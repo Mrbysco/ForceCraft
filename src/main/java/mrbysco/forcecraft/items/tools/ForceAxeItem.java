@@ -87,7 +87,7 @@ public class ForceAxeItem extends AxeItem {
         if(player.getEntityWorld().isRemote)
             return true;
 
-//        MinecraftForge.EVENT_BUS.register(new TreeChopTask(stack, pos, player, 10)); NO!. JUST NO!............. TODO: Replace this mess
+        MinecraftForge.EVENT_BUS.register(new TreeChopTask(stack, pos, player, 10));
         return true;
     }
 
