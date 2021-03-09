@@ -179,11 +179,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     private void processTool() {
         if (hasValidTool()) {
-            ForceCraft.LOGGER.info("hasValidTool infuser tile {} ", handler.getStackInSlot(8));
+            ForceCraft.LOGGER.info("hasValidTool infuser tile {} ", getFromToolSlot());
             for (int i = 0; i < 8; i++) {
                 if (hasValidModifer(i)) {
                     ItemStack mod = getModifier(i);
-                    ItemStack stack = handler.getStackInSlot(8);
+                    ItemStack stack = getFromToolSlot();
                     boolean success = applyModifier(stack, mod);
                     if (success) {
                         handler.setStackInSlot(i, ItemStack.EMPTY);
@@ -244,14 +244,19 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     private boolean hasValidTool() {
-        if (!handler.getStackInSlot(8).isEmpty()) {
-            return handler.getStackInSlot(8).getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
+        ItemStack tool = getFromToolSlot();
+		if (!tool.isEmpty()) {
+            return tool.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
         }
         return false;
     }
 
+	private ItemStack getFromToolSlot() {
+		return handler.getStackInSlot(8);
+	}
+
     private boolean hasValidModifer(int slot) {
-        if (!handler.getStackInSlot(8).isEmpty()) {
+        if (!getFromToolSlot().isEmpty()) {
             for (int j = 0; j < Reference.numModifiers - 1; j++) {
                 if (handler.getStackInSlot(slot).getItem() == validModifierList.get(j)) {
                     return true;
@@ -318,7 +323,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     private ItemStack getModifier(int slot) {
-        if (!handler.getStackInSlot(8).isEmpty()) {
+        if (!getFromToolSlot().isEmpty()) {
             for (int j = 0; j < Reference.numModifiers - 1; j++) {
                 if (handler.getStackInSlot(slot).getItem() == validModifierList.get(j)) {
                     return handler.getStackInSlot(slot);

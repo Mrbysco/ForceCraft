@@ -37,7 +37,7 @@ public class ExperienceTomeProvider implements ICapabilitySerializable<INBT>, IC
         CAPABILITY_EXPTOME.readNBT(experienceTome, null, nbt);
     }
 
-    public final Capability<IExperienceTome> getCapability(){
+    public final Capability<IExperienceTome> getCapability() {
         return CAPABILITY_EXPTOME;
     }
 }
