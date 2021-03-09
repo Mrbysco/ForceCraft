@@ -18,7 +18,7 @@ public class ForceEntities {
 
 	public static final RegistryObject<EntityType<NonBurnableItemEntity>> NON_BURNABLE_ITEM = ENTITIES.register("non_burnable_item", () ->
 			register("non_burnable_item", EntityType.Builder.<NonBurnableItemEntity>create(NonBurnableItemEntity::new, EntityClassification.MISC)
-					.size(0.25F, 0.25F).trackingRange(6).func_233608_b_(20)));
+					.size(0.25F, 0.25F).trackingRange(6).updateInterval(20)));
 
 	public static final RegistryObject<EntityType<ColdChickenEntity>> COLD_CHICKEN = ENTITIES.register("cold_chicken", () ->
 			register("cold_chicken", EntityType.Builder.<ColdChickenEntity>create(ColdChickenEntity::new, EntityClassification.CREATURE)

@@ -237,6 +237,6 @@ public class ForceMittItem extends ToolItem {
 
     @Override
     public boolean canHarvestBlock(BlockState blockIn) {
-        return EFFECTIVE_MATERIALS.contains(blockIn.getMaterial()) || blockIn.isIn(Blocks.COBWEB);
+        return EFFECTIVE_MATERIALS.contains(blockIn.getMaterial()) || blockIn.matchesBlock(Blocks.COBWEB);
     }
 }

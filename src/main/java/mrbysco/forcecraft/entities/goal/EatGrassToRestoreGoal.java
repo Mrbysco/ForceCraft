@@ -44,7 +44,7 @@ public class EatGrassToRestoreGoal extends Goal {
 			if (IS_GRASS.test(this.entityWorld.getBlockState(blockpos))) {
 				return true;
 			} else {
-				return this.entityWorld.getBlockState(blockpos.down()).isIn(Blocks.GRASS_BLOCK);
+				return this.entityWorld.getBlockState(blockpos.down()).matchesBlock(Blocks.GRASS_BLOCK);
 			}
 		}
 	}
@@ -94,7 +94,7 @@ public class EatGrassToRestoreGoal extends Goal {
 				transformMob();
 			} else {
 				BlockPos blockpos1 = blockpos.down();
-				if (this.entityWorld.getBlockState(blockpos1).isIn(Blocks.GRASS_BLOCK)) {
+				if (this.entityWorld.getBlockState(blockpos1).matchesBlock(Blocks.GRASS_BLOCK)) {
 					if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.entityWorld, this.grassEaterEntity)) {
 						this.entityWorld.playEvent(2001, blockpos1, Block.getStateId(Blocks.GRASS_BLOCK.getDefaultState()));
 						this.entityWorld.setBlockState(blockpos1, Blocks.DIRT.getDefaultState(), 2);

@@ -60,7 +60,7 @@ public class ColdCowEntity extends CowEntity implements IColdMob {
 	}
 	
 	public static AttributeModifierMap.MutableAttribute generateAttributes() {
-		return CowEntity.func_234188_eI_();
+		return CowEntity.registerAttributes();
 	}
 
 	@Override
