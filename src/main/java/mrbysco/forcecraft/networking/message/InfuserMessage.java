@@ -3,7 +3,6 @@ package mrbysco.forcecraft.networking.message;
 import io.netty.buffer.ByteBuf;
 import mrbysco.forcecraft.container.InfuserContainer;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
@@ -11,13 +10,9 @@ import java.util.function.Supplier;
 
 public class InfuserMessage {
 
-    public boolean isButtonPressed = false;
+    public boolean isButtonPressed;
     public int fluidAmount;
 
-    private InfuserMessage(ByteBuf buf) {
-        isButtonPressed = buf.readBoolean();
-        fluidAmount = buf.readInt();
-    }
     public InfuserMessage(boolean buttonPressed, int fluidAmount){
         this.isButtonPressed = buttonPressed;
         this.fluidAmount = fluidAmount;
