@@ -9,7 +9,6 @@ import mrbysco.forcecraft.handlers.LivingUpdateHandler;
 import mrbysco.forcecraft.handlers.LootTableHandler;
 import mrbysco.forcecraft.handlers.LootingHandler;
 import mrbysco.forcecraft.handlers.ToolModifierHandler;
-import mrbysco.forcecraft.world.WorldGenHandler;
 import mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.recipe.InfuseRecipe;
@@ -21,6 +20,7 @@ import mrbysco.forcecraft.registry.ForceFluids;
 import mrbysco.forcecraft.registry.ForceLootModifiers;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import mrbysco.forcecraft.registry.ForceSounds;
+import mrbysco.forcecraft.world.WorldGenHandler;
 import mrbysco.forcecraft.world.feature.ForceFeatures;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -92,6 +92,8 @@ public class ForceCraft {
     private void setup(final FMLCommonSetupEvent event) {
         PacketHandler.init();
         CapabilityHandler.register();
+
+        ForceEntities.setupEntities();
     }
     
     public static void registerRecipeSerializers(Register<IRecipeSerializer<?>> event) {

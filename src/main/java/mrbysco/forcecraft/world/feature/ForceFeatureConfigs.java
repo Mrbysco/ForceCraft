@@ -31,11 +31,11 @@ public class ForceFeatureConfigs {
 
 	public static final ConfiguredFeature<BaseTreeFeatureConfig, ?> FORCE_TREE_CONFIG = register("force_tree",
 			ForceFeatures.FORCE_TREE.get().withConfiguration((new BaseTreeFeatureConfig.Builder(new SimpleBlockStateProvider(ForceFeatureConfigs.FORCE_LOG),
-					new SimpleBlockStateProvider(ForceFeatureConfigs.FORCE_LEAVES), new BlobFoliagePlacer(FeatureSpread.func_242252_a(2), FeatureSpread.func_242252_a(0), 3),
+					new SimpleBlockStateProvider(ForceFeatureConfigs.FORCE_LEAVES), new BlobFoliagePlacer(FeatureSpread.create(2), FeatureSpread.create(0), 3),
 					new StraightTrunkPlacer(4, 2, 0), new TwoLayerFeature(1, 0, 1))).setIgnoreVines().build()));
 
 	public static final ConfiguredFeature<BaseTreeFeatureConfig, ?> FORCE_TREE_WITH_MORE_BEEHIVES_CONFIG = register("force_tree_with_bees", ForceFeatures.FORCE_TREE.get()
-			.withConfiguration((FORCE_TREE_CONFIG.getConfig().func_236685_a_(ImmutableList.of(MANY_BEEHIVES)))));
+			.withConfiguration((FORCE_TREE_CONFIG.getConfig().copy(ImmutableList.of(MANY_BEEHIVES)))));
 
 	public static final ConfiguredFeature<?, ?> TREES_FORCE = register("trees_force", Feature.RANDOM_SELECTOR.withConfiguration(
 			new MultipleRandomFeatureConfig(ImmutableList.of(FORCE_TREE_WITH_MORE_BEEHIVES_CONFIG.withChance(0.4F)), FORCE_TREE_CONFIG))
@@ -43,7 +43,7 @@ public class ForceFeatureConfigs {
 
 	public static ConfiguredFeature<?, ?> ORE_FORCE = register("ore_force",
 			Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, FORCE_ORE, 6))
-					.range(64).square().func_242731_b(20));
+					.range(64).square().count(20));
 
 
 	private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(String key, ConfiguredFeature<FC, ?> feature) {

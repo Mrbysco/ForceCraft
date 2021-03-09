@@ -5,6 +5,9 @@ import mrbysco.forcecraft.client.gui.belt.ForceBeltScreen;
 import mrbysco.forcecraft.client.gui.furnace.ForceFurnaceScreen;
 import mrbysco.forcecraft.client.gui.infuser.InfuserScreen;
 import mrbysco.forcecraft.client.gui.pack.ForcePackScreen;
+import mrbysco.forcecraft.client.renderer.ColdChickenRenderer;
+import mrbysco.forcecraft.client.renderer.ColdCowRenderer;
+import mrbysco.forcecraft.client.renderer.ColdPigRenderer;
 import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.registry.ForceEntities;
 import mrbysco.forcecraft.registry.ForceRegistry;
@@ -36,6 +39,9 @@ public class ClientHandler {
 
 		net.minecraft.client.renderer.ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.NON_BURNABLE_ITEM.get(), renderManager -> new ItemRenderer(renderManager, itemRenderer));
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_CHICKEN.get(), ColdChickenRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_COW.get(), ColdCowRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_PIG.get(), ColdPigRenderer::new);
 
 		ItemModelsProperties.registerProperty(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity) -> {
 			IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);

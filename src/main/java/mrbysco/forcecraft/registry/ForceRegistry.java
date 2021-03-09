@@ -157,6 +157,10 @@ public class ForceRegistry {
             new CustomFoodItem(itemBuilder().food(ForceFoods.FORTUNE_COOKIE).maxStackSize(1).group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> SOUL_WAFER  = ITEMS.register("soul_wafer", () ->
             new CustomFoodItem(itemBuilder().food(ForceFoods.SOUL_WAFER).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> RAW_BACON  = ITEMS.register("raw_bacon", () ->
+            new CustomFoodItem(itemBuilder().food(ForceFoods.BACON).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> COOKED_BACON  = ITEMS.register("cooked_bacon", () ->
+            new CustomFoodItem(itemBuilder().food(ForceFoods.COOKED_BACON).group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORCE_HELMET = ITEMS.register("force_helmet", () ->
             new CustomArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlotType.HEAD, itemBuilder().group(ForceCraft.creativeTab)));

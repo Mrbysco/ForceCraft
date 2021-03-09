@@ -1,13 +1,20 @@
 package mrbysco.forcecraft.items.tools;
 
 import mrbysco.forcecraft.Reference;
-import mrbysco.forcecraft.capablilities.shearable.IShearableMob;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
+import mrbysco.forcecraft.entities.ColdChickenEntity;
+import mrbysco.forcecraft.entities.ColdCowEntity;
+import mrbysco.forcecraft.entities.ColdPigEntity;
+import mrbysco.forcecraft.entities.IColdMob;
+import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.entity.passive.MooshroomEntity;
+import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,8 +33,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_SHEARABLE;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class ForceShearsItem extends ShearsItem {
@@ -63,47 +70,104 @@ public class ForceShearsItem extends ShearsItem {
                 return ActionResultType.PASS;
             }
         }
-        if(entity.getCapability(CAPABILITY_SHEARABLE).isPresent()) {
-            IShearableMob shearableCap = entity.getCapability(CAPABILITY_SHEARABLE).orElse(null);
-            if(shearableCap != null) {
-                if(entity instanceof CowEntity) {
-                    if(shearableCap.canBeSheared()) {
-                        java.util.Random rand = new java.util.Random();
-                        int i = 1 + rand.nextInt(3);
+        boolean hasHeat = toolModifier != null && toolModifier.hasHeat();
 
-                        java.util.List<ItemStack> drops = new ArrayList<>();
-                        for (int j = 0; j < i; ++j)
-                            drops.add(new ItemStack(Items.LEATHER, 1));
+        if(!(entity instanceof IColdMob)) {
+            if(entity instanceof CowEntity && !(entity instanceof MooshroomEntity)) {
+                CowEntity originalCow = (CowEntity)entity;
+                World worldIn = originalCow.world;
 
-                        drops.forEach(d -> {
-                            net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
-                            ent.setMotion(ent.getMotion().add((double)((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double)(rand.nextFloat() * 0.05F), (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
-                        });
+                java.util.Random rand = new java.util.Random();
+                int i = 1 + rand.nextInt(3);
 
-                        entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
-                        shearableCap.setSheared(true);
-                        return ActionResultType.SUCCESS;
-                    }
+                java.util.List<ItemStack> drops = new ArrayList<>();
+                for (int j = 0; j < i; ++j)
+                    drops.add(new ItemStack(Items.LEATHER, 1));
+
+                drops.forEach(d -> {
+                    net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
+                    ent.setMotion(ent.getMotion().add((double)((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double)(rand.nextFloat() * 0.05F), (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+                });
+
+                entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+
+                MobEntity replacementMob = new ColdCowEntity(worldIn, originalCow.getType().getRegistryName());
+                replacementMob.copyLocationAndAnglesFrom(originalCow);
+                UUID mobUUID = replacementMob.getUniqueID();
+                replacementMob.copyDataFromOld(originalCow);
+                replacementMob.setUniqueId(mobUUID);
+
+                originalCow.remove(false);
+                worldIn.addEntity(replacementMob);
+                if(hasHeat) {
+                    replacementMob.setFire(10);
                 }
-                if(entity instanceof ChickenEntity) {
-                    if(shearableCap.canBeSheared()) {
-                        java.util.Random rand = new java.util.Random();
-                        int i = 1 + rand.nextInt(3);
 
-                        java.util.List<ItemStack> drops = new ArrayList<>();
-                        for (int j = 0; j < i; ++j)
-                            drops.add(new ItemStack(Items.FEATHER, 1));
+                return ActionResultType.SUCCESS;
+            }
+            if(entity instanceof ChickenEntity) {
+                ChickenEntity originalChicken = (ChickenEntity)entity;
+                World worldIn = originalChicken.world;
 
-                        drops.forEach(d -> {
-                            net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
-                            ent.setMotion(ent.getMotion().add((double)((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double)(rand.nextFloat() * 0.05F), (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
-                        });
+                java.util.Random rand = new java.util.Random();
+                int i = 1 + rand.nextInt(3);
 
-                        entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
-                        shearableCap.setSheared(true);
-                        return ActionResultType.SUCCESS;
-                    }
+                java.util.List<ItemStack> drops = new ArrayList<>();
+                for (int j = 0; j < i; ++j)
+                    drops.add(new ItemStack(Items.FEATHER, 1));
+
+                drops.forEach(d -> {
+                    net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
+                    ent.setMotion(ent.getMotion().add((double)((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double)(rand.nextFloat() * 0.05F), (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+                });
+
+                entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+
+                MobEntity replacementMob = new ColdChickenEntity(worldIn, originalChicken.getType().getRegistryName());
+                replacementMob.copyLocationAndAnglesFrom(originalChicken);
+                UUID mobUUID = replacementMob.getUniqueID();
+                replacementMob.copyDataFromOld(originalChicken);
+                replacementMob.setUniqueId(mobUUID);
+
+                originalChicken.remove(false);
+                worldIn.addEntity(replacementMob);
+                if(hasHeat) {
+                    replacementMob.setFire(10);
                 }
+
+                return ActionResultType.SUCCESS;
+            }
+            if(entity instanceof PigEntity) {
+                PigEntity originalPig = (PigEntity)entity;
+                World worldIn = originalPig.world;
+
+                java.util.Random rand = new java.util.Random();
+                int i = 1 + rand.nextInt(2);
+
+                java.util.List<ItemStack> drops = new ArrayList<>();
+                for (int j = 0; j < i; ++j)
+                    drops.add(new ItemStack(hasHeat ? ForceRegistry.COOKED_BACON.get() : ForceRegistry.RAW_BACON.get(), 1));
+
+                drops.forEach(d -> {
+                    net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
+                    ent.setMotion(ent.getMotion().add((double)((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double)(rand.nextFloat() * 0.05F), (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+                });
+
+                entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+
+                MobEntity replacementMob = new ColdPigEntity(worldIn, originalPig.getType().getRegistryName());
+                replacementMob.copyLocationAndAnglesFrom(originalPig);
+                UUID mobUUID = replacementMob.getUniqueID();
+                replacementMob.copyDataFromOld(originalPig);
+                replacementMob.setUniqueId(mobUUID);
+
+                originalPig.remove(false);
+                worldIn.addEntity(replacementMob);
+                if(hasHeat) {
+                    replacementMob.setFire(10);
+                }
+
+                return ActionResultType.SUCCESS;
             }
         }
 

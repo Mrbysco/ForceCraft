@@ -19,9 +19,6 @@ import mrbysco.forcecraft.capablilities.magnet.MagnetStorage;
 import mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
 import mrbysco.forcecraft.capablilities.playermodifier.PlayerModifierFactory;
 import mrbysco.forcecraft.capablilities.playermodifier.PlayerModifierStorage;
-import mrbysco.forcecraft.capablilities.shearable.IShearableMob;
-import mrbysco.forcecraft.capablilities.shearable.ShearableFactory;
-import mrbysco.forcecraft.capablilities.shearable.ShearableStorage;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolFactory;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
@@ -35,7 +32,6 @@ public class CapabilityHandler {
 
     public static final ResourceLocation BANE_CAP = new ResourceLocation(Reference.MOD_ID, "banemod");
     public static final ResourceLocation PLAYER_CAP = new ResourceLocation(Reference.MOD_ID, "playermod");
-    public static final ResourceLocation SHEAR_CAP = new ResourceLocation(Reference.MOD_ID, "shearable");
 
     @CapabilityInject(IToolModifier.class)
     public static Capability<IToolModifier> CAPABILITY_TOOLMOD = null;
@@ -52,9 +48,6 @@ public class CapabilityHandler {
     @CapabilityInject(IPlayerModifier.class)
     public static Capability<IPlayerModifier> CAPABILITY_PLAYERMOD = null;
 
-    @CapabilityInject(IShearableMob.class)
-    public static Capability<IShearableMob> CAPABILITY_SHEARABLE = null;
-
     @CapabilityInject(IForceWrench.class)
     public static Capability<IForceWrench> CAPABILITY_FORCEWRENCH = null;
 
@@ -66,7 +59,6 @@ public class CapabilityHandler {
         CapabilityManager.INSTANCE.register(IForceRodModifier.class, new ForceRodStorage(), new ForceRodFactory());
         CapabilityManager.INSTANCE.register(IExperienceTome.class, new ExperienceTomeStorage(), new ExperienceTomeFactory());
         CapabilityManager.INSTANCE.register(IBaneModifier.class, new BaneModifierStorage(), new BaneFactory());
-        CapabilityManager.INSTANCE.register(IShearableMob.class, new ShearableStorage(), new ShearableFactory());
         CapabilityManager.INSTANCE.register(IForceWrench.class, new ForceWrenchStorage(), new ForceWrenchFactory());
         CapabilityManager.INSTANCE.register(IPlayerModifier.class, new PlayerModifierStorage(), new PlayerModifierFactory());
         CapabilityManager.INSTANCE.register(IMagnet.class, new MagnetStorage(), new MagnetFactory());
