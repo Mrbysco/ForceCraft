@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.tiles;
 
+import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
@@ -62,12 +63,14 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class InfuserTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
-    protected FluidTank tank = new FluidTank(50000) {
+    private static final int FLUID_PER_GEM = 500;
+	protected FluidTank tank = new FluidTank(50000) {
         @Nonnull
         @Override
         public FluidStack drain(FluidStack resource, FluidAction action) {
-            if (!isFluidEqual(resource))
+            if (!isFluidEqual(resource)) {
                 return null;
+            }
             if (action.simulate()) {
                 int amount = tank.getFluidAmount() - resource.getAmount() < 0 ? tank.getFluidAmount() : resource.getAmount();
                 return new FluidStack(tank.getFluid(), amount);
@@ -127,7 +130,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         energyStorage.setEnergy(nbt.getInt("EnergyHandler"));
         tank.readFromNBT(nbt);
 
-        super.markDirty(); //TODO: Is this markdirty needed?
         super.read(state, nbt);
     }
 
@@ -147,30 +149,29 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public void tick() {
         fluidContained = tank.getFluidAmount();
-        if (world != null) {
-            if (!world.isRemote) {
-                processForceGems();
-                if (!canWork) {
-                    if (processTime == maxProcessTime) {
-                        this.markDirty();
-                        processTool();
-                    }
-                    processTime++;
-                }
-            }
+        if (world.isRemote) {
+        	return;
         }
+        processForceGems();
+        
+//        if (!canWork) {
+            if (processTime == maxProcessTime) {
+                processTool();
+            }
+            processTime++;
+//        }
     }
 
     //Processes force Gems in the force infuser slot
     private void processForceGems() {
         if (handler.getStackInSlot(9).getItem() == ForceRegistry.FORCE_GEM.get()) {
-            FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), 500);
+            FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
 
-            if (tank.getFluidAmount() < tank.getCapacity() - 100) {
+            if (tank.getFluidAmount() < tank.getCapacity() - force.getAmount()) {
                 fill(force, FluidAction.EXECUTE);
                 handler.getStackInSlot(9).shrink(1);
 
-                markDirty();
+                markDirty(); // TODO: ? remove if not needed
                 world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
             }
         }
@@ -178,10 +179,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     private void processTool() {
         if (hasValidTool()) {
+            ForceCraft.LOGGER.info("hasValidTool infuser tile {} ", getFromToolSlot());
             for (int i = 0; i < 8; i++) {
                 if (hasValidModifer(i)) {
                     ItemStack mod = getModifier(i);
-                    ItemStack stack = handler.getStackInSlot(8);
+                    ItemStack stack = getFromToolSlot();
                     boolean success = applyModifier(stack, mod);
                     if (success) {
                         handler.setStackInSlot(i, ItemStack.EMPTY);
@@ -199,10 +201,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        final CompoundNBT compound = new CompoundNBT();
-        markDirty(); //TODO: Another markdirty
-        write(compound);
-        return new SUpdateTileEntityPacket(this.pos, 0, compound);
+        return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
     }
 
     @Override
@@ -213,7 +212,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbt = new CompoundNBT();
-        markDirty(); //TODO: Another markdirty
         this.write(nbt);
         return nbt;
     }
@@ -233,18 +231,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (this.handlerHolder == null)
-                this.handlerHolder = LazyOptional.of(() -> handler);
             return handlerHolder.cast();
         }
         if (capability == FLUID_HANDLER_CAPABILITY) {
-            if (this.tankHolder == null)
-                this.tankHolder = LazyOptional.of(() -> tank);
             return tankHolder.cast();
         }
         if (capability == CapabilityEnergy.ENERGY) {
-            if (this.energyHolder == null)
-                this.energyHolder = LazyOptional.of(() -> energyStorage);
             return energyHolder.cast();
         }
 
@@ -252,14 +244,19 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     private boolean hasValidTool() {
-        if (!handler.getStackInSlot(8).isEmpty()) {
-            return handler.getStackInSlot(8).getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
+        ItemStack tool = getFromToolSlot();
+		if (!tool.isEmpty()) {
+            return tool.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
         }
         return false;
     }
 
+	private ItemStack getFromToolSlot() {
+		return handler.getStackInSlot(8);
+	}
+
     private boolean hasValidModifer(int slot) {
-        if (!handler.getStackInSlot(8).isEmpty()) {
+        if (!getFromToolSlot().isEmpty()) {
             for (int j = 0; j < Reference.numModifiers - 1; j++) {
                 if (handler.getStackInSlot(slot).getItem() == validModifierList.get(j)) {
                     return true;
@@ -326,7 +323,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     private ItemStack getModifier(int slot) {
-        if (!handler.getStackInSlot(8).isEmpty()) {
+        if (!getFromToolSlot().isEmpty()) {
             for (int j = 0; j < Reference.numModifiers - 1; j++) {
                 if (handler.getStackInSlot(slot).getItem() == validModifierList.get(j)) {
                     return handler.getStackInSlot(slot);
@@ -821,24 +818,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     protected boolean isFluidEqual(Fluid fluid) {
-        return tank.getFluid().equals(fluid);
-    }
-
-    @Override
-    public void updateContainingBlockInfo() {
-        super.updateContainingBlockInfo();
-        if (this.handlerHolder != null) {
-            this.handlerHolder.invalidate();
-            this.handlerHolder = null;
-        }
-        if (this.energyHolder != null) {
-            this.energyHolder.invalidate();
-            this.energyHolder = null;
-        }
-        if (this.tankHolder != null) {
-            this.tankHolder.invalidate();
-            this.tankHolder = null;
-        }
+        return tank.getFluid().getFluid().equals(fluid);
     }
 
     @Override

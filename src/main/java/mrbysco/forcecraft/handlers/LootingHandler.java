@@ -10,6 +10,10 @@ public class LootingHandler {
 
     @SubscribeEvent
     public void onLooting(LootingLevelEvent event) {
+    	if (event.getDamageSource() == null || event.getDamageSource().getTrueSource() == null) {
+    		return;
+    	}
+
         int level = event.getLootingLevel();
 
         IPlayerModifier playerModifier = event.getDamageSource().getTrueSource().getCapability(CAPABILITY_PLAYERMOD).orElse(null);

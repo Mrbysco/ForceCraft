@@ -1,7 +1,6 @@
 package mrbysco.forcecraft.client.gui.belt;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.container.ForceBeltContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -28,7 +27,6 @@ public class ForceBeltScreen extends ContainerScreen<ForceBeltContainer> {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(this.TEXTURE);
         this.blit(matrixStack, this.guiLeft, this.guiTop, 0,0,this.xSize, this.ySize);
     }

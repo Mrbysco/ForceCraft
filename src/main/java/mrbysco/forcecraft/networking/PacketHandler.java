@@ -22,7 +22,7 @@ public class PacketHandler {
     private static int id = 0;
 
     public static void init(){
-        CHANNEL.registerMessage(0, InfuserMessage.class, InfuserMessage::encode, InfuserMessage::decode, InfuserMessage::handle);
+        CHANNEL.registerMessage(id++, InfuserMessage.class, InfuserMessage::encode, InfuserMessage::decode, InfuserMessage::handle);
     }
 
     public static void sendPacket(Entity player, IPacket<?> packet) {

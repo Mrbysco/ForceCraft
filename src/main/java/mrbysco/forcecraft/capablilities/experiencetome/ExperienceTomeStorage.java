@@ -14,7 +14,6 @@ public class ExperienceTomeStorage implements Capability.IStorage<IExperienceTom
     public INBT writeNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side) {
         CompoundNBT nbt = new CompoundNBT();
         nbt.putFloat("experience", instance.getExperienceValue());
-
         return nbt;
     }
 
@@ -22,8 +21,7 @@ public class ExperienceTomeStorage implements Capability.IStorage<IExperienceTom
     public void readNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side, INBT nbtIn) {
         if(nbtIn instanceof CompoundNBT) {
             CompoundNBT nbt = (CompoundNBT) nbtIn;
-            instance.setExperienceValue(instance.getExperienceValue());
-
+            instance.setExperienceValue(nbt.getFloat("experience"));
         }
     }
 }

@@ -1,7 +1,6 @@
 package mrbysco.forcecraft.client.gui.infuser;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.container.InfuserContainer;
 import mrbysco.forcecraft.networking.PacketHandler;
@@ -63,7 +62,6 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.minecraft.getTextureManager().bindTexture(this.TEXTURE);
 		this.blit(matrixStack, this.guiLeft, this.guiTop, 0,0,this.xSize, this.ySize);
 	}
@@ -83,7 +81,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
-		if(isPointInRegion(39, 101, 12, 12, mouseX, mouseY)){
+		if(isPointInRegion(39, 101, 12, 12, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
 			text.add(new TranslationTextComponent("gui.forcecraft.infuser.start.tooltip").mergeStyle(TextFormatting.GRAY));
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
@@ -100,7 +98,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
-		if(isPointInRegion(152, 11, 12, 106, mouseX, mouseY)){
+		if(isPointInRegion(152, 11, 12, 106, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
 			text.add(new StringTextComponent(this.container.getTile().getEnergyStored() + " FE"));
 
@@ -108,12 +106,12 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		}
 	}
 
-	private void drawFluidBar(MatrixStack matrixStack){
+	private void drawFluidBar(MatrixStack matrixStack) {
 		if(this.container.getTile().getFluid() != null) {
 			FluidStack fluidStack = this.container.getTile().getFluidStack();
 			ResourceLocation flowing = fluidStack.getFluid().getAttributes().getStillTexture(fluidStack);
 			if (flowing != null) {
-				Texture texture = minecraft.getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE); //getAtlasSprite
+				Texture texture = minecraft.getTextureManager().getTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
 				if (texture instanceof AtlasTexture) {
 					TextureAtlasSprite sprite = ((AtlasTexture) texture).getSprite(flowing);
 					if (sprite != null) {
@@ -126,7 +124,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		}
 	}
 
-	private void drawEnergyBar(){
+	private void drawEnergyBar() {
 
 	}
 }

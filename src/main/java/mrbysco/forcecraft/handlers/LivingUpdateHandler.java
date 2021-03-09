@@ -6,6 +6,7 @@ import mrbysco.forcecraft.items.CustomArmorItem;
 import mrbysco.forcecraft.items.tools.MagnetGloveItem;
 import mrbysco.forcecraft.potion.effects.EffectMagnet;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -22,7 +23,9 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOL
 
 public class LivingUpdateHandler {
 
-    public static List<PlayerEntity> flightList = new ArrayList<PlayerEntity>();
+    private static final int SPEED_DURATION = 200;
+    private static final int INVISIBILITY_DURATION = 200;
+	public static List<PlayerEntity> flightList = new ArrayList<PlayerEntity>();
 
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
@@ -65,7 +68,7 @@ public class LivingUpdateHandler {
                 }
             }
             //Checks Hotbar
-            Iterable<ItemStack> hotBar = player.inventory.mainInventory.subList(0, player.inventory.getHotbarSize());
+            Iterable<ItemStack> hotBar = player.inventory.mainInventory.subList(0, PlayerInventory.getHotbarSize());
             for(ItemStack slotSelected : hotBar) {
                 if(slotSelected.getItem() instanceof MagnetGloveItem) {
                     IMagnet magnetCap = slotSelected.getCapability(CAPABILITY_MAGNET).orElse(null);
@@ -92,22 +95,23 @@ public class LivingUpdateHandler {
                         }
                     }
                     if (camo) {
-                        EffectInstance camoEffect = new EffectInstance(Effects.INVISIBILITY, 200, 1);
+                        EffectInstance camoEffect = new EffectInstance(Effects.INVISIBILITY, INVISIBILITY_DURATION, 1);
                         player.addPotionEffect(camoEffect);
                     }
                     if (speed != 0) {
-                        EffectInstance speedEffect = new EffectInstance(Effects.SPEED, 200, speed);
+                        EffectInstance speedEffect = new EffectInstance(Effects.SPEED, SPEED_DURATION, speed);
+                        player.addPotionEffect(speedEffect);
                     }
                     if (damage != 0) {
-                        int finalDamage = damage;
+                        float finalDamage = damage;
                         player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-                            cap.addAttackDamage((float)(.5 * finalDamage));
+                            cap.addAttackDamage(0.5F * finalDamage);
                         });
                     }
                     if (heat != 0) {
-                        int finalHeat = heat;
+                    	float finalHeat = heat;
                         player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-                            cap.addHeatDamage((float)(.5 * finalHeat));
+                            cap.addHeatDamage(0.5F * finalHeat);
                         });
                     }
                 }
