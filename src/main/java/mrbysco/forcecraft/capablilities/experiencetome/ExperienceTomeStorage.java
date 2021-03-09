@@ -8,7 +8,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nullable;
 
 public class ExperienceTomeStorage implements Capability.IStorage<IExperienceTome> {
-
+  
     @Nullable
     @Override
     public INBT writeNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side) {
