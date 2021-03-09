@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "forcecraft:force_nugget",
+    "forcecraft:force_log",
+    "minecraft:sugar",
+    "minecraft:flint",
+    "minecraft:experience_bottle"
+  ]
+}

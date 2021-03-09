@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NNN",
+    "NNN"  ],
+  "key": {
+    "N": [
+      {
+        "tag": "forge:nuggets/force"
+      }
+    ]
+  },
+  "result": {
+    "item": "forcecraft:force_ingot"
+  }
+}
+

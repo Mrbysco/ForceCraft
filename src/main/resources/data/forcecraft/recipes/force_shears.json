@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "F ",
+    " F"
+  ],
+  "key": {
+    "F": [
+      {
+        "tag": "forge:ingots/force"
+      }
+    ]
+  },
+  "result": {
+    "item": "forcecraft:force_shears"
+  }
+}
+

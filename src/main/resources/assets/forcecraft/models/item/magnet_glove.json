@@ -1,0 +1,10 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "forcecraft:item/magnet_glove_red"
+    },
+    "overrides": [
+        { "predicate": { "active": 0.000000 }, "model": "forcecraft:item/magnet_glove_deactivated" },
+        { "predicate": { "active": 1.0 }, "model": "forcecraft:item/magnet_glove_active" }
+    ]
+}

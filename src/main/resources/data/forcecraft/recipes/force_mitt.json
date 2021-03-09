@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CI ",
+    "CFI",
+    "CLL"  ],
+  "key": {
+    "F": [
+      {
+        "tag": "forge:ingots/force"
+      }
+    ],
+    "L": [
+      {
+        "tag": "forge:leather"
+      }
+    ],
+    "C": [
+      {
+        "tag": "forge:cobblestone"
+      }
+    ],
+    "I": [
+      {
+        "tag": "forge:ingots/iron"
+      }
+    ]
+  },
+  "result": {
+    "item": "forcecraft:force_mitt"
+  }
+}
+

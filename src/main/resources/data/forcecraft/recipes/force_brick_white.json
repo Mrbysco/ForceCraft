@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BDB",
+    "BBB" ],
+  "key": {
+    "B": [
+      {
+        "tag": "forcecraft:force_brick"
+      }
+    ],
+    "D": [
+      {
+        "tag": "forge:dyes/white"
+      }
+    ]
+  },
+  "result": {
+    "item": "forcecraft:force_brick_white",
+    "count": 8
+  }
+}

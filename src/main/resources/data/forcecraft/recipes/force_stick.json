@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "W",
+    "W"
+  ],
+  "key": {
+    "W": [
+      {
+        "item": "forcecraft:force_planks"
+      }
+    ]
+  },
+  "result": {
+    "item": "forcecraft:force_stick",
+    "count": 4
+  }
+}
+

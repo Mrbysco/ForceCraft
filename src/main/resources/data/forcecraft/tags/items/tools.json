@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "forcecraft:force_pickaxe",
+    "forcecraft:force_axe",
+    "forcecraft:force_shovel",
+    "forcecraft:force_sword",
+    "forcecraft:force_rod",
+    "forcecraft:force_shears"
+  ]
+}

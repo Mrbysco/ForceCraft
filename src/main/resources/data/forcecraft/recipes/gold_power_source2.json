@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "forcecraft:force_wood"
+  },
+  "result": "forcecraft:golden_power_source",
+  "experience": 0.15,
+  "cookingtime": 200
+}

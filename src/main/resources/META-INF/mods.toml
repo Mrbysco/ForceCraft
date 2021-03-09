@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+issueTrackerURL="https://github.com/mrbysco/forcecraft"
+license="GNU GENERAL PUBLIC LICENSE"
+
+[[mods]]
+modId="forcecraft"
+version="${file.jarVersion}"
+displayName="ForceCraft"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/forcecraft"
+authors="Mrbysco"
+credits="Bluedart for the Original Mod"
+description='''
+A mod inspired by DartCraft
+'''

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "G",
+    "S"
+  ],
+  "key": {
+    "G": [
+      {
+        "item": "forcecraft:golden_power_source"
+      }
+    ],
+    "S": [
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ]
+  },
+  "result": {
+    "item": "forcecraft:force_torch",
+    "count": 4
+  }
+}
+

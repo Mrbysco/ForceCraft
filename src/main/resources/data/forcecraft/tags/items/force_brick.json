@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "forcecraft:force_brick_red",
+    "forcecraft:force_brick_yellow",
+    "forcecraft:force_brick_green",
+    "forcecraft:force_brick_blue",
+    "forcecraft:force_brick_white",
+    "forcecraft:force_brick_black",
+    "forcecraft:force_brick_brown",
+    "forcecraft:force_brick_orange",
+    "forcecraft:force_brick_light_blue",
+    "forcecraft:force_brick_magenta",
+    "forcecraft:force_brick_pink",
+    "forcecraft:force_brick_light_gray",
+    "forcecraft:force_brick_lime",
+    "forcecraft:force_brick_cyan",
+    "forcecraft:force_brick_purple",
+    "forcecraft:force_brick_gray",
+    "forcecraft:force_brick"
+  ]
+}

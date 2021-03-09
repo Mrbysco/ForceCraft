@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:enchanting_table"
+    },
+    {
+      "item": "forcecraft:force_rod"
+    }
+  ],
+  "result": {
+    "item": "forcecraft:infuser"
+  }
+}

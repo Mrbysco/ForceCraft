@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "forcecraft:block/force_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "forcecraft:block/force_log"
+    },
+    "axis=z": {
+      "model": "forcecraft:block/force_log_horizontal",
+      "x": 90
+    }
+  }
+}

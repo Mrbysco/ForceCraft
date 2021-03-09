@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "F F",
+    "IUI"  ],
+  "key": {
+    "F": [
+      {
+        "tag": "forge:ingots/force"
+      }
+    ],
+    "I": [
+      {
+        "tag": "forge:ingots/iron"
+      }
+    ],
+    "U": [
+      {
+        "item": "minecraft:furnace"
+      }
+    ]
+  },
+  "result": {
+    "item": "forcecraft:force_furnace"
+  }
+}

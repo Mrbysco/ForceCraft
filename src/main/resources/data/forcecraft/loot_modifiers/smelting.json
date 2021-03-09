@@ -1,0 +1,11 @@
+{
+  "type": "forcecraft:smelting",
+  "conditions": [
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "tag": "forcecraft:tools"
+      }
+    }
+  ]
+}

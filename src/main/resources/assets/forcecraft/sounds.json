@@ -1,0 +1,9 @@
+{
+    "whoosh" : {
+    "category" : "player",
+	"subtitle": "forcecraft:whoosh",
+        "sounds": [
+            "forcecraft:whoosh"
+        ]
+    }
+}

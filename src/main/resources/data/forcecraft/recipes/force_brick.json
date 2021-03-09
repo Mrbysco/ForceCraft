@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BFB",
+    "BBB" ],
+  "key": {
+    "B": [
+      {
+        "tag": "minecraft:stone_bricks"
+      }
+    ],
+    "F": [
+      {
+        "item": "forcecraft:force_gem"
+      }
+    ]
+  },
+  "result": {
+    "item": "forcecraft:force_brick",
+    "count": 8
+  }
+}

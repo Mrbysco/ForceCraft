@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_log"
+    }
+  ],
+  "result": {
+    "item": "forcecraft:force_planks",
+    "count": 4
+  }
+}

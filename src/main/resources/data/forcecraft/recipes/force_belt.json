@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LWL",
+    "FIF",
+    "LWL"  ],
+  "key": {
+    "F": [
+      {
+        "tag": "forge:ingots/force"
+      }
+    ],
+	"I": [
+      {
+        "tag": "forge:ingots/iron"
+      }
+    ],
+    "L": [
+      {
+        "tag": "forge:leather"
+      }
+    ],
+    "W": [
+      {
+        "tag": "minecraft:wool"
+      }
+    ]
+  },
+  "result": {
+    "item": "forcecraft:force_belt"
+  }
+}
