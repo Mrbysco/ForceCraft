@@ -127,7 +127,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         energyStorage.setEnergy(nbt.getInt("EnergyHandler"));
         tank.readFromNBT(nbt);
 
-        super.markDirty(); //TODO: Is this markdirty needed?
         super.read(state, nbt);
     }
 
@@ -152,7 +151,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 processForceGems();
                 if (!canWork) {
                     if (processTime == maxProcessTime) {
-                        this.markDirty();
                         processTool();
                     }
                     processTime++;
@@ -170,7 +168,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 fill(force, FluidAction.EXECUTE);
                 handler.getStackInSlot(9).shrink(1);
 
-                markDirty();
+                markDirty(); // TODO: ? remove if not needed
                 world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
             }
         }
@@ -199,10 +197,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        final CompoundNBT compound = new CompoundNBT();
-        markDirty(); //TODO: Another markdirty
-        write(compound);
-        return new SUpdateTileEntityPacket(this.pos, 0, compound);
+        return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
     }
 
     @Override
@@ -213,7 +208,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbt = new CompoundNBT();
-        markDirty(); //TODO: Another markdirty
         this.write(nbt);
         return nbt;
     }
