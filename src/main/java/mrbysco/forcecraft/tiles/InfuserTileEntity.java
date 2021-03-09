@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.tiles;
 
+import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
@@ -62,12 +63,14 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class InfuserTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
-    protected FluidTank tank = new FluidTank(50000) {
+    private static final int FLUID_PER_GEM = 500;
+	protected FluidTank tank = new FluidTank(50000) {
         @Nonnull
         @Override
         public FluidStack drain(FluidStack resource, FluidAction action) {
-            if (!isFluidEqual(resource))
+            if (!isFluidEqual(resource)) {
                 return null;
+            }
             if (action.simulate()) {
                 int amount = tank.getFluidAmount() - resource.getAmount() < 0 ? tank.getFluidAmount() : resource.getAmount();
                 return new FluidStack(tank.getFluid(), amount);
@@ -146,25 +149,25 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public void tick() {
         fluidContained = tank.getFluidAmount();
-        if (world != null) {
-            if (!world.isRemote) {
-                processForceGems();
-                if (!canWork) {
-                    if (processTime == maxProcessTime) {
-                        processTool();
-                    }
-                    processTime++;
-                }
-            }
+        if (world.isRemote) {
+        	return;
         }
+        processForceGems();
+        
+//        if (!canWork) {
+            if (processTime == maxProcessTime) {
+                processTool();
+            }
+            processTime++;
+//        }
     }
 
     //Processes force Gems in the force infuser slot
     private void processForceGems() {
         if (handler.getStackInSlot(9).getItem() == ForceRegistry.FORCE_GEM.get()) {
-            FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), 500);
+            FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
 
-            if (tank.getFluidAmount() < tank.getCapacity() - 100) {
+            if (tank.getFluidAmount() < tank.getCapacity() - force.getAmount()) {
                 fill(force, FluidAction.EXECUTE);
                 handler.getStackInSlot(9).shrink(1);
 
@@ -176,6 +179,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     private void processTool() {
         if (hasValidTool()) {
+            ForceCraft.LOGGER.info("hasValidTool infuser tile {} ", handler.getStackInSlot(8));
             for (int i = 0; i < 8; i++) {
                 if (hasValidModifer(i)) {
                     ItemStack mod = getModifier(i);
@@ -227,18 +231,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (this.handlerHolder == null)
-                this.handlerHolder = LazyOptional.of(() -> handler);
             return handlerHolder.cast();
         }
         if (capability == FLUID_HANDLER_CAPABILITY) {
-            if (this.tankHolder == null)
-                this.tankHolder = LazyOptional.of(() -> tank);
             return tankHolder.cast();
         }
         if (capability == CapabilityEnergy.ENERGY) {
-            if (this.energyHolder == null)
-                this.energyHolder = LazyOptional.of(() -> energyStorage);
             return energyHolder.cast();
         }
 
@@ -815,24 +813,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     protected boolean isFluidEqual(Fluid fluid) {
-        return tank.getFluid().equals(fluid);
-    }
-
-    @Override
-    public void updateContainingBlockInfo() {
-        super.updateContainingBlockInfo();
-        if (this.handlerHolder != null) {
-            this.handlerHolder.invalidate();
-            this.handlerHolder = null;
-        }
-        if (this.energyHolder != null) {
-            this.energyHolder.invalidate();
-            this.energyHolder = null;
-        }
-        if (this.tankHolder != null) {
-            this.tankHolder.invalidate();
-            this.tankHolder = null;
-        }
+        return tank.getFluid().getFluid().equals(fluid);
     }
 
     @Override
