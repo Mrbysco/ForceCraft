@@ -1,0 +1,12 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/gold"
+    },
+    {
+      "item": "minecraft:stone"
+    }
+  ],
+  "result": "forcecraft:knockback"
+}
