@@ -6,6 +6,8 @@
     "item.forcecraft.force_stick": "Force Stick",
     "item.forcecraft.fortune_cookie": "Fortune Cookie",
     "item.forcecraft.soul_wafer": "Soul Wafer",
+    "item.forcecraft.raw_bacon": "Raw Bacon",
+    "item.forcecraft.cooked_bacon": "Cooked Bacon",
     "item.forcecraft.golden_power_source": "Golden Power Source",
     "item.forcecraft.fortune": "Fortune",
     "item.forcecraft.experience_tome": "Experience Tome",
@@ -66,11 +68,17 @@
     "block.forcecraft.force_torch": "Force Torch",
     "block.forcecraft.wall_force_torch": "Force Torch",
 
+
+    "_comment": "Entities",
+    "entity.forcecraft.cold_chicken": "Cold Chicken",
+    "entity.forcecraft.cold_cow": "Cold Cow",
+    "entity.forcecraft.cold_pig": "Cold Pig",
+
     "_comment": "Misc.",
     "itemGroup.forcecraft": "ForceCraft",
 
     "_comment": "Text",
-    "forcecraft.guideEmpty": "This is Broken. Report to Github Please.",
+    "forcecraft.guide_empty": "This is Broken. Report to Github Please.",
 
     "_comment": "GUI",
     "forcecraft.gui.guide_book": "Book of Mudora",

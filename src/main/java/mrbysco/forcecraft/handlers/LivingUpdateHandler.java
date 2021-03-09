@@ -18,7 +18,6 @@ import java.util.List;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_MAGNET;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
-import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_SHEARABLE;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class LivingUpdateHandler {
@@ -29,10 +28,6 @@ public class LivingUpdateHandler {
 
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        event.getEntityLiving().getCapability(CAPABILITY_SHEARABLE).ifPresent((cap) -> {
-            cap.update();
-        });
-
         if (event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = ((PlayerEntity) event.getEntityLiving());
             Iterable<ItemStack> armor = player.getArmorInventoryList();
