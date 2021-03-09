@@ -69,7 +69,7 @@ public class ForceAxeItem extends AxeItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, PlayerEntity player) {
-        IToolModifier toolModifierCap = stack.getCapability(CAPABILITY_TOOLMOD, null).orElse(null);
+        IToolModifier toolModifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
         if(toolModifierCap != null) {
             if(toolModifierCap.hasLumberjack()) {
                 if (player != null) {

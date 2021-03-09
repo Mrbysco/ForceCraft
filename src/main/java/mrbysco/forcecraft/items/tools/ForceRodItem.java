@@ -59,7 +59,7 @@ public class ForceRodItem extends BaseItem {
         Hand handIn = context.getHand();
         ItemStack stack = context.getItem();
         if (!worldIn.isRemote && player != null) {
-            if (worldIn.getBlockState(pos.offset(facing)).getBlock().equals(Blocks.FIRE)) {
+            if (worldIn.getBlockState(pos.offset(facing)).getBlock().equals(Blocks.FIRE)) { //TODO: instanceof FireBlock
                 worldIn.removeBlock(pos.offset(facing), false);
                 List<Entity> list = worldIn.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())));
                 boolean bw = false;

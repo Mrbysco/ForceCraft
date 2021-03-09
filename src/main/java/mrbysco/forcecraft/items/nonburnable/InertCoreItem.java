@@ -17,7 +17,6 @@ public class InertCoreItem extends BaseItem {
     }
 
     /* Non Flamable */
-
     @Override
     public boolean hasCustomEntity(ItemStack stack) {
         return true;
