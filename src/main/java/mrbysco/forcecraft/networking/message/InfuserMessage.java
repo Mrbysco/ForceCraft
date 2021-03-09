@@ -13,7 +13,6 @@ public class InfuserMessage {
 
     public boolean isButtonPressed = false;
     public int fluidAmount;
-    private BlockPos pos;
 
     private InfuserMessage(ByteBuf buf) {
         isButtonPressed = buf.readBoolean();
