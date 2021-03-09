@@ -22,6 +22,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -61,7 +62,7 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORC
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class InfuserTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
+public class InfuserTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventory {
 
     private static final int FLUID_PER_GEM = 500;
 	protected FluidTank tank = new FluidTank(50000) {
@@ -846,4 +847,43 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity player) {
         return new InfuserContainer(id, playerInv, this);
     }
+    
+    /******** Fakeout stuff for IRecipe *********************/
+    @Override
+    public void clear() {
+      // TODO Auto-generated method stub
+    }
+
+    @Override
+    public ItemStack decrStackSize(int arg0, int arg1) {
+      return ItemStack.EMPTY;
+    }
+
+    @Override
+    public int getSizeInventory() {
+      return 0;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int arg0) {
+      return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean isEmpty() {
+      return false;
+    }
+
+    @Override
+    public boolean isUsableByPlayer(PlayerEntity arg0) {
+      return true;
+    }
+
+    @Override
+    public ItemStack removeStackFromSlot(int arg0) {
+      return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void setInventorySlotContents(int arg0, ItemStack arg1) {}
 }
