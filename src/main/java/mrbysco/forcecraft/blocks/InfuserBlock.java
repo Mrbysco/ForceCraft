@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -71,11 +72,15 @@ public class InfuserBlock extends Block {
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult hit) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        if (!worldIn.isRemote && tileentity instanceof InfuserTileEntity) {
-            NetworkHooks.openGui((ServerPlayerEntity) playerIn, (InfuserTileEntity) tileentity, pos);
+        if (worldIn.isRemote) {
+            return ActionResultType.SUCCESS;
+        } else {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if (tileentity instanceof InfuserTileEntity) {
+                NetworkHooks.openGui((ServerPlayerEntity) playerIn, (InfuserTileEntity) tileentity, pos);
+            }
+            return ActionResultType.CONSUME;
         }
-        return ActionResultType.PASS;
     }
 }
 

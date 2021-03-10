@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "side": "forcecraft:block/force_brick_magenta",
+    "bottom": "forcecraft:block/force_brick_magenta",
+    "top": "forcecraft:block/force_brick_magenta"
+  }
+}

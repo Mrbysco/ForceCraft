@@ -40,7 +40,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.OreBlock;
 import net.minecraft.block.SaplingBlock;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.material.Material;
@@ -93,41 +95,62 @@ public class ForceRegistry {
     public static final RegistryObject<Block> FORCE_FURNACE = BLOCKS.register("force_furnace", () ->
             new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F)
                     .setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+
     //Bricks
-    public static final RegistryObject<Block> FORCE_BRICK_RED = BLOCKS.register("force_brick_red", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.RED).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_YELLOW = BLOCKS.register("force_brick_yellow", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.YELLOW).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_GREEN = BLOCKS.register("force_brick_green", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.GREEN).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_BLUE = BLOCKS.register("force_brick_blue", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.BLUE).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_WHITE = BLOCKS.register("force_brick_white", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.WHITE).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_BLACK = BLOCKS.register("force_brick_black", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.BLACK).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_BROWN = BLOCKS.register("force_brick_brown", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.BROWN).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_ORANGE = BLOCKS.register("force_brick_orange", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.ORANGE).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_LIGHT_BLUE = BLOCKS.register("force_brick_light_blue", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.LIGHT_BLUE).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_MAGENTA = BLOCKS.register("force_brick_magenta", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.MAGENTA).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_PINK = BLOCKS.register("force_brick_pink", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.PINK).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_LIGHT_GRAY = BLOCKS.register("force_brick_light_gray", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.LIGHT_GRAY).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_LIME = BLOCKS.register("force_brick_lime", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.LIME).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_CYAN = BLOCKS.register("force_brick_cyan", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.CYAN).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_PURPLE = BLOCKS.register("force_brick_purple", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.PURPLE).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK_GRAY = BLOCKS.register("force_brick_gray", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.GRAY).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
-    public static final RegistryObject<Block> FORCE_BRICK = BLOCKS.register("force_brick", () ->
-            new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.YELLOW).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_RED = BLOCKS.register("force_brick_red", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.RED).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_YELLOW = BLOCKS.register("force_brick_yellow", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.YELLOW).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_GREEN = BLOCKS.register("force_brick_green", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.GREEN).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_BLUE = BLOCKS.register("force_brick_blue", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.BLUE).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_WHITE = BLOCKS.register("force_brick_white", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.WHITE).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_BLACK = BLOCKS.register("force_brick_black", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.BLACK).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_BROWN = BLOCKS.register("force_brick_brown", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.BROWN).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_ORANGE = BLOCKS.register("force_brick_orange", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.ORANGE).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_LIGHT_BLUE = BLOCKS.register("force_brick_light_blue", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.LIGHT_BLUE).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_MAGENTA = BLOCKS.register("force_brick_magenta", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.MAGENTA).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_PINK = BLOCKS.register("force_brick_pink", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.PINK).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_LIGHT_GRAY = BLOCKS.register("force_brick_light_gray", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.LIGHT_GRAY).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_LIME = BLOCKS.register("force_brick_lime", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.LIME).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_CYAN = BLOCKS.register("force_brick_cyan", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.CYAN).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_PURPLE = BLOCKS.register("force_brick_purple", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.PURPLE).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK_GRAY = BLOCKS.register("force_brick_gray", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.GRAY).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    public static final RegistryObject<Block> FORCE_BRICK = BLOCKS.register("force_brick", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.YELLOW).hardnessAndResistance(50.0F, 200.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
+    //Stairs
+    public static final RegistryObject<Block> FORCE_BRICK_RED_STAIRS = BLOCKS.register("force_brick_red_stairs", () -> new StairsBlock(() -> FORCE_BRICK_RED.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_RED.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_YELLOW_STAIRS = BLOCKS.register("force_brick_yellow_stairs", () -> new StairsBlock(() -> FORCE_BRICK_YELLOW.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_YELLOW.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_GREEN_STAIRS = BLOCKS.register("force_brick_green_stairs", () -> new StairsBlock(() -> FORCE_BRICK_GREEN.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_GREEN.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_BLUE_STAIRS = BLOCKS.register("force_brick_blue_stairs", () -> new StairsBlock(() -> FORCE_BRICK_BLUE.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_BLUE.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_WHITE_STAIRS = BLOCKS.register("force_brick_white_stairs", () -> new StairsBlock(() -> FORCE_BRICK_WHITE.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_WHITE.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_BLACK_STAIRS = BLOCKS.register("force_brick_black_stairs", () -> new StairsBlock(() -> FORCE_BRICK_BLACK.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_BLACK.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_BROWN_STAIRS = BLOCKS.register("force_brick_brown_stairs", () -> new StairsBlock(() -> FORCE_BRICK_BROWN.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_BROWN.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_ORANGE_STAIRS = BLOCKS.register("force_brick_orange_stairs", () -> new StairsBlock(() -> FORCE_BRICK_ORANGE.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_ORANGE.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_LIGHT_BLUE_STAIRS = BLOCKS.register("force_brick_light_blue_stairs", () -> new StairsBlock(() -> FORCE_BRICK_LIGHT_BLUE.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_LIGHT_BLUE.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_MAGENTA_STAIRS = BLOCKS.register("force_brick_magenta_stairs", () -> new StairsBlock(() -> FORCE_BRICK_MAGENTA.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_MAGENTA.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_PINK_STAIRS = BLOCKS.register("force_brick_pink_stairs", () -> new StairsBlock(() -> FORCE_BRICK_PINK.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_PINK.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_LIGHT_GRAY_STAIRS = BLOCKS.register("force_brick_light_gray_stairs", () -> new StairsBlock(() -> FORCE_BRICK_LIGHT_GRAY.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_LIGHT_GRAY.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_LIME_STAIRS = BLOCKS.register("force_brick_lime_stairs", () -> new StairsBlock(() -> FORCE_BRICK_LIME.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_LIME.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_CYAN_STAIRS = BLOCKS.register("force_brick_cyan_stairs", () -> new StairsBlock(() -> FORCE_BRICK_CYAN.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_CYAN.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_PURPLE_STAIRS = BLOCKS.register("force_brick_purple_stairs", () -> new StairsBlock(() -> FORCE_BRICK_PURPLE.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_PURPLE.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_GRAY_STAIRS = BLOCKS.register("force_brick_gray_stairs", () -> new StairsBlock(() -> FORCE_BRICK_GRAY.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK_GRAY.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_STAIRS = BLOCKS.register("force_brick_stairs", () -> new StairsBlock(() -> FORCE_BRICK.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_BRICK.get())));
+
+    //Slabs
+    public static final RegistryObject<Block> FORCE_BRICK_RED_SLAB = BLOCKS.register("force_brick_red_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_RED.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_YELLOW_SLAB = BLOCKS.register("force_brick_yellow_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_YELLOW.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_GREEN_SLAB = BLOCKS.register("force_brick_green_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_GREEN.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_BLUE_SLAB = BLOCKS.register("force_brick_blue_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_BLUE.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_WHITE_SLAB = BLOCKS.register("force_brick_white_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_WHITE.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_BLACK_SLAB = BLOCKS.register("force_brick_black_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_BLACK.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_BROWN_SLAB = BLOCKS.register("force_brick_brown_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_BROWN.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_ORANGE_SLAB = BLOCKS.register("force_brick_orange_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_ORANGE.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_LIGHT_BLUE_SLAB = BLOCKS.register("force_brick_light_blue_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_LIGHT_BLUE.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_MAGENTA_SLAB = BLOCKS.register("force_brick_magenta_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_MAGENTA.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_PINK_SLAB = BLOCKS.register("force_brick_pink_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_PINK.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_LIGHT_GRAY_SLAB = BLOCKS.register("force_brick_light_gray_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_LIGHT_GRAY.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_LIME_SLAB = BLOCKS.register("force_brick_lime_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_LIME.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_CYAN_SLAB = BLOCKS.register("force_brick_cyan_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_CYAN.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_PURPLE_SLAB = BLOCKS.register("force_brick_purple_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_PURPLE.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_GRAY_SLAB = BLOCKS.register("force_brick_gray_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK_GRAY.get())));
+    public static final RegistryObject<Block> FORCE_BRICK_SLAB = BLOCKS.register("force_brick_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK.get())));
 
     //Torches
     public static final RegistryObject<Block> FORCE_TORCH = BLOCKS.register("force_torch", () ->
@@ -242,6 +265,40 @@ public class ForceRegistry {
     public static final RegistryObject<Item> FORCE_BRICK_PURPLE_ITEM = ITEMS.register("force_brick_purple", () -> new BlockItem(FORCE_BRICK_PURPLE.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_BRICK_GRAY_ITEM = ITEMS.register("force_brick_gray", () -> new BlockItem(FORCE_BRICK_GRAY.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_BRICK_ITEM = ITEMS.register("force_brick", () -> new BlockItem(FORCE_BRICK.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_RED_STAIRS_ITEM = ITEMS.register("force_brick_red_stairs", () -> new BlockItem(FORCE_BRICK_RED_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_YELLOW_STAIRS_ITEM = ITEMS.register("force_brick_yellow_stairs", () -> new BlockItem(FORCE_BRICK_YELLOW_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_GREEN_STAIRS_ITEM = ITEMS.register("force_brick_green_stairs", () -> new BlockItem(FORCE_BRICK_GREEN_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_BLUE_STAIRS_ITEM = ITEMS.register("force_brick_blue_stairs", () -> new BlockItem(FORCE_BRICK_BLUE_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_WHITE_STAIRS_ITEM = ITEMS.register("force_brick_white_stairs", () -> new BlockItem(FORCE_BRICK_WHITE_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_BLACK_STAIRS_ITEM = ITEMS.register("force_brick_black_stairs", () -> new BlockItem(FORCE_BRICK_BLACK_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_BROWN_STAIRS_ITEM = ITEMS.register("force_brick_brown_stairs", () -> new BlockItem(FORCE_BRICK_BROWN_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_ORANGE_STAIRS_ITEM = ITEMS.register("force_brick_orange_stairs", () -> new BlockItem(FORCE_BRICK_ORANGE_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_LIGHT_BLUE_STAIRS_ITEM = ITEMS.register("force_brick_light_blue_stairs", () -> new BlockItem(FORCE_BRICK_LIGHT_BLUE_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_MAGENTA_STAIRS_ITEM = ITEMS.register("force_brick_magenta_stairs", () -> new BlockItem(FORCE_BRICK_MAGENTA_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_PINK_STAIRS_ITEM = ITEMS.register("force_brick_pink_stairs", () -> new BlockItem(FORCE_BRICK_PINK_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_LIGHT_GRAY_STAIRS_ITEM = ITEMS.register("force_brick_light_gray_stairs", () -> new BlockItem(FORCE_BRICK_LIGHT_GRAY_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_LIME_STAIRS_ITEM = ITEMS.register("force_brick_lime_stairs", () -> new BlockItem(FORCE_BRICK_LIME_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_CYAN_STAIRS_ITEM = ITEMS.register("force_brick_cyan_stairs", () -> new BlockItem(FORCE_BRICK_CYAN_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_PURPLE_STAIRS_ITEM = ITEMS.register("force_brick_purple_stairs", () -> new BlockItem(FORCE_BRICK_PURPLE_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_GRAY_STAIRS_ITEM = ITEMS.register("force_brick_gray_stairs", () -> new BlockItem(FORCE_BRICK_GRAY_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_STAIRS_ITEM = ITEMS.register("force_brick_stairs", () -> new BlockItem(FORCE_BRICK_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_RED_SLAB_ITEM = ITEMS.register("force_brick_red_slab", () -> new BlockItem(FORCE_BRICK_RED_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_YELLOW_SLAB_ITEM = ITEMS.register("force_brick_yellow_slab", () -> new BlockItem(FORCE_BRICK_YELLOW_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_GREEN_SLAB_ITEM = ITEMS.register("force_brick_green_slab", () -> new BlockItem(FORCE_BRICK_GREEN_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_BLUE_SLAB_ITEM = ITEMS.register("force_brick_blue_slab", () -> new BlockItem(FORCE_BRICK_BLUE_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_WHITE_SLAB_ITEM = ITEMS.register("force_brick_white_slab", () -> new BlockItem(FORCE_BRICK_WHITE_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_BLACK_SLAB_ITEM = ITEMS.register("force_brick_black_slab", () -> new BlockItem(FORCE_BRICK_BLACK_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_BROWN_SLAB_ITEM = ITEMS.register("force_brick_brown_slab", () -> new BlockItem(FORCE_BRICK_BROWN_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_ORANGE_SLAB_ITEM = ITEMS.register("force_brick_orange_slab", () -> new BlockItem(FORCE_BRICK_ORANGE_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_LIGHT_BLUE_SLAB_ITEM = ITEMS.register("force_brick_light_blue_slab", () -> new BlockItem(FORCE_BRICK_LIGHT_BLUE_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_MAGENTA_SLAB_ITEM = ITEMS.register("force_brick_magenta_slab", () -> new BlockItem(FORCE_BRICK_MAGENTA_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_PINK_SLAB_ITEM = ITEMS.register("force_brick_pink_slab", () -> new BlockItem(FORCE_BRICK_PINK_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_LIGHT_GRAY_SLAB_ITEM = ITEMS.register("force_brick_light_gray_slab", () -> new BlockItem(FORCE_BRICK_LIGHT_GRAY_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_LIME_SLAB_ITEM = ITEMS.register("force_brick_lime_slab", () -> new BlockItem(FORCE_BRICK_LIME_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_CYAN_SLAB_ITEM = ITEMS.register("force_brick_cyan_slab", () -> new BlockItem(FORCE_BRICK_CYAN_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_PURPLE_SLAB_ITEM = ITEMS.register("force_brick_purple_slab", () -> new BlockItem(FORCE_BRICK_PURPLE_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_GRAY_SLAB_ITEM = ITEMS.register("force_brick_gray_slab", () -> new BlockItem(FORCE_BRICK_GRAY_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BRICK_SLAB_ITEM = ITEMS.register("force_brick_slab", () -> new BlockItem(FORCE_BRICK_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORCE_TORCH_ITEM = ITEMS.register("force_torch", () -> new WallOrFloorItem(FORCE_TORCH.get(), ForceRegistry.WALL_FORCE_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> TIME_TORCH_ITEM = ITEMS.register("time_torch", () -> new WallOrFloorItem(TIME_TORCH.get(), ForceRegistry.WALL_TIME_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));

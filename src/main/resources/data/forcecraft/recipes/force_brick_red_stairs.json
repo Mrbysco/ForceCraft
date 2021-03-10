@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "forcecraft:force_brick_red"
+    }
+  },
+  "result": {
+    "item": "forcecraft:force_brick_red_stairs",
+    "count": 4
+  }
+}

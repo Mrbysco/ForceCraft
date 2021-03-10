@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "side": "forcecraft:block/force_brick_red",
+    "bottom": "forcecraft:block/force_brick_red",
+    "top": "forcecraft:block/force_brick_red"
+  }
+}
