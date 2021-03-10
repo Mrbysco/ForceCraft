@@ -2,12 +2,14 @@ package mrbysco.forcecraft.registry;
 
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
-import mrbysco.forcecraft.blocks.BurnableBlock;
+import mrbysco.forcecraft.blocks.flammable.FlammableBlock;
 import mrbysco.forcecraft.blocks.ForceFluidBlock;
 import mrbysco.forcecraft.blocks.ForceFurnaceBlock;
 import mrbysco.forcecraft.blocks.ForceLeavesBlock;
 import mrbysco.forcecraft.blocks.ForceLogBlock;
 import mrbysco.forcecraft.blocks.InfuserBlock;
+import mrbysco.forcecraft.blocks.flammable.FlammableSlab;
+import mrbysco.forcecraft.blocks.flammable.FlammableStairs;
 import mrbysco.forcecraft.blocks.torch.TimeTorchBlock;
 import mrbysco.forcecraft.blocks.torch.WallTimeTorchBlock;
 import mrbysco.forcecraft.blocks.tree.ForceTree;
@@ -79,7 +81,11 @@ public class ForceRegistry {
         new ForceLogBlock(AbstractBlock.Properties.create(Material.WOOD, MaterialColor.WOOD)
                 .hardnessAndResistance(1.0F).sound(SoundType.WOOD).setLightLevel((state) -> 1)));
     public static final RegistryObject<Block> FORCE_PLANKS = BLOCKS.register("force_planks", () ->
-            new BurnableBlock(AbstractBlock.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)));
+            new FlammableBlock(AbstractBlock.Properties.create(Material.WOOD, MaterialColor.SAND).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD), 5, 20));
+    public static final RegistryObject<Block> FORCE_PLANK_STAIRS = BLOCKS.register("force_plank_stairs", () ->
+            new FlammableStairs(() -> FORCE_PLANKS.get().getDefaultState(), AbstractBlock.Properties.from(FORCE_PLANKS.get()), 5, 20));
+    public static final RegistryObject<Block> FORCE_PLANK_SLAB = BLOCKS.register("force_plank_slab",
+            () -> new FlammableSlab(AbstractBlock.Properties.from(FORCE_PLANKS.get()), 5, 20));
 
 
     public static final RegistryObject<Block> FORCE_LEAVES = BLOCKS.register("force_leaves", () ->
@@ -246,6 +252,8 @@ public class ForceRegistry {
     public static final RegistryObject<Item> FORCE_LEAVES_ITEM = ITEMS.register("force_leaves", () -> new BlockItem(ForceRegistry.FORCE_LEAVES.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> INFUSER_ITEM = ITEMS.register("infuser", () -> new BlockItem(ForceRegistry.INFUSER.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_PLANKS_ITEM = ITEMS.register("force_planks", () -> new BlockItem(ForceRegistry.FORCE_PLANKS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_PLANK_STAIRS_ITEM = ITEMS.register("force_plank_stairs", () -> new BlockItem(ForceRegistry.FORCE_PLANK_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_PLANK_SLAB_ITEM = ITEMS.register("force_plank_slab", () -> new BlockItem(ForceRegistry.FORCE_PLANK_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_FURNACE_ITEM = ITEMS.register("force_furnace", () -> new BlockItem(ForceRegistry.FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORCE_BRICK_RED_ITEM = ITEMS.register("force_brick_red", () -> new BlockItem(FORCE_BRICK_RED.get(), itemBuilder().group(ForceCraft.creativeTab)));

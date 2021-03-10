@@ -46,6 +46,8 @@
     "block.forcecraft.infuser": "Force Infuser",
     "block.forcecraft.force_furnace": "Force Furnace",
     "block.forcecraft.force_planks": "Force Planks",
+    "block.forcecraft.force_plank_stairs": "Force Plank Stairs",
+    "block.forcecraft.force_plank_slab": "Force Plank Slab",
     "block.forcecraft.force_brick_black": "Black Force Brick",
     "block.forcecraft.force_brick_blue": "Blue Force Brick",
     "block.forcecraft.force_brick_brown": "Brown Force Brick",

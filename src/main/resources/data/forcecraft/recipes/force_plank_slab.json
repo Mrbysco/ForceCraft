@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "forcecraft:force_planks"
+    }
+  },
+  "result": {
+    "item": "forcecraft:force_plank_slab",
+    "count": 6
+  }
+}

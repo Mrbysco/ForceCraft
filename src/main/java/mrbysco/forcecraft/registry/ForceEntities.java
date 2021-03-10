@@ -35,9 +35,9 @@ public class ForceEntities {
 					.size(0.9F, 0.9F).trackingRange(10)));
 
 	public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
-		GlobalEntityTypeAttributes.put(ForceEntities.COLD_CHICKEN.get(), ColdChickenEntity.generateAttributes().create());
-		GlobalEntityTypeAttributes.put(ForceEntities.COLD_COW.get(), ColdCowEntity.generateAttributes().create());
-		GlobalEntityTypeAttributes.put(ForceEntities.COLD_PIG.get(), ColdPigEntity.generateAttributes().create());
+		event.put(ForceEntities.COLD_CHICKEN.get(), ColdChickenEntity.generateAttributes().create());
+		event.put(ForceEntities.COLD_COW.get(), ColdCowEntity.generateAttributes().create());
+		event.put(ForceEntities.COLD_PIG.get(), ColdPigEntity.generateAttributes().create());
 	}
 
 	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {

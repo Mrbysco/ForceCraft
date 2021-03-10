@@ -120,6 +120,7 @@ public class ForceDataGen {
 				registerDropSelfLootTable(FORCE_BRICK.get());
 
 				//Stairs
+				registerDropSelfLootTable(FORCE_PLANK_STAIRS.get());
 				registerDropSelfLootTable(FORCE_BRICK_RED_STAIRS.get());
 				registerDropSelfLootTable(FORCE_BRICK_YELLOW_STAIRS.get());
 				registerDropSelfLootTable(FORCE_BRICK_GREEN_STAIRS.get());
@@ -139,6 +140,9 @@ public class ForceDataGen {
 				registerDropSelfLootTable(FORCE_BRICK_STAIRS.get());
 
 				//Slabs
+				registerLootTable(FORCE_PLANK_SLAB.get(), (slab) -> {
+					return droppingSlab((SlabBlock)FORCE_PLANK_SLAB.get());
+				});
 				registerLootTable(FORCE_BRICK_RED_SLAB.get(), (slab) -> {
 					return droppingSlab((SlabBlock)FORCE_BRICK_RED_SLAB.get());
 				});
@@ -213,6 +217,8 @@ public class ForceDataGen {
 		@Override
 		protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
 			//Stairs
+
+			ShapedRecipeBuilder.shapedRecipe(FORCE_PLANK_STAIRS.get(), 4).key('#', FORCE_PLANKS.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_planks", hasItem(FORCE_PLANKS.get())).build(consumer);
 			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_RED_STAIRS.get(), 4).key('#', FORCE_BRICK_RED.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_RED.get())).build(consumer);
 			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_YELLOW_STAIRS.get(), 4).key('#', FORCE_BRICK_YELLOW.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_YELLOW.get())).build(consumer);
 			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_GREEN_STAIRS.get(), 4).key('#', FORCE_BRICK_GREEN.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_GREEN.get())).build(consumer);
@@ -248,6 +254,7 @@ public class ForceDataGen {
 			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_GRAY.get()), FORCE_BRICK_GRAY_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_GRAY.get())).build(consumer, "force_brick_gray_stairs_from_force_brick_gray");
 			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK.get()), FORCE_BRICK_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK.get())).build(consumer, "force_brick_stairs_from_force_brick");
 			//Slabs
+			ShapedRecipeBuilder.shapedRecipe(FORCE_PLANK_SLAB.get(), 6).key('#', FORCE_PLANKS.get()).patternLine("###").addCriterion("has_planks", hasItem(FORCE_PLANKS.get())).build(consumer);
 			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_RED_SLAB.get(), 6).key('#', FORCE_BRICK_RED.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_RED.get())).build(consumer);
 			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_YELLOW_SLAB.get(), 6).key('#', FORCE_BRICK_YELLOW.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_YELLOW.get())).build(consumer);
 			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_GREEN_SLAB.get(), 6).key('#', FORCE_BRICK_GREEN.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_GREEN.get())).build(consumer);
@@ -313,14 +320,10 @@ public class ForceDataGen {
 			withExistingParent("infuser", modLoc("block/infuser"));
 			withExistingParent("force_furnace", modLoc("block/force_furnace"));
 
-			singleTexture("force_sapling", mcLoc("item/generated"), modLoc("block/force_sapling"));
 			withExistingParent("force_log", modLoc("block/force_log"));
 			withExistingParent("force_wood", modLoc("block/force_wood"));
 			withExistingParent("force_leaves", modLoc("block/force_leaves"));
 			withExistingParent("force_planks", modLoc("block/force_planks"));
-
-			singleTexture("force_torch", mcLoc("item/generated"), modLoc("block/force_torch"));
-			singleTexture("time_torch", mcLoc("item/generated"), modLoc("block/time_torch"));
 
 			withExistingParent("force_brick_red", modLoc("block/force_brick_red"));
 			withExistingParent("force_brick_yellow", modLoc("block/force_brick_yellow"));
@@ -340,6 +343,7 @@ public class ForceDataGen {
 			withExistingParent("force_brick_gray", modLoc("block/force_brick_gray"));
 			withExistingParent("force_brick", modLoc("block/force_brick"));
 
+			withExistingParent("force_plank_stairs", modLoc("block/force_plank_stairs"));
 			withExistingParent("force_brick_red_stairs", modLoc("block/force_brick_red_stairs"));
 			withExistingParent("force_brick_yellow_stairs", modLoc("block/force_brick_yellow_stairs"));
 			withExistingParent("force_brick_green_stairs", modLoc("block/force_brick_green_stairs"));
@@ -358,6 +362,7 @@ public class ForceDataGen {
 			withExistingParent("force_brick_gray_stairs", modLoc("block/force_brick_gray_stairs"));
 			withExistingParent("force_brick_stairs", modLoc("block/force_brick_stairs"));
 
+			withExistingParent("force_plank_slab", modLoc("block/force_plank_slab"));
 			withExistingParent("force_brick_red_slab", modLoc("block/force_brick_red_slab"));
 			withExistingParent("force_brick_yellow_slab", modLoc("block/force_brick_yellow_slab"));
 			withExistingParent("force_brick_green_slab", modLoc("block/force_brick_green_slab"));
@@ -391,6 +396,7 @@ public class ForceDataGen {
 
 		@Override
 		protected void registerStatesAndModels() {
+			stairsBlock((StairsBlock) FORCE_PLANK_STAIRS.get(), modLoc("block/force_planks"));
 			stairsBlock((StairsBlock) FORCE_BRICK_RED_STAIRS.get(), modLoc("block/force_brick_red"));
 			stairsBlock((StairsBlock) FORCE_BRICK_YELLOW_STAIRS.get(), modLoc("block/force_brick_yellow"));
 			stairsBlock((StairsBlock) FORCE_BRICK_GREEN_STAIRS.get(), modLoc("block/force_brick_green"));
@@ -409,6 +415,7 @@ public class ForceDataGen {
 			stairsBlock((StairsBlock) FORCE_BRICK_GRAY_STAIRS.get(), modLoc("block/force_brick_gray"));
 			stairsBlock((StairsBlock) FORCE_BRICK_STAIRS.get(), modLoc("block/force_brick"));
 
+			slabBlock((SlabBlock) FORCE_PLANK_SLAB.get(), modLoc("block/force_planks"), modLoc("block/force_planks"));
 			slabBlock((SlabBlock) FORCE_BRICK_RED_SLAB.get(), modLoc("block/force_brick_red"), modLoc("block/force_brick_red"));
 			slabBlock((SlabBlock) FORCE_BRICK_YELLOW_SLAB.get(), modLoc("block/force_brick_yellow"), modLoc("block/force_brick_yellow"));
 			slabBlock((SlabBlock) FORCE_BRICK_GREEN_SLAB.get(), modLoc("block/force_brick_green"), modLoc("block/force_brick_green"));
