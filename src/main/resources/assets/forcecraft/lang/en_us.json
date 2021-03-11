@@ -19,6 +19,7 @@
     "item.forcecraft.bottled_wither": "Bottled Wither",
     "item.forcecraft.inert_core": "Inert Core",
     "item.forcecraft.force_bucket": "Force Bucket",
+    "item.forcecraft.baconator": "Baconator",
 
     "_comment": "Armor",
     "item.forcecraft.force_helmet": "Force Cap",
@@ -129,6 +130,9 @@
     "forcecraft.magnet_glove.active": "Activated",
     "forcecraft.magnet_glove.deactivated": "Deactivated",
     "forcecraft.toolmod.rainbow": "Rainbow",
+    "forcecraft.baconator.shift.text": "Hold Shift to see the contents",
+    "forcecraft.baconator.shift.carrying": "Carrying: ",
+    "forcecraft.baconator.shift.nothing": "Nothing",
 
     "_comment": "Fortunes",
     "text.forcecraft.fortune0": "You aren't supposed to eat me.",

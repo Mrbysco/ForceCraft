@@ -13,6 +13,7 @@ import mrbysco.forcecraft.blocks.flammable.FlammableStairs;
 import mrbysco.forcecraft.blocks.torch.TimeTorchBlock;
 import mrbysco.forcecraft.blocks.torch.WallTimeTorchBlock;
 import mrbysco.forcecraft.blocks.tree.ForceTree;
+import mrbysco.forcecraft.items.BaconatorItem;
 import mrbysco.forcecraft.items.BaseItem;
 import mrbysco.forcecraft.items.BottledWitherItem;
 import mrbysco.forcecraft.items.CustomArmorItem;
@@ -212,6 +213,7 @@ public class ForceRegistry {
     public static final RegistryObject<Item> FORCE_BELT = ITEMS.register("force_belt", () -> new ForceBeltItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> BOTTLED_WITH = ITEMS.register("bottled_wither", () -> new BottledWitherItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> INERT_CORE = ITEMS.register("inert_core", () -> new InertCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> BACONATOR = ITEMS.register("baconator", () -> new BaconatorItem(itemBuilder().group(ForceCraft.creativeTab)));
 
     //Tools
     public static final RegistryObject<Item> FORCE_PICKAXE = ITEMS.register("force_pickaxe", () -> new ForcePickaxeItem(itemBuilder().group(ForceCraft.creativeTab)));
