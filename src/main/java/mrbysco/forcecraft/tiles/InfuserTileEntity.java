@@ -64,7 +64,18 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class InfuserTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventory {
 
-    private static final int FLUID_PER_GEM = 500;
+	//modifiers cap out
+	private static final int MAX_MODIFIER = 10;
+	// slots [0,7] are the surround
+	public static final int SLOT_TOOL = 8;
+    public static final int SLOT_GEM = 9;
+	public static final int SLOT_BOOK = 10;
+	//currently these costs are fixed PER infusing a thing once
+	public static final int ENERGY_COST_PER = 20;
+    public static final int FLUID_COST_PER = 1000;
+    //ratio of gem slot to fluid tank
+	private static final int FLUID_PER_GEM = 500;
+	
 	protected FluidTank tank = new FluidTank(50000) {
         @Nonnull
         @Override
@@ -95,7 +106,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     };
     private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
 
-    public ForceEnergyStorage energyStorage = new ForceEnergyStorage(MAX_POWER, 1000);
+    public ForceEnergyStorage energyStorage = new ForceEnergyStorage(1000000, 1000);
     private LazyOptional<ForceEnergyStorage> energyHolder = LazyOptional.of(() -> energyStorage);
 
     private NonNullList<ItemStack> infuserContents = NonNullList.create();
@@ -107,9 +118,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public int processTime = 0;
     public int maxProcessTime = 17;
 
-    public static int MAX_POWER = 1000000;
-    public static int RF_PER_TICK = 20;
-    public static int PR_PER_TICK_INPUT = 200;
+ //   public static int PR_PER_TICK_INPUT = 200;
 
     public int fluidContained;
 
@@ -155,17 +164,24 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         }
         processForceGems();
         
-//        if (!canWork) {
-            if (processTime == maxProcessTime) {
-                processTool();
+        if (canWork) {
+            if (processTime >= maxProcessTime) {
+                if (hasValidTool()) {
+                	//once we have a valid tool and have waited. go do the thing
+                	processTool();
+                    processTime = 0;
+                    canWork = false;
+                }
             }
-            processTime++;
-//        }
+            else {
+            	processTime++;
+            }
+        }
     }
 
     //Processes force Gems in the force infuser slot
     private void processForceGems() {
-        if (handler.getStackInSlot(9).getItem() == ForceRegistry.FORCE_GEM.get()) {
+        if (handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
             FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
 
             if (tank.getFluidAmount() < tank.getCapacity() - force.getAmount()) {
@@ -179,24 +195,20 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     private void processTool() {
-        if (hasValidTool()) {
-            ForceCraft.LOGGER.info("hasValidTool infuser tile {} ", getFromToolSlot());
-            for (int i = 0; i < 8; i++) {
-                if (hasValidModifer(i)) {
-                    ItemStack mod = getModifier(i);
-                    ItemStack stack = getFromToolSlot();
-                    boolean success = applyModifier(stack, mod);
-                    if (success) {
-                        handler.setStackInSlot(i, ItemStack.EMPTY);
-                        tank.drain(1000, FluidAction.EXECUTE);
-                        energyStorage.consumePower(RF_PER_TICK);
-                        world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
-                    }
+        ForceCraft.LOGGER.info("canWork && hasValidTool infuser tile {} ", getFromToolSlot());
+        for (int i = 0; i < 8; i++) {
+            if (hasValidModifer(i)) {
+                ItemStack mod = getModifier(i);
+                ItemStack stack = getFromToolSlot();
+                boolean success = applyModifier(stack, mod);
+                if (success) {
+                    handler.setStackInSlot(i, ItemStack.EMPTY);
+                    tank.drain(FLUID_COST_PER, FluidAction.EXECUTE);
+                    energyStorage.consumePower(ENERGY_COST_PER);
+                    world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
                 }
             }
         }
-        canWork = false;
-        processTime = 0;
     }
 
     @Nullable
@@ -253,7 +265,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
 	private ItemStack getFromToolSlot() {
-		return handler.getStackInSlot(8);
+		return handler.getStackInSlot(SLOT_TOOL);
 	}
 
     private boolean hasValidModifer(int slot) {
@@ -574,7 +586,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     stack.addEnchantment(Enchantments.UNBREAKING, 1);
                     return true;
                 }
-                else if(modifierCap.getSturdyLevel() < 10) {
+                else if(modifierCap.getSturdyLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSturdy();
                     EnchantUtils.incrementLevel(stack, Enchantments.UNBREAKING);
                     return true;
@@ -588,7 +600,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     modifierCap.incrementSturdy();
                     return true;
                 }
-                else if(modifierCap.getSturdyLevel() < 10) {
+                else if(modifierCap.getSturdyLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSturdy();
                     return true;
                 }
@@ -607,7 +619,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     stack.addEnchantment(Enchantments.FORTUNE, 1);
                     return true;
                 }
-                else if(modifierCap.getLuckLevel() < 10) {
+                else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
                     modifierCap.incrementLuck();
                     EnchantUtils.incrementLevel(stack, Enchantments.FORTUNE);
                     return true;
@@ -622,7 +634,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     stack.addEnchantment(Enchantments.LOOTING, 1);
                     return true;
                 }
-                else if(modifierCap.getLuckLevel() < 10) {
+                else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
                     modifierCap.incrementLuck();
                     EnchantUtils.incrementLevel(stack, Enchantments.LOOTING);
                     return true;
@@ -636,7 +648,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     modifierCap.incrementLuck();
                     return true;
                 }
-                else if(modifierCap.getLuckLevel() < 10) {
+                else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
                     modifierCap.incrementLuck();
                     return true;
                 }
@@ -655,7 +667,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     stack.addEnchantment(Enchantments.SHARPNESS, 1);
                     return true;
                 }
-                else if(modifierCap.getSharpLevel() < 10) {
+                else if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSharp();
                     EnchantUtils.incrementLevel(stack, Enchantments.SHARPNESS);
                     return true;
@@ -669,7 +681,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     modifierCap.incrementSharp();
                     return true;
                 }
-                else if(modifierCap.getSharpLevel() < 10) {
+                else if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSharp();
                     return true;
                 }
@@ -703,7 +715,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     stack.addEnchantment(Enchantments.KNOCKBACK, 1);
                     return true;
                 }
-                else if(modifierCap.getForceLevel() < 10) {
+                else if(modifierCap.getForceLevel() < MAX_MODIFIER) {
                     modifierCap.incrementForce();
                     EnchantUtils.incrementLevel(stack, Enchantments.KNOCKBACK);
                     return true;
@@ -745,7 +757,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     stack.addEnchantment(Enchantments.EFFICIENCY, 1);
                     return true;
                 }
-                else if(modifierCap.getSpeedLevel() < 10) {
+                else if(modifierCap.getSpeedLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSpeed();
                     EnchantUtils.incrementLevel(stack, Enchantments.EFFICIENCY);
                     return true;
@@ -759,7 +771,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     modifierCap.incrementSpeed();
                     return true;
                 }
-                else if(modifierCap.getSpeedLevel() < 10) {
+                else if(modifierCap.getSpeedLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSpeed();
                     return true;
                 }
