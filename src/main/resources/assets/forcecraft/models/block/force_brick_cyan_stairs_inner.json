@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "side": "forcecraft:block/force_brick_cyan",
+    "bottom": "forcecraft:block/force_brick_cyan",
+    "top": "forcecraft:block/force_brick_cyan"
+  }
+}

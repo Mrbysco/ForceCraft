@@ -4,6 +4,7 @@ package mrbysco.forcecraft.config;
 import mrbysco.forcecraft.ForceCraft;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
@@ -14,6 +15,7 @@ public class ConfigHandler {
         public final BooleanValue generateForceTree;
         public final BooleanValue timeTorchEnabled;
         public final BooleanValue timeTorchLogging;
+        public final IntValue baconatorMaxStacks;
 
         Common(ForgeConfigSpec.Builder builder) {
             //General settings
@@ -35,6 +37,10 @@ public class ConfigHandler {
             timeTorchLogging = builder
                     .comment("Print in Log when Time Torch is placed and by who. [Default: true]")
                     .define("timeTorchLogging", true);
+
+            baconatorMaxStacks = builder
+                    .comment("The max amount of food stacks stored in the baconator [Default: 4]")
+                    .defineInRange("baconatorMaxStacks", 4, 1, Integer.MAX_VALUE);
 
             builder.pop();
         }

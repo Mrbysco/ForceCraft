@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "forcecraft:force_brick_blue"
+    }
+  },
+  "result": {
+    "item": "forcecraft:force_brick_blue_slab",
+    "count": 6
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "forcecraft:force_brick_black"
+  },
+  "result": "forcecraft:force_brick_black_slab",
+  "count": 2
+}

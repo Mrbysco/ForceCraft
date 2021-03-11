@@ -9,6 +9,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,11 +34,10 @@ public class ForceEntities {
 			register("cold_pig", EntityType.Builder.<ColdPigEntity>create(ColdPigEntity::new, EntityClassification.CREATURE)
 					.size(0.9F, 0.9F).trackingRange(10)));
 
-
-	public static void setupEntities() {
-		GlobalEntityTypeAttributes.put(ForceEntities.COLD_CHICKEN.get(), ColdChickenEntity.generateAttributes().create());
-		GlobalEntityTypeAttributes.put(ForceEntities.COLD_COW.get(), ColdCowEntity.generateAttributes().create());
-		GlobalEntityTypeAttributes.put(ForceEntities.COLD_PIG.get(), ColdPigEntity.generateAttributes().create());
+	public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
+		event.put(ForceEntities.COLD_CHICKEN.get(), ColdChickenEntity.generateAttributes().create());
+		event.put(ForceEntities.COLD_COW.get(), ColdCowEntity.generateAttributes().create());
+		event.put(ForceEntities.COLD_PIG.get(), ColdPigEntity.generateAttributes().create());
 	}
 
 	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {

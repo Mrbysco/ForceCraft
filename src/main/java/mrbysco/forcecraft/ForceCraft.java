@@ -79,8 +79,9 @@ public class ForceCraft {
         MinecraftForge.EVENT_BUS.register(new LootTableHandler());
         MinecraftForge.EVENT_BUS.register(new ToolModifierHandler());
         MinecraftForge.EVENT_BUS.register(new WorldGenHandler());
-
         MinecraftForge.EVENT_BUS.addListener(NonBurnableItemEntity.EventHandler::onExpire); //Expire event of NonBurnableItemEntity
+
+        eventBus.addListener(ForceEntities::registerEntityAttributes);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             eventBus.addListener(ClientHandler::onClientSetup);
@@ -92,8 +93,6 @@ public class ForceCraft {
     private void setup(final FMLCommonSetupEvent event) {
         PacketHandler.init();
         CapabilityHandler.register();
-
-        ForceEntities.setupEntities();
     }
     
     public static void registerRecipeSerializers(Register<IRecipeSerializer<?>> event) {

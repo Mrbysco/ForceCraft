@@ -108,11 +108,11 @@ jar {
     manifest {
         attributes([
             "Specification-Title": "forcecraft",
-            "Specification-Vendor": "BURN447",
+            "Specification-Vendor": "Mrbysco",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"BURN447",
+            "Implementation-Vendor" :"Mrbysco",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

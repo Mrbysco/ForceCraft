@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "forcecraft:force_brick_cyan"
+  },
+  "result": "forcecraft:force_brick_cyan_slab",
+  "count": 2
+}
