@@ -134,6 +134,7 @@
     "fluid.forcecraft.fluid_force_source": "Liquid Force",
 
     "_comment": "Info text",
+    "forcecraft.tooltip.press_shift": "Press Shift for Details",
     "forcecraft.magnet_glove.active": "Activated",
     "forcecraft.magnet_glove.deactivated": "Deactivated",
     "forcecraft.toolmod.rainbow": "Rainbow",

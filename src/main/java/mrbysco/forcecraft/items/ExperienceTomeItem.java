@@ -13,6 +13,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -32,7 +33,7 @@ public class ExperienceTomeItem extends Item {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if(!Screen.hasShiftDown()){
-            tooltip.add(new StringTextComponent("Press Shift for Details"));
+  		  tooltip.add(new TranslationTextComponent("forcecraft.tooltip.press_shift"));
             return;
         }
         tooltip.add(new StringTextComponent(Float.toString(getExperience(stack)) + " / " + Float.toString(getMaxExperience(stack))));

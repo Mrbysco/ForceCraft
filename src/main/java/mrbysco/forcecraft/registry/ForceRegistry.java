@@ -25,7 +25,7 @@ import mrbysco.forcecraft.items.ForceFluidBucketItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.FortuneItem;
 import mrbysco.forcecraft.items.GoldenPowerSourceItem;
-import mrbysco.forcecraft.items.UpgradeTomeItem;
+import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.nonburnable.InertCoreItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
 import mrbysco.forcecraft.items.tools.ForceMittItem;

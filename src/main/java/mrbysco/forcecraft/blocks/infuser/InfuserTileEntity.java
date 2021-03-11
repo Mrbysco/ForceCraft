@@ -5,6 +5,7 @@ import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.items.CustomArmorItem;
+import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
 import mrbysco.forcecraft.items.tools.ForcePickaxeItem;
 import mrbysco.forcecraft.items.tools.ForceRodItem;
@@ -52,8 +53,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +75,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 	private static final int FLUID_PER_GEM = 500;
 	
 	protected FluidTank tank = new FluidTank(50000) {
-        @Nonnull
         @Override
         public FluidStack drain(FluidStack resource, FluidAction action) {
             if (!isFluidEqual(resource)) {
@@ -89,7 +87,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             return super.drain(resource.getAmount(), action);
         }
 
-        @Nonnull
         @Override
         public FluidStack drain(int maxDrain, FluidAction action) {
             return super.drain(maxDrain, action);
@@ -176,37 +173,31 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         if (world.isRemote) {
         	return;
         }
-        processForceGems();
+
+        if (handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
+        	processForceGems();
+        }
         
-        if (canWork) {
+        if (canWork && hasValidTool() && hasValidBook()) {
         	//working with No progress for now, just is valid and did i turn it on
-//            if (processTime >= maxProcessTime) {
-                if (hasValidTool()) {
-                	//once we have a valid tool and have waited. go do the thing
-                	processTool();
-//                    processTime = 0;
-                	// auto turn off when done
-                    canWork = false;
-                }
-//            }
-//            else {
-//            	processTime++;
-//            }
+
+        	//once we have a valid tool and have waited. go do the thing
+        	processTool();
+        	// auto turn off when done
+            canWork = false;
         }
     }
 
     //Processes force Gems in the force infuser slot
     private void processForceGems() {
-        if (handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
-            FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
+        FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
 
-            if (tank.getFluidAmount() < tank.getCapacity() - force.getAmount()) {
-                fill(force, FluidAction.EXECUTE);
-                handler.getStackInSlot(9).shrink(1);
+        if (tank.getFluidAmount() < tank.getCapacity() - force.getAmount()) {
+            fill(force, FluidAction.EXECUTE);
+            handler.getStackInSlot(9).shrink(1);
 
-                markDirty(); // TODO: ? remove if not needed
-                world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
-            }
+            markDirty(); // TODO: ? remove if not needed
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
         }
     }
 
@@ -214,14 +205,15 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         ForceCraft.LOGGER.info("canWork && hasValidTool infuser tile {} ", getFromToolSlot());
         for (int i = 0; i < 8; i++) {
             if (hasValidModifer(i)) {
-                ItemStack mod = getModifier(i);
-                ItemStack stack = getFromToolSlot();
-                boolean success = applyModifier(stack, mod);
+                ItemStack modifier = getModifier(i);
+                ItemStack tool = getFromToolSlot();
+                boolean success = applyModifier(tool, modifier);
                 if (success) {
                 	// for EACH modifier
                     handler.setStackInSlot(i, ItemStack.EMPTY);
                     tank.drain(FLUID_COST_PER, FluidAction.EXECUTE);
                     energyStorage.consumePower(ENERGY_COST_PER);
+                    UpgradeTomeItem.onModifierApplied(this.getBookInSlot(), modifier, tool);
                 }
             }
         }
@@ -229,7 +221,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
     }
 
-    @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
@@ -260,7 +251,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return handlerHolder.cast();
         }
@@ -281,12 +272,19 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         }
         return false;
     }
+    private boolean hasValidBook() {
+        ItemStack tool = getBookInSlot();
+		if (!tool.isEmpty()) {
+            return tool.getItem() ==ForceRegistry.UPGRADE_TOME.get();
+        }
+        return false;
+    }
 
 	private ItemStack getFromToolSlot() {
 		return handler.getStackInSlot(SLOT_TOOL);
 	}
 	
-	private ItemStack getBookIfValid() {
+	private ItemStack getBookInSlot() {
 		return handler.getStackInSlot(SLOT_BOOK);
 	}
 
@@ -861,7 +859,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         return new TranslationTextComponent(Reference.MOD_ID + ".container.infuser");
     }
 
-    @Nullable
     @Override
     public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity player) {
         return new InfuserContainer(id, playerInv, this);

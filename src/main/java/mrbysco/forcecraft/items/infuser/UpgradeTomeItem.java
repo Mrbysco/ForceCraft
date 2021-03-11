@@ -1,14 +1,14 @@
-package mrbysco.forcecraft.items;
+package mrbysco.forcecraft.items.infuser;
 
 import java.util.List;
 
 import javax.annotation.Nullable;
 
+import mrbysco.forcecraft.items.BaseItem;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -23,25 +23,33 @@ public class UpgradeTomeItem extends BaseItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-//        if(!Screen.hasShiftDown()){
-//            tooltip.add(new StringTextComponent("Press Shift for Details"));
-//            return;
-//        }
+
+		UpgradeBookData bd = new UpgradeBookData(stack);
+	
         TranslationTextComponent tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.tier");
         tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-        tt.appendString(" " + 1);
-        tooltip.add(tt); // TODO: get value
-//
+        tt.appendString(" " + bd.tier);
+        tooltip.add(tt);  
+
+        if(!Screen.hasShiftDown()){
+		  tooltip.add(new TranslationTextComponent("forcecraft.tooltip.press_shift"));
+		  return;
+      	}
         tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.points");
         tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-        tt.appendString(" " + 0);
-        tooltip.add(tt); // TODO: get zero points
+        tt.appendString(" " + bd.points);
+        tooltip.add(tt); 
         
         tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.nexttier");
         tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-        tt.appendString(" " + 0);
-        tooltip.add(tt); // TODO: get zero points
-        
-//        tooltip.add(new StringTextComponent(Float.toString(getExperience(stack)) + " / " + Float.toString(getMaxExperience(stack))));
+        tt.appendString(" " + bd.nextTier());
+        tooltip.add(tt);  
+
     }
+
+	public static void onModifierApplied(ItemStack bookInSlot, ItemStack modifier, ItemStack tool) {
+		UpgradeBookData bd = new UpgradeBookData(bookInSlot);
+		bd.incrementPoints(25); // TODO: points per modifier upgrade value !! 
+		
+	}
 }

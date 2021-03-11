@@ -56,7 +56,7 @@ public class InfuserContainer extends Container {
         this.addSlot(new SlotForceGems(te.handler, InfuserTileEntity.SLOT_GEM, 8, 23));
 
         //Book Upgrade Slot top left
-        this.addSlot(new SlotItemHandler(te.handler, InfuserTileEntity.SLOT_BOOK, 8, 2));
+        this.addSlot(new SlotItemHandler(te.handler, InfuserTileEntity.SLOT_BOOK, 8, 5));
         
         //player inventory here
         int xPos = 8;

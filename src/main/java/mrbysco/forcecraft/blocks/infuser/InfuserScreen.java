@@ -33,6 +33,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	private ProgressBar infuserProgress;
 	private boolean showingPop = false;
 	//12 by 107
+	private ResourceLocation INFO = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/info.png");
 	private ResourceLocation ENERGY = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/energy.png");
 	private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forceinfuser.png");
 
