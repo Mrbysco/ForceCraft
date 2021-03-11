@@ -1,8 +1,8 @@
-package mrbysco.forcecraft.container;
+package mrbysco.forcecraft.blocks.infuser;
 
 import mrbysco.forcecraft.container.slot.SlotForceGems;
+import mrbysco.forcecraft.container.slot.SlotForceTools;
 import mrbysco.forcecraft.registry.ForceContainers;
-import mrbysco.forcecraft.tiles.InfuserTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class InfuserContainer extends Container {
 
-    InfuserTileEntity te;
+    InfuserTileEntity tile;
 
     public InfuserContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
         this(windowId, playerInventory, getTileEntity(playerInventory, data));
@@ -37,8 +37,9 @@ public class InfuserContainer extends Container {
 
     public InfuserContainer(int id, PlayerInventory playerInventoryIn, InfuserTileEntity te) {
         super(ForceContainers.INFUSER.get(), id);
+        this.tile = te;
 
-        //Modifier Slots
+        //Modifier Slots [0, 7] around the outside starting at the top middle going clockwise
         this.addSlot(new SlotItemHandler(te.handler, 0, 80, 20));
         this.addSlot(new SlotItemHandler(te.handler, 1, 104, 32));
         this.addSlot(new SlotItemHandler(te.handler, 2, 116, 57));
@@ -48,15 +49,18 @@ public class InfuserContainer extends Container {
         this.addSlot(new SlotItemHandler(te.handler, 6, 44, 57));
         this.addSlot(new SlotItemHandler(te.handler, 7, 56, 32));
 
-        //Tools Slot
-        this.addSlot(new SlotItemHandler(te.handler, 8, 80, 57));
+        //Tools Slot in the middle
+        this.addSlot(new SlotForceTools(te.handler, InfuserTileEntity.SLOT_TOOL, 80, 57));
 
-        //Force Gem Slot
-        this.addSlot(new SlotForceGems(te.handler, 9, 10, 11));
+        //Force Gem Slot top left
+        this.addSlot(new SlotForceGems(te.handler, InfuserTileEntity.SLOT_GEM, 8, 23));
 
+        //Book Upgrade Slot top left
+        this.addSlot(new SlotItemHandler(te.handler, InfuserTileEntity.SLOT_BOOK, 8, 2));
+        
+        //player inventory here
         int xPos = 8;
         int yPos = 127;
-
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 9; ++x) {
                 this.addSlot(new Slot(playerInventoryIn, x + y * 9 + 9, xPos + x * 18, yPos + y * 18));
@@ -66,8 +70,6 @@ public class InfuserContainer extends Container {
         for (int x = 0; x < 9; ++x) {
             this.addSlot(new Slot(playerInventoryIn, x, xPos + x * 18, yPos + 58));
         }
-
-        this.te = te;
     }
 
     @Override
@@ -125,19 +127,19 @@ public class InfuserContainer extends Container {
     }
 
     public void setButtonPressed(boolean buttonPressed){
-        te.canWork = buttonPressed;
+        tile.canWork = buttonPressed;
     }
 
     public void setFluidAmount(int amount){
-        te.fluidContained = amount;
+        tile.fluidContained = amount;
     }
 
     public int getFluidAmount(){
-        return te.fluidContained;
+        return tile.fluidContained;
     }
 
     public InfuserTileEntity getTile() {
-        return te;
+        return tile;
     }
 
     @Override

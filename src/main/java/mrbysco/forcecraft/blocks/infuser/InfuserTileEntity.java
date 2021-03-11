@@ -1,10 +1,9 @@
-package mrbysco.forcecraft.tiles;
+package mrbysco.forcecraft.blocks.infuser;
 
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import mrbysco.forcecraft.container.InfuserContainer;
 import mrbysco.forcecraft.items.CustomArmorItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
 import mrbysco.forcecraft.items.tools.ForcePickaxeItem;
@@ -103,6 +102,20 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         protected int getStackLimit(int slot, ItemStack stack) {
             return 1;
         }
+        
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+//        	if(slot == SLOT_BOOK) {
+//        		return stack.getItem() == ForceRegistry.UPGRADE_TOME.get();
+//        	}
+        	ForceCraft.LOGGER.info("? isitem valid {}",slot);
+//        	if(slot == SLOT_GEM) {
+//        		return stack.getItem() == ForceRegistry.FORCE_GEM.get();
+//        	}
+        	// else tool or something for the around
+        	return true;
+        }
     };
     private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
 
@@ -120,6 +133,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
  //   public static int PR_PER_TICK_INPUT = 200;
 
+    @Deprecated // TODO: why do we use this
     public int fluidContained;
 
     public InfuserTileEntity(TileEntityType<?> type) {
@@ -165,17 +179,19 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         processForceGems();
         
         if (canWork) {
-            if (processTime >= maxProcessTime) {
+        	//working with No progress for now, just is valid and did i turn it on
+//            if (processTime >= maxProcessTime) {
                 if (hasValidTool()) {
                 	//once we have a valid tool and have waited. go do the thing
                 	processTool();
-                    processTime = 0;
+//                    processTime = 0;
+                	// auto turn off when done
                     canWork = false;
                 }
-            }
-            else {
-            	processTime++;
-            }
+//            }
+//            else {
+//            	processTime++;
+//            }
         }
     }
 
@@ -202,13 +218,15 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 ItemStack stack = getFromToolSlot();
                 boolean success = applyModifier(stack, mod);
                 if (success) {
+                	// for EACH modifier
                     handler.setStackInSlot(i, ItemStack.EMPTY);
                     tank.drain(FLUID_COST_PER, FluidAction.EXECUTE);
                     energyStorage.consumePower(ENERGY_COST_PER);
-                    world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
                 }
             }
         }
+        // TODO: is this notfiy needed?
+        world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
     }
 
     @Nullable
@@ -266,6 +284,10 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
 	private ItemStack getFromToolSlot() {
 		return handler.getStackInSlot(SLOT_TOOL);
+	}
+	
+	private ItemStack getBookIfValid() {
+		return handler.getStackInSlot(SLOT_BOOK);
 	}
 
     private boolean hasValidModifer(int slot) {
@@ -832,21 +854,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     protected boolean isFluidEqual(Fluid fluid) {
         return tank.getFluid().getFluid().equals(fluid);
-    }
-
-    @Override
-    public void remove() {
-        super.remove();
-
-        if(handlerHolder != null) {
-            handlerHolder.invalidate();
-        }
-        if(energyHolder != null) {
-            energyHolder.invalidate();
-        }
-        if(tankHolder != null) {
-            tankHolder.invalidate();
-        }
     }
 
     @Override

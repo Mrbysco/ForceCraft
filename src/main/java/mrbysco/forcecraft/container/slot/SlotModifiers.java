@@ -1,11 +1,12 @@
 package mrbysco.forcecraft.container.slot;
 
-import mrbysco.forcecraft.tiles.InfuserTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
+
+import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
 
 public class SlotModifiers extends SlotItemHandler {
     public SlotModifiers(IItemHandler itemHandler, int index, int xPosition, int yPosition) {

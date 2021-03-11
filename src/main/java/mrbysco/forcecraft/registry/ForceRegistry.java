@@ -7,7 +7,8 @@ import mrbysco.forcecraft.blocks.ForceFluidBlock;
 import mrbysco.forcecraft.blocks.ForceFurnaceBlock;
 import mrbysco.forcecraft.blocks.ForceLeavesBlock;
 import mrbysco.forcecraft.blocks.ForceLogBlock;
-import mrbysco.forcecraft.blocks.InfuserBlock;
+import mrbysco.forcecraft.blocks.infuser.InfuserBlock;
+import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
 import mrbysco.forcecraft.blocks.torch.TimeTorchBlock;
 import mrbysco.forcecraft.blocks.torch.WallTimeTorchBlock;
 import mrbysco.forcecraft.blocks.tree.ForceTree;
@@ -21,6 +22,7 @@ import mrbysco.forcecraft.items.ForceFluidBucketItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.FortuneItem;
 import mrbysco.forcecraft.items.GoldenPowerSourceItem;
+import mrbysco.forcecraft.items.UpgradeTomeItem;
 import mrbysco.forcecraft.items.nonburnable.InertCoreItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
 import mrbysco.forcecraft.items.tools.ForceMittItem;
@@ -33,7 +35,6 @@ import mrbysco.forcecraft.items.tools.ForceWrenchItem;
 import mrbysco.forcecraft.items.tools.MagnetGloveItem;
 import mrbysco.forcecraft.registry.material.ModArmor;
 import mrbysco.forcecraft.tiles.ForceFurnaceTileEntity;
-import mrbysco.forcecraft.tiles.InfuserTileEntity;
 import mrbysco.forcecraft.tiles.TimeTorchTileEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -152,6 +153,7 @@ public class ForceRegistry {
     public static final RegistryObject<Item> FORCE_INGOT = ITEMS.register("force_ingot", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_NUGGET = ITEMS.register("force_nugget", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_STICK = ITEMS.register("force_stick", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> UPGRADE_TOME = ITEMS.register("upgrade_tome", () -> new UpgradeTomeItem(itemBuilder().group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORTUNE_COOKIE = ITEMS.register("fortune_cookie", () ->
             new CustomFoodItem(itemBuilder().food(ForceFoods.FORTUNE_COOKIE).maxStackSize(1).group(ForceCraft.creativeTab)));

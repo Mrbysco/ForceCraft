@@ -5,12 +5,14 @@ import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.items.CustomArmorItem;
 import mrbysco.forcecraft.items.tools.MagnetGloveItem;
 import mrbysco.forcecraft.potion.effects.EffectMagnet;
+import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_PLAY
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class LivingUpdateHandler {
+
 
     private static final int SPEED_DURATION = 200;
     private static final int INVISIBILITY_DURATION = 200;
@@ -113,4 +116,12 @@ public class LivingUpdateHandler {
             }
         }
     }
+
+    @SubscribeEvent
+	public void onItemTooltipEvent(ItemTooltipEvent event) {
+		if(event.getItemStack().getItem() == ForceRegistry.UPGRADE_TOME.get()) {
+			//
+		}
+	}
+    
 }

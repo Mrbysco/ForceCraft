@@ -1,8 +1,11 @@
-package mrbysco.forcecraft.client.gui.infuser;
+package mrbysco.forcecraft.blocks.infuser;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
-import mrbysco.forcecraft.container.InfuserContainer;
+import mrbysco.forcecraft.client.gui.infuser.ProgressBar;
+import mrbysco.forcecraft.client.gui.infuser.ProgressBar.ProgressBarDirection;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -13,6 +16,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -27,6 +31,9 @@ import java.util.List;
 public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 	private ProgressBar infuserProgress;
+	private boolean showingPop = false;
+	//12 by 107
+	private ResourceLocation ENERGY = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/energy.png");
 	private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forceinfuser.png");
 
 	public InfuserScreen(InfuserContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
@@ -37,12 +44,16 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		this.addButton(new Button(39, 101, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.button"), (button) -> {
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
+			ForceCraft.LOGGER.info("here canWork toggle" );
 			container.getTile().canWork = true;
 		}));
 		this.addButton(new Button(123, 17, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
-			if(screenContainer.getTile().handler.getStackInSlot(9).isEmpty()) {
-				//Insert behavior
-			}
+			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
+			showingPop = !showingPop;
+			ForceCraft.LOGGER.info("here test sub gui {}", showingPop);
+//			if(screenContainer.getTile().handler.getStackInSlot(9).isEmpty()) {
+//				//Insert behavior
+//			}
 		}));
 
 		this.infuserProgress = new ProgressBar(TEXTURE, ProgressBar.ProgressBarDirection.DOWN_TO_UP, 2, 20, 134, 93, 176, 0);
@@ -62,7 +73,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
-		this.minecraft.getTextureManager().bindTexture(this.TEXTURE);
+		this.minecraft.getTextureManager().bindTexture(TEXTURE);
 		this.blit(matrixStack, this.guiLeft, this.guiTop, 0,0,this.xSize, this.ySize);
 	}
 
@@ -71,11 +82,12 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		int actualMouseX = mouseX - ((this.width - this.xSize) / 2);
 		int actualMouseY = mouseY - ((this.height - this.ySize) / 2);
 
-		this.infuserProgress.setMin(this.container.getTile().processTime).setMax(this.container.getTile().maxProcessTime);
-		this.infuserProgress.draw(matrixStack, this.minecraft);
+//		this.infuserProgress.setMin(container.getTile().processTime).setMax(container.getTile().maxProcessTime);
+//		this.infuserProgress.draw(matrixStack, this.minecraft);
 		this.drawFluidBar(matrixStack);
+		this.drawEnergyBar(matrixStack);
 
-		if (isPointInRegion(123, 16, 12, 12, mouseX, mouseY) && this.container.getTile().handler.getStackInSlot(9).isEmpty()) {
+		if (isPointInRegion(123, 16, 12, 12, mouseX, mouseY) && container.getTile().handler.getStackInSlot(InfuserTileEntity.SLOT_GEM).isEmpty()) {
 			List<ITextComponent> text = new ArrayList<>();
 			text.add(new TranslationTextComponent("gui.forcecraft.infuser.help.tooltip").mergeStyle(TextFormatting.GRAY));
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
@@ -87,44 +99,66 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
+		if(isPointInRegion(150, 8, 16, 82, mouseX, mouseY)) {
+			List<ITextComponent> text = new ArrayList<>();
+			IFormattableTextComponent tt = new TranslationTextComponent(" " + this.container.tile.getEnergyStored()).mergeStyle(TextFormatting.GRAY);
+			text.add(tt);
+			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
+		}
+
 		if(isPointInRegion(10, 36, 15, 82, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
-			if (this.container.getTile().getFluid() == null) {
+			if (container.tile.getFluid() == null) {
 				text.add(new TranslationTextComponent("gui.forcecraft.infuser.empty.tooltip"));
 			} else {
-				text.add(new StringTextComponent("Liquid Force" + TextFormatting.WHITE + " (" + this.container.getTile().getFluidAmount() + ")").mergeStyle(TextFormatting.YELLOW));
+				// TODO: liquid force tooltip
+				text.add(new StringTextComponent("Liquid Force" + TextFormatting.WHITE + " (" + this.container.tile.getFluidAmount() + ")").mergeStyle(TextFormatting.YELLOW));
 			}
 
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
-		if(isPointInRegion(152, 11, 12, 106, mouseX, mouseY)) {
-			List<ITextComponent> text = new ArrayList<>();
-			text.add(new StringTextComponent(this.container.getTile().getEnergyStored() + " FE"));
-
-			//this.drawHoveringText(text, actualMouseX, actualMouseY);
-		}
+//		if(isPointInRegion(152, 11, 12, 106, mouseX, mouseY)) {
+//			List<ITextComponent> text = new ArrayList<>();
+//			text.add(new StringTextComponent(container.getTile().getEnergyStored() + " FE"));
+//
+//			//this.drawHoveringText(text, actualMouseX, actualMouseY);
+//		}
 	}
 
 	private void drawFluidBar(MatrixStack matrixStack) {
-		if(this.container.getTile().getFluid() != null) {
-			FluidStack fluidStack = this.container.getTile().getFluidStack();
-			ResourceLocation flowing = fluidStack.getFluid().getAttributes().getStillTexture(fluidStack);
-			if (flowing != null) {
-				Texture texture = minecraft.getTextureManager().getTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
-				if (texture instanceof AtlasTexture) {
-					TextureAtlasSprite sprite = ((AtlasTexture) texture).getSprite(flowing);
-					if (sprite != null) {
-						this.minecraft.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
-						int fluidHeight = this.container.getTile().getFluidGuiHeight(82);
-						blit(matrixStack, 10, 60 + (58 - fluidHeight), 0, 16, fluidHeight, sprite);
-					}
+		if(container.getTile() == null || container.getTile().getFluid() == null) {
+			return;
+		}
+		FluidStack fluidStack = container.getTile().getFluidStack();
+		ResourceLocation flowing = fluidStack.getFluid().getAttributes().getStillTexture(fluidStack);
+		
+		if (flowing != null) {
+			Texture texture = minecraft.getTextureManager().getTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+			if (texture instanceof AtlasTexture) {
+				TextureAtlasSprite sprite = ((AtlasTexture) texture).getSprite(flowing);
+				if (sprite != null) {
+					minecraft.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+					int fluidHeight = container.tile.getFluidGuiHeight(82);
+					blit(matrixStack, 8, 65 + (58 - fluidHeight), 0, 16, fluidHeight, sprite);
 				}
 			}
 		}
 	}
 
-	private void drawEnergyBar() {
+	private void drawEnergyBar(MatrixStack ms) {
+		if(container.getTile() == null || container.getTile().energyStorage.getMaxEnergyStored() <= 0) {
+			return;
+		}
 
+		minecraft.textureManager.bindTexture(ENERGY);
+		float energ = container.getTile().getEnergyStored();
+		float capacity = container.getTile().energyStorage.getMaxEnergyStored();
+	    float pct = Math.min(energ / capacity, 1.0F);
+	    
+		float height = 107;
+		int width = 12;
+		int x = 31, y = -3;
+	    blit(ms, guiLeft + x, guiTop + y, 0, 0, width, (int)(height * pct), width,  (int)height);
 	}
 }

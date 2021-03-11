@@ -1,13 +1,10 @@
-package mrbysco.forcecraft.blocks;
+package mrbysco.forcecraft.blocks.infuser;
 
-import mrbysco.forcecraft.tiles.InfuserTileEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -17,7 +14,6 @@ import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -46,19 +42,6 @@ public class InfuserBlock extends Block {
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.matchesBlock(newState.getBlock())) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof AbstractFurnaceTileEntity) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (AbstractFurnaceTileEntity)tileentity);
-                ((AbstractFurnaceTileEntity)tileentity).grantStoredRecipeExperience(worldIn, Vector3d.copyCentered(pos));
-                worldIn.updateComparatorOutputLevel(pos, this);
-            }
-        }
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
-    }
-
-    @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
     }
@@ -74,8 +57,9 @@ public class InfuserBlock extends Block {
         TileEntity tileentity = worldIn.getTileEntity(pos);
         if (!worldIn.isRemote && tileentity instanceof InfuserTileEntity) {
             NetworkHooks.openGui((ServerPlayerEntity) playerIn, (InfuserTileEntity) tileentity, pos);
+            return ActionResultType.SUCCESS;
         }
-        return ActionResultType.PASS;
+        return super.onBlockActivated(state, worldIn, pos, playerIn, handIn, hit);
     }
 }
 

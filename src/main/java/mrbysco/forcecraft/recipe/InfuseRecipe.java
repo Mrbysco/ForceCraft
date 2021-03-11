@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
-import mrbysco.forcecraft.tiles.InfuserTileEntity;
+import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
