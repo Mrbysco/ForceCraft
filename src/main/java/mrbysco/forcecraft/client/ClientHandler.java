@@ -48,5 +48,8 @@ public class ClientHandler {
 			IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
 			return magnetCap != null && magnetCap.isActivated() ? 1.0F : 0.0F;
 		});
+
+		ItemModelsProperties.registerProperty(ForceRegistry.FORCE_PACK.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
+				stack.getTag() != null && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
 	}
 }

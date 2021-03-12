@@ -44,6 +44,19 @@ public class ItemHandlerUtils {
 		return true;
 	}
 
+	public static int getUsedSlots(IItemHandler itemHandler) {
+		if(itemHandler == null) return 0;
+
+		int usedSlots = 0;
+		for(int i = 0; i < itemHandler.getSlots(); i++) {
+			ItemStack stack = itemHandler.getStackInSlot(i);
+			if(!stack.isEmpty()) {
+				usedSlots++;
+			}
+		}
+		return usedSlots;
+	}
+
 	public static boolean extractStackFromPlayer(PlayerInventory inventory, IItemHandler targetHandler, Predicate<ItemStack> stackPredicate) {
 		if(targetHandler != null) {
 			for(int i = 0; i < inventory.getSizeInventory(); i++) {

@@ -1,13 +1,16 @@
 package mrbysco.forcecraft.container;
 
+import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.registry.ForceContainers;
+import mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -16,7 +19,9 @@ import javax.annotation.Nonnull;
 
 public class ForcePackContainer extends Container {
 
-    private int numRows = 5;
+    private PlayerInventory playerInventory;
+    private ItemStack heldStack;
+    private int upgrades;
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
@@ -29,42 +34,64 @@ public class ForcePackContainer extends Container {
 
     public ForcePackContainer(int id, PlayerInventory playerInventory, ItemStack forcePack) {
         super(ForceContainers.FORCE_PACK.get(), id);
-
-        int xPosC = 17;
-        int yPosC = 20;
-        //Maxes at 40
-        int counter = 0;
+        this.playerInventory = playerInventory;
+        this.heldStack = forcePack;
+        upgrades = 0;
 
         IItemHandler itemHandler = forcePack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-        if(itemHandler != null) {
-            for (int j = 0; j < this.numRows; ++j) {
+        if(itemHandler instanceof PackItemStackHandler) {
+            upgrades = ((PackItemStackHandler)itemHandler).getUpgrades();
+            int numRows = upgrades + 1;
+
+            int xPosC = 17;
+            int yPosC = 20;
+            //Maxes at 40
+            for (int j = 0; j < numRows; ++j) {
                 for (int k = 0; k < 8; ++k) {
-                    this.addSlot(new SlotItemHandler(itemHandler, counter, xPosC + k * 18, yPosC + j * 18) {
+                    this.addSlot(new SlotItemHandler(itemHandler, k + j * 8, xPosC + k * 18, yPosC + j * 18) {
                         @Override
                         public boolean isItemValid(@Nonnull ItemStack stack) {
                             return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem);
                         }
                     });
-                    counter++;
                 }
             }
-        }
 
-        //Player Inventory
-        int xPos = 8;
-        int yPos = 126;
+            //Player Inventory
+            int xPos = 8;
+            int yPos = 36 + (numRows * 18);
 
-        //Slots 9-99
-        for (int y = 0; y < 3; ++y) {
-            for (int x = 0; x < 9; ++x) {
-                this.addSlot(new Slot(playerInventory, x + y * 9 + 9, xPos + x * 18, yPos + y * 18));
+            //Slots 9-99
+            for (int y = 0; y < 3; ++y) {
+                for (int x = 0; x < 9; ++x) {
+                    this.addSlot(new Slot(playerInventory, x + y * 9 + 9, xPos + x * 18, yPos + y * 18));
+                }
             }
+
+            //Slots 0-8
+            for (int x = 0; x < 9; ++x) {
+                this.addSlot(new Slot(playerInventory, x, xPos + x * 18, yPos + 58));
+            }
+        } else {
+            playerInventory.player.closeScreen();
+        }
+    }
+
+    @Override
+    public void onContainerClosed(PlayerEntity playerIn) {
+        IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        if(itemHandler instanceof PackItemStackHandler) {
+            CompoundNBT tag = heldStack.getOrCreateTag();
+            tag.putInt("SlotsUsed", ItemHandlerUtils.getUsedSlots(itemHandler));
+            tag.putInt("SlotsTotal", itemHandler.getSlots());
+            heldStack.setTag(tag);
         }
 
-        //Slots 0-8
-        for (int x = 0; x < 9; ++x) {
-            this.addSlot(new Slot(playerInventory, x, xPos + x * 18, yPos + 58));
-        }
+        super.onContainerClosed(playerIn);
+    }
+
+    public int getUpgrades() {
+        return this.upgrades;
     }
 
     //Credit to Shadowfacts for this method

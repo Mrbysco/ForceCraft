@@ -70,7 +70,7 @@ public class BaconatorItem extends BaseItem {
 				} else {
 					worldIn.playSound((PlayerEntity) null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 				}
-				CompoundNBT tag = itemstack.getTag() != null ? itemstack.getTag() : new CompoundNBT();
+				CompoundNBT tag = itemstack.getOrCreateTag();
 				tag.putBoolean(HAS_FOOD_TAG, hasItems);
 			}
 		} else {
@@ -108,7 +108,7 @@ public class BaconatorItem extends BaseItem {
 	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if(stack.getDamage() == 1 && entityIn instanceof PlayerEntity && worldIn.getGameTime() % 20 == 0) {
 			PlayerEntity playerIn = (PlayerEntity)entityIn;
-			if(playerIn.canEat(false) && stack.getTag().getBoolean(HAS_FOOD_TAG)) {
+			if(playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
 				IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 				ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
 				if(!firstStack.isEmpty()) {
