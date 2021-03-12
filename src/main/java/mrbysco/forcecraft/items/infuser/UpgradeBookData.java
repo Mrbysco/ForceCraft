@@ -14,7 +14,7 @@ public class UpgradeBookData {
 			ForceCraft.LOGGER.error("invalid book data entering book {}", book);
 			return;
 		}
-		CompoundNBT tag = book.getTag();
+		CompoundNBT tag = book.getOrCreateTag();
 		if(tag != null && tag.contains("tier")) {
 			//is not empty, load it up
 			this.read(book, tag);

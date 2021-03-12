@@ -46,7 +46,7 @@ public class InfuserMessage {
                 ctr.setFluidAmount(fluidAmount);
                 
                 if(isButtonPressed) {
-                    ctr.setButtonPressed(true);
+                    ctr.getTile().canWork = true;
                 }
             }
         }

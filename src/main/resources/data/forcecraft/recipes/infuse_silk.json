@@ -1,15 +1,8 @@
 {
   "type":"forcecraft:infuser",
-  "ingredients": [
-    {
-      "tag": "forge:ingots/iron"
-    },
-    {
-      "item": "minecraft:flint"
-    },
-    {
-      "item": "forcecraft:force_nugget"
-    }
-  ],
+  "ingredient": 
+  {
+    "item": "minecraft:cobweb"
+  },
   "result": "forcecraft:silk"
 }

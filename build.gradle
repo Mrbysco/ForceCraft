@@ -98,9 +98,9 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}")
     
     
-    implementation fg.deobf("curse.maven:simple-storage-network-268495:3230736")
-    implementation fg.deobf("curse.maven:cyclic-239286:3231794")
-    implementation fg.deobf("curse.maven:simple-tomb-399669:3229015")
+  //  implementation fg.deobf("curse.maven:simple-storage-network-268495:3230736")
+  //  implementation fg.deobf("curse.maven:cyclic-239286:3231794")
+  //  implementation fg.deobf("curse.maven:simple-tomb-399669:3229015")
     
 }
 

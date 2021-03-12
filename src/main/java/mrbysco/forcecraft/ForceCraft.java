@@ -1,5 +1,6 @@
 package mrbysco.forcecraft;
 
+import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
 import mrbysco.forcecraft.capablilities.CapabilityAttachHandler;
 import mrbysco.forcecraft.capablilities.CapabilityHandler;
 import mrbysco.forcecraft.client.ClientHandler;
@@ -93,6 +94,8 @@ public class ForceCraft {
     private void setup(final FMLCommonSetupEvent event) {
         PacketHandler.init();
         CapabilityHandler.register();
+
+        InfuserTileEntity.populateToolList();
     }
     
     public static void registerRecipeSerializers(Register<IRecipeSerializer<?>> event) {

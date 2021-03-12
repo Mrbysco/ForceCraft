@@ -96,19 +96,20 @@ public class InfuserContainer extends Container {
             }
             else {
                 for (int i = 0; i < 11; i++) {
-                    if (!hasReturned) {
-                        if (((Slot) this.inventorySlots.get(i)).getHasStack() || !((Slot) this.inventorySlots.get(i)).isItemValid(itemstack1)) {
+                    Slot itemHere = this.inventorySlots.get(i);
+					if (!hasReturned) {
+                        if (itemHere.getHasStack() || !itemHere.isItemValid(itemstack1)) {
                             hasReturned = true;
                             return ItemStack.EMPTY;
                         }
                     }
                     if (!hasReturned) {
                         if (itemstack1.hasTag() && itemstack1.getCount() == 1) {
-                            ((Slot) this.inventorySlots.get(i)).putStack(itemstack1.copy());
+                        	itemHere.putStack(itemstack1.copy());
                             itemstack1.setCount(0);
                             hasReturned = true;
                         } else if (!itemstack1.isEmpty()) {
-                            ((Slot) this.inventorySlots.get(i)).putStack(new ItemStack(itemstack1.getItem(), 1));
+                        	itemHere.putStack(new ItemStack(itemstack1.getItem(), 1));
                             itemstack1.shrink(1);
                             hasReturned = true;
                         }
@@ -124,10 +125,6 @@ public class InfuserContainer extends Container {
         }
 
         return itemstack;
-    }
-
-    public void setButtonPressed(boolean buttonPressed){
-        tile.canWork = buttonPressed;
     }
 
     public void setFluidAmount(int amount){

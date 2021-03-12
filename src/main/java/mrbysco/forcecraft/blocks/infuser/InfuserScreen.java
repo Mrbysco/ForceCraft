@@ -8,6 +8,7 @@ import mrbysco.forcecraft.client.gui.infuser.ProgressBar;
 import mrbysco.forcecraft.client.gui.infuser.ProgressBar.ProgressBarDirection;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.AtlasTexture;
@@ -36,6 +37,8 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	private ResourceLocation INFO = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/info.png");
 	private ResourceLocation ENERGY = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/energy.png");
 	private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forceinfuser.png");
+	private Button canWorkButton;
+	private Button infoButton;
 
 	public InfuserScreen(InfuserContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
@@ -43,19 +46,17 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		this.xSize = 176;
 		this.ySize = 208;
 
-		this.addButton(new Button(39, 101, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.button"), (button) -> {
-			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
-			ForceCraft.LOGGER.info("here canWork toggle" );
-			container.getTile().canWork = true;
-		}));
-		this.addButton(new Button(123, 17, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+
+		//123, 17, 
+		infoButton = this.addButton(new Button(22, 0, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+			ForceCraft.LOGGER.info("button test ");
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
 			showingPop = !showingPop;
 			ForceCraft.LOGGER.info("here test sub gui {}", showingPop);
 //			if(screenContainer.getTile().handler.getStackInSlot(9).isEmpty()) {
 //				//Insert behavior
 //			}
-		}));
+		})); 
 
 		this.infuserProgress = new ProgressBar(TEXTURE, ProgressBar.ProgressBarDirection.DOWN_TO_UP, 2, 20, 134, 93, 176, 0);
 	}
@@ -63,6 +64,17 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	@Override
 	protected void init() {
 		super.init();
+		// "gui.forcecraft.infuser.button.button"
+		canWorkButton = this.addButton(new Button(guiLeft + 39, guiTop + 101, 12, 12, new TranslationTextComponent(""), (button) -> { 
+			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
+			container.getTile().canWork = true;
+			//TODO: change button
+		}) {
+				@Override
+			   public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+					//skip drawing me		   
+			    }
+		});
 	}
 
 	@Override

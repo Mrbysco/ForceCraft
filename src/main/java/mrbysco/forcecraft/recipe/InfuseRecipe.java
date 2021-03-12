@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
+import mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
 import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -27,25 +28,25 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	private static final Set<String> HASHES = new HashSet<>();
 	public static final Set<InfuseRecipe> RECIPES = new HashSet<>();
 	private final ResourceLocation id;
-	public NonNullList<Ingredient> input = NonNullList.withSize(MAX_SLOTS, Ingredient.EMPTY);
-	String result;
+	public Ingredient input = Ingredient.EMPTY;
+	InfuserModifierType modifier;
 	ItemStack resultStack = ItemStack.EMPTY; // unused!!!! for now
 
-	public InfuseRecipe(ResourceLocation id, NonNullList<Ingredient> input, String result, ItemStack itemStack) {
+	public InfuseRecipe(ResourceLocation id, Ingredient input, InfuserModifierType result, ItemStack itemStack) {
 		super();
 		this.id = id;
 		this.input = input;
-		this.result = result;
 		resultStack = itemStack;
+		modifier = result; 
 	}
 
 	@Override
 	public boolean matches(InfuserTileEntity inv, World worldIn) {
-		for (int i = 0; i < input.size(); i++) {
-			Ingredient current = input.get(i);
+		for(int i = 0; i < inv.handler.getSlots(); i++) {
 			ItemStack stack = inv.handler.getStackInSlot(i);
-			if (current.test(stack)) {
-				//
+			if (input.test(stack)) {
+				//at least one is true
+				return true;
 			}
 		}
 		return false;
@@ -95,11 +96,11 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		return nonnulllist;
 	}
 
-	public static final SerializeGrinderRecipe SERIALIZER = new SerializeGrinderRecipe();
+	public static final SerializeInfuserRecipe SERIALIZER = new SerializeInfuserRecipe();
 
-	public static class SerializeGrinderRecipe extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<InfuseRecipe> {
+	public static class SerializeInfuserRecipe extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<InfuseRecipe> {
 
-		SerializeGrinderRecipe() {
+		SerializeInfuserRecipe() {
 			// This registry name is what people will specify in their json files.
 			this.setRegistryName(new ResourceLocation(Reference.MOD_ID, "infuser"));
 		}
@@ -108,15 +109,19 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		public InfuseRecipe read(ResourceLocation recipeId, JsonObject json) {
 			InfuseRecipe recipe = null;
 			try {
-				NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
+				Ingredient ingredient = Ingredient.deserialize(JSONUtils.getJsonObject(json, "ingredient"));
 
-				if (nonnulllist.size() > MAX_SLOTS) {
-					ForceCraft.LOGGER.info("error: Too Many Ingredients {} Error loading recipe {} ",
-							nonnulllist.size(), recipeId);
-					return null;
-				}
+//				if (nonnulllist.size() > MAX_SLOTS) {
+//					ForceCraft.LOGGER.info("error: Too Many Ingredients {} Error loading recipe {} ",
+//							nonnulllist.size(), recipeId);
+//					return null;
+//				}
 
-				recipe = new InfuseRecipe(recipeId, nonnulllist, JSONUtils.getString(json, "result"), ItemStack.EMPTY);
+				String result = JSONUtils.getString(json, "result");
+				// hardcoded mod id: no api support rip
+				InfuserModifierType type = InfuserModifierType.valueOf(result.replace("forcecraft:","").toUpperCase());
+				
+				recipe = new InfuseRecipe(recipeId, ingredient, type, ItemStack.EMPTY);
 				addRecipe(recipe);
 				return recipe;
 			} catch (Exception e) {
@@ -128,14 +133,10 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		@Override
 		public InfuseRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
 
-			int i = buffer.readVarInt();
-			NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
-
-			for (int j = 0; j < nonnulllist.size(); ++j) {
-				nonnulllist.set(j, Ingredient.read(buffer));
-			}
-
-			InfuseRecipe r = new InfuseRecipe(recipeId, nonnulllist, buffer.readString(), buffer.readItemStack());
+			Ingredient ing = Ingredient.read(buffer);
+			int enumlon = buffer.readVarInt();
+			
+			InfuseRecipe r = new InfuseRecipe(recipeId, ing, InfuserModifierType.values()[enumlon], buffer.readItemStack());
 
 			// server reading recipe from client or vice/versa
 			addRecipe(r);
@@ -145,11 +146,8 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		@Override
 		public void write(PacketBuffer buffer, InfuseRecipe recipe) {
 
-			buffer.writeVarInt(recipe.input.size());
-
-			for (Ingredient ingredient : recipe.input) {
-				ingredient.write(buffer);
-			}
+			recipe.input.write(buffer);
+			buffer.writeVarInt(recipe.modifier.ordinal());
 			buffer.writeItemStack(recipe.getRecipeOutput());
 		}
 	}
@@ -161,7 +159,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		}
 		RECIPES.add(r);
 		HASHES.add(id.toString());
-		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}" , id.toString(), r.result, r.input.size());
+		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}" , id.toString(), r.modifier, r.input);
 		return true;
 	}
 

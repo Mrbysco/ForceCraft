@@ -35,6 +35,5 @@ public class Reference {
     }
 
     public static final String MOD_ID = "forcecraft";
-    public static final int numModifiers = 25;
     public static final int numTools = 11;
 }
