@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "minecraft:sugar"
+  },
+  "tier": 0,
+  "result": "forcecraft:speed"
+}

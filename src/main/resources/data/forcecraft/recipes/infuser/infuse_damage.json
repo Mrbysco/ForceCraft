@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "forcecraft:claw"
+  },
+  "tier": 0,
+  "result": "forcecraft:damage"
+}

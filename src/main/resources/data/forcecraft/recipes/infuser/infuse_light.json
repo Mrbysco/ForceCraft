@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "minecraft:glowstone"
+  },
+  "tier": 0,
+  "result": "forcecraft:light"
+}

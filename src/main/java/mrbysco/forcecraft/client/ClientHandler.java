@@ -3,7 +3,6 @@ package mrbysco.forcecraft.client;
 import mrbysco.forcecraft.capablilities.magnet.IMagnet;
 import mrbysco.forcecraft.client.gui.belt.ForceBeltScreen;
 import mrbysco.forcecraft.client.gui.furnace.ForceFurnaceScreen;
-import mrbysco.forcecraft.client.gui.infuser.InfuserScreen;
 import mrbysco.forcecraft.client.gui.pack.ForcePackScreen;
 import mrbysco.forcecraft.client.renderer.ColdChickenRenderer;
 import mrbysco.forcecraft.client.renderer.ColdCowRenderer;
@@ -22,6 +21,8 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_MAGNET;
+
+import mrbysco.forcecraft.blocks.infuser.InfuserScreen;
 
 public class ClientHandler {
 	public static void onClientSetup(final FMLClientSetupEvent event) {

@@ -1,10 +1,10 @@
 package mrbysco.forcecraft.registry;
 
 import mrbysco.forcecraft.Reference;
+import mrbysco.forcecraft.blocks.infuser.InfuserContainer;
 import mrbysco.forcecraft.container.ForceBeltContainer;
 import mrbysco.forcecraft.container.ForceFurnaceContainer;
 import mrbysco.forcecraft.container.ForcePackContainer;
-import mrbysco.forcecraft.container.InfuserContainer;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;

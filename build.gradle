@@ -88,6 +88,7 @@ repositories {
         name 'JEI maven'
         url = "https://dvs1.progwml6.com/files/maven"
     }
+    maven { url = 'https://www.cursemaven.com'  }
 }
 
 dependencies {
@@ -95,6 +96,12 @@ dependencies {
 
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}")
+    
+    
+  //  implementation fg.deobf("curse.maven:simple-storage-network-268495:3230736")
+  //  implementation fg.deobf("curse.maven:cyclic-239286:3231794")
+  //  implementation fg.deobf("curse.maven:simple-tomb-399669:3229015")
+    
 }
 
 jar {

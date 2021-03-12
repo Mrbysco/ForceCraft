@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "minecraft:potion"
+  },
+  "tier": 0,
+  "result": "forcecraft:camo"
+}

@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "tag": "forge:nuggets/force"
+  },
+  "tier": 0,
+  "result": "forcecraft:force"
+}

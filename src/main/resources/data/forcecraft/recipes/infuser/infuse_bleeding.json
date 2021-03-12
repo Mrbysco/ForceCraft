@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "minecraft:arrow"
+  },
+  "tier": 0,
+  "result": "forcecraft:bleeding"
+}
