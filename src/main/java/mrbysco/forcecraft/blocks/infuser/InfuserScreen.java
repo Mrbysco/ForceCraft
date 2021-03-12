@@ -8,7 +8,6 @@ import mrbysco.forcecraft.client.gui.infuser.ProgressBar;
 import mrbysco.forcecraft.client.gui.infuser.ProgressBar.ProgressBarDirection;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.AtlasTexture;

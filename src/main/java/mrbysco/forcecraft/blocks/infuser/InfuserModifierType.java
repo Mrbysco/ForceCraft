@@ -4,8 +4,7 @@ import mrbysco.forcecraft.ForceCraft;
 import net.minecraft.item.ItemStack;
 
 public enum InfuserModifierType {
-	SPEED, HEAT,FORCE,SILK,DAMAGE,FORTUNE,LIGHT,STURDY,LUMBERJACK,HEALING,ENDER,BLEEDING,BANE,WING,CAMO,
-	RAINBOW,TIME;
+	SPEED,HEAT,FORCE,SILK,DAMAGE,FORTUNE,LIGHT,STURDY,LUMBERJACK,HEALING,ENDER,BLEEDING,BANE,WING,CAMO,RAINBOW,TIME;
 	
 	public boolean apply(ItemStack tool, ItemStack mod) {
 		switch(this) {

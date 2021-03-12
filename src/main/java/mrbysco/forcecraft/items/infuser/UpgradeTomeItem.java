@@ -28,7 +28,7 @@ public class UpgradeTomeItem extends BaseItem {
 	
         TranslationTextComponent tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.tier");
         tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-        tt.appendString(" " + bd.tier);
+        tt.appendString(" " + bd.getTier());
         tooltip.add(tt);  
 
         if(!Screen.hasShiftDown()){

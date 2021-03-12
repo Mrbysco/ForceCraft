@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "forcecraft:force_log"
+  },
+  "tier": 0,
+  "result": "forcecraft:lumberjack"
+}

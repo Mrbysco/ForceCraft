@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "minecraft:lapis_lazuli"
+  },
+  "tier": 0,
+  "result": "forcecraft:rainbow"
+}

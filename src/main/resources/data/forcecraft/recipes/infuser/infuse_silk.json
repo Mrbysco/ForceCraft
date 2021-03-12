@@ -4,5 +4,6 @@
   {
     "item": "minecraft:cobweb"
   },
+  "tier": 0,
   "result": "forcecraft:silk"
 }

@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "minecraft:ender_pearl"
+  },
+  "tier": 0,
+  "result": "forcecraft:ender"
+}

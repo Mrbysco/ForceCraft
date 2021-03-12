@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 public class UpgradeBookData {
-	UpgradeBookTier tier = UpgradeBookTier.ZERO;
+	private UpgradeBookTier tier = UpgradeBookTier.ZERO;
 	int points = 0;
 	
 	public UpgradeBookData(ItemStack book) {
@@ -23,31 +23,37 @@ public class UpgradeBookData {
 	}
 	//how many we need for next tier increment
 	public int nextTier() {
-		return tier.pointsForLevelup() - points;
+		return getTier().pointsForLevelup() - points;
 	}
 	
 	public void incrementPoints(int incoming) {
 		points += incoming;
-		if ( points >= this.tier.pointsForLevelup()
-				&& tier != UpgradeBookTier.FINAL) {
+		if ( points >= this.getTier().pointsForLevelup()
+				&& getTier() != UpgradeBookTier.FINAL) {
 			//then go
-			points -= this.tier.pointsForLevelup();
-			tier = tier.incrementTier();
+			points -= this.getTier().pointsForLevelup();
+			setTier(getTier().incrementTier());
 		}
 	}
 
 	private void read(ItemStack book, CompoundNBT tag) {
-		tier = UpgradeBookTier.values()[tag.getInt("tier")];
+		setTier(UpgradeBookTier.values()[tag.getInt("tier")]);
 		points = tag.getInt("points");
 		
 	}
 
 	public CompoundNBT write(ItemStack bookInSlot) {
 		CompoundNBT tag = bookInSlot.getOrCreateTag();
-		tag.putInt("tier", tier.ordinal());
+		tag.putInt("tier", getTier().ordinal());
 		tag.putInt("points", points);
 		
 		return tag;
+	}
+	public UpgradeBookTier getTier() {
+		return tier;
+	}
+	public void setTier(UpgradeBookTier tier) {
+		this.tier = tier;
 	}
 	
 }

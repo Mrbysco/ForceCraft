@@ -5,6 +5,7 @@ import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.items.CustomArmorItem;
+import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
 import mrbysco.forcecraft.items.tools.ForcePickaxeItem;
@@ -12,6 +13,7 @@ import mrbysco.forcecraft.items.tools.ForceRodItem;
 import mrbysco.forcecraft.items.tools.ForceShearsItem;
 import mrbysco.forcecraft.items.tools.ForceShovelItem;
 import mrbysco.forcecraft.items.tools.ForceSwordItem;
+import mrbysco.forcecraft.recipe.InfuseRecipe;
 import mrbysco.forcecraft.registry.ForceFluids;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import mrbysco.forcecraft.registry.ForceTags;
@@ -28,8 +30,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -53,19 +53,21 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 public class InfuserTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventory {
 
+    public static final List<Item> validToolList = new ArrayList<>();
+    public boolean canWork = false;
+
+    public int processTime = 0;
+    public int maxProcessTime = 17;
+ 
+    public int fluidContained;
 	//modifiers cap out
 	private static final int MAX_MODIFIER = 10;
 	// slots [0,7] are the surround
@@ -84,6 +86,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     //
     
     public static void populateToolList() {
+    	// TODO: update this. or make data tag? 
         validToolList.add(ForceRegistry.FORCE_PICKAXE.get());
         validToolList.add(ForceRegistry.FORCE_AXE.get());
         validToolList.add(ForceRegistry.FORCE_SHOVEL.get());
@@ -94,40 +97,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         validToolList.add(ForceRegistry.FORCE_CHEST.get());
         validToolList.add(ForceRegistry.FORCE_LEGS.get());
         validToolList.add(ForceRegistry.FORCE_BOOTS.get());
-        validToolList.add(ForceRegistry.FORCE_TORCH_ITEM.get());
-        //
-    	addModifier(new InfuserModifier(InfuserModifierType.FORCE, new ItemStack(ForceRegistry.FORCE_NUGGET.get())));
-    	addModifier(new InfuserModifier(InfuserModifierType.SPEED, new ItemStack(Items.SUGAR)));
-    	addModifier(new InfuserModifier(InfuserModifierType.HEAT, new ItemStack(Items.COAL)));
-    	addModifier(new InfuserModifier(InfuserModifierType.SILK, new ItemStack(Items.COBWEB)));
-    	addModifier(new InfuserModifier(InfuserModifierType.DAMAGE, new ItemStack(ForceRegistry.CLAW.get())));
-    	addModifier(new InfuserModifier(InfuserModifierType.FORTUNE, new ItemStack(ForceRegistry.FORTUNE.get())));
-    	addModifier(new InfuserModifier(InfuserModifierType.LUMBERJACK, new ItemStack(ForceRegistry.FORCE_LOG_ITEM.get())));
-    	addModifier(new InfuserModifier(InfuserModifierType.STURDY, new ItemStack(Items.OBSIDIAN)));
-    	addModifier(new InfuserModifier(InfuserModifierType.LIGHT, new ItemStack(Items.GLOWSTONE_DUST)));
-    	addModifier(new InfuserModifier(InfuserModifierType.HEALING, new ItemStack(Items.GHAST_TEAR)));
-    	addModifier(new InfuserModifier(InfuserModifierType.ENDER, new ItemStack(Items.ENDER_PEARL)));
-    	addModifier(new InfuserModifier(InfuserModifierType.BLEEDING, new ItemStack(Items.ARROW)));
-    	addModifier(new InfuserModifier(InfuserModifierType.BANE, new ItemStack(Items.SPIDER_EYE)));
-    	addModifier(new InfuserModifier(InfuserModifierType.CAMO, new ItemStack(Items.POTION)));
-    	addModifier(new InfuserModifier(InfuserModifierType.RAINBOW, new ItemStack(Items.BLUE_DYE)));
-    	addModifier(new InfuserModifier(InfuserModifierType.TIME, new ItemStack(Items.CLOCK)));
-    	addModifier(new InfuserModifier(InfuserModifierType.WING, new ItemStack(Items.FEATHER)));
-  
+        validToolList.add(ForceRegistry.FORCE_TORCH_ITEM.get());  
     }
 
-    
-    public static final List<InfuserModifier> MODS = new ArrayList<>();
-    public static final Map<InfuserModifierType, InfuserModifier> MODIFIERMAP = new HashMap<>();
-    public static void addModifier(InfuserModifier m) {
-    	if(MODIFIERMAP.containsKey(m.modifier)) {
-    		ForceCraft.LOGGER.info("error: dupli8cate recipe for modifier {} | {} ", m.modifier, m);
-    	}	
-    	MODS.add(m);
-    	validModifierIngredients.add(m.input);
-    	MODIFIERMAP.put(m.modifier, m); 
-    }
-    
 	protected FluidTank tank = new FluidTank(50000) {
         @Override
         public FluidStack drain(FluidStack resource, FluidAction action) {
@@ -158,13 +130,15 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
         	if(slot < SLOT_TOOL) {
-        		//is valid modifier
+        		//is valid modifier TODO
         	}
-        	// SLOT_TOOL
-        	if(slot == SLOT_BOOK) {
+        	else if(slot == SLOT_TOOL) {
+        		//TODO is valid tool
+        	}
+        	else if(slot == SLOT_BOOK) {
         		return stack.getItem() == ForceRegistry.UPGRADE_TOME.get();
         	}
-        	if(slot == SLOT_GEM) {
+        	else if(slot == SLOT_GEM) {
         		return stack.getItem() == ForceRegistry.FORCE_GEM.get();
         	}
         	// else tool or something for the around
@@ -178,15 +152,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     private NonNullList<ItemStack> infuserContents = NonNullList.create();
 
-    public static final List<Item> validToolList = new ArrayList<>();
-//    public static final List<Item> validModifierList = new ArrayList<>();
-    public static final List<Ingredient> validModifierIngredients = new ArrayList<>();
-    public boolean canWork = false;
-
-    public int processTime = 0;
-    public int maxProcessTime = 17;
- 
-    public int fluidContained;
 
     public InfuserTileEntity(TileEntityType<?> type) {
         super(type);
@@ -329,7 +294,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     private boolean hasValidBook() {
         ItemStack tool = getBookInSlot();
 		if (!tool.isEmpty()) {
-            return tool.getItem() ==ForceRegistry.UPGRADE_TOME.get();
+            return tool.getItem() == ForceRegistry.UPGRADE_TOME.get();
         }
         return false;
     }
@@ -342,21 +307,10 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		return handler.getStackInSlot(SLOT_BOOK);
 	}
 
-    private ItemStack getModifier(int slot) {
-        if (!getFromToolSlot().isEmpty()) { 
-        	for(Ingredient ing : validModifierIngredients) {
-        		if(ing.test(handler.getStackInSlot(slot))) {
-        			return handler.getStackInSlot(slot);
-        		}
-        	}
-//            for (int j = 0; j < Reference.numModifiers - 1; j++) {
-//                if (
-//                		handler.getStackInSlot(slot).getItem() == validModifierList.get(j)
-//                		) {
-//                    return handler.getStackInSlot(slot);
-//                }
-//            }
-        }
+    private ItemStack getModifier(int slot) { 
+    	if(slot >= 0 && slot <= SLOT_TOOL - 1) {
+			return handler.getStackInSlot(slot);
+    	}
         return ItemStack.EMPTY;
     }
 
@@ -369,11 +323,17 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
      * @param mod
      * @return
      */
-    private boolean applyModifier(ItemStack tool, ItemStack mod) {
-    	
-    	for (InfuserModifier modCurrent : MODS) {
-    		if (modCurrent.input.test(mod)) {
-    			if (modCurrent.modifier.apply(tool, mod)) {
+    private boolean applyModifier(ItemStack tool, ItemStack modifier) {
+		ItemStack bookStack = this.getBookInSlot();
+		UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
+
+    	for (InfuseRecipe modCurrent : InfuseRecipe.RECIPES) {
+    		//test the ingredient of this recipe, if it matches me
+    		if (modCurrent.input.test(modifier)) {
+    			//check level
+    			ForceCraft.LOGGER.info("recipe level vs book level : {} vs {}", modCurrent.tier, bd.getTier());
+    			
+    			if (modCurrent.modifier.apply(tool, modifier)) {
         			ForceCraft.LOGGER.info("NEW FLOW for modifiers {}", modCurrent.modifier);
                     handler.setStackInSlot(SLOT_TOOL, tool);
     				return true;

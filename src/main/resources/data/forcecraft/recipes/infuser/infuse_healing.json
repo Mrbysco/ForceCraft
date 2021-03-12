@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "minecraft:ghast_tear"
+  },
+  "tier": 0,
+  "result": "forcecraft:healing"
+}

@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "minecraft:feather"
+  },
+  "tier": 0,
+  "result": "forcecraft:wing"
+}
