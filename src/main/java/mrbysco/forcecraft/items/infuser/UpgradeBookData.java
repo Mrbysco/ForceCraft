@@ -15,7 +15,7 @@ public class UpgradeBookData {
 			return;
 		}
 		CompoundNBT tag = book.getOrCreateTag();
-		if(tag != null && tag.contains("tier")) {
+		if(tag.contains("tier")) {
 			//is not empty, load it up
 			this.read(book, tag);
 		}

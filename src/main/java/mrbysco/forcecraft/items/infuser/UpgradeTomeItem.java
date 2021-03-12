@@ -50,6 +50,6 @@ public class UpgradeTomeItem extends BaseItem {
 	public static void onModifierApplied(ItemStack bookInSlot, ItemStack modifier, ItemStack tool) {
 		UpgradeBookData bd = new UpgradeBookData(bookInSlot);
 		bd.incrementPoints(25); // TODO: points per modifier upgrade value !! 
-		
+		bd.write(bookInSlot);
 	}
 }
