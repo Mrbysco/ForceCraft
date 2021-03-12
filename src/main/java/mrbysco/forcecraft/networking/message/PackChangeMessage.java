@@ -1,8 +1,5 @@
 package mrbysco.forcecraft.networking.message;
 
-import io.netty.buffer.ByteBuf;
-import mrbysco.forcecraft.container.InfuserContainer;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
