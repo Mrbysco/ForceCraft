@@ -2,5 +2,23 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "forcecraft:item/force_pack"
-  }
+  },
+  "overrides": [
+    { "predicate": { "color": 0.0625 }, "model": "forcecraft:item/force_pack_black" },
+    { "predicate": { "color": 0.125 }, "model": "forcecraft:item/force_pack_red" },
+    { "predicate": { "color": 0.1875 }, "model": "forcecraft:item/force_pack_green" },
+    { "predicate": { "color": 0.25 }, "model": "forcecraft:item/force_pack_brown" },
+    { "predicate": { "color": 0.3125 }, "model": "forcecraft:item/force_pack_blue" },
+    { "predicate": { "color": 0.375 }, "model": "forcecraft:item/force_pack_purple" },
+    { "predicate": { "color": 0.4375 }, "model": "forcecraft:item/force_pack_cyan" },
+    { "predicate": { "color": 0.5 }, "model": "forcecraft:item/force_pack_light_gray" },
+    { "predicate": { "color": 0.5625 }, "model": "forcecraft:item/force_pack_gray" },
+    { "predicate": { "color": 0.625 }, "model": "forcecraft:item/force_pack_pink" },
+    { "predicate": { "color": 0.6875 }, "model": "forcecraft:item/force_pack_lime" },
+    { "predicate": { "color": 0.75 }, "model": "forcecraft:item/force_pack_yellow" },
+    { "predicate": { "color": 0.8125 }, "model": "forcecraft:item/force_pack_light_blue" },
+    { "predicate": { "color": 0.875 }, "model": "forcecraft:item/force_pack_magenta" },
+    { "predicate": { "color": 0.9375 }, "model": "forcecraft:item/force_pack" },
+    { "predicate": { "color": 1.0 }, "model": "forcecraft:item/force_pack_white" }
+  ]
 }
