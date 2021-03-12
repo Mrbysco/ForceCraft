@@ -4,7 +4,6 @@ import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.pack.PackInventoryProvider;
 import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import mrbysco.forcecraft.container.ForcePackContainer;
-import mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
