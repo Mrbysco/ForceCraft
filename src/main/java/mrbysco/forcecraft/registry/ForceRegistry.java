@@ -2,15 +2,15 @@ package mrbysco.forcecraft.registry;
 
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
-import mrbysco.forcecraft.blocks.flammable.FlammableBlock;
 import mrbysco.forcecraft.blocks.ForceFluidBlock;
 import mrbysco.forcecraft.blocks.ForceFurnaceBlock;
 import mrbysco.forcecraft.blocks.ForceLeavesBlock;
-import mrbysco.forcecraft.blocks.ForceLogBlock; 
-import mrbysco.forcecraft.blocks.infuser.InfuserBlock;
-import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;  
+import mrbysco.forcecraft.blocks.ForceLogBlock;
+import mrbysco.forcecraft.blocks.flammable.FlammableBlock;
 import mrbysco.forcecraft.blocks.flammable.FlammableSlab;
-import mrbysco.forcecraft.blocks.flammable.FlammableStairs; 
+import mrbysco.forcecraft.blocks.flammable.FlammableStairs;
+import mrbysco.forcecraft.blocks.infuser.InfuserBlock;
+import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
 import mrbysco.forcecraft.blocks.torch.TimeTorchBlock;
 import mrbysco.forcecraft.blocks.torch.WallTimeTorchBlock;
 import mrbysco.forcecraft.blocks.tree.ForceTree;
@@ -161,12 +161,39 @@ public class ForceRegistry {
     public static final RegistryObject<Block> FORCE_BRICK_SLAB = BLOCKS.register("force_brick_slab", () -> new SlabBlock(AbstractBlock.Properties.from(FORCE_BRICK.get())));
 
     //Torches
-    public static final RegistryObject<Block> FORCE_TORCH = BLOCKS.register("force_torch", () ->
-            new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15)
-                    .sound(SoundType.WOOD), ParticleTypes.FLAME));
-    public static final RegistryObject<Block> WALL_FORCE_TORCH = BLOCKS.register("wall_force_torch", () ->
-            new WallTorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15)
-                    .sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_TORCH = BLOCKS.register("force_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.ORANGE).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_RED_TORCH = BLOCKS.register("force_red_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.RED).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_YELLOW_TORCH = BLOCKS.register("force_yellow_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.YELLOW).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_GREEN_TORCH = BLOCKS.register("force_green_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.GREEN).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_BLUE_TORCH = BLOCKS.register("force_blue_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.BLUE).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_WHITE_TORCH = BLOCKS.register("force_white_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.WHITE).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_BLACK_TORCH = BLOCKS.register("force_black_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.BLACK).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_BROWN_TORCH = BLOCKS.register("force_brown_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.BROWN).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_LIGHT_BLUE_TORCH = BLOCKS.register("force_light_blue_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.LIGHT_BLUE).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_MAGENTA_TORCH = BLOCKS.register("force_magenta_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.MAGENTA).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_PINK_TORCH = BLOCKS.register("force_pink_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.PINK).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_LIGHT_GRAY_TORCH = BLOCKS.register("force_light_gray_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.LIGHT_GRAY).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_LIME_TORCH = BLOCKS.register("force_lime_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.LIME).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_CYAN_TORCH = BLOCKS.register("force_cyan_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.CYAN).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_PURPLE_TORCH = BLOCKS.register("force_purple_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.PURPLE).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> FORCE_GRAY_TORCH = BLOCKS.register("force_gray_torch", () -> new TorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS, DyeColor.GRAY).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15).sound(SoundType.WOOD), ParticleTypes.FLAME));
+
+    public static final RegistryObject<Block> WALL_FORCE_TORCH = BLOCKS.register("wall_force_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_RED_TORCH = BLOCKS.register("wall_force_red_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_RED_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_YELLOW_TORCH = BLOCKS.register("wall_force_yellow_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_YELLOW_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_GREEN_TORCH = BLOCKS.register("wall_force_green_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_GREEN_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_BLUE_TORCH = BLOCKS.register("wall_force_blue_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_BLUE_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_WHITE_TORCH = BLOCKS.register("wall_force_white_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_WHITE_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_BLACK_TORCH = BLOCKS.register("wall_force_black_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_BLACK_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_BROWN_TORCH = BLOCKS.register("wall_force_brown_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_BROWN_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_LIGHT_BLUE_TORCH = BLOCKS.register("wall_force_light_blue_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_LIGHT_BLUE_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_MAGENTA_TORCH = BLOCKS.register("wall_force_magenta_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_MAGENTA_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_PINK_TORCH = BLOCKS.register("wall_force_pink_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_PINK_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_LIGHT_GRAY_TORCH = BLOCKS.register("wall_force_light_gray_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_LIGHT_GRAY_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_LIME_TORCH = BLOCKS.register("wall_force_lime_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_LIME_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_CYAN_TORCH = BLOCKS.register("wall_force_cyan_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_CYAN_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_PURPLE_TORCH = BLOCKS.register("wall_force_purple_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_PURPLE_TORCH.get()), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_FORCE_GRAY_TORCH = BLOCKS.register("wall_force_gray_torch", () -> new WallTorchBlock(AbstractBlock.Properties.from(FORCE_GRAY_TORCH.get()), ParticleTypes.FLAME));
 
     public static final RegistryObject<Block> TIME_TORCH = BLOCKS.register("time_torch", () ->
             new TimeTorchBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().zeroHardnessAndResistance().setLightLevel((state) -> 15)
@@ -312,9 +339,24 @@ public class ForceRegistry {
     public static final RegistryObject<Item> FORCE_BRICK_GRAY_SLAB_ITEM = ITEMS.register("force_brick_gray_slab", () -> new BlockItem(FORCE_BRICK_GRAY_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_BRICK_SLAB_ITEM = ITEMS.register("force_brick_slab", () -> new BlockItem(FORCE_BRICK_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
 
-    public static final RegistryObject<Item> FORCE_TORCH_ITEM = ITEMS.register("force_torch", () -> new WallOrFloorItem(FORCE_TORCH.get(), ForceRegistry.WALL_FORCE_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
-    public static final RegistryObject<Item> TIME_TORCH_ITEM = ITEMS.register("time_torch", () -> new WallOrFloorItem(TIME_TORCH.get(), ForceRegistry.WALL_TIME_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_TORCH_ITEM = ITEMS.register("force_torch", () -> new WallOrFloorItem(FORCE_TORCH.get(), WALL_FORCE_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_RED_TORCH_ITEM = ITEMS.register("force_red_torch", () -> new WallOrFloorItem(FORCE_RED_TORCH.get(), WALL_FORCE_RED_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_YELLOW_TORCH_ITEM = ITEMS.register("force_yellow_torch", () -> new WallOrFloorItem(FORCE_YELLOW_TORCH.get(), WALL_FORCE_YELLOW_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_GREEN_TORCH_ITEM = ITEMS.register("force_green_torch", () -> new WallOrFloorItem(FORCE_GREEN_TORCH.get(), WALL_FORCE_GREEN_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BLUE_TORCH_ITEM = ITEMS.register("force_blue_torch", () -> new WallOrFloorItem(FORCE_BLUE_TORCH.get(), WALL_FORCE_BLUE_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_WHITE_TORCH_ITEM = ITEMS.register("force_white_torch", () -> new WallOrFloorItem(FORCE_WHITE_TORCH.get(), WALL_FORCE_WHITE_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BLACK_TORCH_ITEM = ITEMS.register("force_black_torch", () -> new WallOrFloorItem(FORCE_BLACK_TORCH.get(), WALL_FORCE_BLACK_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BROWN_TORCH_ITEM = ITEMS.register("force_brown_torch", () -> new WallOrFloorItem(FORCE_BROWN_TORCH.get(), WALL_FORCE_BROWN_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_LIGHT_BLUE_TORCH_ITEM = ITEMS.register("force_light_blue_torch", () -> new WallOrFloorItem(FORCE_LIGHT_BLUE_TORCH.get(), WALL_FORCE_LIGHT_BLUE_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_MAGENTA_TORCH_ITEM = ITEMS.register("force_magenta_torch", () -> new WallOrFloorItem(FORCE_MAGENTA_TORCH.get(), WALL_FORCE_MAGENTA_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_PINK_TORCH_ITEM = ITEMS.register("force_pink_torch", () -> new WallOrFloorItem(FORCE_PINK_TORCH.get(), WALL_FORCE_PINK_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_LIGHT_GRAY_TORCH_ITEM = ITEMS.register("force_light_gray_torch", () -> new WallOrFloorItem(FORCE_LIGHT_GRAY_TORCH.get(), WALL_FORCE_LIGHT_GRAY_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_LIME_TORCH_ITEM = ITEMS.register("force_lime_torch", () -> new WallOrFloorItem(FORCE_LIME_TORCH.get(), WALL_FORCE_LIME_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_CYAN_TORCH_ITEM = ITEMS.register("force_cyan_torch", () -> new WallOrFloorItem(FORCE_CYAN_TORCH.get(), WALL_FORCE_CYAN_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_PURPLE_TORCH_ITEM = ITEMS.register("force_purple_torch", () -> new WallOrFloorItem(FORCE_PURPLE_TORCH.get(), WALL_FORCE_PURPLE_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_GRAY_TORCH_ITEM = ITEMS.register("force_gray_torch", () -> new WallOrFloorItem(FORCE_GRAY_TORCH.get(), WALL_FORCE_GRAY_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
 
+    public static final RegistryObject<Item> TIME_TORCH_ITEM = ITEMS.register("time_torch", () -> new WallOrFloorItem(TIME_TORCH.get(), WALL_TIME_TORCH.get(), itemBuilder().group(ForceCraft.creativeTab)));
 
     private static Item.Properties itemBuilder() {
         return new Item.Properties();

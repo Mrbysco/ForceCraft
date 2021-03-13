@@ -1,7 +1,9 @@
 package mrbysco.forcecraft.items;
 
 import mrbysco.forcecraft.Reference;
+import mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen;
 import mrbysco.forcecraft.container.ForceBeltContainer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
@@ -13,6 +15,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -20,10 +26,12 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ForceBeltItem extends BaseItem {
 
@@ -34,9 +42,16 @@ public class ForceBeltItem extends BaseItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if(!worldIn.isRemote && stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-            playerIn.openContainer(this.getContainer(stack));
-            return new ActionResult<ItemStack>(ActionResultType.PASS, stack);
+        IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        if(handler != null) {
+            if(playerIn.isSneaking()) {
+                if(worldIn.isRemote) {
+                    RenameAndRecolorScreen.openScreen(stack, handIn);
+                }
+            } else {
+                playerIn.openContainer(this.getContainer(stack));
+                return new ActionResult<ItemStack>(ActionResultType.PASS, stack);
+            }
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
@@ -57,7 +72,28 @@ public class ForceBeltItem extends BaseItem {
     public INamedContainerProvider getContainer(ItemStack stack) {
         return new SimpleNamedContainerProvider((id, inventory, player) -> {
             return new ForceBeltContainer(id, inventory, stack);
-        }, new TranslationTextComponent(Reference.MOD_ID + ".container.belt"));
+        }, stack.hasDisplayName() ? ((TextComponent)stack.getDisplayName()).mergeStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.belt"));
+    }
+
+    @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return false;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        CompoundNBT tag = stack.getOrCreateTag();
+        if(tag.contains("SlotsUsed") &&  tag.contains("SlotsTotal")) {
+            tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt("SlotsUsed"), tag.getInt("SlotsTotal"))));
+        } else {
+            tooltip.add(new StringTextComponent("0/8 Slots"));
+        }
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
+
+    @Override
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return ((TextComponent)super.getDisplayName(stack)).mergeStyle(TextFormatting.YELLOW);
     }
 
     @Nullable

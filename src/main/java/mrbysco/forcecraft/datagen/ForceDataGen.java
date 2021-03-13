@@ -96,8 +96,39 @@ public class ForceDataGen {
 				});
 
 				registerDropSelfLootTable(FORCE_TORCH.get());
-				registerDropSelfLootTable(WALL_FORCE_TORCH.get());
+				registerDropSelfLootTable(FORCE_RED_TORCH.get());
+				registerDropSelfLootTable(FORCE_YELLOW_TORCH.get());
+				registerDropSelfLootTable(FORCE_GREEN_TORCH.get());
+				registerDropSelfLootTable(FORCE_BLUE_TORCH.get());
+				registerDropSelfLootTable(FORCE_WHITE_TORCH.get());
+				registerDropSelfLootTable(FORCE_BLACK_TORCH.get());
+				registerDropSelfLootTable(FORCE_BROWN_TORCH.get());
+				registerDropSelfLootTable(FORCE_LIGHT_BLUE_TORCH.get());
+				registerDropSelfLootTable(FORCE_MAGENTA_TORCH.get());
+				registerDropSelfLootTable(FORCE_PINK_TORCH.get());
+				registerDropSelfLootTable(FORCE_LIGHT_GRAY_TORCH.get());
+				registerDropSelfLootTable(FORCE_LIME_TORCH.get());
+				registerDropSelfLootTable(FORCE_CYAN_TORCH.get());
+				registerDropSelfLootTable(FORCE_PURPLE_TORCH.get());
+				registerDropSelfLootTable(FORCE_GRAY_TORCH.get());
 				registerDropSelfLootTable(TIME_TORCH.get());
+
+				registerDropping(WALL_FORCE_TORCH.get(), FORCE_TORCH.get());
+				registerDropping(WALL_FORCE_RED_TORCH.get(), FORCE_RED_TORCH.get());
+				registerDropping(WALL_FORCE_YELLOW_TORCH.get(), FORCE_YELLOW_TORCH.get());
+				registerDropping(WALL_FORCE_GREEN_TORCH.get(), FORCE_GREEN_TORCH.get());
+				registerDropping(WALL_FORCE_BLUE_TORCH.get(), FORCE_BLUE_TORCH.get());
+				registerDropping(WALL_FORCE_WHITE_TORCH.get(), FORCE_WHITE_TORCH.get());
+				registerDropping(WALL_FORCE_BLACK_TORCH.get(), FORCE_BLACK_TORCH.get());
+				registerDropping(WALL_FORCE_BROWN_TORCH.get(), FORCE_BROWN_TORCH.get());
+				registerDropping(WALL_FORCE_LIGHT_BLUE_TORCH.get(), FORCE_LIGHT_BLUE_TORCH.get());
+				registerDropping(WALL_FORCE_MAGENTA_TORCH.get(), FORCE_MAGENTA_TORCH.get());
+				registerDropping(WALL_FORCE_PINK_TORCH.get(), FORCE_PINK_TORCH.get());
+				registerDropping(WALL_FORCE_LIGHT_GRAY_TORCH.get(), FORCE_LIGHT_GRAY_TORCH.get());
+				registerDropping(WALL_FORCE_LIME_TORCH.get(), FORCE_LIME_TORCH.get());
+				registerDropping(WALL_FORCE_CYAN_TORCH.get(), FORCE_CYAN_TORCH.get());
+				registerDropping(WALL_FORCE_PURPLE_TORCH.get(), FORCE_PURPLE_TORCH.get());
+				registerDropping(WALL_FORCE_GRAY_TORCH.get(), FORCE_GRAY_TORCH.get());
 				registerDropSelfLootTable(WALL_TIME_TORCH.get());
 
 				//Bricks
@@ -324,6 +355,24 @@ public class ForceDataGen {
 			withExistingParent("force_wood", modLoc("block/force_wood"));
 			withExistingParent("force_leaves", modLoc("block/force_leaves"));
 			withExistingParent("force_planks", modLoc("block/force_planks"));
+
+			singleTexture("force_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch"));
+			singleTexture("force_red_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_red"));
+			singleTexture("force_yellow_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_yellow"));
+			singleTexture("force_green_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_green"));
+			singleTexture("force_blue_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_blue"));
+			singleTexture("force_white_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_white"));
+			singleTexture("force_black_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_black"));
+			singleTexture("force_brown_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_brown"));
+			singleTexture("force_light_blue_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_light_blue"));
+			singleTexture("force_magenta_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_magenta"));
+			singleTexture("force_pink_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_pink"));
+			singleTexture("force_light_gray_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_light_gray"));
+			singleTexture("force_lime_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_lime"));
+			singleTexture("force_cyan_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_cyan"));
+			singleTexture("force_purple_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_purple"));
+			singleTexture("force_gray_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_gray"));
+			singleTexture("time_torch", mcLoc("item/generated"), "layer0", modLoc("block/time_torch"));
 
 			withExistingParent("force_brick_red", modLoc("block/force_brick_red"));
 			withExistingParent("force_brick_yellow", modLoc("block/force_brick_yellow"));

@@ -18,29 +18,29 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.PacketDistributor;
 
-public class PackRenameScreen extends Screen {
-	private ItemStack packStack;
+public class RenameAndRecolorScreen extends Screen {
+	private ItemStack itemstack;
 	private final Hand usedHand;
 	private TextFieldWidget textfield;
 	private int selectedColor;
 
-	protected PackRenameScreen(ItemStack stack, Hand hand) {
+	protected RenameAndRecolorScreen(ItemStack stack, Hand hand) {
 		super(new TranslationTextComponent("forcecraft.pack.rename"));
 
-		this.packStack = stack.copy();
+		this.itemstack = stack.copy();
 		this.usedHand = hand;
 	}
 
 	public static void openScreen(ItemStack packName, Hand hand) {
-		Minecraft.getInstance().displayGuiScreen(new PackRenameScreen(packName, hand));
+		Minecraft.getInstance().displayGuiScreen(new RenameAndRecolorScreen(packName, hand));
 	}
 
 	@Override
 	protected void init() {
 		super.init();
-		selectedColor = packStack.getOrCreateTag().getInt("Color");
+		selectedColor = itemstack.getOrCreateTag().getInt("Color");
 		this.minecraft.keyboardListener.enableRepeatEvents(true);
-		this.addButton(new ItemButton(this.width / 2 - 88, this.height / 2 + 5, 18, 18, DialogTexts.GUI_DONE, this.packStack, (button) -> {
+		this.addButton(new ItemButton(this.width / 2 - 89, this.height / 2 + 5, 18, 18, DialogTexts.GUI_DONE, this.itemstack, (button) -> {
 			ItemButton itemButton = (ItemButton)button;
 			this.selectedColor++;
 			if(selectedColor > 15) {
@@ -51,7 +51,7 @@ public class PackRenameScreen extends Screen {
 			tag.putInt("Color", this.selectedColor);
 			itemButton.getButtonStack().setTag(tag);
 
-			this.packStack = itemButton.getButtonStack();
+			this.itemstack = itemButton.getButtonStack();
 		}));
 
 		this.addButton(new Button(this.width / 2 - 34, this.height / 2 + 3, 60, 20, DialogTexts.GUI_CANCEL, (p_238847_1_) -> {
@@ -66,7 +66,7 @@ public class PackRenameScreen extends Screen {
 
 		this.textfield = new TextFieldWidget(this.minecraft.fontRenderer, this.width / 2 - 90, this.height / 2 - 24, 180, 20, new StringTextComponent("Name"));
 		this.textfield.setMaxStringLength(31);
-		this.textfield.setText(packStack.getDisplayName().getString());
+		this.textfield.setText(itemstack.getDisplayName().getString());
 		this.textfield.setTextColor(-1);
 		this.children.add(this.textfield);
 		setFocusedDefault(textfield);

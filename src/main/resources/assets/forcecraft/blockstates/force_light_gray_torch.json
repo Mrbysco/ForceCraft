@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "forcecraft:block/force_light_gray_torch"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.client;
 
+import mrbysco.forcecraft.blocks.infuser.InfuserScreen;
 import mrbysco.forcecraft.capablilities.magnet.IMagnet;
 import mrbysco.forcecraft.client.gui.belt.ForceBeltScreen;
 import mrbysco.forcecraft.client.gui.furnace.ForceFurnaceScreen;
@@ -22,8 +23,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_MAGNET;
 
-import mrbysco.forcecraft.blocks.infuser.InfuserScreen;
-
 public class ClientHandler {
 	public static void onClientSetup(final FMLClientSetupEvent event) {
 		ScreenManager.registerFactory(ForceContainers.FORCE_FURNACE.get(), ForceFurnaceScreen::new);
@@ -33,9 +32,40 @@ public class ClientHandler {
 
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_SAPLING.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_RED_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_YELLOW_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_GREEN_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_BLUE_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_WHITE_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_BLACK_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_BROWN_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_LIGHT_BLUE_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_MAGENTA_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_PINK_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_LIGHT_GRAY_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_LIME_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_CYAN_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_PURPLE_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_GRAY_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_RED_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_YELLOW_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_GREEN_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_BLUE_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_WHITE_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_BLACK_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_BROWN_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_LIGHT_BLUE_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_MAGENTA_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_PINK_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_LIGHT_GRAY_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_LIME_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_CYAN_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_PURPLE_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_GRAY_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.TIME_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_TIME_TORCH.get(), RenderType.getCutout());
+
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_LEAVES.get(), RenderType.getCutoutMipped());
 
 		net.minecraft.client.renderer.ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
@@ -50,6 +80,9 @@ public class ClientHandler {
 		});
 
 		ItemModelsProperties.registerProperty(ForceRegistry.FORCE_PACK.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
+				stack.getTag() != null && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
+
+		ItemModelsProperties.registerProperty(ForceRegistry.FORCE_BELT.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
 				stack.getTag() != null && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
 	}
 }

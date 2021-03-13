@@ -19,7 +19,6 @@ import javax.annotation.Nonnull;
 
 public class ForcePackContainer extends Container {
 
-    private PlayerInventory playerInventory;
     private ItemStack heldStack;
     private int upgrades;
 
@@ -34,7 +33,6 @@ public class ForcePackContainer extends Container {
 
     public ForcePackContainer(int id, PlayerInventory playerInventory, ItemStack forcePack) {
         super(ForceContainers.FORCE_PACK.get(), id);
-        this.playerInventory = playerInventory;
         this.heldStack = forcePack;
         upgrades = 0;
 

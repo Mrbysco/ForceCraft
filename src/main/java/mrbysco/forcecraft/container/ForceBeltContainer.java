@@ -3,11 +3,13 @@ package mrbysco.forcecraft.container;
 import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.registry.ForceContainers;
+import mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -15,6 +17,8 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 public class ForceBeltContainer extends Container {
+
+    private ItemStack heldStack;
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
@@ -27,8 +31,9 @@ public class ForceBeltContainer extends Container {
 
     public ForceBeltContainer(int id, PlayerInventory playerInventory, ItemStack forceBelt) {
         super(ForceContainers.FORCE_BELT.get(), id);
+        this.heldStack = forceBelt;
         int xPosC = 17;
-        int yPosC = 19;
+        int yPosC = 20;
         //Maxes at 40
 
         IItemHandler itemHandler = forceBelt.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
@@ -41,21 +46,36 @@ public class ForceBeltContainer extends Container {
                     }
                 });
             }
-        }
 
-        //Player Inventory
-        int xPos = 8;
-        int yPos = 53;
+            //Player Inventory
+            int xPos = 8;
+            int yPos = 54;
 
-        for(int y = 0; y < 3; ++y) {
-            for(int x = 0; x < 9; ++x) {
-                this.addSlot(new Slot(playerInventory, x + y * 9 + 9, xPos + x * 18, yPos + y * 18));
+            for(int y = 0; y < 3; ++y) {
+                for(int x = 0; x < 9; ++x) {
+                    this.addSlot(new Slot(playerInventory, x + y * 9 + 9, xPos + x * 18, yPos + y * 18));
+                }
             }
+
+            for(int x = 0; x < 9; ++x) {
+                this.addSlot(new Slot(playerInventory, x, xPos + x * 18, yPos + 58));
+            }
+        } else {
+            playerInventory.player.closeScreen();
+        }
+    }
+
+    @Override
+    public void onContainerClosed(PlayerEntity playerIn) {
+        IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        if(itemHandler != null) {
+            CompoundNBT tag = heldStack.getOrCreateTag();
+            tag.putInt("SlotsUsed", ItemHandlerUtils.getUsedSlots(itemHandler));
+            tag.putInt("SlotsTotal", itemHandler.getSlots());
+            heldStack.setTag(tag);
         }
 
-        for(int x = 0; x < 9; ++x) {
-            this.addSlot(new Slot(playerInventory, x, xPos + x * 18, yPos + 58));
-        }
+        super.onContainerClosed(playerIn);
     }
 
     //Credit to Shadowfacts for this method

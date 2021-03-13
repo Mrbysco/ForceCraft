@@ -2,5 +2,23 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "forcecraft:item/force_belt"
-  }
+  },
+  "overrides": [
+    { "predicate": { "color": 0.0625 }, "model": "forcecraft:item/force_belt_black" },
+    { "predicate": { "color": 0.125 }, "model": "forcecraft:item/force_belt_red" },
+    { "predicate": { "color": 0.1875 }, "model": "forcecraft:item/force_belt_green" },
+    { "predicate": { "color": 0.25 }, "model": "forcecraft:item/force_belt_brown" },
+    { "predicate": { "color": 0.3125 }, "model": "forcecraft:item/force_belt_blue" },
+    { "predicate": { "color": 0.375 }, "model": "forcecraft:item/force_belt_purple" },
+    { "predicate": { "color": 0.4375 }, "model": "forcecraft:item/force_belt_cyan" },
+    { "predicate": { "color": 0.5 }, "model": "forcecraft:item/force_belt_light_gray" },
+    { "predicate": { "color": 0.5625 }, "model": "forcecraft:item/force_belt_gray" },
+    { "predicate": { "color": 0.625 }, "model": "forcecraft:item/force_belt_pink" },
+    { "predicate": { "color": 0.6875 }, "model": "forcecraft:item/force_belt_lime" },
+    { "predicate": { "color": 0.75 }, "model": "forcecraft:item/force_belt_yellow" },
+    { "predicate": { "color": 0.8125 }, "model": "forcecraft:item/force_belt_light_blue" },
+    { "predicate": { "color": 0.875 }, "model": "forcecraft:item/force_belt_magenta" },
+    { "predicate": { "color": 0.9375 }, "model": "forcecraft:item/force_belt" },
+    { "predicate": { "color": 1.0 }, "model": "forcecraft:item/force_belt_white" }
+  ]
 }
