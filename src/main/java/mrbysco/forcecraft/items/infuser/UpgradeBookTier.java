@@ -4,7 +4,7 @@ import mrbysco.forcecraft.ForceCraft;
 
 public enum UpgradeBookTier {
 	
-	ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN;
+	ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN;
 	
 	//which is last one
 	static final UpgradeBookTier FINAL = SEVEN;

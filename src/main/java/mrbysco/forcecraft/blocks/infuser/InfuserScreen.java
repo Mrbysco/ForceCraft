@@ -5,7 +5,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.client.gui.infuser.ProgressBar;
-import mrbysco.forcecraft.client.gui.infuser.ProgressBar.ProgressBarDirection;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -42,20 +41,10 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	public InfuserScreen(InfuserContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
 
-		this.xSize = 176;
+//		this.xSize = 176;
 		this.ySize = 208;
 
 
-		//123, 17, 
-		infoButton = this.addButton(new Button(22, 0, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
-			ForceCraft.LOGGER.info("button test ");
-			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
-			showingPop = !showingPop;
-			ForceCraft.LOGGER.info("here test sub gui {}", showingPop);
-//			if(screenContainer.getTile().handler.getStackInSlot(9).isEmpty()) {
-//				//Insert behavior
-//			}
-		})); 
 
 		this.infuserProgress = new ProgressBar(TEXTURE, ProgressBar.ProgressBarDirection.DOWN_TO_UP, 2, 20, 134, 93, 176, 0);
 	}
@@ -63,6 +52,24 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	@Override
 	protected void init() {
 		super.init();
+
+		//123, 17, 
+		infoButton = this.addButton(new Button(guiLeft + 124, guiTop + 101, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
+			showingPop = !showingPop;
+			ForceCraft.LOGGER.info("here test sub gui {}", showingPop);
+//			if(screenContainer.getTile().handler.getStackInSlot(9).isEmpty()) {
+//				//Insert behavior
+//			}
+		}) {
+			@Override
+			   public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+					//skip drawing me		
+			 	super.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
+			   }
+		}); 
+		
+		
 		// "gui.forcecraft.infuser.button.button"
 		canWorkButton = this.addButton(new Button(guiLeft + 39, guiTop + 101, 12, 12, new TranslationTextComponent(""), (button) -> { 
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
@@ -70,7 +77,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			//TODO: change button
 		}) {
 				@Override
-			   public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+			    public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 					//skip drawing me		   
 			    }
 		});
@@ -80,13 +87,18 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		if(this.showingPop == false) {
+			this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		} 
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		this.minecraft.getTextureManager().bindTexture(TEXTURE);
 		this.blit(matrixStack, this.guiLeft, this.guiTop, 0,0,this.xSize, this.ySize);
+		
+
+		
 	}
 
 	@Override
@@ -94,10 +106,12 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		int actualMouseX = mouseX - ((this.width - this.xSize) / 2);
 		int actualMouseY = mouseY - ((this.height - this.ySize) / 2);
 
-//		this.infuserProgress.setMin(container.getTile().processTime).setMax(container.getTile().maxProcessTime);
-//		this.infuserProgress.draw(matrixStack, this.minecraft);
+		this.infuserProgress.setMin(container.getTile().processTime).setMax(container.getTile().maxProcessTime);
+		this.infuserProgress.draw(matrixStack, this.minecraft);
+		
 		this.drawFluidBar(matrixStack);
 		this.drawEnergyBar(matrixStack);
+		
 
 		if (isPointInRegion(123, 16, 12, 12, mouseX, mouseY) && container.getTile().handler.getStackInSlot(InfuserTileEntity.SLOT_GEM).isEmpty()) {
 			List<ITextComponent> text = new ArrayList<>();
@@ -130,13 +144,13 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
-//		if(isPointInRegion(152, 11, 12, 106, mouseX, mouseY)) {
-//			List<ITextComponent> text = new ArrayList<>();
-//			text.add(new StringTextComponent(container.getTile().getEnergyStored() + " FE"));
-//
-//			//this.drawHoveringText(text, actualMouseX, actualMouseY);
-//		}
+		if(this.showingPop) {
+			//show it now only
+			this.drawPopup(matrixStack);
+		}
+
 	}
+
 
 	private void drawFluidBar(MatrixStack matrixStack) {
 		if(container.getTile() == null || container.getTile().getFluid() == null) {
@@ -172,5 +186,14 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		int width = 12;
 		int x = 31, y = -3;
 	    blit(ms, guiLeft + x, guiTop + y, 0, 0, width, (int)(height * pct), width,  (int)height);
+	}
+
+	private void drawPopup(MatrixStack matrixStack) {
+
+		minecraft.textureManager.bindTexture(INFO);
+		int height = 170;
+		int width = 220;
+		int x = 26, y = 0;
+	    blit(matrixStack, x, y, 0, 0, width, height, width, height);
 	}
 }

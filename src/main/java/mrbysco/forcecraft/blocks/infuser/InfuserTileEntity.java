@@ -104,7 +104,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         @Override
         public FluidStack drain(FluidStack resource, FluidAction action) {
             if (!isFluidEqual(resource)) {
-                return null;
+                return FluidStack.EMPTY;
             }
             if (action.simulate()) {
                 int amount = tank.getFluidAmount() - resource.getAmount() < 0 ? tank.getFluidAmount() : resource.getAmount();
