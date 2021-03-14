@@ -3,6 +3,7 @@ package mrbysco.forcecraft.items;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.pack.PackInventoryProvider;
 import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
+import mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen;
 import mrbysco.forcecraft.container.ForcePackContainer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,10 +40,9 @@ public class ForcePackItem extends BaseItem {
         ItemStack stack = playerIn.getHeldItem(handIn);
         IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(handler instanceof PackItemStackHandler) {
-            PackItemStackHandler packHandler = (PackItemStackHandler)handler;
             if(playerIn.isSneaking()) {
                 if(worldIn.isRemote) {
-                    mrbysco.forcecraft.client.gui.pack.PackRenameScreen.openScreen(stack, handIn);
+                    RenameAndRecolorScreen.openScreen(stack, handIn);
                 }
             } else {
                 playerIn.openContainer(this.getContainer(stack));
@@ -98,7 +98,6 @@ public class ForcePackItem extends BaseItem {
     public ITextComponent getDisplayName(ItemStack stack) {
         return ((TextComponent)super.getDisplayName(stack)).mergeStyle(TextFormatting.YELLOW);
     }
-    //Inspired by Botaina's Code
 
     @Nullable
     @Override

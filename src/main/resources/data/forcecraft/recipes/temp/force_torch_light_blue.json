@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BDB",
+    "BBB" ],
+  "key": {
+    "B": [
+      {
+        "tag": "forcecraft:force_torch"
+      }
+    ],
+    "D": [
+      {
+        "tag": "forge:dyes/light_blue"
+      }
+    ]
+  },
+  "result": {
+    "item": "forcecraft:force_light_blue_torch",
+    "count": 8
+  }
+}

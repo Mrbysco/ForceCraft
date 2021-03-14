@@ -29,7 +29,7 @@ public class PackChangeMessage {
 	}
 
 	public static PackChangeMessage decode(final PacketBuffer packetBuffer) {
-		return new PackChangeMessage(packetBuffer.readInt() == 0 ? Hand.MAIN_HAND : Hand.OFF_HAND, packetBuffer.readString(), packetBuffer.readInt());
+		return new PackChangeMessage(packetBuffer.readInt() == 0 ? Hand.MAIN_HAND : Hand.OFF_HAND, packetBuffer.readString(32767), packetBuffer.readInt());
 	}
 
 	public void handle(Supplier<Context> context) {
