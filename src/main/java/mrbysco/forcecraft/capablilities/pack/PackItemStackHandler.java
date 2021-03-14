@@ -34,12 +34,29 @@ public class PackItemStackHandler extends ItemStackHandler {
 		forceUpdate();
 	}
 
+	public void applyUpgrade(int upgrades) {
+		this.upgrades += upgrades;
+		forceUpdate();
+	}
+
 	public void applydowngrade() {
 		this.upgrades--;
 		forceUpdate();
 	}
 
+
+	public void applydowngrade(int upgrades) {
+		this.upgrades -= upgrades;
+		forceUpdate();
+	}
+
 	public void forceUpdate() {
+		if(this.upgrades > 4) {
+			this.upgrades = 4;
+		}
+		if(this.upgrades < 0) {
+			this.upgrades = 0;
+		}
 		CompoundNBT tag = serializeNBT();
 		deserializeNBT(tag);
 	}
