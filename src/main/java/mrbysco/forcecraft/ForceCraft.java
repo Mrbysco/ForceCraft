@@ -12,8 +12,7 @@ import mrbysco.forcecraft.handlers.LootingHandler;
 import mrbysco.forcecraft.handlers.ToolModifierHandler;
 import mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
 import mrbysco.forcecraft.networking.PacketHandler;
-import mrbysco.forcecraft.recipe.InfuseRecipe;
-import mrbysco.forcecraft.recipe.ModRecipeType;
+import mrbysco.forcecraft.recipe.ForceRecipes;
 import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.registry.ForceEffects;
 import mrbysco.forcecraft.registry.ForceEntities;
@@ -25,12 +24,9 @@ import mrbysco.forcecraft.world.WorldGenHandler;
 import mrbysco.forcecraft.world.feature.ForceFeatures;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -72,6 +68,7 @@ public class ForceCraft {
         ForceFeatures.FEATURES.register(eventBus);
         ForceContainers.CONTAINERS.register(eventBus);
         ForceLootModifiers.GLM.register(eventBus);
+        ForceRecipes.RECIPE_SERIALIZERS.register(eventBus);
 
         MinecraftForge.EVENT_BUS.register(new CapabilityAttachHandler());
         MinecraftForge.EVENT_BUS.register(new BaneHandler());
@@ -87,8 +84,6 @@ public class ForceCraft {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             eventBus.addListener(ClientHandler::onClientSetup);
         });
-
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, ForceCraft::registerRecipeSerializers);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
@@ -96,11 +91,6 @@ public class ForceCraft {
         CapabilityHandler.register();
 
         InfuserTileEntity.populateToolList();
-    }
-    
-    public static void registerRecipeSerializers(Register<IRecipeSerializer<?>> event) {
-        Registry.register(Registry.RECIPE_TYPE, ModRecipeType.INFUSER.toString(), ModRecipeType.INFUSER);
-        event.getRegistry().register(InfuseRecipe.SERIALIZER);
     }
 }
 

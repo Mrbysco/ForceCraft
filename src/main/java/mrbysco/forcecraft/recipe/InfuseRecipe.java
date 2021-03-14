@@ -1,10 +1,6 @@
 package mrbysco.forcecraft.recipe;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.google.gson.JsonObject;
-
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
@@ -19,6 +15,9 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 
@@ -75,7 +74,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 
 	@Override
 	public IRecipeType<?> getType() {
-		return ModRecipeType.INFUSER;
+		return ForceRecipes.INFUSER_TYPE;
 	}
 	public Ingredient getInput() {
 		return input;
@@ -103,17 +102,10 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 
 	@Override
 	public IRecipeSerializer<?> getSerializer() {
-		return SERIALIZER;
+		return ForceRecipes.INFUSER_SERIALIZER.get();
 	}
 
-	public static final SerializeInfuserRecipe SERIALIZER = new SerializeInfuserRecipe();
-
 	public static class SerializeInfuserRecipe extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<InfuseRecipe> {
-
-		SerializeInfuserRecipe() {
-			// This registry name is what people will specify in their json files.
-			this.setRegistryName(new ResourceLocation(Reference.MOD_ID, "infuser"));
-		}
 
 		@Override
 		public InfuseRecipe read(ResourceLocation recipeId, JsonObject json) {
