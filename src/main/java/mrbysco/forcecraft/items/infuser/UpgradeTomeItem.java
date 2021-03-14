@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class UpgradeTomeItem extends BaseItem {
 
 	public UpgradeTomeItem(Properties properties) {
-		super(properties);
+		super(properties.maxStackSize(1));
 	}
 
 

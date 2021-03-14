@@ -362,6 +362,7 @@
     "text.forcecraft.fortune185": "A Yo-Yo isn't a tool for hurting people...",
 
     "_comment": "Infuser GUI",
+    "gui.forcecraft.infuser.nobook": "Upgrade Tome required",
     "gui.forcecraft.infuser.empty.tooltip": "Empty",
     "gui.forcecraft.infuser.help.tooltip": "Help",
     "gui.forcecraft.infuser.start.tooltip": "Start Infusion",

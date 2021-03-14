@@ -3,8 +3,8 @@ package mrbysco.forcecraft.items.infuser;
 import mrbysco.forcecraft.ForceCraft;
 
 public enum UpgradeBookTier {
-	
-	ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN;
+	//zero is unused, but we want .ordinal() to match the meaning
+	ZERO, ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN;
 	
 	//which is last one
 	static final UpgradeBookTier FINAL = SEVEN;

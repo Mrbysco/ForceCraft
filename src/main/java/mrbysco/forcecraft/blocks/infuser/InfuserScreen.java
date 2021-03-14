@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.client.gui.infuser.ProgressBar;
+import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
 import mrbysco.forcecraft.recipe.InfuseRecipe;
@@ -18,6 +19,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
@@ -48,8 +50,9 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		super(screenContainer, inv, titleIn);
 
 //		this.xSize = 176;
-		this.ySize = 208;
-
+		this.ySize = 208; 
+		
+	 
 
 
 		this.infuserProgress = new ProgressBar(TEXTURE, ProgressBar.ProgressBarDirection.DOWN_TO_UP, 2, 20, 134, 93, 176, 0);
@@ -61,12 +64,22 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		//123, 17, 
 		infoButton = this.addButton(new Button(guiLeft + 124, guiTop + 17, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+			
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
+			
+			ItemStack bookStack = container.tile.getBookInSlot();
+			if(bookStack.isEmpty()) {
+				this.playerInventory.player.sendStatusMessage(new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
+				showingPop = false;//do not open without a book
+				return;
+			}
+			
 			showingPop = !showingPop;
 			ForceCraft.LOGGER.info("here test sub gui {}", showingPop);
-//			if(screenContainer.getTile().handler.getStackInSlot(9).isEmpty()) {
-//				//Insert behavior
-//			}
+			if(showingPop) {
+				//reset tiles every time we do a hide/show
+				 renderMyTiles = new ArrayList<>();
+			}
 		}) {
 			@Override
 			   public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
@@ -74,7 +87,6 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			 	  //super.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
 			   }
 		}); 
-		
 		
 		// "gui.forcecraft.infuser.button.button"
 		canWorkButton = this.addButton(new Button(guiLeft + 39, guiTop + 101, 12, 12, new TranslationTextComponent(""), (button) -> { 
@@ -96,102 +108,33 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		
 		if(this.showingPop) {
 			this.renderOverride(matrixStack,mouseX,mouseY,partialTicks);
-			this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
 		 
-				//show it now only
-				this.drawPopup(matrixStack);
+			//show it now only
+			this.drawPopup(matrixStack);
+			
+			for(TiledRecipe tile : renderMyTiles) {
+				if(isPointInRegion(tile.x - guiLeft, tile.y - guiTop, tile.size, tile.size, mouseX, mouseY)) {
+
+					tile.drawTooltip(matrixStack, mouseX, mouseY);
+				}
+			}
 			
 		} 
 		else {
-
 			super.render(matrixStack, mouseX, mouseY, partialTicks);
+			this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
 		}
 	}
 
 	private void renderOverride(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-	    int i = this.guiLeft;
-	      int j = this.guiTop;
-	      this.drawGuiContainerBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
-	      net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiContainerEvent.DrawBackground(this, matrixStack, mouseX, mouseY));
-//	      RenderSystem.disableRescaleNormal();
-//	      RenderSystem.disableDepthTest();
-//	      super.render(matrixStack, mouseX, mouseY, partialTicks);
-//	      RenderSystem.pushMatrix();
-//	      RenderSystem.translatef((float)i, (float)j, 0.0F);
-//	      RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-//	      RenderSystem.enableRescaleNormal();
-//	      this.hoveredSlot = null;
-//	      int k = 240;
-//	      int l = 240;
-//	      RenderSystem.glMultiTexCoord2f(33986, 240.0F, 240.0F);
-//	      RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-//
-//	      for(int i1 = 0; i1 < this.container.inventorySlots.size(); ++i1) {
-//	         Slot slot = this.container.inventorySlots.get(i1);
-//	         if (slot.isEnabled()) {
-//	            this.moveItems(matrixStack, slot);
-//	         }
-//
-//	         if (this.isSlotSelected(slot, (double)mouseX, (double)mouseY) && slot.isEnabled()) {
-//	            this.hoveredSlot = slot;
-//	            RenderSystem.disableDepthTest();
-//	            int j1 = slot.xPos;
-//	            int k1 = slot.yPos;
-//	            RenderSystem.colorMask(true, true, true, false);
-//	            int slotColor = this.getSlotColor(i1);
-//	            this.fillGradient(matrixStack, j1, k1, j1 + 16, k1 + 16, slotColor, slotColor);
-//	            RenderSystem.colorMask(true, true, true, true);
-//	            RenderSystem.enableDepthTest();
-//	         }
-//	      }
-//
-//	      this.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
-//	      net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiContainerEvent.DrawForeground(this, matrixStack, mouseX, mouseY));
-//	      PlayerInventory playerinventory = this.minecraft.player.inventory;
-//	      ItemStack itemstack = this.draggedStack.isEmpty() ? playerinventory.getItemStack() : this.draggedStack;
-//	      if (!itemstack.isEmpty()) {
-//	         int j2 = 8;
-//	         int k2 = this.draggedStack.isEmpty() ? 8 : 16;
-//	         String s = null;
-//	         if (!this.draggedStack.isEmpty() && this.isRightMouseClick) {
-//	            itemstack = itemstack.copy();
-//	            itemstack.setCount(MathHelper.ceil((float)itemstack.getCount() / 2.0F));
-//	         } else if (this.dragSplitting && this.dragSplittingSlots.size() > 1) {
-//	            itemstack = itemstack.copy();
-//	            itemstack.setCount(this.dragSplittingRemnant);
-//	            if (itemstack.isEmpty()) {
-//	               s = "" + TextFormatting.YELLOW + "0";
-//	            }
-//	         }
-//
-//	         this.drawItemStack(itemstack, mouseX - i - 8, mouseY - j - k2, s);
-//	      }
-//
-//	      if (!this.returningStack.isEmpty()) {
-//	         float f = (float)(Util.milliTime() - this.returningStackTime) / 100.0F;
-//	         if (f >= 1.0F) {
-//	            f = 1.0F;
-//	            this.returningStack = ItemStack.EMPTY;
-//	         }
-//
-//	         int l2 = this.returningStackDestSlot.xPos - this.touchUpX;
-//	         int i3 = this.returningStackDestSlot.yPos - this.touchUpY;
-//	         int l1 = this.touchUpX + (int)((float)l2 * f);
-//	         int i2 = this.touchUpY + (int)((float)i3 * f);
-//	         this.drawItemStack(this.returningStack, l1, i2, (String)null);
-//	      }
-//
-//	      RenderSystem.popMatrix();
-//	      RenderSystem.enableDepthTest();
+	    //render only background texture, not the item stacks
+		this.drawGuiContainerBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		this.minecraft.getTextureManager().bindTexture(TEXTURE);
 		this.blit(matrixStack, this.guiLeft, this.guiTop, 0,0,this.xSize, this.ySize);
-		
-
-		
 	}
 
 	@Override
@@ -230,17 +173,14 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			if (container.tile.getFluid() == null) {
 				text.add(new TranslationTextComponent("gui.forcecraft.infuser.empty.tooltip"));
 			} else {
-				// TODO: liquid force tooltip
-				text.add(new StringTextComponent("Liquid Force" + TextFormatting.WHITE + " (" + this.container.tile.getFluidAmount() + ")").mergeStyle(TextFormatting.YELLOW));
+				text.add(new TranslationTextComponent("fluid.forcecraft.fluid_force_source"));
+				
+				text.add(new StringTextComponent("(" + this.container.tile.getFluidAmount() + ")").mergeStyle(TextFormatting.YELLOW));
 			}
 
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
-
-	
-
 	}
-
 
 	private void drawFluidBar(MatrixStack matrixStack) {
 		if(container.getTile() == null || container.getTile().getFluid() == null) {
@@ -279,6 +219,12 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	}
 
 	private void drawPopup(MatrixStack matrixStack) {
+		
+		ItemStack bookStack = container.tile.getBookInSlot();
+		if(bookStack.isEmpty()) {
+			//draw string. actually, button should be locked
+			return;
+		}
 
 		minecraft.textureManager.bindTexture(INFO);
 		int height = 290;
@@ -286,48 +232,91 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		int x = guiLeft + 4 , y = guiTop + 36;
 	    blit(matrixStack, x, y, 0, 0, width, height, width, height);
 
-	    y = guiTop + 40;
-	    for(int tier = 1; tier <= 7; tier++) {
-	    	//ok next tier, go down and right
-	    	x = guiLeft + 8;
-	    	
-		    List<InfuseRecipe> tierSorted = InfuseRecipe.RECIPESBYLEVEL.get(tier);
-		    if(tierSorted == null || tierSorted.size() == 0) {
-
-	    		ForceCraft.LOGGER.info("Tier has no recipes{}", tier);
-	    		continue;
-		    }
-			for(InfuseRecipe recipe : tierSorted) {
-		    	if(recipe.input.getMatchingStacks().length == 0) {
-		    		ForceCraft.LOGGER.info("Cannot render recipe with no input {}", recipe);
-		    		continue;
+		UpgradeBookData bd = new UpgradeBookData(bookStack);
+		
+		if(renderMyTiles.isEmpty()) {
+			//re build the whole list
+		    y = guiTop + 40;
+		    for(int tier = 1; tier <= 7; tier++) {
+		    	
+		    	if(tier > bd.getTier().ordinal()) {
+		    		break;
 		    	}
-		    	//
-	//	    	ForceCraft.LOGGER.info(""+recipe.input.getMatchingStacks()[0]);
-		    	this.drawItemStack(recipe.input.getMatchingStacks()[0], x, y, "");
-		    	x += 20;
+		    	
+		    	//ok next tier, go down and right
+		    	x = guiLeft + 8;
+		    	
+			    List<InfuseRecipe> tierSorted = InfuseRecipe.RECIPESBYLEVEL.get(tier);
+			    if(tierSorted == null || tierSorted.size() == 0) {
+	
+		    		ForceCraft.LOGGER.info("Tier has no recipes{}", tier);
+		    		continue;
+			    }
+				for(InfuseRecipe recipe : tierSorted) {
+			    	if(recipe.input.getMatchingStacks().length == 0) {
+			    		ForceCraft.LOGGER.info("Cannot render recipe with no input {}", recipe);
+			    		continue;
+			    	}
+			    	renderMyTiles.add(new TiledRecipe(this, recipe, x, y));
+			    	
+			    	x += 20;
+			    }
+		    	y += 18;
 		    }
-	    	y += 18;
-	    }
-	  
+		}
+		//else just render
+		for(TiledRecipe tile : renderMyTiles) {
+			tile.drawItemStack();
+		}
 	}
 	
-	   /**
-	    * Draws an ItemStack.
-	    *  
-	    * The z index is increased by 32 (and not decreased afterwards), and the item is then rendered at z=200.
-	    */
-	   private void drawItemStack(ItemStack stack, int x, int y, String altText) {
-	      RenderSystem.translatef(0.0F, 0.0F, 32.0F);
-	      this.setBlitOffset(200);
-	      this.itemRenderer.zLevel = 200.0F;
-	      net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
-	      if (font == null) font = this.font;
-	      this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
-	      this.itemRenderer.renderItemOverlayIntoGUI(font, stack, x, y - 0, altText);
-	      this.setBlitOffset(0);
-	      this.itemRenderer.zLevel = 0.0F;
-	   }
+	private List<TiledRecipe> renderMyTiles = new ArrayList<>();
+	
+	static class TiledRecipe {
+		int size = 20;
+		InfuserScreen parent;
+		InfuseRecipe recipe;
+		int x;
+		int y;
+		
+		public TiledRecipe(InfuserScreen self, InfuseRecipe recipe, int x, int y) {
+			parent = self;
+			this.recipe = recipe;
+			this.x = x;
+			this.y = y;
+		}
+
+		public void drawItemStack() {
+			// TODO: rotate on matching stacks with a timer, just like JEI
+	    	parent.drawItemStack(recipe.input.getMatchingStacks()[0], x, y, "");
+		}
+
+		public void drawTooltip(MatrixStack ms, int actualMouseX, int actualMouseY) {
+			System.out.println("TODO: tooltip" +recipe);
+			
+			List<ITextComponent> text = new ArrayList<>();
+			text.add(new TranslationTextComponent(recipe.getId().toString()));
+			GuiUtils.drawHoveringText(ms, text, actualMouseX, actualMouseY, parent.width, parent.height, -1, parent.font);
+		}
+	}
+	
+	
+   /**
+    * Draws an ItemStack.  Copied from base class
+    *  
+    * The z index is increased by 32 (and not decreased afterwards), and the item is then rendered at z=200.
+    */
+   void drawItemStack(ItemStack stack, int x, int y, String altText) {
+      RenderSystem.translatef(0.0F, 0.0F, 32.0F);
+      this.setBlitOffset(200);
+      this.itemRenderer.zLevel = 200.0F;
+      net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
+      if (font == null) font = this.font;
+      this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
+      this.itemRenderer.renderItemOverlayIntoGUI(font, stack, x, y - 0, altText);
+      this.setBlitOffset(0);
+      this.itemRenderer.zLevel = 0.0F;
+   }
 }
 
 

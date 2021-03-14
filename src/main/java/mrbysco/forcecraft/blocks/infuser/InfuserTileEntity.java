@@ -299,22 +299,22 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         return false;
     }
 
-	private ItemStack getFromToolSlot() {
+    public ItemStack getFromToolSlot() {
 		return handler.getStackInSlot(SLOT_TOOL);
 	}
 	
-	private ItemStack getBookInSlot() {
+	public ItemStack getBookInSlot() {
 		return handler.getStackInSlot(SLOT_BOOK);
 	}
 
-    private ItemStack getModifier(int slot) { 
+	public ItemStack getModifier(int slot) { 
     	if(slot >= 0 && slot <= SLOT_TOOL - 1) {
 			return handler.getStackInSlot(slot);
     	}
         return ItemStack.EMPTY;
     }
 
-    private boolean hasValidModifer(int slot) {
+	public boolean hasValidModifer(int slot) {
         return getModifier(slot).isEmpty() == false;
     }
     /**
@@ -323,8 +323,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
      * @param mod
      * @return
      */
-    private boolean applyModifier(ItemStack tool, ItemStack modifier) {
-		ItemStack bookStack = this.getBookInSlot();
+    private boolean applyModifier(ItemStack tool, ItemStack modifier) { 
 		UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
 
     	for (InfuseRecipe modCurrent : InfuseRecipe.RECIPES) {
