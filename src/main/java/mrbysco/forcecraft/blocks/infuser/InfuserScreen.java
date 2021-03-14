@@ -1,12 +1,14 @@
 package mrbysco.forcecraft.blocks.infuser;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.client.gui.infuser.ProgressBar;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
+import mrbysco.forcecraft.recipe.InfuseRecipe;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.AtlasTexture;
@@ -14,7 +16,11 @@ import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -54,7 +60,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		super.init();
 
 		//123, 17, 
-		infoButton = this.addButton(new Button(guiLeft + 124, guiTop + 101, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+		infoButton = this.addButton(new Button(guiLeft + 124, guiTop + 17, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
 			showingPop = !showingPop;
 			ForceCraft.LOGGER.info("here test sub gui {}", showingPop);
@@ -65,7 +71,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			@Override
 			   public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 					//skip drawing me		
-			 	super.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
+			 	  //super.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
 			   }
 		}); 
 		
@@ -86,10 +92,97 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		if(this.showingPop == false) {
+		
+		
+		if(this.showingPop) {
+			this.renderOverride(matrixStack,mouseX,mouseY,partialTicks);
 			this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		 
+				//show it now only
+				this.drawPopup(matrixStack);
+			
 		} 
+		else {
+
+			super.render(matrixStack, mouseX, mouseY, partialTicks);
+		}
+	}
+
+	private void renderOverride(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	    int i = this.guiLeft;
+	      int j = this.guiTop;
+	      this.drawGuiContainerBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
+	      net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiContainerEvent.DrawBackground(this, matrixStack, mouseX, mouseY));
+//	      RenderSystem.disableRescaleNormal();
+//	      RenderSystem.disableDepthTest();
+//	      super.render(matrixStack, mouseX, mouseY, partialTicks);
+//	      RenderSystem.pushMatrix();
+//	      RenderSystem.translatef((float)i, (float)j, 0.0F);
+//	      RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+//	      RenderSystem.enableRescaleNormal();
+//	      this.hoveredSlot = null;
+//	      int k = 240;
+//	      int l = 240;
+//	      RenderSystem.glMultiTexCoord2f(33986, 240.0F, 240.0F);
+//	      RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+//
+//	      for(int i1 = 0; i1 < this.container.inventorySlots.size(); ++i1) {
+//	         Slot slot = this.container.inventorySlots.get(i1);
+//	         if (slot.isEnabled()) {
+//	            this.moveItems(matrixStack, slot);
+//	         }
+//
+//	         if (this.isSlotSelected(slot, (double)mouseX, (double)mouseY) && slot.isEnabled()) {
+//	            this.hoveredSlot = slot;
+//	            RenderSystem.disableDepthTest();
+//	            int j1 = slot.xPos;
+//	            int k1 = slot.yPos;
+//	            RenderSystem.colorMask(true, true, true, false);
+//	            int slotColor = this.getSlotColor(i1);
+//	            this.fillGradient(matrixStack, j1, k1, j1 + 16, k1 + 16, slotColor, slotColor);
+//	            RenderSystem.colorMask(true, true, true, true);
+//	            RenderSystem.enableDepthTest();
+//	         }
+//	      }
+//
+//	      this.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
+//	      net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiContainerEvent.DrawForeground(this, matrixStack, mouseX, mouseY));
+//	      PlayerInventory playerinventory = this.minecraft.player.inventory;
+//	      ItemStack itemstack = this.draggedStack.isEmpty() ? playerinventory.getItemStack() : this.draggedStack;
+//	      if (!itemstack.isEmpty()) {
+//	         int j2 = 8;
+//	         int k2 = this.draggedStack.isEmpty() ? 8 : 16;
+//	         String s = null;
+//	         if (!this.draggedStack.isEmpty() && this.isRightMouseClick) {
+//	            itemstack = itemstack.copy();
+//	            itemstack.setCount(MathHelper.ceil((float)itemstack.getCount() / 2.0F));
+//	         } else if (this.dragSplitting && this.dragSplittingSlots.size() > 1) {
+//	            itemstack = itemstack.copy();
+//	            itemstack.setCount(this.dragSplittingRemnant);
+//	            if (itemstack.isEmpty()) {
+//	               s = "" + TextFormatting.YELLOW + "0";
+//	            }
+//	         }
+//
+//	         this.drawItemStack(itemstack, mouseX - i - 8, mouseY - j - k2, s);
+//	      }
+//
+//	      if (!this.returningStack.isEmpty()) {
+//	         float f = (float)(Util.milliTime() - this.returningStackTime) / 100.0F;
+//	         if (f >= 1.0F) {
+//	            f = 1.0F;
+//	            this.returningStack = ItemStack.EMPTY;
+//	         }
+//
+//	         int l2 = this.returningStackDestSlot.xPos - this.touchUpX;
+//	         int i3 = this.returningStackDestSlot.yPos - this.touchUpY;
+//	         int l1 = this.touchUpX + (int)((float)l2 * f);
+//	         int i2 = this.touchUpY + (int)((float)i3 * f);
+//	         this.drawItemStack(this.returningStack, l1, i2, (String)null);
+//	      }
+//
+//	      RenderSystem.popMatrix();
+//	      RenderSystem.enableDepthTest();
 	}
 
 	@Override
@@ -144,10 +237,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
-		if(this.showingPop) {
-			//show it now only
-			this.drawPopup(matrixStack);
-		}
+	
 
 	}
 
@@ -191,9 +281,53 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	private void drawPopup(MatrixStack matrixStack) {
 
 		minecraft.textureManager.bindTexture(INFO);
-		int height = 170;
-		int width = 220;
-		int x = 26, y = 0;
+		int height = 290;
+		int width = 240;
+		int x = guiLeft + 4 , y = guiTop + 36;
 	    blit(matrixStack, x, y, 0, 0, width, height, width, height);
+
+	    y = guiTop + 40;
+	    for(int tier = 1; tier <= 7; tier++) {
+	    	//ok next tier, go down and right
+	    	x = guiLeft + 8;
+	    	
+		    List<InfuseRecipe> tierSorted = InfuseRecipe.RECIPESBYLEVEL.get(tier);
+		    if(tierSorted == null || tierSorted.size() == 0) {
+
+	    		ForceCraft.LOGGER.info("Tier has no recipes{}", tier);
+	    		continue;
+		    }
+			for(InfuseRecipe recipe : tierSorted) {
+		    	if(recipe.input.getMatchingStacks().length == 0) {
+		    		ForceCraft.LOGGER.info("Cannot render recipe with no input {}", recipe);
+		    		continue;
+		    	}
+		    	//
+	//	    	ForceCraft.LOGGER.info(""+recipe.input.getMatchingStacks()[0]);
+		    	this.drawItemStack(recipe.input.getMatchingStacks()[0], x, y, "");
+		    	x += 20;
+		    }
+	    	y += 18;
+	    }
+	  
 	}
+	
+	   /**
+	    * Draws an ItemStack.
+	    *  
+	    * The z index is increased by 32 (and not decreased afterwards), and the item is then rendered at z=200.
+	    */
+	   private void drawItemStack(ItemStack stack, int x, int y, String altText) {
+	      RenderSystem.translatef(0.0F, 0.0F, 32.0F);
+	      this.setBlitOffset(200);
+	      this.itemRenderer.zLevel = 200.0F;
+	      net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
+	      if (font == null) font = this.font;
+	      this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
+	      this.itemRenderer.renderItemOverlayIntoGUI(font, stack, x, y - 0, altText);
+	      this.setBlitOffset(0);
+	      this.itemRenderer.zLevel = 0.0F;
+	   }
 }
+
+
