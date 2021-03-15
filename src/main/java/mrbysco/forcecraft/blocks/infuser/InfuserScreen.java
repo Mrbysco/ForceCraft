@@ -56,27 +56,27 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	protected void init() {
 		super.init();
 
-		//Comment out this button to disable Info help ? button
+		// Comment out this button to disable Info help ? button
 		this.addButton(new Button(guiLeft + 124, guiTop + 17, 12, 12,
-			new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+				new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
 
-				PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
+					PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
 
-				ItemStack bookStack = container.tile.getBookInSlot();
-				if (bookStack.isEmpty()) {
-					this.playerInventory.player.sendStatusMessage(
-							new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
-					showingPop = false;// do not open without a book
-					return;
-				}
+					ItemStack bookStack = container.tile.getBookInSlot();
+					if (bookStack.isEmpty()) {
+						this.playerInventory.player.sendStatusMessage(
+								new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
+						showingPop = false;// do not open without a book
+						return;
+					}
 
-				showingPop = !showingPop;
-				ForceCraft.LOGGER.info("here test sub gui {}", showingPop);
-				if (showingPop) {
-					// reset tiles every time we do a hide/show
-					renderMyTiles = new ArrayList<>();
-				}
-			}) {
+					showingPop = !showingPop;
+					ForceCraft.LOGGER.info("here test sub gui {}", showingPop);
+					if (showingPop) {
+						// reset tiles every time we do a hide/show
+						renderMyTiles = new ArrayList<>();
+					}
+				}) {
 			@Override
 			public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 				// skip drawing me
@@ -84,7 +84,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			}
 		});
 
-		this.addButton( new Button(guiLeft + 39, guiTop + 101, 12, 12, new TranslationTextComponent(""), (button) -> {
+		this.addButton(new Button(guiLeft + 39, guiTop + 101, 12, 12, new TranslationTextComponent(""), (button) -> {
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
 			container.getTile().canWork = true;
 			// TODO: change button
@@ -107,7 +107,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			this.drawPopup(matrixStack);
 
 			for (TiledRecipe tile : renderMyTiles) {
-				if (isPointInRegion(tile.x , tile.y , tile.size, tile.size, mouseX, mouseY)) {
+				if (isPointInRegion(tile.x, tile.y, tile.size, tile.size, mouseX, mouseY)) {
 
 					tile.drawTooltip(matrixStack, mouseX, mouseY);
 				}
@@ -301,13 +301,13 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		public void drawItemStack() {
 			// TODO: rotate on matching stacks with a timer, just like JEI
-			parent.drawItemStack(recipe.input.getMatchingStacks()[0], parent.guiLeft+ x, parent.guiTop + y, "");
+			parent.drawItemStack(recipe.input.getMatchingStacks()[0], parent.guiLeft + x, parent.guiTop + y, "");
 		}
 
 		public void drawTooltip(MatrixStack ms, int actualMouseX, int actualMouseY) {
-			
+
 			String recipeSlug = recipe.modifier.getTooltip();
-		
+
 			List<ITextComponent> text = new ArrayList<>();
 			text.add(new TranslationTextComponent(recipeSlug));
 			GuiUtils.drawHoveringText(ms, text, actualMouseX, actualMouseY, parent.width, parent.height, -1,
