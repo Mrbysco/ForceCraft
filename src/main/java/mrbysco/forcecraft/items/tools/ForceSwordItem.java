@@ -57,7 +57,7 @@ public class ForceSwordItem extends SwordItem {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> toolTip, ITooltipFlag flagIn) {
         stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
             if(cap.hasWing())
-                toolTip.add(new StringTextComponent("Wing"));
+                toolTip.add(new StringTextComponent("Wing")); // TODO: language file
             if(cap.hasBleed())
                 toolTip.add(new StringTextComponent("Bleeding " + cap.getBleedLevel()));
         });

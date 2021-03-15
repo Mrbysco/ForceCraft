@@ -4,18 +4,18 @@ import mrbysco.forcecraft.ForceCraft;
 import net.minecraft.item.ItemStack;
 
 public enum InfuserModifierType {
-	SPEED,HEAT,FORCE,SILK,DAMAGE,FORTUNE,LIGHT,STURDY,LUMBERJACK,HEALING,ENDER,BLEEDING,BANE,WING,CAMO,RAINBOW,TIME;
-//	 PACK, // this one upgrades the Force Pack
-	//and others idk what they do, need to look up
-//	 GRINDING, 
-//	 FREEZING, EXP, STORAGE - for chests somehow?, FURNACE - item card enchant
-	// SIGHT - night vision on a force rod ?
-	// soul wafer - mob chunks? 
-//	- TREASURE CORE - make things drop treasure cards - craft into spoils bag
+	SPEED,HEAT,FORCE,SILK,DAMAGE,FORTUNE,LIGHT,STURDY,LUMBERJACK,HEALING,ENDER,BLEEDING,BANE,WING,CAMO,RAINBOW,TIME,
+   PACK, // this one upgrades the Force Pack
+	 GRINDING, FREEZING, EXP, STORAGE, // TODO: look up old mod version
+	 
+	  //- for chests somehow?, FURNACE - item card enchant
+	 SIGHT, //- night vision on a force rod ?
+	 TREASURE //,CORE - make things drop treasure cards - craft into spoils bag
+	;
 	
 	public boolean apply(ItemStack tool, ItemStack mod) {
 		switch(this) {
-		case DAMAGE:
+		case DAMAGE: // claw item
 			return InfuserTileEntity.addDamageModifier(tool);
 		case ENDER:
 			return InfuserTileEntity.addEnderModifier(tool);
@@ -53,5 +53,9 @@ public enum InfuserModifierType {
 		}
 		ForceCraft.LOGGER.error("Error: No action for modifier {}", this);
 		return false;
+	}
+	
+	public String getTooltip() {
+		return "gui.forcecraft.infuser.tooltip." + name().toLowerCase();
 	}
 }

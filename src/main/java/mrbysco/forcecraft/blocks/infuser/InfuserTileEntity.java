@@ -8,6 +8,7 @@ import mrbysco.forcecraft.items.CustomArmorItem;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
+import mrbysco.forcecraft.items.tools.ForceMittItem;
 import mrbysco.forcecraft.items.tools.ForcePickaxeItem;
 import mrbysco.forcecraft.items.tools.ForceRodItem;
 import mrbysco.forcecraft.items.tools.ForceShearsItem;
@@ -53,7 +54,6 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import java.util.ArrayList;
 import java.util.List;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
@@ -61,7 +61,6 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class InfuserTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventory {
 
-    public static final List<Item> validToolList = new ArrayList<>();
     public boolean canWork = false;
 
     public int processTime = 0;
@@ -77,28 +76,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 	//currently these costs are fixed PER infusing a thing once
 	public static final int ENERGY_COST_PER = 20;
     public static final int FLUID_COST_PER = 1000;
-    //ratio of gem slot to fluid tank
+    //ratio o f gem slot to fluid tank
 	private static final int FLUID_PER_GEM = 500;
-
-
-    //
-    //     Big section of modifiers
-    //
-    
-    public static void populateToolList() {
-    	// TODO: update this. or make data tag? 
-        validToolList.add(ForceRegistry.FORCE_PICKAXE.get());
-        validToolList.add(ForceRegistry.FORCE_AXE.get());
-        validToolList.add(ForceRegistry.FORCE_SHOVEL.get());
-        validToolList.add(ForceRegistry.FORCE_SWORD.get());
-        validToolList.add(ForceRegistry.FORCE_ROD.get());
-        validToolList.add(ForceRegistry.FORCE_SHEARS.get());
-        validToolList.add(ForceRegistry.FORCE_HELMET.get());
-        validToolList.add(ForceRegistry.FORCE_CHEST.get());
-        validToolList.add(ForceRegistry.FORCE_LEGS.get());
-        validToolList.add(ForceRegistry.FORCE_BOOTS.get());
-        validToolList.add(ForceRegistry.FORCE_TORCH_ITEM.get());  
-    }
 
 	protected FluidTank tank = new FluidTank(50000) {
         @Override
@@ -130,10 +109,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
         	if(slot < SLOT_TOOL) {
-        		//is valid modifier TODO
+        		//is valid modifier TODO : fixing this check will fix placing and shift-clicking
+        		// non ingredients into the circle
         	}
         	else if(slot == SLOT_TOOL) {
-        		//TODO is valid tool
+                return stack.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
         	}
         	else if(slot == SLOT_BOOK) {
         		return stack.getItem() == ForceRegistry.UPGRADE_TOME.get();
@@ -196,12 +176,15 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         	processForceGems();
         }
         
-        if (canWork && hasValidTool() && hasValidBook()) {
+        if (canWork) {
         	//working with No progress for now, just is valid and did i turn it on
 
         	//once we have a valid tool and have waited. go do the thing
-        	processTool();
+        	if(hasValidTool() && hasValidBook()) {
+        		processTool();
+        	}
         	// auto turn off when done
+        	//even if tool or book slot become empty, dont auto run next insert
             canWork = false;
         }
     }
@@ -228,7 +211,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 boolean success = applyModifier(tool, modifier);
                 if (success) {
                 	// for EACH modifier
-                    handler.setStackInSlot(i, ItemStack.EMPTY);
+                    handler.getStackInSlot(i).shrink(1);
                     tank.drain(FLUID_COST_PER, FluidAction.EXECUTE);
                     energyStorage.consumePower(ENERGY_COST_PER);
                     UpgradeTomeItem.onModifierApplied(this.getBookInSlot(), modifier, tool);
@@ -323,17 +306,14 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
      * @param mod
      * @return
      */
-    private boolean applyModifier(ItemStack tool, ItemStack modifier) { 
-		UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
+    private boolean applyModifier(ItemStack tool, ItemStack modifier) {
 
     	for (InfuseRecipe modCurrent : InfuseRecipe.RECIPES) {
     		//test the ingredient of this recipe, if it matches me
     		if (modCurrent.input.test(modifier)) {
-    			//check level
-    			ForceCraft.LOGGER.info("recipe level vs book level : {} vs {}", modCurrent.tier, bd.getTier());
+    			//check level TODO
     			
     			if (modCurrent.modifier.apply(tool, modifier)) {
-        			ForceCraft.LOGGER.info("NEW FLOW for modifiers {}", modCurrent.modifier);
                     handler.setStackInSlot(SLOT_TOOL, tool);
     				return true;
     			}
@@ -345,6 +325,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
         return false;
     }
+    
+    // TODO: refactor these static below into another place, possibly InfuserModifier class
 
 	static boolean applyCamo(ItemStack tool, ItemStack mod) {
 		List<EffectInstance> effects = PotionUtils.getEffectsFromStack(mod);
@@ -492,7 +474,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     static boolean addLumberjackModifier(ItemStack stack) {
         if (stack.getItem() instanceof ForceAxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null && modifierCap.hasLumberjack()) {
+            if(modifierCap != null && !modifierCap.hasLumberjack()) {
                 modifierCap.setLumberjack(true);
                 return true;
             }
@@ -608,7 +590,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             if(modifierCap != null ) {
                 if(modifierCap.getSharpLevel() == 0) {
                     modifierCap.incrementSharp();
-                    stack.addEnchantment(Enchantments.SHARPNESS, 1);
+                    stack.addEnchantment(Enchantments.SHARPNESS, 2);
                     return true;
                 }
                 else if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
@@ -619,8 +601,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             }
         }
         else if (st instanceof CustomArmorItem) {
+        	
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
+            if(modifierCap != null) {
                 if(modifierCap.getSharpLevel() == 0) {
                     modifierCap.incrementSharp();
                     return true;

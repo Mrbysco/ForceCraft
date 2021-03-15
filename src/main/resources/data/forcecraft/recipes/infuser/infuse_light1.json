@@ -1,9 +1,0 @@
-{
-  "type":"forcecraft:infuser",
-  "ingredient": 
-  {
-    "item": "minecraft:sea_lantern"
-  },
-  "tier": 7,
-  "result": "forcecraft:light"
-}

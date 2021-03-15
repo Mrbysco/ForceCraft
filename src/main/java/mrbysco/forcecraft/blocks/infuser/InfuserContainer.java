@@ -83,37 +83,21 @@ public class InfuserContainer extends Container {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
-        boolean hasReturned = false;
 
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-
-            if (index < 11) {
-                if (!this.mergeItemStack(itemstack1, 11, this.inventorySlots.size(), true)) {
+            final int tileSize = 11;
+            
+            if (index < tileSize) {
+                if (!this.mergeItemStack(itemstack1, tileSize, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
             else {
-                for (int i = 0; i < 11; i++) {
-                    Slot itemHere = this.inventorySlots.get(i);
-					if (!hasReturned) {
-                        if (itemHere.getHasStack() || !itemHere.isItemValid(itemstack1)) {
-                            hasReturned = true;
-                            return ItemStack.EMPTY;
-                        }
-                    }
-                    if (!hasReturned) {
-                        if (itemstack1.hasTag() && itemstack1.getCount() == 1) {
-                        	itemHere.putStack(itemstack1.copy());
-                            itemstack1.setCount(0);
-                            hasReturned = true;
-                        } else if (!itemstack1.isEmpty()) {
-                        	itemHere.putStack(new ItemStack(itemstack1.getItem(), 1));
-                            itemstack1.shrink(1);
-                            hasReturned = true;
-                        }
-                    }
+            	// change to fix all the manual moving. and fix books going to book slots, etc
+                if (!this.mergeItemStack(itemstack1, 0, tileSize, true)) {
+                    return ItemStack.EMPTY;
                 }
             }
 
@@ -127,7 +111,7 @@ public class InfuserContainer extends Container {
         return itemstack;
     }
 
-    public void setFluidAmount(int amount){
+    public void setFluidAmount(int amount) {
         tile.fluidContained = amount;
     }
 

@@ -367,5 +367,8 @@
     "gui.forcecraft.infuser.help.tooltip": "Help",
     "gui.forcecraft.infuser.start.tooltip": "Start Infusion",
     "gui.forcecraft.infuser.button.guide": "Open Guide GUI",
-    "gui.forcecraft.infuser.button.button": "Start Button"
+    "gui.forcecraft.infuser.button.button": "Start Button",
+    "gui.forcecraft.infuser.tooltip.damage": "Damage infuse",
+    "gui.forcecraft.infuser.tooltip.speed": "Speed infuse",
+    "gui.forcecraft.infuser.tooltip.force": "Force infuse"
 }

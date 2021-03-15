@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+
+import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import mrbysco.forcecraft.registry.material.ModToolMaterial;
@@ -179,7 +181,10 @@ public class ForceAxeItem extends AxeItem {
     }
 
     static void attachInformation(ItemStack stack, List<ITextComponent> toolTip) {
+    	IToolModifier stuff = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+    	
         stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
+        	// TODO: language file
             if(cap.getSpeedLevel() > 0)
                 toolTip.add(new StringTextComponent("Speed " + cap.getSpeedLevel()));
         });

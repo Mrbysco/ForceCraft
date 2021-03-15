@@ -1,5 +1,7 @@
 package mrbysco.forcecraft.items;
 
+import mrbysco.forcecraft.ForceCraft;
+import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -9,7 +11,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -32,9 +37,24 @@ public class CustomArmorItem extends ArmorItem {
         return new ToolModProvider();
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+        attachInformation(stack, lores);
+        super.addInformation(stack, worldIn, lores, flagIn);
+    }
 
+    static void attachInformation(ItemStack stack, List<ITextComponent> toolTip) {
+    	IToolModifier stuff = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+	
+ForceCraft.LOGGER.info("WHY IS THIS NULL {}",stuff);
+	
+        stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
+        	// TODO: language file
+            if(cap.getSpeedLevel() > 0) {
+                toolTip.add(new StringTextComponent("force punch " + cap.getSpeedLevel()));
+            }
+        });
     }
 
     @Override
