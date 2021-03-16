@@ -25,6 +25,7 @@ import mrbysco.forcecraft.items.ForceFluidBucketItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.FortuneItem;
 import mrbysco.forcecraft.items.GoldenPowerSourceItem;
+import mrbysco.forcecraft.items.SpoilsBagItem;
 import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.nonburnable.InertCoreItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
@@ -244,6 +245,9 @@ public class ForceRegistry {
     public static final RegistryObject<Item> BOTTLED_WITH = ITEMS.register("bottled_wither", () -> new BottledWitherItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> INERT_CORE = ITEMS.register("inert_core", () -> new InertCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> BACONATOR = ITEMS.register("baconator", () -> new BaconatorItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> SPOILS_BAG = ITEMS.register("spoils_bag", () -> new SpoilsBagItem(itemBuilder().group(ForceCraft.creativeTab), 1));
+    public static final RegistryObject<Item> SPOILS_BAG_T2 = ITEMS.register("spoils_bag_t2", () -> new SpoilsBagItem(itemBuilder().group(ForceCraft.creativeTab), 2));
+    public static final RegistryObject<Item> SPOILS_BAG_T3 = ITEMS.register("spoils_bag_t3", () -> new SpoilsBagItem(itemBuilder().group(ForceCraft.creativeTab), 3));
 
     //Tools
     public static final RegistryObject<Item> FORCE_PICKAXE = ITEMS.register("force_pickaxe", () -> new ForcePickaxeItem(itemBuilder().group(ForceCraft.creativeTab)));

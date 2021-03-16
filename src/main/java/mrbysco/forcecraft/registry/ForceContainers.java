@@ -5,6 +5,7 @@ import mrbysco.forcecraft.blocks.infuser.InfuserContainer;
 import mrbysco.forcecraft.container.ForceBeltContainer;
 import mrbysco.forcecraft.container.ForceFurnaceContainer;
 import mrbysco.forcecraft.container.ForcePackContainer;
+import mrbysco.forcecraft.container.SpoilsBagContainer;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;
@@ -25,4 +26,7 @@ public class ForceContainers {
 
 	public static final RegistryObject<ContainerType<ForceBeltContainer>> FORCE_BELT = CONTAINERS.register("force_belt", () ->
 			IForgeContainerType.create((windowId, inv, data) -> new ForceBeltContainer(windowId, inv)));
+
+	public static final RegistryObject<ContainerType<SpoilsBagContainer>> SPOILS_BAG = CONTAINERS.register("spoils_bag", () ->
+			IForgeContainerType.create((windowId, inv, data) -> new SpoilsBagContainer(windowId, inv)));
 }

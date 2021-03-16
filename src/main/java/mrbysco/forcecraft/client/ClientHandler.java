@@ -5,6 +5,7 @@ import mrbysco.forcecraft.capablilities.magnet.IMagnet;
 import mrbysco.forcecraft.client.gui.belt.ForceBeltScreen;
 import mrbysco.forcecraft.client.gui.furnace.ForceFurnaceScreen;
 import mrbysco.forcecraft.client.gui.pack.ForcePackScreen;
+import mrbysco.forcecraft.client.gui.spoils.SpoilsBagScreen;
 import mrbysco.forcecraft.client.renderer.ColdChickenRenderer;
 import mrbysco.forcecraft.client.renderer.ColdCowRenderer;
 import mrbysco.forcecraft.client.renderer.ColdPigRenderer;
@@ -29,6 +30,7 @@ public class ClientHandler {
 		ScreenManager.registerFactory(ForceContainers.INFUSER.get(), InfuserScreen::new);
 		ScreenManager.registerFactory(ForceContainers.FORCE_BELT.get(), ForceBeltScreen::new);
 		ScreenManager.registerFactory(ForceContainers.FORCE_PACK.get(), ForcePackScreen::new);
+		ScreenManager.registerFactory(ForceContainers.SPOILS_BAG.get(), SpoilsBagScreen::new);
 
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_SAPLING.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_TORCH.get(), RenderType.getCutout());

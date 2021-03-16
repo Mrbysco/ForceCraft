@@ -44,6 +44,18 @@ public class ItemHandlerUtils {
 		return true;
 	}
 
+	public static boolean isEmpty(IItemHandler itemHandler) {
+		if(itemHandler == null) return true;
+
+		for(int i = 0; i < itemHandler.getSlots(); i++) {
+			ItemStack stack = itemHandler.getStackInSlot(i);
+			if(!stack.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static int getUsedSlots(IItemHandler itemHandler) {
 		if(itemHandler == null) return 0;
 

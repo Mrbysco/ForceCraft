@@ -28,6 +28,9 @@
     "item.forcecraft.inert_core": "Inert Core",
     "item.forcecraft.force_bucket": "Force Bucket",
     "item.forcecraft.baconator": "Baconator",
+    "item.forcecraft.spoils_bag": "Spoils Bag",
+    "item.forcecraft.spoils_bag_t2": "Spoils Bag",
+    "item.forcecraft.spoils_bag_t3": "Spoils Bag",
 
     "_comment": "Armor",
     "item.forcecraft.force_helmet": "Force Cap",
@@ -160,6 +163,7 @@
     "forcecraft.container.belt": "Force Belt",
     "forcecraft.container.pack": "Force Pack",
     "forcecraft.container.force_furnace": "Force Furnace",
+    "forcecraft.container.spoils_bag": "Spoils Bag",
 
     "_comment": "Fluid",
     "fluid.forcecraft.fluid_force_source": "Liquid Force",

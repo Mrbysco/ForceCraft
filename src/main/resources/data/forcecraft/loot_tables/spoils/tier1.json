@@ -1,0 +1,80 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "name": "Force Loot",
+      "rolls": {
+        "min": 3.0,
+        "max": 8.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "name": "forcecraft:force_mitt"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 12,
+          "name": "forcecraft:force_bucket"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 5.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "forcecraft:force_gem"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 8.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "forcecraft:force_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 3.0,
+                "max": 8.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "forcecraft:force_ingot"
+        }
+      ]
+    },
+    {
+      "name": "Spawn Chest Loot",
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "name": "minecraft:chests/spawn_bonus_chest"
+        }
+      ]
+    }
+  ]
+}

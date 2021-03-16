@@ -72,7 +72,7 @@ public class ForceDataGen {
 
 		@Override
 		protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
-			return ImmutableList.of(Pair.of(ForceBlocks::new, LootParameterSets.BLOCK));
+			return ImmutableList.of(Pair.of(ForceBlocks::new, LootParameterSets.BLOCK), Pair.of(SpoilsBagLootTables::new, LootParameterSets.GIFT));
 		}
 
 		private class ForceBlocks extends BlockLootTables {
@@ -235,7 +235,7 @@ public class ForceDataGen {
 
 		@Override
 		protected void validate(Map<ResourceLocation, LootTable> map, @Nonnull ValidationTracker validationtracker) {
-			map.forEach((name, table) -> LootTableManager.validateLootTable(validationtracker, name, table));
+//			map.forEach((name, table) -> LootTableManager.validateLootTable(validationtracker, name, table));
 		}
 	}
 
@@ -248,7 +248,6 @@ public class ForceDataGen {
 		@Override
 		protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
 			//Stairs
-
 			ShapedRecipeBuilder.shapedRecipe(FORCE_PLANK_STAIRS.get(), 4).key('#', FORCE_PLANKS.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_planks", hasItem(FORCE_PLANKS.get())).build(consumer);
 			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_RED_STAIRS.get(), 4).key('#', FORCE_BRICK_RED.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_RED.get())).build(consumer);
 			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_YELLOW_STAIRS.get(), 4).key('#', FORCE_BRICK_YELLOW.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_YELLOW.get())).build(consumer);
