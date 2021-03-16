@@ -2,9 +2,10 @@
   "type": "minecraft:gift",
   "pools": [
     {
+      "name": "Force Loot",
       "rolls": {
-        "min": 3.0,
-        "max": 8.0,
+        "min": 1.0,
+        "max": 4.0,
         "type": "minecraft:uniform"
       },
       "entries": [
@@ -66,11 +67,24 @@
       ]
     },
     {
+      "name": "Other Tables",
       "rolls": 1.0,
       "entries": [
         {
           "type": "minecraft:loot_table",
           "name": "minecraft:chests/simple_dungeon"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "name": "minecraft:chests/desert_pyramid"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "name": "minecraft:chests/jungle_temple"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "name": "minecraft:chests/stronghold_crossing"
         }
       ]
     }

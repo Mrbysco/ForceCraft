@@ -4,8 +4,8 @@
     {
       "name": "Force Loot",
       "rolls": {
-        "min": 3.0,
-        "max": 8.0,
+        "min": 1.0,
+        "max": 4.0,
         "type": "minecraft:uniform"
       },
       "entries": [
@@ -67,9 +67,17 @@
       ]
     },
     {
-      "name": "Spawn Chest Loot",
+      "name": "Other tables",
       "rolls": 1.0,
       "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "name": "minecraft:chests/village/village_toolsmith"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "name": "minecraft:chests/village/village_weaponsmith"
+        },
         {
           "type": "minecraft:loot_table",
           "name": "minecraft:chests/spawn_bonus_chest"

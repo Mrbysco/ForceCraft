@@ -21,7 +21,7 @@ public class SpoilsBagLootTables extends GiftLootTables {
 	public void accept(BiConsumer<ResourceLocation, Builder> consumer) {
 		super.accept(consumer);
 		consumer.accept(ForceTables.TIER_1, LootTable.builder()
-				.addLootPool(LootPool.builder().rolls(RandomValueRange.of(3.0F, 8.0F))
+				.addLootPool(LootPool.builder().rolls(RandomValueRange.of(1.0F, 4.0F))
 						.name("Force Loot")
 						.addEntry(ItemLootEntry.builder(ForceRegistry.FORCE_MITT.get()).weight(15))
 						.addEntry(ItemLootEntry.builder(ForceRegistry.BUCKET_FLUID_FORCE.get()).weight(12))
@@ -30,12 +30,15 @@ public class SpoilsBagLootTables extends GiftLootTables {
 						.addEntry(ItemLootEntry.builder(ForceRegistry.FORCE_INGOT.get()).weight(15).acceptFunction(SetCount.builder(RandomValueRange.of(3.0F, 8.0F))))
 				)
 				.addLootPool(LootPool.builder()
-						.name("Spawn Chest Loot")
+						.name("Other tables")
+						.addEntry(TableLootEntry.builder(LootTables.CHESTS_VILLAGE_VILLAGE_TOOLSMITH))
+						.addEntry(TableLootEntry.builder(LootTables.CHESTS_VILLAGE_VILLAGE_WEAPONSMITH))
 						.addEntry(TableLootEntry.builder(LootTables.CHESTS_SPAWN_BONUS_CHEST)))
 		);
 
 		consumer.accept(ForceTables.TIER_2, LootTable.builder()
-				.addLootPool(LootPool.builder().rolls(RandomValueRange.of(3.0F, 8.0F))
+				.addLootPool(LootPool.builder().rolls(RandomValueRange.of(1.0F, 4.0F))
+						.name("Force Loot")
 						.addEntry(ItemLootEntry.builder(ForceRegistry.FORCE_MITT.get()).weight(15))
 						.addEntry(ItemLootEntry.builder(ForceRegistry.BUCKET_FLUID_FORCE.get()).weight(12))
 						.addEntry(ItemLootEntry.builder(ForceRegistry.FORCE_GEM.get()).weight(10).acceptFunction(SetCount.builder(RandomValueRange.of(1.0F, 5.0F))))
@@ -43,15 +46,29 @@ public class SpoilsBagLootTables extends GiftLootTables {
 						.addEntry(ItemLootEntry.builder(ForceRegistry.FORCE_INGOT.get()).weight(15).acceptFunction(SetCount.builder(RandomValueRange.of(3.0F, 8.0F))))
 				)
 				.addLootPool(LootPool.builder()
-						.addEntry(TableLootEntry.builder(LootTables.CHESTS_SIMPLE_DUNGEON)))
-
+						.name("Other Tables")
+						.addEntry(TableLootEntry.builder(LootTables.CHESTS_SIMPLE_DUNGEON))
+						.addEntry(TableLootEntry.builder(LootTables.CHESTS_DESERT_PYRAMID))
+						.addEntry(TableLootEntry.builder(LootTables.CHESTS_JUNGLE_TEMPLE))
+						.addEntry(TableLootEntry.builder(LootTables.CHESTS_STRONGHOLD_CROSSING))
+				)
 		);
 
 		consumer.accept(ForceTables.TIER_3, LootTable.builder()
-					.addLootPool(LootPool.builder()
-							.addEntry(TableLootEntry.builder(LootTables.RUINED_PORTAL)))
-					.addLootPool(LootPool.builder()
-							.addEntry(TableLootEntry.builder(ForceTables.TIER_2)))
-				);
+				.addLootPool(LootPool.builder().rolls(RandomValueRange.of(1.0F, 4.0F))
+						.name("Force Loot")
+						.addEntry(ItemLootEntry.builder(ForceRegistry.FORCE_MITT.get()).weight(15))
+						.addEntry(ItemLootEntry.builder(ForceRegistry.BUCKET_FLUID_FORCE.get()).weight(12))
+						.addEntry(ItemLootEntry.builder(ForceRegistry.FORCE_GEM.get()).weight(10).acceptFunction(SetCount.builder(RandomValueRange.of(1.0F, 5.0F))))
+						.addEntry(ItemLootEntry.builder(ForceRegistry.FORCE_INGOT.get()).weight(8).acceptFunction(SetCount.builder(RandomValueRange.of(1.0F, 8.0F))))
+						.addEntry(ItemLootEntry.builder(ForceRegistry.FORCE_INGOT.get()).weight(15).acceptFunction(SetCount.builder(RandomValueRange.of(3.0F, 8.0F))))
+				)
+				.addLootPool(LootPool.builder()
+						.name("Other Tables")
+						.addEntry(TableLootEntry.builder(LootTables.CHESTS_ABANDONED_MINESHAFT))
+						.addEntry(TableLootEntry.builder(LootTables.CHESTS_STRONGHOLD_CORRIDOR))
+						.addEntry(TableLootEntry.builder(LootTables.CHESTS_STRONGHOLD_LIBRARY))
+				)
+		);
 	}
 }

@@ -14,11 +14,13 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
@@ -32,6 +34,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -50,6 +53,30 @@ public class SpoilsBagItem extends BaseItem {
 
 	@Override
 	public ActionResultType onItemUse(ItemUseContext context) {
+		World worldIn = context.getWorld();
+		ItemStack stack = context.getItem();
+		populateBag(worldIn, stack);
+		if(!worldIn.isRemote) {
+			BlockPos pos = context.getPos();
+			Direction direction = context.getFace();
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			if(tileEntity != null && tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction).isPresent()) {
+				IItemHandler tileInventory = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction).orElse(null);
+				IItemHandler itemHandler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+				if(tileInventory != null && itemHandler instanceof ItemStackHandler) {
+					ItemStackHandler handler = (ItemStackHandler) itemHandler;
+					for(int i = 0; i < handler.getSlots(); i++) {
+						ItemStack bagStack = handler.getStackInSlot(i);
+						if(!bagStack.isEmpty()) {
+							ItemStack remaining = ItemHandlerHelper.insertItem(tileInventory, stack, false);
+							handler.setStackInSlot(i, remaining);
+						}
+					}
+					return ActionResultType.SUCCESS;
+				}
+			}
+		}
+
 		return super.onItemUse(context);
 	}
 
@@ -58,10 +85,7 @@ public class SpoilsBagItem extends BaseItem {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		if(handler != null) {
-			CompoundNBT tag = stack.getOrCreateTag();
-			if(!tag.getBoolean("Filled")) {
-				this.populateBag(worldIn, stack);
-			}
+			this.populateBag(worldIn, stack);
 			playerIn.openContainer(this.getContainer(stack));
 			return new ActionResult<ItemStack>(ActionResultType.PASS, stack);
 		}
@@ -80,12 +104,12 @@ public class SpoilsBagItem extends BaseItem {
 	}
 
 	public void populateBag(World worldIn, ItemStack stack) {
-		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-		if(handler instanceof ItemStackHandler && !worldIn.isRemote) {
-			if(ItemHandlerUtils.isEmpty(handler)) {
-				CompoundNBT tag = stack.getOrCreateTag();
-				List<ItemStack> stacks = new ArrayList<>();
-				if(!tag.getBoolean("Filled")) {
+		if(!worldIn.isRemote && !stack.getOrCreateTag().getBoolean("Filled")) {
+			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+			if(handler instanceof ItemStackHandler) {
+				if(ItemHandlerUtils.isEmpty(handler)) {
+					CompoundNBT tag = stack.getOrCreateTag();
+					List<ItemStack> stacks = new ArrayList<>();
 					do {
 						LootContext ctx = new LootContext.Builder((ServerWorld) worldIn).build(LootParameterSets.EMPTY);
 						List<ItemStack> lootStacks = ((ServerWorld) worldIn).getServer().getLootTableManager()
