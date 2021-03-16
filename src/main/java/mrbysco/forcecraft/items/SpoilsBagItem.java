@@ -56,24 +56,23 @@ public class SpoilsBagItem extends BaseItem {
 		World worldIn = context.getWorld();
 		ItemStack stack = context.getItem();
 		populateBag(worldIn, stack);
-		if(!worldIn.isRemote) {
-			BlockPos pos = context.getPos();
-			Direction direction = context.getFace();
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
-			if(tileEntity != null && tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction).isPresent()) {
-				IItemHandler tileInventory = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction).orElse(null);
-				IItemHandler itemHandler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-				if(tileInventory != null && itemHandler instanceof ItemStackHandler) {
-					ItemStackHandler handler = (ItemStackHandler) itemHandler;
-					for(int i = 0; i < handler.getSlots(); i++) {
-						ItemStack bagStack = handler.getStackInSlot(i);
-						if(!bagStack.isEmpty()) {
-							ItemStack remaining = ItemHandlerHelper.insertItem(tileInventory, stack, false);
-							handler.setStackInSlot(i, remaining);
-						}
+		BlockPos pos = context.getPos();
+		Direction face = context.getFace();
+		TileEntity tile = worldIn.getTileEntity(pos);
+		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+		if (handler != null && tile != null && tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent()) {
+			IItemHandler tileInventory = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).orElse(null);
+			if(tileInventory != null && handler instanceof ItemStackHandler) {
+				ItemStackHandler itemHandler = (ItemStackHandler) handler;
+				for(int i = 0; i < itemHandler.getSlots(); i++) {
+					ItemStack bagStack = itemHandler.getStackInSlot(i);
+					ItemStack remaining = ItemHandlerHelper.copyStackWithSize(stack, stack.getCount());
+					if(!bagStack.isEmpty()) {
+						remaining = ItemHandlerHelper.insertItem(tileInventory, bagStack, false);
+						itemHandler.setStackInSlot(i, remaining);
 					}
-					return ActionResultType.SUCCESS;
 				}
+				return ActionResultType.SUCCESS;
 			}
 		}
 
