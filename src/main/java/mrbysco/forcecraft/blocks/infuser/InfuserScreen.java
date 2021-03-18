@@ -71,7 +71,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 					}
 
 					showingPop = !showingPop;
-					ForceCraft.LOGGER.info("here test sub gui {}", showingPop);
+
 					if (showingPop) {
 						// reset tiles every time we do a hide/show
 						renderMyTiles = new ArrayList<>();

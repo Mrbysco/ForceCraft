@@ -8,7 +8,6 @@ public interface IToolModifier {
      * Effect: Gives Player Haste [Level] when holding the tool
      */
     int getSpeedLevel();
-    boolean hasSpeed();
     void incrementSpeed();
     void setSpeed(int newSpeed);
 

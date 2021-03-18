@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.handlers;
 
+import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.capablilities.magnet.IMagnet;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.items.CustomArmorItem;
@@ -50,6 +51,8 @@ public class LivingUpdateHandler {
                         }
                         //Speed
                         speed += modifierCap.getSpeedLevel();
+                        //TODO: speed zero from desync
+//                        ForceCraft.LOGGER.info(slotSelected + "SPEED FROM ARMOR "+ speed);
                         //Wing
                         if(modifierCap.hasWing()) {
                             wings++;

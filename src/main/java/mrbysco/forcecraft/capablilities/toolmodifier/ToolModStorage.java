@@ -104,7 +104,7 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 			instance.setSpeed(nbt.getInt("speed"));
 			instance.setHeat(nbt.getBoolean("heat"));
 			instance.setForce(nbt.getInt("force"));
-			instance.setSpeed(nbt.getInt("silk"));
+			instance.setSilk(nbt.getBoolean("silk"));
 			instance.setSharp(nbt.getInt("sharp"));
 			instance.setLuck(nbt.getInt("luck"));
 			instance.setSturdy(nbt.getInt("sturdy"));

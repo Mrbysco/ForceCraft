@@ -167,10 +167,10 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     @Override
     public void tick() {
+    	if(world.isRemote) {
+    		return;
+    	}
         fluidContained = tank.getFluidAmount();
-        if (world.isRemote) {
-        	return;
-        }
 
         if (handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
         	processForceGems();
@@ -203,7 +203,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     private void processTool() {
-        ForceCraft.LOGGER.info("canWork && hasValidTool infuser tile {} ", getFromToolSlot());
         for (int i = 0; i < SLOT_TOOL; i++) {
         	//halt if no power
         	if(energyStorage.getEnergyStored() < ENERGY_COST_PER) {
@@ -319,6 +318,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     			
     			if (modCurrent.modifier.apply(tool, modifier)) {
                     handler.setStackInSlot(SLOT_TOOL, tool);
+                    
     				return true;
     			}
     			else {
@@ -698,11 +698,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         else if (stack.getItem() instanceof CustomArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
-                if(modifierCap.getSpeedLevel() == 0) {
-                    modifierCap.incrementSpeed();
-                    return true;
-                }
-                else if(modifierCap.getSpeedLevel() < MAX_MODIFIER) {
+                if(modifierCap.getSpeedLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSpeed();
                     return true;
                 }

@@ -66,7 +66,7 @@ public class ForceAxeItem extends AxeItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if(CAPABILITY_TOOLMOD == null) {
+    	if(CAPABILITY_TOOLMOD == null) {
             return null;
         }
         return new ToolModProvider();
@@ -191,15 +191,13 @@ public class ForceAxeItem extends AxeItem {
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-	 	ForceCraft.LOGGER.info("AXE read wtf  "+nbt);
-    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
-        	super.readShareTag(stack, nbt);
+    	super.readShareTag(stack, nbt); 
+    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) { 
     		return;
     	}
 
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
     	ToolModStorage.readNBT(cap, nbt);
-    	super.readShareTag(stack, nbt);
     }
     
     @Override
