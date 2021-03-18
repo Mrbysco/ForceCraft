@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 public class UpgradeBookData {
-	private UpgradeBookTier tier = UpgradeBookTier.ZERO;
+	private UpgradeBookTier tier = UpgradeBookTier.ONE;
 	int points = 0;
 	
 	public UpgradeBookData(ItemStack book) {

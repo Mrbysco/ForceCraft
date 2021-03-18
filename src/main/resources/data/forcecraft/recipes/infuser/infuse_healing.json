@@ -4,6 +4,6 @@
   {
     "item": "minecraft:ghast_tear"
   },
-  "tier": 0,
+  "tier": 5,
   "result": "forcecraft:healing"
 }

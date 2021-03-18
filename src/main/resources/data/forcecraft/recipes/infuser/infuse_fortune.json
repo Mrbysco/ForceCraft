@@ -2,8 +2,8 @@
   "type":"forcecraft:infuser",
   "ingredient": 
   {
-    "item": "forcecraft:fortune"
+    "item": "forcecraft:fortune_cookie"
   },
-  "tier": 0,
+  "tier": 2,
   "result": "forcecraft:fortune"
 }

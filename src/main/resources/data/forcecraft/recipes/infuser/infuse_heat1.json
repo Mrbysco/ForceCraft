@@ -1,9 +1,0 @@
-{
-  "type":"forcecraft:infuser",
-  "ingredient": 
-  {
-    "item": "minecraft:charcoal"
-  },
-  "tier": 0,
-  "result": "forcecraft:heat"
-}

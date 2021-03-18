@@ -4,6 +4,6 @@
   {
     "item": "minecraft:coal"
   },
-  "tier": 0,
+  "tier": 4,
   "result": "forcecraft:heat"
 }

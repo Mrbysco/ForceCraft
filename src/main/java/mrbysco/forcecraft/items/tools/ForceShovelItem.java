@@ -1,7 +1,9 @@
 package mrbysco.forcecraft.items.tools;
 
 import mrbysco.forcecraft.Reference;
+import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
+import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import mrbysco.forcecraft.registry.material.ModToolMaterial;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -10,6 +12,8 @@ import net.minecraft.item.ShovelItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -57,9 +61,10 @@ public class ForceShovelItem extends ShovelItem {
         return new ToolModProvider();
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
-        ForceAxeItem.attachInformation(stack, lores);
+        ToolModStorage.attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
 
@@ -72,5 +77,25 @@ public class ForceShovelItem extends ShovelItem {
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
         return false;
     }
+    // ShareTag for server->client capability data sync
+    @Override
+    public CompoundNBT getShareTag(ItemStack stack) {
+    	CompoundNBT normal = super.getShareTag(stack);
+    	
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+		CompoundNBT newTag = ToolModStorage.writeNBT(cap);
+		normal.put(Reference.MOD_ID, newTag);
 
+        return normal;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
+    		return;
+    	}
+
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+    	ToolModStorage.readNBT(cap, nbt);
+    }
 }

@@ -7,6 +7,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
+import mrbysco.forcecraft.registry.ForceTags;
 
 public class SlotForceTools extends SlotItemHandler {
     public SlotForceTools(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
@@ -15,7 +16,7 @@ public class SlotForceTools extends SlotItemHandler {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return InfuserTileEntity.validToolList.contains(stack.getItem());
+        return stack.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
     }
 
     @Override

@@ -4,8 +4,12 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+
+import mrbysco.forcecraft.ForceCraft;
+import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
+import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import mrbysco.forcecraft.registry.material.ModToolMaterial;
 import mrbysco.forcecraft.util.DartUtils;
 import net.minecraft.client.util.ITooltipFlag;
@@ -23,6 +27,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -61,7 +66,7 @@ public class ForceAxeItem extends AxeItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if(CAPABILITY_TOOLMOD == null) {
+    	if(CAPABILITY_TOOLMOD == null) {
             return null;
         }
         return new ToolModProvider();
@@ -84,9 +89,9 @@ public class ForceAxeItem extends AxeItem {
     }
 
     public static boolean fellTree(ItemStack stack, BlockPos pos, PlayerEntity player){
-        if(player.getEntityWorld().isRemote)
+        if(player.getEntityWorld().isRemote) {
             return true;
-
+        }
         MinecraftForge.EVENT_BUS.register(new TreeChopTask(stack, pos, player, 10));
         return true;
     }
@@ -171,17 +176,36 @@ public class ForceAxeItem extends AxeItem {
             MinecraftForge.EVENT_BUS.unregister(this);
         }
     }
+    
+    // ShareTag for server->client capability data sync
+    @Override
+    public CompoundNBT getShareTag(ItemStack stack) {
+    	CompoundNBT normal = super.getShareTag(stack);
+    	
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+		CompoundNBT newTag = ToolModStorage.writeNBT(cap);
+		normal.put(Reference.MOD_ID, newTag);
+
+        return normal;
+    }
 
     @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    	super.readShareTag(stack, nbt); 
+    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) { 
+    		return;
+    	}
+
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+    	ToolModStorage.readNBT(cap, nbt);
+    }
+    
+    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
-        attachInformation(stack, lores);
+ 
+    	ToolModStorage.attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
 
-    static void attachInformation(ItemStack stack, List<ITextComponent> toolTip) {
-        stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
-            if(cap.getSpeedLevel() > 0)
-                toolTip.add(new StringTextComponent("Speed " + cap.getSpeedLevel()));
-        });
-    }
+ 
 }

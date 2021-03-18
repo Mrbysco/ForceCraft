@@ -1,8 +1,13 @@
 package mrbysco.forcecraft.recipe;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import com.google.gson.JsonObject;
 import mrbysco.forcecraft.ForceCraft;
-import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
 import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
 import net.minecraft.item.ItemStack;
@@ -16,14 +21,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 
 	private static final int MAX_SLOTS = 8;
 	private static final Set<String> HASHES = new HashSet<>();
 	public static final Set<InfuseRecipe> RECIPES = new HashSet<>();
+	public static final Map<Integer, List<InfuseRecipe>> RECIPESBYLEVEL = new HashMap<>();
 	private final ResourceLocation id;
 	public Ingredient input = Ingredient.EMPTY;
 	public InfuserModifierType modifier;
@@ -150,14 +153,18 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		}
 	}
 
-	public static boolean addRecipe(InfuseRecipe r) {
-		ResourceLocation id = r.getId();
+	public static boolean addRecipe(InfuseRecipe recipe) {
+		ResourceLocation id = recipe.getId();
 		if (HASHES.contains(id.toString())) {
 			return false;
 		}
-		RECIPES.add(r);
+		RECIPES.add(recipe);
+		if(!RECIPESBYLEVEL.containsKey(recipe.tier)) {
+			RECIPESBYLEVEL.put(recipe.tier, new ArrayList<>());
+		}
+		RECIPESBYLEVEL.get(recipe.tier).add(recipe);
 		HASHES.add(id.toString());
-		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}" , id.toString(), r.modifier, r.input.serialize());
+		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}" , id.toString(), recipe.modifier, recipe.input.serialize());
 		return true;
 	}
 

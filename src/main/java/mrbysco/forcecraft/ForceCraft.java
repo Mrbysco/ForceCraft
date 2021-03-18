@@ -89,8 +89,6 @@ public class ForceCraft {
     private void setup(final FMLCommonSetupEvent event) {
         PacketHandler.init();
         CapabilityHandler.register();
-
-        InfuserTileEntity.populateToolList();
     }
 }
 

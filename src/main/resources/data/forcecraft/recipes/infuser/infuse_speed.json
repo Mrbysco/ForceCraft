@@ -4,6 +4,6 @@
   {
     "item": "minecraft:sugar"
   },
-  "tier": 0,
+  "tier": 1,
   "result": "forcecraft:speed"
 }

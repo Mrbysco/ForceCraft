@@ -4,6 +4,6 @@
   {
     "item": "minecraft:arrow"
   },
-  "tier": 0,
+  "tier": 3,
   "result": "forcecraft:bleeding"
 }

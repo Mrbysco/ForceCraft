@@ -23,11 +23,6 @@ public class ToolFactory implements Callable<IToolModifier> {
             }
 
             @Override
-            public boolean hasSpeed() {
-                return speed != 0;
-            }
-
-            @Override
             public void incrementSpeed() {
                 speed++;
             }

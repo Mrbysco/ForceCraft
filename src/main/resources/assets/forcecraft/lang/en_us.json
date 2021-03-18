@@ -172,10 +172,28 @@
     "forcecraft.tooltip.press_shift": "Press Shift for Details",
     "forcecraft.magnet_glove.active": "Activated",
     "forcecraft.magnet_glove.deactivated": "Deactivated",
-    "forcecraft.toolmod.rainbow": "Rainbow",
     "forcecraft.baconator.shift.text": "Hold Shift to see the contents",
     "forcecraft.baconator.shift.carrying": "Carrying: ",
     "forcecraft.baconator.shift.nothing": "Nothing",
+    
+    "item.infuser.tooltip.lumberjack": "Lumberjack",
+    "item.infuser.tooltip.rainbow": "Rainbow",
+    "item.infuser.tooltip.heat": "Heat",
+    "item.infuser.tooltip.bleed": "Bleeding",
+    "item.infuser.tooltip.bane": "Bane",
+    "item.infuser.tooltip.wing": "Wing",
+    "item.infuser.tooltip.ender": "Ender",
+    "item.infuser.tooltip.camo": "Camo",
+    "item.infuser.tooltip.sight": "Sight",
+    "item.infuser.tooltip.speed1": "Speed I",
+    "item.infuser.tooltip.speed2": "Speed II",
+    "item.infuser.tooltip.speed3": "Speed III",
+    "item.infuser.tooltip.force1": "Force I",
+    "item.infuser.tooltip.force2": "Force II",
+    "item.infuser.tooltip.force3": "Force III",
+    "item.infuser.tooltip.healing1": "Healing I",
+    "item.infuser.tooltip.healing2": "Healing II",
+    "item.infuser.tooltip.healing3": "Healing III",
 
     "_comment": "Fortunes",
     "text.forcecraft.fortune0": "You aren't supposed to eat me.",
@@ -366,9 +384,15 @@
     "text.forcecraft.fortune185": "A Yo-Yo isn't a tool for hurting people...",
 
     "_comment": "Infuser GUI",
+    "gui.forcecraft.infuser.nobook": "Upgrade Tome required",
     "gui.forcecraft.infuser.empty.tooltip": "Empty",
     "gui.forcecraft.infuser.help.tooltip": "Help",
     "gui.forcecraft.infuser.start.tooltip": "Start Infusion",
     "gui.forcecraft.infuser.button.guide": "Open Guide GUI",
-    "gui.forcecraft.infuser.button.button": "Start Button"
+    "gui.forcecraft.infuser.button.button": "Start Button",
+    "gui.forcecraft.infuser.tooltip.damage": "Damage infuse",
+    "gui.forcecraft.infuser.tooltip.speed": "Speed infuse",
+    "gui.forcecraft.infuser.tooltip.force": "Force infuse"
+    
+    
 }
