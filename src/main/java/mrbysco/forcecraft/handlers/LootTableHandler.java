@@ -1,6 +1,7 @@
 package mrbysco.forcecraft.handlers;
 
 import mrbysco.forcecraft.registry.ForceRegistry;
+import net.minecraft.loot.EmptyLootEntry;
 import net.minecraft.loot.ItemLootEntry;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.RandomValueRange;
@@ -17,10 +18,12 @@ public class LootTableHandler {
             LootPool.Builder builder = LootPool.builder();
             builder.addEntry(ItemLootEntry.builder(ForceRegistry.CLAW.get())
                     .weight(1)
-                    .quality(0)
-                    .acceptFunction(SetCount.builder(RandomValueRange.of(0, 2))));
-            builder.bonusRolls(0, 1)
+                    .acceptFunction(SetCount.builder(RandomValueRange.of(0, 2))))
                     .name("forcecraft_inject");
+            builder.addEntry(EmptyLootEntry.func_216167_a()
+                    .weight(15)
+                    .acceptFunction(SetCount.builder(RandomValueRange.of(0, 2))))
+                    .name("forcecraft_empty_roll");
             LootPool pool = builder.build();
 
             event.getTable().addPool(pool);

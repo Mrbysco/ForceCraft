@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 
 public enum InfuserModifierType {
 	SPEED,HEAT,FORCE,SILK,DAMAGE,FORTUNE,LIGHT,STURDY,LUMBERJACK,HEALING,ENDER,BLEEDING,BANE,WING,CAMO,RAINBOW,TIME,
-   PACK, // this one upgrades the Force Pack
+   PACK, // this one upgrades the Force Pack (once per tier starting on tier 2, allowing full upgrading on tier 5)
 	 GRINDING, FREEZING, EXP, STORAGE, // TODO: look up old mod version
 	 
 	  //- for chests somehow?, FURNACE - item card enchant
@@ -51,6 +51,8 @@ public enum InfuserModifierType {
             return InfuserTileEntity.addTimeModifier(tool, mod);
 		case TREASURE:
             return InfuserTileEntity.addTreasureModifier(tool);
+		case PACK:
+            return InfuserTileEntity.upgradeBag(tool);
 
 		}
 		ForceCraft.LOGGER.error("Error: No action for modifier {}", this);

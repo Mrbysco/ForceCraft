@@ -3,8 +3,10 @@ package mrbysco.forcecraft.blocks.infuser;
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
+import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.items.CustomArmorItem;
+import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
@@ -20,6 +22,7 @@ import mrbysco.forcecraft.registry.ForceRegistry;
 import mrbysco.forcecraft.registry.ForceTags;
 import mrbysco.forcecraft.tiles.energy.ForceEnergyStorage;
 import mrbysco.forcecraft.util.EnchantUtils;
+import mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
@@ -502,6 +505,24 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 modifierCap.setTreasure(true);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static boolean upgradeBag(ItemStack stack) {
+        if (stack.getItem() instanceof ForcePackItem) {
+            IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+            if(handler instanceof PackItemStackHandler) {
+                PackItemStackHandler packHandler = (PackItemStackHandler)handler;
+                if(packHandler.canUpgrade()) {
+                    packHandler.applyUpgrade();
+                }
+                CompoundNBT tag = stack.getOrCreateTag();
+                tag.putInt("SlotsUsed", ItemHandlerUtils.getUsedSlots(packHandler));
+                tag.putInt("SlotsTotal", packHandler.getSlots());
+                stack.setTag(tag);
                 return true;
             }
         }
