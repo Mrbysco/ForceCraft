@@ -1,6 +1,9 @@
 package mrbysco.forcecraft.items.tools;
 
+import mrbysco.forcecraft.Reference;
+import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
+import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import mrbysco.forcecraft.registry.material.ModToolMaterial;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -53,4 +56,27 @@ public class ForcePickaxeItem extends PickaxeItem {
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
         return false;
     }
+    
+    // ShareTag for server->client capability data sync
+    @Override
+    public CompoundNBT getShareTag(ItemStack stack) {
+    	CompoundNBT normal = super.getShareTag(stack);
+    	
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+		CompoundNBT newTag = ToolModStorage.writeNBT(cap);
+		normal.put(Reference.MOD_ID, newTag);
+
+        return normal;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
+    		return;
+    	}
+
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+    	ToolModStorage.readNBT(cap, nbt);
+    }
+    
 }

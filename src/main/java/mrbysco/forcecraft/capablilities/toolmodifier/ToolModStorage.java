@@ -1,15 +1,48 @@
 package mrbysco.forcecraft.capablilities.toolmodifier;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
+
+import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
+import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+
+import java.util.List;
 
 import javax.annotation.Nullable;
 
 public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 
 	public ToolModStorage() {
+	}
+
+	public static void attachInformation(ItemStack stack, List<ITextComponent> tooltip) {
+
+		stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
+			if (cap.getSpeedLevel() > 0) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
+			}
+			if (cap.hasLumberjack()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.lumberjack"));
+			}
+			if (cap.getForceLevel() > 0) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.force" + cap.getForceLevel()));
+			}
+			if (cap.hasWing()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.wing"));
+			}
+			if (cap.hasBleed()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bleed"));
+			}
+			if (cap.hasRainbow()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.rainbow"));
+			}
+		}); 
 	}
 
 	@Nullable

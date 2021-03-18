@@ -3,6 +3,7 @@ package mrbysco.forcecraft.items.tools;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
+import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import mrbysco.forcecraft.entities.ColdChickenEntity;
 import mrbysco.forcecraft.entities.ColdCowEntity;
 import mrbysco.forcecraft.entities.ColdPigEntity;
@@ -28,6 +29,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -183,14 +186,11 @@ public class ForceShearsItem extends ShearsItem {
         return new ToolModProvider();
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
-            if(cap.hasRainbow()) {
-                tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".toolmod.rainbow"));
-            }
-        });
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+        ToolModStorage.attachInformation(stack, lores);
+        super.addInformation(stack, worldIn, lores, flagIn);
     }
 
     @Override

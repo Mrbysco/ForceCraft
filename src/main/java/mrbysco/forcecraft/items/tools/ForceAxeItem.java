@@ -197,25 +197,15 @@ public class ForceAxeItem extends AxeItem {
 
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
     	ToolModStorage.readNBT(cap, nbt);
+    	super.readShareTag(stack, nbt);
     }
     
-
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
  
-    	attachInformation(stack, lores);
+    	ToolModStorage.attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
 
-    static void attachInformation(ItemStack stack, List<ITextComponent> toolTip) {
-
-        stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
-            if(cap.getSpeedLevel() > 0) {
-                toolTip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
-            }
-            if(cap.hasLumberjack()) {
-                toolTip.add(new TranslationTextComponent("item.infuser.tooltip.lumberjack"));
-            }
-        });
-    }
+ 
 }
