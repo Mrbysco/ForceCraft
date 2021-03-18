@@ -40,7 +40,6 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
     protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
         if (tileentity instanceof ForceFurnaceTileEntity) {
-            System.out.println(new TranslationTextComponent(Reference.MOD_ID + ":container.force_furnace"));
             player.openContainer((INamedContainerProvider)tileentity);
             player.addStat(Stats.INTERACT_WITH_FURNACE);
         }

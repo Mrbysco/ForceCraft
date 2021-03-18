@@ -52,7 +52,6 @@ public class BaconatorItem extends BaseItem {
 		IItemHandler handler = itemstack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		if(playerIn.isSneaking()) {
 			boolean isFull = ItemHandlerUtils.isFull(handler);
-			System.out.println("IsFull: " + isFull);
 			if(!isFull) {
 				//Fill with food
 				boolean extracted = ItemHandlerUtils.extractStackFromPlayer(playerIn.inventory, handler, (stack) -> {

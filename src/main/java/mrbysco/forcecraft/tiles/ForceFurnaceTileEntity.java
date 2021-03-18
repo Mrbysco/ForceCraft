@@ -18,7 +18,7 @@ public class ForceFurnaceTileEntity extends AbstractFurnaceTileEntity {
 	}
 
 	protected ITextComponent getDefaultName() {
-		return new TranslationTextComponent(Reference.MOD_ID + ":container.force_furnace");
+		return new TranslationTextComponent(Reference.MOD_ID + ".container.force_furnace");
 	}
 
 	protected Container createMenu(int id, PlayerInventory player) {
