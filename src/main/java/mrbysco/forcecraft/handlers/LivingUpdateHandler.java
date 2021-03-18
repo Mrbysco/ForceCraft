@@ -1,6 +1,5 @@
 package mrbysco.forcecraft.handlers;
 
-import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.capablilities.magnet.IMagnet;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.items.CustomArmorItem;

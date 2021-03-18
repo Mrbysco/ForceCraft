@@ -497,6 +497,17 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         return false;
     }
 
+    static boolean addTreasureModifier(ItemStack stack) {
+        if (stack.getItem() instanceof ForceSwordItem || stack.getItem() instanceof ForceAxeItem) {
+            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+            if(modifierCap != null ) {
+                modifierCap.setTreasure(true);
+                return true;
+            }
+        }
+        return false;
+    }
+
     static boolean addTimeModifier(ItemStack stack,ItemStack mod) {
         if(stack.getItem() == ForceRegistry.FORCE_TORCH_ITEM.get()) {
         	//convert to time torch, overwrite

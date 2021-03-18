@@ -248,6 +248,10 @@ public class ForceRegistry {
     public static final RegistryObject<Item> SPOILS_BAG = ITEMS.register("spoils_bag", () -> new SpoilsBagItem(itemBuilder().group(ForceCraft.creativeTab), 1));
     public static final RegistryObject<Item> SPOILS_BAG_T2 = ITEMS.register("spoils_bag_t2", () -> new SpoilsBagItem(itemBuilder().group(ForceCraft.creativeTab), 2));
     public static final RegistryObject<Item> SPOILS_BAG_T3 = ITEMS.register("spoils_bag_t3", () -> new SpoilsBagItem(itemBuilder().group(ForceCraft.creativeTab), 3));
+    public static final RegistryObject<Item> LIFE_CARD = ITEMS.register("life_card", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> DARKNESS_CARD = ITEMS.register("darkness_card", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> UNDEATH_CARD = ITEMS.register("undeath_card", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> TREASURE_CORE = ITEMS.register("treasure_core", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
 
     //Tools
     public static final RegistryObject<Item> FORCE_PICKAXE = ITEMS.register("force_pickaxe", () -> new ForcePickaxeItem(itemBuilder().group(ForceCraft.creativeTab)));

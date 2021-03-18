@@ -1,9 +1,5 @@
 package mrbysco.forcecraft.items.infuser;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import mrbysco.forcecraft.items.BaseItem;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -13,6 +9,9 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class UpgradeTomeItem extends BaseItem {
 

@@ -49,7 +49,9 @@ public enum InfuserModifierType {
             return InfuserTileEntity.addRainbowModifier(tool);
 		case TIME:
             return InfuserTileEntity.addTimeModifier(tool, mod);
-	
+		case TREASURE:
+            return InfuserTileEntity.addTreasureModifier(tool);
+
 		}
 		ForceCraft.LOGGER.error("Error: No action for modifier {}", this);
 		return false;

@@ -95,6 +95,8 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 		nbt.putBoolean("sight", instance.hasSight());
 		// Light
 		nbt.putBoolean("light", instance.hasLight());
+		// Treasure
+		nbt.putBoolean("treasure", instance.hasTreasure());
 		return nbt;
 	}
 
@@ -116,6 +118,7 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 			instance.setCamo(nbt.getBoolean("camo"));
 			instance.setSight(nbt.getBoolean("sight"));
 			instance.setLight(nbt.getBoolean("light"));
+			instance.setTreasure(nbt.getBoolean("treasure"));
 		}
 	}
 

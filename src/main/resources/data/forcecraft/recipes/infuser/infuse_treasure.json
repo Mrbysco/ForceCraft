@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "forcecraft:treasure_core"
+  },
+  "tier": 7,
+  "result": "forcecraft:treasure"
+}

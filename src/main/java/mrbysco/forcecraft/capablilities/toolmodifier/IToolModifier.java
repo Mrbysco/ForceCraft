@@ -154,4 +154,15 @@ public interface IToolModifier {
 
     boolean hasLight();
     void setLight(boolean val);
+
+
+    /**
+     * Modifier: Treasure
+     * Items: Treasure Core
+     * Levels: 1
+     * Effect: Allows treasure cards to drop upon killing mobs
+     */
+
+    boolean hasTreasure();
+    void setTreasure(boolean val);
 }

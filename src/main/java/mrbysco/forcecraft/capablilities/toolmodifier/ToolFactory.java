@@ -349,6 +349,26 @@ public class ToolFactory implements Callable<IToolModifier> {
             public void setLight(boolean val) {
                 light = val;
             }
+
+
+            /**
+             * Modifier: Treasure
+             * Items: Treasure Core
+             * Levels: 1
+             * Effect: Allows treasure cards to drop upon killing mobs
+             */
+
+            boolean treasure;
+
+            @Override
+            public boolean hasTreasure() {
+                return treasure;
+            }
+
+            @Override
+            public void setTreasure(boolean val) {
+                treasure = val;
+            }
         };
     }
 }

@@ -1,6 +1,5 @@
 package mrbysco.forcecraft.items;
 
-import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
@@ -71,6 +70,5 @@ public class CustomArmorItem extends ArmorItem {
 
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
     	ToolModStorage.readNBT(cap, nbt);
-    	
     }
 }

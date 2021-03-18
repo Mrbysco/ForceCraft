@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "forcecraft:undeath_card"
+    }
+  },
+  "result": {
+    "item": "forcecraft:spoils_bag_t3"
+  }
+}

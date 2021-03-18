@@ -31,6 +31,10 @@
     "item.forcecraft.spoils_bag": "Spoils Bag",
     "item.forcecraft.spoils_bag_t2": "Spoils Bag",
     "item.forcecraft.spoils_bag_t3": "Spoils Bag",
+    "item.forcecraft.life_card": "Life Card",
+    "item.forcecraft.darkness_card": "Darkness Card",
+    "item.forcecraft.undeath_card": "Undeath Card",
+    "item.forcecraft.treasure_core": "Treasure Core",
 
     "_comment": "Armor",
     "item.forcecraft.force_helmet": "Force Cap",
