@@ -6,8 +6,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
 import mrbysco.forcecraft.ForceCraft;
+import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
+import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import mrbysco.forcecraft.registry.material.ModToolMaterial;
 import mrbysco.forcecraft.util.DartUtils;
 import net.minecraft.client.util.ITooltipFlag;
@@ -25,6 +27,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -173,20 +176,46 @@ public class ForceAxeItem extends AxeItem {
             MinecraftForge.EVENT_BUS.unregister(this);
         }
     }
+    
+    // ShareTag for server->client capability data sync
+    @Override
+    public CompoundNBT getShareTag(ItemStack stack) {
+    	CompoundNBT normal = super.getShareTag(stack);
+    	
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+		CompoundNBT newTag = ToolModStorage.writeNBT(cap);
+		normal.put(Reference.MOD_ID, newTag);
+
+        return normal;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
+    		return;
+    	}
+
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+    	ToolModStorage.readNBT(cap, nbt);
+    }
+    
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
-        attachInformation(stack, lores);
+ 
+    	attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
 
     static void attachInformation(ItemStack stack, List<ITextComponent> toolTip) {
-    	IToolModifier stuff = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-    	
+
         stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
-        	// TODO: language file
-            if(cap.getSpeedLevel() > 0)
-                toolTip.add(new StringTextComponent("Speed " + cap.getSpeedLevel()));
+            if(cap.getSpeedLevel() > 0) {
+                toolTip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
+            }
+            if(cap.hasLumberjack()) {
+                toolTip.add(new TranslationTextComponent("item.infuser.tooltip.lumberjack"));
+            }
         });
     }
 }

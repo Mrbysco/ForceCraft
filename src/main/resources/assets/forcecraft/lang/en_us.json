@@ -361,6 +361,17 @@
     "text.forcecraft.fortune184": "You do not aim Yo-Yos at people.  They should face the ground.",
     "text.forcecraft.fortune185": "A Yo-Yo isn't a tool for hurting people...",
 
+    "_comment": "For tool infusions that are not enchantments",
+    "item.infuser.tooltip.lumberjack": "Lumberjack",
+    "item.infuser.tooltip.heat": "Heat",
+    "item.infuser.tooltip.rainbow": "Rainbow",
+    "item.infuser.tooltip.bleed": "Bleeding",
+    "item.infuser.tooltip.bane": "Bane",
+    "item.infuser.tooltip.wing": "Wing",
+    "item.infuser.tooltip.speed1": "Speed I",
+    "item.infuser.tooltip.speed2": "Speed II",
+    "item.infuser.tooltip.speed3": "Speed III",
+
     "_comment": "Infuser GUI",
     "gui.forcecraft.infuser.nobook": "Upgrade Tome required",
     "gui.forcecraft.infuser.empty.tooltip": "Empty",
@@ -371,4 +382,6 @@
     "gui.forcecraft.infuser.tooltip.damage": "Damage infuse",
     "gui.forcecraft.infuser.tooltip.speed": "Speed infuse",
     "gui.forcecraft.infuser.tooltip.force": "Force infuse"
+    
+    
 }

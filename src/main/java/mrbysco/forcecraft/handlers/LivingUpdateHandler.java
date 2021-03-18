@@ -94,11 +94,11 @@ public class LivingUpdateHandler {
                         EffectInstance camoEffect = new EffectInstance(Effects.INVISIBILITY, INVISIBILITY_DURATION, 1);
                         player.addPotionEffect(camoEffect);
                     }
-                    if (speed != 0) {
+                    if (speed > 0) {
                         EffectInstance speedEffect = new EffectInstance(Effects.SPEED, SPEED_DURATION, speed);
                         player.addPotionEffect(speedEffect);
                     }
-                    if (damage != 0) {
+                    if (damage > 0) {
                         float finalDamage = damage;
                         player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
                             cap.addAttackDamage(0.5F * finalDamage);

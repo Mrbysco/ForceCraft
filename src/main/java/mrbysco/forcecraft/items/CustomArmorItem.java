@@ -1,6 +1,5 @@
 package mrbysco.forcecraft.items;
 
-import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import net.minecraft.client.util.ITooltipFlag;
@@ -45,14 +44,11 @@ public class CustomArmorItem extends ArmorItem {
     }
 
     static void attachInformation(ItemStack stack, List<ITextComponent> toolTip) {
-    	IToolModifier stuff = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-	
-ForceCraft.LOGGER.info("WHY IS THIS NULL {}",stuff);
 	
         stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
         	// TODO: language file
-            if(cap.getSpeedLevel() > 0) {
-                toolTip.add(new StringTextComponent("force punch " + cap.getSpeedLevel()));
+            if(cap.getForceLevel() > 0) {
+                toolTip.add(new StringTextComponent("force punch " + cap.getForceLevel()));
             }
         });
     }
