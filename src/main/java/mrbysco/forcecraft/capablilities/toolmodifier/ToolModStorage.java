@@ -74,7 +74,7 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 		// Silk
 		nbt.putBoolean("silk", instance.hasSilk());
 		// Sharpness
-		nbt.putInt("sharp", instance.getSpeedLevel());
+		nbt.putInt("sharp", instance.getSharpLevel());
 		// Luck
 		nbt.putInt("luck", instance.getLuckLevel());
 		// Sturdy
