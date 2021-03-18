@@ -89,9 +89,9 @@ public class ForceAxeItem extends AxeItem {
     }
 
     public static boolean fellTree(ItemStack stack, BlockPos pos, PlayerEntity player){
-        if(player.getEntityWorld().isRemote)
+        if(player.getEntityWorld().isRemote) {
             return true;
-
+        }
         MinecraftForge.EVENT_BUS.register(new TreeChopTask(stack, pos, player, 10));
         return true;
     }
@@ -191,7 +191,9 @@ public class ForceAxeItem extends AxeItem {
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+	 	ForceCraft.LOGGER.info("AXE read wtf  "+nbt);
     	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
+        	super.readShareTag(stack, nbt);
     		return;
     	}
 

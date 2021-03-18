@@ -36,15 +36,10 @@ public class ForcePickaxeItem extends PickaxeItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> toolTip, ITooltipFlag flagIn) {
-        stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
-            if(cap.hasSpeed())
-                toolTip.add(new StringTextComponent("Speed " + cap.getSpeedLevel()));
-            if(cap.hasHeat())
-                toolTip.add(new StringTextComponent("Heat"));
-        });
-
-        super.addInformation(stack, worldIn, toolTip, flagIn);
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+ 
+    	ToolModStorage.attachInformation(stack, lores);
+        super.addInformation(stack, worldIn, lores, flagIn);
     }
 
     @Override

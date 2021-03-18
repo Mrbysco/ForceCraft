@@ -42,6 +42,9 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 			if (cap.hasRainbow()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.rainbow"));
 			}
+			if (cap.hasHeat()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.heat"));
+			}
 		}); 
 	}
 

@@ -32,9 +32,6 @@ public class CustomArmorItem extends ArmorItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if(CAPABILITY_TOOLMOD == null) {
-            return null;
-        }
         return new ToolModProvider();
     }
 
@@ -55,17 +52,18 @@ public class CustomArmorItem extends ArmorItem {
     	CompoundNBT normal = super.getShareTag(stack);
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+	    ForceCraft.LOGGER.info(stack + " armor capability  " + cap);
 		CompoundNBT newTag = ToolModStorage.writeNBT(cap);
 		normal.put(Reference.MOD_ID, newTag);
-	//	ForceCraft.LOGGER.info("write "+normal);
+//	    ForceCraft.LOGGER.info(stack + "write "+normal);
 
         return normal;
     }
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-	//	ForceCraft.LOGGER.info("readarmpor  "+nbt);
     	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
+        	super.readShareTag(stack, nbt);
     		return;
     	}
 
