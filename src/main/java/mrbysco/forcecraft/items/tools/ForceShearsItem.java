@@ -1,6 +1,5 @@
 package mrbysco.forcecraft.items.tools;
 
-import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
@@ -35,7 +34,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
