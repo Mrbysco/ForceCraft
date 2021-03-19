@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.items.tools;
 
+import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
@@ -9,12 +10,16 @@ import mrbysco.forcecraft.entities.ColdPigEntity;
 import mrbysco.forcecraft.entities.IColdMob;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.MooshroomEntity;
 import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,179 +30,195 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class ForceShearsItem extends ShearsItem {
 
-    public ForceShearsItem(Item.Properties properties){
-        super(properties);
-    }
+	private static final int SET_FIRE_TIME = 10;
+	private static final int SHEARS_DMG = 238; // vanilla shears have this max damage
+	public ForceShearsItem(Item.Properties properties) {
+		super(properties.maxStackSize(1).maxDamage(SHEARS_DMG * 4));
+	}
 
-    @Override
-    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
-        if (entity.world.isRemote) {
-            return ActionResultType.PASS;
-        }
+	private static final Item[] WOOL = { Items.RED_WOOL, Items.BLUE_WOOL, Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.WHITE_WOOL, Items.ORANGE_WOOL, Items.MAGENTA_WOOL, Items.LIGHT_BLUE_WOOL, Items.YELLOW_WOOL, Items.LIME_WOOL, Items.PINK_WOOL, Items.GRAY_WOOL, Items.LIGHT_GRAY_WOOL,
+			Items.CYAN_WOOL, Items.PURPLE_WOOL, Items.BROWN_WOOL, Items.GREEN_WOOL };
 
-        IToolModifier toolModifier = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-        if(toolModifier != null) {
-            if (toolModifier.hasRainbow()) {
-                if (entity instanceof net.minecraftforge.common.IForgeShearable) {
-                    net.minecraftforge.common.IForgeShearable target = (net.minecraftforge.common.IForgeShearable) entity;
-                    BlockPos pos = new BlockPos(entity.getPosX(), entity.getPosY(), entity.getPosZ());
-                    if (target.isShearable(stack, entity.world, pos)) {
-                        java.util.List<ItemStack> drops = target.onSheared(playerIn, stack, entity.world, pos,
-                                net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.enchantment.Enchantments.FORTUNE, stack));
-                        java.util.Random rand = new java.util.Random();
-                        drops.forEach(d -> {
-                            net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
-                            ent.setMotion(ent.getMotion().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
-                        });
-                        stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
-                    }
-                    return ActionResultType.SUCCESS;
-                }
-                return ActionResultType.PASS;
-            }
-        }
-        boolean hasHeat = toolModifier != null && toolModifier.hasHeat();
+	private ItemStack getRandomWool(World world) {
+		return new ItemStack(WOOL[MathHelper.nextInt(world.rand, 0, WOOL.length)]);
+	}
 
-        if(!(entity instanceof IColdMob)) {
-            if(entity instanceof CowEntity && !(entity instanceof MooshroomEntity)) {
-                CowEntity originalCow = (CowEntity)entity;
-                World worldIn = originalCow.world;
+	@Override
+	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
+		World world = entity.world;
+		if (world.isRemote) {
+			return ActionResultType.PASS;
+		}
 
-                java.util.Random rand = new java.util.Random();
-                int i = 1 + rand.nextInt(3);
+		Random rand = world.rand;
 
-                java.util.List<ItemStack> drops = new ArrayList<>();
-                for (int j = 0; j < i; ++j)
-                    drops.add(new ItemStack(Items.LEATHER, 1));
+		IToolModifier toolModifier = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 
-                drops.forEach(d -> {
-                    net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
-                    ent.setMotion(ent.getMotion().add((double)((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double)(rand.nextFloat() * 0.05F), (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
-                });
+		// dont drop wool from ALL IForgeShearable mobs, only sheep
+		// for example: snow golems and Mooshroom are both IForgeShearable, but they
+		// should not drop rainbow wool
+		if (toolModifier != null && toolModifier.hasRainbow() && entity instanceof SheepEntity) {
 
-                entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+			SheepEntity target = (SheepEntity) entity;
+			BlockPos pos = new BlockPos(entity.getPosX(), entity.getPosY(), entity.getPosZ());
 
-                MobEntity replacementMob = new ColdCowEntity(worldIn, originalCow.getType().getRegistryName());
-                replacementMob.copyLocationAndAnglesFrom(originalCow);
-                UUID mobUUID = replacementMob.getUniqueID();
-                replacementMob.copyDataFromOld(originalCow);
-                replacementMob.setUniqueId(mobUUID);
+			if (target.isShearable(stack, world, pos)) {
+				List<ItemStack> drops = target.onSheared(playerIn, stack, world, pos, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack));
 
-                originalCow.remove(false);
-                worldIn.addEntity(replacementMob);
-                if(hasHeat) {
-                    replacementMob.setFire(10);
-                }
+				// get drops to test and see the COUNT of how many we should drop
+				for (int i = 0; i < drops.size(); i++) {
+					ItemEntity ent = entity.entityDropItem(getRandomWool(world), 1.0F);
+					ent.setMotion(ent.getMotion().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+				}
 
-                return ActionResultType.SUCCESS;
-            }
-            if(entity instanceof ChickenEntity) {
-                ChickenEntity originalChicken = (ChickenEntity)entity;
-                World worldIn = originalChicken.world;
+				stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
 
-                java.util.Random rand = new java.util.Random();
-                int i = 1 + rand.nextInt(3);
+				return ActionResultType.SUCCESS;
+			}
+		}
+		boolean hasHeat = toolModifier != null && toolModifier.hasHeat();
 
-                java.util.List<ItemStack> drops = new ArrayList<>();
-                for (int j = 0; j < i; ++j)
-                    drops.add(new ItemStack(Items.FEATHER, 1));
+		// part 2 :
+		if (!(entity instanceof IColdMob)) {
+			if (entity instanceof CowEntity && !(entity instanceof MooshroomEntity)) {
+				CowEntity originalCow = (CowEntity) entity;
 
-                drops.forEach(d -> {
-                    net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
-                    ent.setMotion(ent.getMotion().add((double)((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double)(rand.nextFloat() * 0.05F), (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
-                });
+				int i = 1 + rand.nextInt(3);
 
-                entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+				List<ItemStack> drops = new ArrayList<>();
+				for (int j = 0; j < i; ++j)
+					drops.add(new ItemStack(Items.LEATHER, 1));
 
-                MobEntity replacementMob = new ColdChickenEntity(worldIn, originalChicken.getType().getRegistryName());
-                replacementMob.copyLocationAndAnglesFrom(originalChicken);
-                UUID mobUUID = replacementMob.getUniqueID();
-                replacementMob.copyDataFromOld(originalChicken);
-                replacementMob.setUniqueId(mobUUID);
+				drops.forEach(d -> {
+					ItemEntity ent = entity.entityDropItem(d, 1.0F);
+					ent.setMotion(ent.getMotion().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+				});
 
-                originalChicken.remove(false);
-                worldIn.addEntity(replacementMob);
-                if(hasHeat) {
-                    replacementMob.setFire(10);
-                }
+				entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
 
-                return ActionResultType.SUCCESS;
-            }
-            if(entity instanceof PigEntity) {
-                PigEntity originalPig = (PigEntity)entity;
-                World worldIn = originalPig.world;
+				MobEntity replacementMob = new ColdCowEntity(world, originalCow.getType().getRegistryName());
+				replacementMob.copyLocationAndAnglesFrom(originalCow);
+				UUID mobUUID = replacementMob.getUniqueID();
+				replacementMob.copyDataFromOld(originalCow);
+				replacementMob.setUniqueId(mobUUID);
 
-                java.util.Random rand = new java.util.Random();
-                int i = 1 + rand.nextInt(2);
+				originalCow.remove(false);
+				world.addEntity(replacementMob);
+				if (hasHeat) {
+					replacementMob.setFire(SET_FIRE_TIME);
+				}
 
-                java.util.List<ItemStack> drops = new ArrayList<>();
-                for (int j = 0; j < i; ++j)
-                    drops.add(new ItemStack(hasHeat ? ForceRegistry.COOKED_BACON.get() : ForceRegistry.RAW_BACON.get(), 1));
+				return ActionResultType.SUCCESS;
+			}
+			if (entity instanceof ChickenEntity) {
+				ChickenEntity originalChicken = (ChickenEntity) entity;
+				World worldIn = originalChicken.world;
 
-                drops.forEach(d -> {
-                    net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
-                    ent.setMotion(ent.getMotion().add((double)((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double)(rand.nextFloat() * 0.05F), (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
-                });
+				int i = 1 + rand.nextInt(3);
 
-                entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+				java.util.List<ItemStack> drops = new ArrayList<>();
+				for (int j = 0; j < i; ++j) {
+					drops.add(new ItemStack(Items.FEATHER, 1));
+				}
 
-                MobEntity replacementMob = new ColdPigEntity(worldIn, originalPig.getType().getRegistryName());
-                replacementMob.copyLocationAndAnglesFrom(originalPig);
-                UUID mobUUID = replacementMob.getUniqueID();
-                replacementMob.copyDataFromOld(originalPig);
-                replacementMob.setUniqueId(mobUUID);
+				drops.forEach(d -> {
+					ItemEntity ent = entity.entityDropItem(d, 1.0F);
+					ent.setMotion(ent.getMotion().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+				});
 
-                originalPig.remove(false);
-                worldIn.addEntity(replacementMob);
-                if(hasHeat) {
-                    replacementMob.setFire(10);
-                }
+				entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
 
-                return ActionResultType.SUCCESS;
-            }
-        }
+				MobEntity replacementMob = new ColdChickenEntity(worldIn, originalChicken.getType().getRegistryName());
+				replacementMob.copyLocationAndAnglesFrom(originalChicken);
+				UUID mobUUID = replacementMob.getUniqueID();
+				replacementMob.copyDataFromOld(originalChicken);
+				replacementMob.setUniqueId(mobUUID);
 
-        return super.itemInteractionForEntity(stack, playerIn, entity, hand);
-    }
+				originalChicken.remove(false);
+				worldIn.addEntity(replacementMob);
+				if (hasHeat) {
+					replacementMob.setFire(SET_FIRE_TIME);
+				}
 
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if(CAPABILITY_TOOLMOD == null) {
-            return null;
-        }
-        return new ToolModProvider();
-    }
+				return ActionResultType.SUCCESS;
+			}
+			if (entity instanceof PigEntity) {
+				PigEntity originalPig = (PigEntity) entity;
+				World worldIn = originalPig.world;
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
-        ToolModStorage.attachInformation(stack, lores);
-        super.addInformation(stack, worldIn, lores, flagIn);
-    }
+				int i = 1 + rand.nextInt(2);
 
-    @Override
-    public int getItemEnchantability() {
-        return 0;
-    }
+				java.util.List<ItemStack> drops = new ArrayList<>();
+				for (int j = 0; j < i; ++j)
+					drops.add(new ItemStack(hasHeat ? ForceRegistry.COOKED_BACON.get() : ForceRegistry.RAW_BACON.get(), 1));
 
-    @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        return false;
-    }
+				drops.forEach(d -> {
+					net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
+					ent.setMotion(ent.getMotion().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+				});
+
+				entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+
+				MobEntity replacementMob = new ColdPigEntity(worldIn, originalPig.getType().getRegistryName());
+				replacementMob.copyLocationAndAnglesFrom(originalPig);
+				UUID mobUUID = replacementMob.getUniqueID();
+				replacementMob.copyDataFromOld(originalPig);
+				replacementMob.setUniqueId(mobUUID);
+
+				originalPig.remove(false);
+				worldIn.addEntity(replacementMob);
+				if (hasHeat) {
+					replacementMob.setFire(SET_FIRE_TIME);
+				}
+
+				return ActionResultType.SUCCESS;
+			}
+		}
+
+		return super.itemInteractionForEntity(stack, playerIn, entity, hand);
+	}
+
+	@Nullable
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+		if (CAPABILITY_TOOLMOD == null) {
+			return null;
+		}
+		return new ToolModProvider();
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+		ToolModStorage.attachInformation(stack, lores);
+		super.addInformation(stack, worldIn, lores, flagIn);
+	}
+
+	@Override
+	public int getItemEnchantability() {
+		return 0;
+	}
+
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+		return false;
+	}
 }
