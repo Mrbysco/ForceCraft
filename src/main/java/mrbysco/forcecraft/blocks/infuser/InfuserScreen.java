@@ -302,7 +302,9 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		public void drawItemStack() {
 			// TODO: rotate on matching stacks with a timer, just like JEI
-			parent.drawItemStack(recipe.input.getMatchingStacks()[0], parent.guiLeft + x, parent.guiTop + y, "");
+			if(recipe.input.getMatchingStacks().length > 0) {
+				parent.drawItemStack(recipe.input.getMatchingStacks()[0], parent.guiLeft + x, parent.guiTop + y, "");
+			}
 		}
 
 		public void drawTooltip(MatrixStack ms, int actualMouseX, int actualMouseY) {
@@ -311,6 +313,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 			List<ITextComponent> text = new ArrayList<>();
 			text.add(new TranslationTextComponent(recipeSlug));
+			ForceCraft.LOGGER.info("show tooltip {} {}",actualMouseX,actualMouseY);
 			GuiUtils.drawHoveringText(ms, text, actualMouseX, actualMouseY, parent.width, parent.height, -1,
 					parent.font);
 		}

@@ -12,8 +12,9 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
     @Override
     public INBT writeNBT(Capability<IForceRodModifier> capability, IForceRodModifier instance, Direction side) {
         CompoundNBT nbt  = new CompoundNBT();
-
-        nbt.putBoolean("healingOne", instance.isRodOfHealing(1));
+		nbt.putInt("speed", instance.getSpeedLevel());
+        // why isnt this just an integer
+        nbt.putBoolean("healingOne", instance.isRodOfHealing(1));	
         nbt.putBoolean("healingTwo", instance.isRodOfHealing(2));
         nbt.putBoolean("healingThree", instance.isRodOfHealing(3));
 
@@ -32,6 +33,7 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
     public void readNBT(Capability<IForceRodModifier> capability, IForceRodModifier instance, Direction side, INBT nbtIn) {
         if(nbtIn instanceof CompoundNBT){
             CompoundNBT nbt = (CompoundNBT) nbtIn;
+			instance.setSpeed(nbt.getInt("speed"));
             instance.setRodOfHealing(nbt.getBoolean("healingOne"), 1);
             instance.setRodOfHealing(nbt.getBoolean("healingTwo"), 2);
             instance.setRodOfHealing(nbt.getBoolean("healingThree"), 3);
