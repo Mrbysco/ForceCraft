@@ -308,6 +308,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		}
 
 		public void drawTooltip(MatrixStack ms, int actualMouseX, int actualMouseY) {
+			RenderSystem.translatef(0.0F, 0.0F, 33.0F); 
 
 			String recipeSlug = recipe.modifier.getTooltip();
 
@@ -316,6 +317,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			ForceCraft.LOGGER.info("show tooltip {} {}",actualMouseX,actualMouseY);
 			GuiUtils.drawHoveringText(ms, text, actualMouseX, actualMouseY, parent.width, parent.height, -1,
 					parent.font);
+			RenderSystem.translatef(0.0F, 0.0F, 0.0F); 
 		}
 	}
 }

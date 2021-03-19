@@ -30,19 +30,27 @@ public class UpgradeTomeItem extends BaseItem {
         tt.appendString(" " + bd.getTier());
         tooltip.add(tt);  
 
-        if(!Screen.hasShiftDown()){
+        if(!Screen.hasShiftDown()) {
 		  tooltip.add(new TranslationTextComponent("forcecraft.tooltip.press_shift"));
 		  return;
       	}
-        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.points");
-        tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-        tt.appendString(" " + bd.points);
-        tooltip.add(tt); 
         
-        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.nexttier");
-        tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-        tt.appendString(" " + bd.nextTier());
-        tooltip.add(tt);  
+        if(bd.getTier() == UpgradeBookTier.FINAL) {
+            tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.max");
+            tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
+            tooltip.add(tt); 
+        }
+        else {
+	        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.points");
+	        tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
+	        tt.appendString(" " + bd.points);
+	        tooltip.add(tt); 
+        
+	        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.nexttier");
+	        tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
+	        tt.appendString(" " + bd.nextTier());
+	        tooltip.add(tt);  
+        }
 
     }
 
