@@ -128,6 +128,10 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		this.minecraft.getTextureManager().bindTexture(TEXTURE);
 		this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+		
+
+		this.drawFluidBar(matrixStack);
+		this.drawEnergyBar(matrixStack);
 	}
 
 	@Override
@@ -138,8 +142,6 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		this.infuserProgress.setMin(container.getTile().processTime).setMax(container.getTile().maxProcessTime);
 		this.infuserProgress.draw(matrixStack, this.minecraft);
 
-		this.drawFluidBar(matrixStack);
-		this.drawEnergyBar(matrixStack);
 
 		if (isPointInRegion(123, 16, 12, 12, mouseX, mouseY)
 				&& container.getTile().handler.getStackInSlot(InfuserTileEntity.SLOT_GEM).isEmpty()) {
@@ -193,7 +195,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 				if (sprite != null) {
 					minecraft.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
 					int fluidHeight = container.tile.getFluidGuiHeight(82);
-					blit(matrixStack, 8, 65 + (58 - fluidHeight), 0, 16, fluidHeight, sprite);
+					blit(matrixStack, guiLeft + 8, guiTop + 65 + (58 - fluidHeight), 0, 16, fluidHeight, sprite);
 				}
 			}
 		}
@@ -210,9 +212,8 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		float pct = Math.min(energ / capacity, 1.0F);
 
 		float height = 107;
-		int width = 12;
-		int x = 31, y = -3;
-		blit(ms, guiLeft + x, guiTop + y, 0, 0, width, (int) (height * pct), width, (int) height);
+		int width = 12; 
+		blit(ms, guiLeft + 156, guiTop + 13, 0, 0, width, (int) (height * pct), width, (int) height);
 	}
 
 	private void drawPopup(MatrixStack matrixStack) {
