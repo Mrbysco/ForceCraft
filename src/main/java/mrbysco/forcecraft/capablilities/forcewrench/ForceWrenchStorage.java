@@ -2,6 +2,7 @@ package mrbysco.forcecraft.capablilities.forcewrench;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -16,6 +17,10 @@ public class ForceWrenchStorage implements Capability.IStorage<IForceWrench> {
         if(instance.getStoredBlockNBT() != null) {
             nbt.put("storedNBT", instance.getStoredBlockNBT());
         }
+
+        if(instance.getStoredBlockState() != null) {
+            nbt.put("storedBlockState", NBTUtil.writeBlockState(instance.getStoredBlockState()));
+        }
         if(instance.getStoredName() != null) {
             nbt.putString("name", instance.getStoredName());
         }
@@ -29,6 +34,9 @@ public class ForceWrenchStorage implements Capability.IStorage<IForceWrench> {
             CompoundNBT nbt = (CompoundNBT) nbtIn;
 
             instance.storeBlockNBT(nbt.getCompound("storedNBT"));
+            if(nbt.contains("storedBlockState")) {
+                instance.storeBlockState(NBTUtil.readBlockState(nbt.getCompound("storedBlockState")));
+            }
             instance.setBlockName(nbt.getString("name"));
         }
     }

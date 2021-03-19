@@ -30,7 +30,7 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOL
 public class ForceSwordItem extends SwordItem {
 
     public ForceSwordItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE, 0, -2.4F, properties);
+        super(ModToolMaterial.FORCE, -2, -2.4F, properties);
     }
 
     @Override

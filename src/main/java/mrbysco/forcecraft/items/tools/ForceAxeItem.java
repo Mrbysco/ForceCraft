@@ -1,9 +1,6 @@
 package mrbysco.forcecraft.items.tools;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
@@ -11,12 +8,7 @@ import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import mrbysco.forcecraft.registry.material.ModToolMaterial;
 import mrbysco.forcecraft.util.DartUtils;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,21 +34,7 @@ import static mrbysco.forcecraft.util.DartUtils.isLog;
 public class ForceAxeItem extends AxeItem {
 
     public ForceAxeItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE, 8.0F, -2.0F, properties);
-    }
-
-    @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
-        Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
-        if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-            if(multimap != null) {
-                Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-                builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon damage modifier", (double)9.0F, Operation.ADDITION));
-                builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon speed modifier", -2.0D,  Operation.ADDITION));
-                multimap = builder.build();
-            }
-        }
-        return multimap;
+        super(ModToolMaterial.FORCE, 0F, -3.1F, properties);
     }
 
     @Nullable

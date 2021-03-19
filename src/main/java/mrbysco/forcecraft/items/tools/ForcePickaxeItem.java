@@ -22,7 +22,7 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOL
 public class ForcePickaxeItem extends PickaxeItem {
 
     public ForcePickaxeItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE,-2, -2.8F, properties);
+        super(ModToolMaterial.FORCE,-6, -2.8F, properties);
     }
 
     @Nullable

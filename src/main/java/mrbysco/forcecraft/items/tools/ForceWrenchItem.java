@@ -18,6 +18,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -67,16 +69,15 @@ public class ForceWrenchItem extends BaseItem {
         if(wrenchCap != null) {
             String blockName = state.getBlock().getTranslationKey();
             TileEntity tileEntity = world.getTileEntity(pos);
-            CompoundNBT nbt = new CompoundNBT();
 
             if(tileEntity != null){
-                tileEntity.write(nbt);
+                CompoundNBT nbt = tileEntity.write(new CompoundNBT());
                 wrenchCap.storeBlockNBT(nbt);
-                wrenchCap.storeBlockState(world.getBlockState(pos));
+                wrenchCap.storeBlockState(state);
                 wrenchCap.setBlockName(blockName);
                 world.removeTileEntity(pos);
                 BlockState airState = Blocks.AIR.getDefaultState();
-                world.setBlockState(pos, airState);
+                world.removeBlock(pos, false);
                 world.markBlockRangeForRenderUpdate(pos, state, airState);
             }
             return ActionResultType.SUCCESS;
@@ -92,9 +93,15 @@ public class ForceWrenchItem extends BaseItem {
                 CompoundNBT tileCmp = wrenchCap.getStoredBlockNBT();
                 BlockState state = wrenchCap.getStoredBlockState();
                 TileEntity te = TileEntity.readTileEntity(state, tileCmp);
-                te.setPos(pos.offset(side));
-                world.setBlockState(pos.offset(side), state);
-                world.setTileEntity(pos.offset(side), te);
+                BlockPos offPos = pos.offset(side);
+                if(state != null) {
+                    world.setBlockState(offPos, state);
+                }
+                if(te != null) {
+                    te.read(state, tileCmp);
+                    te.setPos(offPos);
+                    world.setTileEntity(offPos, te);
+                }
                 wrenchCap.clearBlockStorage();
             }
         }
@@ -106,7 +113,8 @@ public class ForceWrenchItem extends BaseItem {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         stack.getCapability(CAPABILITY_FORCEWRENCH).ifPresent((cap) -> {
             if(cap.getStoredName() != null){
-                tooltip.add(new StringTextComponent("Stored: " + cap.getStoredName()));
+                tooltip.add(new StringTextComponent("Stored: ").mergeStyle(TextFormatting.GOLD)
+                        .appendSibling(new TranslationTextComponent(cap.getStoredName()).mergeStyle(TextFormatting.GRAY)));
             }
         });
         super.addInformation(stack, worldIn, tooltip, flagIn);

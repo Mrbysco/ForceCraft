@@ -36,7 +36,7 @@ public class ForceShovelItem extends ShovelItem {
     public List<Reference.MODIFIERS> applicableModifers = new ArrayList<>();
 
     public ForceShovelItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE, -2.5F, -3.0F, properties);
+        super(ModToolMaterial.FORCE, -7F, -3.0F, properties);
         setApplicableModifers();
     }
 
