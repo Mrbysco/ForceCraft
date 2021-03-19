@@ -49,9 +49,9 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOL
 public class ForceShearsItem extends ShearsItem {
 
 	private static final int SET_FIRE_TIME = 10;
-
+	private static final int SHEARS_DMG = 238; // vanilla shears have this max damage
 	public ForceShearsItem(Item.Properties properties) {
-		super(properties.maxStackSize(1));
+		super(properties.maxStackSize(1).maxDamage(SHEARS_DMG * 4));
 	}
 
 	private static final Item[] WOOL = { Items.RED_WOOL, Items.BLUE_WOOL, Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.WHITE_WOOL, Items.ORANGE_WOOL, Items.MAGENTA_WOOL, Items.LIGHT_BLUE_WOOL, Items.YELLOW_WOOL, Items.LIME_WOOL, Items.PINK_WOOL, Items.GRAY_WOOL, Items.LIGHT_GRAY_WOOL,
@@ -67,6 +67,7 @@ public class ForceShearsItem extends ShearsItem {
 		if (world.isRemote) {
 			return ActionResultType.PASS;
 		}
+
 		Random rand = world.rand;
 
 		IToolModifier toolModifier = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
@@ -87,6 +88,9 @@ public class ForceShearsItem extends ShearsItem {
 					ItemEntity ent = entity.entityDropItem(getRandomWool(world), 1.0F);
 					ent.setMotion(ent.getMotion().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
 				}
+
+				stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
+
 				return ActionResultType.SUCCESS;
 			}
 		}
