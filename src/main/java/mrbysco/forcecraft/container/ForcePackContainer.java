@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.container;
 
+import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForcePackItem;
@@ -34,12 +35,16 @@ public class ForcePackContainer extends Container {
     public ForcePackContainer(int id, PlayerInventory playerInventory, ItemStack forcePack) {
         super(ForceContainers.FORCE_PACK.get(), id);
         this.heldStack = forcePack;
+        ForceCraft.LOGGER.info("Pack container:  heldStack.getTag()",  heldStack.getTag());
+		
         upgrades = 0;
 
         IItemHandler itemHandler = forcePack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler instanceof PackItemStackHandler) {
             upgrades = ((PackItemStackHandler)itemHandler).getUpgrades();
             int numRows = upgrades + 1;
+            ForceCraft.LOGGER.info("Pack upgrades)",  upgrades);
+    		
 
             int xPosC = 17;
             int yPosC = 20;
@@ -80,8 +85,8 @@ public class ForcePackContainer extends Container {
         IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler instanceof PackItemStackHandler) {
             CompoundNBT tag = heldStack.getOrCreateTag();
-            tag.putInt("SlotsUsed", ItemHandlerUtils.getUsedSlots(itemHandler));
-            tag.putInt("SlotsTotal", itemHandler.getSlots());
+            tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(itemHandler));
+            tag.putInt(ForcePackItem.SLOTS_TOTAL, itemHandler.getSlots());
             heldStack.setTag(tag);
         }
 

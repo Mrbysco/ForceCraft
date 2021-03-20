@@ -230,6 +230,9 @@ public class ForceRodItem extends BaseItem {
 			if (cap.hasLight()) {
 				playerIn.addPotionEffect(new EffectInstance(Effects.GLOWING, 1000, 0));
 			}
+			if (cap.getSpeedLevel() > 0) {
+				playerIn.addPotionEffect(new EffectInstance(Effects.SPEED, 10 * 20, cap.getSpeedLevel() - 1));
+			}
 		});
 
 		return super.onItemRightClick(worldIn, playerIn, handIn);
@@ -261,6 +264,9 @@ public class ForceRodItem extends BaseItem {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing2"));
 			} else if (cap.isRodOfHealing(1)) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing1"));
+			}
+			if (cap.getSpeedLevel() > 0) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
 			}
 			if (cap.hasCamoModifier()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender"));

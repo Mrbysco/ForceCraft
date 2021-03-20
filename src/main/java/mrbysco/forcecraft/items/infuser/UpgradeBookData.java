@@ -23,6 +23,9 @@ public class UpgradeBookData {
 	}
 	//how many we need for next tier increment
 	public int nextTier() {
+		if(getTier() == UpgradeBookTier.FINAL) {
+			return 0;
+		}
 		return getTier().pointsForLevelup() - points;
 	}
 	

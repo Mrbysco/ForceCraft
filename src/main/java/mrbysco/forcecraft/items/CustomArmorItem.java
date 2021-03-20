@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.items;
 
+import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
@@ -11,6 +12,7 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -51,24 +53,36 @@ public class CustomArmorItem extends ArmorItem {
     // ShareTag for server->client capability data sync
     @Override
     public CompoundNBT getShareTag(ItemStack stack) {
-    	CompoundNBT normal = stack.getOrCreateTag();
+    	CompoundNBT nbt = stack.getOrCreateTag();
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-		 
-		CompoundNBT newTag = ToolModStorage.writeNBT(cap);
-		normal.put(Reference.MOD_ID, newTag);
+	  
+		//on server  this runs . also has correct values.
+		//set data for sync to client
+		if(cap != null) {
+			CompoundNBT shareTag = ToolModStorage.serializeNBT(cap);
+			
+			nbt.put(Reference.MOD_ID, shareTag);
+	        ForceCraft.LOGGER.info("(SERVER) getShareTag : ARMOR{}  ", shareTag);
+		}
 
-        return normal;
+        return nbt;
     }
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-    	super.readShareTag(stack, nbt);
-    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
-    		return;
-    	}
+    	if(nbt != null && nbt.contains(Reference.MOD_ID)) {
 
-		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-    	ToolModStorage.readNBT(cap, nbt);
+    		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+    		//these logs run on client. and yes, on client speed:1 its going up as expected
+    		if(cap != null) {
+        		INBT shareTag = nbt.get(Reference.MOD_ID);
+	        	ToolModStorage.deserializeNBT(cap, shareTag);
+
+            	ForceCraft.LOGGER.info("(CLIENT) readShareTag : ARMOR{}  ", shareTag);
+	        	//if we used plain nbt and not capabilities, call super instead
+//	        	super.readShareTag(stack, nbt);
+    		}
+    	}
     }
 }

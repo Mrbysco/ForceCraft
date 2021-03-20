@@ -25,4 +25,13 @@ public interface IForceRodModifier extends INBTSerializable<CompoundNBT> {
 
     boolean hasLight();
     void setLight(boolean val);
+
+    /**
+     * Modifier: Speed
+     * Levels: 3
+     * Effect: when using the rod give speed to player
+     */
+    int getSpeedLevel();
+    void incrementSpeed();
+    void setSpeed(int newSpeed);
 }

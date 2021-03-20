@@ -160,7 +160,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		if (isPointInRegion(150, 8, 16, 82, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
-			IFormattableTextComponent tt = new TranslationTextComponent(" " + this.container.tile.getEnergyStored())
+			IFormattableTextComponent tt = new TranslationTextComponent("" + this.container.tile.getEnergyStored())
 					.mergeStyle(TextFormatting.GRAY);
 			text.add(tt);
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
@@ -211,9 +211,11 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		float capacity = container.getTile().energyStorage.getMaxEnergyStored();
 		float pct = Math.min(energ / capacity, 1.0F);
 
-		float height = 107;
+		final float height = 107;
 		int width = 12; 
-		blit(ms, guiLeft + 156, guiTop + 13, 0, 0, width, (int) (height * pct), width, (int) height);
+		blit(ms, guiLeft + 156, guiTop + 13, 0, 0, 
+				width, (int) (height * pct), 
+				width, (int) height);
 	}
 
 	private void drawPopup(MatrixStack matrixStack) {
@@ -302,17 +304,22 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		public void drawItemStack() {
 			// TODO: rotate on matching stacks with a timer, just like JEI
-			parent.drawItemStack(recipe.input.getMatchingStacks()[0], parent.guiLeft + x, parent.guiTop + y, "");
+			if(recipe.input.getMatchingStacks().length > 0) {
+				parent.drawItemStack(recipe.input.getMatchingStacks()[0], parent.guiLeft + x, parent.guiTop + y, "");
+			}
 		}
 
 		public void drawTooltip(MatrixStack ms, int actualMouseX, int actualMouseY) {
+			RenderSystem.translatef(0.0F, 0.0F, 33.0F); 
 
 			String recipeSlug = recipe.modifier.getTooltip();
 
 			List<ITextComponent> text = new ArrayList<>();
 			text.add(new TranslationTextComponent(recipeSlug));
-			GuiUtils.drawHoveringText(ms, text, actualMouseX, actualMouseY, parent.width, parent.height, -1,
-					parent.font);
+
+			GuiUtils.drawHoveringText(ms, text, actualMouseX, actualMouseY, parent.width, parent.height, -1, parent.font);
+			
+			RenderSystem.translatef(0.0F, 0.0F, 0.0F); 
 		}
 	}
 }

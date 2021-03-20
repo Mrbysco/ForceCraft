@@ -15,6 +15,7 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
             boolean camo = false;
             boolean ender = false;
             boolean sight = false;
+            int speed = 0;
 
             BlockPos homeLocation = null;
 
@@ -110,6 +111,21 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
             public void deserializeNBT(CompoundNBT nbt) {
 
             }
+
+			@Override
+			public int getSpeedLevel() {
+				return speed;
+			}
+
+			@Override
+			public void incrementSpeed() {
+				setSpeed(speed + 1);
+			}
+
+			@Override
+			public void setSpeed(int newSpeed) {
+				speed = Math.min(3, newSpeed);
+			}
         };
     }
 }

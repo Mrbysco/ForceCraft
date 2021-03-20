@@ -70,8 +70,8 @@ public class ForceBeltContainer extends Container {
         IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler != null) {
             CompoundNBT tag = heldStack.getOrCreateTag();
-            tag.putInt("SlotsUsed", ItemHandlerUtils.getUsedSlots(itemHandler));
-            tag.putInt("SlotsTotal", itemHandler.getSlots());
+            tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(itemHandler));
+            tag.putInt(ForcePackItem.SLOTS_TOTAL, itemHandler.getSlots());
             heldStack.setTag(tag);
         }
 

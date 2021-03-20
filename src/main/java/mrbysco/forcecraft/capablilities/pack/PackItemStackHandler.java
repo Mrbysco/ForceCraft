@@ -8,17 +8,24 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class PackItemStackHandler extends ItemStackHandler {
+	private static final int SLOTS_PER_UPGRADE = 8;
+	private static final int MAX_UPGRADES = 4;
+	public static final String NBT_UPGRADES = "Upgrades";
 	private int upgrades;
 
-	public PackItemStackHandler(int size) {
-		super(size);
-		this.upgrades = size % 8 == 0 ? size / 8 - 1 : 0;
+	public PackItemStackHandler() {
+		//always set handler to max slots, evne if some are hidden/notused
+		super((MAX_UPGRADES + 1) * SLOTS_PER_UPGRADE);
 	}
 
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack) {
 		//Make sure there's no ForcePack-ception
 		return !(stack.getItem() instanceof ForcePackItem) && super.isItemValid(slot, stack);
+	}
+	
+	public int getSlotsInUse() {
+		return (upgrades + 1) * SLOTS_PER_UPGRADE;
 	}
 
 	public int getUpgrades() {
@@ -44,15 +51,14 @@ public class PackItemStackHandler extends ItemStackHandler {
 		forceUpdate();
 	}
 
-
 	public void applydowngrade(int upgrades) {
 		this.upgrades -= upgrades;
 		forceUpdate();
 	}
 
 	public void forceUpdate() {
-		if(this.upgrades > 4) {
-			this.upgrades = 4;
+		if(this.upgrades > MAX_UPGRADES) {
+			this.upgrades = MAX_UPGRADES;
 		}
 		if(this.upgrades < 0) {
 			this.upgrades = 0;
@@ -62,7 +68,7 @@ public class PackItemStackHandler extends ItemStackHandler {
 	}
 
 	public boolean canUpgrade() {
-		return this.upgrades < 4;
+		return this.upgrades < MAX_UPGRADES;
 	}
 
 	@Override
@@ -78,14 +84,14 @@ public class PackItemStackHandler extends ItemStackHandler {
 		}
 		CompoundNBT nbt = new CompoundNBT();
 		nbt.put("Items", nbtTagList);
-		nbt.putInt("Upgrades", upgrades);
+		nbt.putInt(NBT_UPGRADES, upgrades);
 		return nbt;
 	}
 
 	@Override
 	public void deserializeNBT(CompoundNBT nbt) {
-		setUpgrades(nbt.contains("Upgrades", Constants.NBT.TAG_INT) ? nbt.getInt("Upgrades") : upgrades);
-		setSize((getUpgrades() + 1) * 8);
+		setUpgrades(nbt.contains(NBT_UPGRADES, Constants.NBT.TAG_INT) ? nbt.getInt(NBT_UPGRADES) : upgrades);
+//		setSize((getUpgrades() + 1) * 8);
 
 		ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < tagList.size(); i++)

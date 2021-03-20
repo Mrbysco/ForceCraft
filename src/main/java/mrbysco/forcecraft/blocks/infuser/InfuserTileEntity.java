@@ -314,10 +314,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
      */
     private boolean applyModifier(ItemStack tool, ItemStack modifier) {
 
+		UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
+		
     	for (InfuseRecipe modCurrent : InfuseRecipe.RECIPES) {
+    		// if the recipe level does not exceed what the book has
     		//test the ingredient of this recipe, if it matches me
-    		if (modCurrent.input.test(modifier)) {
-    			//check level TODO
+    		if (modCurrent.tier <= bd.getTier().ordinal() && modCurrent.input.test(modifier)) {
     			
     			if (modCurrent.modifier.apply(tool, modifier)) {
                     handler.setStackInSlot(SLOT_TOOL, tool);
@@ -520,8 +522,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     packHandler.applyUpgrade();
                 }
                 CompoundNBT tag = stack.getOrCreateTag();
-                tag.putInt("SlotsUsed", ItemHandlerUtils.getUsedSlots(packHandler));
-                tag.putInt("SlotsTotal", packHandler.getSlots());
+                tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(packHandler));
+                tag.putInt(ForcePackItem.SLOTS_TOTAL, packHandler.getSlotsInUse());
                 stack.setTag(tag);
                 return true;
             }
@@ -712,7 +714,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addSpeedModifier(ItemStack stack) {
-        if(stack.getItem() instanceof ForceShovelItem || stack.getItem() instanceof ForcePickaxeItem || stack.getItem() instanceof ForceAxeItem) {
+        if(stack.getItem() instanceof ForceShovelItem || stack.getItem() instanceof ForcePickaxeItem || stack.getItem() instanceof ForceAxeItem
+        	 ) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(modifierCap.getSpeedLevel() == 0) {
@@ -735,6 +738,15 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     return true;
                 }
             }
+        }
+        else if (stack.getItem() instanceof ForceRodItem) {
+        	   IForceRodModifier modifierCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
+              if(modifierCap != null ) {
+                  if(modifierCap.getSpeedLevel() < 3) {
+                      modifierCap.incrementSpeed();
+                      return true;
+                  }
+              }
         }
         return false;
     }

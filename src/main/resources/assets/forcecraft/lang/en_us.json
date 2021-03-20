@@ -396,9 +396,13 @@
     "gui.forcecraft.infuser.start.tooltip": "Start Infusion",
     "gui.forcecraft.infuser.button.guide": "Open Guide GUI",
     "gui.forcecraft.infuser.button.button": "Start Button",
-    "gui.forcecraft.infuser.tooltip.damage": "Damage infuse",
-    "gui.forcecraft.infuser.tooltip.speed": "Speed infuse",
-    "gui.forcecraft.infuser.tooltip.force": "Force infuse"
+    
+    "gui.forcecraft.infuser.tooltip.fortune": "Add fortune to your tools",
+    "gui.forcecraft.infuser.tooltip.pack": "Upgrade the force pack",
+    "gui.forcecraft.infuser.tooltip.rainbow": "Get random wool from sheep using shears ",
+    "gui.forcecraft.infuser.tooltip.speed": "Add speed to armor or the force rod",
+    "gui.forcecraft.infuser.tooltip.lumberjack": "Lumberjack on your axe will chop the whole tree",
+    "gui.forcecraft.infuser.tooltip.force": "Force increases your damage"
     
     
 }

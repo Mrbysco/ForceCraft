@@ -56,7 +56,7 @@ public class ForcePackScreen extends ContainerScreen<ForcePackContainer> {
         this.playerInventoryTitleY = 42 + (this.container.getUpgrades() * 18);
         super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
 
-        int actualMouseX = mouseX - ((this.width - this.xSize) / 2);
-        int actualMouseY = mouseY - ((this.height - this.ySize) / 2);
+//        int actualMouseX = mouseX - ((this.width - this.xSize) / 2);
+//        int actualMouseY = mouseY - ((this.height - this.ySize) / 2);
     }
 }

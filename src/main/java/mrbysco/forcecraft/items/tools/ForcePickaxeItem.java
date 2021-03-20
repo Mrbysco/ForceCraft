@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -54,13 +55,14 @@ public class ForcePickaxeItem extends PickaxeItem {
     // ShareTag for server->client capability data sync
     @Override
     public CompoundNBT getShareTag(ItemStack stack) {
-    	CompoundNBT normal = super.getShareTag(stack);
+    	CompoundNBT nbt = super.getShareTag(stack);
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-		CompoundNBT newTag = ToolModStorage.writeNBT(cap);
-		normal.put(Reference.MOD_ID, newTag);
-
-        return normal;
+		if(cap != null) {
+			CompoundNBT shareTag = ToolModStorage.serializeNBT(cap);
+			nbt.put(Reference.MOD_ID, shareTag);
+		}
+        return nbt;
     }
 
     @Override
@@ -68,9 +70,11 @@ public class ForcePickaxeItem extends PickaxeItem {
     	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
     		return;
     	}
-
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-    	ToolModStorage.readNBT(cap, nbt);
+		if(cap != null) {
+	    	INBT shareTag = nbt.get(Reference.MOD_ID);
+	    	ToolModStorage.deserializeNBT(cap, shareTag);
+		}
     }
     
 }
