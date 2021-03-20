@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -51,9 +52,12 @@ public class ForcePackItem extends BaseItem {
         if(handler instanceof PackItemStackHandler) {
             if(playerIn.isSneaking()) {
                 if(worldIn.isRemote) {
+
+                	ForceCraft.LOGGER.info("(CLIENT) pack:openScreen {}  ", stack.getTag());
                     RenameAndRecolorScreen.openScreen(stack, handIn);
                 }
             } else {
+            	ForceCraft.LOGGER.info("(SERVER) openContainer {}  ", stack.getTag());
                 playerIn.openContainer(this.getContainer(stack));
                 return new ActionResult<ItemStack>(ActionResultType.PASS, stack);
             }
@@ -102,7 +106,7 @@ public class ForcePackItem extends BaseItem {
         }
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
- 
+    
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         return ((TextComponent)super.getDisplayName(stack)).mergeStyle(TextFormatting.YELLOW);
@@ -112,5 +116,25 @@ public class ForcePackItem extends BaseItem {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         return new PackInventoryProvider();
+    }
+    
+    // ShareTag for server->client capability data sync
+    @Override
+    public CompoundNBT getShareTag(ItemStack stack) {
+    	CompoundNBT shareTag = stack.getOrCreateTag();
+    	// no capability, use all of it
+        return shareTag;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    	
+    	if(nbt != null && nbt.contains(SLOTS_TOTAL)) {
+
+    		stack.getOrCreateTag().putInt(SLOTS_TOTAL, nbt.getInt(SLOTS_TOTAL));
+    		stack.getOrCreateTag().putInt(SLOTS_USED, nbt.getInt(SLOTS_USED));
+//
+//        	ForceCraft.LOGGER.info("(CLIENT) readShareTag : AFTER setting to stack {}  ", stack.getTag());
+    	}
     }
 }
