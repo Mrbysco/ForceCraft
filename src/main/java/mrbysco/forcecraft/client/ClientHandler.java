@@ -9,6 +9,7 @@ import mrbysco.forcecraft.client.gui.spoils.SpoilsBagScreen;
 import mrbysco.forcecraft.client.renderer.ColdChickenRenderer;
 import mrbysco.forcecraft.client.renderer.ColdCowRenderer;
 import mrbysco.forcecraft.client.renderer.ColdPigRenderer;
+import mrbysco.forcecraft.client.renderer.ForceArrowRenderer;
 import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.registry.ForceEntities;
 import mrbysco.forcecraft.registry.ForceRegistry;
@@ -75,6 +76,7 @@ public class ClientHandler {
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_CHICKEN.get(), ColdChickenRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_COW.get(), ColdCowRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_PIG.get(), ColdPigRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FORCE_ARROW.get(), ForceArrowRenderer::new);
 
 		ItemModelsProperties.registerProperty(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity) -> {
 			IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
@@ -86,5 +88,15 @@ public class ClientHandler {
 
 		ItemModelsProperties.registerProperty(ForceRegistry.FORCE_BELT.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
 				stack.getTag() != null && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
+
+		ItemModelsProperties.registerProperty(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pull"), (stack, world, livingEntity) -> {
+			if (livingEntity == null) {
+				return 0.0F;
+			} else {
+				return livingEntity.getActiveItemStack() != stack ? 0.0F : (float)(stack.getUseDuration() - livingEntity.getItemInUseCount()) / 20.0F;
+			}
+		});
+		ItemModelsProperties.registerProperty(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pulling"), (stack, world, livingEntity) ->
+				livingEntity != null && livingEntity.isHandActive() && livingEntity.getActiveItemStack() == stack ? 1.0F : 0.0F);
 	}
 }

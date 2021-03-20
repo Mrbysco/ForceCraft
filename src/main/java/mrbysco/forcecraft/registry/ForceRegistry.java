@@ -28,7 +28,9 @@ import mrbysco.forcecraft.items.GoldenPowerSourceItem;
 import mrbysco.forcecraft.items.SpoilsBagItem;
 import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.nonburnable.InertCoreItem;
+import mrbysco.forcecraft.items.tools.ForceArrowItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
+import mrbysco.forcecraft.items.tools.ForceBowItem;
 import mrbysco.forcecraft.items.tools.ForceMittItem;
 import mrbysco.forcecraft.items.tools.ForcePickaxeItem;
 import mrbysco.forcecraft.items.tools.ForceRodItem;
@@ -252,6 +254,7 @@ public class ForceRegistry {
     public static final RegistryObject<Item> DARKNESS_CARD = ITEMS.register("darkness_card", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> UNDEATH_CARD = ITEMS.register("undeath_card", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> TREASURE_CORE = ITEMS.register("treasure_core", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_ARROW = ITEMS.register("force_arrow", () -> new ForceArrowItem(itemBuilder().group(ForceCraft.creativeTab)));
 
     //Tools
     public static final RegistryObject<Item> FORCE_PICKAXE = ITEMS.register("force_pickaxe", () -> new ForcePickaxeItem(itemBuilder().group(ForceCraft.creativeTab)));
@@ -259,6 +262,7 @@ public class ForceRegistry {
     public static final RegistryObject<Item> FORCE_SWORD = ITEMS.register("force_sword", () -> new ForceSwordItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_SHOVEL = ITEMS.register("force_shovel", () -> new ForceShovelItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_SHEARS = ITEMS.register("force_shears", () -> new ForceShearsItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_BOW = ITEMS.register("force_bow", () -> new ForceBowItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_MITT = ITEMS.register("force_mitt", () -> new ForceMittItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> MAGNET_GLOVE = ITEMS.register("magnet_glove", () -> new MagnetGloveItem(itemBuilder().group(ForceCraft.creativeTab)));
 

@@ -1,0 +1,6 @@
+{
+    "parent": "forcecraft:item/force_bow",
+    "textures": {
+        "layer0": "forcecraft:item/force_bow_pulling_1"
+    }
+}

@@ -35,6 +35,7 @@
     "item.forcecraft.darkness_card": "Darkness Card",
     "item.forcecraft.undeath_card": "Undeath Card",
     "item.forcecraft.treasure_core": "Treasure Core",
+    "item.forcecraft.force_arrow": "Force Arrow",
 
     "_comment": "Armor",
     "item.forcecraft.force_helmet": "Force Cap",
@@ -50,6 +51,7 @@
     "item.forcecraft.force_wrench": "Force Wrench",
     "item.forcecraft.force_rod": "Force Rod",
     "item.forcecraft.force_shears": "Force Shears",
+    "item.forcecraft.force_bow": "Force Bow",
     "item.forcecraft.magnet_glove": "Magnet Glove",
     "item.forcecraft.force_mitt": "Force Mitts",
 

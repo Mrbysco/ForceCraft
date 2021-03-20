@@ -4,6 +4,7 @@ import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.entities.ColdChickenEntity;
 import mrbysco.forcecraft.entities.ColdCowEntity;
 import mrbysco.forcecraft.entities.ColdPigEntity;
+import mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
 import mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -31,6 +32,10 @@ public class ForceEntities {
 	public static final RegistryObject<EntityType<ColdPigEntity>> COLD_PIG = ENTITIES.register("cold_pig", () ->
 			register("cold_pig", EntityType.Builder.<ColdPigEntity>create(ColdPigEntity::new, EntityClassification.CREATURE)
 					.size(0.9F, 0.9F).trackingRange(10)));
+
+	public static final RegistryObject<EntityType<ForceArrowEntity>> FORCE_ARROW = ENTITIES.register("force_arrow", () ->
+			register("force_arrow", EntityType.Builder.<ForceArrowEntity>create(ForceArrowEntity::new, EntityClassification.MISC)
+					.size(0.5F, 0.5F).trackingRange(4).updateInterval(20)));
 
 	public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
 		event.put(ForceEntities.COLD_CHICKEN.get(), ColdChickenEntity.generateAttributes().create());
