@@ -8,11 +8,11 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class PackItemStackHandler extends ItemStackHandler {
+	public static final String NBT_UPGRADES = "Upgrades";
 	private int upgrades;
 
-	public PackItemStackHandler(int size) {
-		super(size);
-		this.upgrades = size % 8 == 0 ? size / 8 - 1 : 0;
+	public PackItemStackHandler() {
+		super(40);
 	}
 
 	@Override
@@ -20,6 +20,10 @@ public class PackItemStackHandler extends ItemStackHandler {
 		//Make sure there's no ForcePack-ception
 		return !(stack.getItem() instanceof ForcePackItem) && super.isItemValid(slot, stack);
 	}
+//	
+//	public int getSlotsInUse() {
+//		return (upgrades + 1) * 8;
+//	}
 
 	public int getUpgrades() {
 		return this.upgrades;
@@ -43,7 +47,6 @@ public class PackItemStackHandler extends ItemStackHandler {
 		this.upgrades--;
 		forceUpdate();
 	}
-
 
 	public void applydowngrade(int upgrades) {
 		this.upgrades -= upgrades;
@@ -78,14 +81,14 @@ public class PackItemStackHandler extends ItemStackHandler {
 		}
 		CompoundNBT nbt = new CompoundNBT();
 		nbt.put("Items", nbtTagList);
-		nbt.putInt("Upgrades", upgrades);
+		nbt.putInt(NBT_UPGRADES, upgrades);
 		return nbt;
 	}
 
 	@Override
 	public void deserializeNBT(CompoundNBT nbt) {
-		setUpgrades(nbt.contains("Upgrades", Constants.NBT.TAG_INT) ? nbt.getInt("Upgrades") : upgrades);
-		setSize((getUpgrades() + 1) * 8);
+		setUpgrades(nbt.contains(NBT_UPGRADES, Constants.NBT.TAG_INT) ? nbt.getInt(NBT_UPGRADES) : upgrades);
+//		setSize((getUpgrades() + 1) * 8);
 
 		ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < tagList.size(); i++)

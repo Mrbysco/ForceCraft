@@ -10,6 +10,7 @@ import mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen;
 import mrbysco.forcecraft.container.ForcePackContainer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.Item;
@@ -27,6 +28,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -48,36 +50,15 @@ public class ForcePackItem extends BaseItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-        if(handler instanceof PackItemStackHandler) {
-            if(playerIn.isSneaking()) {
-                if(worldIn.isRemote) {
 
-                	ForceCraft.LOGGER.info("(CLIENT) pack:openScreen {}  ", stack.getTag());
-                    RenameAndRecolorScreen.openScreen(stack, handIn);
-                }
-            } else {
-            	ForceCraft.LOGGER.info("(SERVER) openContainer {}  ", stack.getTag());
-                playerIn.openContainer(this.getContainer(stack));
-                return new ActionResult<ItemStack>(ActionResultType.PASS, stack);
-            }
+        if (!worldIn.isRemote) {
+            NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.getPosition());
         }
-
         //If it doesn't nothing bad happens
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
-    @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
-        ItemStack stack = context.getItem();
-        if(player != null && stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-            player.openContainer(this.getContainer(stack));
-            return ActionResultType.PASS;
-        }
-        //If it doesn't nothing bad happens
-        return super.onItemUse(context);
-    }
+
 
     @Nullable
     public INamedContainerProvider getContainer(ItemStack stack) {
@@ -123,6 +104,16 @@ public class ForcePackItem extends BaseItem {
     public CompoundNBT getShareTag(ItemStack stack) {
     	CompoundNBT shareTag = stack.getOrCreateTag();
     	// no capability, use all of it
+
+        IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        if(handler instanceof PackItemStackHandler) {
+            PackItemStackHandler packHandler = (PackItemStackHandler)handler;
+            shareTag.putInt(PackItemStackHandler.NBT_UPGRADES, packHandler.getUpgrades());
+        }
+        
+        ForceCraft.LOGGER.info("(CLIENT) getShareTag : AFTER setting to stack {}  ", stack.getTag());
+        
+        
         return shareTag;
     }
 
@@ -130,11 +121,21 @@ public class ForcePackItem extends BaseItem {
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
     	
     	if(nbt != null && nbt.contains(SLOTS_TOTAL)) {
-
+           	ForceCraft.LOGGER.info("(CLIENT) readShareTag : AFTER setting to stack {}  ", stack.getTag());
+            
     		stack.getOrCreateTag().putInt(SLOTS_TOTAL, nbt.getInt(SLOTS_TOTAL));
     		stack.getOrCreateTag().putInt(SLOTS_USED, nbt.getInt(SLOTS_USED));
-//
-//        	ForceCraft.LOGGER.info("(CLIENT) readShareTag : AFTER setting to stack {}  ", stack.getTag());
+
+
+            IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+            if(handler instanceof PackItemStackHandler) {
+                PackItemStackHandler packHandler = (PackItemStackHandler)handler;
+                packHandler.setUpgrades(nbt.getInt(PackItemStackHandler.NBT_UPGRADES));
+                
+            	ForceCraft.LOGGER.info("(CLIENT) readShareTag : UPGRADES {}  ", packHandler.getUpgrades());
+            	   
+            }
+            
     	}
     }
 }

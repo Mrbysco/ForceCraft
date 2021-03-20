@@ -11,14 +11,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class PackInventoryProvider implements ICapabilitySerializable<CompoundNBT> {
-	private final LazyOptional<PackItemStackHandler> inventory = LazyOptional.of(() -> new PackItemStackHandler(8));
+	private final LazyOptional<PackItemStackHandler> inventory = LazyOptional.of(() -> new PackItemStackHandler());
 
 	@Nonnull
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-		if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+		if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return inventory.cast();
-		else return LazyOptional.empty();
+		}
+		return LazyOptional.empty();
 	}
 
 	@Override
