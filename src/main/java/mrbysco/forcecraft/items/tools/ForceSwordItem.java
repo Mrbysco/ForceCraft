@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
@@ -76,13 +77,14 @@ public class ForceSwordItem extends SwordItem {
     // ShareTag for server->client capability data sync
     @Override
     public CompoundNBT getShareTag(ItemStack stack) {
-    	CompoundNBT normal = super.getShareTag(stack);
+    	CompoundNBT nbt = super.getShareTag(stack);
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-		CompoundNBT newTag = ToolModStorage.serializeNBT(cap);
-		normal.put(Reference.MOD_ID, newTag);
-
-        return normal;
+		if(cap != null) {
+			CompoundNBT shareTag = ToolModStorage.serializeNBT(cap);
+			nbt.put(Reference.MOD_ID, shareTag);
+		}
+        return nbt;
     }
 
     @Override
@@ -92,6 +94,9 @@ public class ForceSwordItem extends SwordItem {
     	}
 
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-    	ToolModStorage.deserializeNBT(cap, nbt);
+		if(cap != null) {
+	    	INBT shareTag = nbt.get(Reference.MOD_ID);
+	    	ToolModStorage.deserializeNBT(cap, shareTag);
+		}
     }
 }

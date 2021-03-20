@@ -64,10 +64,10 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 	}
 
 	public static CompoundNBT serializeNBT(IToolModifier instance) {
-		CompoundNBT nbt = new CompoundNBT();
 		if (instance == null) {
-			return nbt;
+			return null;
 		}
+		CompoundNBT nbt = new CompoundNBT();
 		// Speed
 		nbt.putInt("speed", instance.getSpeedLevel());
 		// Heat

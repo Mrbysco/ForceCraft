@@ -523,7 +523,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 }
                 CompoundNBT tag = stack.getOrCreateTag();
                 tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(packHandler));
-                tag.putInt(ForcePackItem.SLOTS_TOTAL, packHandler.getSlots());
+                tag.putInt(ForcePackItem.SLOTS_TOTAL, packHandler.getSlotsInUse());
                 stack.setTag(tag);
                 return true;
             }

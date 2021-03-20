@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.items.tools;
 
+import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
@@ -25,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShearsItem;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
@@ -218,5 +220,30 @@ public class ForceShearsItem extends ShearsItem {
 	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
 		return false;
-	}
+	}    
+	
+	@Override
+    public CompoundNBT getShareTag(ItemStack stack) {
+    	CompoundNBT nbt = super.getShareTag(stack);
+    	
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+		if(cap != null) {
+			CompoundNBT shareTag = ToolModStorage.serializeNBT(cap);
+			nbt.put(Reference.MOD_ID, shareTag);
+		}
+        return nbt;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    	super.readShareTag(stack, nbt); 
+    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) { 
+    		return;
+    	}
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+		if(cap != null) {
+	    	INBT shareTag = nbt.get(Reference.MOD_ID);
+	    	ToolModStorage.deserializeNBT(cap, shareTag);
+		}
+    }
 }

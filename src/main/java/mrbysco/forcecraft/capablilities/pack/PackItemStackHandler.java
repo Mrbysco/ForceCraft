@@ -8,11 +8,14 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class PackItemStackHandler extends ItemStackHandler {
+	private static final int SLOTS_PER_UPGRADE = 8;
+	private static final int MAX_UPGRADES = 4;
 	public static final String NBT_UPGRADES = "Upgrades";
 	private int upgrades;
 
 	public PackItemStackHandler() {
-		super(40);
+		//always set handler to max slots, evne if some are hidden/notused
+		super((MAX_UPGRADES + 1) * SLOTS_PER_UPGRADE);
 	}
 
 	@Override
@@ -20,10 +23,10 @@ public class PackItemStackHandler extends ItemStackHandler {
 		//Make sure there's no ForcePack-ception
 		return !(stack.getItem() instanceof ForcePackItem) && super.isItemValid(slot, stack);
 	}
-//	
-//	public int getSlotsInUse() {
-//		return (upgrades + 1) * 8;
-//	}
+	
+	public int getSlotsInUse() {
+		return (upgrades + 1) * SLOTS_PER_UPGRADE;
+	}
 
 	public int getUpgrades() {
 		return this.upgrades;
@@ -54,8 +57,8 @@ public class PackItemStackHandler extends ItemStackHandler {
 	}
 
 	public void forceUpdate() {
-		if(this.upgrades > 4) {
-			this.upgrades = 4;
+		if(this.upgrades > MAX_UPGRADES) {
+			this.upgrades = MAX_UPGRADES;
 		}
 		if(this.upgrades < 0) {
 			this.upgrades = 0;
@@ -65,7 +68,7 @@ public class PackItemStackHandler extends ItemStackHandler {
 	}
 
 	public boolean canUpgrade() {
-		return this.upgrades < 4;
+		return this.upgrades < MAX_UPGRADES;
 	}
 
 	@Override

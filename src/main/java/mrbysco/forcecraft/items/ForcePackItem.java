@@ -111,7 +111,7 @@ public class ForcePackItem extends BaseItem {
             shareTag.putInt(PackItemStackHandler.NBT_UPGRADES, packHandler.getUpgrades());
         }
         
-        ForceCraft.LOGGER.info("(CLIENT) getShareTag : AFTER setting to stack {}  ", stack.getTag());
+//         ForceCraft.LOGGER.info("(SERVER) getShareTag : AFTER setting to stack {}  ", stack.getTag());
         
         
         return shareTag;
@@ -120,19 +120,17 @@ public class ForcePackItem extends BaseItem {
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
     	
-    	if(nbt != null && nbt.contains(SLOTS_TOTAL)) {
-           	ForceCraft.LOGGER.info("(CLIENT) readShareTag : AFTER setting to stack {}  ", stack.getTag());
+    	if(nbt != null && nbt.contains(PackItemStackHandler.NBT_UPGRADES)) {
+//        	ForceCraft.LOGGER.info("(CLIENT) readShareTag :  setting to stack {}  ", stack.getTag());
             
-    		stack.getOrCreateTag().putInt(SLOTS_TOTAL, nbt.getInt(SLOTS_TOTAL));
     		stack.getOrCreateTag().putInt(SLOTS_USED, nbt.getInt(SLOTS_USED));
-
 
             IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
             if(handler instanceof PackItemStackHandler) {
                 PackItemStackHandler packHandler = (PackItemStackHandler)handler;
                 packHandler.setUpgrades(nbt.getInt(PackItemStackHandler.NBT_UPGRADES));
-                
-            	ForceCraft.LOGGER.info("(CLIENT) readShareTag : UPGRADES {}  ", packHandler.getUpgrades());
+
+        		stack.getOrCreateTag().putInt(SLOTS_TOTAL,packHandler.getSlotsInUse());
             	   
             }
             
