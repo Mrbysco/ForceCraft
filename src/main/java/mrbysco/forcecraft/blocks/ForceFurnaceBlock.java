@@ -1,6 +1,5 @@
 package mrbysco.forcecraft.blocks;
 
-import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.tiles.ForceFurnaceTileEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.AbstractFurnaceBlock;
@@ -15,7 +14,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;

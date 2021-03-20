@@ -1,12 +1,8 @@
 package mrbysco.forcecraft.items;
 
-import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.pack.PackInventoryProvider;
 import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
-import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
-import mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen;
 import mrbysco.forcecraft.container.ForcePackContainer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,11 +11,8 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -33,9 +26,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
-
-import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
-
 import java.util.List;
 
 public class ForcePackItem extends BaseItem {
@@ -57,8 +47,6 @@ public class ForcePackItem extends BaseItem {
         //If it doesn't nothing bad happens
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
-
-
 
     @Nullable
     public INamedContainerProvider getContainer(ItemStack stack) {

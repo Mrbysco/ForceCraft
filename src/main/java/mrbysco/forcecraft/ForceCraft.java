@@ -1,6 +1,5 @@
 package mrbysco.forcecraft;
 
-import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
 import mrbysco.forcecraft.capablilities.CapabilityAttachHandler;
 import mrbysco.forcecraft.capablilities.CapabilityHandler;
 import mrbysco.forcecraft.client.ClientHandler;
