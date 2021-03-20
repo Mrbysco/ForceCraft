@@ -3,6 +3,8 @@ package mrbysco.forcecraft.items;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.pack.PackInventoryProvider;
 import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
+import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
+import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen;
 import mrbysco.forcecraft.container.ForcePackContainer;
 import net.minecraft.client.util.ITooltipFlag;
@@ -27,11 +29,17 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
+
+import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+
 import java.util.List;
 
 public class ForcePackItem extends BaseItem {
 
-    public ForcePackItem(Item.Properties properties){
+    public static final String SLOTS_TOTAL = "SlotsTotal";
+	public static final String SLOTS_USED = "SlotsUsed";
+
+	public ForcePackItem(Item.Properties properties){
         super(properties.maxStackSize(1));
     }
 
@@ -81,8 +89,8 @@ public class ForcePackItem extends BaseItem {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         CompoundNBT tag = stack.getOrCreateTag();
-        if(tag.contains("SlotsUsed") &&  tag.contains("SlotsTotal")) {
-            tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt("SlotsUsed"), tag.getInt("SlotsTotal"))));
+        if(tag.contains(SLOTS_USED) &&  tag.contains(SLOTS_TOTAL)) {
+            tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt(SLOTS_USED), tag.getInt(SLOTS_TOTAL))));
         } else {
             IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
             int defaultAmount = 8;
@@ -94,6 +102,28 @@ public class ForcePackItem extends BaseItem {
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
+    // ShareTag for server->client capability data sync
+    @Override
+    public CompoundNBT getShareTag(ItemStack stack) {
+    	CompoundNBT normal = super.getShareTag(stack);
+    	
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+		CompoundNBT newTag = ToolModStorage.writeNBT(cap);
+		normal.put(Reference.MOD_ID, newTag);
+
+        return normal;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
+    		return;
+    	}
+
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+    	ToolModStorage.readNBT(cap, nbt);
+    }
+    
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         return ((TextComponent)super.getDisplayName(stack)).mergeStyle(TextFormatting.YELLOW);

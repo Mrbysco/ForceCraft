@@ -314,9 +314,9 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 			List<ITextComponent> text = new ArrayList<>();
 			text.add(new TranslationTextComponent(recipeSlug));
-			ForceCraft.LOGGER.info("show tooltip {} {}",actualMouseX,actualMouseY);
-			GuiUtils.drawHoveringText(ms, text, actualMouseX, actualMouseY, parent.width, parent.height, -1,
-					parent.font);
+
+			GuiUtils.drawHoveringText(ms, text, actualMouseX, actualMouseY, parent.width, parent.height, -1, parent.font);
+			
 			RenderSystem.translatef(0.0F, 0.0F, 0.0F); 
 		}
 	}

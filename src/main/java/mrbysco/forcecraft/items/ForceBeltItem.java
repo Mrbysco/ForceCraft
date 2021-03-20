@@ -83,8 +83,8 @@ public class ForceBeltItem extends BaseItem {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         CompoundNBT tag = stack.getOrCreateTag();
-        if(tag.contains("SlotsUsed") &&  tag.contains("SlotsTotal")) {
-            tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt("SlotsUsed"), tag.getInt("SlotsTotal"))));
+        if(tag.contains(ForcePackItem.SLOTS_USED) &&  tag.contains(ForcePackItem.SLOTS_TOTAL)) {
+            tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt(ForcePackItem.SLOTS_USED), tag.getInt(ForcePackItem.SLOTS_TOTAL))));
         } else {
             tooltip.add(new StringTextComponent("0/8 Slots"));
         }
