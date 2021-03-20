@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.items;
 
+import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.pack.PackInventoryProvider;
 import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
@@ -101,29 +102,7 @@ public class ForcePackItem extends BaseItem {
         }
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
-
-    // ShareTag for server->client capability data sync
-    @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-    	CompoundNBT normal = super.getShareTag(stack);
-    	
-		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-		CompoundNBT newTag = ToolModStorage.writeNBT(cap);
-		normal.put(Reference.MOD_ID, newTag);
-
-        return normal;
-    }
-
-    @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
-    		return;
-    	}
-
-		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-    	ToolModStorage.readNBT(cap, nbt);
-    }
-    
+ 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         return ((TextComponent)super.getDisplayName(stack)).mergeStyle(TextFormatting.YELLOW);

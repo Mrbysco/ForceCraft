@@ -16,6 +16,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import mrbysco.forcecraft.ForceCraft;
+
 public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 
 	public ToolModStorage() {
@@ -23,7 +25,8 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 
 	public static void attachInformation(ItemStack stack, List<ITextComponent> tooltip) {
 
-		stack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
+		stack.getCapability(CAPABILITY_TOOLMOD).ifPresent(cap -> {
+
 			if (cap.getSpeedLevel() > 0) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
 			}
@@ -51,16 +54,16 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 	@Nullable
 	@Override
 	public INBT writeNBT(Capability<IToolModifier> capability, IToolModifier instance, Direction side) {
-		CompoundNBT nbt = writeNBT(instance);
+		CompoundNBT nbt = serializeNBT(instance);
 		return nbt;
 	}
 
 	@Override
 	public void readNBT(Capability<IToolModifier> capability, IToolModifier instance, Direction side, INBT nbtIn) {
-		readNBT(instance, nbtIn);
+		deserializeNBT(instance, nbtIn);
 	}
 
-	public static CompoundNBT writeNBT(IToolModifier instance) {
+	public static CompoundNBT serializeNBT(IToolModifier instance) {
 		CompoundNBT nbt = new CompoundNBT();
 		if (instance == null) {
 			return nbt;
@@ -100,7 +103,7 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 		return nbt;
 	}
 
-	public static void readNBT(IToolModifier instance, INBT nbtIn) {
+	public static void deserializeNBT(IToolModifier instance, INBT nbtIn) {
 		if (nbtIn instanceof CompoundNBT) {
 			CompoundNBT nbt = (CompoundNBT) nbtIn;
 			instance.setSpeed(nbt.getInt("speed"));

@@ -160,7 +160,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		if (isPointInRegion(150, 8, 16, 82, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
-			IFormattableTextComponent tt = new TranslationTextComponent(" " + this.container.tile.getEnergyStored())
+			IFormattableTextComponent tt = new TranslationTextComponent("" + this.container.tile.getEnergyStored())
 					.mergeStyle(TextFormatting.GRAY);
 			text.add(tt);
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
@@ -211,9 +211,11 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		float capacity = container.getTile().energyStorage.getMaxEnergyStored();
 		float pct = Math.min(energ / capacity, 1.0F);
 
-		float height = 107;
+		final float height = 107;
 		int width = 12; 
-		blit(ms, guiLeft + 156, guiTop + 13, 0, 0, width, (int) (height * pct), width, (int) height);
+		blit(ms, guiLeft + 156, guiTop + 13, 0, 0, 
+				width, (int) (height * pct), 
+				width, (int) height);
 	}
 
 	private void drawPopup(MatrixStack matrixStack) {

@@ -57,7 +57,7 @@ public class ForcePickaxeItem extends PickaxeItem {
     	CompoundNBT normal = super.getShareTag(stack);
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-		CompoundNBT newTag = ToolModStorage.writeNBT(cap);
+		CompoundNBT newTag = ToolModStorage.serializeNBT(cap);
 		normal.put(Reference.MOD_ID, newTag);
 
         return normal;
@@ -70,7 +70,7 @@ public class ForcePickaxeItem extends PickaxeItem {
     	}
 
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-    	ToolModStorage.readNBT(cap, nbt);
+    	ToolModStorage.deserializeNBT(cap, nbt);
     }
     
 }
