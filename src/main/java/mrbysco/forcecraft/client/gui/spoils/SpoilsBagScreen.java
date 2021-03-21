@@ -14,7 +14,6 @@ public class SpoilsBagScreen extends ContainerScreen<SpoilsBagContainer> {
     public SpoilsBagScreen(SpoilsBagContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
 
-        this.xSize = 176;
         this.ySize = 134;
     }
 

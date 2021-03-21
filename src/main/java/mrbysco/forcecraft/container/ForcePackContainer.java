@@ -35,7 +35,7 @@ public class ForcePackContainer extends Container {
     public ForcePackContainer(int id, PlayerInventory playerInventory, ItemStack forcePack) {
         super(ForceContainers.FORCE_PACK.get(), id);
         this.heldStack = forcePack;
-        ForceCraft.LOGGER.info("Pack container:  heldStack.getTag()",  heldStack.getTag());
+//        ForceCraft.LOGGER.info("Pack container:  {}}",  heldStack.getTag());
 		
         upgrades = 0;
 
@@ -43,7 +43,7 @@ public class ForcePackContainer extends Container {
         if(itemHandler instanceof PackItemStackHandler) {
             upgrades = ((PackItemStackHandler)itemHandler).getUpgrades();
             int numRows = upgrades + 1;
-            ForceCraft.LOGGER.info("Pack upgrades)",  upgrades);
+            ForceCraft.LOGGER.info("Pack upgrades {}",  upgrades);
     		
 
             int xPosC = 17;

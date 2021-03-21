@@ -14,7 +14,6 @@ public class ForceBeltScreen extends ContainerScreen<ForceBeltContainer> {
     public ForceBeltScreen(ForceBeltContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
 
-        this.xSize = 176;
         this.ySize = 134;
     }
 
