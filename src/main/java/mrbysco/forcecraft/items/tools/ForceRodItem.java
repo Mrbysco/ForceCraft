@@ -44,11 +44,10 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORC
 
 public class ForceRodItem extends BaseItem {
 
-	public List<Reference.MODIFIERS> applicableModifers = new ArrayList<>();
+	public List<Reference.MODIFIERS> applicableModifiers = new ArrayList<>();
 
 	public ForceRodItem(Item.Properties properties) {
-		super(properties.maxDamage(100));
-//        setHasSubtypes(true);
+		super(properties.maxDamage(75));
 		setApplicableModifers();
 	}
 
@@ -248,8 +247,8 @@ public class ForceRodItem extends BaseItem {
 	}
 
 	public void setApplicableModifers() {
-		applicableModifers.add(MOD_HEALING);
-		applicableModifers.add(MOD_ENDER);
+		applicableModifiers.add(MOD_HEALING);
+		applicableModifiers.add(MOD_ENDER);
 	}
 
 	@OnlyIn(Dist.CLIENT)

@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "minecraft:iron_hoe"
+    }
+  ],
+  "result": {
+    "item": "minecraft:iron_ingot"
+  }
+}

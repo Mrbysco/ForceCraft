@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "minecraft:stone_bricks"
+    }
+  ],
+  "result": {
+    "item": "forcecraft:force_brick_yellow"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "forcecraft:fortune_cookie"
+    }
+  ],
+  "result": {
+    "item": "forcecraft:fortune"
+  }
+}

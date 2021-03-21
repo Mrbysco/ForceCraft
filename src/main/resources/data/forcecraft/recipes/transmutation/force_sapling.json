@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "minecraft:oak_sapling"
+    }
+  ],
+  "result": {
+    "item": "forcecraft:force_sapling"
+  }
+}

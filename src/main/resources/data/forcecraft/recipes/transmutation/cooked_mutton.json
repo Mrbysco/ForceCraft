@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "minecraft:cooked_porkchop"
+    }
+  ],
+  "result": {
+    "item": "minecraft:cooked_mutton"
+  }
+}

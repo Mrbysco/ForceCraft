@@ -26,6 +26,7 @@ import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.FortuneItem;
 import mrbysco.forcecraft.items.GoldenPowerSourceItem;
 import mrbysco.forcecraft.items.SpoilsBagItem;
+import mrbysco.forcecraft.items.UpgradeCoreItem;
 import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.nonburnable.InertCoreItem;
 import mrbysco.forcecraft.items.tools.ForceArrowItem;
@@ -215,6 +216,12 @@ public class ForceRegistry {
     public static final RegistryObject<Item> FORCE_STICK = ITEMS.register("force_stick", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> UPGRADE_TOME = ITEMS.register("upgrade_tome", () -> new UpgradeTomeItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_PACK_UPGRADE = ITEMS.register("force_pack_upgrade", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> UPGRADE_CORE = ITEMS.register("upgrade_core", () -> new UpgradeCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> EXPERIENCE_CORE = ITEMS.register("experience_core", () -> new UpgradeCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FREEZING_CORE = ITEMS.register("freezing_core", () -> new UpgradeCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> GRINDING_CORE = ITEMS.register("grinding_core", () -> new UpgradeCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> HEAT_CORE = ITEMS.register("heat_core", () -> new UpgradeCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> SPEED_CORE = ITEMS.register("speed_core", () -> new UpgradeCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORTUNE_COOKIE = ITEMS.register("fortune_cookie", () ->
             new CustomFoodItem(itemBuilder().food(ForceFoods.FORTUNE_COOKIE).maxStackSize(1).group(ForceCraft.creativeTab)));

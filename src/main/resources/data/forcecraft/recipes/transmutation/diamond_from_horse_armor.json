@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "minecraft:diamond_horse_armor"
+    }
+  ],
+  "result": {
+    "item": "minecraft:diamond",
+    "count": 4
+  }
+}

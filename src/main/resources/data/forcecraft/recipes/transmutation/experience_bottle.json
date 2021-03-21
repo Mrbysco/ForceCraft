@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "minecraft:enchanted_book"
+    }
+  ],
+  "result": {
+    "item": "minecraft:experience_bottle"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "minecraft:dandelion"
+    }
+  ],
+  "result": {
+    "item": "minecraft:poppy"
+  }
+}

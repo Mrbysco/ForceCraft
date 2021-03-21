@@ -36,6 +36,12 @@
     "item.forcecraft.undeath_card": "Undeath Card",
     "item.forcecraft.treasure_core": "Treasure Core",
     "item.forcecraft.force_arrow": "Force Arrow",
+    "item.forcecraft.upgrade_core": "Upgrade Core",
+    "item.forcecraft.experience_core": "Experience Core",
+    "item.forcecraft.freezing_core": "Freezing Core",
+    "item.forcecraft.grinding_core": "Grinding Core",
+    "item.forcecraft.heat_core": "Heat Core",
+    "item.forcecraft.speed_core": "Speed Core",
 
     "_comment": "Armor",
     "item.forcecraft.force_helmet": "Force Cap",

@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "minecraft:wooden_axe"
+    }
+  ],
+  "result": {
+    "item": "minecraft:stick"
+  }
+}
