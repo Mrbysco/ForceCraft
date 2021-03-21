@@ -60,15 +60,24 @@ public class TransmutationRecipe implements ICraftingRecipe {
 	public boolean matches(CraftingInventory inv, World worldIn) {
 		RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
 		java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
+		java.util.List<ItemStack> inputItems = new java.util.ArrayList<>();
 		int i = 0;
 
 		for(int j = 0; j < inv.getSizeInventory(); ++j) {
 			ItemStack itemstack = inv.getStackInSlot(j);
-			if (!itemstack.isEmpty()) {
+			if (!itemstack.isEmpty()) { //TEMP fix!
 				++i;
-				if (isSimple)
-					recipeitemhelper.func_221264_a(itemstack, 1);
-				else inputs.add(itemstack);
+				if((itemstack.getItem() instanceof ForceRodItem)) {
+					if (isSimple)
+						recipeitemhelper.func_221264_a(itemstack, 1);
+					else inputs.add(itemstack);
+				} else {
+					if(!itemstack.isDamaged()) {
+						if (isSimple)
+							recipeitemhelper.func_221264_a(itemstack, 1);
+						else inputs.add(itemstack);
+					}
+				}
 			}
 		}
 
