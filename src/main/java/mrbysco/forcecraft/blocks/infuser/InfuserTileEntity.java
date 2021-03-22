@@ -693,7 +693,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     static boolean addHeatModifier(ItemStack stack) {
         Item st = stack.getItem();
-        if(st instanceof ForceAxeItem || st instanceof ForceShovelItem || st instanceof ForcePickaxeItem) {
+        if(st instanceof ForceAxeItem || st instanceof ForceShovelItem || st instanceof ForcePickaxeItem || st instanceof ForceShearsItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(!modifierCap.hasHeat()) {
