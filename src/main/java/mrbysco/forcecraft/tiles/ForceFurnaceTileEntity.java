@@ -12,7 +12,7 @@ import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class ForceFurnaceTileEntity extends AbstractFurnaceTileEntity {
+public class ForceFurnaceTileEntity extends AbstractForceFurnaceTile {
 	//2 times faster
 	//Auto output to nearest IInventory that isn't a hopper
 	//Stores the fuel between operations
@@ -23,7 +23,7 @@ public class ForceFurnaceTileEntity extends AbstractFurnaceTileEntity {
 	//Experience Core = Double xp
 	//Any fuel (Golden Power Source smelts 10)
 	public ForceFurnaceTileEntity() {
-		super(ForceRegistry.FURNACE_TILE.get(), IRecipeType.SMELTING);
+		super(ForceRegistry.FURNACE_TILE.get());
 	}
 
 	protected ITextComponent getDefaultName() {
@@ -35,16 +35,8 @@ public class ForceFurnaceTileEntity extends AbstractFurnaceTileEntity {
 	}
 
 	@Override
-	protected int getCookTime() {
-		return this.world.getRecipeManager().getRecipe((IRecipeType<AbstractCookingRecipe>)this.recipeType, this, this.world).map(AbstractCookingRecipe::getCookTime).orElse(100);
-	}
-
-	@Override
 	protected int getBurnTime(ItemStack fuel) {
-		if(fuel.getItem() == ForceRegistry.FORCE_GEM.get())
-			return 1600;
-		else
-			return 0;
+		return super.getBurnTime(fuel);
 	}
 
 	public static boolean isFuel(ItemStack stack) {

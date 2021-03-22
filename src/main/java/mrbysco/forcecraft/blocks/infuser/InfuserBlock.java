@@ -68,22 +68,17 @@ public class InfuserBlock extends Block {
             return ActionResultType.CONSUME;
         } 
     }
-    
-	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (state.getBlock() != newState.getBlock()) {
-			TileEntity tileentity = worldIn.getTileEntity(pos);
-			if (tileentity != null) {
-				IItemHandler items = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-				if (items != null) {
-					for (int i = 0; i < items.getSlots(); ++i) {
-						InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), items.getStackInSlot(i));
-					}
-					worldIn.updateComparatorOutputLevel(pos, this);
-				}
-			}
-			super.onReplaced(state, worldIn, pos, newState, isMoving);
-		}
-	}
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.matchesBlock(newState.getBlock())) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if (tileentity instanceof InfuserTileEntity) {
+                InventoryHelper.dropInventoryItems(worldIn, pos, (InfuserTileEntity)tileentity);
+            }
+
+            super.onReplaced(state, worldIn, pos, newState, isMoving);
+        }
+    }
 }
 
