@@ -2,7 +2,7 @@
   "type":"forcecraft:infuser",
   "ingredient": 
   {
-    "item": "minecraft:coal"
+    "item": "forcecraft:golden_power_source"
   },
   "tier": 4,
   "result": "forcecraft:heat"

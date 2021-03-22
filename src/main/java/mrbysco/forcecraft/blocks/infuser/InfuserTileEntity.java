@@ -310,7 +310,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     /**
      * Loop on all modifiers and apply first one that matches the input test.  
      * @param tool
-     * @param mod
+     * @param modifier
      * @return
      */
     private boolean applyModifier(ItemStack tool, ItemStack modifier) {
@@ -715,8 +715,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addSpeedModifier(ItemStack stack) {
-        if(stack.getItem() instanceof ForceShovelItem || stack.getItem() instanceof ForcePickaxeItem || stack.getItem() instanceof ForceAxeItem
-        	 ) {
+        if(stack.getItem() instanceof ForceShovelItem || stack.getItem() instanceof ForcePickaxeItem || stack.getItem() instanceof ForceAxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(modifierCap.getSpeedLevel() == 0) {
@@ -741,13 +740,13 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             }
         }
         else if (stack.getItem() instanceof ForceRodItem) {
-        	   IForceRodModifier modifierCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-              if(modifierCap != null ) {
-                  if(modifierCap.getSpeedLevel() < 3) {
-                      modifierCap.incrementSpeed();
-                      return true;
-                  }
-              }
+            IForceRodModifier modifierCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
+            if(modifierCap != null ) {
+                if(modifierCap.getSpeedLevel() < 3) {
+                    modifierCap.incrementSpeed();
+                    return true;
+                }
+            }
         }
         return false;
     }
