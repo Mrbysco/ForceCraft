@@ -131,7 +131,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     };
     private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
 
-    public ForceEnergyStorage energyStorage = new ForceEnergyStorage(1000000, 1000);
+    public ForceEnergyStorage energyStorage = new ForceEnergyStorage(64000, 1000);
     private LazyOptional<ForceEnergyStorage> energyHolder = LazyOptional.of(() -> energyStorage);
 
     private NonNullList<ItemStack> infuserContents = NonNullList.create();
@@ -150,7 +150,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         //Items
         handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
         ItemStackHelper.loadAllItems(nbt, this.infuserContents);
-        energyStorage.setEnergy(nbt.getInt("EnergyHandler"));
+        energyStorage.setEnergy(nbt.getInt("EnergyHandler")); 
         tank.readFromNBT(nbt);
 
         super.read(state, nbt);
@@ -222,7 +222,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     tank.drain(FLUID_COST_PER, FluidAction.EXECUTE);
                     energyStorage.consumePower(ENERGY_COST_PER);
                     UpgradeTomeItem.onModifierApplied(this.getBookInSlot(), modifier, tool);
-         			ForceCraft.LOGGER.info("process tool success {}", this.getBookInSlot().getTag());
+         			ForceCraft.LOGGER.info("process tool success {}, {}", this.getBookInSlot().getTag() , energyStorage.getEnergyStored());
                 }
             }
         }
