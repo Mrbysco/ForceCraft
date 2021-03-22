@@ -209,9 +209,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     private void processTool() {
         for (int i = 0; i < SLOT_TOOL; i++) {
         	//halt if no power
-//        	if(energyStorage.getEnergyStored() < ENERGY_COST_PER) {
-//        		break;
-//        	}
+        	if(energyStorage.getEnergyStored() < ENERGY_COST_PER) {
+        		break;
+        	}
             if (hasValidModifer(i)) {
                 ItemStack modifier = getModifier(i);
                 ItemStack tool = getFromToolSlot();
