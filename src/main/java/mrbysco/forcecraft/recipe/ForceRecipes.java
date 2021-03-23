@@ -1,8 +1,8 @@
 package mrbysco.forcecraft.recipe;
 
 import mrbysco.forcecraft.Reference;
-import mrbysco.forcecraft.recipe.TransmutationRecipe.SerializerTransmutationRecipe;
 import mrbysco.forcecraft.recipe.InfuseRecipe.SerializeInfuserRecipe;
+import mrbysco.forcecraft.recipe.TransmutationRecipe.SerializerTransmutationRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;

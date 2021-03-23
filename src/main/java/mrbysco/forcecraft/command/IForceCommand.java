@@ -1,11 +1,10 @@
 package mrbysco.forcecraft.command;
 
-import java.util.List;
-
 import com.mojang.brigadier.context.CommandContext;
-
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
+
+import java.util.List;
 
 public interface IForceCommand {
 

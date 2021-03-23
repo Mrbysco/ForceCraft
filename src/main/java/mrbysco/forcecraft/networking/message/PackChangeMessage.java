@@ -1,6 +1,5 @@
 package mrbysco.forcecraft.networking.message;
 
-import mrbysco.forcecraft.recipe.ForceRecipes;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;

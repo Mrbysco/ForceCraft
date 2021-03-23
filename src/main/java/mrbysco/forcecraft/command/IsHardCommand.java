@@ -1,15 +1,14 @@
 package mrbysco.forcecraft.command;
 
-import java.util.List;
-
 import com.mojang.brigadier.context.CommandContext;
-
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 public class IsHardCommand implements IForceCommand {
 
