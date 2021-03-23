@@ -86,7 +86,6 @@ public class ForcePackContainer extends Container {
         if(itemHandler instanceof PackItemStackHandler) {
             CompoundNBT tag = heldStack.getOrCreateTag();
             tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(itemHandler));
-            tag.putInt(ForcePackItem.SLOTS_TOTAL, itemHandler.getSlots());
             heldStack.setTag(tag);
         }
 

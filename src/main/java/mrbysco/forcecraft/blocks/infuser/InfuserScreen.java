@@ -6,6 +6,7 @@ import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.client.gui.infuser.ProgressBar;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
+import mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
 import mrbysco.forcecraft.recipe.InfuseRecipe;
@@ -236,7 +237,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		if (renderMyTiles.isEmpty()) {
 			// re build the whole list
 			y = 40;
-			for (int tier = 1; tier <= 7; tier++) {
+			for (int tier = UpgradeBookTier.ZERO.ordinal(); tier <= UpgradeBookTier.FINAL.ordinal(); tier++) {
 
 				if (tier > bd.getTier().ordinal()) {
 					break;

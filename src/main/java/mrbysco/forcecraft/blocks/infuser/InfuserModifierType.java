@@ -1,11 +1,13 @@
 package mrbysco.forcecraft.blocks.infuser;
 
 import mrbysco.forcecraft.ForceCraft;
+import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import net.minecraft.item.ItemStack;
 
 public enum InfuserModifierType {
 	SPEED,HEAT,FORCE,SILK,DAMAGE,FORTUNE,LIGHT,STURDY,LUMBERJACK,HEALING,ENDER,BLEEDING,BANE,WING,CAMO,RAINBOW,TIME,
-   PACK, // this one upgrades the Force Pack (once per tier starting on tier 2, allowing full upgrading on tier 5)
+      PACK1,PACK2,PACK3,PACK4, // 4 upgrades: this one upgrades the Force Pack 
+      // (once per tier starting on tier 2, allowing full upgrading on tier 5)
 	 GRINDING, FREEZING, EXP, STORAGE, // TODO: look up old mod version
 	 
 	  //- for chests somehow?, FURNACE - item card enchant
@@ -13,7 +15,7 @@ public enum InfuserModifierType {
 	 TREASURE //,CORE - make things drop treasure cards - craft into spoils bag
 	;
 	
-	public boolean apply(ItemStack tool, ItemStack mod) {
+	public boolean apply(ItemStack tool, ItemStack mod, UpgradeBookData bd) {
 		switch(this) {
 		case DAMAGE: // claw item
 			return InfuserTileEntity.addDamageModifier(tool);
@@ -51,8 +53,12 @@ public enum InfuserModifierType {
             return InfuserTileEntity.addTimeModifier(tool, mod);
 		case TREASURE:
             return InfuserTileEntity.addTreasureModifier(tool);
-		case PACK:
-            return InfuserTileEntity.upgradeBag(tool);
+		case PACK1:
+		case PACK2:
+		case PACK3:
+		case PACK4:
+			// logic of which pack upgrade to use is inside
+            return InfuserTileEntity.upgradeBag(tool, bd);
 
 		}
 		ForceCraft.LOGGER.error("Error: No action for modifier {}", this);
