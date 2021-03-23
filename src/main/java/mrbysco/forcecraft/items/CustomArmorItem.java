@@ -50,6 +50,7 @@ public class CustomArmorItem extends ArmorItem {
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
         return false;
     }
+
     // ShareTag for server->client capability data sync
     @Override
     public CompoundNBT getShareTag(ItemStack stack) {
@@ -84,5 +85,6 @@ public class CustomArmorItem extends ArmorItem {
 //	        	super.readShareTag(stack, nbt);
     		}
     	}
+		super.readShareTag(stack, nbt);
     }
 }

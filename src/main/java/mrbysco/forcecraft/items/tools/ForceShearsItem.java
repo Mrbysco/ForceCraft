@@ -236,7 +236,6 @@ public class ForceShearsItem extends ShearsItem {
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-    	super.readShareTag(stack, nbt); 
     	if(nbt == null || !nbt.contains(Reference.MOD_ID)) { 
     		return;
     	}
@@ -245,5 +244,6 @@ public class ForceShearsItem extends ShearsItem {
 	    	INBT shareTag = nbt.get(Reference.MOD_ID);
 	    	ToolModStorage.deserializeNBT(cap, shareTag);
 		}
-    }
+		super.readShareTag(stack, nbt);
+	}
 }

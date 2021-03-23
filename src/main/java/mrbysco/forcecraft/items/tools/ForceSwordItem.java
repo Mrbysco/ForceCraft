@@ -98,5 +98,6 @@ public class ForceSwordItem extends SwordItem {
 	    	INBT shareTag = nbt.get(Reference.MOD_ID);
 	    	ToolModStorage.deserializeNBT(cap, shareTag);
 		}
-    }
+		super.readShareTag(stack, nbt);
+	}
 }

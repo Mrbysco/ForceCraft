@@ -167,8 +167,7 @@ public class ForceAxeItem extends AxeItem {
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-    	super.readShareTag(stack, nbt); 
-    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) { 
+    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
     		return;
     	}
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
@@ -176,6 +175,7 @@ public class ForceAxeItem extends AxeItem {
 	    	INBT shareTag = nbt.get(Reference.MOD_ID);
 	    	ToolModStorage.deserializeNBT(cap, shareTag);
 		}
+        super.readShareTag(stack, nbt);
     }
     
     @Override
