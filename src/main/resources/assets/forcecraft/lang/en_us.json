@@ -397,6 +397,10 @@
     "text.forcecraft.fortune184": "You do not aim Yo-Yos at people.  They should face the ground.",
     "text.forcecraft.fortune185": "A Yo-Yo isn't a tool for hurting people...",
 
+
+	"commands.forcecraft.null":"Second argument must be a valid command: ",
+	"commands.forcecraft.failed":"Command failed, ensure you have permission",
+
     "_comment": "Infuser GUI",
     "gui.forcecraft.infuser.nobook": "Upgrade Tome required",
     "gui.forcecraft.infuser.empty.tooltip": "Empty",

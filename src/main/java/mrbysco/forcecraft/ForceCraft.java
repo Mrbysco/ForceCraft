@@ -3,6 +3,7 @@ package mrbysco.forcecraft;
 import mrbysco.forcecraft.capablilities.CapabilityAttachHandler;
 import mrbysco.forcecraft.capablilities.CapabilityHandler;
 import mrbysco.forcecraft.client.ClientHandler;
+import mrbysco.forcecraft.command.ForceCommands;
 import mrbysco.forcecraft.config.ConfigHandler;
 import mrbysco.forcecraft.handlers.BaneHandler;
 import mrbysco.forcecraft.handlers.LivingUpdateHandler;
@@ -69,6 +70,7 @@ public class ForceCraft {
         ForceLootModifiers.GLM.register(eventBus);
         ForceRecipes.RECIPE_SERIALIZERS.register(eventBus);
 
+        MinecraftForge.EVENT_BUS.register(new ForceCommands());
         MinecraftForge.EVENT_BUS.register(new CapabilityAttachHandler());
         MinecraftForge.EVENT_BUS.register(new BaneHandler());
         MinecraftForge.EVENT_BUS.register(new LivingUpdateHandler());

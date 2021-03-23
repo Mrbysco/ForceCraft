@@ -7,7 +7,7 @@ public enum UpgradeBookTier {
 	ZERO, ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN;
 	
 	//which is last one
-	static final UpgradeBookTier FINAL = SEVEN;
+	public static final UpgradeBookTier FINAL = SEVEN;
 	
 	 //at tier 7 is where OG would have the /dartcraftishard command giving you a book saying 'Mastered!'
 	public int pointsForLevelup() {
