@@ -8,6 +8,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -55,14 +56,17 @@ public class ForceBowItem extends BowItem {
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-    	super.readShareTag(stack, nbt); 
-    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) { 
+    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
     		return;
     	}
 
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-    	ToolModStorage.deserializeNBT(cap, nbt);
-    }
+		if(cap != null) {
+			INBT shareTag = nbt.get(Reference.MOD_ID);
+			ToolModStorage.deserializeNBT(cap, shareTag);
+		}
+		super.readShareTag(stack, nbt);
+	}
     
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {

@@ -1,10 +1,10 @@
 package mrbysco.forcecraft.items;
 
 import mrbysco.forcecraft.Reference;
-import mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen;
 import mrbysco.forcecraft.container.ForceBeltContainer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.Item;
@@ -25,8 +25,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -42,17 +42,16 @@ public class ForceBeltItem extends BaseItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-        if(handler != null) {
-            if(playerIn.isSneaking()) {
-                if(worldIn.isRemote) {
-                    RenameAndRecolorScreen.openScreen(stack, handIn);
-                }
-            } else {
-                playerIn.openContainer(this.getContainer(stack));
-                return new ActionResult<ItemStack>(ActionResultType.PASS, stack);
+        if(playerIn.isSneaking()) {
+            if(worldIn.isRemote) {
+                mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen.openScreen(stack, handIn);
+            }
+        } else {
+            if (!worldIn.isRemote) {
+                NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.getPosition());
             }
         }
+        //If it doesn't nothing bad happens
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 

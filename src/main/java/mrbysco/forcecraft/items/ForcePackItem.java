@@ -41,8 +41,14 @@ public class ForcePackItem extends BaseItem {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
 
-        if (!worldIn.isRemote) {
-            NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.getPosition());
+        if(playerIn.isSneaking()) {
+            if(worldIn.isRemote) {
+                mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen.openScreen(stack, handIn);
+            }
+        } else {
+            if (!worldIn.isRemote) {
+                NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.getPosition());
+            }
         }
         //If it doesn't nothing bad happens
         return super.onItemRightClick(worldIn, playerIn, handIn);
@@ -100,14 +106,13 @@ public class ForcePackItem extends BaseItem {
         }
         
 //         ForceCraft.LOGGER.info("(SERVER) getShareTag : AFTER setting to stack {}  ", stack.getTag());
-        
-        
+
+
         return shareTag;
     }
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-    	
     	if(nbt != null && nbt.contains(PackItemStackHandler.NBT_UPGRADES)) {
 //        	ForceCraft.LOGGER.info("(CLIENT) readShareTag :  setting to stack {}  ", stack.getTag());
             
@@ -119,9 +124,8 @@ public class ForcePackItem extends BaseItem {
                 packHandler.setUpgrades(nbt.getInt(PackItemStackHandler.NBT_UPGRADES));
 
         		stack.getOrCreateTag().putInt(SLOTS_TOTAL,packHandler.getSlotsInUse());
-            	   
             }
-            
     	}
+        super.readShareTag(stack, nbt);
     }
 }

@@ -1,5 +1,7 @@
 package mrbysco.forcecraft.networking.message;
 
+import mrbysco.forcecraft.recipe.ForceRecipes;
+import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -37,15 +39,18 @@ public class PackChangeMessage {
 		ctx.enqueueWork(() -> {
 			if (ctx.getDirection().getReceptionSide().isServer() && ctx.getSender() != null) {
 				ItemStack stack = ctx.getSender().getHeldItem(hand);
-				CompoundNBT tag = stack.getOrCreateTag();
-				tag.putInt("Color", color);
-				stack.setTag(tag);
 
-				if(customName.isEmpty()) {
-					stack.clearCustomName();
-				} else {
-					if(!stack.getDisplayName().getUnformattedComponentText().equals(customName)) {
-						stack.setDisplayName(new StringTextComponent(customName).mergeStyle(TextFormatting.YELLOW));
+				if(stack.getItem() == ForceRegistry.FORCE_PACK.get() || stack.getItem() == ForceRegistry.FORCE_BELT.get()) {
+					CompoundNBT tag = stack.getOrCreateTag();
+					tag.putInt("Color", color);
+					stack.setTag(tag);
+
+					if(customName.isEmpty()) {
+						stack.clearCustomName();
+					} else {
+						if(!stack.getDisplayName().getUnformattedComponentText().equals(customName)) {
+							stack.setDisplayName(new StringTextComponent(customName).mergeStyle(TextFormatting.YELLOW));
+						}
 					}
 				}
 			}

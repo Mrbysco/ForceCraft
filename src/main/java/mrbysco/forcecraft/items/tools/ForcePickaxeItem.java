@@ -75,6 +75,7 @@ public class ForcePickaxeItem extends PickaxeItem {
 	    	INBT shareTag = nbt.get(Reference.MOD_ID);
 	    	ToolModStorage.deserializeNBT(cap, shareTag);
 		}
-    }
+		super.readShareTag(stack, nbt);
+	}
     
 }
