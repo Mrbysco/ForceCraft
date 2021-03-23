@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
 import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
+import mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -32,9 +33,9 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	public Ingredient input = Ingredient.EMPTY;
 	public InfuserModifierType modifier;
 	ItemStack resultStack = ItemStack.EMPTY; // unused!!!! for now
-	public int tier;
+	public UpgradeBookTier tier;
 
-	public InfuseRecipe(ResourceLocation id, Ingredient input, InfuserModifierType result, int tier, ItemStack itemStack) {
+	public InfuseRecipe(ResourceLocation id, Ingredient input, InfuserModifierType result, UpgradeBookTier tier, ItemStack itemStack) {
 		super();
 		this.id = id;
 		this.input = input;
@@ -96,11 +97,11 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		this.modifier = modifier;
 	}
 
-	public int getTier() {
+	public UpgradeBookTier getTier() {
 		return tier;
 	}
 
-	public void setTier(int tier) {
+	public void setTier(UpgradeBookTier tier) {
 		this.tier = tier;
 	}
 
@@ -122,7 +123,8 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 				// hardcoded mod id: no api support rip
 				InfuserModifierType type = InfuserModifierType.valueOf(result.replace("forcecraft:","").toUpperCase());
 				int tier = JSONUtils.getInt(json, "tier");
-				recipe = new InfuseRecipe(recipeId, ingredient, type, tier, ItemStack.EMPTY);
+				
+				recipe = new InfuseRecipe(recipeId, ingredient, type, UpgradeBookTier.values()[tier], ItemStack.EMPTY);
 				addRecipe(recipe);
 				return recipe;
 			} catch (Exception e) {
@@ -136,8 +138,9 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 
 			Ingredient ing = Ingredient.read(buffer);
 			int enumlon = buffer.readVarInt();
+			int tier = buffer.readInt();
 			
-			InfuseRecipe r = new InfuseRecipe(recipeId, ing, InfuserModifierType.values()[enumlon], buffer.readInt() ,buffer.readItemStack());
+			InfuseRecipe r = new InfuseRecipe(recipeId, ing, InfuserModifierType.values()[enumlon],  UpgradeBookTier.values()[tier],buffer.readItemStack());
 
 			// server reading recipe from client or vice/versa
 			addRecipe(r);
@@ -149,7 +152,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 
 			recipe.input.write(buffer);
 			buffer.writeVarInt(recipe.modifier.ordinal());
-			buffer.writeInt(recipe.tier);
+			buffer.writeInt(recipe.tier.ordinal());
 			buffer.writeItemStack(recipe.getRecipeOutput());
 		}
 	}
@@ -160,10 +163,11 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 			return false;
 		}
 		RECIPES.add(recipe);
-		if(!RECIPESBYLEVEL.containsKey(recipe.tier)) {
-			RECIPESBYLEVEL.put(recipe.tier, new ArrayList<>());
+		int thisTier = recipe.tier.ordinal();
+		if(!RECIPESBYLEVEL.containsKey(thisTier)) {
+			RECIPESBYLEVEL.put(thisTier, new ArrayList<>());
 		}
-		RECIPESBYLEVEL.get(recipe.tier).add(recipe);
+		RECIPESBYLEVEL.get(thisTier).add(recipe);
 		HASHES.add(id.toString());
 		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}" , id.toString(), recipe.modifier, recipe.input.serialize());
 		return true;

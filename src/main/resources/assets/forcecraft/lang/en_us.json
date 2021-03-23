@@ -409,12 +409,21 @@
     "gui.forcecraft.infuser.button.guide": "Open Guide GUI",
     "gui.forcecraft.infuser.button.button": "Start Button",
     
+    "gui.forcecraft.infuser.tooltip.bane": "???",
+    "gui.forcecraft.infuser.tooltip.heat": "???",
+    "gui.forcecraft.infuser.tooltip.time": "???",
+    "gui.forcecraft.infuser.tooltip.silk": "Add silk touch",
+    "gui.forcecraft.infuser.tooltip.bleeding": "Add bleeding effect",
     "gui.forcecraft.infuser.tooltip.fortune": "Add fortune to your tools",
-    "gui.forcecraft.infuser.tooltip.pack": "Upgrade the force pack",
+    "gui.forcecraft.infuser.tooltip.pack1": "Upgrade the force pack to 16 slots",
+    "gui.forcecraft.infuser.tooltip.pack2": "Upgrade the force pack to 24 slots",
+    "gui.forcecraft.infuser.tooltip.pack3": "Upgrade the force pack to 32 slots",
+    "gui.forcecraft.infuser.tooltip.pack4": "Upgrade the force pack to the maximum 40 slots",
     "gui.forcecraft.infuser.tooltip.rainbow": "Get random wool from sheep using shears ",
     "gui.forcecraft.infuser.tooltip.speed": "Add speed to armor or the force rod",
     "gui.forcecraft.infuser.tooltip.lumberjack": "Lumberjack on your axe will chop the whole tree",
-    "gui.forcecraft.infuser.tooltip.force": "Force increases your damage"
+    "gui.forcecraft.infuser.tooltip.force": "Force adds Knockback to weapons",
+    "gui.forcecraft.infuser.tooltip.damage": "Add adds sharpness to weapons"
     
     
 }

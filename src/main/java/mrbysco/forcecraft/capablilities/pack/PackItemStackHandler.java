@@ -1,6 +1,8 @@
 package mrbysco.forcecraft.capablilities.pack;
 
 import mrbysco.forcecraft.items.ForcePackItem;
+import mrbysco.forcecraft.items.infuser.UpgradeBookData;
+import mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -67,8 +69,29 @@ public class PackItemStackHandler extends ItemStackHandler {
 		deserializeNBT(tag);
 	}
 
-	public boolean canUpgrade() {
-		return this.upgrades < MAX_UPGRADES;
+	public boolean canUpgrade(UpgradeBookData bd) {
+		if(upgrades >= MAX_UPGRADES) {
+			return false;
+		}
+		if(bd.getTier() == UpgradeBookTier.TWO && this.upgrades == 0) {
+			//0->1 so 8 into 16 slots
+			return true;
+		}
+
+		if(bd.getTier() == UpgradeBookTier.THREE && this.upgrades == 1) {
+			//bout to become 24 slots
+			return true;
+		}
+
+		if(bd.getTier() == UpgradeBookTier.FOUR && this.upgrades == 2) {
+			return true; // 32 slots next
+		}
+
+		if(bd.getTier() == UpgradeBookTier.FIVE && this.upgrades == 3) {
+			return true; // will be upgrade 4, 40 slots
+		}
+		
+		return false;
 	}
 
 	@Override

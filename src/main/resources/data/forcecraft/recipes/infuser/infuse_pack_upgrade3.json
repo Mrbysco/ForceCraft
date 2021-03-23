@@ -1,0 +1,9 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "forcecraft:force_pack_upgrade"
+  },
+  "tier": 4,
+  "result": "forcecraft:pack3"
+}

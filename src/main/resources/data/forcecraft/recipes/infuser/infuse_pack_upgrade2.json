@@ -4,6 +4,6 @@
   {
     "item": "forcecraft:force_pack_upgrade"
   },
-  "tier": 2,
-  "result": "forcecraft:pack"
+  "tier": 3,
+  "result": "forcecraft:pack2"
 }

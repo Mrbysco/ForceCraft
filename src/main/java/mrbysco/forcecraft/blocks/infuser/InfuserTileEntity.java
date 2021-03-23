@@ -316,13 +316,19 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     private boolean applyModifier(ItemStack tool, ItemStack modifier) {
 
 		UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
-		
+
+		// if the recipe level does not exceed what the book has
+		//test the ingredient of this recipe, if it matches me
     	for (InfuseRecipe modCurrent : InfuseRecipe.RECIPES) {
-    		// if the recipe level does not exceed what the book has
-    		//test the ingredient of this recipe, if it matches me
-    		if (modCurrent.tier <= bd.getTier().ordinal() && modCurrent.input.test(modifier)) {
+    		if(modCurrent.tier.ordinal() <= bd.getTier().ordinal() ) {
+
+    			ForceCraft.LOGGER.info("Tier mismatch cant apply {} to the tool {}", modCurrent.modifier, tool);
+    			continue;
+    		}
+    		//force pack upgrade can be applied multiple times depending on many things
+    		if (modCurrent.input.test(modifier)) {
     			
-    			if (modCurrent.modifier.apply(tool, modifier)) {
+    			if (modCurrent.modifier.apply(tool, modifier, bd)) {
                     handler.setStackInSlot(SLOT_TOOL, tool);
                     
     				return true;
@@ -514,19 +520,23 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         return false;
     }
 
-    static boolean upgradeBag(ItemStack stack) {
+    static boolean upgradeBag(ItemStack stack, UpgradeBookData bd) {
+
         if (stack.getItem() instanceof ForcePackItem) {
             IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
             if(handler instanceof PackItemStackHandler) {
                 PackItemStackHandler packHandler = (PackItemStackHandler)handler;
-                if(packHandler.canUpgrade()) {
+                
+                if(packHandler.canUpgrade(bd)) {
                     packHandler.applyUpgrade();
+
+                    CompoundNBT tag = stack.getOrCreateTag();
+                    tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(packHandler));
+                    
+                    stack.setTag(tag);
+                    return true;
                 }
-                CompoundNBT tag = stack.getOrCreateTag();
-                tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(packHandler));
-                tag.putInt(ForcePackItem.SLOTS_TOTAL, packHandler.getSlotsInUse());
-                stack.setTag(tag);
-                return true;
+                return false;
             }
         }
         return false;
