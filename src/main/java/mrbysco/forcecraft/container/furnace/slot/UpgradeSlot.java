@@ -19,6 +19,7 @@ public class UpgradeSlot extends Slot {
 		return isUpgrade(stack);
 	}
 
+	@Override
 	public int getItemStackLimit(ItemStack stack) {
 		return 1;
 	}

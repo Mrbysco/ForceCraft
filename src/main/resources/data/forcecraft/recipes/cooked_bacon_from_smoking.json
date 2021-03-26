@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": {
+    "item": "forcecraft:raw_bacon"
+  },
+  "result": "forcecraft:cooked_bacon",
+  "experience": 0.1,
+  "cookingtime": 100
+}

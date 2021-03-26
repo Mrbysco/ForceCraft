@@ -181,7 +181,7 @@ public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<
 			if(upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
 				return ForceRecipes.FREEZING; //TODO FREEZING RECIPES
 			} else if(upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
-				return IRecipeType.SMELTING; //TODO GRINDING RECIPES
+				return ForceRecipes.GRINDING; //TODO GRINDING RECIPES
 			}
 		}
 		return recipeType;

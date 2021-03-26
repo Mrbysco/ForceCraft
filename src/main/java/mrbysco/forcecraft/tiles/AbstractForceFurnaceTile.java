@@ -116,9 +116,9 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		ItemStack upgrade = getUpgrade();
 		if(!upgrade.isEmpty()) {
 			if(upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
-				return ForceRecipes.FREEZING; //TODO FREEZING RECIPES
+				return ForceRecipes.FREEZING;
 			} else if(upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
-				return IRecipeType.SMELTING; //TODO GRINDING RECIPES
+				return ForceRecipes.GRINDING;
 			}
 		}
 		return IRecipeType.SMELTING;
@@ -293,7 +293,9 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 			ItemStack itemstack = this.items.get(INPUT_SLOT);
 			List<? extends String> additionalBlacklist = new ArrayList<>();
 			if(ConfigHandler.COMMON.furnaceOutputBlacklist.get() != null) {
-				additionalBlacklist = ConfigHandler.COMMON.furnaceOutputBlacklist.get();
+				if(!ConfigHandler.COMMON.furnaceOutputBlacklist.get().isEmpty() && !ConfigHandler.COMMON.furnaceOutputBlacklist.get().get(0).isEmpty()) {
+					additionalBlacklist = ConfigHandler.COMMON.furnaceOutputBlacklist.get();
+				}
 			}
 
 			if(recipe instanceof MultipleOutputFurnaceRecipe) {
@@ -327,7 +329,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 							break;
 						}
 					}
-					if(i > 0) {
+					if(i > 0 && !outputStack.isEmpty()) {
 						((ServerWorld)world).spawnParticle(ParticleTypes.POOF, (double)pos.getX(), (double)pos.getY() + 1, (double)pos.getZ(), 1, 0, 0, 0, 0.0D);
 						ItemEntity itemEntity = new ItemEntity(world, getPos().getX(), getPos().getY() + 1, getPos().getZ(), outputStack);
 						world.addEntity(itemEntity);
