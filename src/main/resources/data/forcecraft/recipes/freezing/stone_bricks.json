@@ -1,0 +1,14 @@
+
+{
+  "type": "forcecraft:freezing",
+  "ingredient": {
+    "tag": "forge:stone"
+  },
+  "results": [
+      {
+        "item": "minecraft:stone_bricks"
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 200
+}

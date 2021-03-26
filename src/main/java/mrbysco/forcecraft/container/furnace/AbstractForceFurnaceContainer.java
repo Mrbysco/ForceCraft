@@ -1,8 +1,11 @@
-package mrbysco.forcecraft.container;
+package mrbysco.forcecraft.container.furnace;
 
-import mrbysco.forcecraft.container.slot.ForceFurnaceFuelSlot;
-import mrbysco.forcecraft.container.slot.UpgradeSlot;
+import mrbysco.forcecraft.container.furnace.slot.ForceFurnaceFuelSlot;
+import mrbysco.forcecraft.container.furnace.slot.ForceFurnaceResultSlot;
+import mrbysco.forcecraft.container.furnace.slot.UpgradeSlot;
 import mrbysco.forcecraft.items.UpgradeCoreItem;
+import mrbysco.forcecraft.recipe.ForceRecipes;
+import mrbysco.forcecraft.registry.ForceRegistry;
 import mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -11,7 +14,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.FurnaceResultSlot;
 import net.minecraft.inventory.container.RecipeBookContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -39,6 +41,10 @@ public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<
 		this(containerType, recipeBookCategory, containerID, playerInventory, new Inventory(4), new IntArray(4));
 	}
 
+	public int getBurn() {
+		return furnaceData.get(0);
+	}
+
 	protected AbstractForceFurnaceContainer(ContainerType<?> containerType, RecipeBookCategory recipeBookCategory, int containerID, PlayerInventory playerInventory, IInventory inventory, IIntArray furnaceData) {
 		super(containerType, containerID);
 		this.field_242384_g = recipeBookCategory;
@@ -49,7 +55,7 @@ public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<
 		this.world = playerInventory.player.world;
 		this.addSlot(new Slot(inventory, 0, 56, 17));
 		this.addSlot(new ForceFurnaceFuelSlot(this, inventory, 1, 56, 53));
-		this.addSlot(new FurnaceResultSlot(playerInventory.player, inventory, 2, 116, 35));
+		this.addSlot(new ForceFurnaceResultSlot(playerInventory.player, inventory, 2, 116, 35));
 		this.addSlot(new UpgradeSlot(inventory, 3, 12, 12));
 
 		for(int i = 0; i < 3; ++i) {
@@ -169,7 +175,16 @@ public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<
 	}
 
 	protected IRecipeType<? extends AbstractCookingRecipe> getRecipeType() {
-		return IRecipeType.SMELTING;
+		IRecipeType<? extends AbstractCookingRecipe> recipeType = IRecipeType.SMELTING;
+		ItemStack upgrade = furnaceInventory.getStackInSlot(3);;
+		if(!upgrade.isEmpty()) {
+			if(upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
+				return ForceRecipes.FREEZING; //TODO FREEZING RECIPES
+			} else if(upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
+				return IRecipeType.SMELTING; //TODO GRINDING RECIPES
+			}
+		}
+		return recipeType;
 	}
 
 	public boolean isFuel(ItemStack stack) {

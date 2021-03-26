@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "item": "minecraft:furnace"
+  },
+  "results": [
+      {
+        "item": "minecraft:cobblestone",
+        "count": 8
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

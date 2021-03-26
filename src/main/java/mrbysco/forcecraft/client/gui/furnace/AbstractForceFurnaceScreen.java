@@ -2,7 +2,7 @@ package mrbysco.forcecraft.client.gui.furnace;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import mrbysco.forcecraft.container.AbstractForceFurnaceContainer;
+import mrbysco.forcecraft.container.furnace.AbstractForceFurnaceContainer;
 import net.minecraft.client.gui.recipebook.AbstractRecipeBookGui;
 import net.minecraft.client.gui.recipebook.IRecipeShownListener;
 import net.minecraft.client.gui.recipebook.RecipeBookGui;
@@ -13,8 +13,14 @@ import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.gui.GuiUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractForceFurnaceScreen<T extends AbstractForceFurnaceContainer> extends ContainerScreen<T> implements IRecipeShownListener {
@@ -57,6 +63,13 @@ public abstract class AbstractForceFurnaceScreen<T extends AbstractForceFurnaceC
 			this.recipeGui.render(matrixStack, mouseX, mouseY, partialTicks);
 			super.render(matrixStack, mouseX, mouseY, partialTicks);
 			this.recipeGui.func_230477_a_(matrixStack, this.guiLeft, this.guiTop, true, partialTicks);
+		}
+
+		if (isPointInRegion(60, 36, 10, 12, mouseX, mouseY)) {
+			List<ITextComponent> text = new ArrayList<>();
+			text.add(new StringTextComponent(String.valueOf(container.getBurn()))
+					.mergeStyle(TextFormatting.GRAY));
+			GuiUtils.drawHoveringText(matrixStack, text, mouseX, mouseY + 10, width, height, -1, font);
 		}
 
 		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);

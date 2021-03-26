@@ -1,6 +1,6 @@
-package mrbysco.forcecraft.container.slot;
+package mrbysco.forcecraft.container.furnace.slot;
 
-import mrbysco.forcecraft.container.AbstractForceFurnaceContainer;
+import mrbysco.forcecraft.container.furnace.AbstractForceFurnaceContainer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;

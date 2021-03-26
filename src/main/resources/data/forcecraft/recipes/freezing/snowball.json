@@ -1,0 +1,14 @@
+
+{
+  "type": "forcecraft:freezing",
+  "ingredient": {
+    "tag": "forge:slimeballs"
+  },
+  "results": [
+      {
+        "item": "minecraft:snowball"
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 200
+}

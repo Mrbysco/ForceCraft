@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "tag": "forge:sandstone"
+  },
+  "results": [
+      {
+        "item": "minecraft:sand"
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

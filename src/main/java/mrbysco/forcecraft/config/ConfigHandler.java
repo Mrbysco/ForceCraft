@@ -4,10 +4,14 @@ package mrbysco.forcecraft.config;
 import mrbysco.forcecraft.ForceCraft;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ConfigHandler {
     public static class Common {
@@ -16,6 +20,7 @@ public class ConfigHandler {
         public final BooleanValue timeTorchEnabled;
         public final BooleanValue timeTorchLogging;
         public final IntValue baconatorMaxStacks;
+        public final ConfigValue<List<? extends String>> furnaceOutputBlacklist;
 
         Common(ForgeConfigSpec.Builder builder) {
             //General settings
@@ -41,6 +46,11 @@ public class ConfigHandler {
             baconatorMaxStacks = builder
                     .comment("The max amount of food stacks stored in the baconator [Default: 4]")
                     .defineInRange("baconatorMaxStacks", 4, 1, Integer.MAX_VALUE);
+
+            furnaceOutputBlacklist = builder
+                    .comment("An additional list of tile entities the Force Furnace can NOT insert into [Syntax: modid:tile_name]\n" +
+                            "Examples: \"minecraft:shulker_box\" would it stop inserting into shulkers")
+                    .defineList("furnaceOutputBlacklist", Arrays.asList(new String[] {""}), o -> (o instanceof String));
 
             builder.pop();
         }

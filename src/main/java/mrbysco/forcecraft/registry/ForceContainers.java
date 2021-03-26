@@ -3,7 +3,7 @@ package mrbysco.forcecraft.registry;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.blocks.infuser.InfuserContainer;
 import mrbysco.forcecraft.container.ForceBeltContainer;
-import mrbysco.forcecraft.container.ForceFurnaceContainer;
+import mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
 import mrbysco.forcecraft.container.ForcePackContainer;
 import mrbysco.forcecraft.container.SpoilsBagContainer;
 import net.minecraft.inventory.container.ContainerType;

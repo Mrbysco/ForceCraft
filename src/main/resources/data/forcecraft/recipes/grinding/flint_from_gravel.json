@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "tag": "forge:gravel"
+  },
+  "results": [
+      {
+        "item": "minecraft:flint"
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

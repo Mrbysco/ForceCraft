@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "item": "minecraft:iron_door"
+  },
+  "results": [
+      {
+        "item": "minecraft:iron_ingot",
+        "count": 6
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

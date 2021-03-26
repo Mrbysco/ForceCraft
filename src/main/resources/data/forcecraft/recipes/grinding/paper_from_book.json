@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "item": "minecraft:book"
+  },
+  "results": [
+      {
+        "item": "minecraft:paper",
+        "count": 3
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

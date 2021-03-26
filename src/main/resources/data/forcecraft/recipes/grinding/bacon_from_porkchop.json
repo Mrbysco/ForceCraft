@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "item": "minecraft:porkchop"
+  },
+  "results": [
+      {
+        "item": "forcecraft:raw_bacon",
+        "count": 2
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "tag": "forge:chests/wooden"
+  },
+  "results": [
+      {
+        "item": "minecraft:oak_planks",
+        "count": 8
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

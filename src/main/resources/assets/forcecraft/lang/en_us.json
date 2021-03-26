@@ -423,7 +423,11 @@
     "gui.forcecraft.infuser.tooltip.speed": "Add speed to armor or the force rod",
     "gui.forcecraft.infuser.tooltip.lumberjack": "Lumberjack on your axe will chop the whole tree",
     "gui.forcecraft.infuser.tooltip.force": "Force adds Knockback to weapons",
-    "gui.forcecraft.infuser.tooltip.damage": "Add adds sharpness to weapons"
-    
-    
+    "gui.forcecraft.infuser.tooltip.damage": "Add adds sharpness to weapons",
+
+
+    "_comment": "JEI",
+    "forcecraft.gui.jei.category.freezing": "Freezing",
+    "forcecraft.gui.jei.category.grinding": "Grinding",
+    "forcecraft.gui.jei.category.grinding.tooltip": "% Chance"
 }

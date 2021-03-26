@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "tag": "minecraft:spruce_logs"
+  },
+  "results": [
+      {
+        "item": "minecraft:spruce_planks",
+        "count": 6
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

@@ -3,11 +3,15 @@ package mrbysco.forcecraft.tiles;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import mrbysco.forcecraft.config.ConfigHandler;
+import mrbysco.forcecraft.recipe.ForceRecipes;
+import mrbysco.forcecraft.recipe.MultipleOutputFurnaceRecipe;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.IRecipeHolder;
@@ -21,6 +25,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.HopperTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -35,6 +40,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -109,7 +115,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		ItemStack upgrade = getUpgrade();
 		if(!upgrade.isEmpty()) {
 			if(upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
-				return IRecipeType.SMELTING; //TODO FREEZING RECIPES
+				return ForceRecipes.FREEZING; //TODO FREEZING RECIPES
 			} else if(upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
 				return IRecipeType.SMELTING; //TODO GRINDING RECIPES
 			}
@@ -131,16 +137,25 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		return !getUpgrade().isEmpty() && upgrade.getItem() == ForceRegistry.SPEED_CORE.get();
 	}
 
+	public boolean hasXPMultiplied() {
+		ItemStack upgrade = getUpgrade();
+		return !getUpgrade().isEmpty() && upgrade.getItem() == ForceRegistry.EXPERIENCE_CORE.get();
+	}
+
 	public int getSpeed() {
 		return isFast() ? 10 : 2;
+	}
+
+	public int getXPMultiplier() {
+		return hasXPMultiplied() ? 2 : 1;
 	}
 
 	protected AbstractCookingRecipe getRecipe() {
 		ItemStack input = this.getStackInSlot(INPUT_SLOT);
 		if (input.isEmpty() || input == failedMatch) return null;
-		if (currentRecipe != null && currentRecipe.matches(this, world)) return currentRecipe;
+		if (currentRecipe != null && currentRecipe.matches(this, world) && currentRecipe.getType() == getRecipeType()) return currentRecipe;
 		else {
-			AbstractCookingRecipe rec = world.getRecipeManager().getRecipe((IRecipeType<AbstractCookingRecipe>) this.getRecipeType(), this, this.world).orElse(null);
+			AbstractCookingRecipe rec = world.getRecipeManager().getRecipe(this.getRecipeType(), this, this.world).orElse(null);
 			if (rec == null) failedMatch = input;
 			else failedMatch = ItemStack.EMPTY;
 			return currentRecipe = rec;
@@ -196,7 +211,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 			this.burnTime -= this.burnSpeed;
 		}
 
-		if (!this.world.isRemote) {
+		if (this.world != null && !this.world.isRemote) {
 			ItemStack fuel = this.items.get(FUEL_SLOT);
 			if (this.isBurning() || !fuel.isEmpty() && !this.items.get(INPUT_SLOT).isEmpty()) {
 				AbstractCookingRecipe irecipe = getRecipe();
@@ -275,35 +290,79 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	private void smelt(@Nullable IRecipe<?> recipe) {
 		if (recipe != null && this.canSmelt(recipe)) {
 			ItemStack itemstack = this.items.get(INPUT_SLOT);
-			ItemStack itemstack1 = recipe.getRecipeOutput();
-			ItemStack outputStack = itemstack1.copy();
 
-			for(Direction dir : getBlockState().get(AbstractFurnaceBlock.FACING).values()) {
-				BlockPos offPos = pos.offset(dir);
-				if(this.world.isAreaLoaded(pos, 1)) {
-					TileEntity foundTile = this.world.getTileEntity(offPos);
-					if(foundTile instanceof HopperTileEntity || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile) {
-						return;
-					}
+			if(recipe instanceof MultipleOutputFurnaceRecipe) {
+				MultipleOutputFurnaceRecipe multipleRecipe = (MultipleOutputFurnaceRecipe) recipe;
+				NonNullList<ItemStack> outputStacks = multipleRecipe.getRecipeOutputs();
+				for(int i = 0; i < outputStacks.size(); i++) {
+					ItemStack outputStack = outputStacks.get(i).copy();
 
-					if(foundTile != null && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-						IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
-						ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
-						outputStack = rest;
-						if(outputStack.isEmpty()) {
+					if(i > 0) {
+						if(multipleRecipe.getSecondaryChance() != 1.0F || world.rand.nextFloat() > multipleRecipe.getSecondaryChance()) {
+							//Early break if change didn't work out on second output
 							break;
 						}
 					}
-				} else {
-					break;
-				}
-			}
 
-			ItemStack itemstack2 = this.items.get(OUTPUT_SLOT);
-			if (itemstack2.isEmpty() && !outputStack.isEmpty()) {
-				this.items.set(OUTPUT_SLOT, outputStack);
-			} else if (itemstack2.getItem() == itemstack1.getItem()) {
-				itemstack2.grow(outputStack.getCount());
+					for(Direction dir : Direction.values()) {
+						BlockPos offPos = pos.offset(dir);
+						if(this.world.isAreaLoaded(pos, 1)) {
+							TileEntity foundTile = this.world.getTileEntity(offPos);
+							boolean flag = foundTile instanceof HopperTileEntity || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile;
+							boolean flag2 = ConfigHandler.COMMON.furnaceOutputBlacklist.get().isEmpty() || ConfigHandler.COMMON.furnaceOutputBlacklist.get().contains(foundTile.getType().toString());
+							if(!flag && flag2 && foundTile != null && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+								IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
+								ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
+								outputStack = rest;
+								if(outputStack.isEmpty()) {
+									break;
+								}
+							}
+						} else {
+							break;
+						}
+					}
+					if(i > 0) {
+						((ServerWorld)world).spawnParticle(ParticleTypes.POOF, (double)pos.getX(), (double)pos.getY() + 0.5, (double)pos.getZ(), 1, 0, 0, 0, 0.0D);
+						ItemEntity itemEntity = new ItemEntity(world, getPos().getX(), getPos().getY() + 0.5, getPos().getZ(), outputStack);
+						world.addEntity(itemEntity);
+					} else {
+						ItemStack itemstack2 = this.items.get(OUTPUT_SLOT);
+						if (itemstack2.isEmpty() && !outputStack.isEmpty()) {
+							this.items.set(OUTPUT_SLOT, outputStack);
+						} else if (itemstack2.getItem() == outputStacks.get(i).getItem()) {
+							itemstack2.grow(outputStack.getCount());
+						}
+					}
+				}
+			} else {
+				ItemStack itemstack1 = recipe.getRecipeOutput();
+				ItemStack outputStack = itemstack1.copy();
+				for(Direction dir : Direction.values()) {
+					BlockPos offPos = pos.offset(dir);
+					if(this.world.isAreaLoaded(pos, 1)) {
+						TileEntity foundTile = this.world.getTileEntity(offPos);
+						boolean flag = foundTile instanceof HopperTileEntity || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile;
+						boolean flag2 = ConfigHandler.COMMON.furnaceOutputBlacklist.get().isEmpty() || ConfigHandler.COMMON.furnaceOutputBlacklist.get().contains(foundTile.getType().toString());
+						if(!flag && flag2 && foundTile != null && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+							IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
+							ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
+							outputStack = rest;
+							if(outputStack.isEmpty()) {
+								break;
+							}
+						}
+					} else {
+						break;
+					}
+				}
+
+				ItemStack itemstack2 = this.items.get(OUTPUT_SLOT);
+				if (itemstack2.isEmpty() && !outputStack.isEmpty()) {
+					this.items.set(OUTPUT_SLOT, outputStack);
+				} else if (itemstack2.getItem() == itemstack1.getItem()) {
+					itemstack2.grow(outputStack.getCount());
+				}
 			}
 
 			if (!this.world.isRemote) {
@@ -328,8 +387,8 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 
 	protected int getCookTime() {
 		AbstractCookingRecipe rec = getRecipe();
-		if (rec == null) return 100;
-		return this.world.getRecipeManager().getRecipe((IRecipeType<AbstractCookingRecipe>)this.getRecipeType(), this, this.world).map(AbstractCookingRecipe::getCookTime).orElse(100);
+		if (rec == null) return 200;
+		return this.world.getRecipeManager().getRecipe(this.getRecipeType(), this, this.world).map(AbstractCookingRecipe::getCookTime).orElse(100);
 	}
 
 	public static boolean isFuel(ItemStack stack) {
@@ -480,7 +539,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		for(Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
 			world.getRecipeManager().getRecipe(entry.getKey()).ifPresent((recipe) -> {
 				list.add(recipe);
-				splitAndSpawnExperience(world, pos, entry.getIntValue(), ((AbstractCookingRecipe)recipe).getExperience());
+				splitAndSpawnExperience(world, pos, entry.getIntValue(), (((AbstractCookingRecipe)recipe).getExperience() * getXPMultiplier()));
 			});
 		}
 

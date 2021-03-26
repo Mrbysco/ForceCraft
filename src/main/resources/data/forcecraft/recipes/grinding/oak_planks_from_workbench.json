@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "item": "forge:workbenches/oak"
+  },
+  "results": [
+      {
+        "item": "minecraft:oak_planks",
+        "count": 4
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

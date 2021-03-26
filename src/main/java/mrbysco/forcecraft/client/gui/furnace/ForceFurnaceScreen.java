@@ -1,7 +1,7 @@
 package mrbysco.forcecraft.client.gui.furnace;
 
 import mrbysco.forcecraft.Reference;
-import mrbysco.forcecraft.container.ForceFurnaceContainer;
+import mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
 import net.minecraft.client.gui.recipebook.FurnaceRecipeGui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;

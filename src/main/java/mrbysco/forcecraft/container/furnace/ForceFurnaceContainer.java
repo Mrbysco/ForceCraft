@@ -1,4 +1,4 @@
-package mrbysco.forcecraft.container;
+package mrbysco.forcecraft.container.furnace;
 
 import mrbysco.forcecraft.registry.ForceContainers;
 import net.minecraft.entity.player.PlayerInventory;

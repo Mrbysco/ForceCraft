@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "item": "minecraft:stone_pressure_plate"
+  },
+  "results": [
+      {
+        "item": "minecraft:stone",
+        "count": 2
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

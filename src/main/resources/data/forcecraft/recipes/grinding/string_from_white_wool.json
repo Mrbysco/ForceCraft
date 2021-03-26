@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "item": "minecraft:white_wool"
+  },
+  "results": [
+      {
+        "item": "minecraft:string",
+        "count": 4
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

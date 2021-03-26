@@ -1,0 +1,14 @@
+
+{
+  "type": "forcecraft:freezing",
+  "ingredient": {
+    "tag": "forge:cobblestone"
+  },
+  "results": [
+      {
+        "item": "minecraft:stone"
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 200
+}

@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "tag": "minecraft:jungle_logs"
+  },
+  "results": [
+      {
+        "item": "minecraft:jungle_planks",
+        "count": 6
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

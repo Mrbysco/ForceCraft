@@ -1,0 +1,14 @@
+
+{
+  "type": "forcecraft:freezing",
+  "ingredient": {
+    "tag": "forge:netherrack"
+  },
+  "results": [
+      {
+        "item": "minecraft:cobblestone"
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 200
+}

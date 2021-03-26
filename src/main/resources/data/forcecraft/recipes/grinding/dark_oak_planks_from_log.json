@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "item": "minecraft:dark_oak_logs"
+  },
+  "results": [
+      {
+        "item": "minecraft:dark_oak_planks",
+        "count": 6
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

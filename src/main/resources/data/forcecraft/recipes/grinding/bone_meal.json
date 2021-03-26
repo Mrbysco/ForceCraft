@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:grinding",
+  "ingredient": {
+    "tag": "forge:bones"
+  },
+  "results": [
+      {
+        "item": "minecraft:bone_meal",
+        "count": 5
+      }
+  ],
+  "experience": 0.1,
+  "processtime": 2000
+}

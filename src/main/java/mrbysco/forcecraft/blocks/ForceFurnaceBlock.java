@@ -1,19 +1,28 @@
 package mrbysco.forcecraft.blocks;
 
+import mrbysco.forcecraft.items.UpgradeCoreItem;
+import mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
 import mrbysco.forcecraft.tiles.ForceFurnaceTileEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.stats.Stats;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -69,5 +78,50 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new ForceFurnaceTileEntity();
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (stack.hasDisplayName()) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if (tileentity instanceof AbstractForceFurnaceTile) {
+                ((AbstractForceFurnaceTile)tileentity).setCustomName(stack.getDisplayName());
+            }
+        }
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.matchesBlock(newState.getBlock())) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if (tileentity instanceof AbstractForceFurnaceTile) {
+                IInventory inventory = ((AbstractForceFurnaceTile) tileentity);
+                for(int i = 0; i < inventory.getSizeInventory(); ++i) {
+                    if(!(inventory.getStackInSlot(i).getItem() instanceof UpgradeCoreItem)) {
+                        spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(i));
+                    }
+                }
+                ((AbstractFurnaceTileEntity)tileentity).grantStoredRecipeExperience(worldIn, Vector3d.copyCentered(pos));
+                worldIn.updateComparatorOutputLevel(pos, this);
+            }
+
+            super.onReplaced(state, worldIn, pos, newState, isMoving);
+        }
+    }
+
+    public static void spawnItemStack(World worldIn, double x, double y, double z, ItemStack stack) {
+        double d0 = (double) EntityType.ITEM.getWidth();
+        double d1 = 1.0D - d0;
+        double d2 = d0 / 2.0D;
+        double d3 = Math.floor(x) + worldIn.rand.nextDouble() * d1 + d2;
+        double d4 = Math.floor(y) + worldIn.rand.nextDouble() * d1;
+        double d5 = Math.floor(z) + worldIn.rand.nextDouble() * d1 + d2;
+
+        while(!stack.isEmpty()) {
+            ItemEntity itementity = new ItemEntity(worldIn, d3, d4, d5, stack.split(worldIn.rand.nextInt(21) + 10));
+            float f = 0.05F;
+            itementity.setMotion(worldIn.rand.nextGaussian() * (double)0.05F, worldIn.rand.nextGaussian() * (double)0.05F + (double)0.2F, worldIn.rand.nextGaussian() * (double)0.05F);
+            worldIn.addEntity(itementity);
+        }
     }
 }
