@@ -328,8 +328,8 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 						}
 					}
 					if(i > 0) {
-						((ServerWorld)world).spawnParticle(ParticleTypes.POOF, (double)pos.getX(), (double)pos.getY() + 0.5, (double)pos.getZ(), 1, 0, 0, 0, 0.0D);
-						ItemEntity itemEntity = new ItemEntity(world, getPos().getX(), getPos().getY() + 0.5, getPos().getZ(), outputStack);
+						((ServerWorld)world).spawnParticle(ParticleTypes.POOF, (double)pos.getX(), (double)pos.getY() + 1, (double)pos.getZ(), 1, 0, 0, 0, 0.0D);
+						ItemEntity itemEntity = new ItemEntity(world, getPos().getX(), getPos().getY() + 1, getPos().getZ(), outputStack);
 						world.addEntity(itemEntity);
 					} else {
 						ItemStack itemstack2 = this.items.get(OUTPUT_SLOT);
