@@ -46,6 +46,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractForceFurnaceTile extends LockableTileEntity implements ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
@@ -290,6 +291,10 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	private void smelt(@Nullable IRecipe<?> recipe) {
 		if (recipe != null && this.canSmelt(recipe)) {
 			ItemStack itemstack = this.items.get(INPUT_SLOT);
+			List<? extends String> additionalBlacklist = new ArrayList<>();
+			if(ConfigHandler.COMMON.furnaceOutputBlacklist.get() != null) {
+				additionalBlacklist = ConfigHandler.COMMON.furnaceOutputBlacklist.get();
+			}
 
 			if(recipe instanceof MultipleOutputFurnaceRecipe) {
 				MultipleOutputFurnaceRecipe multipleRecipe = (MultipleOutputFurnaceRecipe) recipe;
@@ -309,8 +314,8 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 						if(this.world.isAreaLoaded(pos, 1)) {
 							TileEntity foundTile = this.world.getTileEntity(offPos);
 							boolean flag = foundTile instanceof HopperTileEntity || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile;
-							boolean flag2 = ConfigHandler.COMMON.furnaceOutputBlacklist.get().isEmpty() || ConfigHandler.COMMON.furnaceOutputBlacklist.get().contains(foundTile.getType().toString());
-							if(!flag && flag2 && foundTile != null && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+							boolean flag2 = foundTile != null && (additionalBlacklist.isEmpty() || additionalBlacklist.contains(foundTile.getType().toString()));
+							if(!flag && flag2 && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
 								IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
 								ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
 								outputStack = rest;
@@ -343,8 +348,8 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 					if(this.world.isAreaLoaded(pos, 1)) {
 						TileEntity foundTile = this.world.getTileEntity(offPos);
 						boolean flag = foundTile instanceof HopperTileEntity || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile;
-						boolean flag2 = ConfigHandler.COMMON.furnaceOutputBlacklist.get().isEmpty() || ConfigHandler.COMMON.furnaceOutputBlacklist.get().contains(foundTile.getType().toString());
-						if(!flag && flag2 && foundTile != null && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+						boolean flag2 = foundTile != null && (additionalBlacklist.isEmpty() || additionalBlacklist.contains(foundTile.getType().toString()));
+						if(!flag && flag2 && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
 							IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
 							ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
 							outputStack = rest;
