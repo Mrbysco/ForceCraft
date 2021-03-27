@@ -4,7 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import it.unimi.dsi.fastutil.ints.IntList;
+import mrbysco.forcecraft.items.ExperienceTomeItem;
 import mrbysco.forcecraft.items.tools.ForceRodItem;
+import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
@@ -12,6 +14,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
@@ -71,10 +74,24 @@ public class TransmutationRecipe implements ICraftingRecipe {
 						recipeitemhelper.func_221264_a(itemstack, 1);
 					else inputs.add(itemstack);
 				} else {
-					if(!itemstack.isDamaged()) {
-						if (isSimple)
-							recipeitemhelper.func_221264_a(itemstack, 1);
-						else inputs.add(itemstack);
+					if(itemstack.getItem() instanceof ExperienceTomeItem) {
+						if(itemstack.getOrCreateTag().getInt("Experience") < 100) {
+							return false;
+						} else {
+							ItemStack experienceTome = new ItemStack(ForceRegistry.EXPERIENCE_TOME.get());
+							CompoundNBT nbt = experienceTome.getOrCreateTag();
+							nbt.putInt("Experience", 100);
+							experienceTome.setTag(nbt);
+							if (isSimple)
+								recipeitemhelper.func_221264_a(experienceTome, 1);
+							else inputs.add(experienceTome);
+						}
+					} else {
+						if(!itemstack.isDamaged()) {
+							if (isSimple)
+								recipeitemhelper.func_221264_a(itemstack, 1);
+							else inputs.add(itemstack);
+						}
 					}
 				}
 			}
@@ -84,7 +101,16 @@ public class TransmutationRecipe implements ICraftingRecipe {
 	}
 
 	public ItemStack getCraftingResult(CraftingInventory inv) {
-		return this.recipeOutput.copy();
+		ItemStack resultStack = this.recipeOutput.copy();
+		for(int j = 0; j < inv.getSizeInventory(); ++j) {
+			ItemStack itemstack = inv.getStackInSlot(j);
+			if((itemstack.getItem() instanceof ExperienceTomeItem)) {
+				CompoundNBT tag = itemstack.getOrCreateTag();
+				int count = Math.min((int)((float)tag.getInt("Experience") / 100f), 64);
+				resultStack.setCount(count);
+			}
+		}
+		return resultStack;
 	}
 
 	@Override
@@ -102,7 +128,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 			} else if (itemstack.getItem() instanceof ForceRodItem) {
 				ItemStack itemstack1 = itemstack.copy();
 				//TODO: make it eat 25 force when force is stored. Else eat durability
-				if(itemstack1.getItem().getDamage(itemstack1) >= itemstack1.getItem().getMaxDamage()) {
+				if(itemstack1.getItem().getDamage(itemstack1) >= itemstack1.getMaxDamage()) {
 					itemstack1.shrink(1);
 				} else {
 					itemstack1.getItem().setDamage(itemstack1, itemstack1.getDamage() + 1);

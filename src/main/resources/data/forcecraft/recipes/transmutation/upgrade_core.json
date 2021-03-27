@@ -5,7 +5,9 @@
       "item": "forcecraft:force_rod"
     },
     {
-      "item": "forcecraft:experience_tome"
+      "type": "forge:nbt",
+      "item": "forcecraft:experience_tome",
+      "nbt": "{Experience: 100}"
     }
   ],
   "result": {
