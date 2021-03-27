@@ -97,7 +97,6 @@ public class ExperienceTomeItem extends Item {
     }
 
     public static int getExtraPlayerExperience(PlayerEntity player) {
-
         return Math.round(player.experience * player.xpBarCap());
     }
 
@@ -115,7 +114,6 @@ public class ExperienceTomeItem extends Item {
     }
 
     public static void addExperienceToPlayer(PlayerEntity player, int exp) {
-
         int i = Integer.MAX_VALUE - player.experienceTotal;
 
         if (exp > i) {
@@ -151,7 +149,7 @@ public class ExperienceTomeItem extends Item {
         } else if (storedExp < 0) {
             storedExp = 0;
         }
-        CompoundNBT tag = stack.hasTag() ? stack.getTag() : new CompoundNBT();
+        CompoundNBT tag = stack.getOrCreateTag();
         tag.putInt("Experience", storedExp);
         stack.setTag(tag);
         return storedExp;

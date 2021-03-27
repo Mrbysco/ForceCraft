@@ -60,7 +60,6 @@ public class TransmutationRecipe implements ICraftingRecipe {
 	public boolean matches(CraftingInventory inv, World worldIn) {
 		RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
 		java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
-		java.util.List<ItemStack> inputItems = new java.util.ArrayList<>();
 		int i = 0;
 
 		for(int j = 0; j < inv.getSizeInventory(); ++j) {
@@ -87,7 +86,6 @@ public class TransmutationRecipe implements ICraftingRecipe {
 	public ItemStack getCraftingResult(CraftingInventory inv) {
 		return this.recipeOutput.copy();
 	}
-
 
 	@Override
 	public boolean canFit(int width, int height) {
