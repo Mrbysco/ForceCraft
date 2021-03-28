@@ -377,7 +377,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 			}
 
 			if (itemstack.getItem() == Blocks.WET_SPONGE.asItem() && !this.items.get(FUEL_SLOT).isEmpty() && this.items.get(FUEL_SLOT).getItem() == Items.BUCKET) {
-				this.items.set(1, new ItemStack(Items.WATER_BUCKET));
+				this.items.set(FUEL_SLOT, new ItemStack(Items.WATER_BUCKET));
 			}
 
 			itemstack.shrink(1);
@@ -503,6 +503,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	 * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot. For
 	 * guis use Slot.isItemValid
 	 */
+	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
 		if (index == 2) {
 			return false;
