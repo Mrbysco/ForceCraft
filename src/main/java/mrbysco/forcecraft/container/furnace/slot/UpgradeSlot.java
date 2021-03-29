@@ -3,6 +3,7 @@ package mrbysco.forcecraft.container.furnace.slot;
 import mrbysco.forcecraft.items.UpgradeCoreItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
@@ -16,7 +17,7 @@ public class UpgradeSlot extends Slot {
 	}
 
 	public boolean isItemValid(ItemStack stack) {
-		return isUpgrade(stack);
+		return isUpgrade(stack) && inventory.getStackInSlot(slotIndex).isEmpty();
 	}
 
 	@Override
