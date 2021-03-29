@@ -125,7 +125,7 @@ public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 			if (index == 2) {
-				if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+				if (!this.mergeItemStack(itemstack1, 4, 40, true)) {
 					return ItemStack.EMPTY;
 				}
 
@@ -143,14 +143,14 @@ public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<
 					itemstack1.shrink(1);
 					playerIn.world.playSound((PlayerEntity) null, playerIn.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					return ItemStack.EMPTY;
-				} else if (index >= 4 && index < 30) {
-					if (!this.mergeItemStack(itemstack1, 30, 39, false)) {
+				} else if (index >= 4 && index < 31) {
+					if (!this.mergeItemStack(itemstack1, 31, 40, false)) {
 						return ItemStack.EMPTY;
 					}
-				} else if (index >= 30 && index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false)) {
+				} else if (index >= 31 && index < 40 && !this.mergeItemStack(itemstack1, 4, 31, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 3, 39, false)) {
+			} else if (!this.mergeItemStack(itemstack1, 4, 40, false)) {
 				return ItemStack.EMPTY;
 			}
 
