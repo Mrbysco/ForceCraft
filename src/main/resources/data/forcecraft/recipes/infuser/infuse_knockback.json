@@ -5,7 +5,7 @@
     "tag": "forge:nuggets/force"
   },
   "center": {
-    "tag": "forcecraft:valid_infuser_tools"
+    "tag": "forcecraft:valid_knockback_tools"
   },
   "tier": 0,
   "result": "forcecraft:force"

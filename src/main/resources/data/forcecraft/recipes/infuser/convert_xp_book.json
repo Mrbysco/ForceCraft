@@ -5,11 +5,11 @@
     "item": "minecraft:experience_bottle"
   },
   "center": {
-    "item": "forcecraft:upgrade_core"
+    "item": "minecraft:book"
   },
   "tier": 2,
   "output": {
-  	"item":"forcecraft:experience_core",
+  	"item":"forcecraft:experience_tome",
   	"count": 1
   },
   "result": "forcecraft:item"

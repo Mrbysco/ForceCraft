@@ -19,7 +19,6 @@ import mrbysco.forcecraft.items.tools.ForceSwordItem;
 import mrbysco.forcecraft.recipe.InfuseRecipe;
 import mrbysco.forcecraft.registry.ForceFluids;
 import mrbysco.forcecraft.registry.ForceRegistry;
-import mrbysco.forcecraft.registry.ForceTags;
 import mrbysco.forcecraft.tiles.energy.ForceEnergyStorage;
 import mrbysco.forcecraft.util.EnchantUtils;
 import mrbysco.forcecraft.util.ItemHandlerUtils;
@@ -556,7 +555,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean upgradeBag(ItemStack stack, UpgradeBookData bd) {
-
         if (stack.getItem() instanceof ForcePackItem) {
             IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
             if(handler instanceof PackItemStackHandler) {
@@ -728,7 +726,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     static boolean addForceModifier(ItemStack stack) {
         Item st = stack.getItem();
-        if(st instanceof ForceSwordItem) {
+        if(st instanceof ForceSwordItem || st instanceof ForceAxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
                 if(modifierCap.getForceLevel() == 0) {
@@ -748,7 +746,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     static boolean addHeatModifier(ItemStack stack) {
         Item st = stack.getItem();
-        if(st instanceof ForceAxeItem || st instanceof ForceShovelItem || st instanceof ForcePickaxeItem || st instanceof ForceShearsItem) {
+        if(st instanceof ForceSwordItem || st instanceof ForceAxeItem || st instanceof ForceShovelItem || st instanceof ForcePickaxeItem || st instanceof ForceShearsItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(!modifierCap.hasHeat()) {

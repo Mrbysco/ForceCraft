@@ -5,7 +5,7 @@
     "item": "minecraft:feather"
   },
   "center": {
-    "tag": "forcecraft:valid_infuser_tools"
+    "tag": "forcecraft:valid_wing_tools"
   },
   "tier": 5,
   "result": "forcecraft:wing"

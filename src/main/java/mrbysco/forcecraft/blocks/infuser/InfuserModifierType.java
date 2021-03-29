@@ -2,7 +2,6 @@ package mrbysco.forcecraft.blocks.infuser;
 
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
-import mrbysco.forcecraft.recipe.InfuseRecipe;
 import net.minecraft.item.ItemStack;
 
 public enum InfuserModifierType {

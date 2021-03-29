@@ -5,7 +5,7 @@
     "item": "forcecraft:force_log"
   },
   "center": {
-    "tag": "forcecraft:valid_infuser_tools"
+    "tag": "forcecraft:valid_lumber_tools"
   },
   "tier": 1,
   "result": "forcecraft:lumberjack"

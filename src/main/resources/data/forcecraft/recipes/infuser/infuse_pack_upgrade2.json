@@ -5,7 +5,7 @@
     "item": "forcecraft:force_pack_upgrade"
   },
   "center": {
-    "tag": "forcecraft:valid_infuser_tools"
+    "item": "forcecraft:force_pack"
   },
   "tier": 3,
   "result": "forcecraft:pack2"

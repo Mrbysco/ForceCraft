@@ -10,7 +10,6 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.util.Translator;
-import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.compat.JeiCompat;
 import mrbysco.forcecraft.recipe.MultipleOutputFurnaceRecipe;
 import net.minecraft.block.Block;

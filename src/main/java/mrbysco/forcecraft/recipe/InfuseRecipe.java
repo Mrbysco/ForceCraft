@@ -14,6 +14,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -26,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
-
 	private static final int MAX_SLOTS = 8;
 	private static final Set<String> HASHES = new HashSet<>();
 	public static final Set<InfuseRecipe> RECIPES = new HashSet<>();
@@ -120,6 +120,22 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		this.tier = tier;
 	}
 
+	public Ingredient getCenter() {
+		return center;
+	}
+
+	public void setCenter(Ingredient center) {
+		this.center = center;
+	}
+
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		NonNullList<Ingredient> ingredients = NonNullList.create();
+		ingredients.add(center);
+		ingredients.add(input);
+		return ingredients;
+	}
+
 	@Override
 	public IRecipeSerializer<?> getSerializer() {
 		return ForceRecipes.INFUSER_SERIALIZER.get();
@@ -162,7 +178,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 			int enumlon = buffer.readVarInt();
 			int tier = buffer.readInt();
 			
-			InfuseRecipe r = new InfuseRecipe(recipeId, ing, InfuserModifierType.values()[enumlon],  UpgradeBookTier.values()[tier],buffer.readItemStack());
+			InfuseRecipe r = new InfuseRecipe(recipeId, ing, InfuserModifierType.values()[enumlon], UpgradeBookTier.values()[tier], buffer.readItemStack());
 
 			// server reading recipe from client or vice/versa
 			addRecipe(r);
@@ -194,13 +210,4 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}" , id.toString(), recipe.resultModifier, recipe.input.serialize());
 		return true;
 	}
-
-	public Ingredient getCenter() {
-		return center;
-	}
-
-	public void setCenter(Ingredient center) {
-		this.center = center;
-	}
-
 }

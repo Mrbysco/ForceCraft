@@ -2,14 +2,14 @@
   "type":"forcecraft:infuser",
   "ingredient": 
   {
-    "item": "minecraft:experience_bottle"
+    "item": "forcecraft:golden_power_source"
   },
   "center": {
     "item": "forcecraft:upgrade_core"
   },
-  "tier": 2,
+  "tier": 4,
   "output": {
-  	"item":"forcecraft:experience_core",
+  	"item":"forcecraft:heat_core",
   	"count": 1
   },
   "result": "forcecraft:item"

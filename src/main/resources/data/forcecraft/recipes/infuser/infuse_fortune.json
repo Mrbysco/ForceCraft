@@ -5,7 +5,7 @@
     "item": "forcecraft:fortune_cookie"
   },
   "center": {
-    "tag": "forcecraft:valid_infuser_tools"
+    "tag": "forcecraft:valid_lucky_tools"
   },
   "tier": 2,
   "result": "forcecraft:fortune"

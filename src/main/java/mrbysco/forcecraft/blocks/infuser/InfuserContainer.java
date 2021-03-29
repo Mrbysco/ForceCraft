@@ -1,7 +1,6 @@
 package mrbysco.forcecraft.blocks.infuser;
 
 import mrbysco.forcecraft.container.slot.SlotForceGems;
-import mrbysco.forcecraft.container.slot.SlotForceTools;
 import mrbysco.forcecraft.registry.ForceContainers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

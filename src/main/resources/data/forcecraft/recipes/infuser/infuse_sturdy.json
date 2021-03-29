@@ -5,7 +5,7 @@
     "item": "minecraft:obsidian"
   },
   "center": {
-    "tag": "forcecraft:valid_infuser_tools"
+    "tag": "forcecraft:valid_sturdy_tools"
   },
   "tier": 6,
   "result": "forcecraft:sturdy"

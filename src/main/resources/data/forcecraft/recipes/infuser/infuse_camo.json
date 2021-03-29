@@ -5,7 +5,7 @@
     "item": "minecraft:potion"
   },
   "center": {
-    "tag": "forcecraft:valid_infuser_tools"
+    "tag": "forcecraft:valid_camo_tools"
   },
   "tier": 5,
   "result": "forcecraft:camo"

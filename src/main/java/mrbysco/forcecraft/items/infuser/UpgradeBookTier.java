@@ -4,7 +4,13 @@ import mrbysco.forcecraft.ForceCraft;
 
 public enum UpgradeBookTier {
 	//zero is unused, but we want .ordinal() to match the meaning
-	ZERO, ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN;
+	ZERO(0), ONE(1),TWO(2),THREE(3),FOUR(4),FIVE(5),SIX(6),SEVEN(7);
+
+	private final int tier;
+
+	private UpgradeBookTier(int tier) {
+		this.tier = tier;
+	}
 	
 	//which is last one
 	public static final UpgradeBookTier FINAL = SEVEN;
@@ -28,6 +34,8 @@ public enum UpgradeBookTier {
 		ForceCraft.LOGGER.info("upgrade tome item: Tier level up {}", nextTier);
 		return nextTier;
 	}
-	
-	
+
+	public int asInt() {
+		return tier;
+	}
 }

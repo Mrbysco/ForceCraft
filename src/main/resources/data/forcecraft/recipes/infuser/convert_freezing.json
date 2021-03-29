@@ -2,14 +2,14 @@
   "type":"forcecraft:infuser",
   "ingredient": 
   {
-    "item": "minecraft:experience_bottle"
+    "item": "forcecraft:snow_cookie"
   },
   "center": {
     "item": "forcecraft:upgrade_core"
   },
   "tier": 2,
   "output": {
-  	"item":"forcecraft:experience_core",
+  	"item":"forcecraft:freezing_core",
   	"count": 1
   },
   "result": "forcecraft:item"

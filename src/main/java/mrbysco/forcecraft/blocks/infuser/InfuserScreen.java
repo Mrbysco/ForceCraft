@@ -28,11 +28,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 import net.minecraftforge.fml.network.PacketDistributor;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.lwjgl.opengl.GL11;
 
 public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
@@ -340,7 +339,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		}
 
 		public void drawTooltip(MatrixStack ms, int actualMouseX, int actualMouseY) {
-			RenderSystem.translatef(0.0F, 0.0F, 33.0F); 
+			RenderSystem.translatef(0.0F, 0.0F, 33.0F);
 
 			String recipeSlug = recipe.resultModifier.getTooltip();
 
@@ -349,7 +348,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 			GuiUtils.drawHoveringText(ms, text, actualMouseX, actualMouseY, parent.width, parent.height, -1, parent.font);
 			
-			RenderSystem.translatef(0.0F, 0.0F, 0.0F); 
+			RenderSystem.translatef(0.0F, 0.0F, 0.0F);
 		}
 	}
 }

@@ -11,11 +11,13 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.util.ErrorUtil;
 import mrbysco.forcecraft.Reference;
+import mrbysco.forcecraft.compat.infuser.InfuserCategory;
 import mrbysco.forcecraft.compat.multipleoutput.FreezingCategory;
 import mrbysco.forcecraft.compat.multipleoutput.GrindingCategory;
 import mrbysco.forcecraft.recipe.ForceRecipes;
 import mrbysco.forcecraft.recipe.FreezingRecipe;
 import mrbysco.forcecraft.recipe.GrindingRecipe;
+import mrbysco.forcecraft.recipe.InfuseRecipe;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
@@ -28,14 +30,18 @@ import java.util.Objects;
 @JeiPlugin
 public class JeiCompat implements IModPlugin {
 	public static final ResourceLocation RECIPE_MULTIPLES_JEI = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/multiples.png");
+	public static final ResourceLocation RECIPE_INFUSER_JEI = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/infuser.png");
 
 	public static final ResourceLocation PLUGIN_UID = new ResourceLocation(Reference.MOD_ID, "main");
 	public static final ResourceLocation FREEZING = new ResourceLocation(Reference.MOD_ID, "freezing");
 	public static final ResourceLocation GRINDING = new ResourceLocation(Reference.MOD_ID, "grinding");
+	public static final ResourceLocation INFUSER = new ResourceLocation(Reference.MOD_ID, "infuser");
 	@Nullable
 	private IRecipeCategory<FreezingRecipe> freezingCategory;
 	@Nullable
 	private IRecipeCategory<GrindingRecipe> grindingCategory;
+	@Nullable
+	private IRecipeCategory<InfuseRecipe> infuserCategory;
 
 	@Override
 	public ResourceLocation getPluginUid() {
@@ -47,6 +53,7 @@ public class JeiCompat implements IModPlugin {
 		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.FORCE_FURNACE.get()), VanillaRecipeCategoryUid.FURNACE);
 		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.FREEZING_CORE.get()), FREEZING);
 		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.GRINDING_CORE.get()), GRINDING);
+		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.INFUSER.get()), INFUSER);
 	}
 
 	@Override
@@ -55,7 +62,8 @@ public class JeiCompat implements IModPlugin {
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 		registration.addRecipeCategories(
 			freezingCategory = new FreezingCategory(guiHelper),
-			grindingCategory = new GrindingCategory(guiHelper)
+			grindingCategory = new GrindingCategory(guiHelper),
+			infuserCategory = new InfuserCategory(guiHelper)
 		);
 	}
 
@@ -63,9 +71,11 @@ public class JeiCompat implements IModPlugin {
 	public void registerRecipes(IRecipeRegistration registration) {
 		ErrorUtil.checkNotNull(freezingCategory, "freezingCategory");
 		ErrorUtil.checkNotNull(grindingCategory, "grindingCategory");
+		ErrorUtil.checkNotNull(infuserCategory, "grindingCategory");
 
 		ClientWorld world = Objects.requireNonNull(Minecraft.getInstance().world);
 		registration.addRecipes(world.getRecipeManager().getRecipesForType(ForceRecipes.FREEZING), FREEZING);
 		registration.addRecipes(world.getRecipeManager().getRecipesForType(ForceRecipes.GRINDING), GRINDING);
+		registration.addRecipes(world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE), INFUSER);
 	}
 }

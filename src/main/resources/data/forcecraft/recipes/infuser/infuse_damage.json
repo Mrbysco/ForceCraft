@@ -5,7 +5,7 @@
     "item": "forcecraft:claw"
   },
   "center": {
-    "tag": "forcecraft:valid_infuser_tools"
+    "tag": "forcecraft:valid_damage_tools"
   },
   "tier": 0,
   "result": "forcecraft:damage"

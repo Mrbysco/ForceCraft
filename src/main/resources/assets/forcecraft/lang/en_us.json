@@ -429,5 +429,7 @@
     "_comment": "JEI",
     "forcecraft.gui.jei.category.freezing": "Freezing",
     "forcecraft.gui.jei.category.grinding": "Grinding",
-    "forcecraft.gui.jei.category.grinding.tooltip": "% Chance"
+    "forcecraft.gui.jei.category.grinding.tooltip": "% Chance",
+    "forcecraft.gui.jei.category.infuser": "Infuser",
+    "forcecraft.gui.jei.category.infuser.tier": "Tier: %s"
 }
