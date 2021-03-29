@@ -4,6 +4,9 @@
   {
     "item": "minecraft:lapis_lazuli"
   },
+  "center": {
+    "item": "forcecraft:force_shears"
+  },
   "tier": 2,
   "result": "forcecraft:rainbow"
 }

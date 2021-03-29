@@ -2,6 +2,7 @@ package mrbysco.forcecraft.recipe;
 
 import com.google.gson.JsonObject;
 import mrbysco.forcecraft.ForceCraft;
+import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
 import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
 import mrbysco.forcecraft.items.infuser.UpgradeBookTier;
@@ -10,6 +11,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -31,25 +33,35 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	public static final Map<Integer, List<InfuseRecipe>> RECIPESBYLEVEL = new HashMap<>();
 	private final ResourceLocation id;
 	public Ingredient input = Ingredient.EMPTY;
-	public InfuserModifierType modifier;
-	ItemStack resultStack = ItemStack.EMPTY; // unused!!!! for now
-	public UpgradeBookTier tier;
+	public InfuserModifierType resultModifier;
+	ItemStack output = ItemStack.EMPTY;  
+	private UpgradeBookTier tier;
+	private Ingredient center;
 
-	public InfuseRecipe(ResourceLocation id, Ingredient input, InfuserModifierType result, UpgradeBookTier tier, ItemStack itemStack) {
+	public InfuseRecipe(ResourceLocation id, Ingredient input, InfuserModifierType result, UpgradeBookTier tier, ItemStack outputStack) {
 		super();
 		this.id = id;
 		this.input = input;
-		resultStack = itemStack;
-		modifier = result; 
-		this.tier = tier;
+		output = outputStack;
+		resultModifier = result; 
+		this.setTier(tier);
 	}
-
+	
 	@Override
 	public boolean matches(InfuserTileEntity inv, World worldIn) {
+		//does the center match
+		ItemStack cent = inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL);
+		if(!this.center.test(cent)) {
+			// center doesnt match this recipe. move over
+			ForceCraft.LOGGER.info(cent + " does not match "+this.id);
+			return false;
+		}
+//		ForceCraft.LOGGER.info(cent + " does  match center for "+this.id);
+
 		for(int i = 0; i < inv.handler.getSlots(); i++) {
 			ItemStack stack = inv.handler.getStackInSlot(i);
-			if (input.test(stack)) {
-				//at least one is true
+			if (i < InfuserTileEntity.SLOT_TOOL && input.test(stack)) {
+				//center is true and at least one is true
 				return true;
 			}
 		}
@@ -62,9 +74,12 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
-		// output is the center of the infuser but modified, so this is unused
-		return resultStack; // unused ? for now
+	public ItemStack getRecipeOutput() { 
+		return output;  
+	}
+	
+	public boolean hasOutput() {
+		return !output.isEmpty(); //should also be for modifier == ITEM
 	}
 
 	@Override
@@ -90,11 +105,11 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	}
 
 	public InfuserModifierType getModifier() {
-		return modifier;
+		return resultModifier;
 	}
 
 	public void setModifier(InfuserModifierType modifier) {
-		this.modifier = modifier;
+		this.resultModifier = modifier;
 	}
 
 	public UpgradeBookTier getTier() {
@@ -117,14 +132,21 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 			InfuseRecipe recipe = null;
 			try {
 				Ingredient ingredient = Ingredient.deserialize(JSONUtils.getJsonObject(json, "ingredient"));
-
+				Ingredient center = Ingredient.deserialize(JSONUtils.getJsonObject(json, "center"));
+				
 				String result = JSONUtils.getString(json, "result");
 
 				// hardcoded mod id: no api support rip
-				InfuserModifierType type = InfuserModifierType.valueOf(result.replace("forcecraft:","").toUpperCase());
+				InfuserModifierType modifier = InfuserModifierType.valueOf(result.replace(Reference.MOD_ID + ":","").toUpperCase());
+				
+		        ItemStack output = ItemStack.EMPTY;
+		        if(modifier == InfuserModifierType.ITEM && JSONUtils.hasField(json, "output") ) {
+		        	output = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "output"));
+		        }
 				int tier = JSONUtils.getInt(json, "tier");
 				
-				recipe = new InfuseRecipe(recipeId, ingredient, type, UpgradeBookTier.values()[tier], ItemStack.EMPTY);
+				recipe = new InfuseRecipe(recipeId, ingredient, modifier, UpgradeBookTier.values()[tier], output);
+				recipe.setCenter(center);
 				addRecipe(recipe);
 				return recipe;
 			} catch (Exception e) {
@@ -151,8 +173,8 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		public void write(PacketBuffer buffer, InfuseRecipe recipe) {
 
 			recipe.input.write(buffer);
-			buffer.writeVarInt(recipe.modifier.ordinal());
-			buffer.writeInt(recipe.tier.ordinal());
+			buffer.writeVarInt(recipe.resultModifier.ordinal());
+			buffer.writeInt(recipe.getTier().ordinal());
 			buffer.writeItemStack(recipe.getRecipeOutput());
 		}
 	}
@@ -163,14 +185,22 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 			return false;
 		}
 		RECIPES.add(recipe);
-		int thisTier = recipe.tier.ordinal();
+		int thisTier = recipe.getTier().ordinal();
 		if(!RECIPESBYLEVEL.containsKey(thisTier)) {
 			RECIPESBYLEVEL.put(thisTier, new ArrayList<>());
 		}
 		RECIPESBYLEVEL.get(thisTier).add(recipe);
 		HASHES.add(id.toString());
-		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}" , id.toString(), recipe.modifier, recipe.input.serialize());
+		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}" , id.toString(), recipe.resultModifier, recipe.input.serialize());
 		return true;
+	}
+
+	public Ingredient getCenter() {
+		return center;
+	}
+
+	public void setCenter(Ingredient center) {
+		this.center = center;
 	}
 
 }

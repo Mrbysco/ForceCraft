@@ -1,0 +1,16 @@
+{
+  "type":"forcecraft:infuser",
+  "ingredient": 
+  {
+    "item": "minecraft:sugar"
+  },
+  "center": {
+    "item": "forcecraft:upgrade_core"
+  },
+  "tier": 4,
+  "output": {
+  	"item":"forcecraft:speed_core",
+  	"count": 1
+  },
+  "result": "forcecraft:item"
+}
