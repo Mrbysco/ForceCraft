@@ -47,6 +47,7 @@ public class InfuserMessage {
                 
                 if(isButtonPressed) {
                     ctr.getTile().canWork = true;
+                    ctr.getTile().processTime = 0;
                 }
             }
         }

@@ -150,6 +150,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
         //Items
+    	canWork = nbt.getBoolean("canWork");
         handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
         ItemStackHelper.loadAllItems(nbt, this.infuserContents);
         energyStorage.setEnergy(nbt.getInt("EnergyHandler")); 
@@ -163,6 +164,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         compound = super.write(compound);
 
         //Items
+        compound.putBoolean("canWork", canWork);
         compound.put("ItemStackHandler", handler.serializeNBT());
         compound.putInt("EnergyHandler", energyStorage.getEnergyStored());
         ItemStackHelper.saveAllItems(compound, this.infuserContents);
@@ -181,8 +183,13 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         if (handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
         	processForceGems();
         }
-        
+//        ForceCraft.LOGGER.info("tile TICK: canWork = "+  canWork);
         if (canWork) {
+        	processTime++;
+        	if(processTime < this.maxProcessTime) {
+        		return;
+        	}
+        	processTime = 0;
         	//working with No progress for now, just is valid and did i turn it on
 
         	//once we have a valid tool and have waited. go do the thing
@@ -192,8 +199,16 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         	// auto turn off when done
         	//even if tool or book slot become empty, dont auto run next insert
             canWork = false;
+            
+            refreshClient();
         }
+        
     }
+
+	private void refreshClient() {
+		markDirty();     
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+	}
 
     //Processes force Gems in the force infuser slot
     private void processForceGems() {
@@ -203,8 +218,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             fill(force, FluidAction.EXECUTE);
             handler.getStackInSlot(SLOT_GEM).shrink(1);
 
-            markDirty(); // TODO: ? remove if not needed
-            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+            refreshClient();
         }
     }
 
