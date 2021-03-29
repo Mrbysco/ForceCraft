@@ -10,6 +10,7 @@ import mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
 import mrbysco.forcecraft.recipe.InfuseRecipe;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.AtlasTexture;
@@ -30,6 +31,8 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.lwjgl.opengl.GL11;
 
 public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
@@ -56,42 +59,69 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	protected void init() {
 		super.init();
 
+		int btnSize = 13;
+		int x = 124;
+		int y = 17;
 		// Comment out this button to disable Info help ? button
-		this.addButton(new Button(guiLeft + 124, guiTop + 17, 12, 12,
-				new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+		this.addButton(new Button(guiLeft + x, guiTop + y, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
 
-					PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
+			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
 
-					ItemStack bookStack = container.tile.getBookInSlot();
-					if (bookStack.isEmpty()) {
-						this.playerInventory.player.sendStatusMessage(
-								new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
-						showingPop = false;// do not open without a book
-						return;
-					}
+			ItemStack bookStack = container.tile.getBookInSlot();
+			if (bookStack.isEmpty()) {
+				this.playerInventory.player.sendStatusMessage(new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
+				showingPop = false;// do not open without a book
+				return;
+			}
 
-					showingPop = !showingPop;
+			showingPop = !showingPop;
 
-					if (showingPop) {
-						// reset tiles every time we do a hide/show
-						renderMyTiles = new ArrayList<>();
-					}
-				}) {
+			if (showingPop) {
+				// reset tiles every time we do a hide/show
+				renderMyTiles = new ArrayList<>();
+			}
+		}) {
 			@Override
-			public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+			public void renderWidget(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
 				// skip drawing me
+
+				ItemStack bookStack = container.tile.getBookInSlot();
+				if (!bookStack.isEmpty()) {
+					Minecraft minecraft = Minecraft.getInstance();
+					minecraft.getTextureManager().bindTexture(TEXTURE);
+					GL11.glColor4f(1.0F, 1.0F, 1.0F, this.alpha);
+					GL11.glEnable(GL11.GL_BLEND);
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					this.blit(ms, x, y, 201, 0, btnSize, btnSize);
+
+					this.renderBg(ms, minecraft, mouseX, mouseY);
+				}
 				// super.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
 			}
 		});
-
-		this.addButton(new Button(guiLeft + 39, guiTop + 101, 12, 12, new TranslationTextComponent(""), (button) -> {
+		x = 39;
+		y = 101;
+		this.addButton(new Button(guiLeft + x, guiTop + y, btnSize, btnSize, new TranslationTextComponent(""), (button) -> {
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
 			container.getTile().canWork = true;
 			// TODO: change button
 		}) {
 			@Override
-			public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+			public void renderWidget(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
 				// skip drawing me
+//				ForceCraft.LOGGER.info("canWork = "+ container.getTile().canWork);
+				if (!container.getTile().canWork) {
+					// render special
+//				    super.renderWidget(ms, mouseX, mouseY, partialTicks);
+					Minecraft minecraft = Minecraft.getInstance();
+					minecraft.getTextureManager().bindTexture(TEXTURE);
+					GL11.glColor4f(1.0F, 1.0F, 1.0F, this.alpha);
+					GL11.glEnable(GL11.GL_BLEND);
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					this.blit(ms, x, y, 188, 0, btnSize, btnSize);
+
+					this.renderBg(ms, minecraft, mouseX, mouseY);
+				}
 			}
 		});
 	}
