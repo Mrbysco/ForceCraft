@@ -156,8 +156,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		if (input.isEmpty() || input == failedMatch) return null;
 		if (currentRecipe != null && currentRecipe.matches(this, world) && currentRecipe.getType() == getRecipeType()) return currentRecipe;
 		else {
-			//the .getRecipe(..) had error, said method didnt exist in my gradle
-			AbstractCookingRecipe rec = null;//world.getRecipeManager().getRecipe(this.getRecipeType(), this, this.world).orElse(null);
+			AbstractCookingRecipe rec = world.getRecipeManager().getRecipe(this.getRecipeType(), this, this.world).orElse(null);
 			if (rec == null) failedMatch = input;
 			else failedMatch = ItemStack.EMPTY;
 			return currentRecipe = rec;
@@ -396,8 +395,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	protected int getCookTime() {
 		AbstractCookingRecipe rec = getRecipe();
 		if (rec == null) return 200;
-		//the .getRecipe(..) had error, said method didnt exist in my gradle
-		return 1;// this.world.getRecipeManager().getRecipe(this.getRecipeType(), this, this.world).map(AbstractCookingRecipe::getCookTime).orElse(100);
+		return this.world.getRecipeManager().getRecipe(this.getRecipeType(), this, this.world).map(AbstractCookingRecipe::getCookTime).orElse(100);
 	}
 
 	public static boolean isFuel(ItemStack stack) {
