@@ -25,7 +25,7 @@ public class ForceBowItem extends BowItem {
 	};
 
     public ForceBowItem(Properties properties) {
-        super(properties);
+        super(properties.maxStackSize(1));
     }
 
     @Nullable

@@ -50,7 +50,7 @@ public class InfuserContainer extends Container {
         this.addSlot(new SlotItemHandler(te.handler, 7, 56, 32));
 
         //Tools Slot in the middle
-        this.addSlot(new SlotForceTools(te.handler, InfuserTileEntity.SLOT_TOOL, 80, 57));
+        this.addSlot(new SlotItemHandler(te.handler, InfuserTileEntity.SLOT_TOOL, 80, 57));
 
         //Force Gem Slot top left
         this.addSlot(new SlotForceGems(te.handler, InfuserTileEntity.SLOT_GEM, 8, 23));

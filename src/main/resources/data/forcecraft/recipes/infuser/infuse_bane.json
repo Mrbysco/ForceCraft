@@ -4,6 +4,9 @@
   {
     "item": "minecraft:spider_eye"
   },
+  "center": {
+    "tag": "forcecraft:valid_infuser_tools"
+  },
   "tier": 4,
   "result": "forcecraft:bane"
 }

@@ -4,6 +4,9 @@
   {
     "item": "minecraft:ender_eye"
   },
+  "center": {
+    "tag": "forcecraft:valid_infuser_tools"
+  },
   "tier": 6,
   "result": "forcecraft:ender"
 }

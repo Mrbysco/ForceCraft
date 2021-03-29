@@ -10,6 +10,7 @@ import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
+import mrbysco.forcecraft.items.tools.ForceBowItem;
 import mrbysco.forcecraft.items.tools.ForcePickaxeItem;
 import mrbysco.forcecraft.items.tools.ForceRodItem;
 import mrbysco.forcecraft.items.tools.ForceShearsItem;
@@ -117,7 +118,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         		// non ingredients into the circle
         	}
         	else if(slot == SLOT_TOOL) {
-                return stack.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
+        		//dont hardcode validation here, check recipe "center" tag or item
+                return true;// stack.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
         	}
         	else if(slot == SLOT_BOOK) {
         		return stack.getItem() == ForceRegistry.UPGRADE_TOME.get();
@@ -184,7 +186,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         	//working with No progress for now, just is valid and did i turn it on
 
         	//once we have a valid tool and have waited. go do the thing
-        	if(hasValidTool() && hasValidBook()) {
+        	if(hasTool() && hasValidBook()) {
         		processTool();
         	}
         	// auto turn off when done
@@ -215,6 +217,10 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             if (hasValidModifer(i)) {
                 ItemStack modifier = getModifier(i);
                 ItemStack tool = getFromToolSlot();
+                if(tool.getCount() != 1) {
+                	//halt if empty. halt if stack larger than 1, only upgrade a single item
+                	continue;
+                }
                 boolean success = applyModifier(tool, modifier);
                 if (success) {
                 	// for EACH modifier
@@ -274,13 +280,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         return super.getCapability(capability, facing);
     }
 
-    private boolean hasValidTool() {
+    private boolean hasTool() {
         ItemStack tool = getFromToolSlot();
-		if (!tool.isEmpty()) {
-            return tool.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
-        }
-        return false;
+		return !tool.isEmpty();
     }
+
     private boolean hasValidBook() {
         ItemStack tool = getBookInSlot();
 		if (!tool.isEmpty()) {
@@ -316,25 +320,42 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     private boolean applyModifier(ItemStack tool, ItemStack modifier) {
 
 		UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
-
+		int bookTier = bd.getTier().ordinal();
 		// if the recipe level does not exceed what the book has
 		//test the ingredient of this recipe, if it matches me
-    	for (InfuseRecipe modCurrent : InfuseRecipe.RECIPES) {
-    		if(modCurrent.tier.ordinal() <= bd.getTier().ordinal() ) {
+		
+    	for (InfuseRecipe recipeCurrent : InfuseRecipe.RECIPES) {
 
-    			ForceCraft.LOGGER.info("Tier mismatch cant apply {} to the tool {}", modCurrent.modifier, tool);
+			ForceCraft.LOGGER.info("."+recipeCurrent.getId());
+    		if(recipeCurrent.getTier().ordinal() > bookTier) {
+
+    			ForceCraft.LOGGER.info("recipe tier {} > book Tier {}", recipeCurrent.getTier().ordinal(), bookTier);
     			continue;
     		}
+    		if(recipeCurrent.getCenter().test(tool) == false) {
+    			//doesnt match the "center" tool test from recipe
+				continue;
+    		}
+    		ForceCraft.LOGGER.info("CENTER and tier both match {} on tool {}", recipeCurrent.resultModifier, tool);
+    		
     		//force pack upgrade can be applied multiple times depending on many things
-    		if (modCurrent.input.test(modifier)) {
+    		if (recipeCurrent.input.test(modifier)) {
     			
-    			if (modCurrent.modifier.apply(tool, modifier, bd)) {
-                    handler.setStackInSlot(SLOT_TOOL, tool);
+    			if (recipeCurrent.resultModifier.apply(tool, modifier, bd)) {
+                    
+                    if(recipeCurrent.resultModifier == InfuserModifierType.ITEM && recipeCurrent.hasOutput()) {
+                    	//overwrite / convert item
+                    	handler.setStackInSlot(SLOT_TOOL, recipeCurrent.getRecipeOutput().copy());
+                    }
+                    else {
+                    	//sync item changes
+                        handler.setStackInSlot(SLOT_TOOL, tool);
+                    }
                     
     				return true;
     			}
     			else {
-        			ForceCraft.LOGGER.info("cannot apply {} to the tool {}", modCurrent.modifier, tool);
+        			ForceCraft.LOGGER.info(" apply returned false on {} to the tool {}", recipeCurrent.resultModifier, tool);
     			}
     		}
     	}
@@ -645,6 +666,16 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 else if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSharp();
                     EnchantUtils.incrementLevel(stack, Enchantments.SHARPNESS);
+                    return true;
+                }
+            }
+        }
+        else if(st instanceof ForceBowItem) {
+            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+            if(modifierCap != null ) {
+                if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
+                    modifierCap.incrementSharp();
+                    EnchantUtils.incrementLevel(stack, Enchantments.POWER);
                     return true;
                 }
             }

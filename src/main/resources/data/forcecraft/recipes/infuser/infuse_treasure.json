@@ -4,6 +4,9 @@
   {
     "item": "forcecraft:treasure_core"
   },
+  "center": {
+    "tag": "forcecraft:valid_infuser_tools"
+  },
   "tier": 7,
   "result": "forcecraft:treasure"
 }

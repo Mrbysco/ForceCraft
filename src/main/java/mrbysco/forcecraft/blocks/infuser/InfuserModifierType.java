@@ -2,6 +2,7 @@ package mrbysco.forcecraft.blocks.infuser;
 
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
+import mrbysco.forcecraft.recipe.InfuseRecipe;
 import net.minecraft.item.ItemStack;
 
 public enum InfuserModifierType {
@@ -13,6 +14,7 @@ public enum InfuserModifierType {
 	  //- for chests somehow?, FURNACE - item card enchant
 	 SIGHT, //- night vision on a force rod ?
 	 TREASURE //,CORE - make things drop treasure cards - craft into spoils bag
+	 ,ITEM // ITEM type is for a recipe that converts things, with resultStack 
 	;
 	
 	public boolean apply(ItemStack tool, ItemStack mod, UpgradeBookData bd) {
@@ -59,7 +61,10 @@ public enum InfuserModifierType {
 		case PACK4:
 			// logic of which pack upgrade to use is inside
             return InfuserTileEntity.upgradeBag(tool, bd);
-
+		case ITEM:
+			ForceCraft.LOGGER.info("i need to give you item {}", this);
+			
+			return true;
 		}
 		ForceCraft.LOGGER.error("Error: No action for modifier {}", this);
 		return false;

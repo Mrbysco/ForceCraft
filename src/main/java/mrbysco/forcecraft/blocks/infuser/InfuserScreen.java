@@ -312,7 +312,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		public void drawTooltip(MatrixStack ms, int actualMouseX, int actualMouseY) {
 			RenderSystem.translatef(0.0F, 0.0F, 33.0F); 
 
-			String recipeSlug = recipe.modifier.getTooltip();
+			String recipeSlug = recipe.resultModifier.getTooltip();
 
 			List<ITextComponent> text = new ArrayList<>();
 			text.add(new TranslationTextComponent(recipeSlug));
