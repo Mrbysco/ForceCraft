@@ -2,7 +2,7 @@
   "type":"forcecraft:infuser",
   "ingredient": 
   {
-    "item": "forcecraft:fortune_cookie"
+    "tag": "forcecraft:fortune"
   },
   "center": {
     "tag": "forcecraft:valid_lucky_tools"
