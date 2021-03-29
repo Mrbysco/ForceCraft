@@ -1,6 +1,5 @@
 package mrbysco.forcecraft.items;
 
-import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
@@ -64,7 +63,7 @@ public class CustomArmorItem extends ArmorItem {
 			CompoundNBT shareTag = ToolModStorage.serializeNBT(cap);
 			
 			nbt.put(Reference.MOD_ID, shareTag);
-	        ForceCraft.LOGGER.info("(SERVER) getShareTag : ARMOR{}  ", shareTag);
+//	        ForceCraft.LOGGER.info("(SERVER) getShareTag : ARMOR{}  ", shareTag);
 		}
 
         return nbt;
@@ -80,7 +79,7 @@ public class CustomArmorItem extends ArmorItem {
         		INBT shareTag = nbt.get(Reference.MOD_ID);
 	        	ToolModStorage.deserializeNBT(cap, shareTag);
 
-            	ForceCraft.LOGGER.info("(CLIENT) readShareTag : ARMOR{}  ", shareTag);
+//            	ForceCraft.LOGGER.info("(CLIENT) readShareTag : ARMOR{}  ", shareTag);
 	        	//if we used plain nbt and not capabilities, call super instead
 //	        	super.readShareTag(stack, nbt);
     		}

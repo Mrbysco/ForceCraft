@@ -38,10 +38,11 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	private UpgradeBookTier tier;
 	private Ingredient center;
 
-	public InfuseRecipe(ResourceLocation id, Ingredient input, InfuserModifierType result, UpgradeBookTier tier, ItemStack outputStack) {
+	public InfuseRecipe(ResourceLocation id, Ingredient center, Ingredient input, InfuserModifierType result, UpgradeBookTier tier, ItemStack outputStack) {
 		super();
 		this.id = id;
 		this.input = input;
+		this.center = center;
 		output = outputStack;
 		resultModifier = result; 
 		this.setTier(tier);
@@ -96,12 +97,13 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	public IRecipeType<?> getType() {
 		return ForceRecipes.INFUSER_TYPE;
 	}
+
 	public Ingredient getInput() {
 		return input;
 	}
 
-	public void setInput(Ingredient input) {
-		this.input = input;
+	public Ingredient getCenter() {
+		return center;
 	}
 
 	public InfuserModifierType getModifier() {
@@ -118,14 +120,6 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 
 	public void setTier(UpgradeBookTier tier) {
 		this.tier = tier;
-	}
-
-	public Ingredient getCenter() {
-		return center;
-	}
-
-	public void setCenter(Ingredient center) {
-		this.center = center;
 	}
 
 	@Override
@@ -161,8 +155,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		        }
 				int tier = JSONUtils.getInt(json, "tier");
 				
-				recipe = new InfuseRecipe(recipeId, ingredient, modifier, UpgradeBookTier.values()[tier], output);
-				recipe.setCenter(center);
+				recipe = new InfuseRecipe(recipeId, center, ingredient, modifier, UpgradeBookTier.values()[tier], output);
 				addRecipe(recipe);
 				return recipe;
 			} catch (Exception e) {
@@ -173,12 +166,12 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 
 		@Override
 		public InfuseRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-
+			Ingredient center = Ingredient.read(buffer);
 			Ingredient ing = Ingredient.read(buffer);
 			int enumlon = buffer.readVarInt();
 			int tier = buffer.readInt();
 			
-			InfuseRecipe r = new InfuseRecipe(recipeId, ing, InfuserModifierType.values()[enumlon], UpgradeBookTier.values()[tier], buffer.readItemStack());
+			InfuseRecipe r = new InfuseRecipe(recipeId, center, ing, InfuserModifierType.values()[enumlon], UpgradeBookTier.values()[tier], buffer.readItemStack());
 
 			// server reading recipe from client or vice/versa
 			addRecipe(r);
@@ -187,7 +180,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 
 		@Override
 		public void write(PacketBuffer buffer, InfuseRecipe recipe) {
-
+			recipe.center.write(buffer);
 			recipe.input.write(buffer);
 			buffer.writeVarInt(recipe.resultModifier.ordinal());
 			buffer.writeInt(recipe.getTier().ordinal());
