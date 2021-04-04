@@ -127,11 +127,13 @@ public class TransmutationRecipe implements ICraftingRecipe {
 				nonnulllist.set(i, itemstack.getContainerItem());
 			} else if (itemstack.getItem() instanceof ForceRodItem) {
 				ItemStack itemstack1 = itemstack.copy();
-				//TODO: make it eat 25 force when force is stored. Else eat durability
+				ForceRodItem rod = (ForceRodItem) itemstack1.getItem();
+				int damage = rod.damageItem(itemstack1, 1);
+
 				if(itemstack1.getItem().getDamage(itemstack1) >= itemstack1.getMaxDamage()) {
 					itemstack1.shrink(1);
 				} else {
-					itemstack1.getItem().setDamage(itemstack1, itemstack1.getDamage() + 1);
+					itemstack1.setDamage(itemstack1.getDamage() + damage);
 					nonnulllist.set(i, itemstack1);
 				}
 				break;
