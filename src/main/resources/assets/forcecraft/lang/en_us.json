@@ -42,6 +42,7 @@
     "item.forcecraft.grinding_core": "Grinding Core",
     "item.forcecraft.heat_core": "Heat Core",
     "item.forcecraft.speed_core": "Speed Core",
+    "item.forcecraft.recovery_heart": "Recovery Heart",
 
     "_comment": "Armor",
     "item.forcecraft.force_helmet": "Force Cap",

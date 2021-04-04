@@ -210,6 +210,7 @@ public class ForceRegistry {
     /**
      * Items
      */
+    public static final RegistryObject<Item> RECOVERY_HEART = ITEMS.register("recovery_heart", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_GEM = ITEMS.register("force_gem", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_INGOT = ITEMS.register("force_ingot", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_NUGGET = ITEMS.register("force_nugget", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
