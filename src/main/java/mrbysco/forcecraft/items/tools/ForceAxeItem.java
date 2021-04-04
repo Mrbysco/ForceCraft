@@ -39,7 +39,7 @@ import static mrbysco.forcecraft.util.DartUtils.isLog;
 public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 
     public ForceAxeItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE, 0F, -3.1F, properties.maxDamage(256));
+        super(ModToolMaterial.FORCE, 0F, -3.1F, properties);
     }
 
     @Nullable
