@@ -128,6 +128,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 
 	@Override
 	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        //TODO: Make the wrench only work when it has Force. Only pickup a block when shift-right click. Using 100 force. Else rotate a block for 25 force
 		return this.damageItem(stack, amount);
 	}
 }
