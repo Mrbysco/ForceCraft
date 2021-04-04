@@ -11,7 +11,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class ForceToolData {
 
 	private int force = 0;
-	
+
 	public int getForce() {
 		return force;
 	}
@@ -22,7 +22,7 @@ public class ForceToolData {
 
 	public ForceToolData(ItemStack tool) {
 		CompoundNBT tag = tool.getTag();
-		if(tag != null && tag.contains("force")) {
+		if (tag != null && tag.contains("force")) {
 			this.read(tool, tag);
 		}
 	}
@@ -42,10 +42,10 @@ public class ForceToolData {
 	}
 
 	public void attachInformation(List<ITextComponent> tooltip) {
-		if(this.force > 0) { 
+		if (this.force > 0) {
 			TranslationTextComponent t = new TranslationTextComponent("item.infuser.tooltip.forcelevel");
 			t.appendString("" + this.force);
-			t.mergeStyle(TextFormatting.GOLD); 
+			t.mergeStyle(TextFormatting.GOLD);
 			tooltip.add(t);
 		}
 	}

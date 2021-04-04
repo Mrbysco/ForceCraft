@@ -74,12 +74,11 @@ public class ForceShovelItem extends ShovelItem implements IForceChargingTool {
     	ToolModStorage.attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
-
+    
 	@Override
 	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
 		return this.damageItem(stack,amount);
 	}
-
 
     @Override
     public int getItemEnchantability() {

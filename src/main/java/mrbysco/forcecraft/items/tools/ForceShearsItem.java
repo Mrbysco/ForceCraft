@@ -8,6 +8,8 @@ import mrbysco.forcecraft.entities.ColdChickenEntity;
 import mrbysco.forcecraft.entities.ColdCowEntity;
 import mrbysco.forcecraft.entities.ColdPigEntity;
 import mrbysco.forcecraft.entities.IColdMob;
+import mrbysco.forcecraft.items.infuser.ForceToolData;
+import mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -43,10 +45,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
-public class ForceShearsItem extends ShearsItem {
+public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 	private static final int SET_FIRE_TIME = 10;
 	private static final int SHEARS_DMG = 238; // vanilla shears have this max damage
@@ -208,8 +211,15 @@ public class ForceShearsItem extends ShearsItem {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
-		ToolModStorage.attachInformation(stack, lores);
+    	ForceToolData fd = new ForceToolData(stack);
+    	fd.attachInformation(lores);
+    	ToolModStorage.attachInformation(stack, lores);
 		super.addInformation(stack, worldIn, lores, flagIn);
+	}
+
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return this.damageItem(stack, amount);
 	}
 
 	@Override

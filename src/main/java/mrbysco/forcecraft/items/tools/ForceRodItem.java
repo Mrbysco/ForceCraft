@@ -3,12 +3,15 @@ package mrbysco.forcecraft.items.tools;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcerod.ForceRodProvider;
 import mrbysco.forcecraft.items.BaseItem;
+import mrbysco.forcecraft.items.infuser.ForceToolData;
+import mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import mrbysco.forcecraft.items.nonburnable.InertCoreItem;
 import mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -37,12 +40,13 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static mrbysco.forcecraft.Reference.MODIFIERS.MOD_ENDER;
 import static mrbysco.forcecraft.Reference.MODIFIERS.MOD_HEALING;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
 
-public class ForceRodItem extends BaseItem {
+public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 	public List<Reference.MODIFIERS> applicableModifiers = new ArrayList<>();
 
@@ -251,10 +255,19 @@ public class ForceRodItem extends BaseItem {
 		applicableModifiers.add(MOD_ENDER);
 	}
 
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return this.damageItem(stack, amount);
+	}
+	
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
 			ITooltipFlag flagIn) {
+		
+    	ForceToolData fd = new ForceToolData(stack);
+    	fd.attachInformation(tooltip);
+    	
 		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
 			// TODO: a get method returning an integer
 			if (cap.isRodOfHealing(3)) {
