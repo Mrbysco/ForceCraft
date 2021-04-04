@@ -9,6 +9,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
@@ -69,6 +70,32 @@ public class InfuserContainer extends Container {
         for (int x = 0; x < 9; ++x) {
             this.addSlot(new Slot(playerInventoryIn, x, xPos + x * 18, yPos + 58));
         }
+        
+        //set data that will sync server->client WITHOUT needing to call .markDirty()
+		trackInt(new IntReferenceHolder() {
+
+			@Override
+			public int get() {
+				return tile.processTime;
+			}
+
+			@Override
+			public void set(int value) {
+				tile.processTime = value;
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+
+			@Override
+			public int get() {
+				return tile.maxProcessTime;
+			}
+
+			@Override
+			public void set(int value) {
+				tile.maxProcessTime = value;
+			}
+		});
     }
 
     @Override

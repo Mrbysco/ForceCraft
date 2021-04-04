@@ -2,6 +2,8 @@ package mrbysco.forcecraft.client.gui.infuser;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+
+import mrbysco.forcecraft.ForceCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
@@ -50,7 +52,7 @@ public class ProgressBar extends AbstractGui {
     }
 
     public ProgressBar setMax(int max){
-        this.min = max;
+        this.max = max;
         return this;
     }
 
@@ -63,7 +65,8 @@ public class ProgressBar extends AbstractGui {
     }
 
     public void draw(MatrixStack matrixStack, Minecraft mc) {
-        GlStateManager.color4f(232.0F, 244.0F, 66.0F, 12.0F);
+//        GlStateManager.color4f(232.0F, 244.0F, 66.0F, 12.0F);
+//
         mc.getTextureManager().bindTexture(texture);
         switch (direction) {
             case DIAGONAL_UP_LEFT:
@@ -81,9 +84,8 @@ public class ProgressBar extends AbstractGui {
             case DIAGONAL_DOWN_RIGHT:
                 this.blit(matrixStack, positionX, positionY, textureX, textureY, getAdjustedWidth(), getAdjustedHeight());
                 break;
-            case DOWN_TO_UP:
-                this.blit(matrixStack, positionX, positionY, textureX, textureY, width, height);
-                this.blit(matrixStack, positionX, positionY, positionX, positionY, width, height - getAdjustedHeight());
+            case DOWN_TO_UP: //the only one that gets used 
+                this.blit(matrixStack, positionX, positionY, textureX, textureY, width, height - getAdjustedHeight());
                 break;
             case LEFT_TO_RIGHT:
                 this.blit(matrixStack, positionX, positionY, textureX, textureY, getAdjustedWidth(), height);
