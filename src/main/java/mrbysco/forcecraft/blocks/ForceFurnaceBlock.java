@@ -141,9 +141,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
 			// inventory step
 
 			if (stack.getTag() != null && stack.getTag().contains(NBT_UPGRADE)) {
-
 				ItemStack upgrade = ItemStack.read(stack.getTag().getCompound(NBT_UPGRADE));
-
 				furnaceTile.setUpgrade(upgrade);
 			}
 		}
