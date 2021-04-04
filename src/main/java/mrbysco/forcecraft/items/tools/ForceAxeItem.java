@@ -5,9 +5,12 @@ import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
+import mrbysco.forcecraft.items.infuser.ForceToolData;
+import mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import mrbysco.forcecraft.registry.material.ModToolMaterial;
 import mrbysco.forcecraft.util.DartUtils;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
@@ -28,14 +31,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 import static mrbysco.forcecraft.util.DartUtils.isLog;
 
-public class ForceAxeItem extends AxeItem {
+public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 
     public ForceAxeItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE, 0F, -3.1F, properties);
+        super(ModToolMaterial.FORCE, 0F, -3.1F, properties.maxDamage(256));
     }
 
     @Nullable
@@ -180,10 +184,16 @@ public class ForceAxeItem extends AxeItem {
     
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
- 
+    	ForceToolData fd = new ForceToolData(stack);
+    	fd.attachInformation(lores);
     	ToolModStorage.attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
 
- 
+
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return this.damageItem(stack, amount);
+	}
+
 }

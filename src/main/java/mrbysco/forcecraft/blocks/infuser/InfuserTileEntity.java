@@ -7,6 +7,7 @@ import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.items.CustomArmorItem;
 import mrbysco.forcecraft.items.ForcePackItem;
+import mrbysco.forcecraft.items.infuser.ForceToolData;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.tools.ForceAxeItem;
@@ -19,6 +20,7 @@ import mrbysco.forcecraft.items.tools.ForceSwordItem;
 import mrbysco.forcecraft.recipe.InfuseRecipe;
 import mrbysco.forcecraft.registry.ForceFluids;
 import mrbysco.forcecraft.registry.ForceRegistry;
+import mrbysco.forcecraft.registry.ForceTags;
 import mrbysco.forcecraft.tiles.energy.ForceEnergyStorage;
 import mrbysco.forcecraft.util.EnchantUtils;
 import mrbysco.forcecraft.util.ItemHandlerUtils;
@@ -65,7 +67,9 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class InfuserTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventory {
 
-    public boolean canWork = false;
+    private static final int FLUID_CHARGE = 1000;
+
+	public boolean canWork = false;
 
     public int processTime = 0;
     public int maxProcessTime = 17;
@@ -182,7 +186,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         if (handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
         	processForceGems();
         }
-//        ForceCraft.LOGGER.info("tile TICK: canWork = "+  canWork);
+
         if (canWork) {
         	processTime++;
         	if(processTime < this.maxProcessTime) {
@@ -193,7 +197,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
         	//once we have a valid tool and have waited. go do the thing
         	if(hasTool() && hasValidBook()) {
-        		processTool();
+        		if(areAllModifiersEmpty()) {
+        			processForceCharging();
+        		}
+        		else {
+        			processTool();
+        		}
         	}
         	// auto turn off when done
         	//even if tool or book slot become empty, dont auto run next insert
@@ -206,7 +215,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
 	private void refreshClient() {
 		markDirty();     
-		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+		BlockState state = world.getBlockState(pos);
+		world.notifyBlockUpdate(pos, state, state, 2);
 	}
 
     //Processes force Gems in the force infuser slot
@@ -219,6 +229,34 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
             refreshClient();
         }
+    }
+    
+    private boolean areAllModifiersEmpty() {
+
+    	int emptySlots = 0;
+        for (int i = 0; i < SLOT_TOOL; i++) {
+        	if(handler.getStackInSlot(i).isEmpty()) {
+        		emptySlots++;
+        	}
+        }
+    	
+    	return emptySlots == 8;
+    }
+    
+    private void processForceCharging() {
+        ItemStack tool = getFromToolSlot();
+        
+        if(!tool.getItem().isIn(ForceTags.VALID_INFUSER_CHARGE) || tool.getCount() != 1
+        		|| tank.getFluidAmount() < FLUID_CHARGE) {
+        	//halt if empty. halt if stack larger than 1, only upgrade a single item
+        	return;
+        }
+        //its a valid force tool non stacked, so charging is ok
+        
+        ForceToolData force = new ForceToolData(tool);
+        force.charge(FLUID_CHARGE);
+        tank.drain(FLUID_CHARGE, FluidAction.EXECUTE);
+        force.write(tool);
     }
 
     private void processTool() {
