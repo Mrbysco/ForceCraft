@@ -20,7 +20,7 @@ public class HeartHandler {
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
 		World world = event.getEntity().world;
-		if (world.isRemote || event.getSource() == null || world.rand.nextDouble() >= CHANCE+1) {
+		if (world.isRemote || event.getSource() == null || world.rand.nextDouble() >= CHANCE) {
 			return;
 		}
 		if (event.getSource().getTrueSource() instanceof PlayerEntity && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
