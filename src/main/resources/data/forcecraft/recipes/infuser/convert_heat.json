@@ -8,6 +8,7 @@
     "item": "forcecraft:upgrade_core"
   },
   "tier": 4,
+  "time": 60,
   "output": {
   	"item":"forcecraft:heat_core",
   	"count": 1

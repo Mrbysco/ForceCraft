@@ -8,5 +8,6 @@
     "tag": "forcecraft:valid_heat_tools"
   },
   "tier": 4,
+  "time": 60,
   "result": "forcecraft:heat"
 }

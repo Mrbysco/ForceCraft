@@ -29,7 +29,6 @@ import java.util.Set;
 public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	private static final int MAX_SLOTS = 8;
 	private static final Set<String> HASHES = new HashSet<>();
-	public static final Set<InfuseRecipe> RECIPES = new HashSet<>();
 	public static final Map<Integer, List<InfuseRecipe>> RECIPESBYLEVEL = new HashMap<>();
 	private final ResourceLocation id;
 	public Ingredient input = Ingredient.EMPTY;
@@ -37,6 +36,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	ItemStack output = ItemStack.EMPTY;  
 	private UpgradeBookTier tier;
 	private Ingredient center;
+	private int time;
 
 	public InfuseRecipe(ResourceLocation id, Ingredient center, Ingredient input, InfuserModifierType result, UpgradeBookTier tier, ItemStack outputStack) {
 		super();
@@ -47,6 +47,16 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		resultModifier = result; 
 		this.setTier(tier);
 	}
+	
+	public int getTime() {
+		return time;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
+	}
+
+	
 	
 	@Override
 	public boolean matches(InfuserTileEntity inv, World worldIn) {
@@ -156,6 +166,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 				int tier = JSONUtils.getInt(json, "tier");
 				
 				recipe = new InfuseRecipe(recipeId, center, ingredient, modifier, UpgradeBookTier.values()[tier], output);
+				recipe.setTime(JSONUtils.getInt(json, "time"));
 				addRecipe(recipe);
 				return recipe;
 			} catch (Exception e) {
@@ -173,6 +184,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 			
 			InfuseRecipe r = new InfuseRecipe(recipeId, center, ing, InfuserModifierType.values()[enumlon], UpgradeBookTier.values()[tier], buffer.readItemStack());
 
+			r.setTime(buffer.readInt());
 			// server reading recipe from client or vice/versa
 			addRecipe(r);
 			return r;
@@ -185,6 +197,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 			buffer.writeVarInt(recipe.resultModifier.ordinal());
 			buffer.writeInt(recipe.getTier().ordinal());
 			buffer.writeItemStack(recipe.getRecipeOutput());
+			buffer.writeInt(recipe.getTime());
 		}
 	}
 
@@ -193,8 +206,8 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		if (HASHES.contains(id.toString())) {
 			return false;
 		}
-		RECIPES.add(recipe);
 		int thisTier = recipe.getTier().ordinal();
+		//by level is for the GUI 
 		if(!RECIPESBYLEVEL.containsKey(thisTier)) {
 			RECIPESBYLEVEL.put(thisTier, new ArrayList<>());
 		}

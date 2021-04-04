@@ -17,6 +17,7 @@ import mrbysco.forcecraft.items.tools.ForceRodItem;
 import mrbysco.forcecraft.items.tools.ForceShearsItem;
 import mrbysco.forcecraft.items.tools.ForceShovelItem;
 import mrbysco.forcecraft.items.tools.ForceSwordItem;
+import mrbysco.forcecraft.recipe.ForceRecipes;
 import mrbysco.forcecraft.recipe.InfuseRecipe;
 import mrbysco.forcecraft.registry.ForceFluids;
 import mrbysco.forcecraft.registry.ForceRegistry;
@@ -194,9 +195,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
         if (canWork) {
         	
-        	
-        	
-        	
         	processTime++;
         	if(processTime < this.maxProcessTime) {
         		return;
@@ -224,10 +222,43 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public void startWork() {
     	canWork = true;
     	processTime = 0;
-    	// TODO: look at all modifiers
-    	// add up time for each and put here
-    	maxProcessTime = 117;
+    	setMaxTimeFromRecipes();
+    	if(maxProcessTime <= 0) {
+    		//no valid recipes
+        	canWork = false;
+        	maxProcessTime = 0;
+    		
+    	}
     }
+
+	private void setMaxTimeFromRecipes() {
+		maxProcessTime = 0;
+		for (int i = 0; i < SLOT_TOOL; i++) {
+
+			ItemStack modifier = getModifier(i);
+			UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
+			int bookTier = bd.getTier().ordinal();
+			// if the recipe level does not exceed what the book has
+			// test the ingredient of this recipe, if it matches me
+
+			List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
+			for (InfuseRecipe recipeCurrent : recipes) {
+				if (recipeCurrent.getTier().ordinal() > bookTier) {
+					continue;
+				}
+				ItemStack tool = getFromToolSlot();
+				if (recipeCurrent.getCenter().test(tool) == false) {
+					// doesnt match the "center" tool test from recipe
+					continue;
+				}
+				if (recipeCurrent.input.test(modifier)) {
+					// tool, book, and modifier all valid
+//					ForceCraft.LOGGER.info(recipeCurrent.getId() + " increase  "+ recipeCurrent.getTime());
+					maxProcessTime += recipeCurrent.getTime();
+				}
+			}
+		}
+	}
 
 	private void refreshClient() {
 		markDirty();     
@@ -276,7 +307,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     private void processTool() {
-
+    	//recipes were pre-validated in setMaxTimeFromRecipes
+    	//but do it again here in case any slots changed contents
         for (int i = 0; i < SLOT_TOOL; i++) {
         	//halt if no power
         	if(energyStorage.getEnergyStored() < ENERGY_COST_PER) {
@@ -392,7 +424,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		// if the recipe level does not exceed what the book has
 		//test the ingredient of this recipe, if it matches me
 		
-    	for (InfuseRecipe recipeCurrent : InfuseRecipe.RECIPES) {
+		List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
+    	for (InfuseRecipe recipeCurrent : recipes) {
 
     		if(recipeCurrent.getTier().ordinal() > bookTier) {
 

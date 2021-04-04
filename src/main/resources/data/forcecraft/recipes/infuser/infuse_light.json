@@ -8,5 +8,6 @@
     "tag": "forcecraft:valid_light_tools"
   },
   "tier": 7,
+  "time": 20,
   "result": "forcecraft:light"
 }

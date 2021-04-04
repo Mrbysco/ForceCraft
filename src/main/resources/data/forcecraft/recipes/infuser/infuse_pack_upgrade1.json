@@ -8,5 +8,6 @@
     "item": "forcecraft:force_pack"
   },
   "tier": 2,
+  "time": 20,
   "result": "forcecraft:pack1"
 }

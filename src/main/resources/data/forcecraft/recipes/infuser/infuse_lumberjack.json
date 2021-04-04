@@ -8,5 +8,6 @@
     "tag": "forcecraft:valid_lumber_tools"
   },
   "tier": 1,
+  "time": 20,
   "result": "forcecraft:lumberjack"
 }

@@ -8,5 +8,6 @@
     "tag": "forcecraft:valid_bleeding_tools"
   },
   "tier": 3,
+  "time": 20,
   "result": "forcecraft:bleeding"
 }
