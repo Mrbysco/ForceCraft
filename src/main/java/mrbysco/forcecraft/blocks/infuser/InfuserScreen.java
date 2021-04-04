@@ -50,14 +50,16 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 //		this.xSize = 176;
 		this.ySize = 208;
 
-		this.infuserProgress = new ProgressBar(TEXTURE, ProgressBar.ProgressBarDirection.DOWN_TO_UP, 2, 20, 134, 93,
-				176, 0);
 	}
 
 	@Override
 	protected void init() {
 		super.init();
 
+		this.infuserProgress = new ProgressBar(TEXTURE, ProgressBar.ProgressBarDirection.DOWN_TO_UP, 2, 20, 
+				guiLeft + 134, guiTop + 93,
+				176, 0);
+		
 		int btnSize = 13;
 		int x = 124;
 		int y = 17;
@@ -108,7 +110,6 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			@Override
 			public void renderWidget(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
 				// skip drawing me
-//				ForceCraft.LOGGER.info("canWork = "+ container.getTile().canWork);
 				if (!container.getTile().canWork) {
 					// render special
 //				    super.renderWidget(ms, mouseX, mouseY, partialTicks);
@@ -161,19 +162,18 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		this.drawFluidBar(matrixStack);
 		this.drawEnergyBar(matrixStack);
+		this.drawProgressBar(matrixStack);
 	}
-
+	
 	@Override
 	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
 		int actualMouseX = mouseX - ((this.width - this.xSize) / 2);
 		int actualMouseY = mouseY - ((this.height - this.ySize) / 2);
 
-		this.infuserProgress.setMin(container.getTile().processTime).setMax(container.getTile().maxProcessTime);
-		this.infuserProgress.draw(matrixStack, this.minecraft);
-
+		InfuserTileEntity tile = container.getTile();
 
 		if (isPointInRegion(123, 16, 12, 12, mouseX, mouseY)
-				&& container.getTile().handler.getStackInSlot(InfuserTileEntity.SLOT_GEM).isEmpty()) {
+				&& tile.handler.getStackInSlot(InfuserTileEntity.SLOT_GEM).isEmpty()) {
 			List<ITextComponent> text = new ArrayList<>();
 			text.add(new TranslationTextComponent("gui.forcecraft.infuser.help.tooltip")
 					.mergeStyle(TextFormatting.GRAY));
@@ -189,7 +189,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		if (isPointInRegion(150, 8, 16, 82, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
-			IFormattableTextComponent tt = new TranslationTextComponent("" + this.container.tile.getEnergyStored())
+			IFormattableTextComponent tt = new TranslationTextComponent("" + tile.getEnergyStored())
 					.mergeStyle(TextFormatting.GRAY);
 			text.add(tt);
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
@@ -197,12 +197,12 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		if (isPointInRegion(10, 36, 15, 82, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
-			if (container.tile.getFluid() == null) {
+			if (tile.getFluid() == null) {
 				text.add(new TranslationTextComponent("gui.forcecraft.infuser.empty.tooltip"));
 			} else {
 				text.add(new TranslationTextComponent("fluid.forcecraft.fluid_force_source"));
 
-				text.add(new StringTextComponent("(" + this.container.tile.getFluidAmount() + ")")
+				text.add(new StringTextComponent("(" + tile.getFluidAmount() + ")")
 						.mergeStyle(TextFormatting.YELLOW));
 			}
 
@@ -245,6 +245,14 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		blit(ms, guiLeft + 156, guiTop + 13, 0, 0, 
 				width, (int) (height * pct), 
 				width, (int) height);
+	}
+
+	private void drawProgressBar(MatrixStack matrixStack) {
+		InfuserTileEntity tile = container.getTile();
+		if(tile.canWork) {
+			this.infuserProgress.setMin(tile.processTime).setMax(tile.maxProcessTime);
+			this.infuserProgress.draw(matrixStack, this.minecraft);
+		}
 	}
 
 	private void drawPopup(MatrixStack matrixStack) {

@@ -152,6 +152,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
+
+    	this.processTime = nbt.getInt("processTime");
+    	this.maxProcessTime = nbt.getInt("maxProcessTime");
         //Items
     	canWork = nbt.getBoolean("canWork");
         handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
@@ -166,6 +169,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public CompoundNBT write(CompoundNBT compound) {
         compound = super.write(compound);
 
+        compound.putInt("processTime", this.processTime);
+        compound.putInt("maxProcessTime", this.maxProcessTime);
         //Items
         compound.putBoolean("canWork", canWork);
         compound.put("ItemStackHandler", handler.serializeNBT());
@@ -188,6 +193,10 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         }
 
         if (canWork) {
+        	
+        	
+        	
+        	
         	processTime++;
         	if(processTime < this.maxProcessTime) {
         		return;
@@ -209,8 +218,15 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             canWork = false;
             
             refreshClient();
-        }
-        
+        } 
+    }
+    
+    public void startWork() {
+    	canWork = true;
+    	processTime = 0;
+    	// TODO: look at all modifiers
+    	// add up time for each and put here
+    	maxProcessTime = 117;
     }
 
 	private void refreshClient() {
@@ -260,6 +276,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     private void processTool() {
+
         for (int i = 0; i < SLOT_TOOL; i++) {
         	//halt if no power
         	if(energyStorage.getEnergyStored() < ENERGY_COST_PER) {
@@ -377,7 +394,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		
     	for (InfuseRecipe recipeCurrent : InfuseRecipe.RECIPES) {
 
-			ForceCraft.LOGGER.info("."+recipeCurrent.getId());
     		if(recipeCurrent.getTier().ordinal() > bookTier) {
 
     			ForceCraft.LOGGER.info("recipe tier {} > book Tier {}", recipeCurrent.getTier().ordinal(), bookTier);
@@ -387,7 +403,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     			//doesnt match the "center" tool test from recipe
 				continue;
     		}
-    		ForceCraft.LOGGER.info("CENTER and tier both match {} on tool {}", recipeCurrent.resultModifier, tool);
+//    		ForceCraft.LOGGER.info("CENTER and tier both match {} on tool {}", recipeCurrent.resultModifier, tool);
     		
     		//force pack upgrade can be applied multiple times depending on many things
     		if (recipeCurrent.input.test(modifier)) {
