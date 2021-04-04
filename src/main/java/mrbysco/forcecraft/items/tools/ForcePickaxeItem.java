@@ -4,8 +4,11 @@ import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
+import mrbysco.forcecraft.items.infuser.ForceToolData;
+import mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import mrbysco.forcecraft.registry.material.ModToolMaterial;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
@@ -17,13 +20,14 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
-public class ForcePickaxeItem extends PickaxeItem {
+public class ForcePickaxeItem extends PickaxeItem implements IForceChargingTool {
 
-    public ForcePickaxeItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE,-6, -2.8F, properties);
+	public ForcePickaxeItem(Item.Properties properties) {
+        super(ModToolMaterial.FORCE,-6, -2.8F, properties.maxDamage(256)); // idk real value
     }
 
     @Nullable
@@ -37,10 +41,16 @@ public class ForcePickaxeItem extends PickaxeItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
- 
+    	ForceToolData fd = new ForceToolData(stack);
+    	fd.attachInformation(lores);
     	ToolModStorage.attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
+    
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return this.damageItem(stack,amount);
+	}
 
     @Override
     public int getItemEnchantability() {

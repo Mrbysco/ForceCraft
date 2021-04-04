@@ -188,6 +188,7 @@
     "forcecraft.baconator.shift.carrying": "Carrying: ",
     "forcecraft.baconator.shift.nothing": "Nothing",
     
+    "item.infuser.tooltip.forcelevel": "Force: ",
     "item.infuser.tooltip.lumberjack": "Lumberjack",
     "item.infuser.tooltip.rainbow": "Rainbow",
     "item.infuser.tooltip.heat": "Heat",
