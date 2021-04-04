@@ -1,6 +1,5 @@
 package mrbysco.forcecraft.blocks;
 
-import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.items.UpgradeCoreItem;
 import mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
 import mrbysco.forcecraft.tiles.ForceFurnaceTileEntity;
@@ -38,11 +37,11 @@ import java.util.function.ToIntFunction;
 
 public class ForceFurnaceBlock extends AbstractFurnaceBlock {
 
-    private static final String NBT_UPGRADE = "upgrade";
+	private static final String NBT_UPGRADE = "upgrade";
 
 	public ForceFurnaceBlock(AbstractBlock.Properties builder) {
-        super(builder);
-    }
+		super(builder);
+	}
 
     public static ToIntFunction<BlockState> getLightValueLit(int lightValue) {
         return (state) -> {
@@ -117,7 +116,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
         while(!stack.isEmpty()) {
             ItemEntity itementity = new ItemEntity(worldIn, d3, d4, d5, stack.split(worldIn.rand.nextInt(21) + 10));
             float f = 0.05F;
-            itementity.setMotion(worldIn.rand.nextGaussian() * (double)0.05F, worldIn.rand.nextGaussian() * (double)0.05F + (double)0.2F, worldIn.rand.nextGaussian() * (double)0.05F);
+            itementity.setMotion(worldIn.rand.nextGaussian() * (double)0.05F, worldIn.rand.nextGaussian() * (double)f + (double)0.2F, worldIn.rand.nextGaussian() * (double)f);
             worldIn.addEntity(itementity);
         }
     }
