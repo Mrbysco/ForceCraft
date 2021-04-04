@@ -41,7 +41,7 @@ public class ForceShovelItem extends ShovelItem implements IForceChargingTool {
     public List<Reference.MODIFIERS> applicableModifers = new ArrayList<>();
 
     public ForceShovelItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE, -7F, -3.0F, properties.maxDamage(256));
+        super(ModToolMaterial.FORCE, -7F, -3.0F, properties);
         setApplicableModifers();
     }
 
@@ -74,7 +74,7 @@ public class ForceShovelItem extends ShovelItem implements IForceChargingTool {
     	ToolModStorage.attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
-    
+
 	@Override
 	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
 		return this.damageItem(stack,amount);

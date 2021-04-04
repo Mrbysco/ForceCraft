@@ -35,7 +35,7 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOL
 public class ForceSwordItem extends SwordItem implements IForceChargingTool {
 
     public ForceSwordItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE, -2, -2.4F, properties.maxDamage(256));
+        super(ModToolMaterial.FORCE, -2, -2.4F, properties);
     }
 
     @Override

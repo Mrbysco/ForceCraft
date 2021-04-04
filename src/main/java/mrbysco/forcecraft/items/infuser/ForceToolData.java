@@ -21,15 +21,13 @@ public class ForceToolData {
 	}
 
 	public ForceToolData(ItemStack tool) {
-
 		CompoundNBT tag = tool.getTag();
 		if(tag != null && tag.contains("force")) {
 			this.read(tool, tag);
 		}
 	}
 
-
-	private void read(ItemStack book, CompoundNBT tag) {
+	private void read(ItemStack tool, CompoundNBT tag) {
 		force = tag.getInt("force");
 	}
 
