@@ -3,9 +3,12 @@ package mrbysco.forcecraft.items.tools;
 import mrbysco.forcecraft.capablilities.forcewrench.ForceWrenchProvider;
 import mrbysco.forcecraft.capablilities.forcewrench.IForceWrench;
 import mrbysco.forcecraft.items.BaseItem;
+import mrbysco.forcecraft.items.infuser.ForceToolData;
+import mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,10 +28,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEWRENCH;
 
-public class ForceWrenchItem extends BaseItem {
+public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 
     public ForceWrenchItem(Item.Properties name){
         super(name.maxStackSize(1));
@@ -111,12 +115,19 @@ public class ForceWrenchItem extends BaseItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        stack.getCapability(CAPABILITY_FORCEWRENCH).ifPresent((cap) -> {
-            if(cap.getStoredName() != null){
+    	ForceToolData fd = new ForceToolData(stack);
+    	fd.attachInformation(tooltip);
+    	stack.getCapability(CAPABILITY_FORCEWRENCH).ifPresent((cap) -> {
+            if(cap.getStoredName() != null){ // idk what this is
                 tooltip.add(new StringTextComponent("Stored: ").mergeStyle(TextFormatting.GOLD)
                         .appendSibling(new TranslationTextComponent(cap.getStoredName()).mergeStyle(TextFormatting.GRAY)));
             }
         });
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
+
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return this.damageItem(stack, amount);
+	}
 }

@@ -190,7 +190,6 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
         super.addInformation(stack, worldIn, lores, flagIn);
     }
 
-
 	@Override
 	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
 		return this.damageItem(stack, amount);
