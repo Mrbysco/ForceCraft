@@ -29,7 +29,7 @@ public class ForceBowItem extends BowItem implements IForceChargingTool {
 	};
 
     public ForceBowItem(Properties properties) {
-        super(properties.maxStackSize(1));
+        super(properties.maxStackSize(1).maxDamage(332));
     }
 
     @Nullable
