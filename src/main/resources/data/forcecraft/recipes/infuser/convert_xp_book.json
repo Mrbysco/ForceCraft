@@ -8,6 +8,7 @@
     "item": "minecraft:book"
   },
   "tier": 2,
+  "time": 20,
   "output": {
   	"item":"forcecraft:experience_tome",
   	"count": 1

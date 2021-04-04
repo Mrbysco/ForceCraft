@@ -8,5 +8,6 @@
     "tag": "forcecraft:valid_damage_tools"
   },
   "tier": 0,
+  "time": 20,
   "result": "forcecraft:damage"
 }

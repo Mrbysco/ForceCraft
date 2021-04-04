@@ -8,6 +8,7 @@
     "item": "forcecraft:upgrade_core"
   },
   "tier": 2,
+  "time": 20,
   "output": {
   	"item":"forcecraft:experience_core",
   	"count": 1

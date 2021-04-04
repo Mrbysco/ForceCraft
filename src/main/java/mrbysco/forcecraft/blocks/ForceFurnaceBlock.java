@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.stats.Stats;
@@ -28,14 +29,19 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.ToIntFunction;
 
 public class ForceFurnaceBlock extends AbstractFurnaceBlock {
 
-    public ForceFurnaceBlock(AbstractBlock.Properties builder) {
-        super(builder);
-    }
+	private static final String NBT_UPGRADE = "upgrade";
+
+	public ForceFurnaceBlock(AbstractBlock.Properties builder) {
+		super(builder);
+	}
 
     public static ToIntFunction<BlockState> getLightValueLit(int lightValue) {
         return (state) -> {
@@ -79,15 +85,6 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
         return new ForceFurnaceTileEntity();
     }
 
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        if (stack.hasDisplayName()) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof AbstractForceFurnaceTile) {
-                ((AbstractForceFurnaceTile)tileentity).setCustomName(stack.getDisplayName());
-            }
-        }
-    }
 
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
@@ -119,8 +116,56 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
         while(!stack.isEmpty()) {
             ItemEntity itementity = new ItemEntity(worldIn, d3, d4, d5, stack.split(worldIn.rand.nextInt(21) + 10));
             float f = 0.05F;
-            itementity.setMotion(worldIn.rand.nextGaussian() * (double)0.05F, worldIn.rand.nextGaussian() * (double)0.05F + (double)0.2F, worldIn.rand.nextGaussian() * (double)0.05F);
+            itementity.setMotion(worldIn.rand.nextGaussian() * (double)0.05F, worldIn.rand.nextGaussian() * (double)f + (double)0.2F, worldIn.rand.nextGaussian() * (double)f);
             worldIn.addEntity(itementity);
         }
     }
+    
+    // keep inventory feature  for upgrade only
+    // TODO: tooltip?
+
+	@Override
+	public List<ItemStack> getDrops(BlockState state, net.minecraft.loot.LootContext.Builder builder) {
+		// because harvestBlock manually forces a drop, we must do this to dodge that
+		return new ArrayList<>();
+	}
+
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		TileEntity tileentity = worldIn.getTileEntity(pos);
+		if (tileentity instanceof AbstractForceFurnaceTile) {
+
+			AbstractForceFurnaceTile furnaceTile = (AbstractForceFurnaceTile) tileentity;
+			if (stack.hasDisplayName()) {
+				furnaceTile.setCustomName(stack.getDisplayName());
+			}
+			// inventory step
+
+			if (stack.getTag() != null && stack.getTag().contains(NBT_UPGRADE)) {
+
+				ItemStack upgrade = ItemStack.read(stack.getTag().getCompound(NBT_UPGRADE));
+
+				furnaceTile.setUpgrade(upgrade);
+			}
+		}
+	}
+
+	@Override
+	public void harvestBlock(World world, PlayerEntity player, BlockPos pos, BlockState state, TileEntity tileentity, ItemStack stackToolUsed) {
+		super.harvestBlock(world, player, pos, state, tileentity, stackToolUsed);
+
+	    ItemStack tankStack = new ItemStack(this); 
+	    
+		if (tileentity != null && tileentity instanceof AbstractForceFurnaceTile) {
+			AbstractForceFurnaceTile furnaceTile = (AbstractForceFurnaceTile) tileentity;
+			
+			CompoundNBT upgrade = new CompoundNBT();
+			furnaceTile.getUpgrade().write(upgrade);
+
+			tankStack.getOrCreateTag().put(NBT_UPGRADE, upgrade);
+		}
+		if (world.isRemote == false) {
+			world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), tankStack));
+		}
+	}
 }
