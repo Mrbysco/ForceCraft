@@ -124,6 +124,10 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		return IRecipeType.SMELTING;
 	}
 
+	public ItemStack setUpgrade(ItemStack upgrade) {
+		return this.items.set(UPGRADE_SLOT, upgrade);
+	}
+
 	public ItemStack getUpgrade() {
 		return this.items.get(UPGRADE_SLOT);
 	}
