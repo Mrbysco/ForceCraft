@@ -27,7 +27,7 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOL
 public class ForcePickaxeItem extends PickaxeItem implements IForceChargingTool {
 
 	public ForcePickaxeItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE,-6, -2.8F, properties.maxDamage(256));
+        super(ModToolMaterial.FORCE,-6, -2.8F, properties);
     }
 
     @Nullable

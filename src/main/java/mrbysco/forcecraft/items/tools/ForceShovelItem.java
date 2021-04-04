@@ -80,7 +80,6 @@ public class ForceShovelItem extends ShovelItem implements IForceChargingTool {
 		return this.damageItem(stack,amount);
 	}
 
-
     @Override
     public int getItemEnchantability() {
         return 0;
