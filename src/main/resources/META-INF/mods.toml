@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[36,)"
 issueTrackerURL="https://github.com/mrbysco/forcecraft"
-license="GNU GENERAL PUBLIC LICENSE"
+license="GNU GPL v3 "
 
 [[mods]]
 modId="forcecraft"
