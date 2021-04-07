@@ -20,8 +20,22 @@ public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe 
 		this.secondaryChance = secondaryChance;
 	}
 
+	@Override
+	public ItemStack getCraftingResult(IInventory inv) {
+		return this.resultItems.get(0).copy();
+	}
+
+	@Override
+	public ItemStack getRecipeOutput() {
+		return this.resultItems.get(0);
+	}
+
 	public NonNullList<ItemStack> getCraftingResults(IInventory inv) {
-		return this.resultItems;
+		NonNullList<ItemStack> results = NonNullList.create();
+		for(ItemStack stack : this.resultItems) {
+			results.add(stack.copy());
+		}
+		return results;
 	}
 
 	public NonNullList<ItemStack> getRecipeOutputs() {
