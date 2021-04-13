@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "forcecraft:item/blue_chu_jelly"
+  }
+}

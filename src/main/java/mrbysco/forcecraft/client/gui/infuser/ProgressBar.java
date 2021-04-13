@@ -1,9 +1,6 @@
 package mrbysco.forcecraft.client.gui.infuser;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import mrbysco.forcecraft.ForceCraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;

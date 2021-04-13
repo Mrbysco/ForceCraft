@@ -74,7 +74,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 					if (i instanceof ItemEntity) {
 						if (((ItemEntity) i).getItem().getItem() instanceof InertCoreItem) {
 							ItemEntity bottledWither = new NonBurnableItemEntity(worldIn, pos.getX(), pos.getY() + 1,
-									pos.getZ(), new ItemStack(ForceRegistry.BOTTLED_WITH.get(),
+									pos.getZ(), new ItemStack(ForceRegistry.BOTTLED_WITHER.get(),
 											((ItemEntity) i).getItem().getCount()));
 							worldIn.addEntity(bottledWither);
 							stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));

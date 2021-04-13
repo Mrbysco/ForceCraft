@@ -2,8 +2,10 @@ package mrbysco.forcecraft.registry;
 
 import mrbysco.forcecraft.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ITag.INamedTag;
 import net.minecraft.tags.ItemTags;
@@ -21,7 +23,13 @@ public class ForceTags {
 	public static final ITag.INamedTag<Item> FORCE_NUGGET = forgeTag("nuggets/force");
 	public static final ITag.INamedTag<Item> FORGE_GEM = forgeTag("gems/force");
 
+	public static final ITag.INamedTag<Fluid> FORCE = forgeFluidTag("force");
+
 	private static INamedTag<Item> forgeTag(String name) {
 		return ItemTags.makeWrapperTag("forge:" + name);
+	}
+
+	private static INamedTag<Fluid> forgeFluidTag(String name) {
+		return FluidTags.makeWrapperTag("forge:" + name);
 	}
 }

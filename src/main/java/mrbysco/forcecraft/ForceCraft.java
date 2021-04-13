@@ -82,16 +82,19 @@ public class ForceCraft {
         MinecraftForge.EVENT_BUS.register(new WorldGenHandler());
         MinecraftForge.EVENT_BUS.addListener(NonBurnableItemEntity.EventHandler::onExpire); //Expire event of NonBurnableItemEntity
 
+        MinecraftForge.EVENT_BUS.addListener(ForceEntities::addSpawns);
         eventBus.addListener(ForceEntities::registerEntityAttributes);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             eventBus.addListener(ClientHandler::onClientSetup);
+            eventBus.addListener(ClientHandler::registerItemColors);
         });
     }
 
     private void setup(final FMLCommonSetupEvent event) {
         PacketHandler.init();
         CapabilityHandler.register();
+        ForceEntities.registerSpawnPlacement();
     }
 }
 

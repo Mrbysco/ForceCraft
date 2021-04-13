@@ -19,6 +19,7 @@ import mrbysco.forcecraft.items.BaseItem;
 import mrbysco.forcecraft.items.BottledWitherItem;
 import mrbysco.forcecraft.items.CustomArmorItem;
 import mrbysco.forcecraft.items.CustomFoodItem;
+import mrbysco.forcecraft.items.CustomSpawnEggItem;
 import mrbysco.forcecraft.items.ExperienceTomeItem;
 import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForceFluidBucketItem;
@@ -27,6 +28,10 @@ import mrbysco.forcecraft.items.FortuneItem;
 import mrbysco.forcecraft.items.GoldenPowerSourceItem;
 import mrbysco.forcecraft.items.SpoilsBagItem;
 import mrbysco.forcecraft.items.UpgradeCoreItem;
+import mrbysco.forcecraft.items.flask.ForceFilledForceFlask;
+import mrbysco.forcecraft.items.flask.ForceFlaskItem;
+import mrbysco.forcecraft.items.flask.MilkFlaskItem;
+import mrbysco.forcecraft.items.flask.RedPotionItem;
 import mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import mrbysco.forcecraft.items.nonburnable.InertCoreItem;
 import mrbysco.forcecraft.items.tools.ForceArrowItem;
@@ -223,6 +228,10 @@ public class ForceRegistry {
     public static final RegistryObject<Item> GRINDING_CORE = ITEMS.register("grinding_core", () -> new UpgradeCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> HEAT_CORE = ITEMS.register("heat_core", () -> new UpgradeCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> SPEED_CORE = ITEMS.register("speed_core", () -> new UpgradeCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> RED_CHU_JELLY = ITEMS.register("red_chu_jelly", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> GREEN_CHU_JELLY = ITEMS.register("green_chu_jelly", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> BLUE_CHU_JELLY = ITEMS.register("blue_chu_jelly", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> GOLD_CHU_JELLY = ITEMS.register("gold_chu_jelly", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORTUNE_COOKIE = ITEMS.register("fortune_cookie", () ->
             new CustomFoodItem(itemBuilder().food(ForceFoods.FORTUNE_COOKIE).maxStackSize(1).group(ForceCraft.creativeTab)));
@@ -244,15 +253,14 @@ public class ForceRegistry {
 
     public static final RegistryObject<Item> FORCE_ROD = ITEMS.register("force_rod", () -> new ForceRodItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_WRENCH = ITEMS.register("force_wrench", () -> new ForceWrenchItem(itemBuilder().group(ForceCraft.creativeTab)));
-    public static final RegistryObject<Item> GOLDEN_POWER_SOURCE = ITEMS.register("golden_power_source", () ->
-            new GoldenPowerSourceItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> GOLDEN_POWER_SOURCE = ITEMS.register("golden_power_source", () -> new GoldenPowerSourceItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> CLAW = ITEMS.register("claw", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORTUNE =ITEMS.register("fortune", () ->  new FortuneItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_GEAR = ITEMS.register("force_gear", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> SNOW_COOKIE = ITEMS.register("snow_cookie", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_PACK = ITEMS.register("force_pack", () -> new ForcePackItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_BELT = ITEMS.register("force_belt", () -> new ForceBeltItem(itemBuilder().group(ForceCraft.creativeTab)));
-    public static final RegistryObject<Item> BOTTLED_WITH = ITEMS.register("bottled_wither", () -> new BottledWitherItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> BOTTLED_WITHER = ITEMS.register("bottled_wither", () -> new BottledWitherItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> INERT_CORE = ITEMS.register("inert_core", () -> new InertCoreItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> BACONATOR = ITEMS.register("baconator", () -> new BaconatorItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> SPOILS_BAG = ITEMS.register("spoils_bag", () -> new SpoilsBagItem(itemBuilder().group(ForceCraft.creativeTab), 1));
@@ -263,6 +271,10 @@ public class ForceRegistry {
     public static final RegistryObject<Item> UNDEATH_CARD = ITEMS.register("undeath_card", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> TREASURE_CORE = ITEMS.register("treasure_core", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_ARROW = ITEMS.register("force_arrow", () -> new ForceArrowItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_FLASK = ITEMS.register("force_flask", () -> new ForceFlaskItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> MILK_FORCE_FLASK = ITEMS.register("milk_force_flask", () -> new MilkFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_FILLED_FORCE_FLASK = ITEMS.register("force_filled_force_flask", () -> new ForceFilledForceFlask(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> RED_POTION = ITEMS.register("red_potion", () -> new RedPotionItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
 
     //Tools
     public static final RegistryObject<Item> FORCE_PICKAXE = ITEMS.register("force_pickaxe", () -> new ForcePickaxeItem(itemBuilder().group(ForceCraft.creativeTab)));
@@ -280,6 +292,15 @@ public class ForceRegistry {
 
     //Experience Tome
     public static final RegistryObject<Item> EXPERIENCE_TOME = ITEMS.register("experience_tome", () -> new ExperienceTomeItem(itemBuilder().group(ForceCraft.creativeTab)));
+
+    //Spawn eggs
+    public static final RegistryObject<Item> RED_CHU_CHU_SPAWN_EGG = ITEMS.register("red_chu_chu_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.RED_CHU_CHU.get(), 15674931, 14483465, itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> GREEN_CHU_CHU_SPAWN_EGG = ITEMS.register("green_chu_chu_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.GREEN_CHU_CHU.get(), 6539935, 3190138, itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> BLUE_CHU_CHU_SPAWN_EGG = ITEMS.register("blue_chu_chu_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.BLUE_CHU_CHU.get(), 2450423, 16606, itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> GOLD_CHU_CHU_SPAWN_EGG = ITEMS.register("gold_chu_chu_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.GOLD_CHU_CHU.get(), 14921786, 13670157, itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> COLD_CHICKEN_SPAWN_EGG = ITEMS.register("cold_chicken_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.COLD_CHICKEN.get(), 10592673, 16711680, itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> COLD_COW_SPAWN_EGG = ITEMS.register("cold_cow_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.COLD_COW.get(), 4470310, 10592673, itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> COLD_PIG_SPAWN_EGG = ITEMS.register("cold_pig_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.COLD_PIG.get(), 15771042, 14377823, itemBuilder().group(ForceCraft.creativeTab)));
 
 
     /**

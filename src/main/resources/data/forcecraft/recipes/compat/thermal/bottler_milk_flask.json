@@ -1,0 +1,23 @@
+{
+  "type": "thermal:bottler",
+  "ingredient": [
+    {
+      "item": "forcecraft:force_flask"
+    },
+    {
+      "fluid": "minecraft:milk",
+      "amount": 1000
+    }
+  ],
+  "result": [
+    {
+      "item": "forcecraft:milk_force_flask"
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "thermal"
+    }
+  ]
+}

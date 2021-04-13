@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "forcecraft:item/milk_force_flask"
+  }
+}

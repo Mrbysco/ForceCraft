@@ -17,6 +17,10 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -55,16 +59,22 @@ public class InfuserBlock extends Block {
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult hit) {
-        if (worldIn.isRemote) {
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        if (tileentity instanceof InfuserTileEntity) {
+            LazyOptional<IFluidHandler> fluidHandler = tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, hit.getFace());
+            fluidHandler.ifPresent((handler) -> {
+                if(playerIn.getHeldItem(handIn).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+                    FluidUtil.interactWithFluidHandler(playerIn, handIn, worldIn, pos, hit.getFace());
+                } else {
+                    if (!worldIn.isRemote) {
+                        NetworkHooks.openGui((ServerPlayerEntity) playerIn, (InfuserTileEntity) tileentity, pos);
+                    }
+                }
+            });
+
             return ActionResultType.SUCCESS;
-        } else {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof InfuserTileEntity) {
-                NetworkHooks.openGui((ServerPlayerEntity) playerIn, (InfuserTileEntity) tileentity, pos);
-                return ActionResultType.SUCCESS;
-            }
-            return ActionResultType.CONSUME;
-        } 
+        }
+        return ActionResultType.PASS;
     }
 
     @Override

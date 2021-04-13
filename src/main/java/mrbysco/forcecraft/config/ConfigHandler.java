@@ -22,6 +22,11 @@ public class ConfigHandler {
         public final IntValue baconatorMaxStacks;
         public final ConfigValue<List<? extends String>> furnaceOutputBlacklist;
 
+        public final BooleanValue ChuChuSpawning;
+        public final IntValue ChuChuWeight;
+        public final IntValue ChuChuMinGroup;
+        public final IntValue ChuChuMaxGroup;
+
         Common(ForgeConfigSpec.Builder builder) {
             //General settings
             builder.comment("General settings")
@@ -50,7 +55,27 @@ public class ConfigHandler {
             furnaceOutputBlacklist = builder
                     .comment("An additional list of tile entities the Force Furnace can NOT insert into [Syntax: modid:tile_name]\n" +
                             "Examples: \"minecraft:shulker_box\" would it stop inserting into shulkers")
-                    .defineList("furnaceOutputBlacklist", Arrays.asList(new String[] {""}), o -> (o instanceof String));
+                    .defineList("furnaceOutputBlacklist", Arrays.asList(new String[] {"minecraft:hopper"}), o -> (o instanceof String));
+
+            builder.pop();
+            builder.comment("General settings")
+                    .push("general");
+
+            ChuChuSpawning = builder
+                    .comment("Enable Chu Chu's to spawn [Default: 1]")
+                    .define("ChuChuSpawning", true);
+
+            ChuChuWeight = builder
+                    .comment("Chu Chu spawn weight [Default: 100]")
+                    .defineInRange("ChuChuWeight", 100, 1, Integer.MAX_VALUE);
+
+            ChuChuMinGroup = builder
+                    .comment("Chu Chu Min Group size [Default: 1]")
+                    .defineInRange("ChuChuMinGroup", 1, 1, Integer.MAX_VALUE);
+
+            ChuChuMaxGroup = builder
+                    .comment("Chu Chu Max Group size [Default: 1]")
+                    .defineInRange("ChuChuMaxGroup", 1, 1, Integer.MAX_VALUE);
 
             builder.pop();
         }

@@ -6,10 +6,15 @@ import mrbysco.forcecraft.client.gui.belt.ForceBeltScreen;
 import mrbysco.forcecraft.client.gui.furnace.ForceFurnaceScreen;
 import mrbysco.forcecraft.client.gui.pack.ForcePackScreen;
 import mrbysco.forcecraft.client.gui.spoils.SpoilsBagScreen;
+import mrbysco.forcecraft.client.renderer.BlueChuChuRenderer;
 import mrbysco.forcecraft.client.renderer.ColdChickenRenderer;
 import mrbysco.forcecraft.client.renderer.ColdCowRenderer;
 import mrbysco.forcecraft.client.renderer.ColdPigRenderer;
 import mrbysco.forcecraft.client.renderer.ForceArrowRenderer;
+import mrbysco.forcecraft.client.renderer.GoldChuChuRenderer;
+import mrbysco.forcecraft.client.renderer.GreenChuChuRenderer;
+import mrbysco.forcecraft.client.renderer.RedChuChuRenderer;
+import mrbysco.forcecraft.items.CustomSpawnEggItem;
 import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.registry.ForceEntities;
 import mrbysco.forcecraft.registry.ForceRegistry;
@@ -17,9 +22,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -76,6 +83,10 @@ public class ClientHandler {
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_CHICKEN.get(), ColdChickenRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_COW.get(), ColdCowRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_PIG.get(), ColdPigRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.RED_CHU_CHU.get(), RedChuChuRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.GREEN_CHU_CHU.get(), GreenChuChuRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.BLUE_CHU_CHU.get(), BlueChuChuRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.GOLD_CHU_CHU.get(), GoldChuChuRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FORCE_ARROW.get(), ForceArrowRenderer::new);
 
 		ItemModelsProperties.registerProperty(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity) -> {
@@ -98,5 +109,15 @@ public class ClientHandler {
 		});
 		ItemModelsProperties.registerProperty(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pulling"), (stack, world, livingEntity) ->
 				livingEntity != null && livingEntity.isHandActive() && livingEntity.getActiveItemStack() == stack ? 1.0F : 0.0F);
+	}
+
+	public static void registerItemColors(final ColorHandlerEvent.Item event) {
+		ItemColors colors = event.getItemColors();
+
+		for(CustomSpawnEggItem item : CustomSpawnEggItem.getCustomEggs()) {
+			colors.register((p_198141_1_, p_198141_2_) -> {
+				return item.getColor(p_198141_2_);
+			}, item);
+		}
 	}
 }

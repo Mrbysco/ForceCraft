@@ -43,6 +43,14 @@
     "item.forcecraft.heat_core": "Heat Core",
     "item.forcecraft.speed_core": "Speed Core",
     "item.forcecraft.recovery_heart": "Recovery Heart",
+    "item.forcecraft.force_flask": "Force Flask",
+    "item.forcecraft.milk_force_flask": "Milk Force Flask",
+    "item.forcecraft.force_filled_force_flask": "Liquid Force Force Flask",
+    "item.forcecraft.red_potion": "Red Potion",
+    "item.forcecraft.red_chu_jelly": "Red Chu Jelly",
+    "item.forcecraft.green_chu_jelly": "Green Chu Jelly",
+    "item.forcecraft.blue_chu_jelly": "Blue Chu Jelly",
+    "item.forcecraft.gold_chu_jelly": "Gold Chu Jelly",
 
     "_comment": "Armor",
     "item.forcecraft.force_helmet": "Force Cap",
@@ -61,6 +69,15 @@
     "item.forcecraft.force_bow": "Force Bow",
     "item.forcecraft.magnet_glove": "Magnet Glove",
     "item.forcecraft.force_mitt": "Force Mitts",
+
+    "_comment": "Spawn Eggs",
+    "item.forcecraft.red_chu_chu_spawn_egg": "Red Chu Chu Spawn Egg",
+    "item.forcecraft.green_chu_chu_spawn_egg": "Green Chu Chu Spawn Egg",
+    "item.forcecraft.blue_chu_chu_spawn_egg": "Blue Chu Chu Spawn Egg",
+    "item.forcecraft.gold_chu_chu_spawn_egg": "Gold Chu Chu Spawn Egg",
+    "item.forcecraft.cold_chicken_spawn_egg": "Cold Chicken Spawn Egg",
+    "item.forcecraft.cold_cow_spawn_egg": "Cold Cow Spawn Egg",
+    "item.forcecraft.cold_pig_spawn_egg": "Cold Pig Spawn Egg",
 
     "_comment": "Blocks",
     "block.forcecraft.power_ore": "Power Ore",
@@ -164,6 +181,10 @@
     "entity.forcecraft.cold_chicken": "Cold Chicken",
     "entity.forcecraft.cold_cow": "Cold Cow",
     "entity.forcecraft.cold_pig": "Cold Pig",
+    "entity.forcecraft.red_chu_chu": "Red Chu Chu",
+    "entity.forcecraft.green_chu_chu": "Green Chu Chu",
+    "entity.forcecraft.blue_chu_chu": "Blue Chu Chu",
+    "entity.forcecraft.gold_chu_chu": "Gold Chu Chu",
 
     "_comment": "Misc.",
     "itemGroup.forcecraft": "ForceCraft",
@@ -210,6 +231,10 @@
     "item.infuser.tooltip.healing1": "Healing I",
     "item.infuser.tooltip.healing2": "Healing II",
     "item.infuser.tooltip.healing3": "Healing III",
+
+    "item.milk_force_flask.tooltip": "Farm Fresh",
+    "item.force_filled_force_flask.tooltip": "Force Potion Base",
+    "item.red_potion.tooltip": "Restores all Hearts",
 
     "_comment": "Fortunes",
     "text.forcecraft.fortune0": "You aren't supposed to eat me.",

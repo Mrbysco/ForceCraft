@@ -42,11 +42,13 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -60,6 +62,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
@@ -74,7 +77,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     public int processTime = 0;
     public int maxProcessTime = 17;
- 
+
     public int fluidContained;
 	//modifiers cap out
 	private static final int MAX_MODIFIER = 10;
@@ -105,7 +108,17 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         public FluidStack drain(int maxDrain, FluidAction action) {
             return super.drain(maxDrain, action);
         }
-    };
+
+		@Override
+		public boolean isFluidValid(FluidStack stack) {
+			for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation("forge","force")).getAllElements()){
+				if (fluid == stack.getFluid()) {
+					return true;
+				}
+			}
+			return false;
+		}
+	};
     private LazyOptional<IFluidHandler> tankHolder = LazyOptional.of(() -> tank);
 
     public final ItemStackHandler handler = new ItemStackHandler(11) {
@@ -113,7 +126,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         protected int getStackLimit(int slot, ItemStack stack) {
             return 1;
         }
-        
+
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
@@ -160,7 +173,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     	canWork = nbt.getBoolean("canWork");
         handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
         ItemStackHelper.loadAllItems(nbt, this.infuserContents);
-        energyStorage.setEnergy(nbt.getInt("EnergyHandler")); 
+        energyStorage.setEnergy(nbt.getInt("EnergyHandler"));
         tank.readFromNBT(nbt);
 
         super.read(state, nbt);
@@ -194,7 +207,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         }
 
         if (canWork) {
-        	
+
         	processTime++;
         	if(processTime < this.maxProcessTime) {
         		return;
@@ -214,11 +227,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         	// auto turn off when done
         	//even if tool or book slot become empty, dont auto run next insert
             canWork = false;
-            
+
             refreshClient();
-        } 
+        }
     }
-    
+
     public void startWork() {
     	canWork = true;
     	processTime = 0;
@@ -227,7 +240,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     		//no valid recipes
         	canWork = false;
         	maxProcessTime = 0;
-    		
+
     	}
     }
 
@@ -261,7 +274,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 	}
 
 	private void refreshClient() {
-		markDirty();     
+		markDirty();
 		BlockState state = world.getBlockState(pos);
 		world.notifyBlockUpdate(pos, state, state, 2);
 	}
@@ -277,7 +290,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             refreshClient();
         }
     }
-    
+
     private boolean areAllModifiersEmpty() {
 
     	int emptySlots = 0;
@@ -286,20 +299,20 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         		emptySlots++;
         	}
         }
-    	
+
     	return emptySlots == 8;
     }
-    
+
     private void processForceCharging() {
         ItemStack tool = getFromToolSlot();
-        
+
         if(!tool.getItem().isIn(ForceTags.VALID_INFUSER_CHARGE) || tool.getCount() != 1
         		|| tank.getFluidAmount() < FLUID_CHARGE) {
         	//halt if empty. halt if stack larger than 1, only upgrade a single item
         	return;
         }
         //its a valid force tool non stacked, so charging is ok
-        
+
         ForceToolData force = new ForceToolData(tool);
         force.charge(FLUID_CHARGE);
         tank.drain(FLUID_CHARGE, FluidAction.EXECUTE);
@@ -396,12 +409,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public ItemStack getFromToolSlot() {
 		return handler.getStackInSlot(SLOT_TOOL);
 	}
-	
+
 	public ItemStack getBookInSlot() {
 		return handler.getStackInSlot(SLOT_BOOK);
 	}
 
-	public ItemStack getModifier(int slot) { 
+	public ItemStack getModifier(int slot) {
     	if(slot >= 0 && slot <= SLOT_TOOL - 1) {
 			return handler.getStackInSlot(slot);
     	}
@@ -412,7 +425,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         return getModifier(slot).isEmpty() == false;
     }
     /**
-     * Loop on all modifiers and apply first one that matches the input test.  
+     * Loop on all modifiers and apply first one that matches the input test.
      * @param tool
      * @param modifier
      * @return
@@ -423,7 +436,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		int bookTier = bd.getTier().ordinal();
 		// if the recipe level does not exceed what the book has
 		//test the ingredient of this recipe, if it matches me
-		
+
 		List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
     	for (InfuseRecipe recipeCurrent : recipes) {
 
@@ -437,12 +450,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				continue;
     		}
 //    		ForceCraft.LOGGER.info("CENTER and tier both match {} on tool {}", recipeCurrent.resultModifier, tool);
-    		
+
     		//force pack upgrade can be applied multiple times depending on many things
     		if (recipeCurrent.input.test(modifier)) {
-    			
+
     			if (recipeCurrent.resultModifier.apply(tool, modifier, bd)) {
-                    
+
                     if(recipeCurrent.resultModifier == InfuserModifierType.ITEM && recipeCurrent.hasOutput()) {
                     	//overwrite / convert item
                     	handler.setStackInSlot(SLOT_TOOL, recipeCurrent.getRecipeOutput().copy());
@@ -451,7 +464,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     	//sync item changes
                         handler.setStackInSlot(SLOT_TOOL, tool);
                     }
-                    
+
     				return true;
     			}
     			else {
@@ -462,7 +475,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
         return false;
     }
-    
+
     // TODO: refactor these static below into another place, possibly InfuserModifier class
 
 	static boolean applyCamo(ItemStack tool, ItemStack mod) {
@@ -646,13 +659,13 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
             if(handler instanceof PackItemStackHandler) {
                 PackItemStackHandler packHandler = (PackItemStackHandler)handler;
-                
+
                 if(packHandler.canUpgrade(bd)) {
                     packHandler.applyUpgrade();
 
                     CompoundNBT tag = stack.getOrCreateTag();
                     tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(packHandler));
-                    
+
                     stack.setTag(tag);
                     return true;
                 }
@@ -780,7 +793,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             }
         }
         else if (st instanceof CustomArmorItem) {
-        	
+
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
                 if(modifierCap.getSharpLevel() == 0) {
@@ -954,7 +967,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity player) {
         return new InfuserContainer(id, playerInv, this);
     }
-    
+
     /******** Fakeout stuff for IRecipe *********************/
     @Override
     public void clear() {
