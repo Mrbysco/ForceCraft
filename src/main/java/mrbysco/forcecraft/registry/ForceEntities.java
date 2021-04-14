@@ -6,6 +6,7 @@ import mrbysco.forcecraft.entities.ChuChuEntity;
 import mrbysco.forcecraft.entities.ColdChickenEntity;
 import mrbysco.forcecraft.entities.ColdCowEntity;
 import mrbysco.forcecraft.entities.ColdPigEntity;
+import mrbysco.forcecraft.entities.FairyEntity;
 import mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
 import mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
 import net.minecraft.entity.Entity;
@@ -45,6 +46,10 @@ public class ForceEntities {
 			register("cold_pig", EntityType.Builder.<ColdPigEntity>create(ColdPigEntity::new, EntityClassification.CREATURE)
 					.size(0.9F, 0.9F).trackingRange(10)));
 
+	public static final RegistryObject<EntityType<FairyEntity>> FAIRY = ENTITIES.register("fairy", () ->
+			register("fairy", EntityType.Builder.<FairyEntity>create(FairyEntity::new, EntityClassification.CREATURE)
+					.size(0.5F, 0.5F).trackingRange(10)));
+
 	public static final RegistryObject<EntityType<ChuChuEntity>> RED_CHU_CHU = ENTITIES.register("red_chu_chu", () ->
 			register("red_chu_chu", EntityType.Builder.<ChuChuEntity>create(ChuChuEntity::new, EntityClassification.MONSTER)
 					.size(2.04F, 2.04F).trackingRange(10)));
@@ -67,23 +72,29 @@ public class ForceEntities {
 		EntitySpawnPlacementRegistry.register(GREEN_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnOn);
 		EntitySpawnPlacementRegistry.register(BLUE_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnOn);
 		EntitySpawnPlacementRegistry.register(GOLD_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnOn);
+
+		EntitySpawnPlacementRegistry.register(FAIRY.get(), EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, FairyEntity::canSpawnOn);
 	}
 
 	public static void addSpawns(BiomeLoadingEvent event) {
 		RegistryKey<Biome> biomeKey = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, event.getName());
 		if(BiomeDictionary.hasType(biomeKey, Type.OVERWORLD)) {
-			if(BiomeDictionary.hasType(biomeKey, Type.SWAMP)) {
-				event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(RED_CHU_CHU.get(), 1, 1, 1));
-				event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(GREEN_CHU_CHU.get(), 1, 1, 1));
-				event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(BLUE_CHU_CHU.get(), 1, 1, 1));
-				event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(GOLD_CHU_CHU.get(), 1, 1, 1));
+			if(ConfigHandler.COMMON.ChuChuSpawning.get()) {
+				if(BiomeDictionary.hasType(biomeKey, Type.SWAMP)) {
+					event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(RED_CHU_CHU.get(), 1, 1, 1));
+					event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(GREEN_CHU_CHU.get(), 1, 1, 1));
+					event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(BLUE_CHU_CHU.get(), 1, 1, 1));
+					event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(GOLD_CHU_CHU.get(), 1, 1, 1));
+				}
+				event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(RED_CHU_CHU.get(), ConfigHandler.COMMON.ChuChuWeight.get(), ConfigHandler.COMMON.ChuChuMinGroup.get(), ConfigHandler.COMMON.ChuChuMaxGroup.get()));
+				event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(GREEN_CHU_CHU.get(), ConfigHandler.COMMON.ChuChuWeight.get(), ConfigHandler.COMMON.ChuChuMinGroup.get(), ConfigHandler.COMMON.ChuChuMaxGroup.get()));
+				event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(BLUE_CHU_CHU.get(), ConfigHandler.COMMON.ChuChuWeight.get(), ConfigHandler.COMMON.ChuChuMinGroup.get(), ConfigHandler.COMMON.ChuChuMaxGroup.get()));
+				event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(GOLD_CHU_CHU.get(), ConfigHandler.COMMON.ChuChuWeight.get(), ConfigHandler.COMMON.ChuChuMinGroup.get(), ConfigHandler.COMMON.ChuChuMaxGroup.get()));
 			}
-			event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(RED_CHU_CHU.get(), ConfigHandler.COMMON.ChuChuWeight.get(), ConfigHandler.COMMON.ChuChuMinGroup.get(), ConfigHandler.COMMON.ChuChuMaxGroup.get()));
-			event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(GREEN_CHU_CHU.get(), ConfigHandler.COMMON.ChuChuWeight.get(), ConfigHandler.COMMON.ChuChuMinGroup.get(), ConfigHandler.COMMON.ChuChuMaxGroup.get()));
-			event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(BLUE_CHU_CHU.get(), ConfigHandler.COMMON.ChuChuWeight.get(), ConfigHandler.COMMON.ChuChuMinGroup.get(), ConfigHandler.COMMON.ChuChuMaxGroup.get()));
-			event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(GOLD_CHU_CHU.get(), ConfigHandler.COMMON.ChuChuWeight.get(), ConfigHandler.COMMON.ChuChuMinGroup.get(), ConfigHandler.COMMON.ChuChuMaxGroup.get()));
+			if(ConfigHandler.COMMON.FairySpawning.get()) {
+				event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(FAIRY.get(), ConfigHandler.COMMON.FairyWeight.get(), ConfigHandler.COMMON.FairyMinGroup.get(), ConfigHandler.COMMON.FairyMaxGroup.get()));
+			}
 		}
-
 	}
 
 	public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
@@ -95,6 +106,8 @@ public class ForceEntities {
 		event.put(ForceEntities.GREEN_CHU_CHU.get(), MonsterEntity.func_234295_eP_().create());
 		event.put(ForceEntities.BLUE_CHU_CHU.get(), MonsterEntity.func_234295_eP_().create());
 		event.put(ForceEntities.GOLD_CHU_CHU.get(), MonsterEntity.func_234295_eP_().create());
+
+		event.put(ForceEntities.FAIRY.get(), FairyEntity.generateAttributes().create());
 	}
 
 	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {

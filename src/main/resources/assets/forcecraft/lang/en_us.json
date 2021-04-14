@@ -78,6 +78,7 @@
     "item.forcecraft.cold_chicken_spawn_egg": "Cold Chicken Spawn Egg",
     "item.forcecraft.cold_cow_spawn_egg": "Cold Cow Spawn Egg",
     "item.forcecraft.cold_pig_spawn_egg": "Cold Pig Spawn Egg",
+    "item.forcecraft.fairy_spawn_egg": "Fairy Spawn Egg",
 
     "_comment": "Blocks",
     "block.forcecraft.power_ore": "Power Ore",
@@ -176,7 +177,6 @@
     "block.forcecraft.wall_force_purple_torch": "Purple Force Torch",
     "block.forcecraft.wall_force_gray_torch": "Gray Force Torch",
 
-
     "_comment": "Entities",
     "entity.forcecraft.cold_chicken": "Cold Chicken",
     "entity.forcecraft.cold_cow": "Cold Cow",
@@ -185,6 +185,13 @@
     "entity.forcecraft.green_chu_chu": "Green Chu Chu",
     "entity.forcecraft.blue_chu_chu": "Blue Chu Chu",
     "entity.forcecraft.gold_chu_chu": "Gold Chu Chu",
+    "entity.forcecraft.fairy": "Fairy",
+
+    "_comment": "Subtitles",
+    "forcecraft.whoosh.subtitle": "Whooshing",
+    "forcecraft.fairy.pickup.subtitle": "Fairy being absorbed",
+    "forcecraft.fairy.listen.subtitle": "Fairy yelling",
+    "forcecraft.fairy.listen.special.subtitle": "Fairy wishing a happy birthday",
 
     "_comment": "Misc.",
     "itemGroup.forcecraft": "ForceCraft",

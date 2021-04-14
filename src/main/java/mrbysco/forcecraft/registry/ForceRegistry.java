@@ -301,6 +301,7 @@ public class ForceRegistry {
     public static final RegistryObject<Item> COLD_CHICKEN_SPAWN_EGG = ITEMS.register("cold_chicken_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.COLD_CHICKEN.get(), 10592673, 16711680, itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> COLD_COW_SPAWN_EGG = ITEMS.register("cold_cow_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.COLD_COW.get(), 4470310, 10592673, itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> COLD_PIG_SPAWN_EGG = ITEMS.register("cold_pig_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.COLD_PIG.get(), 15771042, 14377823, itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.FAIRY.get(), 11395062, 12970232, itemBuilder().group(ForceCraft.creativeTab)));
 
 
     /**

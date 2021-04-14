@@ -12,4 +12,13 @@ public class ForceSounds {
 
 	public static final RegistryObject<SoundEvent> WHOOSH = SOUND_EVENTS.register("whoosh", () ->
 			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "whoosh")));
+
+	public static final RegistryObject<SoundEvent> FAIRY_PICKUP = SOUND_EVENTS.register("fairy.pickup", () ->
+			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "fairy.pickup")));
+
+	public static final RegistryObject<SoundEvent> FAIRY_LISTEN = SOUND_EVENTS.register("fairy.listen", () ->
+			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "fairy.listen")));
+
+	public static final RegistryObject<SoundEvent> FAIRY_LISTEN_SPECIAL = SOUND_EVENTS.register("fairy.listen.special", () ->
+			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "fairy.listen.special")));
 }

@@ -8,7 +8,7 @@ import mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import mrbysco.forcecraft.items.nonburnable.InertCoreItem;
 import mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
 import mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.FireBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -64,8 +64,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		Hand handIn = context.getHand();
 		ItemStack stack = context.getItem();
 		if (!worldIn.isRemote && player != null) {
-			if (worldIn.getBlockState(pos.offset(facing)).getBlock().equals(Blocks.FIRE)) { // TODO: instanceof
-																							// FireBlock
+			if (worldIn.getBlockState(pos.offset(facing)).getBlock() instanceof FireBlock) {
 				worldIn.removeBlock(pos.offset(facing), false);
 				List<Entity> list = worldIn.getEntitiesWithinAABB(ItemEntity.class,
 						new AxisAlignedBB(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())));

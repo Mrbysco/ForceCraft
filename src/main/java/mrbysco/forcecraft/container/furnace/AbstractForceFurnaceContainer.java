@@ -139,7 +139,7 @@ public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<
 					if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
 						return ItemStack.EMPTY;
 					}
-				} else if (this.isUpgrade(itemstack1) && index == 3) {
+				} else if (isUpgrade(itemstack1) && index == 3) {
 					itemstack1.shrink(1);
 					playerIn.world.playSound((PlayerEntity) null, playerIn.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					return ItemStack.EMPTY;
@@ -176,12 +176,12 @@ public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<
 
 	protected IRecipeType<? extends AbstractCookingRecipe> getRecipeType() {
 		IRecipeType<? extends AbstractCookingRecipe> recipeType = IRecipeType.SMELTING;
-		ItemStack upgrade = furnaceInventory.getStackInSlot(3);;
+		ItemStack upgrade = furnaceInventory.getStackInSlot(3);
 		if(!upgrade.isEmpty()) {
 			if(upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
-				return ForceRecipes.FREEZING; //TODO FREEZING RECIPES
+				return ForceRecipes.FREEZING;
 			} else if(upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
-				return ForceRecipes.GRINDING; //TODO GRINDING RECIPES
+				return ForceRecipes.GRINDING;
 			}
 		}
 		return recipeType;

@@ -27,6 +27,12 @@ public class ConfigHandler {
         public final IntValue ChuChuMinGroup;
         public final IntValue ChuChuMaxGroup;
 
+        public final BooleanValue FairySpawning;
+        public final IntValue FairyWeight;
+        public final IntValue FairyMinGroup;
+        public final IntValue FairyMaxGroup;
+
+
         Common(ForgeConfigSpec.Builder builder) {
             //General settings
             builder.comment("General settings")
@@ -76,6 +82,22 @@ public class ConfigHandler {
             ChuChuMaxGroup = builder
                     .comment("Chu Chu Max Group size [Default: 1]")
                     .defineInRange("ChuChuMaxGroup", 1, 1, Integer.MAX_VALUE);
+
+            FairySpawning = builder
+                    .comment("Enable Fairy's to spawn [Default: 1]")
+                    .define("FairySpawning", true);
+
+            FairyWeight = builder
+                    .comment("Fairy spawn weight [Default: 4]")
+                    .defineInRange("FairyWeight", 4, 1, Integer.MAX_VALUE);
+
+            FairyMinGroup = builder
+                    .comment("Fairy Min Group size [Default: 1]")
+                    .defineInRange("FairyMinGroup", 1, 1, Integer.MAX_VALUE);
+
+            FairyMaxGroup = builder
+                    .comment("Fairy Max Group size [Default: 1]")
+                    .defineInRange("FairyMaxGroup", 2, 1, Integer.MAX_VALUE);
 
             builder.pop();
         }

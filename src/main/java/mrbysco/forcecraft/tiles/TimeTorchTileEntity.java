@@ -13,11 +13,10 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Random;
 
 //All Code Heavily inspired by Torcherino. Credit to Moze_Intel, Sci4me and NinjaPhenix
 public class TimeTorchTileEntity extends TileEntity implements ITickableTileEntity {
@@ -31,12 +30,9 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
 
     private byte speed;
 
-    private Random rand;
-
     public TimeTorchTileEntity(TileEntityType<?> tileTypeIn) {
         super(tileTypeIn);
         this.speed = 3;
-        this.rand = new Random();
     }
 
     public TimeTorchTileEntity() {
@@ -72,33 +68,35 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
         this.zMax = this.pos.getZ() + 1;
     }
 
-
-    private void tickBlock(BlockPos pos) {
+    @SuppressWarnings("deprecation")
+    private void tickBlock(@Nonnull BlockPos pos) {
         if(pos.equals(getPos())) return;
 
         BlockState blockState = this.world.getBlockState(pos);
-        Block block = blockState.getBlock();
+        if(blockState != null) {
+            Block block = blockState.getBlock();
 
-        if(block == null || block instanceof FlowingFluidBlock || block instanceof TimeTorchBlock || block == Blocks.AIR)
-            return;
+            if(block == null || block instanceof FlowingFluidBlock || block instanceof TimeTorchBlock || block == Blocks.AIR)
+                return;
 
-        if(block.ticksRandomly(blockState) && !world.isRemote) {
-            for(int i = 0; i < this.speed; i++) {
-                if(getWorld().getBlockState(pos) != blockState) break;
-                block.tick(blockState, (ServerWorld)this.world, pos, this.rand);
-            }
-        }
-        if(block.hasTileEntity(blockState)) {
-            TileEntity tile = this.world.getTileEntity(pos);
-
-            if(tile == null || tile.isRemoved()) return;
-
-            for(int i = 0; i < this.speed; i++) {
-                if(tile.isRemoved()) {
-                    break;
+            if(block.ticksRandomly(blockState) && !world.isRemote) {
+                for(int i = 0; i < this.speed; i++) {
+                    if(getWorld().getBlockState(pos) != blockState) break;
+                    block.tick(blockState, (ServerWorld)this.world, pos, world.rand);
                 }
-                if(tile instanceof ITickableTileEntity) {
-                    ((ITickableTileEntity) tile).tick();
+            }
+            if(block.hasTileEntity(blockState)) {
+                TileEntity tile = this.world.getTileEntity(pos);
+
+                if(tile == null || tile.isRemoved()) return;
+
+                for(int i = 0; i < this.speed; i++) {
+                    if(tile.isRemoved()) {
+                        break;
+                    }
+                    if(tile instanceof ITickableTileEntity) {
+                        ((ITickableTileEntity) tile).tick();
+                    }
                 }
             }
         }
@@ -129,9 +127,5 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
         this.read(getBlockState(), pkt.getNbtCompound());
-    }
-
-    public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newSate) {
-        return oldState.getBlock() != newSate.getBlock();
     }
 }

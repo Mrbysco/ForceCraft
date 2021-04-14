@@ -59,7 +59,6 @@ public class RenameAndRecolorScreen extends Screen {
 		}));
 
 		this.addButton(new Button(this.width / 2 + 31, this.height / 2 + 3, 60, 20, DialogTexts.GUI_DONE, (p_238847_1_) -> {
-			//TODO: MAKE/SEND PACKET!
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new PackChangeMessage(usedHand, textfield.getText(), this.selectedColor));
 			this.minecraft.displayGuiScreen((Screen)null);
 		}));

@@ -1,9 +1,31 @@
 {
     "whoosh" : {
     "category" : "player",
-	"subtitle": "forcecraft:whoosh",
+	"subtitle": "forcecraft.whoosh.subtitle",
         "sounds": [
             "forcecraft:whoosh"
+        ]
+    },
+	"fairy.pickup" : {
+    "category" : "ambient",
+	"subtitle": "forcecraft.fairy.pickup.subtitle",
+        "sounds": [
+            "forcecraft:pickup"
+        ]
+    },
+	"fairy.listen" : {
+    "category" : "ambient",
+	"subtitle": "forcecraft.fairy.listen.subtitle",
+        "sounds": [
+            "forcecraft:listen",
+            "forcecraft:listen2"
+        ]
+    },
+	"fairy.listen.special" : {
+    "category" : "ambient",
+	"subtitle": "forcecraft.fairy.listen.special.subtitle",
+        "sounds": [
+            "forcecraft:listen3"
         ]
     }
 }

@@ -10,6 +10,7 @@ import mrbysco.forcecraft.client.renderer.BlueChuChuRenderer;
 import mrbysco.forcecraft.client.renderer.ColdChickenRenderer;
 import mrbysco.forcecraft.client.renderer.ColdCowRenderer;
 import mrbysco.forcecraft.client.renderer.ColdPigRenderer;
+import mrbysco.forcecraft.client.renderer.FairyRenderer;
 import mrbysco.forcecraft.client.renderer.ForceArrowRenderer;
 import mrbysco.forcecraft.client.renderer.GoldChuChuRenderer;
 import mrbysco.forcecraft.client.renderer.GreenChuChuRenderer;
@@ -87,6 +88,7 @@ public class ClientHandler {
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.GREEN_CHU_CHU.get(), GreenChuChuRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.BLUE_CHU_CHU.get(), BlueChuChuRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.GOLD_CHU_CHU.get(), GoldChuChuRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FAIRY.get(), FairyRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FORCE_ARROW.get(), ForceArrowRenderer::new);
 
 		ItemModelsProperties.registerProperty(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity) -> {
