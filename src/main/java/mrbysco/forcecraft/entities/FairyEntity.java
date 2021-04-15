@@ -2,9 +2,11 @@ package mrbysco.forcecraft.entities;
 
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.registry.ForceSounds;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -14,6 +16,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.IParticleData;
@@ -23,11 +26,13 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.Random;
 import java.util.UUID;
 
 public class FairyEntity extends CreatureEntity implements IFlyingAnimal {
@@ -75,7 +80,10 @@ public class FairyEntity extends CreatureEntity implements IFlyingAnimal {
 		this.remove();
 	}
 
-
+	public static boolean canSpawnOn(EntityType<? extends MobEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random random) {
+		BlockPos blockpos = pos.down();
+		return reason == SpawnReason.SPAWNER || (worldIn.getBlockState(blockpos).canEntitySpawn(worldIn, blockpos, typeIn) && worldIn.getLightSubtracted(pos, 0) > 8);
+	}
 
 	public SoundEvent collideSound(PlayerEntity playerEntity) {
 		int randomInt = world.rand.nextInt(100);
