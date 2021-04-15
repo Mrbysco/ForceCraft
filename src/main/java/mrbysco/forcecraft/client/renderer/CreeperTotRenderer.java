@@ -3,15 +3,10 @@ package mrbysco.forcecraft.client.renderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.client.model.CreeperTotModel;
-import mrbysco.forcecraft.client.model.FairyModel;
 import mrbysco.forcecraft.client.renderer.layer.CreeperTotChargeLayer;
 import mrbysco.forcecraft.entities.CreeperTotEntity;
-import mrbysco.forcecraft.entities.FairyEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.CreeperChargeLayer;
-import net.minecraft.client.renderer.entity.model.CreeperModel;
-import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
