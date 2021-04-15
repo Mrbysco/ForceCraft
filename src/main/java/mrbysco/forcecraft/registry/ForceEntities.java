@@ -73,7 +73,7 @@ public class ForceEntities {
 		EntitySpawnPlacementRegistry.register(BLUE_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnOn);
 		EntitySpawnPlacementRegistry.register(GOLD_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnOn);
 
-		EntitySpawnPlacementRegistry.register(FAIRY.get(), EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, FairyEntity::canSpawnOn);
+		EntitySpawnPlacementRegistry.register(FAIRY.get(), EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING, FairyEntity::canSpawnOn);
 	}
 
 	public static void addSpawns(BiomeLoadingEvent event) {
