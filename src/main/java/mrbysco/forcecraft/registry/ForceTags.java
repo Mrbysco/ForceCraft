@@ -19,16 +19,20 @@ public class ForceTags {
 	public static final ITag.INamedTag<Item> FORCE_FUELS = ItemTags.makeWrapperTag(Reference.MOD_ID + ":force_fuel");
 	public static final ITag.INamedTag<Item> BACONATOR_FOOD = ItemTags.makeWrapperTag(Reference.MOD_ID + ":baconator_food");
 
-	public static final ITag.INamedTag<Item> FORCE_INGOT = forgeTag("ingots/force");
-	public static final ITag.INamedTag<Item> FORCE_NUGGET = forgeTag("nuggets/force");
-	public static final ITag.INamedTag<Item> FORGE_GEM = forgeTag("gems/force");
+	public static final ITag.INamedTag<Item> FORCE_INGOT = forceItemTag("ingots/force");
+	public static final ITag.INamedTag<Item> FORCE_NUGGET = forceItemTag("nuggets/force");
+	public static final ITag.INamedTag<Item> FORGE_GEM = forceItemTag("gems/force");
 
 	public static final ITag.INamedTag<Fluid> FORCE = forgeFluidTag("force");
 
-	private static INamedTag<Item> forgeTag(String name) {
+	public static final ITag.INamedTag<Block> ENDERTOT_HOLDABLE = forgeBlockTag("endertot_holdable");
+
+	private static INamedTag<Item> forceItemTag(String name) {
 		return ItemTags.makeWrapperTag("forge:" + name);
 	}
-
+	private static INamedTag<Block> forgeBlockTag(String name) {
+		return BlockTags.makeWrapperTag("forge:" + name);
+	}
 	private static INamedTag<Fluid> forgeFluidTag(String name) {
 		return FluidTags.makeWrapperTag("forge:" + name);
 	}

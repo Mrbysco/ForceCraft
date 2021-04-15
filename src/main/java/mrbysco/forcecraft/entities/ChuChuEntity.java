@@ -25,11 +25,6 @@ public class ChuChuEntity extends SlimeEntity {
 	}
 
 	@Override
-	public EntityType<? extends SlimeEntity> getType() {
-		return super.getType();
-	}
-
-	@Override
 	protected ResourceLocation getLootTable() {
 		return this.getType().getLootTable();
 	}

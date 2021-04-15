@@ -232,6 +232,7 @@ public class ForceRegistry {
     public static final RegistryObject<Item> GREEN_CHU_JELLY = ITEMS.register("green_chu_jelly", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> BLUE_CHU_JELLY = ITEMS.register("blue_chu_jelly", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> GOLD_CHU_JELLY = ITEMS.register("gold_chu_jelly", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> PILE_OF_GUNPOWDER = ITEMS.register("pile_of_gunpowder", () -> new BaseItem(itemBuilder().group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORTUNE_COOKIE = ITEMS.register("fortune_cookie", () ->
             new CustomFoodItem(itemBuilder().food(ForceFoods.FORTUNE_COOKIE).maxStackSize(1).group(ForceCraft.creativeTab)));
@@ -302,6 +303,9 @@ public class ForceRegistry {
     public static final RegistryObject<Item> COLD_COW_SPAWN_EGG = ITEMS.register("cold_cow_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.COLD_COW.get(), 4470310, 10592673, itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> COLD_PIG_SPAWN_EGG = ITEMS.register("cold_pig_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.COLD_PIG.get(), 15771042, 14377823, itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.FAIRY.get(), 11395062, 12970232, itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> CREEPER_TOT_SPAWN_EGG = ITEMS.register("creeper_tot_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.CREEPER_TOT.get(), 894731, 0, itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> ENDER_TOT_SPAWN_EGG = ITEMS.register("ender_tot_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.ENDER_TOT.get(), 1447446, 0, itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> ANGRY_ENDERMAN_SPAWN_EGG = ITEMS.register("angry_enderman_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.ANGRY_ENDERMAN.get(), 1447446, 0, itemBuilder().group(ForceCraft.creativeTab)));
 
 
     /**

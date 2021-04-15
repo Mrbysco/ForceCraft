@@ -10,6 +10,8 @@ import mrbysco.forcecraft.client.renderer.BlueChuChuRenderer;
 import mrbysco.forcecraft.client.renderer.ColdChickenRenderer;
 import mrbysco.forcecraft.client.renderer.ColdCowRenderer;
 import mrbysco.forcecraft.client.renderer.ColdPigRenderer;
+import mrbysco.forcecraft.client.renderer.CreeperTotRenderer;
+import mrbysco.forcecraft.client.renderer.EnderTotRenderer;
 import mrbysco.forcecraft.client.renderer.FairyRenderer;
 import mrbysco.forcecraft.client.renderer.ForceArrowRenderer;
 import mrbysco.forcecraft.client.renderer.GoldChuChuRenderer;
@@ -24,6 +26,7 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.entity.EndermanRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
@@ -89,6 +92,9 @@ public class ClientHandler {
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.BLUE_CHU_CHU.get(), BlueChuChuRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.GOLD_CHU_CHU.get(), GoldChuChuRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FAIRY.get(), FairyRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.CREEPER_TOT.get(), CreeperTotRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.ENDER_TOT.get(), EnderTotRenderer::new);
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.ANGRY_ENDERMAN.get(), EndermanRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FORCE_ARROW.get(), ForceArrowRenderer::new);
 
 		ItemModelsProperties.registerProperty(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity) -> {

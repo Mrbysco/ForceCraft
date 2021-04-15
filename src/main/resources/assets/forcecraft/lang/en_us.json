@@ -51,6 +51,7 @@
     "item.forcecraft.green_chu_jelly": "Green Chu Jelly",
     "item.forcecraft.blue_chu_jelly": "Blue Chu Jelly",
     "item.forcecraft.gold_chu_jelly": "Gold Chu Jelly",
+    "item.forcecraft.pile_of_gunpowder": "Small Pile of Gunpowder",
 
     "_comment": "Armor",
     "item.forcecraft.force_helmet": "Force Cap",
@@ -79,6 +80,9 @@
     "item.forcecraft.cold_cow_spawn_egg": "Cold Cow Spawn Egg",
     "item.forcecraft.cold_pig_spawn_egg": "Cold Pig Spawn Egg",
     "item.forcecraft.fairy_spawn_egg": "Fairy Spawn Egg",
+    "item.forcecraft.creeper_tot_spawn_egg": "Creeper Tot Spawn Egg",
+    "item.forcecraft.ender_tot_spawn_egg": "Ender Tot Spawn Egg",
+    "item.forcecraft.angry_enderman_spawn_egg": "Angry Enderman Spawn Egg",
 
     "_comment": "Blocks",
     "block.forcecraft.power_ore": "Power Ore",
@@ -186,6 +190,9 @@
     "entity.forcecraft.blue_chu_chu": "Blue Chu Chu",
     "entity.forcecraft.gold_chu_chu": "Gold Chu Chu",
     "entity.forcecraft.fairy": "Fairy",
+    "entity.forcecraft.creeper_tot": "Creeper Tot",
+    "entity.forcecraft.ender_tot": "Ender Tot",
+    "entity.forcecraft.angry_enderman": "Angry Enderman",
 
     "_comment": "Subtitles",
     "forcecraft.whoosh.subtitle": "Whooshing",

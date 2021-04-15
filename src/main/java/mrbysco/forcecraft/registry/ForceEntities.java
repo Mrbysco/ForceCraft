@@ -2,10 +2,13 @@ package mrbysco.forcecraft.registry;
 
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.config.ConfigHandler;
+import mrbysco.forcecraft.entities.AngryEndermanEntity;
 import mrbysco.forcecraft.entities.ChuChuEntity;
 import mrbysco.forcecraft.entities.ColdChickenEntity;
 import mrbysco.forcecraft.entities.ColdCowEntity;
 import mrbysco.forcecraft.entities.ColdPigEntity;
+import mrbysco.forcecraft.entities.CreeperTotEntity;
+import mrbysco.forcecraft.entities.EnderTotEntity;
 import mrbysco.forcecraft.entities.FairyEntity;
 import mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
 import mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
@@ -63,15 +66,29 @@ public class ForceEntities {
 			register("red_chu_chu", EntityType.Builder.<ChuChuEntity>create(ChuChuEntity::new, EntityClassification.MONSTER)
 					.size(2.04F, 2.04F).trackingRange(10)));
 
+	public static final RegistryObject<EntityType<CreeperTotEntity>> CREEPER_TOT = ENTITIES.register("creeper_tot", () ->
+			register("creeper_tot", EntityType.Builder.<CreeperTotEntity>create(CreeperTotEntity::new, EntityClassification.MONSTER)
+					.size(0.6F, 1.1F).trackingRange(8)));
+
+	public static final RegistryObject<EntityType<EnderTotEntity>> ENDER_TOT = ENTITIES.register("ender_tot", () ->
+			register("ender_tot", EntityType.Builder.<EnderTotEntity>create(EnderTotEntity::new, EntityClassification.MONSTER)
+					.size(0.6F, 1.6F).trackingRange(8)));
+
+	public static final RegistryObject<EntityType<AngryEndermanEntity>> ANGRY_ENDERMAN = ENTITIES.register("angry_enderman", () ->
+			register("angry_enderman", EntityType.Builder.<AngryEndermanEntity>create(AngryEndermanEntity::new, EntityClassification.MONSTER)
+					.size(0.6F, 2.9F).trackingRange(8)));
+
 	public static final RegistryObject<EntityType<ForceArrowEntity>> FORCE_ARROW = ENTITIES.register("force_arrow", () ->
 			register("force_arrow", EntityType.Builder.<ForceArrowEntity>create(ForceArrowEntity::new, EntityClassification.MISC)
 					.size(0.5F, 0.5F).trackingRange(4).updateInterval(20)));
 
 	public static void registerSpawnPlacement() {
 		EntitySpawnPlacementRegistry.register(RED_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnHere);
-		EntitySpawnPlacementRegistry.register(GREEN_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnOn);
-		EntitySpawnPlacementRegistry.register(BLUE_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnOn);
-		EntitySpawnPlacementRegistry.register(GOLD_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnOn);
+		EntitySpawnPlacementRegistry.register(GREEN_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnHere);
+		EntitySpawnPlacementRegistry.register(BLUE_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnHere);
+		EntitySpawnPlacementRegistry.register(GOLD_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnHere);
+		EntitySpawnPlacementRegistry.register(CREEPER_TOT.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::canMonsterSpawnInLight);
+		EntitySpawnPlacementRegistry.register(ENDER_TOT.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::canMonsterSpawnInLight);
 
 		EntitySpawnPlacementRegistry.register(FAIRY.get(), EntitySpawnPlacementRegistry.PlacementType.NO_RESTRICTIONS, Heightmap.Type.MOTION_BLOCKING, FairyEntity::canSpawnOn);
 	}
@@ -94,6 +111,12 @@ public class ForceEntities {
 			if(ConfigHandler.COMMON.FairySpawning.get()) {
 				event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(FAIRY.get(), ConfigHandler.COMMON.FairyWeight.get(), ConfigHandler.COMMON.FairyMinGroup.get(), ConfigHandler.COMMON.FairyMaxGroup.get()));
 			}
+			if(ConfigHandler.COMMON.CreeperTotSpawning.get()) {
+				event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(CREEPER_TOT.get(), ConfigHandler.COMMON.CreeperTotWeight.get(), ConfigHandler.COMMON.CreeperTotMinGroup.get(), ConfigHandler.COMMON.CreeperTotMaxGroup.get()));
+			}
+			if(ConfigHandler.COMMON.EnderTotSpawning.get()) {
+				event.getSpawns().getSpawner(EntityClassification.MONSTER).add(new MobSpawnInfo.Spawners(ENDER_TOT.get(), ConfigHandler.COMMON.EnderTotWeight.get(), ConfigHandler.COMMON.EnderTotMinGroup.get(), ConfigHandler.COMMON.EnderTotMaxGroup.get()));
+			}
 		}
 	}
 
@@ -106,6 +129,10 @@ public class ForceEntities {
 		event.put(ForceEntities.GREEN_CHU_CHU.get(), MonsterEntity.func_234295_eP_().create());
 		event.put(ForceEntities.BLUE_CHU_CHU.get(), MonsterEntity.func_234295_eP_().create());
 		event.put(ForceEntities.GOLD_CHU_CHU.get(), MonsterEntity.func_234295_eP_().create());
+
+		event.put(ForceEntities.CREEPER_TOT.get(), CreeperTotEntity.generateAttributes().create());
+		event.put(ForceEntities.ENDER_TOT.get(), EnderTotEntity.generateAttributes().create());
+		event.put(ForceEntities.ANGRY_ENDERMAN.get(), AngryEndermanEntity.generateAttributes().create());
 
 		event.put(ForceEntities.FAIRY.get(), FairyEntity.generateAttributes().create());
 	}
