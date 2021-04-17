@@ -57,13 +57,13 @@ public class ForceEntities {
 			register("red_chu_chu", EntityType.Builder.<ChuChuEntity>create(ChuChuEntity::new, EntityClassification.MONSTER)
 					.size(2.04F, 2.04F).trackingRange(10)));
 	public static final RegistryObject<EntityType<ChuChuEntity>> GREEN_CHU_CHU = ENTITIES.register("green_chu_chu", () ->
-			register("red_chu_chu", EntityType.Builder.<ChuChuEntity>create(ChuChuEntity::new, EntityClassification.MONSTER)
+			register("green_chu_chu", EntityType.Builder.<ChuChuEntity>create(ChuChuEntity::new, EntityClassification.MONSTER)
 					.size(2.04F, 2.04F).trackingRange(10)));
 	public static final RegistryObject<EntityType<ChuChuEntity>> BLUE_CHU_CHU = ENTITIES.register("blue_chu_chu", () ->
-			register("red_chu_chu", EntityType.Builder.<ChuChuEntity>create(ChuChuEntity::new, EntityClassification.MONSTER)
+			register("blue_chu_chu", EntityType.Builder.<ChuChuEntity>create(ChuChuEntity::new, EntityClassification.MONSTER)
 					.size(2.04F, 2.04F).trackingRange(10)));
 	public static final RegistryObject<EntityType<ChuChuEntity>> GOLD_CHU_CHU = ENTITIES.register("gold_chu_chu", () ->
-			register("red_chu_chu", EntityType.Builder.<ChuChuEntity>create(ChuChuEntity::new, EntityClassification.MONSTER)
+			register("gold_chu_chu", EntityType.Builder.<ChuChuEntity>create(ChuChuEntity::new, EntityClassification.MONSTER)
 					.size(2.04F, 2.04F).trackingRange(10)));
 
 	public static final RegistryObject<EntityType<CreeperTotEntity>> CREEPER_TOT = ENTITIES.register("creeper_tot", () ->
