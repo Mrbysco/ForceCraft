@@ -34,9 +34,5 @@ public class ForceBeltScreen extends ContainerScreen<ForceBeltContainer> {
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
         this.playerInventoryTitleY = 42;
         super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
-
-        int actualMouseX = mouseX - ((this.width - this.xSize) / 2);
-        int actualMouseY = mouseY - ((this.height - this.ySize) / 2);
-
     }
 }

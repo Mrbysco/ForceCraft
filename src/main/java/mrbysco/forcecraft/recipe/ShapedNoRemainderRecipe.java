@@ -18,7 +18,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -182,19 +182,19 @@ public class ShapedNoRemainderRecipe extends ShapedRecipe {
 
 	public static ItemStack deserializeItem(JsonObject object) {
 		String s = JSONUtils.getString(object, "item");
-		Item item = Registry.ITEM.getOptional(new ResourceLocation(s)).orElseThrow(() -> {
-			return new JsonSyntaxException("Unknown item '" + s + "'");
-		});
+		// the non-deprecated version. same one used by CraftingHelper
+		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(s));
+        if (item == null) {
+			throw new JsonSyntaxException("Unknown item '" + s + "'");
+		}
 		if (object.has("data")) {
 			throw new JsonParseException("Disallowed data tag found");
 		} else {
-			int i = JSONUtils.getInt(object, "count", 1);
 			return net.minecraftforge.common.crafting.CraftingHelper.getItemStack(object, true);
 		}
 	}
 
 	public static class SerializerShapedNoRemainderRecipe extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>>  implements IRecipeSerializer<ShapedNoRemainderRecipe> {
-		private static final ResourceLocation NAME = new ResourceLocation("minecraft", "crafting_shaped");
 		public ShapedNoRemainderRecipe read(ResourceLocation recipeId, JsonObject json) {
 			String s = JSONUtils.getString(json, "group", "");
 			Map<String, Ingredient> map = ShapedNoRemainderRecipe.deserializeKey(JSONUtils.getJsonObject(json, "key"));

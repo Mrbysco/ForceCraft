@@ -23,5 +23,8 @@ public final class EnchantUtils {
             enchantments.put(enchantment, oldLevel + 1);
             EnchantmentHelper.setEnchantments(enchantments, stack);
         }
+        else {
+            stack.addEnchantment(enchantment, 1);
+        }
     }
 }
