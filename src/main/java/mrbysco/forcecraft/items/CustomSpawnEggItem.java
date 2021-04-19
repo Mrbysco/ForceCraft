@@ -131,7 +131,7 @@ public class CustomSpawnEggItem extends SpawnEggItem {
 		if (compound != null && compound.contains("EntityTag", 10)) {
 			CompoundNBT lvt_2_1_ = compound.getCompound("EntityTag");
 			if (lvt_2_1_.contains("id", 8)) {
-				return (EntityType)EntityType.byKey(lvt_2_1_.getString("id")).orElse(this.typeIn.get());
+				return (EntityType<?>)EntityType.byKey(lvt_2_1_.getString("id")).orElse(this.typeIn.get());
 			}
 		}
 

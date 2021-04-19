@@ -108,11 +108,9 @@ public class EnderTotModel<T extends EnderTotEntity> extends BipedModel<T> {
 		this.bipedHeadwear.rotateAngleY = this.bipedHead.rotateAngleY;
 		this.bipedHeadwear.rotateAngleZ = this.bipedHead.rotateAngleZ;
 		if (this.isAttacking) {
-			float f2 = 1.0F;
 			this.bipedHead.rotationPointY -= 5.0F;
 		}
 
-		float f3 = -14.0F;
 		this.bipedRightArm.setRotationPoint(-5.0F, 9.0F, 0.0F);
 		this.bipedLeftArm.setRotationPoint(5.0F, 9.0F, 0.0F);
 	}

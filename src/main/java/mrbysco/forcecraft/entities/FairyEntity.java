@@ -160,7 +160,6 @@ public class FairyEntity extends CreatureEntity implements IFlyingAnimal {
 		private Vector3d getRandomLocation() {
 			Vector3d vector3d = FairyEntity.this.getLook(0.0F);
 
-			int i = 8;
 			Vector3d vector3d2 = RandomPositionGenerator.findAirTarget(FairyEntity.this, 8, 7, vector3d, ((float)Math.PI / 2F), 2, 1);
 			return vector3d2 != null ? vector3d2 : RandomPositionGenerator.findGroundTarget(FairyEntity.this, 8, 4, -2, vector3d, (double)((float)Math.PI / 2F));
 		}

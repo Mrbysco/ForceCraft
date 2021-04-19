@@ -2,7 +2,6 @@ package mrbysco.forcecraft.util;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map;

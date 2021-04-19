@@ -38,7 +38,7 @@ public class EnderTotRenderer extends MobRenderer<EnderTotEntity, EnderTotModel<
 	public Vector3d getRenderOffset(EnderTotEntity entityIn, float partialTicks) {
 		if (entityIn.isScreaming()) {
 			double d0 = 0.02D;
-			return new Vector3d(this.rnd.nextGaussian() * 0.02D, 0.0D, this.rnd.nextGaussian() * 0.02D);
+			return new Vector3d(this.rnd.nextGaussian() * d0, 0.0D, this.rnd.nextGaussian() * d0);
 		} else {
 			return super.getRenderOffset(entityIn, partialTicks);
 		}
