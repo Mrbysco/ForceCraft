@@ -2,6 +2,7 @@ package mrbysco.forcecraft.util;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map;
@@ -22,6 +23,9 @@ public final class EnchantUtils {
             enchantments.remove(enchantment);
             enchantments.put(enchantment, oldLevel + 1);
             EnchantmentHelper.setEnchantments(enchantments, stack);
+        }
+        else {
+            stack.addEnchantment(enchantment, 1);
         }
     }
 }

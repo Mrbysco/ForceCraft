@@ -227,8 +227,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         	// auto turn off when done
         	//even if tool or book slot become empty, dont auto run next insert
             canWork = false;
+        	processTime = 0;
 
             refreshClient();
+        }
+        else {
+        	processTime = 0;
         }
     }
 
@@ -240,8 +244,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     		//no valid recipes
         	canWork = false;
         	maxProcessTime = 0;
-
     	}
+        refreshClient();
     }
 
 	private void setMaxTimeFromRecipes() {

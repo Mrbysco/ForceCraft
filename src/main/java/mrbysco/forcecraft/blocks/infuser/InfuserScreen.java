@@ -103,9 +103,8 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		x = 39;
 		y = 101;
 		this.addButton(new Button(guiLeft + x, guiTop + y, btnSize, btnSize, new TranslationTextComponent(""), (button) -> {
-			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
-			container.getTile().canWork = true;
-			// TODO: change button
+			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true)); 
+//			container.getTile().canWork = false;
 		}) {
 			@Override
 			public void renderWidget(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
