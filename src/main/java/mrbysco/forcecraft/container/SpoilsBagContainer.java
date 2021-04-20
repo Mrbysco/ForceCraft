@@ -77,7 +77,7 @@ public class SpoilsBagContainer extends Container {
     public ItemStack transferStackInSlot(PlayerEntity player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
 
-        if(index <= inventorySlots.size()) {
+        if(index <= 8) {
             Slot slot = inventorySlots.get(index);
 
             if (slot != null && slot.getHasStack()) {

@@ -72,6 +72,9 @@ public class SpoilsBagItem extends BaseItem {
 						itemHandler.setStackInSlot(i, remaining);
 					}
 				}
+				if(ItemHandlerUtils.isEmpty(itemHandler)) {
+					stack.shrink(1);
+				}
 				return ActionResultType.SUCCESS;
 			}
 		}
