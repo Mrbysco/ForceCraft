@@ -24,7 +24,6 @@ public class EnderTotHeldBlockLayer extends LayerRenderer<EnderTotEntity, EnderT
 			matrixStackIn.rotate(Vector3f.XP.rotationDegrees(20.0F));
 			matrixStackIn.rotate(Vector3f.YP.rotationDegrees(45.0F));
 			matrixStackIn.translate(0.25D, 0.1875D, 0.25D);
-			float f = 0.5F;
 			matrixStackIn.scale(-0.5F, -0.5F, 0.5F);
 			matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90.0F));
 			Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(blockstate, matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
