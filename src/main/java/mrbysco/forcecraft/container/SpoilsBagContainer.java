@@ -23,7 +23,17 @@ public class SpoilsBagContainer extends Container {
     }
 
     public SpoilsBagContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, playerInventory.getCurrentItem());
+        this(id, playerInventory, getSpoilsBag(playerInventory));
+    }
+
+    public static ItemStack getSpoilsBag(PlayerInventory playerInventory) {
+        PlayerEntity player = playerInventory.player;
+        if(player.getHeldItemMainhand().getItem() instanceof SpoilsBagItem) {
+            return player.getHeldItemMainhand();
+        } else if(player.getHeldItemOffhand().getItem() instanceof SpoilsBagItem) {
+            return player.getHeldItemOffhand();
+        }
+        return ItemStack.EMPTY;
     }
 
     public SpoilsBagContainer(int id, PlayerInventory playerInventory, ItemStack forceBelt) {
