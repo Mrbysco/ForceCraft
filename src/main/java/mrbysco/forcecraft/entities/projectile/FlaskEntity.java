@@ -86,6 +86,7 @@ public class FlaskEntity extends ProjectileItemEntity implements IRendersAsItem 
 							this.setItem(skeletonFlask);
 						} else {
 							forceFlask.storeEntity(stack, livingEntity);
+							this.setItem(stack);
 						}
 					}
 				}

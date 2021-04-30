@@ -4,7 +4,7 @@
         "layer0": "forcecraft:item/force_flask"
     },
     "overrides": [
-        { "predicate": { "active": 0.000000 }, "model": "forcecraft:item/force_flask" },
-        { "predicate": { "active": 1.0 }, "model": "forcecraft:item/entity_flask_captured" }
+        { "predicate": { "captured": 0.000000 }, "model": "forcecraft:item/force_flask" },
+        { "predicate": { "captured": 1.0 }, "model": "forcecraft:item/entity_flask_captured" }
     ]
 }

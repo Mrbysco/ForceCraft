@@ -107,7 +107,8 @@ public class ClientHandler {
 			return magnetCap != null && magnetCap.isActivated() ? 1.0F : 0.0F;
 		});
 
-		ItemModelsProperties.registerProperty(ForceRegistry.ENTITY_FLASK.get(), new ResourceLocation("captured"), (stack, world, livingEntity) -> stack.hasTag() && stack.getTag().contains("StoredEntity") ? 1.0F : 0.0F);
+		ItemModelsProperties.registerProperty(ForceRegistry.ENTITY_FLASK.get(), new ResourceLocation("captured"), (stack, world, livingEntity) ->
+				stack.getOrCreateTag().contains("StoredEntity") ? 1.0F : 0.0F);
 
 		ItemModelsProperties.registerProperty(ForceRegistry.FORCE_PACK.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
 				stack.getOrCreateTag().contains("Color") ? (1.0F / 16) * stack.getOrCreateTag().getInt("Color") : 0.9375F);
