@@ -46,6 +46,10 @@
     "item.forcecraft.force_flask": "Force Flask",
     "item.forcecraft.milk_force_flask": "Milk Force Flask",
     "item.forcecraft.force_filled_force_flask": "Liquid Force Force Flask",
+    "item.forcecraft.entity_flask": "%s Flask",
+    "item.forcecraft.chicken_flask": "Chicken Flask",
+    "item.forcecraft.pig_flask": "Pig Flask",
+    "item.forcecraft.skeleton_flask": "Skeleton Flask",
     "item.forcecraft.red_potion": "Red Potion",
     "item.forcecraft.red_chu_jelly": "Red Chu Jelly",
     "item.forcecraft.green_chu_jelly": "Green Chu Jelly",
@@ -223,7 +227,7 @@
     "forcecraft.baconator.shift.text": "Hold Shift to see the contents",
     "forcecraft.baconator.shift.carrying": "Carrying: ",
     "forcecraft.baconator.shift.nothing": "Nothing",
-    
+
     "item.infuser.tooltip.forcelevel": "Force: ",
     "item.infuser.tooltip.lumberjack": "Lumberjack",
     "item.infuser.tooltip.rainbow": "Rainbow",
@@ -248,6 +252,10 @@
 
     "item.milk_force_flask.tooltip": "Farm Fresh",
     "item.force_filled_force_flask.tooltip": "Force Potion Base",
+    "item.entity_flask.tooltip": "Mob: ",
+    "item.entity_flask.tooltip2": "Health: ",
+    "item.entity_flask.empty": "Invalid flask.",
+    "item.entity_flask.empty2": "Please capture the actual mob you cheater!",
     "item.red_potion.tooltip": "Restores all Hearts",
 
     "_comment": "Fortunes",
@@ -449,7 +457,7 @@
     "gui.forcecraft.infuser.start.tooltip": "Start Infusion",
     "gui.forcecraft.infuser.button.guide": "Open Guide GUI",
     "gui.forcecraft.infuser.button.button": "Start Button",
-    
+
     "gui.forcecraft.infuser.tooltip.bane": "???",
     "gui.forcecraft.infuser.tooltip.heat": "???",
     "gui.forcecraft.infuser.tooltip.time": "???",

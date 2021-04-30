@@ -28,6 +28,7 @@ import mrbysco.forcecraft.items.FortuneItem;
 import mrbysco.forcecraft.items.GoldenPowerSourceItem;
 import mrbysco.forcecraft.items.SpoilsBagItem;
 import mrbysco.forcecraft.items.UpgradeCoreItem;
+import mrbysco.forcecraft.items.flask.EntityFlaskItem;
 import mrbysco.forcecraft.items.flask.ForceFilledForceFlask;
 import mrbysco.forcecraft.items.flask.ForceFlaskItem;
 import mrbysco.forcecraft.items.flask.MilkFlaskItem;
@@ -276,6 +277,10 @@ public class ForceRegistry {
     public static final RegistryObject<Item> MILK_FORCE_FLASK = ITEMS.register("milk_force_flask", () -> new MilkFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_FILLED_FORCE_FLASK = ITEMS.register("force_filled_force_flask", () -> new ForceFilledForceFlask(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> RED_POTION = ITEMS.register("red_potion", () -> new RedPotionItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> ENTITY_FLASK = ITEMS.register("entity_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> CHICKEN_FLASK = ITEMS.register("chicken_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> PIG_FLASK = ITEMS.register("pig_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> SKELETON_FLASK = ITEMS.register("skeleton_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
 
     //Tools
     public static final RegistryObject<Item> FORCE_PICKAXE = ITEMS.register("force_pickaxe", () -> new ForcePickaxeItem(itemBuilder().group(ForceCraft.creativeTab)));

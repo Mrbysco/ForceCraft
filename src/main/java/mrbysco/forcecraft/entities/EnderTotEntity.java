@@ -127,7 +127,7 @@ public class EnderTotEntity extends EndermanEntity {
 				return false;
 			} else {
 				double d0 = this.targetPlayer.getDistanceSq(this.endertot);
-				return d0 > 256.0D ? false : this.endertot.shouldAttackPlayer((PlayerEntity)this.targetPlayer);
+				return !(d0 > 256.0D) && this.endertot.shouldAttackPlayer((PlayerEntity) this.targetPlayer);
 			}
 		}
 
@@ -158,9 +158,7 @@ public class EnderTotEntity extends EndermanEntity {
 		public FindPlayerGoal(EnderTotEntity enderTotIn, @Nullable Predicate<LivingEntity> p_i241912_2_) {
 			super(enderTotIn, PlayerEntity.class, 10, false, false, p_i241912_2_);
 			this.endertot = enderTotIn;
-			this.field_220791_m = (new EntityPredicate()).setDistance(this.getTargetDistance()).setCustomPredicate((p_220790_1_) -> {
-				return enderTotIn.shouldAttackPlayer((PlayerEntity)p_220790_1_);
-			});
+			this.field_220791_m = (new EntityPredicate()).setDistance(this.getTargetDistance()).setCustomPredicate((p_220790_1_) -> enderTotIn.shouldAttackPlayer((PlayerEntity)p_220790_1_));
 		}
 
 		/**
@@ -201,7 +199,7 @@ public class EnderTotEntity extends EndermanEntity {
 					return true;
 				}
 			} else {
-				return this.nearestTarget != null && this.field_220792_n.canTarget(this.endertot, this.nearestTarget) ? true : super.shouldContinueExecuting();
+				return this.nearestTarget != null && this.field_220792_n.canTarget(this.endertot, this.nearestTarget) || super.shouldContinueExecuting();
 			}
 		}
 

@@ -2,13 +2,16 @@ package mrbysco.forcecraft.registry;
 
 import mrbysco.forcecraft.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ITag.INamedTag;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
 
 public class ForceTags {
 	public static final ITag.INamedTag<Block> FORCE_BRICK = BlockTags.makeWrapperTag(Reference.MOD_ID + ":force_brick");
@@ -27,6 +30,8 @@ public class ForceTags {
 
 	public static final ITag.INamedTag<Block> ENDERTOT_HOLDABLE = forgeBlockTag("endertot_holdable");
 
+	public static final ITag<EntityType<?>> FLASK_BLACKLIST = EntityTypeTags.createOptional(new ResourceLocation(Reference.MOD_ID + ":" + "flask_blacklist"));
+
 	private static INamedTag<Item> forceItemTag(String name) {
 		return ItemTags.makeWrapperTag("forge:" + name);
 	}
@@ -36,4 +41,5 @@ public class ForceTags {
 	private static INamedTag<Fluid> forgeFluidTag(String name) {
 		return FluidTags.makeWrapperTag("forge:" + name);
 	}
+
 }

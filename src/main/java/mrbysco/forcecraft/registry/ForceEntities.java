@@ -10,6 +10,7 @@ import mrbysco.forcecraft.entities.ColdPigEntity;
 import mrbysco.forcecraft.entities.CreeperTotEntity;
 import mrbysco.forcecraft.entities.EnderTotEntity;
 import mrbysco.forcecraft.entities.FairyEntity;
+import mrbysco.forcecraft.entities.projectile.FlaskEntity;
 import mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
 import mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
 import net.minecraft.entity.Entity;
@@ -81,6 +82,12 @@ public class ForceEntities {
 	public static final RegistryObject<EntityType<ForceArrowEntity>> FORCE_ARROW = ENTITIES.register("force_arrow", () ->
 			register("force_arrow", EntityType.Builder.<ForceArrowEntity>create(ForceArrowEntity::new, EntityClassification.MISC)
 					.size(0.5F, 0.5F).trackingRange(4).updateInterval(20)));
+
+	public static final RegistryObject<EntityType<FlaskEntity>> FORCE_FLASK = ENTITIES.register("force_flask", () ->
+			register("force_flask", EntityType.Builder.<FlaskEntity>create(FlaskEntity::new, EntityClassification.MISC)
+					.size(0.25F, 0.25F)
+					.setCustomClientFactory(FlaskEntity::new)
+					.trackingRange(4).updateInterval(10)));
 
 	public static void registerSpawnPlacement() {
 		EntitySpawnPlacementRegistry.register(RED_CHU_CHU.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, ChuChuEntity::canSpawnHere);

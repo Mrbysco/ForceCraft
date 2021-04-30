@@ -1,17 +1,23 @@
 package mrbysco.forcecraft.items.flask;
 
+import mrbysco.forcecraft.entities.projectile.FlaskEntity;
 import mrbysco.forcecraft.items.BaseItem;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
+/**
+ * Credit to Buuz135 for the Mob Imprisonment Tool code <3
+ */
 public class ForceFlaskItem extends BaseItem {
 
     public ForceFlaskItem(Properties properties) {
@@ -19,8 +25,24 @@ public class ForceFlaskItem extends BaseItem {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        return super.onItemUse(context);
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack itemstack = playerIn.getHeldItem(handIn);
+        if(playerIn.isSneaking()) {
+            worldIn.playSound((PlayerEntity)null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+            if (!worldIn.isRemote) {
+                FlaskEntity flaskEntity = new FlaskEntity(worldIn, playerIn);
+                flaskEntity.setItem(new ItemStack(ForceRegistry.ENTITY_FLASK.get()));
+                flaskEntity.setDirectionAndMovement(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.5F, 1.0F);
+                worldIn.addEntity(flaskEntity);
+            }
+
+            playerIn.addStat(Stats.ITEM_USED.get(this));
+            if (!playerIn.abilities.isCreativeMode) {
+                itemstack.shrink(1);
+            }
+        }
+
+        return ActionResult.func_233538_a_(itemstack, worldIn.isRemote());
     }
 
     @Override

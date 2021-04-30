@@ -10,7 +10,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ConfigHandler {
@@ -70,8 +72,8 @@ public class ConfigHandler {
 
             furnaceOutputBlacklist = builder
                     .comment("An additional list of tile entities the Force Furnace can NOT insert into [Syntax: modid:tile_name]\n" +
-                            "Examples: \"minecraft:shulker_box\" would it stop inserting into shulkers")
-                    .defineList("furnaceOutputBlacklist", Arrays.asList(new String[] {"minecraft:hopper"}), o -> (o instanceof String));
+                            "Examples: \"minecraft:shulker_box\" would stop it inserting into shulkers")
+                    .defineListAllowEmpty(Collections.singletonList("furnaceOutputBlacklist"), () -> Collections.singletonList("minecraft:hopper"), o -> (o instanceof String));
 
             builder.pop();
             builder.comment("General settings")

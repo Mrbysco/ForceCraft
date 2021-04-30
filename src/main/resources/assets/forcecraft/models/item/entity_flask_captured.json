@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "forcecraft:item/egg_force_flask",
+    "layer1": "forcecraft:item/egg_force_flask_overlay",
+    "layer2": "forcecraft:item/force_flask"
+  }
+}
