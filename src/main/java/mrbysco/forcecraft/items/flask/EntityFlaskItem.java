@@ -42,7 +42,7 @@ public class EntityFlaskItem extends BaseItem {
 		World worldIn = context.getWorld();
 		ItemStack stack = context.getItem();
 		PlayerEntity playerIn = context.getPlayer();
-		if (worldIn.isRemote || hasEntityStored(stack)) return ActionResultType.FAIL;
+		if (worldIn.isRemote || !hasEntityStored(stack)) return ActionResultType.FAIL;
 
 		Entity storedEntity = getStoredEntity(stack, worldIn);
 		BlockPos pos = context.getPos().offset(context.getFace());
