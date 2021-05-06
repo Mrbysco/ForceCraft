@@ -16,7 +16,7 @@ public class PotionMagnet extends Effect {
 
     @Override
     public boolean isBeneficial() {
-        return false;
+        return true;
     }
 
     @Override

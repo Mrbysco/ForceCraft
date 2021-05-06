@@ -2,12 +2,14 @@ package mrbysco.forcecraft.items;
 
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.container.ItemCardContainer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -23,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemCardItem extends BaseItem {
 	public ItemCardItem(Properties properties) {
@@ -74,5 +77,22 @@ public class ItemCardItem extends BaseItem {
 		}
 
 		return super.itemInteractionForEntity(stack, playerIn, target, hand);
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		CompoundNBT tag = stack.getOrCreateTag();
+		if(tag.contains("RecipeContents")) {
+			CompoundNBT recipeContents = tag.getCompound("RecipeContents");
+			ItemStack resultStack = ItemStack.read(recipeContents.getCompound("result"));
+			tooltip.add(new TranslationTextComponent("forcecraft.item_card.recipe_output",
+					new StringTextComponent(resultStack.getCount() + " " + resultStack.getDisplayName().getString()).mergeStyle(TextFormatting.GRAY)).mergeStyle(TextFormatting.YELLOW));
+		} else {
+			tooltip.add(new TranslationTextComponent("forcecraft.item_card.recipe_output", 1, "minecraft:air").mergeStyle(TextFormatting.YELLOW));
+		}
+		tooltip.add(new StringTextComponent(" "));
+		tooltip.add(new TranslationTextComponent("forcecraft.item_card.recipe_set").mergeStyle(TextFormatting.BOLD));
+
+		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
 }

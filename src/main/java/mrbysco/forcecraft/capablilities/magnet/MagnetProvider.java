@@ -14,11 +14,11 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_MAGN
 
 public class MagnetProvider implements ICapabilitySerializable<INBT>, ICapabilityProvider {
     private LazyOptional<IMagnet> instance;
-    private IMagnet wrench;
+    private IMagnet magnet;
 
     public MagnetProvider(){
-        this.wrench = CAPABILITY_MAGNET.getDefaultInstance();
-        this.instance = LazyOptional.of(() -> wrench);
+        this.magnet = CAPABILITY_MAGNET.getDefaultInstance();
+        this.instance = LazyOptional.of(() -> magnet);
     }
 
     @Nonnull
@@ -29,12 +29,12 @@ public class MagnetProvider implements ICapabilitySerializable<INBT>, ICapabilit
 
     @Override
     public INBT serializeNBT() {
-        return CAPABILITY_MAGNET.writeNBT(wrench, null);
+        return CAPABILITY_MAGNET.writeNBT(magnet, null);
     }
 
     @Override
     public void deserializeNBT(INBT nbt) {
-        CAPABILITY_MAGNET.readNBT(wrench, null, nbt);
+        CAPABILITY_MAGNET.readNBT(magnet, null, nbt);
     }
 
     public final Capability<IMagnet> getCapability(){

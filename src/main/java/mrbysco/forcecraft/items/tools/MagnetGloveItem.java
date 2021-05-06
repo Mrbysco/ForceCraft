@@ -1,13 +1,18 @@
 package mrbysco.forcecraft.items.tools;
 
 import mrbysco.forcecraft.Reference;
+import mrbysco.forcecraft.capablilities.magnet.IMagnet;
 import mrbysco.forcecraft.capablilities.magnet.MagnetProvider;
 import mrbysco.forcecraft.items.BaseItem;
+import mrbysco.forcecraft.potion.effects.EffectMagnet;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
@@ -15,6 +20,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -51,6 +57,19 @@ public class MagnetGloveItem extends BaseItem {
             });
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if(entityIn instanceof PlayerEntity && !(entityIn instanceof FakePlayer)) {
+            if(itemSlot >= 0 && itemSlot <= PlayerInventory.getHotbarSize()) {
+                IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
+                if (magnetCap != null && magnetCap.isActivated()) {
+                    EffectInstance magnet = new EffectMagnet(20);
+                    ((PlayerEntity)entityIn).addPotionEffect(magnet);
+                }
+            }
+        }
     }
 
     @Override
