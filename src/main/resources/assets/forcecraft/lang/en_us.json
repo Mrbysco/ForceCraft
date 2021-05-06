@@ -56,6 +56,7 @@
     "item.forcecraft.blue_chu_jelly": "Blue Chu Jelly",
     "item.forcecraft.gold_chu_jelly": "Gold Chu Jelly",
     "item.forcecraft.pile_of_gunpowder": "Small Pile of Gunpowder",
+    "item.forcecraft.item_card": "Item Card",
 
     "_comment": "Armor",
     "item.forcecraft.force_helmet": "Force Cap",
@@ -216,6 +217,7 @@
     "forcecraft.container.pack": "Force Pack",
     "forcecraft.container.force_furnace": "Force Furnace",
     "forcecraft.container.spoils_bag": "Spoils Bag",
+    "forcecraft.container.card": "Item Card",
 
     "_comment": "Fluid",
     "fluid.forcecraft.fluid_force_source": "Liquid Force",

@@ -3,6 +3,8 @@ package mrbysco.forcecraft.networking;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
 import mrbysco.forcecraft.networking.message.PackChangeMessage;
+import mrbysco.forcecraft.networking.message.RecipeToCardMessage;
+import mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.IPacket;
@@ -25,6 +27,8 @@ public class PacketHandler {
     public static void init(){
         CHANNEL.registerMessage(id++, InfuserMessage.class, InfuserMessage::encode, InfuserMessage::decode, InfuserMessage::handle);
         CHANNEL.registerMessage(id++, PackChangeMessage.class, PackChangeMessage::encode, PackChangeMessage::decode, PackChangeMessage::handle);
+        CHANNEL.registerMessage(id++, RecipeToCardMessage.class, RecipeToCardMessage::encode, RecipeToCardMessage::decode, RecipeToCardMessage::handle);
+        CHANNEL.registerMessage(id++, SaveCardRecipeMessage.class, SaveCardRecipeMessage::encode, SaveCardRecipeMessage::decode, SaveCardRecipeMessage::handle);
     }
 
     public static void sendPacket(Entity player, IPacket<?> packet) {

@@ -26,6 +26,7 @@ import mrbysco.forcecraft.items.ForceFluidBucketItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.FortuneItem;
 import mrbysco.forcecraft.items.GoldenPowerSourceItem;
+import mrbysco.forcecraft.items.ItemCardItem;
 import mrbysco.forcecraft.items.SpoilsBagItem;
 import mrbysco.forcecraft.items.UpgradeCoreItem;
 import mrbysco.forcecraft.items.flask.EntityFlaskItem;
@@ -281,6 +282,7 @@ public class ForceRegistry {
     public static final RegistryObject<Item> CHICKEN_FLASK = ITEMS.register("chicken_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> PIG_FLASK = ITEMS.register("pig_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> SKELETON_FLASK = ITEMS.register("skeleton_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> ITEM_CARD = ITEMS.register("item_card", () -> new ItemCardItem(itemBuilder().group(ForceCraft.creativeTab)));
 
     //Tools
     public static final RegistryObject<Item> FORCE_PICKAXE = ITEMS.register("force_pickaxe", () -> new ForcePickaxeItem(itemBuilder().group(ForceCraft.creativeTab)));

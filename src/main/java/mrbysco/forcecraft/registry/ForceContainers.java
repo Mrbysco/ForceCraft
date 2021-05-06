@@ -4,6 +4,7 @@ import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.blocks.infuser.InfuserContainer;
 import mrbysco.forcecraft.container.ForceBeltContainer;
 import mrbysco.forcecraft.container.ForcePackContainer;
+import mrbysco.forcecraft.container.ItemCardContainer;
 import mrbysco.forcecraft.container.SpoilsBagContainer;
 import mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
 import net.minecraft.inventory.container.ContainerType;
@@ -29,4 +30,7 @@ public class ForceContainers {
 
 	public static final RegistryObject<ContainerType<SpoilsBagContainer>> SPOILS_BAG = CONTAINERS.register("spoils_bag", () ->
 			IForgeContainerType.create((windowId, inv, data) -> new SpoilsBagContainer(windowId, inv)));
+
+	public static final RegistryObject<ContainerType<ItemCardContainer>> ITEM_CARD = CONTAINERS.register("item_card", () ->
+			IForgeContainerType.create((windowId, inv, data) -> new ItemCardContainer(windowId, inv)));
 }

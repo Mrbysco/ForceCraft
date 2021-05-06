@@ -9,11 +9,13 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.util.ErrorUtil;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.compat.infuser.InfuserCategory;
 import mrbysco.forcecraft.compat.multipleoutput.FreezingCategory;
 import mrbysco.forcecraft.compat.multipleoutput.GrindingCategory;
+import mrbysco.forcecraft.compat.transfer.ItemCardTransferHandler;
 import mrbysco.forcecraft.recipe.ForceRecipes;
 import mrbysco.forcecraft.recipe.FreezingRecipe;
 import mrbysco.forcecraft.recipe.GrindingRecipe;
@@ -65,6 +67,11 @@ public class JeiCompat implements IModPlugin {
 			grindingCategory = new GrindingCategory(guiHelper),
 			infuserCategory = new InfuserCategory<InfuseRecipe>(guiHelper)
 		);
+	}
+
+	@Override
+	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+		registration.addRecipeTransferHandler(new ItemCardTransferHandler(), VanillaRecipeCategoryUid.CRAFTING);
 	}
 
 	@Override
