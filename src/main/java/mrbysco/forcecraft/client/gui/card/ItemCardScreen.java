@@ -17,8 +17,8 @@ import net.minecraft.util.text.StringTextComponent;
 
 public class ItemCardScreen extends ContainerScreen<ItemCardContainer> {
 	private static final ResourceLocation ITEM_CARD_GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/crafting3x3.png");
-	private static final StringTextComponent saveText = new StringTextComponent("✔");
-	private static final StringTextComponent invalidText = new StringTextComponent("✘");
+	private static final StringTextComponent saveText = new StringTextComponent("\u2714");
+	private static final StringTextComponent invalidText = new StringTextComponent("\u2718");
 	private Button buttonSave;
 
 	public ItemCardScreen(ItemCardContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
