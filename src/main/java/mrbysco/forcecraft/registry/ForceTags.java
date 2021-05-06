@@ -21,6 +21,7 @@ public class ForceTags {
 	public static final ITag.INamedTag<Item> VALID_INFUSER_CHARGE = ItemTags.makeWrapperTag(Reference.MOD_ID + ":valid_infuser_charge");
 	public static final ITag.INamedTag<Item> FORCE_FUELS = ItemTags.makeWrapperTag(Reference.MOD_ID + ":force_fuel");
 	public static final ITag.INamedTag<Item> BACONATOR_FOOD = ItemTags.makeWrapperTag(Reference.MOD_ID + ":baconator_food");
+	public static final ITag.INamedTag<Item> VALID_FORCE_BELT = ItemTags.makeWrapperTag(Reference.MOD_ID + ":valid_force_belt");
 
 	public static final ITag.INamedTag<Item> FORCE_INGOT = forceItemTag("ingots/force");
 	public static final ITag.INamedTag<Item> FORCE_NUGGET = forceItemTag("nuggets/force");

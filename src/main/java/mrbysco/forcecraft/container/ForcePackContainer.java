@@ -4,6 +4,7 @@ import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForcePackItem;
+import mrbysco.forcecraft.items.SpoilsBagItem;
 import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,7 +30,17 @@ public class ForcePackContainer extends Container {
     }
 
     public ForcePackContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, playerInventory.getCurrentItem());
+        this(id, playerInventory, getPackStack(playerInventory));
+    }
+
+    public static ItemStack getPackStack(PlayerInventory playerInventory) {
+        PlayerEntity player = playerInventory.player;
+        if(player.getHeldItemMainhand().getItem() instanceof ForcePackItem) {
+            return player.getHeldItemMainhand();
+        } else if(player.getHeldItemOffhand().getItem() instanceof ForcePackItem) {
+            return player.getHeldItemOffhand();
+        }
+        return ItemStack.EMPTY;
     }
 
     public ForcePackContainer(int id, PlayerInventory playerInventory, ItemStack forcePack) {

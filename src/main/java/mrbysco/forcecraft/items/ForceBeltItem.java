@@ -2,6 +2,7 @@ package mrbysco.forcecraft.items;
 
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.container.ForceBeltContainer;
+import mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -106,7 +107,7 @@ public class ForceBeltItem extends BaseItem {
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
                 //Make sure there's no ForceBelt-ception
-                return !(stack.getItem() instanceof ForceBeltItem) && super.isItemValid(slot, stack);
+                return !(stack.getItem() instanceof ForceBeltItem) && stack.getItem().isIn(ForceTags.VALID_FORCE_BELT) && super.isItemValid(slot, stack);
             }
         });
 

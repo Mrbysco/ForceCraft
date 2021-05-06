@@ -22,11 +22,21 @@ public class ForceBeltContainer extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return !playerIn.isSpectator();
+        return !playerIn.isSpectator() && !heldStack.isEmpty();
     }
 
     public ForceBeltContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, playerInventory.getCurrentItem());
+        this(id, playerInventory, getBeltStack(playerInventory));
+    }
+
+    public static ItemStack getBeltStack(PlayerInventory playerInventory) {
+        PlayerEntity player = playerInventory.player;
+        if(player.getHeldItemMainhand().getItem() instanceof ForceBeltItem) {
+            return player.getHeldItemMainhand();
+        } else if(player.getHeldItemOffhand().getItem() instanceof ForceBeltItem) {
+            return player.getHeldItemOffhand();
+        }
+        return ItemStack.EMPTY;
     }
 
     public ForceBeltContainer(int id, PlayerInventory playerInventory, ItemStack forceBelt) {

@@ -1,6 +1,8 @@
 package mrbysco.forcecraft.networking.message;
 
 import mrbysco.forcecraft.container.ItemCardContainer;
+import mrbysco.forcecraft.items.ForcePackItem;
+import mrbysco.forcecraft.items.ItemCardItem;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -41,7 +43,12 @@ public class RecipeToCardMessage {
 		ctx.enqueueWork(() -> {
 			PlayerEntity player = ctx.getSender();
 			// Handle tablet version
-			ItemStack mainhand = player.getHeldItemMainhand();
+			ItemStack mainhand = ItemStack.EMPTY;
+			if(player.getHeldItemMainhand().getItem() instanceof ItemCardItem) {
+				mainhand = player.getHeldItemMainhand();
+			} else if(player.getHeldItemOffhand().getItem() instanceof ItemCardItem) {
+				mainhand = player.getHeldItemOffhand();
+			}
 			if (!mainhand.isEmpty() && mainhand.getItem() == ForceRegistry.ITEM_CARD.get()) {
 				if (player.openContainer instanceof ItemCardContainer) {
 					ItemCardContainer itemCardContainer = (ItemCardContainer) player.openContainer;

@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.container;
 
+import mrbysco.forcecraft.items.ItemCardItem;
 import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +23,6 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +31,7 @@ public class ItemCardContainer extends Container {
 	private final CraftResultInventory craftResult = new CraftResultInventory();
 	private final IWorldPosCallable worldPosCallable;
 	private final PlayerEntity player;
+	private ItemStack heldStack;
 
 	public ItemCardContainer(int id, PlayerInventory playerInventory) {
 		this(id, playerInventory, IWorldPosCallable.DUMMY);
@@ -90,7 +91,7 @@ public class ItemCardContainer extends Container {
 			this.addSlot(new Slot(playerInventory, l, 8 + l * 18, 142));
 		}
 
-		ItemStack heldStack = player.getHeldItemMainhand();
+		heldStack = getCardStack(playerInventory);
 		if(heldStack.getItem() == ForceRegistry.ITEM_CARD.get()) {
 			CompoundNBT tag = heldStack.getOrCreateTag();
 			if(tag.contains("RecipeContents")) {
@@ -103,7 +104,16 @@ public class ItemCardContainer extends Container {
 				}
 			}
 		}
+	}
 
+	public static ItemStack getCardStack(PlayerInventory playerInventory) {
+		PlayerEntity player = playerInventory.player;
+		if(player.getHeldItemMainhand().getItem() instanceof ItemCardItem) {
+			return player.getHeldItemMainhand();
+		} else if(player.getHeldItemOffhand().getItem() instanceof ItemCardItem) {
+			return player.getHeldItemOffhand();
+		}
+		return ItemStack.EMPTY;
 	}
 
 	protected void updateCraftingResult(World world, PlayerEntity player, CraftingInventory inventory, CraftResultInventory inventoryResult) {
@@ -148,7 +158,7 @@ public class ItemCardContainer extends Container {
 	 * Determines whether supplied player can use this container
 	 */
 	public boolean canInteractWith(PlayerEntity playerIn) {
-		return true && !playerIn.getHeldItemMainhand().isEmpty();
+		return true && !heldStack.isEmpty();
 	}
 
 	/**
