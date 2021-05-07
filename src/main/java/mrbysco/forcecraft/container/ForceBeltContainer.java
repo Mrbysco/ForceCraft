@@ -3,6 +3,7 @@ package mrbysco.forcecraft.container;
 import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.registry.ForceContainers;
+import mrbysco.forcecraft.registry.ForceTags;
 import mrbysco.forcecraft.util.FindingUtil;
 import mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,7 +45,7 @@ public class ForceBeltContainer extends Container {
                 this.addSlot(new SlotItemHandler(itemHandler, k, xPosC + k * 18, yPosC) {
                     @Override
                     public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem);
+                        return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem) && stack.getItem().isIn(ForceTags.VALID_FORCE_BELT);
                     }
                 });
             }

@@ -68,13 +68,13 @@ public class ForcePackItem extends BaseItem {
 
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-
 		int defaultAmount = 8;
+		CompoundNBT tag = stack.getOrCreateTag();
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		if (handler instanceof PackItemStackHandler) {
 			defaultAmount = ((PackItemStackHandler) handler).getSlotsInUse();
 		}
-		tooltip.add(new StringTextComponent(String.format("0/%s Slots", defaultAmount)));
+		tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt(SLOTS_USED), defaultAmount)));
 
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
@@ -108,7 +108,6 @@ public class ForcePackItem extends BaseItem {
 	@Override
 	public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
 		if (nbt != null && nbt.contains(PackItemStackHandler.NBT_UPGRADES)) {
-
 			stack.getOrCreateTag().putInt(SLOTS_USED, nbt.getInt(SLOTS_USED));
 
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
