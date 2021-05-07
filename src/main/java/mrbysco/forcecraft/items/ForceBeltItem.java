@@ -71,7 +71,7 @@ public class ForceBeltItem extends BaseItem {
     @Nullable
     public INamedContainerProvider getContainer(ItemStack stack) {
         return new SimpleNamedContainerProvider((id, inventory, player) -> {
-            return new ForceBeltContainer(id, inventory, stack);
+            return new ForceBeltContainer(id, inventory);
         }, stack.hasDisplayName() ? ((TextComponent)stack.getDisplayName()).mergeStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.belt"));
     }
 

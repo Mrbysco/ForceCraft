@@ -35,6 +35,7 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -43,6 +44,17 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_MAGN
 
 public class ClientHandler {
 	public static void onClientSetup(final FMLClientSetupEvent event) {
+		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_OPEN_HOTBAR_PACK);
+		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_OPEN_HOTBAR_BELT);
+		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_1);
+		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_2);
+		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_3);
+		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_4);
+		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_5);
+		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_6);
+		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_7);
+		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_8);
+
 		ScreenManager.registerFactory(ForceContainers.FORCE_FURNACE.get(), ForceFurnaceScreen::new);
 		ScreenManager.registerFactory(ForceContainers.INFUSER.get(), InfuserScreen::new);
 		ScreenManager.registerFactory(ForceContainers.FORCE_BELT.get(), ForceBeltScreen::new);

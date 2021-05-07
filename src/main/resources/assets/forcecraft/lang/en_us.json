@@ -478,6 +478,20 @@
     "gui.forcecraft.infuser.tooltip.force": "Force adds Knockback to weapons",
     "gui.forcecraft.infuser.tooltip.damage": "Add adds sharpness to weapons",
 
+    "_comment": "Keybinds",
+    "key.forcecraft.category": "Forcecraft",
+    "key.forcecraft.open_hotbar_pack": "Open hotbar Force Pack",
+    "key.forcecraft.open_hotbar_belt": "Open hotbar Force Belt",
+    "key.forcecraft.quick_use": "Forcecraft Quick Use",
+    "key.forcecraft.quick_use_1": "Force Belt Slot 1",
+    "key.forcecraft.quick_use_2": "Force Belt Slot 2",
+    "key.forcecraft.quick_use_3": "Force Belt Slot 3",
+    "key.forcecraft.quick_use_4": "Force Belt Slot 4",
+    "key.forcecraft.quick_use_5": "Force Belt Slot 5",
+    "key.forcecraft.quick_use_6": "Force Belt Slot 6",
+    "key.forcecraft.quick_use_7": "Force Belt Slot 7",
+    "key.forcecraft.quick_use_8": "Force Belt Slot 8",
+
 
     "_comment": "JEI",
     "forcecraft.gui.jei.category.freezing": "Freezing",

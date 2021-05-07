@@ -3,6 +3,7 @@ package mrbysco.forcecraft.container;
 import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.registry.ForceContainers;
+import mrbysco.forcecraft.util.FindingUtil;
 import mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -26,27 +27,18 @@ public class ForceBeltContainer extends Container {
     }
 
     public ForceBeltContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, getBeltStack(playerInventory));
-    }
-
-    public static ItemStack getBeltStack(PlayerInventory playerInventory) {
-        PlayerEntity player = playerInventory.player;
-        if(player.getHeldItemMainhand().getItem() instanceof ForceBeltItem) {
-            return player.getHeldItemMainhand();
-        } else if(player.getHeldItemOffhand().getItem() instanceof ForceBeltItem) {
-            return player.getHeldItemOffhand();
-        }
-        return ItemStack.EMPTY;
-    }
-
-    public ForceBeltContainer(int id, PlayerInventory playerInventory, ItemStack forceBelt) {
         super(ForceContainers.FORCE_BELT.get(), id);
-        this.heldStack = forceBelt;
+        this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForceBeltItem);
+        if (heldStack == null || heldStack.isEmpty()) {
+            playerInventory.player.closeScreen();
+            return;
+        }
+
         int xPosC = 17;
         int yPosC = 20;
         //Maxes at 40
 
-        IItemHandler itemHandler = forceBelt.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler != null) {
             for (int k = 0; k < 8; ++k) {
                 this.addSlot(new SlotItemHandler(itemHandler, k, xPosC + k * 18, yPosC) {

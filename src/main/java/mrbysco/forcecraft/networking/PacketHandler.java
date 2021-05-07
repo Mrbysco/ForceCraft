@@ -2,7 +2,10 @@ package mrbysco.forcecraft.networking;
 
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
+import mrbysco.forcecraft.networking.message.OpenBeltMessage;
+import mrbysco.forcecraft.networking.message.OpenPackMessage;
 import mrbysco.forcecraft.networking.message.PackChangeMessage;
+import mrbysco.forcecraft.networking.message.QuickUseBeltMessage;
 import mrbysco.forcecraft.networking.message.RecipeToCardMessage;
 import mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
 import net.minecraft.entity.Entity;
@@ -29,6 +32,9 @@ public class PacketHandler {
         CHANNEL.registerMessage(id++, PackChangeMessage.class, PackChangeMessage::encode, PackChangeMessage::decode, PackChangeMessage::handle);
         CHANNEL.registerMessage(id++, RecipeToCardMessage.class, RecipeToCardMessage::encode, RecipeToCardMessage::decode, RecipeToCardMessage::handle);
         CHANNEL.registerMessage(id++, SaveCardRecipeMessage.class, SaveCardRecipeMessage::encode, SaveCardRecipeMessage::decode, SaveCardRecipeMessage::handle);
+        CHANNEL.registerMessage(id++, OpenBeltMessage.class, OpenBeltMessage::encode, OpenBeltMessage::decode, OpenBeltMessage::handle);
+        CHANNEL.registerMessage(id++, OpenPackMessage.class, OpenPackMessage::encode, OpenPackMessage::decode, OpenPackMessage::handle);
+        CHANNEL.registerMessage(id++, QuickUseBeltMessage.class, QuickUseBeltMessage::encode, QuickUseBeltMessage::decode, QuickUseBeltMessage::handle);
     }
 
     public static void sendPacket(Entity player, IPacket<?> packet) {

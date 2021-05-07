@@ -3,6 +3,7 @@ package mrbysco.forcecraft;
 import mrbysco.forcecraft.capablilities.CapabilityAttachHandler;
 import mrbysco.forcecraft.capablilities.CapabilityHandler;
 import mrbysco.forcecraft.client.ClientHandler;
+import mrbysco.forcecraft.client.KeybindHandler;
 import mrbysco.forcecraft.command.ForceCommands;
 import mrbysco.forcecraft.config.ConfigHandler;
 import mrbysco.forcecraft.handlers.BaneHandler;
@@ -88,6 +89,7 @@ public class ForceCraft {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             eventBus.addListener(ClientHandler::onClientSetup);
             eventBus.addListener(ClientHandler::registerItemColors);
+            MinecraftForge.EVENT_BUS.addListener(KeybindHandler::onClientTick);
         });
     }
 

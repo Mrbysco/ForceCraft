@@ -6,6 +6,7 @@ import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.SpoilsBagItem;
 import mrbysco.forcecraft.registry.ForceContainers;
+import mrbysco.forcecraft.util.FindingUtil;
 import mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -30,27 +31,16 @@ public class ForcePackContainer extends Container {
     }
 
     public ForcePackContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, getPackStack(playerInventory));
-    }
-
-    public static ItemStack getPackStack(PlayerInventory playerInventory) {
-        PlayerEntity player = playerInventory.player;
-        if(player.getHeldItemMainhand().getItem() instanceof ForcePackItem) {
-            return player.getHeldItemMainhand();
-        } else if(player.getHeldItemOffhand().getItem() instanceof ForcePackItem) {
-            return player.getHeldItemOffhand();
-        }
-        return ItemStack.EMPTY;
-    }
-
-    public ForcePackContainer(int id, PlayerInventory playerInventory, ItemStack forcePack) {
         super(ForceContainers.FORCE_PACK.get(), id);
-        this.heldStack = forcePack;
-//        ForceCraft.LOGGER.info("Pack container:  {}}",  heldStack.getTag());
+        this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForcePackItem);
+        if (heldStack == null || heldStack.isEmpty()) {
+            playerInventory.player.closeScreen();
+            return;
+        }
 		
         upgrades = 0;
 
-        IItemHandler itemHandler = forcePack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler instanceof PackItemStackHandler) {
             upgrades = ((PackItemStackHandler)itemHandler).getUpgrades();
             int numRows = upgrades + 1;
