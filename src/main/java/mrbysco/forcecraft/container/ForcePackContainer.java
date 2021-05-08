@@ -1,10 +1,9 @@
 package mrbysco.forcecraft.container;
 
-import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForcePackItem;
-import mrbysco.forcecraft.items.SpoilsBagItem;
+import mrbysco.forcecraft.items.ItemCardItem;
 import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.util.FindingUtil;
 import mrbysco.forcecraft.util.ItemHandlerUtils;
@@ -14,11 +13,16 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ForcePackContainer extends Container {
 
@@ -44,7 +48,7 @@ public class ForcePackContainer extends Container {
         if(itemHandler instanceof PackItemStackHandler) {
             upgrades = ((PackItemStackHandler)itemHandler).getUpgrades();
             int numRows = upgrades + 1;
-            ForceCraft.LOGGER.info("Pack upgrades {}",  upgrades);
+//            ForceCraft.LOGGER.info("Pack upgrades {}",  upgrades);
     		
 
             int xPosC = 17;
@@ -85,6 +89,104 @@ public class ForcePackContainer extends Container {
     public void onContainerClosed(PlayerEntity playerIn) {
         IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler instanceof PackItemStackHandler) {
+            for(int i = 0; i < itemHandler.getSlots(); i++) {
+                ItemStack stack = itemHandler.getStackInSlot(i);
+                CompoundNBT tag = stack.getOrCreateTag();
+                if(stack.getItem() instanceof ItemCardItem && tag.contains("RecipeContents")) {
+                    CompoundNBT recipeContents = tag.getCompound("RecipeContents");
+                    NonNullList<ItemStack> ingredientList = NonNullList.create();
+                    List<ItemStack> mergeList = new ArrayList<>();
+                    for(int j = 0; j < 9; j++) {
+                        ItemStack recipeStack = ItemStack.read(recipeContents.getCompound("slot_" + j));
+                        if(!recipeStack.isEmpty()) {
+                            if(ingredientList.isEmpty()) {
+                                ingredientList.add(recipeStack);
+                            } else {
+                                mergeList.add(recipeStack);
+                            }
+                        }
+                    }
+
+                    for (ItemStack recipeStack : mergeList) {
+                        if(!ingredientList.isEmpty()) {
+                            List<ItemStack> buffer = new ArrayList<>();
+                            for (Iterator<ItemStack> iterator = ingredientList.iterator(); iterator.hasNext();) {
+                                ItemStack ingredient = iterator.next();
+                                if(ingredient != null && !ingredient.isEmpty()) {
+                                    if(areItemsAndTagsEqual(ingredient, recipeStack)) {
+                                        int addedCount = ingredient.getCount() + recipeStack.getCount();
+                                        int maxCount = ingredient.getMaxStackSize();
+                                        if (addedCount <= maxCount) {
+                                            recipeStack.setCount(0);
+                                            ingredient.setCount(addedCount);
+                                        } else if (recipeStack.getCount() < maxCount) {
+                                            recipeStack.shrink(maxCount - ingredient.getCount());
+                                            ingredient.setCount(maxCount);
+                                        }
+                                    }
+                                }
+
+                                if(!recipeStack.isEmpty()) {
+                                    buffer.add(recipeStack);
+                                }
+                            }
+                            if(!buffer.isEmpty()) {
+                                ingredientList.addAll(buffer);
+                            }
+                        }
+                    }
+                    mergeList.clear();
+
+                    List<ItemStack> restList = new ArrayList<>();
+                    for(int k = 0; k < itemHandler.getSlots(); k++) {
+                        if(k != i) {
+                            ItemStack restStack = itemHandler.getStackInSlot(k);
+                            if(!restStack.isEmpty()) {
+                                restList.add(restStack);
+                            }
+                        }
+                    }
+                    boolean canCraft = true;
+                    int craftCount = 64;
+                    for(ItemStack ingredient : ingredientList) {
+                        int countPossible = 0;
+                        for(ItemStack rest : restList) {
+                            if(ingredient.getItem() == rest.getItem() && ingredient.getOrCreateTag().equals(rest.getOrCreateTag())) {
+                                countPossible += (double)rest.getCount() / ingredient.getCount();
+                            }
+                        }
+                        if(countPossible == 0) {
+                            canCraft = false;
+                            craftCount = 0;
+                            break;
+                        }
+                        if(countPossible < craftCount) {
+                            craftCount = countPossible;
+                        }
+                    }
+
+                    ItemStack craftStack = ItemStack.read(recipeContents.getCompound("result"));
+                    if(canCraft && craftCount > 0) {
+                        for(int l = 0; l < craftCount; l++) {
+                            for(ItemStack ingredient : ingredientList) {
+                                for(ItemStack rest : restList) {
+                                    if(ingredient.getItem() == rest.getItem() && ingredient.getOrCreateTag().equals(rest.getOrCreateTag())) {
+                                        rest.shrink(ingredient.getCount());
+                                    }
+                                }
+                            }
+
+                            ItemStack stackCopy = craftStack.copy();
+                            ItemStack craftedStack = ItemHandlerHelper.insertItem(itemHandler, stackCopy, false);
+                            if(!craftedStack.isEmpty()) {
+                                playerIn.dropItem(craftedStack, true);
+                            }
+
+                        }
+                    }
+                }
+            }
+
             CompoundNBT tag = heldStack.getOrCreateTag();
             tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(itemHandler));
             heldStack.setTag(tag);
@@ -92,6 +194,7 @@ public class ForcePackContainer extends Container {
 
         super.onContainerClosed(playerIn);
     }
+
 
     public int getUpgrades() {
         return this.upgrades;

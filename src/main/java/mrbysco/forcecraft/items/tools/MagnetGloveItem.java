@@ -16,6 +16,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -79,5 +80,9 @@ public class MagnetGloveItem extends BaseItem {
         } else {
             tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".magnet_glove.deactivated").mergeStyle(TextFormatting.RED));
         }
+        tooltip.add(new StringTextComponent(" "));
+        tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.change").mergeStyle(TextFormatting.BOLD));
+
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 }

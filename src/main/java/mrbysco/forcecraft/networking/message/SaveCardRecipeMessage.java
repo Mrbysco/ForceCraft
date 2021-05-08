@@ -1,7 +1,9 @@
 package mrbysco.forcecraft.networking.message;
 
 import mrbysco.forcecraft.container.ItemCardContainer;
+import mrbysco.forcecraft.items.ItemCardItem;
 import mrbysco.forcecraft.registry.ForceRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
@@ -10,6 +12,9 @@ import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
@@ -35,8 +40,8 @@ public class SaveCardRecipeMessage {
 			if (ctx.getDirection().getReceptionSide().isServer() && ctx.getSender() != null) {
 				ServerPlayerEntity player = ctx.getSender();
 				World world = player.world;
-				ItemStack stack = player.getHeldItemMainhand();
-				if (!stack.isEmpty() && stack.getItem() == ForceRegistry.ITEM_CARD.get()) {
+				ItemStack stack = getCardStack(player);
+				if (!stack.isEmpty()) {
 					if (player.openContainer instanceof ItemCardContainer) {
 						ItemCardContainer itemCardContainer = (ItemCardContainer) player.openContainer;
 						CraftingInventory craftMatrix = itemCardContainer.getCraftMatrix();
@@ -54,8 +59,18 @@ public class SaveCardRecipeMessage {
 						});
 					}
 				}
+				player.sendMessage(new StringTextComponent("Recipe saved").mergeStyle(TextFormatting.YELLOW), Util.DUMMY_UUID);
 			}
 		});
 		ctx.setPacketHandled(true);
+	}
+
+	private static ItemStack getCardStack(PlayerEntity player) {
+		if(player.getHeldItemMainhand().getItem() instanceof ItemCardItem) {
+			return player.getHeldItemMainhand();
+		} else if(player.getHeldItemOffhand().getItem() instanceof ItemCardItem) {
+			return player.getHeldItemOffhand();
+		}
+		return ItemStack.EMPTY;
 	}
 }

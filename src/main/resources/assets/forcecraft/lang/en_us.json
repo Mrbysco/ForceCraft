@@ -230,7 +230,9 @@
     "forcecraft.baconator.shift.carrying": "Carrying: ",
     "forcecraft.baconator.shift.nothing": "Nothing",
     "forcecraft.item_card.recipe_output": "Crafts: %s",
-    "forcecraft.item_card.recipe_set": "Shift Right-click to set a recipe",
+    "forcecraft.item_card.unset": "No Recipe Set",
+    "forcecraft.item_card.recipe_set": "Sneak Right-click to set a recipe",
+    "forcecraft.magnet_glove.change": "Sneak Right-click to change modes",
 
     "item.infuser.tooltip.forcelevel": "Force: ",
     "item.infuser.tooltip.lumberjack": "Lumberjack",

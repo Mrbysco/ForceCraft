@@ -66,7 +66,7 @@ public class SpoilsBagItem extends BaseItem {
 				ItemStackHandler itemHandler = (ItemStackHandler) handler;
 				for(int i = 0; i < itemHandler.getSlots(); i++) {
 					ItemStack bagStack = itemHandler.getStackInSlot(i);
-					ItemStack remaining = ItemHandlerHelper.copyStackWithSize(stack, stack.getCount());
+					ItemStack remaining = ItemHandlerHelper.copyStackWithSize(bagStack, bagStack.getCount());
 					if(!bagStack.isEmpty()) {
 						remaining = ItemHandlerHelper.insertItem(tileInventory, bagStack, false);
 						itemHandler.setStackInSlot(i, remaining);

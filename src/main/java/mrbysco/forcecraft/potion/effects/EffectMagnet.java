@@ -20,9 +20,10 @@ public class EffectMagnet extends EffectInstance {
         //Inspired by Botania Code
 
         double x = entity.getPosX();
-        double y = entity.getPosY();
+        double y = entity.getPosY() + 0.75;;
         double z = entity.getPosZ();
         double range = 10.0d;
+
         EffectInstance activePotionEffect = entity.getActivePotionEffect(ForceEffects.MAGNET.get());
         if(activePotionEffect != null) {
             range += activePotionEffect.getAmplifier() * 0.3f;
@@ -35,18 +36,16 @@ public class EffectMagnet extends EffectInstance {
             }
 
             // constant force!
-            float strength = 0.07f;
+            float strength = 0.07F;
 
-            // calculate direction: item -> player
-            Vector3d vec = new Vector3d(x, y, z);
-            vec.subtract(new Vector3d(item.getPosX(), item.getPosY(), item.getPosZ()));
+            Vector3d entityVector = new Vector3d(item.getPosX(), item.getPosY() - item.getYOffset() + item.getHeight() / 2, item.getPosZ());
+            Vector3d finalVector = new Vector3d(x, y, z).subtract(entityVector);
 
-            vec.normalize();
-            vec.scale(strength);
+            if (Math.sqrt(finalVector.x * finalVector.x + finalVector.y * finalVector.y + finalVector.z * finalVector.z) > 1) {
+                finalVector = finalVector.normalize();
+            }
 
-            // we calculated the movement vector and set it to the correct strength.. now we apply it \o/
-            Vector3d motion = item.getMotion();
-            item.setMotion(motion.x + vec.x, motion.y + vec.y, motion.z + vec.z);
+            item.setMotion(finalVector.mul(strength, strength, strength));
         }
     }
 

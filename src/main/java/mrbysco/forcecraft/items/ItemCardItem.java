@@ -88,7 +88,7 @@ public class ItemCardItem extends BaseItem {
 			tooltip.add(new TranslationTextComponent("forcecraft.item_card.recipe_output",
 					new StringTextComponent(resultStack.getCount() + " " + resultStack.getDisplayName().getString()).mergeStyle(TextFormatting.GRAY)).mergeStyle(TextFormatting.YELLOW));
 		} else {
-			tooltip.add(new TranslationTextComponent("forcecraft.item_card.recipe_output", 1, "minecraft:air").mergeStyle(TextFormatting.YELLOW));
+			tooltip.add(new TranslationTextComponent("forcecraft.item_card.unset").mergeStyle(TextFormatting.RED));
 		}
 		tooltip.add(new StringTextComponent(" "));
 		tooltip.add(new TranslationTextComponent("forcecraft.item_card.recipe_set").mergeStyle(TextFormatting.BOLD));

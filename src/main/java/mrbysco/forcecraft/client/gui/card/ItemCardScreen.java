@@ -31,7 +31,6 @@ public class ItemCardScreen extends ContainerScreen<ItemCardContainer> {
 
 		this.buttonSave = this.addButton(new Button(this.width / 2 + 62, this.height / 2 - 76, 20, 20, saveText, (button) -> {
 			PacketHandler.CHANNEL.sendToServer(new SaveCardRecipeMessage());
-			this.minecraft.displayGuiScreen((Screen)null);
 		}));
 	}
 
