@@ -43,6 +43,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	private ResourceLocation ENERGY = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/energy.png");
 	private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID,
 			"textures/gui/container/forceinfuser.png");
+	private Button buttonInfuse;
 
 	public InfuserScreen(InfuserContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
@@ -61,14 +62,14 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 				176, 0);
 		
 		int btnSize = 13;
-		int x = 124;
-		int y = 17;
+		int x = 123;
+		int y = 16;
 		// Comment out this button to disable Info help ? button
 		this.addButton(new Button(guiLeft + x, guiTop + y, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
 
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
 
-			ItemStack bookStack = container.tile.getBookInSlot();
+			ItemStack bookStack = container.getTile().getBookInSlot();
 			if (bookStack.isEmpty()) {
 				this.playerInventory.player.sendStatusMessage(new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
 				showingPop = false;// do not open without a book
@@ -86,7 +87,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			public void renderWidget(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
 				// skip drawing me
 
-				ItemStack bookStack = container.tile.getBookInSlot();
+				ItemStack bookStack = container.getTile().getBookInSlot();
 				if (!bookStack.isEmpty()) {
 					Minecraft minecraft = Minecraft.getInstance();
 					minecraft.getTextureManager().bindTexture(TEXTURE);
@@ -102,14 +103,21 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		});
 		x = 39;
 		y = 101;
-		this.addButton(new Button(guiLeft + x, guiTop + y, btnSize, btnSize, new TranslationTextComponent(""), (button) -> {
-			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true)); 
+		buttonInfuse = this.addButton(new Button(guiLeft + x, guiTop + y, btnSize, btnSize, new TranslationTextComponent(""), (button) -> {
+			ItemStack bookStack = container.getTile().getBookInSlot();
+			if (bookStack.isEmpty()) {
+				this.playerInventory.player.sendStatusMessage(new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
+				showingPop = false;// do not open without a book
+				return;
+			} else {
+				PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
+			}
 //			container.getTile().canWork = false;
 		}) {
 			@Override
 			public void renderWidget(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
 				// skip drawing me
-				if (!container.getTile().canWork) {
+				if(getContainer().isWorkAllowed()) {
 					// render special
 //				    super.renderWidget(ms, mouseX, mouseY, partialTicks);
 					Minecraft minecraft = Minecraft.getInstance();
@@ -123,6 +131,15 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 				}
 			}
 		});
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+
+		if(buttonInfuse.active != getContainer().isWorkAllowed()) {
+			buttonInfuse.active = getContainer().isWorkAllowed();
+		}
 	}
 
 	@Override
@@ -181,27 +198,38 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		if (isPointInRegion(39, 101, 12, 12, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
-			text.add(new TranslationTextComponent("gui.forcecraft.infuser.start.tooltip")
-					.mergeStyle(TextFormatting.GRAY));
+			if(getContainer().isWorkAllowed()) {
+				text.add(new TranslationTextComponent("gui.forcecraft.infuser.start.tooltip")
+						.mergeStyle(TextFormatting.GRAY));
+			} else {
+				boolean modifiersEmpty = tile.areAllModifiersEmpty();
+				if(!modifiersEmpty && tile.getEnergyStored() < tile.getEnergyCostPer()) {
+					text.add(new TranslationTextComponent("gui.forcecraft.infuser.missing.rf.tooltip")
+							.mergeStyle(TextFormatting.RED));
+				} else {
+					text.add(new TranslationTextComponent("gui.forcecraft.infuser.missing.tooltip")
+							.mergeStyle(TextFormatting.RED));
+				}
+			}
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
-		if (isPointInRegion(150, 8, 16, 82, mouseX, mouseY)) {
+		if (isPointInRegion(156, 8, 12, 112, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
-			IFormattableTextComponent tt = new TranslationTextComponent("" + tile.getEnergyStored())
-					.mergeStyle(TextFormatting.GRAY);
+			IFormattableTextComponent tt = new StringTextComponent(tile.getEnergyStored() + " RF")
+					.mergeStyle(TextFormatting.GOLD);
 			text.add(tt);
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
-		if (isPointInRegion(10, 36, 15, 82, mouseX, mouseY)) {
+		if (isPointInRegion(10, 41, 15, 82, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
 			if (tile.getFluid() == null) {
 				text.add(new TranslationTextComponent("gui.forcecraft.infuser.empty.tooltip"));
 			} else {
 				text.add(new TranslationTextComponent("fluid.forcecraft.fluid_force_source"));
 
-				text.add(new StringTextComponent("(" + tile.getFluidAmount() + ")")
+				text.add(new StringTextComponent(tile.getFluidAmount() + " mb")
 						.mergeStyle(TextFormatting.YELLOW));
 			}
 
@@ -222,7 +250,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 				TextureAtlasSprite sprite = ((AtlasTexture) texture).getSprite(flowing);
 				if (sprite != null) {
 					minecraft.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
-					int fluidHeight = container.tile.getFluidGuiHeight(82);
+					int fluidHeight = container.getTile().getFluidGuiHeight(82);
 					blit(matrixStack, guiLeft + 8, guiTop + 65 + (58 - fluidHeight), 0, 16, fluidHeight, sprite);
 				}
 			}
@@ -256,7 +284,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 	private void drawPopup(MatrixStack matrixStack) {
 
-		ItemStack bookStack = container.tile.getBookInSlot();
+		ItemStack bookStack = container.getTile().getBookInSlot();
 		if (bookStack.isEmpty()) {
 			// draw string. actually, button should be locked
 			return;

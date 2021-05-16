@@ -215,7 +215,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         	//working with No progress for now, just is valid and did i turn it on
 
         	//once we have a valid tool and have waited. go do the thing
-        	if(hasTool() && hasValidBook()) {
+        	if(isWorkAllowed()) {
         		if(areAllModifiersEmpty()) {
         			processForceCharging();
         		}
@@ -249,28 +249,30 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
 	private void setMaxTimeFromRecipes() {
 		maxProcessTime = 0;
-		for (int i = 0; i < SLOT_TOOL; i++) {
+		if(!this.getBookInSlot().isEmpty()) { //Make sure it doesn't run if the book is missing
+			for (int i = 0; i < SLOT_TOOL; i++) {
 
-			ItemStack modifier = getModifier(i);
-			UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
-			int bookTier = bd.getTier().ordinal();
-			// if the recipe level does not exceed what the book has
-			// test the ingredient of this recipe, if it matches me
+				ItemStack modifier = getModifier(i);
+				UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
+				int bookTier = bd.getTier().ordinal();
+				// if the recipe level does not exceed what the book has
+				// test the ingredient of this recipe, if it matches me
 
-			List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
-			for (InfuseRecipe recipeCurrent : recipes) {
-				if (recipeCurrent.getTier().ordinal() > bookTier) {
-					continue;
-				}
-				ItemStack tool = getFromToolSlot();
-				if (recipeCurrent.getCenter().test(tool) == false) {
-					// doesnt match the "center" tool test from recipe
-					continue;
-				}
-				if (recipeCurrent.input.test(modifier)) {
-					// tool, book, and modifier all valid
+				List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
+				for (InfuseRecipe recipeCurrent : recipes) {
+					if (recipeCurrent.getTier().ordinal() > bookTier) {
+						continue;
+					}
+					ItemStack tool = getFromToolSlot();
+					if (recipeCurrent.getCenter().test(tool) == false) {
+						// doesnt match the "center" tool test from recipe
+						continue;
+					}
+					if (recipeCurrent.input.test(modifier)) {
+						// tool, book, and modifier all valid
 //					ForceCraft.LOGGER.info(recipeCurrent.getId() + " increase  "+ recipeCurrent.getTime());
-					maxProcessTime += recipeCurrent.getTime();
+						maxProcessTime += recipeCurrent.getTime();
+					}
 				}
 			}
 		}
@@ -294,7 +296,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         }
     }
 
-    private boolean areAllModifiersEmpty() {
+    public boolean areAllModifiersEmpty() {
 
     	int emptySlots = 0;
         for (int i = 0; i < SLOT_TOOL; i++) {
@@ -396,12 +398,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         return super.getCapability(capability, facing);
     }
 
-    private boolean hasTool() {
+	public boolean hasTool() {
         ItemStack tool = getFromToolSlot();
 		return !tool.isEmpty();
     }
 
-    private boolean hasValidBook() {
+	public boolean hasValidBook() {
         ItemStack tool = getBookInSlot();
 		if (!tool.isEmpty()) {
             return tool.getItem() == ForceRegistry.UPGRADE_TOME.get();
@@ -936,6 +938,14 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         }
         return null;
     }
+
+    public boolean isWorkAllowed() {
+    	return hasTool() && hasValidBook() && (!areAllModifiersEmpty() ? !(energyStorage.getEnergyStored() < ENERGY_COST_PER) : true);
+	}
+
+	public int getEnergyCostPer() {
+    	return ENERGY_COST_PER;
+	}
 
     public int getFluidAmount() {
         return tank.getFluidAmount();

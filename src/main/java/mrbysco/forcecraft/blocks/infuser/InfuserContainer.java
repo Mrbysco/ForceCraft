@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class InfuserContainer extends Container {
 
-    InfuserTileEntity tile;
+    private InfuserTileEntity tile;
 
     public InfuserContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
         this(windowId, playerInventory, getTileEntity(playerInventory, data));
@@ -143,6 +143,10 @@ public class InfuserContainer extends Container {
 
     public int getFluidAmount(){
         return tile.fluidContained;
+    }
+
+    public boolean isWorkAllowed() {
+        return tile.isWorkAllowed();
     }
 
     public InfuserTileEntity getTile() {
