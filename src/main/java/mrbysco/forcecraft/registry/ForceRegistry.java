@@ -89,7 +89,7 @@ public class ForceRegistry {
         new SaplingBlock(new ForceTree(), AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)));
     public static final RegistryObject<Block> FORCE_LOG = BLOCKS.register("force_log", () ->
         new ForceLogBlock(AbstractBlock.Properties.create(Material.WOOD, MaterialColor.SAND)
-                .hardnessAndResistance(1.0F).sound(SoundType.WOOD).setLightLevel((state) -> 1)));
+                .hardnessAndResistance(1.0F).sound(SoundType.WOOD).setLightLevel((state) -> 2)));
     public static final RegistryObject<Block> FORCE_WOOD = BLOCKS.register("force_wood", () ->
         new ForceLogBlock(AbstractBlock.Properties.create(Material.WOOD, MaterialColor.WOOD)
                 .hardnessAndResistance(1.0F).sound(SoundType.WOOD).setLightLevel((state) -> 1)));

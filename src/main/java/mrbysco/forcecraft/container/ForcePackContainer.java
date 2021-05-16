@@ -171,7 +171,9 @@ public class ForcePackContainer extends Container {
                             for(ItemStack ingredient : ingredientList) {
                                 for(ItemStack rest : restList) {
                                     if(ingredient.getItem() == rest.getItem() && ingredient.getOrCreateTag().equals(rest.getOrCreateTag())) {
-                                        rest.shrink(ingredient.getCount());
+                                        if(rest.getCount() >= ingredient.getCount()) {
+                                            rest.shrink(ingredient.getCount());
+                                        }
                                     }
                                 }
                             }

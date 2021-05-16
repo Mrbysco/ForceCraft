@@ -15,6 +15,7 @@ import mrbysco.forcecraft.handlers.ToolModifierHandler;
 import mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.recipe.ForceRecipes;
+import mrbysco.forcecraft.recipe.condition.ForceConditions;
 import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.registry.ForceEffects;
 import mrbysco.forcecraft.registry.ForceEntities;
@@ -56,6 +57,7 @@ public class ForceCraft {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.commonSpec);
         eventBus.register(ConfigHandler.class);
 
+        eventBus.register(new ForceConditions());
         eventBus.addListener(this::setup);
 
         ForceFluids.registerFluids();
