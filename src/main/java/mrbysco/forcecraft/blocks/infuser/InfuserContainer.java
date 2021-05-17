@@ -40,14 +40,23 @@ public class InfuserContainer extends Container {
         this.tile = te;
 
         //Modifier Slots [0, 7] around the outside starting at the top middle going clockwise
-        this.addSlot(new SlotItemHandler(te.handler, 0, 80, 20));
-        this.addSlot(new SlotItemHandler(te.handler, 1, 104, 32));
-        this.addSlot(new SlotItemHandler(te.handler, 2, 116, 57));
-        this.addSlot(new SlotItemHandler(te.handler, 3, 104, 81));
-        this.addSlot(new SlotItemHandler(te.handler, 4, 80, 93));
-        this.addSlot(new SlotItemHandler(te.handler, 5, 56, 81));
-        this.addSlot(new SlotItemHandler(te.handler, 6, 44, 57));
-        this.addSlot(new SlotItemHandler(te.handler, 7, 56, 32));
+        int bookTier = tile.getBookTier();
+        if(bookTier >= 0)
+            this.addSlot(new SlotItemHandler(te.handler, 0, 80, 20));
+        if(bookTier >= 1)
+            this.addSlot(new SlotItemHandler(te.handler, 1, 104, 32));
+        if(bookTier >= 2)
+            this.addSlot(new SlotItemHandler(te.handler, 2, 116, 57));
+        if(bookTier >= 3)
+            this.addSlot(new SlotItemHandler(te.handler, 3, 104, 81));
+        if(bookTier >= 4)
+            this.addSlot(new SlotItemHandler(te.handler, 4, 80, 93));
+        if(bookTier >= 5)
+            this.addSlot(new SlotItemHandler(te.handler, 5, 56, 81));
+        if(bookTier >= 6)
+            this.addSlot(new SlotItemHandler(te.handler, 6, 44, 57));
+        if(bookTier >= 7)
+            this.addSlot(new SlotItemHandler(te.handler, 7, 56, 32));
 
         //Tools Slot in the middle
         this.addSlot(new SlotItemHandler(te.handler, InfuserTileEntity.SLOT_TOOL, 80, 57));

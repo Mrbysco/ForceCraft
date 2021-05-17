@@ -943,6 +943,13 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     	return hasTool() && hasValidBook() && (!areAllModifiersEmpty() ? !(energyStorage.getEnergyStored() < ENERGY_COST_PER) : true);
 	}
 
+	public int getBookTier() {
+    	if(!getBookInSlot().isEmpty()) {
+			return new UpgradeBookData(this.getBookInSlot()).getTier().ordinal();
+		}
+		return 0;
+	}
+
 	public int getEnergyCostPer() {
     	return ENERGY_COST_PER;
 	}
