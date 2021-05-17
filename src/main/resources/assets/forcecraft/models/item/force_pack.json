@@ -15,10 +15,10 @@
     { "predicate": { "color": 0.5625 }, "model": "forcecraft:item/force_pack_gray" },
     { "predicate": { "color": 0.625 }, "model": "forcecraft:item/force_pack_pink" },
     { "predicate": { "color": 0.6875 }, "model": "forcecraft:item/force_pack_lime" },
-    { "predicate": { "color": 0.75 }, "model": "forcecraft:item/force_pack_yellow" },
+    { "predicate": { "color": 0.75 }, "model": "forcecraft:item/force_pack_orange" },
     { "predicate": { "color": 0.8125 }, "model": "forcecraft:item/force_pack_light_blue" },
     { "predicate": { "color": 0.875 }, "model": "forcecraft:item/force_pack_magenta" },
-    { "predicate": { "color": 0.9375 }, "model": "forcecraft:item/force_pack" },
+    { "predicate": { "color": 0.9375 }, "model": "forcecraft:item/force_pack_yellow" },
     { "predicate": { "color": 1.0 }, "model": "forcecraft:item/force_pack_white" }
   ]
 }

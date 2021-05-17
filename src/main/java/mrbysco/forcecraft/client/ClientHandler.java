@@ -65,7 +65,7 @@ public class ClientHandler {
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_SAPLING.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_RED_TORCH.get(), RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_YELLOW_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_ORANGE_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_GREEN_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_BLUE_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_WHITE_TORCH.get(), RenderType.getCutout());
@@ -81,7 +81,7 @@ public class ClientHandler {
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_GRAY_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_RED_TORCH.get(), RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_YELLOW_TORCH.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_ORANGE_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_GREEN_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_BLUE_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_WHITE_TORCH.get(), RenderType.getCutout());

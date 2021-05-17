@@ -96,7 +96,7 @@ public class ForceDataGen {
 
 				registerDropSelfLootTable(FORCE_TORCH.get());
 				registerDropSelfLootTable(FORCE_RED_TORCH.get());
-				registerDropSelfLootTable(FORCE_YELLOW_TORCH.get());
+				registerDropSelfLootTable(FORCE_ORANGE_TORCH.get());
 				registerDropSelfLootTable(FORCE_GREEN_TORCH.get());
 				registerDropSelfLootTable(FORCE_BLUE_TORCH.get());
 				registerDropSelfLootTable(FORCE_WHITE_TORCH.get());
@@ -114,7 +114,7 @@ public class ForceDataGen {
 
 				registerDropping(WALL_FORCE_TORCH.get(), FORCE_TORCH.get());
 				registerDropping(WALL_FORCE_RED_TORCH.get(), FORCE_RED_TORCH.get());
-				registerDropping(WALL_FORCE_YELLOW_TORCH.get(), FORCE_YELLOW_TORCH.get());
+				registerDropping(WALL_FORCE_ORANGE_TORCH.get(), FORCE_ORANGE_TORCH.get());
 				registerDropping(WALL_FORCE_GREEN_TORCH.get(), FORCE_GREEN_TORCH.get());
 				registerDropping(WALL_FORCE_BLUE_TORCH.get(), FORCE_BLUE_TORCH.get());
 				registerDropping(WALL_FORCE_WHITE_TORCH.get(), FORCE_WHITE_TORCH.get());
@@ -356,7 +356,7 @@ public class ForceDataGen {
 
 			singleTexture("force_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch"));
 			singleTexture("force_red_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_red"));
-			singleTexture("force_yellow_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_yellow"));
+			singleTexture("force_orange_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_orange"));
 			singleTexture("force_green_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_green"));
 			singleTexture("force_blue_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_blue"));
 			singleTexture("force_white_torch", mcLoc("item/generated"), "layer0", modLoc("block/force_torch_white"));
