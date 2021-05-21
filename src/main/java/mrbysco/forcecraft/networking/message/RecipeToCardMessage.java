@@ -1,7 +1,6 @@
 package mrbysco.forcecraft.networking.message;
 
 import mrbysco.forcecraft.container.ItemCardContainer;
-import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.ItemCardItem;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.entity.player.PlayerEntity;

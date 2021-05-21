@@ -15,7 +15,7 @@ public class FindingUtil {
 			return player.getHeldItemOffhand();
 		}
 
-		for (int i = 0; i <= playerInventory.getHotbarSize(); i++) {
+		for (int i = 0; i <= PlayerInventory.getHotbarSize(); i++) {
 			ItemStack stack = playerInventory.getStackInSlot(i);
 			if (itemPredicate.test(stack))
 				return stack;
@@ -30,7 +30,7 @@ public class FindingUtil {
 			amountFound++;
 		}
 
-		for (int i = 0; i <= playerInventory.getHotbarSize(); i++) {
+		for (int i = 0; i <= PlayerInventory.getHotbarSize(); i++) {
 			ItemStack stack = playerInventory.getStackInSlot(i);
 			if (itemPredicate.test(stack))
 				amountFound++;

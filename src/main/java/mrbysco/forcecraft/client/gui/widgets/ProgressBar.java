@@ -1,4 +1,4 @@
-package mrbysco.forcecraft.client.gui.infuser;
+package mrbysco.forcecraft.client.gui.widgets;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;

@@ -31,13 +31,11 @@ public class ShapedNoRemainderRecipe extends ShapedRecipe {
 	private final int recipeWidth;
 	private final int recipeHeight;
 	private final NonNullList<Ingredient> recipeItems;
-	private final ItemStack recipeOutput;
-	private final ResourceLocation id;
+	private final ItemStack recipeOutput; 
 	private final String group;
 
 	public ShapedNoRemainderRecipe(ResourceLocation idIn, String groupIn, int recipeWidthIn, int recipeHeightIn, NonNullList<Ingredient> recipeItemsIn, ItemStack recipeOutputIn) {
-		super(idIn, groupIn, recipeWidthIn, recipeHeightIn, recipeItemsIn, recipeOutputIn);
-		this.id = idIn;
+		super(idIn, groupIn, recipeWidthIn, recipeHeightIn, recipeItemsIn, recipeOutputIn); 
 		this.group = groupIn;
 		this.recipeWidth = recipeWidthIn;
 		this.recipeHeight = recipeHeightIn;

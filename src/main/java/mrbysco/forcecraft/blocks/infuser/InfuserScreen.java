@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
-import mrbysco.forcecraft.client.gui.infuser.ProgressBar;
+import mrbysco.forcecraft.client.gui.widgets.ProgressBar;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import mrbysco.forcecraft.networking.PacketHandler;
