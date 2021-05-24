@@ -92,8 +92,8 @@ public class ForcePackContainer extends Container {
         if(itemHandler instanceof PackItemStackHandler) {
             for(int i = 0; i < itemHandler.getSlots(); i++) {
                 ItemStack stack = itemHandler.getStackInSlot(i);
-                CompoundNBT tag = stack.getOrCreateTag();
-                if(stack.getItem() instanceof ItemCardItem && tag.contains("RecipeContents")) {
+                CompoundNBT tag = stack.getTag();
+                if(stack.getItem() instanceof ItemCardItem && tag != null && tag.contains("RecipeContents")) {
                     CompoundNBT recipeContents = tag.getCompound("RecipeContents");
                     NonNullList<ItemStack> ingredientList = NonNullList.create();
                     List<ItemStack> mergeList = new ArrayList<>();
@@ -152,7 +152,7 @@ public class ForcePackContainer extends Container {
                     for(ItemStack ingredient : ingredientList) {
                         int countPossible = 0;
                         for(ItemStack rest : restList) {
-                            if(ingredient.getItem() == rest.getItem() && ingredient.getOrCreateTag().equals(rest.getOrCreateTag())) {
+                            if(ingredient.getItem() == rest.getItem() && ItemStack.areItemStackTagsEqual(ingredient, rest)) {
                                 countPossible += (double)rest.getCount() / ingredient.getCount();
                             }
                         }
@@ -171,7 +171,7 @@ public class ForcePackContainer extends Container {
                         for(int l = 0; l < craftCount; l++) {
                             for(ItemStack ingredient : ingredientList) {
                                 for(ItemStack rest : restList) {
-                                    if(ingredient.getItem() == rest.getItem() && ingredient.getOrCreateTag().equals(rest.getOrCreateTag())) {
+                                    if(ingredient.getItem() == rest.getItem() && ItemStack.areItemStackTagsEqual(ingredient, rest)) {
                                         if(rest.getCount() >= ingredient.getCount()) {
                                             rest.shrink(ingredient.getCount());
                                         }
@@ -184,7 +184,6 @@ public class ForcePackContainer extends Container {
                             if(!craftedStack.isEmpty()) {
                                 playerIn.dropItem(craftedStack, true);
                             }
-
                         }
                     }
                 }
