@@ -83,7 +83,7 @@ public class ForceBeltContainer extends Container {
     @Override
     public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
         if (slotId >= 0) {
-            if (getSlot(slotId).getStack().getItem() instanceof ForcePackItem)
+            if (getSlot(slotId).getStack().getItem() instanceof ForceBeltItem)
                 return ItemStack.EMPTY;
         }
         if (clickTypeIn == ClickType.SWAP)
