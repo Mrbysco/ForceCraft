@@ -9,6 +9,7 @@ import mrbysco.forcecraft.util.FindingUtil;
 import mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -77,6 +78,18 @@ public class ForceBeltContainer extends Container {
         }
 
         super.onContainerClosed(playerIn);
+    }
+
+    @Override
+    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+        if (slotId >= 0) {
+            if (getSlot(slotId).getStack().getItem() instanceof ForcePackItem)
+                return ItemStack.EMPTY;
+        }
+        if (clickTypeIn == ClickType.SWAP)
+            return ItemStack.EMPTY;
+
+        return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
 
     //Credit to Shadowfacts for this method
