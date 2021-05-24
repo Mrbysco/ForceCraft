@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.container;
 
+import mrbysco.forcecraft.container.slot.BeltSlot;
 import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.registry.ForceContainers;
@@ -12,6 +13,8 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -42,12 +45,7 @@ public class ForceBeltContainer extends Container {
         IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler != null) {
             for (int k = 0; k < 8; ++k) {
-                this.addSlot(new SlotItemHandler(itemHandler, k, xPosC + k * 18, yPosC) {
-                    @Override
-                    public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem) && stack.getItem().isIn(ForceTags.VALID_FORCE_BELT);
-                    }
-                });
+                this.addSlot(new BeltSlot(itemHandler, k, xPosC + k * 18, yPosC));
             }
 
             //Player Inventory
