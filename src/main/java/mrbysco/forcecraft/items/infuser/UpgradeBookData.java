@@ -10,11 +10,12 @@ import mrbysco.forcecraft.recipe.InfuseRecipe;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 
 public class UpgradeBookData {
 	private UpgradeBookTier tier = UpgradeBookTier.ZERO;
-	private Map<Integer, ResourceLocation> recipeGroups = new HashMap<>();
+	private Map<Integer, Set<ResourceLocation>> recipesUsed = new HashMap<>();
 	private int points = 0;
 	 
 	public UpgradeBookData(ItemStack book) {
@@ -39,28 +40,60 @@ public class UpgradeBookData {
 	}
 	
 	public void onRecipeApply(InfuseRecipe recipe) {
-		if(recipeGroups.isEmpty()) {
-//			for( )
+		Integer tier = recipe.getTier().ordinal();
+		Set<ResourceLocation> tierSet = new HashSet<>();
+
+		if(recipesUsed.containsKey(tier)) {
+			tierSet = recipesUsed.get(tier);
 		}
-//		if(!completedRecipes.contains(recipe.getId())) {
-//			completedRecipes.add(recipe.getId());
-//		}
+		
+		tierSet.add(recipe.getId());
+		recipesUsed.put(tier, tierSet); 
 	}
 	
 	public void incrementPoints(int incoming) {
 		points += incoming;
-		if ( points >= this.getTier().pointsForLevelup()
-				&& getTier() != UpgradeBookTier.FINAL) {
+		if (canLevelUp()) {
 			//then go
+			
+			
 			points -= this.getTier().pointsForLevelup();
 			setTier(getTier().incrementTier());
 		}
+	}
+	private boolean canLevelUp() {
+		if(points < this.getTier().pointsForLevelup()
+			|| getTier() == UpgradeBookTier.FINAL) {
+			return false;
+		}
+		
+		// check more
+		Set<ResourceLocation> thisTier = this.recipesUsed.get(this.tier.ordinal());
+		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
+		
+		ForceCraft.LOGGER.info("can lvlup? recipesThisTier = "+ recipesThisTier);
+		
+		return true;
 	}
 
 	private void read(ItemStack book, CompoundNBT tag) {
 		setTier(UpgradeBookTier.values()[tag.getInt("tier")]);
 		points = tag.getInt("points");
-		
+
+		for(UpgradeBookTier tier : UpgradeBookTier.values()) {
+			Set<ResourceLocation> tierSet = new HashSet<>();
+			
+			ListNBT listTag = (ListNBT)tag.get("tier" + tier.ordinal()); // can be null TODO
+			
+			if(listTag != null) {
+				for(int i = 0; i < listTag.size(); i++) {
+					CompoundNBT tg = (CompoundNBT) listTag.get(i);
+					String id = tg.getString("id");
+					tierSet.add(ResourceLocation.tryCreate(id));
+				}
+			}
+			recipesUsed.put(tier.ordinal(), tierSet);
+		}
 	}
 
 	public CompoundNBT write(ItemStack bookInSlot) {
@@ -68,14 +101,32 @@ public class UpgradeBookData {
 		tag.putInt("tier", getTier().ordinal());
 		tag.putInt("points", points);
 		
+		
+		for(UpgradeBookTier tier : UpgradeBookTier.values()) {
+			Set<ResourceLocation> tierSet = recipesUsed.get(tier.ordinal());
+			
+			//save   
+			ListNBT listTag = new ListNBT(); 
+			CompoundNBT tg = new CompoundNBT();
+			for(ResourceLocation id : tierSet) {
+				tg.putString("id", id.toString());
+			}
+			listTag.add(tg);
+			
+			tag.put("tier" + tier.ordinal(), listTag);
+		}
+		
 		return tag;
 	}
+	
 	public UpgradeBookTier getTier() {
 		return tier;
 	}
+	
 	public void setTier(UpgradeBookTier tier) {
 		this.tier = tier;
 	}
+	
 	public int getPoints() {
 		return points;
 	}
