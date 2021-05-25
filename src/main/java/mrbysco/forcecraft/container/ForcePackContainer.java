@@ -9,6 +9,7 @@ import mrbysco.forcecraft.util.FindingUtil;
 import mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -91,8 +92,8 @@ public class ForcePackContainer extends Container {
         if(itemHandler instanceof PackItemStackHandler) {
             for(int i = 0; i < itemHandler.getSlots(); i++) {
                 ItemStack stack = itemHandler.getStackInSlot(i);
-                CompoundNBT tag = stack.getOrCreateTag();
-                if(stack.getItem() instanceof ItemCardItem && tag.contains("RecipeContents")) {
+                CompoundNBT tag = stack.getTag();
+                if(stack.getItem() instanceof ItemCardItem && tag != null && tag.contains("RecipeContents")) {
                     CompoundNBT recipeContents = tag.getCompound("RecipeContents");
                     NonNullList<ItemStack> ingredientList = NonNullList.create();
                     List<ItemStack> mergeList = new ArrayList<>();
@@ -151,7 +152,7 @@ public class ForcePackContainer extends Container {
                     for(ItemStack ingredient : ingredientList) {
                         int countPossible = 0;
                         for(ItemStack rest : restList) {
-                            if(ingredient.getItem() == rest.getItem() && ingredient.getOrCreateTag().equals(rest.getOrCreateTag())) {
+                            if(ingredient.getItem() == rest.getItem() && ItemStack.areItemStackTagsEqual(ingredient, rest)) {
                                 countPossible += (double)rest.getCount() / ingredient.getCount();
                             }
                         }
@@ -170,7 +171,7 @@ public class ForcePackContainer extends Container {
                         for(int l = 0; l < craftCount; l++) {
                             for(ItemStack ingredient : ingredientList) {
                                 for(ItemStack rest : restList) {
-                                    if(ingredient.getItem() == rest.getItem() && ingredient.getOrCreateTag().equals(rest.getOrCreateTag())) {
+                                    if(ingredient.getItem() == rest.getItem() && ItemStack.areItemStackTagsEqual(ingredient, rest)) {
                                         if(rest.getCount() >= ingredient.getCount()) {
                                             rest.shrink(ingredient.getCount());
                                         }
@@ -183,7 +184,6 @@ public class ForcePackContainer extends Container {
                             if(!craftedStack.isEmpty()) {
                                 playerIn.dropItem(craftedStack, true);
                             }
-
                         }
                     }
                 }
@@ -197,6 +197,17 @@ public class ForcePackContainer extends Container {
         super.onContainerClosed(playerIn);
     }
 
+    @Override
+    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+        if (slotId >= 0) {
+            if (getSlot(slotId).getStack().getItem() instanceof ForcePackItem)
+                return ItemStack.EMPTY;
+        }
+        if (clickTypeIn == ClickType.SWAP)
+            return ItemStack.EMPTY;
+
+        return super.slotClick(slotId, dragType, clickTypeIn, player);
+    }
 
     public int getUpgrades() {
         return this.upgrades;
