@@ -48,7 +48,6 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	public InfuserScreen(InfuserContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
 
-//		this.xSize = 176;
 		this.ySize = 208;
 
 	}
@@ -65,42 +64,41 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		int x = 123;
 		int y = 16;
 		// Comment out this button to disable Info help ? button
-		this.addButton(new Button(guiLeft + x, guiTop + y, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
-
-			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
-
-			ItemStack bookStack = container.getTile().getBookInSlot();
-			if (bookStack.isEmpty()) {
-				this.playerInventory.player.sendStatusMessage(new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
-				showingPop = false;// do not open without a book
-				return;
-			}
-
-			showingPop = !showingPop;
-
-			if (showingPop) {
-				// reset tiles every time we do a hide/show
-				renderMyTiles = new ArrayList<>();
-			}
-		}) {
-			@Override
-			public void renderWidget(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
-				// skip drawing me
-
-				ItemStack bookStack = container.getTile().getBookInSlot();
-				if (!bookStack.isEmpty()) {
-					Minecraft minecraft = Minecraft.getInstance();
-					minecraft.getTextureManager().bindTexture(TEXTURE);
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, this.alpha);
-					GL11.glEnable(GL11.GL_BLEND);
-					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-					this.blit(ms, x, y, 201, 0, btnSize, btnSize);
-
-					this.renderBg(ms, minecraft, mouseX, mouseY);
-				}
-				// super.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
-			}
-		});
+//		this.addButton(new Button(guiLeft + x, guiTop + y, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+//
+//			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
+//
+//			ItemStack bookStack = container.getTile().getBookInSlot();
+//			if (bookStack.isEmpty()) {
+//				this.playerInventory.player.sendStatusMessage(new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
+//				showingPop = false;// do not open without a book
+//				return;
+//			}
+//
+//			showingPop = !showingPop;
+//
+//			if (showingPop) {
+//				// reset tiles every time we do a hide/show
+//				renderMyTiles = new ArrayList<>();
+//			}
+//		}) {
+//			@Override
+//			public void renderWidget(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+//				// skip drawing me
+//
+//				ItemStack bookStack = container.getTile().getBookInSlot();
+//				if (!bookStack.isEmpty()) {
+//					Minecraft minecraft = Minecraft.getInstance();
+//					minecraft.getTextureManager().bindTexture(TEXTURE);
+//					GL11.glColor4f(1.0F, 1.0F, 1.0F, this.alpha);
+//					GL11.glEnable(GL11.GL_BLEND);
+//					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//					this.blit(ms, x, y, 201, 0, btnSize, btnSize);
+//
+//					this.renderBg(ms, minecraft, mouseX, mouseY);
+//				} 
+//			}
+//		});
 		x = 39;
 		y = 101;
 		buttonInfuse = this.addButton(new Button(guiLeft + x, guiTop + y, btnSize, btnSize, new TranslationTextComponent(""), (button) -> {

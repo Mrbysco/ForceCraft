@@ -55,12 +55,12 @@ public class UpgradeBookData {
 		points += incoming;
 		if (canLevelUp()) {
 			//then go
-			
-			
+						
 			points -= this.getTier().pointsForLevelup();
 			setTier(getTier().incrementTier());
 		}
 	}
+
 	private boolean canLevelUp() {
 		if(points < this.getTier().pointsForLevelup()
 			|| getTier() == UpgradeBookTier.FINAL) {
@@ -70,10 +70,15 @@ public class UpgradeBookData {
 		// check more
 		Set<ResourceLocation> thisTier = this.recipesUsed.get(this.tier.ordinal());
 		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
+		int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
 		
-		ForceCraft.LOGGER.info("can lvlup? recipesThisTier = "+ recipesThisTier);
+		ForceCraft.LOGGER.info("can lvlup?  ?  "+ recipesThisTier +" >= "+totalThisTier);
+		for(ResourceLocation id : thisTier) {
+			ForceCraft.LOGGER.info(""+id);
+		}
 		
-		return true;
+		//if this tier has total=5 recipes, i need to craft at least 5 unique recipes this tier
+		return recipesThisTier >= totalThisTier;
 	}
 
 	private void read(ItemStack book, CompoundNBT tag) {
@@ -83,7 +88,7 @@ public class UpgradeBookData {
 		for(UpgradeBookTier tier : UpgradeBookTier.values()) {
 			Set<ResourceLocation> tierSet = new HashSet<>();
 			
-			ListNBT listTag = (ListNBT)tag.get("tier" + tier.ordinal()); // can be null TODO
+			ListNBT listTag = (ListNBT)tag.get("tier" + tier.ordinal());
 			
 			if(listTag != null) {
 				for(int i = 0; i < listTag.size(); i++) {
@@ -104,8 +109,10 @@ public class UpgradeBookData {
 		
 		for(UpgradeBookTier tier : UpgradeBookTier.values()) {
 			Set<ResourceLocation> tierSet = recipesUsed.get(tier.ordinal());
-			
-			//save   
+
+			if(tierSet == null) {
+				tierSet = new HashSet<>();
+			}
 			ListNBT listTag = new ListNBT(); 
 			CompoundNBT tg = new CompoundNBT();
 			for(ResourceLocation id : tierSet) {
