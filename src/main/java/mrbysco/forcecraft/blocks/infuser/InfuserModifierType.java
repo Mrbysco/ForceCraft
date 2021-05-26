@@ -57,6 +57,16 @@ public enum InfuserModifierType {
 			ForceCraft.LOGGER.info("i need to give you item {}", this);
 
 			return true;
+		case EXP:
+			break;
+		case FREEZING:
+			break;
+		case GRINDING:
+			break;
+		case SIGHT:
+			break;
+		case STORAGE:
+			break;
 		}
 		ForceCraft.LOGGER.error("Error: No action for modifier {}", this);
 		return false;

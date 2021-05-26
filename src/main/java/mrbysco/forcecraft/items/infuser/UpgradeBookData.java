@@ -17,6 +17,7 @@ public class UpgradeBookData {
 	private UpgradeBookTier tier = UpgradeBookTier.ZERO;
 	private Map<Integer, Set<ResourceLocation>> recipesUsed = new HashMap<>();
 	private int points = 0;
+	private String progressCache = "";
 	 
 	public UpgradeBookData(ItemStack book) {
 		if(book.getItem() != ForceRegistry.UPGRADE_TOME.get()) {
@@ -36,26 +37,33 @@ public class UpgradeBookData {
 		if(getTier() == UpgradeBookTier.FINAL) {
 			return 0;
 		}
-		return getTier().pointsForLevelup() - points;
+		return Math.max(0, getTier().pointsForLevelup() - points);
 	}
 	
-	public void onRecipeApply(InfuseRecipe recipe) {
+	public void onRecipeApply(InfuseRecipe recipe, ItemStack bookStack) {
 		Integer tier = recipe.getTier().ordinal();
 		Set<ResourceLocation> tierSet = new HashSet<>();
 
 		if(recipesUsed.containsKey(tier)) {
 			tierSet = recipesUsed.get(tier);
 		}
-		
+
 		tierSet.add(recipe.getId());
 		recipesUsed.put(tier, tierSet); 
+
+		tryLevelUp();
+		
+		this.write(bookStack);
 	}
 	
 	public void incrementPoints(int incoming) {
 		points += incoming;
+		tryLevelUp();
+	}
+	// update level and points if levelup is possible
+	private void tryLevelUp() {
 		if (canLevelUp()) {
 			//then go
-						
 			points -= this.getTier().pointsForLevelup();
 			setTier(getTier().incrementTier());
 		}
@@ -73,15 +81,14 @@ public class UpgradeBookData {
 		int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
 		
 		ForceCraft.LOGGER.info("can lvlup?  ?  "+ recipesThisTier +" >= "+totalThisTier);
-		for(ResourceLocation id : thisTier) {
-			ForceCraft.LOGGER.info(""+id);
-		}
-		
+
+		this.progressCache = recipesThisTier + "/" + totalThisTier;
 		//if this tier has total=5 recipes, i need to craft at least 5 unique recipes this tier
 		return recipesThisTier >= totalThisTier;
 	}
 
 	private void read(ItemStack book, CompoundNBT tag) {
+		progressCache = tag.getString("progressCache");
 		setTier(UpgradeBookTier.values()[tag.getInt("tier")]);
 		points = tag.getInt("points");
 
@@ -93,8 +100,11 @@ public class UpgradeBookData {
 			if(listTag != null) {
 				for(int i = 0; i < listTag.size(); i++) {
 					CompoundNBT tg = (CompoundNBT) listTag.get(i);
-					String id = tg.getString("id");
-					tierSet.add(ResourceLocation.tryCreate(id));
+					String id = tg.getString("id"); 
+					
+					//i dont know where this bug comes from
+					if(!id.isEmpty() && "minecraft:".equalsIgnoreCase(id) == false)
+						tierSet.add(ResourceLocation.tryCreate(id));
 				}
 			}
 			recipesUsed.put(tier.ordinal(), tierSet);
@@ -103,27 +113,34 @@ public class UpgradeBookData {
 
 	public CompoundNBT write(ItemStack bookInSlot) {
 		CompoundNBT tag = bookInSlot.getOrCreateTag();
+		tag.putString("progressCache", progressCache);
 		tag.putInt("tier", getTier().ordinal());
 		tag.putInt("points", points);
 		
 		
 		for(UpgradeBookTier tier : UpgradeBookTier.values()) {
-			Set<ResourceLocation> tierSet = recipesUsed.get(tier.ordinal());
-
+			Set<ResourceLocation> tierSet = recipesUsed.get(tier.ordinal()); 
 			if(tierSet == null) {
 				tierSet = new HashSet<>();
 			}
 			ListNBT listTag = new ListNBT(); 
-			CompoundNBT tg = new CompoundNBT();
 			for(ResourceLocation id : tierSet) {
-				tg.putString("id", id.toString());
+				//i dont know where this bug comes from
+				if("minecraft:".equalsIgnoreCase(id.toString()) == false) {
+					CompoundNBT tg = new CompoundNBT();
+					tg.putString("id", id.toString());
+					listTag.add(tg);
+				}
 			}
-			listTag.add(tg);
-			
+ 
 			tag.put("tier" + tier.ordinal(), listTag);
 		}
 		
 		return tag;
+	}
+	
+	public String getProgressCache() {
+		return progressCache;
 	}
 	
 	public UpgradeBookTier getTier() {

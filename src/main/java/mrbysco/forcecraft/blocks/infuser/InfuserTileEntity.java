@@ -448,7 +448,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     		if(recipeCurrent.getTier().ordinal() > bookTier) {
 
-    			ForceCraft.LOGGER.info("recipe tier {} > book Tier {}", recipeCurrent.getTier().ordinal(), bookTier);
     			continue;
     		}
     		if(recipeCurrent.getCenter().test(tool) == false) {
@@ -462,7 +461,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     			if (recipeCurrent.resultModifier.apply(tool, modifier, bd)) {
 
-    				bd.onRecipeApply(recipeCurrent);
+    				bd.onRecipeApply(recipeCurrent, getBookInSlot());
     				
                     if(recipeCurrent.resultModifier == InfuserModifierType.ITEM && recipeCurrent.hasOutput()) {
                     	//overwrite / convert item
