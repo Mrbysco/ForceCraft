@@ -16,7 +16,7 @@ public class CapabilityAttachHandler {
     @SubscribeEvent
     public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
         if(event.getObject() instanceof EndermanEntity){
-                event.addCapability(BANE_CAP, new BaneProvider());
+            event.addCapability(BANE_CAP, new BaneProvider());
         }
 
         if(event.getObject() instanceof PlayerEntity){
