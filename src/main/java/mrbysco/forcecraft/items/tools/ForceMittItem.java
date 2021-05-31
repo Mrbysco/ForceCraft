@@ -149,7 +149,8 @@ public class ForceMittItem extends ToolItem {
         return false;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public ActionResultType onItemUse(ItemUseContext context) {
         World world = context.getWorld();
         BlockPos blockpos = context.getPos();

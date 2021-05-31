@@ -6,7 +6,6 @@ import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.container.ItemCardContainer;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;

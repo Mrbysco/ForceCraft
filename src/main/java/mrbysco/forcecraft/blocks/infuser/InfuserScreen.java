@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
-import mrbysco.forcecraft.client.gui.infuser.ProgressBar;
+import mrbysco.forcecraft.client.gui.widgets.ProgressBar;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import mrbysco.forcecraft.networking.PacketHandler;
@@ -48,7 +48,6 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	public InfuserScreen(InfuserContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
 
-//		this.xSize = 176;
 		this.ySize = 208;
 
 	}
@@ -64,7 +63,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		int btnSize = 13;
 		int x = 123;
 		int y = 16;
-		// Comment out this button to disable Info help ? button
+//	TODO: when we get new screen	 Comment out this button to disable Info help ? button
 		this.addButton(new Button(guiLeft + x, guiTop + y, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
 
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(false));
@@ -97,8 +96,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 					this.blit(ms, x, y, 201, 0, btnSize, btnSize);
 
 					this.renderBg(ms, minecraft, mouseX, mouseY);
-				}
-				// super.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
+				} 
 			}
 		});
 		x = 39;

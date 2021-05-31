@@ -5,19 +5,12 @@ import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import net.minecraft.item.ItemStack;
 
 public enum InfuserModifierType {
-	SPEED,HEAT,FORCE,SILK,DAMAGE,FORTUNE,LIGHT,STURDY,LUMBERJACK,HEALING,ENDER,BLEEDING,BANE,WING,CAMO,RAINBOW,TIME,
-      PACK1,PACK2,PACK3,PACK4, // 4 upgrades: this one upgrades the Force Pack 
-      // (once per tier starting on tier 2, allowing full upgrading on tier 5)
-	 GRINDING, FREEZING, EXP, STORAGE, // TODO: look up old mod version
-	 
-	  //- for chests somehow?, FURNACE - item card enchant
-	 SIGHT, //- night vision on a force rod ?
-	 TREASURE //,CORE - make things drop treasure cards - craft into spoils bag
-	 ,ITEM // ITEM type is for a recipe that converts things, with resultStack 
-	;
-	
+	SPEED, HEAT, FORCE, SILK, DAMAGE, FORTUNE, LIGHT, STURDY, LUMBERJACK, HEALING, ENDER, BLEEDING, BANE, WING, CAMO, RAINBOW, TIME, 
+	// pack is for upgrades, item gives crafting results
+	PACK1, PACK2, PACK3, PACK4, GRINDING, FREEZING, EXP, STORAGE, SIGHT, TREASURE, ITEM;
+
 	public boolean apply(ItemStack tool, ItemStack mod, UpgradeBookData bd) {
-		switch(this) {
+		switch (this) {
 		case DAMAGE: // claw item
 			return InfuserTileEntity.addDamageModifier(tool);
 		case ENDER:
@@ -27,7 +20,7 @@ public enum InfuserModifierType {
 		case HEALING:
 			return InfuserTileEntity.addHealingModifier(tool);
 		case HEAT:
-			return InfuserTileEntity.addHeatModifier(tool); 
+			return InfuserTileEntity.addHeatModifier(tool);
 		case LIGHT:
 			return InfuserTileEntity.addLightModifier(tool);
 		case FORTUNE:
@@ -37,38 +30,48 @@ public enum InfuserModifierType {
 		case SILK:
 			return InfuserTileEntity.addSilkTouchModifier(tool);
 		case SPEED:
-			return InfuserTileEntity.addSpeedModifier(tool); 
+			return InfuserTileEntity.addSpeedModifier(tool);
 		case STURDY:
 			return InfuserTileEntity.addSturdyModifier(tool);
 		case CAMO:
 			return InfuserTileEntity.applyCamo(tool, mod);
 		case BANE:
-            return InfuserTileEntity.addBaneModifier(tool);
+			return InfuserTileEntity.addBaneModifier(tool);
 		case BLEEDING:
-            return InfuserTileEntity.addBleedingModifier(tool);
+			return InfuserTileEntity.addBleedingModifier(tool);
 		case WING:
-            return InfuserTileEntity.addWingModifier(tool);
+			return InfuserTileEntity.addWingModifier(tool);
 		case RAINBOW:
-            return InfuserTileEntity.addRainbowModifier(tool);
+			return InfuserTileEntity.addRainbowModifier(tool);
 		case TIME:
-            return InfuserTileEntity.addTimeModifier(tool, mod);
+			return InfuserTileEntity.addTimeModifier(tool, mod);
 		case TREASURE:
-            return InfuserTileEntity.addTreasureModifier(tool);
+			return InfuserTileEntity.addTreasureModifier(tool);
 		case PACK1:
 		case PACK2:
 		case PACK3:
 		case PACK4:
 			// logic of which pack upgrade to use is inside
-            return InfuserTileEntity.upgradeBag(tool, bd);
+			return InfuserTileEntity.upgradeBag(tool, bd);
 		case ITEM:
 			ForceCraft.LOGGER.info("i need to give you item {}", this);
-			
+
 			return true;
+		case EXP:
+			break;
+		case FREEZING:
+			break;
+		case GRINDING:
+			break;
+		case SIGHT:
+			break;
+		case STORAGE:
+			break;
 		}
 		ForceCraft.LOGGER.error("Error: No action for modifier {}", this);
 		return false;
 	}
-	
+
 	public String getTooltip() {
 		return "gui.forcecraft.infuser.tooltip." + name().toLowerCase();
 	}

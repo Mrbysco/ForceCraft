@@ -24,11 +24,13 @@ public class IsHardCommand implements IForceCommand {
 
 	@Override
 	public int execute(CommandContext<CommandSource> ctx, List<String> arguments, PlayerEntity player) {
-		UpgradeBookTier bookTier = UpgradeBookTier.FINAL;
+		UpgradeBookTier bookTier;
 		try {
-			bookTier = UpgradeBookTier.values()[Integer.parseInt(arguments.get(0))];
+			String arg = arguments.get(0);
+			bookTier = UpgradeBookTier.values()[Integer.parseInt(arg)];
 		}
 		catch(Exception e) {
+			bookTier = UpgradeBookTier.FINAL;
 			//dont care, just use max level
 		}
 		

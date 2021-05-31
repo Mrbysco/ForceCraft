@@ -77,7 +77,8 @@ public class InfuserBlock extends Block {
         return ActionResultType.PASS;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.matchesBlock(newState.getBlock())) {
             TileEntity tileentity = worldIn.getTileEntity(pos);

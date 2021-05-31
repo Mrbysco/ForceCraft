@@ -327,6 +327,7 @@ public class EnderTotEntity extends EndermanEntity {
 			}
 		}
 
+		@SuppressWarnings("deprecation")
 		private boolean func_220836_a(World p_220836_1_, BlockPos p_220836_2_, BlockState p_220836_3_, BlockState p_220836_4_, BlockState p_220836_5_, BlockPos p_220836_6_) {
 			return p_220836_4_.isAir(p_220836_1_, p_220836_2_) && !p_220836_5_.isAir(p_220836_1_, p_220836_6_) && !p_220836_5_.matchesBlock(Blocks.BEDROCK) && !p_220836_5_.isIn(net.minecraftforge.common.Tags.Blocks.ENDERMAN_PLACE_ON_BLACKLIST) && p_220836_5_.hasOpaqueCollisionShape(p_220836_1_, p_220836_6_) && p_220836_3_.isValidPosition(p_220836_1_, p_220836_2_) && p_220836_1_.getEntitiesWithinAABBExcludingEntity(this.endertot, AxisAlignedBB.fromVector(Vector3d.copy(p_220836_2_))).isEmpty();
 		}

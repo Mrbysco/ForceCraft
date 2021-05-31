@@ -87,7 +87,7 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	public Entity getStoredEntity(ItemStack stack, World worldIn) {
-		EntityType type = ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryCreate(stack.getTag().getString("StoredEntity")));
+		EntityType<?> type = ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryCreate(stack.getTag().getString("StoredEntity")));
 		if (type != null) {
 			Entity entity = type.create(worldIn);
 			entity.read(stack.getTag().getCompound("EntityData"));

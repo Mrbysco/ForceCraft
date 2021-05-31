@@ -28,6 +28,9 @@ public class UpgradeTomeItem extends BaseItem {
         TranslationTextComponent tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.tier");
         tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
         tt.appendString(" " + bd.getTier());
+        if(!bd.getProgressCache().isEmpty()) {
+        	tt.appendString(" : " + bd.getProgressCache());
+        }
         tooltip.add(tt);  
 
         if(!Screen.hasShiftDown()) {
@@ -43,7 +46,7 @@ public class UpgradeTomeItem extends BaseItem {
         else {
 	        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.points");
 	        tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-	        tt.appendString(" " + bd.points);
+	        tt.appendString(" " + bd.getPoints());
 	        tooltip.add(tt); 
         
 	        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.nexttier");

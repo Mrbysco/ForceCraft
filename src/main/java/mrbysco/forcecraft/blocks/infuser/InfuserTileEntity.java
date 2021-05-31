@@ -345,6 +345,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                     handler.getStackInSlot(i).shrink(1);
                     tank.drain(FLUID_COST_PER, FluidAction.EXECUTE);
                     energyStorage.consumePower(ENERGY_COST_PER);
+                    
                     UpgradeTomeItem.onModifierApplied(this.getBookInSlot(), modifier, tool);
          			ForceCraft.LOGGER.info("process tool success {}, {}", this.getBookInSlot().getTag() , energyStorage.getEnergyStored());
                 }
@@ -447,7 +448,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     		if(recipeCurrent.getTier().ordinal() > bookTier) {
 
-    			ForceCraft.LOGGER.info("recipe tier {} > book Tier {}", recipeCurrent.getTier().ordinal(), bookTier);
     			continue;
     		}
     		if(recipeCurrent.getCenter().test(tool) == false) {
@@ -461,6 +461,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     			if (recipeCurrent.resultModifier.apply(tool, modifier, bd)) {
 
+    				bd.onRecipeApply(recipeCurrent, getBookInSlot());
+    				
                     if(recipeCurrent.resultModifier == InfuserModifierType.ITEM && recipeCurrent.hasOutput()) {
                     	//overwrite / convert item
                     	handler.setStackInSlot(SLOT_TOOL, recipeCurrent.getRecipeOutput().copy());

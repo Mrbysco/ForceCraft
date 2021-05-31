@@ -29,6 +29,9 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
+			// required for patchouli
+            property 'mixin.env.disableRefMap', 'true'
+            
             // Recommended logging data for a userdev environment
             // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
@@ -101,6 +104,9 @@ dependencies {
 
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}")
+
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
   //  compile fg.deobf("curse.maven:industrial-foregoing-266515:3261176")
   //  compile fg.deobf("curse.maven:titanium-287342:3261072")
