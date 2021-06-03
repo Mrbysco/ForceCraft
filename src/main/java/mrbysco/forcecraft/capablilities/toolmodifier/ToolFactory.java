@@ -160,7 +160,7 @@ public class ToolFactory implements Callable<IToolModifier> {
             /**
              * Modifier: Sturdy
              * Item: Bricks/Obsidian
-             * Levels: 10
+             * Levels: 3 (tools) 1 (armor)
              * Effect: Adds 1 Level of Unbreaking to tool up to 10
              */
 

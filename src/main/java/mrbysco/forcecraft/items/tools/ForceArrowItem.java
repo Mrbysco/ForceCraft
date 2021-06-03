@@ -1,6 +1,7 @@
 package mrbysco.forcecraft.items.tools;
 
 import mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
+import mrbysco.forcecraft.registry.ForceEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -33,6 +34,10 @@ public class ForceArrowItem extends ArrowItem {
 						CompoundNBT tag = stack.getOrCreateTag();
 						tag.putBoolean("ender", true);
 						stack.setTag(tag);
+					}
+					if(cap.hasBleed()) {
+						EffectInstance bleedingEffect = new EffectInstance(ForceEffects.BLEEDING.get(), 20 * cap.getBleedLevel(), 0);
+						forceArrow.addEffect(bleedingEffect);
 					}
 				});
 			}

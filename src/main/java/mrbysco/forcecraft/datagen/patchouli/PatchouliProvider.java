@@ -43,9 +43,24 @@ public class PatchouliProvider extends PatchouliBookProvider {
 				.addEntry("infuser/requirements", "info.forcecraft.book.requirements.entry.name", "forcecraft:infuser")
 				.addTextPage("info.forcecraft.book.requirements_info.text").build()
 				.addSpotlightPage(new ItemStack(ForceRegistry.FORCE_GEM.get()))
-					.setText("info.forcecraft.book.requirements_gem.text").build()
+				.setText("info.forcecraft.book.requirements_gem.text").build()
 				.addSpotlightPage(new ItemStack(ForceRegistry.UPGRADE_TOME.get()))
-					.setText("info.forcecraft.book.requirements_tome.text").build()
+				.setText("info.forcecraft.book.requirements_tome.text").build().build()
+
+				.addEntry("infuser/furnace", "info.forcecraft.book.force_furnace.entry.name", "forcecraft:force_furnace")
+				.addTextPage("info.forcecraft.book.force_furnace_info.text").build()
+				.addSpotlightPage(new ItemStack(ForceRegistry.SPEED_CORE.get()))
+				.setText("info.forcecraft.book.force_furnace_speed_core.text").build()
+				.addSpotlightPage(new ItemStack(ForceRegistry.HEAT_CORE.get()))
+				.setText("info.forcecraft.book.force_furnace_heat_core.text").build()
+				.addSpotlightPage(new ItemStack(ForceRegistry.GRINDING_CORE.get()))
+				.setText("info.forcecraft.book.force_furnace_grinding_core.text").build()
+				.addSpotlightPage(new ItemStack(ForceRegistry.FREEZING_CORE.get()))
+				.setText("info.forcecraft.book.force_furnace_freezing_core.text").build()
+				.addSpotlightPage(new ItemStack(ForceRegistry.EXPERIENCE_CORE.get()))
+				.setText("info.forcecraft.book.force_furnace_experience_core.text").build()
+				.addCraftingPage(new ResourceLocation(Reference.MOD_ID, "force_furnace")).setText("info.forcecraft.book.force_furnace_recipe.text").build()
+
 				.build().build(); //Back to the bookbuilder
 
 		bookBuilder = addTier0(bookBuilder);
