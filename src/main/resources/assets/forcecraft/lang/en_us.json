@@ -499,12 +499,12 @@
     "info.forcecraft.book.force_furnace_info.text": "With the $(item)Force Furnace$() you can smelt blocks and items similar to a vanilla furnace but twice as fast.$(br)The furnace can be upgraded by applying an Upgrade Core of choice into the Upgrade slot on the top left. (Once an upgrade is applied taking it out will void it)",
     "info.forcecraft.book.force_furnace_speed_core.text": "The $(item)Speed Core$() will increase the furnace speed fivefold.",
     "info.forcecraft.book.force_furnace_heat_core.text": "The $(item)Heat Core$() will increase the furnace efficiency by twofold, allowing you to smelt twice the amount of items/blocks with the same amount of fuel.",
-    "info.forcecraft.book.force_furnace_grinding_core.text": "The $(item)Grinding Core$() will change the furnace into grinding mode. With grinding mode active you can make use of Grinding recipes.$(br)For example grinding a single bone into 5 bonemeal.",
-    "info.forcecraft.book.force_furnace_freezing_core.text": "The $(item)Freezing Core$() will change the furnace into freezing mode. With freezing mode active you can make use of Grinding recipes.$(br)For example freezing a Blaze Rod into a Bone.",
+    "info.forcecraft.book.force_furnace_grinding_core.text": "The $(item)Grinding Core$() will change the furnace into grinding mode. With grinding mode active, you can make use of Grinding recipes.$(br)For example, grinding a single Bone into 5 Bonemeal.",
+    "info.forcecraft.book.force_furnace_freezing_core.text": "The $(item)Freezing Core$() will change the furnace into freezing mode. With freezing mode active, you can make use of Freezing recipes.$(br)For example, freezing a Blaze Rod into a Bone.",
     "info.forcecraft.book.force_furnace_experience_core.text": "The $(item)Experience Core$() will increase the experience that can be obtained from smelting by twofold.",
 
     "info.forcecraft.book.requirements.entry.name": "Requirements",
-    "info.forcecraft.book.requirements_info.text": "To get started the following items are required:$(br)$(br)Firstly, the  $(item)Infuser$() requires power in the form of $(4)RF$().",
+    "info.forcecraft.book.requirements_info.text": "To get started the following items are required:$(br)$(br)Firstly, the $(item)Infuser$() requires power in the form of $(4)RF$().",
     "info.forcecraft.book.requirements_gem.text": "The second requirement is $(6)Liquid Force$().$(br)Liquid force is added by inserting $(item)Force Gems$() into the slot above the liquid tank.",
     "info.forcecraft.book.requirements_tome.text": "The third requirement is an $(item)Upgrade Tome$() which is required for infusions. Without it the $(item)Infuser$() will not function.",
 

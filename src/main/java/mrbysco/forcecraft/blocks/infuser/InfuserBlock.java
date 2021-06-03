@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
@@ -83,7 +84,11 @@ public class InfuserBlock extends Block {
         if (!state.matchesBlock(newState.getBlock())) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity instanceof InfuserTileEntity) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (InfuserTileEntity)tileentity);
+                tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
+                    for(int i = 0; i < handler.getSlots(); ++i) {
+                        InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));
+                    }
+                });
             }
 
             super.onReplaced(state, worldIn, pos, newState, isMoving);
