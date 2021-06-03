@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.time.entry.name",
+  "category": "tier_6",
+  "icon": "minecraft:clock",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.time_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "minecraft:clock"
+    }
+  ],
+  "secret": true
+}

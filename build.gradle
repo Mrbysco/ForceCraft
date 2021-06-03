@@ -96,6 +96,10 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
+    maven {
+        name "brassgoggledcoders"
+        url "https://maven.teamacronymcoders.com/"
+    }
     maven { url = 'https://www.cursemaven.com'  }
 }
 
@@ -107,6 +111,9 @@ dependencies {
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+
+    compileOnly fg.deobf("xyz.brassgoggledcoders:PatchouliProvider:1.16.5-${patchouli_provider_version}")
+    runtimeOnly fg.deobf("xyz.brassgoggledcoders:PatchouliProvider:1.16.5-${patchouli_provider_version}")
 
   //  compile fg.deobf("curse.maven:industrial-foregoing-266515:3261176")
   //  compile fg.deobf("curse.maven:titanium-287342:3261072")

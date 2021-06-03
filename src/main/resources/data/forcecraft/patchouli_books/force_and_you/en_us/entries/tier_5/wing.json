@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.wing.entry.name",
+  "category": "tier_5",
+  "icon": "minecraft:feather",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.wing_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "minecraft:feather"
+    }
+  ],
+  "secret": true
+}

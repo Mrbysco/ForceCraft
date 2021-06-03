@@ -155,6 +155,26 @@ public interface IToolModifier {
     boolean hasLight();
     void setLight(boolean val);
 
+    /**
+     * Modifier: Ender
+     * Items: Ender Pearl / Eye of Ender
+     * Levels: 1
+     * Effect: Teleports target to random location
+     */
+
+    boolean hasEnder();
+    void setEnder(boolean val);
+
+    /**
+     * Modifier: Freezing
+     * Items: Snow Cookie
+     * Levels: 1
+     * Effect: Gives Slowness to enemy
+     */
+
+    boolean hasFreezing();
+    void setFreezing(boolean val);
+
 
     /**
      * Modifier: Treasure

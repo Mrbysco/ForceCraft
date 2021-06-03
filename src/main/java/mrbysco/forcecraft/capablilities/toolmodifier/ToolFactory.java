@@ -350,6 +350,44 @@ public class ToolFactory implements Callable<IToolModifier> {
                 light = val;
             }
 
+            /**
+             * Modifier: Ender
+             * Items: Ender Pearl / Eye of Ender
+             * Levels: 1
+             * Effect: Teleports target to random location
+             */
+
+            boolean ender;
+
+            @Override
+            public boolean hasEnder() {
+                return ender;
+            }
+
+            @Override
+            public void setEnder(boolean val) {
+                ender = val;
+            }
+
+            /**
+             * Modifier: Freezing
+             * Items: Snow Cookie
+             * Levels: 1
+             * Effect: Gives Slowness to enemy
+             */
+
+            boolean freezing;
+
+            @Override
+            public boolean hasFreezing() {
+                return freezing;
+            }
+
+            @Override
+            public void setFreezing(boolean val) {
+                freezing = val;
+            }
+
 
             /**
              * Modifier: Treasure

@@ -1,0 +1,17 @@
+{
+  "name": "info.forcecraft.book.bleeding.entry.name",
+  "category": "tier_3",
+  "icon": "minecraft:arrow",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.bleeding_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "minecraft:arrow",
+      "text": "info.forcecraft.book.bleeding_info.text2"
+    }
+  ],
+  "secret": true
+}

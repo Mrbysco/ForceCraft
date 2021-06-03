@@ -7,7 +7,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE;
 
 public class BaneHandler {
-
     @SubscribeEvent
     public void onEnderTeleportEvent(EnderTeleportEvent event){
         if(event.getEntity() instanceof EndermanEntity){

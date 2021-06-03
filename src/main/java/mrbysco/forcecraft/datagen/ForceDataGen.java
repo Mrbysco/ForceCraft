@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import mrbysco.forcecraft.Reference;
+import mrbysco.forcecraft.datagen.patchouli.PatchouliProvider;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.SlabBlock;
@@ -54,13 +55,14 @@ public class ForceDataGen {
 		ExistingFileHelper helper = event.getExistingFileHelper();
 
 		if (event.includeServer()) {
-			generator.addProvider(new Loots(generator));
-			generator.addProvider(new Recipes(generator));
+//			generator.addProvider(new Loots(generator));
+//			generator.addProvider(new Recipes(generator));
+			generator.addProvider(new PatchouliProvider(generator));
 		}
 		if (event.includeClient()) {
 //			generator.addProvider(new Language(generator));
-			generator.addProvider(new BlockStates(generator, helper));
-			generator.addProvider(new ItemModels(generator, helper));
+//			generator.addProvider(new BlockStates(generator, helper));
+//			generator.addProvider(new ItemModels(generator, helper));
 		}
 	}
 

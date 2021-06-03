@@ -1,0 +1,6 @@
+{
+  "name": "info.forcecraft.book.tier_2.name",
+  "description": "info.forcecraft.book.tier_2.desc",
+  "icon": "forcecraft:infuser",
+  "secret": true
+}

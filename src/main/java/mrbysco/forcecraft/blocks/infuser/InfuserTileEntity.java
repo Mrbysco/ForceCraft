@@ -598,16 +598,39 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         return false;
     }
 
-    static boolean addEnderModifier(ItemStack stack) {
-        if (stack.getItem() instanceof ForceRodItem) {
-            IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-            if(rodCap != null && rodCap.isRodofEnder()) {
-                rodCap.setEnderModifier(true);
-                return true;
-            }
-        }
-        return false;
-    }
+	static boolean addEnderModifier(ItemStack stack) {
+		if (stack.getItem() instanceof ForceRodItem) {
+			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
+			if(rodCap != null && rodCap.isRodofEnder()) {
+				rodCap.setEnderModifier(true);
+				return true;
+			}
+		} else if (stack.getItem() instanceof ForceSwordItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null && !modifierCap.hasEnder()) {
+				modifierCap.setEnder(true);
+				return true;
+			}
+		} else if (stack.getItem() instanceof ForceBowItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null && !modifierCap.hasEnder()) {
+				modifierCap.setEnder(true);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	static boolean addFreezingModifier(ItemStack stack) {
+		if (stack.getItem() instanceof ForceBowItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null && !modifierCap.hasFreezing()) {
+				modifierCap.setFreezing(true);
+				return true;
+			}
+		}
+		return false;
+	}
 
     static boolean addHealingModifier(ItemStack stack) {
         if (stack.getItem() instanceof ForceRodItem) {

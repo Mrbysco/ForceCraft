@@ -1,0 +1,17 @@
+{
+  "name": "info.forcecraft.book.freezing.entry.name",
+  "category": "tier_2",
+  "icon": "forcecraft:snow_cookie",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.freezing_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "forcecraft:snow_cookie"
+    }
+  ],
+  "advancement": "forcecraft:tier2/root",
+  "secret": true
+}

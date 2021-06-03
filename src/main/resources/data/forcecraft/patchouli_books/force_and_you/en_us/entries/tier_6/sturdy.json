@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.sturdy.entry.name",
+  "category": "tier_6",
+  "icon": "minecraft:obsidian",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.sturdy_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "minecraft:obsidian"
+    }
+  ],
+  "secret": true
+}

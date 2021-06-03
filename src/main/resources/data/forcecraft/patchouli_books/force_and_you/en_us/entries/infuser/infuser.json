@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.infuser.entry.name",
+  "category": "infuser",
+  "icon": "forcecraft:infuser",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.infuser_info.text"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forcecraft:transmutation/infuser",
+      "text": "info.forcecraft.book.infuser_recipe.text"
+    }
+  ]
+}

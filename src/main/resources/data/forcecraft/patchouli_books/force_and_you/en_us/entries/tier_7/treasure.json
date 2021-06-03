@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.treasure.entry.name",
+  "category": "tier_7",
+  "icon": "forcecraft:treasure_core",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.treasure_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "forcecraft:treasure_core"
+    }
+  ],
+  "secret": true
+}

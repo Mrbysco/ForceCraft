@@ -1,0 +1,17 @@
+{
+  "name": "info.forcecraft.book.heat.entry.name",
+  "category": "tier_1",
+  "icon": "forcecraft:golden_power_source",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.heat_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "forcecraft:golden_power_source"
+    }
+  ],
+  "advancement": "forcecraft:tier1/root",
+  "secret": true
+}

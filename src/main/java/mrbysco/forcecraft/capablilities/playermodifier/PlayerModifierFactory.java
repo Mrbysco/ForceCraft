@@ -16,7 +16,6 @@ public class PlayerModifierFactory implements Callable<IPlayerModifier> {
             private float damage = attackDamage + heatDamage;
             private int luck;
 
-
             @Override
             public float getAttackDamage() {
                 return attackDamage;

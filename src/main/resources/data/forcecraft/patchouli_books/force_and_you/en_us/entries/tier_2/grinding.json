@@ -1,0 +1,17 @@
+{
+  "name": "info.forcecraft.book.grinding.entry.name",
+  "category": "tier_2",
+  "icon": "minecraft:flint",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.grinding_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "minecraft:flint"
+    }
+  ],
+  "advancement": "forcecraft:tier2/root",
+  "secret": true
+}

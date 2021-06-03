@@ -14,6 +14,7 @@ public class BaneModifierStorage implements Capability.IStorage<IBaneModifier> {
         CompoundNBT nbt = new CompoundNBT();
         
         nbt.putBoolean("canTeleport", instance.canTeleport());
+        nbt.putBoolean("canExplode", instance.canExplode());
         return nbt;
     }
 
@@ -23,6 +24,7 @@ public class BaneModifierStorage implements Capability.IStorage<IBaneModifier> {
             CompoundNBT nbt = ((CompoundNBT) nbtIn);
 
             instance.setTeleportAbility(nbt.getBoolean("canTeleport"));
+            instance.setExplodeAbility(nbt.getBoolean("canExplode"));
         }
     }
 }

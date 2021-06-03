@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.light.entry.name",
+  "category": "tier_7",
+  "icon": "minecraft:glowstone",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.light_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "minecraft:glowstone"
+    }
+  ],
+  "secret": true
+}

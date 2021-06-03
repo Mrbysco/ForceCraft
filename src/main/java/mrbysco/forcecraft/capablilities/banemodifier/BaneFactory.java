@@ -21,6 +21,18 @@ public class BaneFactory implements Callable<IBaneModifier> {
                 this.canTeleport = canTeleport;
             }
 
+            boolean canExplode = true;
+
+            @Override
+            public boolean canExplode() {
+                return canExplode;
+            }
+
+            @Override
+            public void setExplodeAbility(boolean canExplode) {
+                this.canExplode = canExplode;
+            }
+
             @Override
             public CompoundNBT serializeNBT() {
                 return null;

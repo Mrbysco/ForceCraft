@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.force.entry.name",
+  "category": "tier_0",
+  "icon": "forcecraft:force_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.force_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "forcecraft:force_nugget"
+    }
+  ],
+  "secret": true
+}

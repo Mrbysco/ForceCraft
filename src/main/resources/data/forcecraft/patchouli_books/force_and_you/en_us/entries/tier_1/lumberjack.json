@@ -1,0 +1,17 @@
+{
+  "name": "info.forcecraft.book.lumberjack.entry.name",
+  "category": "tier_1",
+  "icon": "forcecraft:force_log",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.lumberjack_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "forcecraft:force_log"
+    }
+  ],
+  "advancement": "forcecraft:tier1/root",
+  "secret": true
+}

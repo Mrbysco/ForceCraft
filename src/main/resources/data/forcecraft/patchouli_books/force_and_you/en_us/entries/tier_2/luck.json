@@ -1,0 +1,25 @@
+{
+  "name": "info.forcecraft.book.luck.entry.name",
+  "category": "tier_2",
+  "icon": "forcecraft:fortune",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.luck_info.text"
+    },
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.luck_info.text2"
+    },
+    {
+      "type": "spotlight",
+      "item": "forcecraft:fortune"
+    },
+    {
+      "type": "spotlight",
+      "item": "forcecraft:fortune_cookie"
+    }
+  ],
+  "advancement": "forcecraft:tier2/root",
+  "secret": true
+}

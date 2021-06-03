@@ -7,4 +7,7 @@ public interface IBaneModifier extends INBTSerializable<CompoundNBT> {
 
     boolean canTeleport();
     void setTeleportAbility(boolean canTeleport);
+
+    boolean canExplode();
+    void setExplodeAbility(boolean canExplode);
 }

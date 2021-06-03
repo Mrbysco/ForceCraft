@@ -60,7 +60,7 @@ public enum InfuserModifierType {
 		case EXP:
 			break;
 		case FREEZING:
-			break;
+			return InfuserTileEntity.addFreezingModifier(tool);
 		case GRINDING:
 			break;
 		case SIGHT:

@@ -1,0 +1,15 @@
+{
+  "name": "item.forcecraft.book.name",
+  "landing_text": "info.forcecraft.book.landing",
+  "book_texture": "forcecraft:textures/gui/book.png",
+  "filler_texture": "forcecraft:textures/gui/page_filler.png",
+  "model": "forcecraft:force_and_you",
+  "show_progress": false,
+  "subtitle": "info.forcecraft.book.subtitle",
+  "creative_tab": "forcecraft",
+  "advancements_tab": "forcecraft:root",
+  "i18n": true,
+  "macros": {
+    "$(item)": "$(#b89232)"
+  }
+}

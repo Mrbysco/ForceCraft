@@ -10,6 +10,7 @@ import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -17,10 +18,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPlayerDiggingPacket;
 import net.minecraft.network.play.server.SChangeBlockPacket;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -210,6 +213,36 @@ public class DartUtils {
 
     public static ResourceLocation getResource(String res) {
         return new ResourceLocation(Reference.MOD_ID, res);
+    }
+
+    public static void teleportRandomly(LivingEntity livingEntity) {
+        if (!livingEntity.world.isRemote() && livingEntity.isAlive() && !livingEntity.isInWaterOrBubbleColumn()) {
+            double d0 = livingEntity.getPosX() + (livingEntity.getRNG().nextDouble() - 0.5D) * 32.0D;
+            double d1 = livingEntity.getPosY() + (double) (livingEntity.getRNG().nextInt(32) - 16);
+            double d2 = livingEntity.getPosZ() + (livingEntity.getRNG().nextDouble() - 0.5D) * 32.0D;
+            teleportTo(livingEntity, d0, d1, d2);
+        }
+    }
+
+    public static void teleportTo(LivingEntity living, double x, double y, double z) {
+        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(x, y, z);
+
+        while(blockpos$mutable.getY() > 0 && !living.world.getBlockState(blockpos$mutable).getMaterial().blocksMovement()) {
+            blockpos$mutable.move(Direction.DOWN);
+        }
+
+        BlockState blockstate = living.world.getBlockState(blockpos$mutable);
+        boolean flag = blockstate.getMaterial().blocksMovement();
+        boolean flag1 = blockstate.getFluidState().isTagged(FluidTags.WATER);
+        if (flag && !flag1) {
+            net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent(living, x, y, z, 0);
+            if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return;
+            boolean flag2 = living.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+            if (flag2 && !living.isSilent()) {
+                living.world.playSound((PlayerEntity)null, living.prevPosX, living.prevPosY, living.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, living.getSoundCategory(), 1.0F, 1.0F);
+                living.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+            }
+        }
     }
 
 }

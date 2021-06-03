@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.healing.entry.name",
+  "category": "tier_5",
+  "icon": "minecraft:ghast_tear",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.healing_info.text"
+    },
+    {
+      "type": "spotlight",
+      "item": "minecraft:ghast_tear"
+    }
+  ],
+  "secret": true
+}
