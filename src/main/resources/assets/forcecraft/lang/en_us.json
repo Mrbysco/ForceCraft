@@ -556,7 +556,7 @@
     "info.forcecraft.book.bane.entry.name": "Bane",
     "info.forcecraft.book.bane_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Sword$(): Will imbue the sword with Bane$(br)$(li)On a $(item)Force Bow$(): Will imbue the bow's projectiles with Bane$(br)$(li)On $(item)Force Armor$(): will imbue any projectile fired by a bow with Bane",
     "info.forcecraft.book.bane_info.text2": "Bane will permanently remove certain monster abilities, leaving them mostly harmless:$(br)$(li)$(l)Creepers$() hit with bane will lose the ability to blow up$(br)$(li)$(l)Enderman$() and $(l)Ender Tots$() hit with bane will lose the ability to teleport",
-    "info.forcecraft.book.heat_upgrade.entry.name": "Heat",
+    "info.forcecraft.book.heat_upgrade.entry.name": "Heat Upgrade",
     "info.forcecraft.book.heat_upgrade_info.text": "This infusion does the following:$(br)$(li)On an $(item)Upgrade Core$(): Converts the Upgrade Core to an $(item)Heat Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()",
 
     "info.forcecraft.book.tier_5.name": "Tier 5 Infusions",
