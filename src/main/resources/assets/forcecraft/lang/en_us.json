@@ -539,7 +539,7 @@
     "info.forcecraft.book.freezing.entry.name": "Freezing",
     "info.forcecraft.book.freezing_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Bow$(): Adds a freezing effect to the arrows$(br)$(li)On an $(item)Upgrade Core$(): Converts the Upgrade Core to an $(item)Freezing Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()",
     "info.forcecraft.book.grinding.entry.name": "Grinding",
-    "info.forcecraft.book.grinding_info.text": "This infusion does the following:$(br)$(li)On an $(item)Upgrade Core$(): Converts the Upgrade Core to an $(item)Grinding Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()",
+    "info.forcecraft.book.grinding_info.text": "This infusion does the following:$(br)$(li)On an $(item)Upgrade Core$(): Converts the Upgrade Core to a $(item)Grinding Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()",
 
     "info.forcecraft.book.tier_3.name": "Tier 3 Infusions",
     "info.forcecraft.book.tier_3.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 3",

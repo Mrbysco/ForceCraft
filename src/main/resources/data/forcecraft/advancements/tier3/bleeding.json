@@ -1,0 +1,28 @@
+{
+  "display": {
+    "title": {
+      "text": "Bleeding"
+    },
+    "description": {
+      "text": "Sticking someone with an arrow might make them bleed"
+    },
+    "icon": {
+      "item": "minecraft:arrow"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "parent": "forcecraft:tier3/tier",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ]
+}

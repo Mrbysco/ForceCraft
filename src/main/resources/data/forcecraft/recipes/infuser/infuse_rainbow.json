@@ -2,7 +2,7 @@
   "type":"forcecraft:infuser",
   "ingredient": 
   {
-    "item": "minecraft:lapis_lazuli"
+    "item": "minecraft:blue_dye"
   },
   "center": {
     "item": "forcecraft:force_shears"

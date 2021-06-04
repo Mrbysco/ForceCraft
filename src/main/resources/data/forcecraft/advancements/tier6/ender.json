@@ -1,0 +1,28 @@
+{
+  "display": {
+    "title": {
+      "text": "Light"
+    },
+    "description": {
+      "text": "Leaving little pools of light all around"
+    },
+    "icon": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "parent": "forcecraft:tier6/tier",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ]
+}

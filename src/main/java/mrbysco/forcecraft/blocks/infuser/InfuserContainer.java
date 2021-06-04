@@ -2,6 +2,7 @@ package mrbysco.forcecraft.blocks.infuser;
 
 import mrbysco.forcecraft.container.slot.SlotForceGems;
 import mrbysco.forcecraft.registry.ForceContainers;
+import mrbysco.forcecraft.util.AdvancementUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -18,6 +19,7 @@ import java.util.Objects;
 public class InfuserContainer extends Container {
 
     private InfuserTileEntity tile;
+    private PlayerEntity player;
 
     public InfuserContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
         this(windowId, playerInventory, getTileEntity(playerInventory, data));
@@ -38,6 +40,7 @@ public class InfuserContainer extends Container {
     public InfuserContainer(int id, PlayerInventory playerInventoryIn, InfuserTileEntity te) {
         super(ForceContainers.INFUSER.get(), id);
         this.tile = te;
+        this.player = playerInventoryIn.player;
 
         //Modifier Slots [0, 7] around the outside starting at the top middle going clockwise
         int bookTier = tile.getBookTier();
@@ -105,6 +108,7 @@ public class InfuserContainer extends Container {
 				tile.maxProcessTime = value;
 			}
 		});
+        AdvancementUtil.unlockTierAdvancements(player, tile.getBookTier());
     }
 
     @Override
@@ -165,5 +169,7 @@ public class InfuserContainer extends Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
+
+        AdvancementUtil.unlockTierAdvancements(player, tile.getBookTier());
     }
 }

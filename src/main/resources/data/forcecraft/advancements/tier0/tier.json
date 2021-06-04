@@ -1,0 +1,40 @@
+{
+    "display": {
+        "title": {
+            "text": "Tier 0",
+            "color": "gold",
+            "bold": false,
+            "italic": false,
+            "underlined": false,
+            "strikethrough": false,
+            "obfuscated": false
+        },
+        "description": {
+            "text": "Infusions that can be executed by default"
+        },
+        "icon": {
+            "item": "forcecraft:infuser"
+        },
+        "frame": "goal",
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "forcecraft:root",
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "forcecraft:infuser"
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "crafting_table"
+        ]
+    ]
+}

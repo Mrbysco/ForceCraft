@@ -22,11 +22,20 @@
         "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
     },
     "criteria": {
-        "PlacedInfuser": {
-            "trigger": "minecraft:placed_block",
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
             "conditions": {
-                "block": "forcecraft:infuser"
+                "items": [
+                    {
+                        "item": "forcecraft:infuser"
+                    }
+                ]
             }
         }
-    }
+    },
+    "requirements": [
+        [
+            "crafting_table"
+        ]
+    ]
 }

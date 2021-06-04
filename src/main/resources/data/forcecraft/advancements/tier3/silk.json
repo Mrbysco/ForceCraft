@@ -1,0 +1,28 @@
+{
+  "display": {
+    "title": {
+      "text": "Silk Touch"
+    },
+    "description": {
+      "text": "Silky webs could make my tool have a hint of silk to its touch"
+    },
+    "icon": {
+      "item": "minecraft:cobweb"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "parent": "forcecraft:tier3/camo",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ]
+}

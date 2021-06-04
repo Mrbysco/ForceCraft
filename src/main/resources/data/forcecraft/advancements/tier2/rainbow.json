@@ -11,17 +11,18 @@
     },
     "frame": "task",
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+    "announce_to_chat": false,
+    "hidden": true
   },
-  "parent": "forcecraft:tier2/root",
+  "parent": "forcecraft:tier2/luck",
   "criteria": {
-    "PlacedInfuser": {
-      "trigger": "minecraft:placed_block",
-      "conditions": {
-        "block": "forcecraft:infuser"
-      }
+    "impossible": {
+      "trigger": "minecraft:impossible"
     }
-  }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ]
 }

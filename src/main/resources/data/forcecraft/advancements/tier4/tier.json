@@ -1,7 +1,7 @@
 {
   "display": {
     "title": {
-      "text": "ForceCraft Tier 4",
+      "text": "Tier 4",
       "color": "gold",
       "bold": false,
       "italic": false,
@@ -15,18 +15,19 @@
     "icon": {
       "item": "forcecraft:infuser"
     },
-    "frame": "challenge",
+    "frame": "goal",
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false,
-    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+    "announce_to_chat": true
   },
+  "parent": "forcecraft:root",
   "criteria": {
-    "PlacedInfuser": {
-      "trigger": "minecraft:placed_block",
-      "conditions": {
-        "block": "forcecraft:infuser"
-      }
+    "impossible": {
+      "trigger": "minecraft:impossible"
     }
-  }
+  },
+  "requirements": [
+    [
+      "impossible"
+    ]
+  ]
 }
