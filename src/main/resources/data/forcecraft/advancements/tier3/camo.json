@@ -7,7 +7,7 @@
       "text": "You can't see me"
     },
     "icon": {
-      "item": "minecraft:cobweb"
+      "item": "minecraft:potion"
     },
     "frame": "task",
     "show_toast": true,

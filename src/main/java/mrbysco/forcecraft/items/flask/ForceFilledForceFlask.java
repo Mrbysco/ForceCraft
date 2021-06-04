@@ -31,7 +31,7 @@ public class ForceFilledForceFlask extends BaseItem {
 
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-        if (!worldIn.isRemote) entityLiving.addPotionEffect(new EffectInstance(Effects.SPEED, 600, 2));
+        if (!worldIn.isRemote) entityLiving.addPotionEffect(new EffectInstance(Effects.SPEED, 600, 2, false, false));
 
         if (entityLiving instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)entityLiving;

@@ -21,7 +21,7 @@ public class ForceFluidBlock extends FlowingFluidBlock {
     @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
         if (entityIn instanceof LivingEntity) {
-            ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.REGENERATION, 10, 10));
+            ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.REGENERATION, 10, 10, false, false));
         }
     }
 }

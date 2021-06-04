@@ -21,6 +21,8 @@ public class InfuserContainer extends Container {
     private InfuserTileEntity tile;
     private PlayerEntity player;
 
+    public final int[] powerStored = new int[1];
+
     public InfuserContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
         this(windowId, playerInventory, getTileEntity(playerInventory, data));
     }
@@ -82,7 +84,10 @@ public class InfuserContainer extends Container {
         for (int x = 0; x < 9; ++x) {
             this.addSlot(new Slot(playerInventoryIn, x, xPos + x * 18, yPos + 58));
         }
-        
+
+        this.powerStored[0] = tile.getEnergyStored();
+        this.trackInt(IntReferenceHolder.create(this.powerStored, 0));
+
         //set data that will sync server->client WITHOUT needing to call .markDirty()
 		trackInt(new IntReferenceHolder() {
 
@@ -169,6 +174,8 @@ public class InfuserContainer extends Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
+
+        this.powerStored[0] = tile.getEnergyStored();
 
         AdvancementUtil.unlockTierAdvancements(player, tile.getBookTier());
     }

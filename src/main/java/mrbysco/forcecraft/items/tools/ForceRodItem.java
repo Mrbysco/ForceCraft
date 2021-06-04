@@ -52,7 +52,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 	public ForceRodItem(Item.Properties properties) {
 		super(properties.maxDamage(75));
-		setApplicableModifers();
+		setApplicableModifiers();
 	}
 
 	@Override
@@ -207,15 +207,15 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
 			if (cap.isRodOfHealing(3)) {
-				playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 2));
+				playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 2, false, false));
 			} else if (cap.isRodOfHealing(2)) {
-				playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 1));
+				playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 1, false, false));
 			} else if (cap.isRodOfHealing(1)) {
-				playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 0));
+				playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 0, false, false));
 			}
 
 			if (cap.hasCamoModifier())
-				playerIn.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 1000, 0));
+				playerIn.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 1000, 0, false, false));
 
 			if (cap.hasEnderModifier()) {
 				if (cap.getHomeLocation() == null) {
@@ -226,14 +226,14 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 			}
 
 			if (cap.hasSightModifier()) {
-				playerIn.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 1000, 0));
+				playerIn.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 1000, 0, false, false));
 			}
 
 			if (cap.hasLight()) {
-				playerIn.addPotionEffect(new EffectInstance(Effects.GLOWING, 1000, 0));
+				playerIn.addPotionEffect(new EffectInstance(Effects.GLOWING, 1000, 0, false, false));
 			}
 			if (cap.getSpeedLevel() > 0) {
-				playerIn.addPotionEffect(new EffectInstance(Effects.SPEED, 10 * 20, cap.getSpeedLevel() - 1));
+				playerIn.addPotionEffect(new EffectInstance(Effects.SPEED, 10 * 20, cap.getSpeedLevel() - 1, false, false));
 			}
 		});
 
@@ -249,7 +249,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		return new ForceRodProvider();
 	}
 
-	public void setApplicableModifers() {
+	public void setApplicableModifiers() {
 		applicableModifiers.add(MOD_HEALING);
 		applicableModifiers.add(MOD_ENDER);
 	}

@@ -28,7 +28,7 @@ public class ForceArrowItem extends ArrowItem {
 			if(heldItem.getItem() instanceof ForceBowItem) {
 				heldItem.getCapability(CAPABILITY_TOOLMOD).ifPresent(cap -> {
 					if(cap.hasFreezing()) {
-						forceArrow.addEffect(new EffectInstance(Effects.SLOWNESS, 60, 2));
+						forceArrow.addEffect(new EffectInstance(Effects.SLOWNESS, 60, 2, false, false));
 					}
 					if(cap.hasEnder()) {
 						CompoundNBT tag = stack.getOrCreateTag();
@@ -36,7 +36,7 @@ public class ForceArrowItem extends ArrowItem {
 						stack.setTag(tag);
 					}
 					if(cap.hasBleed()) {
-						EffectInstance bleedingEffect = new EffectInstance(ForceEffects.BLEEDING.get(), 20 * cap.getBleedLevel(), 0);
+						EffectInstance bleedingEffect = new EffectInstance(ForceEffects.BLEEDING.get(), 20 * cap.getBleedLevel(), 0, false, false);
 						forceArrow.addEffect(bleedingEffect);
 					}
 				});

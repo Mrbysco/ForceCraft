@@ -160,7 +160,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 						.mergeStyle(TextFormatting.GRAY));
 			} else {
 				boolean modifiersEmpty = tile.areAllModifiersEmpty();
-				if(!modifiersEmpty && tile.getEnergyStored() < tile.getEnergyCostPer()) {
+				if(!modifiersEmpty && getContainer().powerStored[0] < tile.getEnergyCostPer()) {
 					text.add(new TranslationTextComponent("gui.forcecraft.infuser.missing.rf.tooltip")
 							.mergeStyle(TextFormatting.RED));
 				} else {
@@ -173,7 +173,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		if (isPointInRegion(156, 8, 12, 112, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
-			IFormattableTextComponent tt = new StringTextComponent(tile.getEnergyStored() + " RF")
+			IFormattableTextComponent tt = new StringTextComponent(getContainer().powerStored[0] + " RF")
 					.mergeStyle(TextFormatting.GOLD);
 			text.add(tt);
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
@@ -220,7 +220,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		}
 
 		minecraft.textureManager.bindTexture(ENERGY);
-		float energ = container.getTile().getEnergyStored();
+		float energ = getContainer().powerStored[0];
 		float capacity = container.getTile().energyStorage.getMaxEnergyStored();
 		float pct = Math.min(energ / capacity, 1.0F);
 

@@ -42,10 +42,10 @@ public class ForceShovelItem extends ShovelItem implements IForceChargingTool {
 
     public ForceShovelItem(Item.Properties properties) {
         super(ModToolMaterial.FORCE, -7F, -3.0F, properties);
-        setApplicableModifers();
+        setApplicableModifiers();
     }
 
-    public void setApplicableModifers() {
+    public void setApplicableModifiers() {
         applicableModifers.add(MOD_CHARGE);
         applicableModifers.add(MOD_CHARGEII);
         applicableModifers.add(MOD_HEAT);

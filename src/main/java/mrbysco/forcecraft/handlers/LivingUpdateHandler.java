@@ -79,11 +79,11 @@ public class LivingUpdateHandler {
 				}
 				// else not creative
 				if (camo) {
-					EffectInstance camoEffect = new EffectInstance(Effects.INVISIBILITY, INVISIBILITY_DURATION, 1);
+					EffectInstance camoEffect = new EffectInstance(Effects.INVISIBILITY, INVISIBILITY_DURATION, 1, false, false);
 					player.addPotionEffect(camoEffect);
 				}
 				if (speed > 0) {
-					EffectInstance speedEffect = new EffectInstance(Effects.SPEED, SPEED_DURATION, speed);
+					EffectInstance speedEffect = new EffectInstance(Effects.SPEED, SPEED_DURATION, speed, false, false);
 					player.addPotionEffect(speedEffect);
 				}
 				if (damage > 0) {
