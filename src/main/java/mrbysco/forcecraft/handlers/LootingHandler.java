@@ -50,14 +50,14 @@ public class LootingHandler {
 
 	@SubscribeEvent
 	public void onTreasureDrop(LivingDropsEvent event) {
-		if (event.getSource() == null || event.getSource().getTrueSource() == null || !event.isRecentlyHit()) {
+		if (event.getSource() == null || event.getSource().getTrueSource() == null) {
 			return;
 		}
 
 		Entity source = event.getSource().getTrueSource();
 		if(source instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) source;
-			player.getActiveItemStack().getCapability(CapabilityHandler.CAPABILITY_TOOLMOD).ifPresent(cap -> {
+			player.getHeldItemMainhand().getCapability(CapabilityHandler.CAPABILITY_TOOLMOD).ifPresent(cap -> {
 				if(cap.hasTreasure()) {
 					Random rand = player.getRNG();
 					int looting = event.getLootingLevel();
