@@ -627,7 +627,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 	static boolean addEnderModifier(ItemStack stack) {
 		if (stack.getItem() instanceof ForceRodItem) {
 			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-			if(rodCap != null && rodCap.isRodofEnder()) {
+			if(rodCap != null && !rodCap.isRodofEnder()) {
 				rodCap.setEnderModifier(true);
 				addInfusedTag(stack);
 				return true;

@@ -51,9 +51,9 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
 				Vector3d vec = playerIn.getLookVec();
 				double wantedVelocity = 1.7;
 				playerIn.setMotion(vec.x * wantedVelocity,vec.y * wantedVelocity,vec.z * wantedVelocity);
-				worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
 				heldStack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 				playerIn.getCooldownTracker().setCooldown(this, 20);
+				worldIn.playSound((PlayerEntity)null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
 			}
 			//Ender Modifier
 			if(toolCap.hasEnder()) {
