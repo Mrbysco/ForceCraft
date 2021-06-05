@@ -43,29 +43,35 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        //Wing Modifier
         ItemStack heldStack = playerIn.getHeldItem(handIn);
-        heldStack.getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
-			if(cap.hasWing()) {
+		IToolModifier toolCap = heldStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+		if(toolCap != null) {
+			//Wing Modifier
+			if(toolCap.hasWing()) {
 				Vector3d vec = playerIn.getLookVec();
 				double wantedVelocity = 1.7;
 				playerIn.setMotion(vec.x * wantedVelocity,vec.y * wantedVelocity,vec.z * wantedVelocity);
 				worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
+				heldStack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+				playerIn.getCooldownTracker().setCooldown(this, 20);
 			}
-			if(cap.hasEnder()) {
+			//Ender Modifier
+			if(toolCap.hasEnder()) {
 				BlockRayTraceResult traceResult = rayTrace(worldIn, playerIn, FluidMode.NONE);
 				BlockPos lookPos = traceResult.getPos().offset(traceResult.getFace());
 				net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent(playerIn, lookPos.getX(), lookPos.getY(),
 						lookPos.getZ(), 0);
-				if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return;
-
-				boolean flag2 = playerIn.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
-				if (flag2 && !playerIn.isSilent()) {
-					worldIn.playSound((PlayerEntity)null, playerIn.prevPosX, playerIn.prevPosY, playerIn.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, playerIn.getSoundCategory(), 1.0F, 1.0F);
-					playerIn.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+				if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) {
+					boolean flag2 = playerIn.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+					if (flag2 && !playerIn.isSilent()) {
+						worldIn.playSound((PlayerEntity)null, playerIn.prevPosX, playerIn.prevPosY, playerIn.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, playerIn.getSoundCategory(), 1.0F, 1.0F);
+						playerIn.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+						heldStack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+						playerIn.getCooldownTracker().setCooldown(this, 10);
+					}
 				}
 			}
-		});
+		}
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
@@ -86,7 +92,7 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
     	ToolModStorage.attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
-    
+
 	@Override
 	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
 		return this.damageItem(stack,amount);

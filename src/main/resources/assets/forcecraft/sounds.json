@@ -27,5 +27,12 @@
         "sounds": [
             "forcecraft:listen3"
         ]
+    },
+    "infuser.done" : {
+      "category" : "block",
+      "subtitle": "forcecraft.infuser.done.subtitle",
+      "sounds": [
+        "forcecraft:infuser_done"
+      ]
     }
 }

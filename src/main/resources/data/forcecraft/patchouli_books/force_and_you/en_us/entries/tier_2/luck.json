@@ -20,6 +20,6 @@
       "item": "forcecraft:fortune_cookie"
     }
   ],
-  "advancement": "forcecraft:tier2/root",
+  "advancement": "forcecraft:tier2/tier",
   "secret": true
 }

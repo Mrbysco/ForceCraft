@@ -5,9 +5,7 @@
     "forcecraft:force_shovel",
     "forcecraft:force_axe",
     "forcecraft:force_sword",
-    "forcecraft:force_helmet",
-    "forcecraft:force_chest",
-    "forcecraft:force_legs",
-    "forcecraft:force_boots"
+    "forcecraft:force_bow",
+	"#forcecraft:force_armor"
   ]
 }

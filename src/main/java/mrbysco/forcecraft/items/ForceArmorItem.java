@@ -5,6 +5,7 @@ import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
@@ -12,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,9 +25,9 @@ import java.util.List;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
-public class CustomArmorItem extends ArmorItem {
+public class ForceArmorItem extends ArmorItem {
 
-    public CustomArmorItem(IArmorMaterial materialIn, EquipmentSlotType slot, Item.Properties builderIn) {
+    public ForceArmorItem(IArmorMaterial materialIn, EquipmentSlotType slot, Item.Properties builderIn) {
         super(materialIn, slot, builderIn);
     }
 
@@ -86,4 +88,14 @@ public class CustomArmorItem extends ArmorItem {
     	}
 		super.readShareTag(stack, nbt);
     }
+
+	@Nullable
+	@Override
+	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+		if(cap != null && cap.hasCamo()) {
+			return "forcecraft:textures/models/armor/force_invisible.png";
+		}
+		return super.getArmorTexture(stack, entity, slot, type);
+	}
 }

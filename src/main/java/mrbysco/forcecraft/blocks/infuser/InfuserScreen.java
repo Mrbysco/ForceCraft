@@ -85,7 +85,6 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			ItemStack bookStack = container.getTile().getBookInSlot();
 			if (bookStack.isEmpty()) {
 				this.playerInventory.player.sendStatusMessage(new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
-				return;
 			} else {
 				PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
 			}
@@ -94,7 +93,8 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			@Override
 			public void renderWidget(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
 				// skip drawing me
-				if(getContainer().isWorkAllowed()) {
+				boolean flag = getContainer().validRecipe[0] == 1;
+				if(flag) {
 					// render special
 //				    super.renderWidget(ms, mouseX, mouseY, partialTicks);
 					Minecraft minecraft = Minecraft.getInstance();
@@ -114,8 +114,9 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	public void tick() {
 		super.tick();
 
-		if(buttonInfuse.active != getContainer().isWorkAllowed()) {
-			buttonInfuse.active = getContainer().isWorkAllowed();
+		boolean flag = getContainer().validRecipe[0] == 1;
+		if(buttonInfuse.active != flag) {
+			buttonInfuse.active = flag;
 		}
 	}
 

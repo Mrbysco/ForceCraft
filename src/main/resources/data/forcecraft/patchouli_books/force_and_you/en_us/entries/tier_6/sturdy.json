@@ -12,5 +12,6 @@
       "item": "minecraft:obsidian"
     }
   ],
+  "advancement": "forcecraft:tier6/tier",
   "secret": true
 }

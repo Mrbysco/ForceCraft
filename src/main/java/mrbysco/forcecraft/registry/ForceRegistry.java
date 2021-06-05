@@ -17,7 +17,7 @@ import mrbysco.forcecraft.blocks.tree.ForceTree;
 import mrbysco.forcecraft.items.BaconatorItem;
 import mrbysco.forcecraft.items.BaseItem;
 import mrbysco.forcecraft.items.BottledWitherItem;
-import mrbysco.forcecraft.items.CustomArmorItem;
+import mrbysco.forcecraft.items.ForceArmorItem;
 import mrbysco.forcecraft.items.CustomFoodItem;
 import mrbysco.forcecraft.items.CustomSpawnEggItem;
 import mrbysco.forcecraft.items.ExperienceTomeItem;
@@ -246,13 +246,13 @@ public class ForceRegistry {
             new CustomFoodItem(itemBuilder().food(ForceFoods.COOKED_BACON).group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORCE_HELMET = ITEMS.register("force_helmet", () ->
-            new CustomArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlotType.HEAD, itemBuilder().group(ForceCraft.creativeTab)));
+            new ForceArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlotType.HEAD, itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_CHEST = ITEMS.register("force_chest", () ->
-            new CustomArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlotType.CHEST, itemBuilder().group(ForceCraft.creativeTab)));
+            new ForceArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlotType.CHEST, itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_LEGS = ITEMS.register("force_legs", () ->
-            new CustomArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlotType.LEGS, itemBuilder().group(ForceCraft.creativeTab)));
+            new ForceArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlotType.LEGS, itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_BOOTS = ITEMS.register("force_boots", () ->
-            new CustomArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlotType.FEET, itemBuilder().group(ForceCraft.creativeTab)));
+            new ForceArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlotType.FEET, itemBuilder().group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORCE_ROD = ITEMS.register("force_rod", () -> new ForceRodItem(itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_WRENCH = ITEMS.register("force_wrench", () -> new ForceWrenchItem(itemBuilder().group(ForceCraft.creativeTab)));

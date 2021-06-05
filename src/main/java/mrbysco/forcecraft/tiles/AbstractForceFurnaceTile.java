@@ -160,7 +160,6 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		if (input.isEmpty() || input == failedMatch) return null;
 		if (currentRecipe != null && currentRecipe.matches(this, world) && currentRecipe.getType() == getRecipeType()) return currentRecipe;
 		else {
-			//eclipse gives me error if i dont cast the getRecipeType()
 			AbstractCookingRecipe rec = world.getRecipeManager().getRecipe((IRecipeType<AbstractCookingRecipe>)this.getRecipeType(), this, this.world).orElse(null);
 			if (rec == null) failedMatch = input;
 			else failedMatch = ItemStack.EMPTY;

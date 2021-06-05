@@ -12,6 +12,6 @@
       "item": "forcecraft:force_log"
     }
   ],
-  "advancement": "forcecraft:tier1/root",
+  "advancement": "forcecraft:tier1/tier",
   "secret": true
 }

@@ -13,5 +13,6 @@
       "text": "info.forcecraft.book.bleeding_info.text2"
     }
   ],
+  "advancement": "forcecraft:tier3/tier",
   "secret": true
 }

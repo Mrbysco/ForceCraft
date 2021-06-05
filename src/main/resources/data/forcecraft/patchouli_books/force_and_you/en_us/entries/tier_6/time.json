@@ -12,5 +12,6 @@
       "item": "minecraft:clock"
     }
   ],
+  "advancement": "forcecraft:tier6/tier",
   "secret": true
 }

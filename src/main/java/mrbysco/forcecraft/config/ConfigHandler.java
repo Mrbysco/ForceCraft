@@ -20,6 +20,7 @@ public class ConfigHandler {
         public final BooleanValue timeTorchEnabled;
         public final BooleanValue timeTorchLogging;
         public final IntValue baconatorMaxStacks;
+        public final IntValue forceInfusingTime;
         public final ConfigValue<List<? extends String>> furnaceOutputBlacklist;
 
         public final BooleanValue ChuChuSpawning;
@@ -67,6 +68,10 @@ public class ConfigHandler {
             baconatorMaxStacks = builder
                     .comment("The max amount of food stacks stored in the baconator [Default: 4]")
                     .defineInRange("baconatorMaxStacks", 4, 1, Integer.MAX_VALUE);
+
+            forceInfusingTime = builder
+                    .comment("The max amount of ticks it takes to charge a tool with Force [Default: 120 (6 seconds)]")
+                    .defineInRange("forceInfusingTime",120, 20, Integer.MAX_VALUE);
 
             furnaceOutputBlacklist = builder
                     .comment("An additional list of tile entities the Force Furnace can NOT insert into [Syntax: modid:tile_name]\n" +

@@ -22,10 +22,11 @@ public class ForceTags {
 	public static final ITag.INamedTag<Item> FORCE_FUELS = ItemTags.makeWrapperTag(Reference.MOD_ID + ":force_fuel");
 	public static final ITag.INamedTag<Item> BACONATOR_FOOD = ItemTags.makeWrapperTag(Reference.MOD_ID + ":baconator_food");
 	public static final ITag.INamedTag<Item> VALID_FORCE_BELT = ItemTags.makeWrapperTag(Reference.MOD_ID + ":valid_force_belt");
+	public static final ITag.INamedTag<Item> ENDER = ItemTags.makeWrapperTag(Reference.MOD_ID + ":ender");
 
-	public static final ITag.INamedTag<Item> FORCE_INGOT = forceItemTag("ingots/force");
-	public static final ITag.INamedTag<Item> FORCE_NUGGET = forceItemTag("nuggets/force");
-	public static final ITag.INamedTag<Item> FORGE_GEM = forceItemTag("gems/force");
+	public static final ITag.INamedTag<Item> FORCE_INGOT = forgeItemTag("ingots/force");
+	public static final ITag.INamedTag<Item> FORCE_NUGGET = forgeItemTag("nuggets/force");
+	public static final ITag.INamedTag<Item> FORGE_GEM = forgeItemTag("gems/force");
 
 	public static final ITag.INamedTag<Fluid> FORCE = forgeFluidTag("force");
 
@@ -33,7 +34,7 @@ public class ForceTags {
 
 	public static final ITag<EntityType<?>> FLASK_BLACKLIST = EntityTypeTags.createOptional(new ResourceLocation(Reference.MOD_ID + ":" + "flask_blacklist"));
 
-	private static INamedTag<Item> forceItemTag(String name) {
+	private static INamedTag<Item> forgeItemTag(String name) {
 		return ItemTags.makeWrapperTag("forge:" + name);
 	}
 	private static INamedTag<Block> forceBlockTag(String name) {

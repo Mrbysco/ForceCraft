@@ -5,7 +5,8 @@ import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
 import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import mrbysco.forcecraft.items.CustomArmorItem;
+import mrbysco.forcecraft.config.ConfigHandler;
+import mrbysco.forcecraft.items.ForceArmorItem;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.infuser.ForceToolData;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
@@ -21,6 +22,7 @@ import mrbysco.forcecraft.recipe.ForceRecipes;
 import mrbysco.forcecraft.recipe.InfuseRecipe;
 import mrbysco.forcecraft.registry.ForceFluids;
 import mrbysco.forcecraft.registry.ForceRegistry;
+import mrbysco.forcecraft.registry.ForceSounds;
 import mrbysco.forcecraft.registry.ForceTags;
 import mrbysco.forcecraft.tiles.energy.ForceEnergyStorage;
 import mrbysco.forcecraft.util.EnchantUtils;
@@ -49,6 +51,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -62,7 +65,10 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
@@ -89,6 +95,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public static final int FLUID_COST_PER = 1000;
     //ratio o f gem slot to fluid tank
 	private static final int FLUID_PER_GEM = 500;
+
+	protected Map<Integer, InfuseRecipe> currentRecipes = new HashMap<>();
 
 	protected FluidTank tank = new FluidTank(50000) {
         @Override
@@ -126,7 +134,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             return 1;
         }
 
-
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
         	if(slot < SLOT_TOOL) {
@@ -146,7 +153,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         	// else tool or something for the around
         	return true;
         }
-    };
+	};
     private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
 
     public ForceEnergyStorage energyStorage = new ForceEnergyStorage(64000, 1000);
@@ -165,7 +172,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
-
     	this.processTime = nbt.getInt("processTime");
     	this.maxProcessTime = nbt.getInt("maxProcessTime");
         //Items
@@ -206,8 +212,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         }
 
         if (canWork) {
-
         	processTime++;
+			energyStorage.consumePower(ENERGY_COST_PER);
         	if(processTime < this.maxProcessTime) {
         		return;
         	}
@@ -216,10 +222,10 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
         	//once we have a valid tool and have waited. go do the thing
         	if(isWorkAllowed()) {
-        		if(areAllModifiersEmpty()) {
+        		if(areAllModifiersEmpty() && canCharge()) {
         			processForceCharging();
         		}
-        		else {
+        		else if(recipesStillMatch()) {
         			processTool();
         		}
         	}
@@ -239,6 +245,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     	canWork = true;
     	processTime = 0;
     	setMaxTimeFromRecipes();
+    	if(areAllModifiersEmpty() && canCharge()) {
+			maxProcessTime = ConfigHandler.COMMON.forceInfusingTime.get();
+		}
     	if(maxProcessTime <= 0) {
     		//no valid recipes
         	canWork = false;
@@ -250,32 +259,45 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 	private void setMaxTimeFromRecipes() {
 		maxProcessTime = 0;
 		if(!this.getBookInSlot().isEmpty()) { //Make sure it doesn't run if the book is missing
-			for (int i = 0; i < SLOT_TOOL; i++) {
-
-				ItemStack modifier = getModifier(i);
-				UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
-				int bookTier = bd.getTier().ordinal();
-				// if the recipe level does not exceed what the book has
-				// test the ingredient of this recipe, if it matches me
-
-				List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
+			List<InfuseRecipe> recipes = new ArrayList<>(getMatchingRecipes().values());
+			if(!recipes.isEmpty()) {
 				for (InfuseRecipe recipeCurrent : recipes) {
-					if (recipeCurrent.getTier().ordinal() > bookTier) {
-						continue;
-					}
-					ItemStack tool = getFromToolSlot();
-					if (recipeCurrent.getCenter().test(tool) == false) {
-						// doesnt match the "center" tool test from recipe
-						continue;
-					}
-					if (recipeCurrent.input.test(modifier)) {
-						// tool, book, and modifier all valid
 //					ForceCraft.LOGGER.info(recipeCurrent.getId() + " increase  "+ recipeCurrent.getTime());
-						maxProcessTime += recipeCurrent.getTime();
-					}
+					maxProcessTime += recipeCurrent.getTime();
 				}
 			}
 		}
+	}
+
+	protected Map<Integer, InfuseRecipe> getMatchingRecipes() {
+		if(getBookInSlot().isEmpty()) return new HashMap<>();
+		if (!currentRecipes.isEmpty() && recipesStillMatch()) return currentRecipes;
+		else {
+			Map<Integer, InfuseRecipe> matchingRecipes = new HashMap<>();
+			for (int i = 0; i < SLOT_TOOL; i++) {
+				ItemStack modifier = getModifier(i);
+				if(modifier.isEmpty()) continue;
+
+				List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
+				for(InfuseRecipe recipe : recipes) {
+					if(recipe.matchesModifier(this, modifier, false)) {
+						matchingRecipes.put(i, recipe);
+						break;
+					}
+				}
+			}
+			return currentRecipes = matchingRecipes;
+		}
+	}
+
+	protected boolean recipesStillMatch() {
+		for (HashMap.Entry<Integer, InfuseRecipe> entry : currentRecipes.entrySet()) {
+			ItemStack modifier = getModifier(entry.getKey());
+			if(!entry.getValue().matchesModifier(this, modifier, false)) {
+				return false;
+			}
+		}
+    	return true;
 	}
 
 	private void refreshClient() {
@@ -297,7 +319,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     public boolean areAllModifiersEmpty() {
-
     	int emptySlots = 0;
         for (int i = 0; i < SLOT_TOOL; i++) {
         	if(handler.getStackInSlot(i).isEmpty()) {
@@ -310,13 +331,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     private void processForceCharging() {
         ItemStack tool = getFromToolSlot();
-
-        if(!tool.getItem().isIn(ForceTags.VALID_INFUSER_CHARGE) || tool.getCount() != 1
-        		|| tank.getFluidAmount() < FLUID_CHARGE) {
-        	//halt if empty. halt if stack larger than 1, only upgrade a single item
-        	return;
-        }
-        //its a valid force tool non stacked, so charging is ok
+		addInfusedTag(tool);
 
         ForceToolData force = new ForceToolData(tool);
         force.charge(FLUID_CHARGE);
@@ -325,32 +340,26 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     private void processTool() {
-    	//recipes were pre-validated in setMaxTimeFromRecipes
-    	//but do it again here in case any slots changed contents
-        for (int i = 0; i < SLOT_TOOL; i++) {
-        	//halt if no power
-        	if(energyStorage.getEnergyStored() < ENERGY_COST_PER) {
-        		break;
-        	}
-            if (hasValidModifer(i)) {
-                ItemStack modifier = getModifier(i);
-                ItemStack tool = getFromToolSlot();
-                if(tool.getCount() != 1) {
-                	//halt if empty. halt if stack larger than 1, only upgrade a single item
-                	continue;
-                }
-                boolean success = applyModifier(tool, modifier);
-                if (success) {
-                	// for EACH modifier
-                    handler.getStackInSlot(i).shrink(1);
-                    tank.drain(FLUID_COST_PER, FluidAction.EXECUTE);
-                    energyStorage.consumePower(ENERGY_COST_PER);
-                    
-                    UpgradeTomeItem.onModifierApplied(this.getBookInSlot(), modifier, tool);
-         			ForceCraft.LOGGER.info("process tool success {}, {}", this.getBookInSlot().getTag() , energyStorage.getEnergyStored());
-                }
-            }
-        }
+		for (HashMap.Entry<Integer, InfuseRecipe> entry : currentRecipes.entrySet()) {
+			ItemStack modifier = getModifier(entry.getKey());
+			InfuseRecipe recipe = entry.getValue();
+			if(recipe.matchesModifier(this, modifier, true)) {
+				ItemStack tool = getFromToolSlot();
+				boolean success = applyModifier(tool, modifier, recipe);
+				if (success) {
+					world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_DONE.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+					// for EACH modifier
+					modifier.shrink(1);
+					tank.drain(FLUID_COST_PER, FluidAction.EXECUTE);
+//                    energyStorage.consumePower(ENERGY_COST_PER);
+
+					UpgradeTomeItem.onModifierApplied(this.getBookInSlot(), modifier, tool);
+					ForceCraft.LOGGER.info("process tool success {}, {}", this.getBookInSlot().getTag() , energyStorage.getEnergyStored());
+				}
+			}
+		}
+
         // TODO: is this notfiy needed?
         world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
     }
@@ -428,57 +437,44 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
 	public boolean hasValidModifer(int slot) {
-        return getModifier(slot).isEmpty() == false;
+        return !getModifier(slot).isEmpty();
     }
+
+    public boolean canCharge() {
+		ItemStack tool = getFromToolSlot();
+    	return isValidChargeableStack(tool) && tank.getFluidAmount() > FLUID_CHARGE;
+	}
+
+    public boolean isValidChargeableStack(ItemStack stack) {
+    	return stack.getItem().isIn(ForceTags.VALID_INFUSER_CHARGE) && stack.getCount() == 1;
+	}
+
     /**
      * Loop on all modifiers and apply first one that matches the input test.
      * @param tool
      * @param modifier
      * @return
      */
-    private boolean applyModifier(ItemStack tool, ItemStack modifier) {
-
+    private boolean applyModifier(ItemStack tool, ItemStack modifier, InfuseRecipe recipe) {
 		UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
-		int bookTier = bd.getTier().ordinal();
-		// if the recipe level does not exceed what the book has
+		//if the recipe level does not exceed what the book has
 		//test the ingredient of this recipe, if it matches me
 
-		List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
-    	for (InfuseRecipe recipeCurrent : recipes) {
+		if (recipe.resultModifier.apply(tool, modifier, bd)) {
+			bd.onRecipeApply(recipe, getBookInSlot());
 
-    		if(recipeCurrent.getTier().ordinal() > bookTier) {
+			if (recipe.resultModifier == InfuserModifierType.ITEM && recipe.hasOutput()) {
+				//overwrite / convert item
+				handler.setStackInSlot(SLOT_TOOL, recipe.getRecipeOutput().copy());
+			} else {
+				//sync item changes
+				handler.setStackInSlot(SLOT_TOOL, tool);
+			}
 
-    			continue;
-    		}
-    		if(recipeCurrent.getCenter().test(tool) == false) {
-    			//doesnt match the "center" tool test from recipe
-				continue;
-    		}
-//    		ForceCraft.LOGGER.info("CENTER and tier both match {} on tool {}", recipeCurrent.resultModifier, tool);
-
-    		//force pack upgrade can be applied multiple times depending on many things
-    		if (recipeCurrent.input.test(modifier)) {
-
-    			if (recipeCurrent.resultModifier.apply(tool, modifier, bd)) {
-
-    				bd.onRecipeApply(recipeCurrent, getBookInSlot());
-    				
-                    if(recipeCurrent.resultModifier == InfuserModifierType.ITEM && recipeCurrent.hasOutput()) {
-                    	//overwrite / convert item
-                    	handler.setStackInSlot(SLOT_TOOL, recipeCurrent.getRecipeOutput().copy());
-                    }
-                    else {
-                    	//sync item changes
-                        handler.setStackInSlot(SLOT_TOOL, tool);
-                    }
-
-    				return true;
-    			}
-    			else {
-        			ForceCraft.LOGGER.info(" apply returned false on {} to the tool {}", recipeCurrent.resultModifier, tool);
-    			}
-    		}
-    	}
+			return true;
+		} else {
+			ForceCraft.LOGGER.info(" apply returned false on {} to the tool {}", recipe.resultModifier, tool);
+		}
 
         return false;
     }
@@ -501,8 +497,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     static boolean addLightModifier(ItemStack stack) {
         if (stack.getItem() instanceof ForceRodItem) {
             IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-            if(rodCap != null && rodCap.hasLight()) {
+            if(rodCap != null && !rodCap.hasLight()) {
                 rodCap.setLight(true);
+				addInfusedTag(stack);
                 return true;
             }
         }
@@ -510,21 +507,30 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     private static boolean addCamoModifier(ItemStack stack) {
-        if (stack.getItem() instanceof ForceRodItem) {
-            IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-            if(rodCap != null && rodCap.hasCamoModifier()) {
-                rodCap.setCamoModifier(true);
-                return true;
-            }
-        }
+		if (stack.getItem() instanceof ForceRodItem) {
+			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
+			if(rodCap != null && !rodCap.hasCamoModifier()) {
+				rodCap.setCamoModifier(true);
+				addInfusedTag(stack);
+				return true;
+			}
+		} else if (stack.getItem() instanceof ForceArmorItem) {
+			IToolModifier toolCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(toolCap != null && !toolCap.hasCamo()) {
+				toolCap.setCamo(true);
+				addInfusedTag(stack);
+				return true;
+			}
+		}
         return false;
     }
 
     private static boolean addSightModifier(ItemStack stack) {
         if (stack.getItem() instanceof ForceRodItem) {
             IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-            if(rodCap != null && rodCap.hasSightModifier()) {
+            if(rodCap != null && !rodCap.hasSightModifier()) {
                 rodCap.setSightModifier(true);
+				addInfusedTag(stack);
                 return true;
             }
         }
@@ -534,15 +540,17 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     static boolean addWingModifier(ItemStack stack) {
         if (stack.getItem() instanceof ForceSwordItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null && modifierCap.hasWing()) {
+            if(modifierCap != null && !modifierCap.hasWing()) {
                 modifierCap.setWing(true);
+				addInfusedTag(stack);
                 return true;
             }
         }
-        else if (stack.getItem() instanceof CustomArmorItem) {
+        else if (stack.getItem() instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null && modifierCap.hasWing()) {
+            if(modifierCap != null && !modifierCap.hasWing()) {
                 modifierCap.setWing(true);
+				addInfusedTag(stack);
                 return true;
             }
         }
@@ -552,22 +560,29 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     static boolean addBaneModifier(ItemStack stack) {
         Item st = stack.getItem();
-        if(st instanceof ForceSwordItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null && modifierCap.getBaneLevel() < 4) {
-                modifierCap.incrementBane();
-                return true;
-            }
-        }
-        else if (st instanceof CustomArmorItem) {
+		if(st instanceof ForceSwordItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null && !modifierCap.hasBane()) {
+				modifierCap.setBane(1);
+				addInfusedTag(stack);
+				return true;
+			}
+		}
+		else if(st instanceof ForceBowItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null && !modifierCap.hasBane()) {
+				modifierCap.setBane(1);
+				addInfusedTag(stack);
+				return true;
+			}
+		}
+		else if (st instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
-                if(modifierCap.getBaneLevel() == 0) {
-                    modifierCap.incrementBane();
-                    return true;
-                } else if (modifierCap.getBaneLevel() < 4) {
-                    modifierCap.incrementBane();
-                    return true;
+				if(modifierCap != null && !modifierCap.hasBane()) {
+					modifierCap.setBane(1);
+					addInfusedTag(stack);
+					return true;
                 }
             }
         }
@@ -576,21 +591,32 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     static boolean addBleedingModifier(ItemStack stack) {
         Item st = stack.getItem();
-        if(st instanceof ForceSwordItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null && modifierCap.getBleedLevel() < 2) {
-                modifierCap.incrementBleed();
-                return true;
-            }
-        }
-        else if (st instanceof CustomArmorItem) {
+		if(st instanceof ForceSwordItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null && modifierCap.getBleedLevel() < 2) {
+				modifierCap.incrementBleed();
+				addInfusedTag(stack);
+				return true;
+			}
+		}
+		else if(st instanceof ForceBowItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null && modifierCap.getBleedLevel() < 2) {
+				modifierCap.incrementBleed();
+				addInfusedTag(stack);
+				return true;
+			}
+		}
+		else if (st instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
                 if(modifierCap.getBleedLevel() == 0) {
                     modifierCap.incrementBleed();
+					addInfusedTag(stack);
                     return true;
                 } else if(modifierCap.getBleedLevel() < 2) {
                     modifierCap.incrementBleed();
+					addInfusedTag(stack);
                     return true;
                 }
             }
@@ -603,18 +629,21 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
 			if(rodCap != null && rodCap.isRodofEnder()) {
 				rodCap.setEnderModifier(true);
+				addInfusedTag(stack);
 				return true;
 			}
 		} else if (stack.getItem() instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null && !modifierCap.hasEnder()) {
 				modifierCap.setEnder(true);
+				addInfusedTag(stack);
 				return true;
 			}
 		} else if (stack.getItem() instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null && !modifierCap.hasEnder()) {
 				modifierCap.setEnder(true);
+				addInfusedTag(stack);
 				return true;
 			}
 		}
@@ -626,6 +655,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null && !modifierCap.hasFreezing()) {
 				modifierCap.setFreezing(true);
+				addInfusedTag(stack);
 				return true;
 			}
 		}
@@ -636,14 +666,17 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         if (stack.getItem() instanceof ForceRodItem) {
             IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
             if(rodCap != null) {
-                if(rodCap.isRodOfHealing(1)) {
+                if(!rodCap.isRodOfHealing(1)) {
                     rodCap.setRodOfHealing(true, 1);
+					addInfusedTag(stack);
                     return true;
                 } else if (!rodCap.isRodOfHealing(2) && rodCap.isRodOfHealing(1)) {
                     rodCap.setRodOfHealing(true, 2);
+					addInfusedTag(stack);
                     return true;
                 } else if (!rodCap.isRodOfHealing(3) && rodCap.isRodOfHealing(2) && rodCap.isRodOfHealing(1)) {
                     rodCap.setRodOfHealing(true, 3);
+					addInfusedTag(stack);
                     return true;
                 }
             }
@@ -656,6 +689,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null && !modifierCap.hasLumberjack()) {
                 modifierCap.setLumberjack(true);
+				addInfusedTag(stack);
                 return true;
             }
         }
@@ -667,6 +701,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 modifierCap.setRainbow(true);
+				addInfusedTag(stack);
                 return true;
             }
         }
@@ -678,6 +713,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 modifierCap.setTreasure(true);
+				addInfusedTag(stack);
                 return true;
             }
         }
@@ -695,21 +731,13 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
                     CompoundNBT tag = stack.getOrCreateTag();
                     tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(packHandler));
+                    tag.putInt("BookTier", packHandler.getUpgrades());
 
                     stack.setTag(tag);
                     return true;
                 }
                 return false;
             }
-        }
-        return false;
-    }
-
-    static boolean addTimeModifier(ItemStack stack,ItemStack mod) {
-        if(stack.getItem() == ForceRegistry.FORCE_TORCH_ITEM.get()) {
-        	//convert to time torch, overwrite
-        	mod = new ItemStack(ForceRegistry.TIME_TORCH.get());
-            return true;
         }
         return false;
     }
@@ -722,24 +750,23 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 if(modifierCap.getSturdyLevel() == 0) {
                     modifierCap.incrementSturdy();
                     stack.addEnchantment(Enchantments.UNBREAKING, 1);
+					addInfusedTag(stack);
                     return true;
                 }
-                else if(modifierCap.getSturdyLevel() < MAX_MODIFIER) {
+                else if(modifierCap.getSturdyLevel() < 3) {
                     modifierCap.incrementSturdy();
                     EnchantUtils.incrementLevel(stack, Enchantments.UNBREAKING);
+					addInfusedTag(stack);
                     return true;
                 }
             }
         }
-        else if (stack.getItem() instanceof CustomArmorItem) {
+        else if (stack.getItem() instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(modifierCap.getSturdyLevel() == 0) {
                     modifierCap.incrementSturdy();
-                    return true;
-                }
-                else if(modifierCap.getSturdyLevel() < MAX_MODIFIER) {
-                    modifierCap.incrementSturdy();
+					addInfusedTag(stack);
                     return true;
                 }
             }
@@ -755,39 +782,60 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 if(modifierCap.getLuckLevel() == 0) {
                     modifierCap.incrementLuck();
                     stack.addEnchantment(Enchantments.FORTUNE, 1);
+					addInfusedTag(stack);
                     return true;
                 }
                 else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
                     modifierCap.incrementLuck();
                     EnchantUtils.incrementLevel(stack, Enchantments.FORTUNE);
+					addInfusedTag(stack);
                     return true;
                 }
             }
         }
-        else if(st instanceof ForceSwordItem) {
+		else if(st instanceof ForceSwordItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null ) {
+				if(modifierCap.getLuckLevel() == 0) {
+					modifierCap.incrementLuck();
+					stack.addEnchantment(Enchantments.LOOTING, 1);
+					addInfusedTag(stack);
+					return true;
+				}
+				else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
+					modifierCap.incrementLuck();
+					EnchantUtils.incrementLevel(stack, Enchantments.LOOTING);
+					addInfusedTag(stack);
+					return true;
+				}
+			}
+		}
+		else if(st instanceof ForceBowItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null ) {
+				if(modifierCap.getLuckLevel() == 0) {
+					modifierCap.incrementLuck();
+					addInfusedTag(stack);
+					return true;
+				}
+				else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
+					modifierCap.incrementLuck();
+					addInfusedTag(stack);
+					return true;
+				}
+			}
+		}
+        else if (st instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(modifierCap.getLuckLevel() == 0) {
                     modifierCap.incrementLuck();
-                    stack.addEnchantment(Enchantments.LOOTING, 1);
+					addInfusedTag(stack);
                     return true;
                 }
                 else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
                     modifierCap.incrementLuck();
-                    EnchantUtils.incrementLevel(stack, Enchantments.LOOTING);
-                    return true;
-                }
-            }
-        }
-        else if (st instanceof CustomArmorItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-                if(modifierCap.getLuckLevel() == 0) {
-                    modifierCap.incrementLuck();
-                    return true;
-                }
-                else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
-                    modifierCap.incrementLuck();
+					addInfusedTag(stack);
                     return true;
                 }
             }
@@ -803,11 +851,13 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 if(modifierCap.getSharpLevel() == 0) {
                     modifierCap.incrementSharp();
                     stack.addEnchantment(Enchantments.SHARPNESS, 2);
+					addInfusedTag(stack);
                     return true;
                 }
                 else if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSharp();
                     EnchantUtils.incrementLevel(stack, Enchantments.SHARPNESS);
+					addInfusedTag(stack);
                     return true;
                 }
             }
@@ -818,20 +868,23 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSharp();
                     EnchantUtils.incrementLevel(stack, Enchantments.POWER);
+					addInfusedTag(stack);
                     return true;
                 }
             }
         }
-        else if (st instanceof CustomArmorItem) {
+        else if (st instanceof ForceArmorItem) {
 
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
                 if(modifierCap.getSharpLevel() == 0) {
                     modifierCap.incrementSharp();
+					addInfusedTag(stack);
                     return true;
                 }
                 else if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSharp();
+					addInfusedTag(stack);
                     return true;
                 }
             }
@@ -847,6 +900,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 if(!modifierCap.hasSilk()) {
                     modifierCap.setSilk(true);
                     stack.addEnchantment(Enchantments.SILK_TOUCH, 1);
+					addInfusedTag(stack);
                     return true;
                 }
             }
@@ -862,11 +916,13 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 if(modifierCap.getForceLevel() == 0) {
                     modifierCap.incrementForce();
                     stack.addEnchantment(Enchantments.KNOCKBACK, 1);
+					addInfusedTag(stack);
                     return true;
                 }
                 else if(modifierCap.getForceLevel() < MAX_MODIFIER) {
                     modifierCap.incrementForce();
                     EnchantUtils.incrementLevel(stack, Enchantments.KNOCKBACK);
+					addInfusedTag(stack);
                     return true;
                 }
             }
@@ -881,15 +937,17 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             if(modifierCap != null ) {
                 if(!modifierCap.hasHeat()) {
                     modifierCap.setHeat(true);
+					addInfusedTag(stack);
                     return true;
                 }
             }
         }
-        else if (stack.getItem() instanceof CustomArmorItem) {
+        else if (stack.getItem() instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(!modifierCap.hasHeat()) {
                     modifierCap.setHeat(true);
+					addInfusedTag(stack);
                     return true;
                 }
             }
@@ -904,20 +962,23 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 if(modifierCap.getSpeedLevel() == 0) {
                     modifierCap.incrementSpeed();
                     stack.addEnchantment(Enchantments.EFFICIENCY, 1);
+					addInfusedTag(stack);
                     return true;
                 }
                 else if(modifierCap.getSpeedLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSpeed();
                     EnchantUtils.incrementLevel(stack, Enchantments.EFFICIENCY);
+					addInfusedTag(stack);
                     return true;
                 }
             }
         }
-        else if (stack.getItem() instanceof CustomArmorItem) {
+        else if (stack.getItem() instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(modifierCap.getSpeedLevel() < MAX_MODIFIER) {
                     modifierCap.incrementSpeed();
+					addInfusedTag(stack);
                     return true;
                 }
             }
@@ -927,12 +988,21 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             if(modifierCap != null ) {
                 if(modifierCap.getSpeedLevel() < 3) {
                     modifierCap.incrementSpeed();
+					addInfusedTag(stack);
                     return true;
                 }
             }
         }
         return false;
     }
+
+	static void addInfusedTag(ItemStack stack) {
+    	CompoundNBT tag = stack.getOrCreateTag();
+    	if(!tag.contains("ForceInfused")) {
+			tag.putBoolean("ForceInfused", true);
+			stack.setTag(tag);
+		}
+	}
 
     public int fill(FluidStack resource, FluidAction action) {
         FluidStack resourceCopy = resource.copy();
@@ -965,7 +1035,41 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     public boolean isWorkAllowed() {
-    	return hasTool() && hasValidBook() && (!areAllModifiersEmpty() ? !(energyStorage.getEnergyStored() < ENERGY_COST_PER) : true);
+    	return hasTool() && hasValidBook();
+	}
+
+	public boolean hasValidRecipe() {
+    	return isWorkAllowed() && ((areAllModifiersEmpty() && canCharge()) || allSlotsMatchRecipe());
+	}
+
+	public boolean updateValidRecipe() {
+		if(canWork) {
+			canWork = false;
+			processTime = 0;
+
+			refreshClient();
+		}
+		return hasValidRecipe();
+	}
+
+	public boolean allSlotsMatchRecipe() {
+		for (int i = 0; i < SLOT_TOOL; i++) {
+			ItemStack modifier = getModifier(i);
+			if(modifier.isEmpty()) continue;
+
+			List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
+			boolean foundMatch = false;
+			for(InfuseRecipe recipe : recipes) {
+				if(recipe.matchesModifier(this, modifier, false)) {
+					foundMatch = true;
+					break;
+				}
+			}
+			if(!foundMatch) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public int getBookTier() {

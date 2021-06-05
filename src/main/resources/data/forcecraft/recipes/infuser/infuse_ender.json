@@ -2,7 +2,7 @@
   "type":"forcecraft:infuser",
   "ingredient": 
   {
-    "item": "minecraft:ender_pearl"
+	"tag": "forcecraft:ender"
   },
   "center": {
     "tag": "forcecraft:valid_ender_tools"

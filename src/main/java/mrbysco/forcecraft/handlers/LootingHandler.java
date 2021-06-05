@@ -2,6 +2,7 @@ package mrbysco.forcecraft.handlers;
 
 import mrbysco.forcecraft.capablilities.CapabilityHandler;
 import mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
+import mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -9,6 +10,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
@@ -22,15 +24,25 @@ public class LootingHandler {
 
 	@SubscribeEvent
 	public void onLooting(LootingLevelEvent event) {
-		if (event.getDamageSource() == null || event.getDamageSource().getTrueSource() == null) {
+		final DamageSource source = event.getDamageSource();
+		if (source == null || source.getTrueSource() == null) {
 			return;
 		}
 
 		int level = event.getLootingLevel();
 
-		IPlayerModifier playerModifier = event.getDamageSource().getTrueSource().getCapability(CAPABILITY_PLAYERMOD).orElse(null);
+		IPlayerModifier playerModifier = source.getTrueSource().getCapability(CAPABILITY_PLAYERMOD).orElse(null);
 		if(playerModifier != null) {
 			level += playerModifier.getLuckLevel();
+		}
+
+		if(source.getImmediateSource() instanceof ForceArrowEntity) {
+			ForceArrowEntity forceArrow = (ForceArrowEntity) source.getImmediateSource();
+			level += forceArrow.getLuck();
+		}
+
+		if(level > 4) {
+			level = 4;
 		}
 
 		event.setLootingLevel(level);

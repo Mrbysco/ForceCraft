@@ -44,7 +44,7 @@ public enum InfuserModifierType {
 		case RAINBOW:
 			return InfuserTileEntity.addRainbowModifier(tool);
 		case TIME:
-			return InfuserTileEntity.addTimeModifier(tool, mod);
+			break;
 		case TREASURE:
 			return InfuserTileEntity.addTreasureModifier(tool);
 		case PACK1:

@@ -12,5 +12,6 @@
       "item": "minecraft:ghast_tear"
     }
   ],
+  "advancement": "forcecraft:tier5/tier",
   "secret": true
 }

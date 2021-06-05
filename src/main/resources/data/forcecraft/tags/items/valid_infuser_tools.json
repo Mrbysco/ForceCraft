@@ -7,11 +7,8 @@
     "forcecraft:force_sword",
     "forcecraft:force_rod",
     "forcecraft:force_shears",
-    "forcecraft:force_helmet",
-    "forcecraft:force_chest",
-    "forcecraft:force_legs",
-    "forcecraft:force_boots",
     "forcecraft:force_torch",
-    "forcecraft:force_pack"
+    "forcecraft:force_pack",
+	"#forcecraft:force_armor"
   ]
 }

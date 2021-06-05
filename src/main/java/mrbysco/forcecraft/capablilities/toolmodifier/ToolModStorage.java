@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -19,14 +20,19 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 	}
 
 	public static void attachInformation(ItemStack stack, List<ITextComponent> tooltip) {
-
 		stack.getCapability(CAPABILITY_TOOLMOD).ifPresent(cap -> {
 
 			if (cap.getSpeedLevel() > 0) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()).mergeStyle(TextFormatting.YELLOW));
 			}
 			if (cap.hasLumberjack()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.lumberjack"));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.lumberjack").mergeStyle(TextFormatting.YELLOW));
+			}
+			if(cap.getLuckLevel() > 0) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.luck" + cap.getLuckLevel()).mergeStyle(TextFormatting.GREEN));
+			}
+			if(cap.getBaneLevel() > 0) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bane").mergeStyle(TextFormatting.LIGHT_PURPLE));
 			}
 			if (cap.getForceLevel() > 0) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.force" + cap.getForceLevel()));
@@ -35,13 +41,25 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.wing"));
 			}
 			if (cap.hasBleed()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bleed"));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bleed").mergeStyle(TextFormatting.RED));
 			}
 			if (cap.hasRainbow()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.rainbow"));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.rainbow").mergeStyle(TextFormatting.GOLD));
 			}
 			if (cap.hasHeat()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.heat"));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.heat").mergeStyle(TextFormatting.RED));
+			}
+			if (cap.hasCamo()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.camo").mergeStyle(TextFormatting.DARK_GREEN));
+			}
+			if (cap.hasEnder()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender").mergeStyle(TextFormatting.DARK_PURPLE));
+			}
+			if (cap.hasFreezing()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.freezing").mergeStyle(TextFormatting.BLUE));
+			}
+			if (cap.hasTreasure()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.treasure").mergeStyle(TextFormatting.GOLD));
 			}
 		}); 
 	}

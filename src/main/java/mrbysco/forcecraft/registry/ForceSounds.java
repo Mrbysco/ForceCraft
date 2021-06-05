@@ -21,4 +21,8 @@ public class ForceSounds {
 
 	public static final RegistryObject<SoundEvent> FAIRY_LISTEN_SPECIAL = SOUND_EVENTS.register("fairy.listen.special", () ->
 			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "fairy.listen.special")));
+
+	public static final RegistryObject<SoundEvent> INFUSER_DONE = SOUND_EVENTS.register("infuser.done", () ->
+			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "infuser.done")));
+
 }

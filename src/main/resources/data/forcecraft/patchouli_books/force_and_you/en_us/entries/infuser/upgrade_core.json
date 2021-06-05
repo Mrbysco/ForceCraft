@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.upgrade_core.entry.name",
+  "category": "infuser",
+  "icon": "forcecraft:upgrade_core",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.upgrade_core_info.text"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forcecraft:transmutation/upgrade_core",
+      "text": "info.forcecraft.book.upgrade_core_recipe.text"
+    }
+  ]
+}

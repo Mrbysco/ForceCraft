@@ -12,5 +12,6 @@
       "item": "forcecraft:claw"
     }
   ],
+  "advancement": "forcecraft:tier0/tier",
   "secret": true
 }

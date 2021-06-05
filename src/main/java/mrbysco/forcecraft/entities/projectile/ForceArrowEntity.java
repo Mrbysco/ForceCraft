@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 
 public class ForceArrowEntity extends ArrowEntity {
 	private static final DataParameter<Boolean> ENDER = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> LUCK = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.VARINT);
 
 	public ForceArrowEntity(EntityType<? extends ArrowEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -41,6 +42,14 @@ public class ForceArrowEntity extends ArrowEntity {
 
 	public void setEnder() {
 		this.dataManager.set(ENDER, true);
+	}
+
+	public int getLuck() {
+		return this.dataManager.get(LUCK);
+	}
+
+	public void setLuck(int luck) {
+		this.dataManager.set(LUCK, luck);
 	}
 
 	@Override

@@ -5,7 +5,10 @@ import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
 import mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
+import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
+import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.items.infuser.UpgradeBookTier;
+import mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -17,6 +20,8 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.ArrayList;
@@ -56,25 +61,51 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		this.time = time;
 	}
 
-	
-	
 	@Override
 	public boolean matches(InfuserTileEntity inv, World worldIn) {
-		//does the center match
-		ItemStack cent = inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL);
-		if(!this.center.test(cent)) {
-			// center doesnt match this recipe. move over
-			ForceCraft.LOGGER.info(cent + " does not match "+this.id);
-			return false;
-		}
-//		ForceCraft.LOGGER.info(cent + " does  match center for "+this.id);
-
 		for(int i = 0; i < inv.handler.getSlots(); i++) {
 			ItemStack stack = inv.handler.getStackInSlot(i);
-			if (i < InfuserTileEntity.SLOT_TOOL && input.test(stack)) {
-				//center is true and at least one is true
-				return true;
+			if (i < InfuserTileEntity.SLOT_TOOL) {
+				return matchesModifier(inv, stack, false);
 			}
+		}
+		return false;
+	}
+
+	public boolean matchesModifier(InfuserTileEntity inv, ItemStack modifier, boolean ignoreInfused) {
+		//Has the correct tier
+		UpgradeBookData bd = new UpgradeBookData(inv.getBookInSlot());
+		int bookTier = bd.getTier().ordinal();
+		if (getTier().ordinal() > bookTier) {
+			return false;
+		}
+
+		//Does the center match
+		ItemStack cent = inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL);
+		if(!this.center.test(cent)) {
+			// center doesn't match this recipe. move over
+			return false;
+		}
+		if(!ignoreInfused) {
+			//Ignore if the tool is infused in case of infusing for the first time
+			if((cent.hasTag() && cent.getTag().getBoolean("ForceInfused"))) {
+				return false;
+			}
+		}
+
+//		ForceCraft.LOGGER.info(cent + " does  match center for "+this.id);
+
+		if(modifier.getItem() == ForceRegistry.FORCE_PACK_UPGRADE.get()) {
+			IItemHandler handler = cent.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+			if(handler instanceof PackItemStackHandler) {
+				if(((PackItemStackHandler) handler).getUpgrades() != getTier().ordinal() - 2) {
+					return false;
+				}
+			}
+		}
+
+		if(input.test(modifier)) {
+			return true;
 		}
 		return false;
 	}

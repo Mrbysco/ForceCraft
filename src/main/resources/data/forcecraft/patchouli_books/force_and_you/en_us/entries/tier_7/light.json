@@ -12,5 +12,6 @@
       "item": "minecraft:glowstone"
     }
   ],
+  "advancement": "forcecraft:tier7/tier",
   "secret": true
 }

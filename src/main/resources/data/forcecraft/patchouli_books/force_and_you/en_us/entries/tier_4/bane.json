@@ -13,5 +13,6 @@
       "text": "info.forcecraft.book.bane_info.text2"
     }
   ],
+  "advancement": "forcecraft:tier4/tier",
   "secret": true
 }

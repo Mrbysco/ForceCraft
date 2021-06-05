@@ -12,5 +12,6 @@
       "item": "minecraft:feather"
     }
   ],
+  "advancement": "forcecraft:tier5/tier",
   "secret": true
 }

@@ -17,5 +17,6 @@
       "item": "minecraft:ender_eye"
     }
   ],
+  "advancement": "forcecraft:tier6/tier",
   "secret": true
 }

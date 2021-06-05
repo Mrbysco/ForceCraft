@@ -4,10 +4,7 @@
     "forcecraft:force_shovel",
     "forcecraft:force_pickaxe",
     "forcecraft:force_axe",
-    "forcecraft:force_helmet",
-    "forcecraft:force_chest",
-    "forcecraft:force_legs",
-    "forcecraft:force_boots",
-    "forcecraft:force_rod"
+    "forcecraft:force_rod",
+	"#forcecraft:force_armor"
   ]
 }

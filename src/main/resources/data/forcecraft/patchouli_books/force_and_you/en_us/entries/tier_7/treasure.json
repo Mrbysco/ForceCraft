@@ -12,5 +12,6 @@
       "item": "forcecraft:treasure_core"
     }
   ],
+  "advancement": "forcecraft:tier7/tier",
   "secret": true
 }

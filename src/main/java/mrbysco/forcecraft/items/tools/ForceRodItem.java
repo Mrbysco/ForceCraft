@@ -31,6 +31,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -268,25 +269,27 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
     	fd.attachInformation(tooltip);
     	
 		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
-			// TODO: a get method returning an integer
 			if (cap.isRodOfHealing(3)) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing3"));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing3").mergeStyle(TextFormatting.RED));
 			} else if (cap.isRodOfHealing(2)) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing2"));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing2").mergeStyle(TextFormatting.RED));
 			} else if (cap.isRodOfHealing(1)) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing1"));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing1").mergeStyle(TextFormatting.RED));
 			}
 			if (cap.getSpeedLevel() > 0) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
 			}
 			if (cap.hasCamoModifier()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender"));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.camo").mergeStyle(TextFormatting.DARK_GREEN));
 			}
 			if (cap.hasEnderModifier()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender"));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender").mergeStyle(TextFormatting.DARK_PURPLE));
 			}
 			if (cap.hasSightModifier()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sight"));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sight").mergeStyle(TextFormatting.LIGHT_PURPLE));
+			}
+			if (cap.hasLight()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.light").mergeStyle(TextFormatting.YELLOW));
 			}
 		});
 	}

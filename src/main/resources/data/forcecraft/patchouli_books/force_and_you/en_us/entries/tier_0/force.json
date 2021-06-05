@@ -12,5 +12,6 @@
       "item": "forcecraft:force_nugget"
     }
   ],
+  "advancement": "forcecraft:tier0/tier",
   "secret": true
 }

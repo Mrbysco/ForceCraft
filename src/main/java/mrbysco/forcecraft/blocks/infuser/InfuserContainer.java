@@ -5,12 +5,14 @@ import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.util.AdvancementUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IntReferenceHolder;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
@@ -22,6 +24,7 @@ public class InfuserContainer extends Container {
     private PlayerEntity player;
 
     public final int[] powerStored = new int[1];
+    public final int[] validRecipe = new int[1];
 
     public InfuserContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
         this(windowId, playerInventory, getTileEntity(playerInventory, data));
@@ -47,30 +50,30 @@ public class InfuserContainer extends Container {
         //Modifier Slots [0, 7] around the outside starting at the top middle going clockwise
         int bookTier = tile.getBookTier();
         if(bookTier >= 0)
-            this.addSlot(new SlotItemHandler(te.handler, 0, 80, 20));
+            this.addSlot(new MatrixUpdatingSlot(te.handler, 0, 80, 20));
         if(bookTier >= 1)
-            this.addSlot(new SlotItemHandler(te.handler, 1, 104, 32));
+            this.addSlot(new MatrixUpdatingSlot(te.handler, 1, 104, 32));
         if(bookTier >= 2)
-            this.addSlot(new SlotItemHandler(te.handler, 2, 116, 57));
+            this.addSlot(new MatrixUpdatingSlot(te.handler, 2, 116, 57));
         if(bookTier >= 3)
-            this.addSlot(new SlotItemHandler(te.handler, 3, 104, 81));
+            this.addSlot(new MatrixUpdatingSlot(te.handler, 3, 104, 81));
         if(bookTier >= 4)
-            this.addSlot(new SlotItemHandler(te.handler, 4, 80, 93));
+            this.addSlot(new MatrixUpdatingSlot(te.handler, 4, 80, 93));
         if(bookTier >= 5)
-            this.addSlot(new SlotItemHandler(te.handler, 5, 56, 81));
+            this.addSlot(new MatrixUpdatingSlot(te.handler, 5, 56, 81));
         if(bookTier >= 6)
-            this.addSlot(new SlotItemHandler(te.handler, 6, 44, 57));
+            this.addSlot(new MatrixUpdatingSlot(te.handler, 6, 44, 57));
         if(bookTier >= 7)
-            this.addSlot(new SlotItemHandler(te.handler, 7, 56, 32));
+            this.addSlot(new MatrixUpdatingSlot(te.handler, 7, 56, 32));
 
         //Tools Slot in the middle
-        this.addSlot(new SlotItemHandler(te.handler, InfuserTileEntity.SLOT_TOOL, 80, 57));
+        this.addSlot(new MatrixUpdatingSlot(te.handler, InfuserTileEntity.SLOT_TOOL, 80, 57));
 
         //Force Gem Slot top left
         this.addSlot(new SlotForceGems(te.handler, InfuserTileEntity.SLOT_GEM, 8, 23));
 
         //Book Upgrade Slot top left
-        this.addSlot(new SlotItemHandler(te.handler, InfuserTileEntity.SLOT_BOOK, 8, 5));
+        this.addSlot(new MatrixUpdatingSlot(te.handler, InfuserTileEntity.SLOT_BOOK, 8, 5));
         
         //player inventory here
         int xPos = 8;
@@ -87,6 +90,9 @@ public class InfuserContainer extends Container {
 
         this.powerStored[0] = tile.getEnergyStored();
         this.trackInt(IntReferenceHolder.create(this.powerStored, 0));
+
+        this.validRecipe[0] = tile.hasValidRecipe() ? 1 : 0;
+        this.trackInt(IntReferenceHolder.create(this.validRecipe, 0));
 
         //set data that will sync server->client WITHOUT needing to call .markDirty()
 		trackInt(new IntReferenceHolder() {
@@ -151,6 +157,7 @@ public class InfuserContainer extends Container {
                 slot.onSlotChanged();
             }
         }
+        this.onCraftMatrixChanged(null);
 
         return itemstack;
     }
@@ -176,7 +183,29 @@ public class InfuserContainer extends Container {
         super.detectAndSendChanges();
 
         this.powerStored[0] = tile.getEnergyStored();
+    }
 
+    @Override
+    public void onCraftMatrixChanged(IInventory inventoryIn) {
+        if(inventoryIn != null) {
+            super.onCraftMatrixChanged(inventoryIn);
+        }
+
+        if(!player.world.isRemote) {
+            this.validRecipe[0] = tile.updateValidRecipe() ? 1 : 0;
+        }
         AdvancementUtil.unlockTierAdvancements(player, tile.getBookTier());
+    }
+
+    public class MatrixUpdatingSlot extends SlotItemHandler {
+        public MatrixUpdatingSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public void onSlotChanged() {
+            super.onSlotChanged();
+            onCraftMatrixChanged(null);
+        }
     }
 }

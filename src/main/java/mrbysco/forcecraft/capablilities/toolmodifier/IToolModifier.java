@@ -106,7 +106,7 @@ public interface IToolModifier {
     /**
      * Modifier: Bane
      * Items: Spider Eye
-     * Levels: 4
+     * Levels: 1
      * Effect: Applies Bane Potion Effect
      */
 

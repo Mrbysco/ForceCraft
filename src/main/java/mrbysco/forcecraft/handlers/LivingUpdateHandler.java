@@ -1,7 +1,7 @@
 package mrbysco.forcecraft.handlers;
 
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import mrbysco.forcecraft.items.CustomArmorItem;
+import mrbysco.forcecraft.items.ForceArmorItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
@@ -27,7 +27,6 @@ public class LivingUpdateHandler {
 			PlayerEntity player = ((PlayerEntity) event.getEntityLiving());
 			Iterable<ItemStack> armor = player.getArmorInventoryList();
 			int wings = 0;
-			boolean camo = false;
 			int speed = 0;
 			int damage = 0;
 			int heat = 0;
@@ -35,13 +34,9 @@ public class LivingUpdateHandler {
 			int bane = 0;
 			int bleed = 0;
 			for (ItemStack slotSelected : armor) {
-				if (slotSelected.getItem() instanceof CustomArmorItem) {
+				if (slotSelected.getItem() instanceof ForceArmorItem) {
 					IToolModifier modifierCap = slotSelected.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 					if (modifierCap != null) {
-						// Camo
-						if (modifierCap.hasCamo()) {
-							camo = true;
-						}
 						// Speed
 						speed += modifierCap.getSpeedLevel();
 
@@ -78,13 +73,11 @@ public class LivingUpdateHandler {
 					}
 				}
 				// else not creative
-				if (camo) {
-					EffectInstance camoEffect = new EffectInstance(Effects.INVISIBILITY, INVISIBILITY_DURATION, 1, false, false);
-					player.addPotionEffect(camoEffect);
-				}
 				if (speed > 0) {
-					EffectInstance speedEffect = new EffectInstance(Effects.SPEED, SPEED_DURATION, speed, false, false);
-					player.addPotionEffect(speedEffect);
+					EffectInstance speedEffect = new EffectInstance(Effects.SPEED, SPEED_DURATION, 0, false, false);
+					if(!player.isPotionActive(Effects.SPEED) || (player.isPotionActive(Effects.SPEED) && player.getActivePotionEffect(Effects.SPEED).getDuration() <= 100)) {
+						player.addPotionEffect(speedEffect);
+					}
 				}
 				if (damage > 0) {
 					float finalDamage = damage;

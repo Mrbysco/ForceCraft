@@ -12,5 +12,6 @@
       "item": "forcecraft:golden_power_source"
     }
   ],
+  "advancement": "forcecraft:tier4/tier",
   "secret": true
 }

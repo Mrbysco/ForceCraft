@@ -12,6 +12,6 @@
       "item": "minecraft:experience_bottle"
     }
   ],
-  "advancement": "forcecraft:tier2/root",
+  "advancement": "forcecraft:tier2/tier",
   "secret": true
 }

@@ -1,10 +1,5 @@
 package mrbysco.forcecraft.items.infuser;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.recipe.InfuseRecipe;
 import mrbysco.forcecraft.registry.ForceRegistry;
@@ -13,9 +8,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 public class UpgradeBookData {
 	private UpgradeBookTier tier = UpgradeBookTier.ZERO;
-	private Map<Integer, Set<ResourceLocation>> recipesUsed = new HashMap<>();
+	private final Map<Integer, Set<ResourceLocation>> recipesUsed = new HashMap<>();
 	private int points = 0;
 	private String progressCache = "";
 
@@ -34,7 +34,6 @@ public class UpgradeBookData {
 
 	// how many we need for next tier increment
 	public int nextTier() {
-
 		if (getTier() == UpgradeBookTier.FINAL) {
 			return 0;
 		}
@@ -42,6 +41,7 @@ public class UpgradeBookData {
 	}
 
 	public void onRecipeApply(InfuseRecipe recipe, ItemStack bookStack) {
+		System.out.println(recipe.getId());
 		Integer tier = recipe.getTier().ordinal();
 		Set<ResourceLocation> tierSet = new HashSet<>();
 
@@ -68,7 +68,18 @@ public class UpgradeBookData {
 			// then go
 			points -= this.getTier().pointsForLevelup();
 			setTier(getTier().incrementTier());
+
+			updateCache();
 		}
+	}
+
+	private void updateCache() {
+		//Update tooltip
+		Set<ResourceLocation> thisTier = this.recipesUsed.get(this.tier.ordinal());
+		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
+		int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
+
+		this.progressCache = recipesThisTier + "/" + totalThisTier;
 	}
 
 	private boolean canLevelUp() {
@@ -77,9 +88,10 @@ public class UpgradeBookData {
 		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
 		int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
 
-		ForceCraft.LOGGER.info("can lvlup?  ?  " + recipesThisTier + " >= " + totalThisTier);
+		ForceCraft.LOGGER.debug("can lvlup?  ?  " + recipesThisTier + " >= " + totalThisTier);
 
-		this.progressCache = recipesThisTier + "/" + totalThisTier;
+		updateCache();
+
 		if (points < this.getTier().pointsForLevelup() || getTier() == UpgradeBookTier.FINAL) {
 			return false;
 		}

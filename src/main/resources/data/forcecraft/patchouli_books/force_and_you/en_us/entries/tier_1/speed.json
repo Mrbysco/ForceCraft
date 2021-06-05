@@ -13,6 +13,6 @@
       "text": "info.forcecraft.book.speed_info.text2"
     }
   ],
-  "advancement": "forcecraft:tier1/root",
+  "advancement": "forcecraft:tier1/tier",
   "secret": true
 }
