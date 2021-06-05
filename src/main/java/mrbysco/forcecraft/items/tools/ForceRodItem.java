@@ -28,8 +28,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -194,10 +196,18 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		}
 
 		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
-			if (cap.getHomeLocation() != null) {
-				cap.teleportPlayerToLocation(player, cap.getHomeLocation());
-				stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
-				player.getCooldownTracker().setCooldown(this, 10);
+			if (cap.hasEnderModifier()) {
+				if(player.isSneaking()) {
+					cap.setHomeLocation(GlobalPos.getPosition(player.world.getDimensionKey(), player.getPosition()));
+				} else {
+					if(cap.getHomeLocation() != null) {
+						cap.teleportPlayerToLocation(player, cap.getHomeLocation());
+						stack.damageItem(1, player, (playerIn) -> player.sendBreakAnimation(handIn));
+						player.getCooldownTracker().setCooldown(this, 10);
+						worldIn.playSound((PlayerEntity)null, player.prevPosX, player.prevPosY, player.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, player.getSoundCategory(), 1.0F, 1.0F);
+						player.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+					}
+				}
 			}
 		});
 
@@ -231,12 +241,16 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 				}
 
 				if (cap.hasEnderModifier()) {
-					if (cap.getHomeLocation() == null) {
-						cap.setHomeLocation(playerIn.getPosition());
+					if(playerIn.isSneaking()) {
+						cap.setHomeLocation(GlobalPos.getPosition(playerIn.world.getDimensionKey(), playerIn.getPosition()));
 					} else {
-						cap.teleportPlayerToLocation(playerIn, cap.getHomeLocation());
-						stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
-						playerIn.getCooldownTracker().setCooldown(this, 10);
+						if(cap.getHomeLocation() != null) {
+							cap.teleportPlayerToLocation(playerIn, cap.getHomeLocation());
+							stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
+							playerIn.getCooldownTracker().setCooldown(this, 10);
+							worldIn.playSound((PlayerEntity)null, playerIn.prevPosX, playerIn.prevPosY, playerIn.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, playerIn.getSoundCategory(), 1.0F, 1.0F);
+							playerIn.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+						}
 					}
 				}
 
@@ -260,6 +274,18 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		}
 
 		return super.onItemRightClick(worldIn, playerIn, handIn);
+	}
+
+	@Override
+	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
+		if(playerIn != null) {
+			stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
+				if(cap.hasLight()) {
+					target.addPotionEffect(new EffectInstance(Effects.GLOWING, 2400, 0, false, false));
+				}
+			});
+		}
+		return super.itemInteractionForEntity(stack, playerIn, target, hand);
 	}
 
 	@Nullable
@@ -305,6 +331,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 			}
 			if (cap.hasEnderModifier()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender").mergeStyle(TextFormatting.DARK_PURPLE));
+				tooltip.add(new TranslationTextComponent("forcecraft.ender_rod.text").mergeStyle(TextFormatting.GRAY));
 			}
 			if (cap.hasSightModifier()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sight").mergeStyle(TextFormatting.LIGHT_PURPLE));

@@ -3,6 +3,7 @@ package mrbysco.forcecraft.capablilities.forcerod;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public interface IForceRodModifier extends INBTSerializable<CompoundNBT> {
@@ -13,9 +14,9 @@ public interface IForceRodModifier extends INBTSerializable<CompoundNBT> {
     boolean hasCamoModifier();
     void setCamoModifier(boolean newVal);
 
-    BlockPos getHomeLocation();
-    void setHomeLocation(BlockPos pos);
-    void teleportPlayerToLocation(PlayerEntity player, BlockPos pos);
+    GlobalPos getHomeLocation();
+    void setHomeLocation(GlobalPos pos);
+    void teleportPlayerToLocation(PlayerEntity player, GlobalPos pos);
     boolean hasEnderModifier();
     void setEnderModifier(boolean newVal);
     boolean isRodofEnder();

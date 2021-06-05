@@ -37,6 +37,9 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 			if (cap.getForceLevel() > 0) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.force" + cap.getForceLevel()));
 			}
+			if (cap.getSturdyLevel() > 0) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sturdy" + cap.getForceLevel()));
+			}
 			if (cap.hasWing()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.wing"));
 			}

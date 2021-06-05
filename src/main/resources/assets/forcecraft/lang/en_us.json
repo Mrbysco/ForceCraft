@@ -234,6 +234,8 @@
     "forcecraft.item_card.unset": "No Recipe Set",
     "forcecraft.item_card.recipe_set": "Sneak Right-click to set a recipe",
     "forcecraft.magnet_glove.change": "Sneak Right-click to change modes",
+    "forcecraft.ender_rod.text": "Shift-Right click to reset position",
+    "forcecraft.ender_rod.dimension.text": "Can't teleport to another dimension",
 
     "item.infuser.tooltip.forcelevel": "Force: ",
     "item.infuser.tooltip.lumberjack": "Lumberjack",
@@ -249,6 +251,7 @@
     "item.infuser.tooltip.sight": "Sight",
     "item.infuser.tooltip.light": "Light",
     "item.infuser.tooltip.treasure": "Treasure",
+    "item.infuser.tooltip.sturdy1": "Sturdy I",
     "item.infuser.tooltip.speed1": "Speed I",
     "item.infuser.tooltip.speed2": "Speed II",
     "item.infuser.tooltip.speed3": "Speed III",

@@ -2,7 +2,11 @@ package mrbysco.forcecraft.capablilities.forcerod;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.concurrent.Callable;
 
@@ -17,7 +21,7 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
             boolean sight = false;
             int speed = 0;
 
-            BlockPos homeLocation = null;
+            GlobalPos homeLocation = null;
 
             @Override
             public boolean isRodOfHealing(int level) {
@@ -40,22 +44,29 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
             }
 
             @Override
-            public BlockPos getHomeLocation() {
+            public GlobalPos getHomeLocation() {
                 return homeLocation;
             }
 
             @Override
-            public void setHomeLocation(BlockPos pos) {
-                homeLocation = pos;
+            public void setHomeLocation(GlobalPos globalPos) {
+                homeLocation = globalPos;
             }
 
             @Override
-            public void teleportPlayerToLocation(PlayerEntity player, BlockPos pos) {
-                int x = pos.getX();
-                int y = pos.getY() + 1;
-                int z = pos.getZ();
+            public void teleportPlayerToLocation(PlayerEntity player, GlobalPos globalPos) {
+                if(player.world.getDimensionKey().getLocation().equals(globalPos.getDimension().getLocation())) {
+                    BlockPos pos = globalPos.getPos();
+                    int x = pos.getX();
+                    int y = pos.getY() + 1;
+                    int z = pos.getZ();
 
-                player.attemptTeleport(x, y, z, true);
+                    player.attemptTeleport(x, y, z, true);
+                } else {
+                    if(!player.world.isRemote) {
+                        player.sendMessage(new TranslationTextComponent("forcecraft.ender_rod.dimension.text").mergeStyle(TextFormatting.YELLOW), Util.DUMMY_UUID);
+                    }
+                }
             }
 
             @Override
