@@ -41,7 +41,6 @@ public class UpgradeBookData {
 	}
 
 	public void onRecipeApply(InfuseRecipe recipe, ItemStack bookStack) {
-		System.out.println(recipe.getId());
 		Integer tier = recipe.getTier().ordinal();
 		Set<ResourceLocation> tierSet = new HashSet<>();
 

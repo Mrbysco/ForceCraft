@@ -46,20 +46,22 @@ public class ToolModifierHandler {
 					CreeperEntity creeper = ((CreeperEntity) target);
 					creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
 						if(entityCap.canExplode()){
+							creeper.setCreeperState(-1);
+							creeper.getDataManager().set(CreeperEntity.IGNITED, false);
 							entityCap.setExplodeAbility(false);
 							creeper.goalSelector.goals.removeIf(goal -> goal.getGoal() instanceof CreeperSwellGoal);
+							ForceCraft.LOGGER.info("Added Bane to " + target.getName());
 						}
 					});
-					ForceCraft.LOGGER.info("Added Bane to " + target.getName());
 				}
 				if(event.getEntity() instanceof EndermanEntity){
 					EndermanEntity enderman = ((EndermanEntity) event.getEntity());
 					enderman.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
 						if(entityCap.canTeleport()){
 							entityCap.setTeleportAbility(false);
+							ForceCraft.LOGGER.info("Added Bane to " + target.getName());
 						}
 					});
-					ForceCraft.LOGGER.info("Added Bane to " + target.getName());
 				}
 			}
 			if(cap.hasBleed()) {

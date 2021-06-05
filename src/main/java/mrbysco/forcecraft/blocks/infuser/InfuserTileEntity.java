@@ -932,16 +932,27 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     static boolean addHeatModifier(ItemStack stack) {
         Item st = stack.getItem();
-        if(st instanceof ForceSwordItem || st instanceof ForceAxeItem || st instanceof ForceShovelItem || st instanceof ForcePickaxeItem || st instanceof ForceShearsItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-                if(!modifierCap.hasHeat()) {
-                    modifierCap.setHeat(true);
+		if(st instanceof ForceShovelItem || st instanceof ForcePickaxeItem || st instanceof ForceShearsItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null ) {
+				if(!modifierCap.hasHeat()) {
+					modifierCap.setHeat(true);
 					addInfusedTag(stack);
-                    return true;
-                }
-            }
-        }
+					return true;
+				}
+			}
+		}
+		else if (st instanceof ForceSwordItem || st instanceof ForceAxeItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null ) {
+				if(!modifierCap.hasHeat()) {
+					stack.addEnchantment(Enchantments.FIRE_ASPECT, 1);
+					modifierCap.setHeat(true);
+					addInfusedTag(stack);
+					return true;
+				}
+			}
+		}
         else if (stack.getItem() instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {

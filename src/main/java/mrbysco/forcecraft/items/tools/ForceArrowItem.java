@@ -7,7 +7,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
@@ -31,9 +30,10 @@ public class ForceArrowItem extends ArrowItem {
 						forceArrow.addEffect(new EffectInstance(Effects.SLOWNESS, 60, 2, false, false));
 					}
 					if(cap.hasEnder()) {
-						CompoundNBT tag = stack.getOrCreateTag();
-						tag.putBoolean("ender", true);
-						stack.setTag(tag);
+						forceArrow.setEnder();
+					}
+					if(cap.hasBane()) {
+						forceArrow.setBane();
 					}
 					if(cap.hasBleed()) {
 						EffectInstance bleedingEffect = new EffectInstance(ForceEffects.BLEEDING.get(), 20 * cap.getBleedLevel(), 0, false, false);
