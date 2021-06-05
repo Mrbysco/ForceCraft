@@ -196,7 +196,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
 			if (cap.getHomeLocation() != null) {
 				cap.teleportPlayerToLocation(player, cap.getHomeLocation());
-				stack.damageItem(2, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+				stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
 				player.getCooldownTracker().setCooldown(this, 10);
 			}
 		});
@@ -212,21 +212,21 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 			stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
 				if (cap.isRodOfHealing(3)) {
 					playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 2, false, false));
-					stack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 					playerIn.getCooldownTracker().setCooldown(this, 10);
 				} else if (cap.isRodOfHealing(2)) {
 					playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 1, false, false));
-					stack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 					playerIn.getCooldownTracker().setCooldown(this, 10);
 				} else if (cap.isRodOfHealing(1)) {
 					playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 0, false, false));
-					stack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 					playerIn.getCooldownTracker().setCooldown(this, 10);
 				}
 
 				if (cap.hasCamoModifier()) {
 					playerIn.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 1000, 0, false, false));
-					stack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 					playerIn.getCooldownTracker().setCooldown(this, 10);
 				}
 
@@ -235,25 +235,25 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 						cap.setHomeLocation(playerIn.getPosition());
 					} else {
 						cap.teleportPlayerToLocation(playerIn, cap.getHomeLocation());
-						stack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+						stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 						playerIn.getCooldownTracker().setCooldown(this, 10);
 					}
 				}
 
 				if (cap.hasSightModifier()) {
 					playerIn.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 1000, 0, false, false));
-					stack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 					playerIn.getCooldownTracker().setCooldown(this, 10);
 				}
 
 				if (cap.hasLight()) {
 					playerIn.addPotionEffect(new EffectInstance(Effects.GLOWING, 1000, 0, false, false));
-					stack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 					playerIn.getCooldownTracker().setCooldown(this, 10);
 				}
 				if (cap.getSpeedLevel() > 0) {
 					playerIn.addPotionEffect(new EffectInstance(Effects.SPEED, 10 * 20, cap.getSpeedLevel() - 1, false, false));
-					stack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 					playerIn.getCooldownTracker().setCooldown(this, 10);
 				}
 			});

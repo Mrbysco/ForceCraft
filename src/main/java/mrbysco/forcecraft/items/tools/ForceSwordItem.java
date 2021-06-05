@@ -52,7 +52,7 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
 				double wantedVelocity = 1.7;
 				playerIn.setMotion(vec.x * wantedVelocity,vec.y * wantedVelocity,vec.z * wantedVelocity);
 				worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
-				heldStack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+				heldStack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 				playerIn.getCooldownTracker().setCooldown(this, 20);
 			}
 			//Ender Modifier
@@ -66,7 +66,7 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
 					if (flag2 && !playerIn.isSilent()) {
 						worldIn.playSound((PlayerEntity)null, playerIn.prevPosX, playerIn.prevPosY, playerIn.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, playerIn.getSoundCategory(), 1.0F, 1.0F);
 						playerIn.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
-						heldStack.damageItem(2, playerIn, (player) -> player.sendBreakAnimation(handIn));
+						heldStack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 						playerIn.getCooldownTracker().setCooldown(this, 10);
 					}
 				}
