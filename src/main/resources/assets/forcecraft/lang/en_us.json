@@ -598,7 +598,7 @@
     "info.forcecraft.book.time.entry.name": "Time",
     "info.forcecraft.book.time_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Torch$(): Imbues the torch with time converting it to a $(item)Time Torch$()$(br)$(br)$(l)Note:$() If you're unable to execute the infusion it means the recipe has been disabled in the config",
     "info.forcecraft.book.ender.entry.name": "Ender",
-    "info.forcecraft.book.ender_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Rod$(): Will imbue the rod with Ender allowing it to be setup used a teleportation device$(br)$(li)On a $(item)Force Sword$(): Will add Ender to the sword causing you to be able to teleport to a targeted spot",
+    "info.forcecraft.book.ender_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Rod$(): Will imbue the rod with Ender allowing it to be used as teleportation device$(br)$(li)On a $(item)Force Sword$(): Will add Ender to the sword causing you to be able to teleport to a targeted spot",
     "info.forcecraft.book.ender_info.text2": "$(li)On a $(item)Force Bow$(): will imbue any projectile fired by the bow, causing enemies to teleport to a random location",
     "info.forcecraft.book.sturdy.entry.name": "Sturdy",
     "info.forcecraft.book.sturdy_info.text": "This infusion does the following:$(br)$(li)On $(item)Force Tools$() (Max lvl: 3): will imbue with the vanilla Unbreaking enchantment$(br)$(li)On $(item)Force Armor$() (Max lvl: 1 per piece): Reduces damage from all sources for a total of 75%",
