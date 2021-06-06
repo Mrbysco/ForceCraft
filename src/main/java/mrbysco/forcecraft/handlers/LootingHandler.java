@@ -67,9 +67,9 @@ public class LootingHandler {
 					int chanceMax = 20;
 					if(looting > 0) {
 						chanceMax = chanceMax / looting;
-					}
-					if(chanceMax < 0) {
-						chanceMax = 1;
+						if(chanceMax < 0) {
+							chanceMax = 1;
+						}
 					}
 					float dropChance = rand.nextInt(chanceMax);
 					if(dropChance == 0) {
