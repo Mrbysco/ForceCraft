@@ -64,7 +64,11 @@ public class LootingHandler {
 					LivingEntity entity = event.getEntityLiving();
 					BlockPos entityPos = entity.getPosition();
 
-					float dropChance = rand.nextInt(20 - (Math.max(looting, 10)));
+					int chanceMax = 20;
+					if(looting > 0) {
+						chanceMax = chanceMax / looting;
+					}
+					float dropChance = rand.nextInt(chanceMax);
 					if(dropChance == 0) {
 						if(entity.isEntityUndead()) {
 							event.getDrops().add(new ItemEntity(entity.world, entityPos.getX(), entityPos.getY(), entityPos.getZ(), new ItemStack(ForceRegistry.UNDEATH_CARD.get(), rand.nextInt(Math.max(1, looting)) + 1)));
