@@ -277,15 +277,17 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 	}
 
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
+	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand handIn) {
 		if(playerIn != null) {
 			stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
 				if(cap.hasLight()) {
 					target.addPotionEffect(new EffectInstance(Effects.GLOWING, 2400, 0, false, false));
+					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
+					playerIn.getCooldownTracker().setCooldown(this, 10);
 				}
 			});
 		}
-		return super.itemInteractionForEntity(stack, playerIn, target, hand);
+		return super.itemInteractionForEntity(stack, playerIn, target, handIn);
 	}
 
 	@Nullable
