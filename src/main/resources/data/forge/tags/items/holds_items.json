@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "forcecraft:force_pack",
+    "forcecraft:force_belt",
+    "forcecraft:spoils_bag",
+    "forcecraft:spoils_bag_t2",
+    "forcecraft:spoils_bag_t3"
+  ]
+}

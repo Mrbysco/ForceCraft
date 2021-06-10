@@ -30,6 +30,8 @@ public class ForceTags {
 
 	public static final ITag.INamedTag<Fluid> FORCE = forgeFluidTag("force");
 
+	public static final ITag.INamedTag<Item> HOLDS_ITEMS = forgeItemTag("holds_items");
+
 	public static final ITag.INamedTag<Block> ENDERTOT_HOLDABLE = forceBlockTag("endertot_holdable");
 
 	public static final ITag<EntityType<?>> FLASK_BLACKLIST = EntityTypeTags.createOptional(new ResourceLocation(Reference.MOD_ID + ":" + "flask_blacklist"));

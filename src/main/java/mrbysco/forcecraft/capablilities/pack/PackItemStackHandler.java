@@ -3,6 +3,7 @@ package mrbysco.forcecraft.capablilities.pack;
 import mrbysco.forcecraft.items.ForcePackItem;
 import mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import mrbysco.forcecraft.items.infuser.UpgradeBookTier;
+import mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -23,7 +24,7 @@ public class PackItemStackHandler extends ItemStackHandler {
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack) {
 		//Make sure there's no ForcePack-ception
-		return !(stack.getItem() instanceof ForcePackItem) && super.isItemValid(slot, stack);
+		return !(stack.getItem() instanceof ForcePackItem) && !stack.getItem().isIn(ForceTags.HOLDS_ITEMS) && super.isItemValid(slot, stack);
 	}
 	
 	public int getSlotsInUse() {
