@@ -30,7 +30,7 @@ public class BaneHandler {
             if(entity instanceof CreeperEntity){
                 CreeperEntity creeper = ((CreeperEntity) entity);
                 creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
-                    if(entityCap.canExplode()){
+                    if(!entityCap.canExplode()){
                         creeper.setCreeperState(-1);
                         creeper.getDataManager().set(CreeperEntity.IGNITED, false);
                         entityCap.setExplodeAbility(false);

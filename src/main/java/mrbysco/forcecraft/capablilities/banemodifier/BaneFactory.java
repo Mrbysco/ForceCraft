@@ -1,7 +1,5 @@
 package mrbysco.forcecraft.capablilities.banemodifier;
 
-import net.minecraft.nbt.CompoundNBT;
-
 import java.util.concurrent.Callable;
 
 public class BaneFactory implements Callable<IBaneModifier> {
@@ -31,16 +29,6 @@ public class BaneFactory implements Callable<IBaneModifier> {
             @Override
             public void setExplodeAbility(boolean canExplode) {
                 this.canExplode = canExplode;
-            }
-
-            @Override
-            public CompoundNBT serializeNBT() {
-                return null;
-            }
-
-            @Override
-            public void deserializeNBT(CompoundNBT nbt) {
-
             }
         };
     }
