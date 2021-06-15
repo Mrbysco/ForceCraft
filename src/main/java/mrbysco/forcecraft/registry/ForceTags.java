@@ -12,6 +12,7 @@ import net.minecraft.tags.ITag;
 import net.minecraft.tags.ITag.INamedTag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.Tags.IOptionalNamedTag;
 
 public class ForceTags {
 	public static final ITag.INamedTag<Block> FORCE_BRICK = forceBlockTag("force_brick");
@@ -27,14 +28,20 @@ public class ForceTags {
 	public static final ITag.INamedTag<Item> FORCE_INGOT = forgeItemTag("ingots/force");
 	public static final ITag.INamedTag<Item> FORCE_NUGGET = forgeItemTag("nuggets/force");
 	public static final ITag.INamedTag<Item> FORGE_GEM = forgeItemTag("gems/force");
-
-	public static final ITag.INamedTag<Fluid> FORCE = forgeFluidTag("force");
-
 	public static final ITag.INamedTag<Item> HOLDS_ITEMS = forgeItemTag("holds_items");
+
+	//Fuels
+	public static final ITag.INamedTag<Fluid> FORCE = forgeFluidTag("force");
+	public static final IOptionalNamedTag<Fluid> FUEL = optionalForgeFluidTag("fuel");
+	public static final IOptionalNamedTag<Fluid> BIOFUEL = optionalForgeFluidTag("biofuel");
+
+	//Throttle Fluids
+	public static final IOptionalNamedTag<Fluid> MILK = optionalForgeFluidTag("milk");
+
 
 	public static final ITag.INamedTag<Block> ENDERTOT_HOLDABLE = forceBlockTag("endertot_holdable");
 
-	public static final ITag<EntityType<?>> FLASK_BLACKLIST = EntityTypeTags.createOptional(new ResourceLocation(Reference.MOD_ID + ":" + "flask_blacklist"));
+	public static final ITag<EntityType<?>> FLASK_BLACKLIST = EntityTypeTags.createOptional(new ResourceLocation(Reference.MOD_ID, "flask_blacklist"));
 
 	private static INamedTag<Item> forgeItemTag(String name) {
 		return ItemTags.makeWrapperTag("forge:" + name);
@@ -44,6 +51,9 @@ public class ForceTags {
 	}
 	private static INamedTag<Fluid> forgeFluidTag(String name) {
 		return FluidTags.makeWrapperTag("forge:" + name);
+	}
+	private static IOptionalNamedTag<Fluid> optionalForgeFluidTag(String name) {
+		return FluidTags.createOptional(new ResourceLocation("forge", name));
 	}
 
 }

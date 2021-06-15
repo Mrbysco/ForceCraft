@@ -29,6 +29,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -87,6 +88,8 @@ public class ForceCraft {
 
         MinecraftForge.EVENT_BUS.addListener(ForceEntities::addSpawns);
         eventBus.addListener(ForceEntities::registerEntityAttributes);
+
+        ForgeMod.enableMilkFluid(); //Enable milk from forge
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             eventBus.addListener(ClientHandler::onClientSetup);

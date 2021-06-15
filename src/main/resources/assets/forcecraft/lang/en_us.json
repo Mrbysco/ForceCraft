@@ -97,6 +97,7 @@
     "block.forcecraft.force_leaves": "Force Leaves",
     "block.forcecraft.infuser": "Force Infuser",
     "block.forcecraft.force_furnace": "Force Furnace",
+    "block.forcecraft.force_engine": "Force Engine",
     "block.forcecraft.force_planks": "Force Planks",
     "block.forcecraft.force_plank_stairs": "Force Plank Stairs",
     "block.forcecraft.force_plank_slab": "Force Plank Slab",
@@ -219,6 +220,7 @@
     "forcecraft.container.force_furnace": "Force Furnace",
     "forcecraft.container.spoils_bag": "Spoils Bag",
     "forcecraft.container.card": "Item Card",
+    "forcecraft.container.force_engine": "Force Engine",
 
     "_comment": "Fluid",
     "fluid.forcecraft.fluid_force_source": "Liquid Force",
@@ -493,6 +495,9 @@
     "gui.forcecraft.infuser.tooltip.lumberjack": "Lumberjack on your axe will chop the whole tree",
     "gui.forcecraft.infuser.tooltip.force": "Force adds Knockback to weapons",
     "gui.forcecraft.infuser.tooltip.damage": "Add adds sharpness to weapons",
+
+    "_comment": "Force Engine GUI",
+    "gui.forcecraft.force_engine.empty": "Empty",
 
     "_comment": "Patchouli",
     "item.forcecraft.book.name": "Force and You",

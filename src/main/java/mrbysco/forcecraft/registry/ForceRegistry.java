@@ -6,6 +6,7 @@ import mrbysco.forcecraft.blocks.ForceFluidBlock;
 import mrbysco.forcecraft.blocks.ForceFurnaceBlock;
 import mrbysco.forcecraft.blocks.ForceLeavesBlock;
 import mrbysco.forcecraft.blocks.ForceLogBlock;
+import mrbysco.forcecraft.blocks.engine.ForceEngineBlock;
 import mrbysco.forcecraft.blocks.flammable.FlammableBlock;
 import mrbysco.forcecraft.blocks.flammable.FlammableSlab;
 import mrbysco.forcecraft.blocks.flammable.FlammableStairs;
@@ -17,10 +18,10 @@ import mrbysco.forcecraft.blocks.tree.ForceTree;
 import mrbysco.forcecraft.items.BaconatorItem;
 import mrbysco.forcecraft.items.BaseItem;
 import mrbysco.forcecraft.items.BottledWitherItem;
-import mrbysco.forcecraft.items.ForceArmorItem;
 import mrbysco.forcecraft.items.CustomFoodItem;
 import mrbysco.forcecraft.items.CustomSpawnEggItem;
 import mrbysco.forcecraft.items.ExperienceTomeItem;
+import mrbysco.forcecraft.items.ForceArmorItem;
 import mrbysco.forcecraft.items.ForceBeltItem;
 import mrbysco.forcecraft.items.ForceFluidBucketItem;
 import mrbysco.forcecraft.items.ForcePackItem;
@@ -48,6 +49,7 @@ import mrbysco.forcecraft.items.tools.ForceSwordItem;
 import mrbysco.forcecraft.items.tools.ForceWrenchItem;
 import mrbysco.forcecraft.items.tools.MagnetGloveItem;
 import mrbysco.forcecraft.registry.material.ModArmor;
+import mrbysco.forcecraft.tiles.ForceEngineTile;
 import mrbysco.forcecraft.tiles.ForceFurnaceTileEntity;
 import mrbysco.forcecraft.tiles.TimeTorchTileEntity;
 import net.minecraft.block.AbstractBlock;
@@ -114,6 +116,9 @@ public class ForceRegistry {
     public static final RegistryObject<Block> FORCE_FURNACE = BLOCKS.register("force_furnace", () ->
             new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F)
                     .setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> FORCE_ENGINE = BLOCKS.register("force_engine", () ->
+            new ForceEngineBlock(AbstractBlock.Properties.create(Material.IRON).sound(SoundType.METAL).setRequiresTool().hardnessAndResistance(4.0F, 18.0F)
+                    .setLightLevel(ForceEngineBlock.getLightValueActive(8))));
 
     //Bricks
     public static final RegistryObject<Block> FORCE_BRICK_RED = BLOCKS.register("force_brick_red", () -> new Block(AbstractBlock.Properties.create(Material.ROCK, DyeColor.RED).hardnessAndResistance(2.0F, 12.0F).harvestTool(ToolType.PICKAXE).harvestLevel(3)));
@@ -327,6 +332,10 @@ public class ForceRegistry {
     public static final RegistryObject<TileEntityType<TimeTorchTileEntity>> TIME_TORCH_TILE = TILES.register("time_torch", () -> TileEntityType.Builder.create(() ->
             new TimeTorchTileEntity(), ForceRegistry.TIME_TORCH.get(), ForceRegistry.WALL_TIME_TORCH.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<ForceEngineTile>> FORCE_ENGINE_TILE = TILES.register("force_engine", () -> TileEntityType.Builder.create(() ->
+            new ForceEngineTile(), ForceRegistry.FORCE_ENGINE.get()).build(null));
+
+
     /**
      * Block items
      */
@@ -340,6 +349,7 @@ public class ForceRegistry {
     public static final RegistryObject<Item> FORCE_PLANK_STAIRS_ITEM = ITEMS.register("force_plank_stairs", () -> new BlockItem(ForceRegistry.FORCE_PLANK_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_PLANK_SLAB_ITEM = ITEMS.register("force_plank_slab", () -> new BlockItem(ForceRegistry.FORCE_PLANK_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_FURNACE_ITEM = ITEMS.register("force_furnace", () -> new BlockItem(ForceRegistry.FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FORCE_ENGINE_ITEM = ITEMS.register("force_engine", () -> new BlockItem(ForceRegistry.FORCE_ENGINE.get(), itemBuilder().group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORCE_BRICK_RED_ITEM = ITEMS.register("force_brick_red", () -> new BlockItem(FORCE_BRICK_RED.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_BRICK_YELLOW_ITEM = ITEMS.register("force_brick_yellow", () -> new BlockItem(FORCE_BRICK_YELLOW.get(), itemBuilder().group(ForceCraft.creativeTab)));

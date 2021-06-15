@@ -67,10 +67,10 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		Hand handIn = context.getHand();
 		ItemStack stack = context.getItem();
 		if (!worldIn.isRemote && player != null) {
-			if (worldIn.getBlockState(pos.offset(facing)).getBlock() instanceof FireBlock) {
-				worldIn.removeBlock(pos.offset(facing), false);
+			if (worldIn.getBlockState(pos).getBlock() instanceof FireBlock) {
+				worldIn.removeBlock(pos, false);
 				List<Entity> list = worldIn.getEntitiesWithinAABB(ItemEntity.class,
-						new AxisAlignedBB(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())));
+						new AxisAlignedBB(new BlockPos(pos.getX(), pos.getY(), pos.getZ())).expand(0.5, 1, 0.5));
 				boolean bw = false;
 				for (Entity i : list) {
 					if (i instanceof ItemEntity) {

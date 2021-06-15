@@ -1,0 +1,109 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "forcecraft:block/engine/force_engine_side",
+		"1": "forcecraft:block/engine/force_engine_bottom",
+		"2": "forcecraft:block/engine/force_engine_coil",
+		"3": "forcecraft:block/engine/force_engine_tank",
+		"particle": "forcecraft:block/engine/force_engine_side"
+	},
+	"elements": [
+		{
+			"name": "conduit",
+			"from": [4, 8, 4],
+			"to": [12, 16, 12],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 8, 8, 16], "texture": "#2"},
+				"east": {"uv": [0, 8, 8, 16], "texture": "#2"},
+				"south": {"uv": [0, 8, 8, 16], "texture": "#2"},
+				"west": {"uv": [0, 8, 8, 16], "texture": "#2"},
+				"up": {"uv": [0, 0, 8, 8], "texture": "#2"}
+			}
+		},
+		{
+			"name": "baseRight",
+			"from": [11, 4, 3],
+			"to": [15, 11, 13],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 3.5], "texture": "#3"},
+				"east": {"uv": [2, 0, 7, 3.5], "texture": "#3"},
+				"south": {"uv": [0, 3.5, 2, 0], "rotation": 180, "texture": "#3"},
+				"west": {"uv": [9, 0, 14, 3.5], "texture": "#3"},
+				"up": {"uv": [7, 0, 9, 5], "texture": "#3"}
+			}
+		},
+		{
+			"name": "baseLeft",
+			"from": [1, 4, 3],
+			"to": [5, 11, 13],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 14.5, 2, 11], "rotation": 180, "texture": "#3"},
+				"east": {"uv": [9, 11, 14, 14.5], "texture": "#3"},
+				"south": {"uv": [0, 11, 2, 14.5], "texture": "#3"},
+				"west": {"uv": [2, 11, 7, 14.5], "texture": "#3"},
+				"up": {"uv": [7, 11, 9, 16], "rotation": 180, "texture": "#3"}
+			}
+		},
+		{
+			"name": "base2",
+			"from": [3, 4, 12],
+			"to": [13, 10, 14],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"east": {"uv": [0, 6, 2, 12], "rotation": 180, "texture": "#0"},
+				"south": {"uv": [3, 6, 13, 12], "texture": "#0"},
+				"west": {"uv": [14, 6, 16, 12], "rotation": 180, "texture": "#0"},
+				"up": {"uv": [3, 4, 13, 6], "texture": "#0"}
+			}
+		},
+		{
+			"name": "base2",
+			"from": [3, 4, 2],
+			"to": [13, 10, 4],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [3, 6, 13, 12], "texture": "#0"},
+				"east": {"uv": [0, 6, 2, 12], "texture": "#0"},
+				"south": {"uv": [3, 6, 13, 12], "texture": "#0"},
+				"west": {"uv": [14, 6, 16, 12], "texture": "#0"},
+				"up": {"uv": [3, 4, 13, 6], "rotation": 180, "texture": "#0"}
+			}
+		},
+		{
+			"name": "base",
+			"from": [0, 0, 0],
+			"to": [16, 4, 16],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 12, 16, 16], "texture": "#0"},
+				"east": {"uv": [0, 12, 16, 16], "texture": "#0"},
+				"south": {"uv": [0, 12, 16, 16], "texture": "#0"},
+				"west": {"uv": [0, 12, 16, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"head": {
+			"rotation": [-60, 0, 0],
+			"translation": [0, 5, -9]
+		}
+	},
+	"groups": [
+		{
+			"name": "VoxelShapes",
+			"origin": [0, 0, 0],
+			"children": [0, 1, 2, 3, 4, 5]
+		}
+	]
+}

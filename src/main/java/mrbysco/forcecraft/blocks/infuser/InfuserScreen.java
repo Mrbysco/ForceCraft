@@ -1,12 +1,11 @@
 package mrbysco.forcecraft.blocks.infuser;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.client.gui.widgets.ProgressBar;
+import mrbysco.forcecraft.client.util.RenderHelper;
 import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.networking.message.InfuserMessage;
-import mrbysco.forcecraft.recipe.InfuseRecipe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -200,19 +199,11 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 			return;
 		}
 		FluidStack fluidStack = container.getTile().getFluidStack();
-		ResourceLocation flowing = fluidStack.getFluid().getAttributes().getStillTexture(fluidStack);
+		float tankPercentage = RenderHelper.getTankPercentage(getContainer().getTile().getFluidAmount(), 50000);
+		RenderHelper.drawFluidTankInGUI(fluidStack, guiLeft + 8, guiTop + 41, tankPercentage, 82);
 
-		if (flowing != null) {
-			Texture texture = minecraft.getTextureManager().getTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
-			if (texture instanceof AtlasTexture) {
-				TextureAtlasSprite sprite = ((AtlasTexture) texture).getSprite(flowing);
-				if (sprite != null) {
-					minecraft.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
-					int fluidHeight = container.getTile().getFluidGuiHeight(82);
-					blit(matrixStack, guiLeft + 8, guiTop + 65 + (58 - fluidHeight), 0, 16, fluidHeight, sprite);
-				}
-			}
-		}
+		minecraft.textureManager.bindTexture(TEXTURE);
+		blit(matrixStack, guiLeft + 8, guiTop + 41, 188, 26, 16, 82);
 	}
 
 	private void drawEnergyBar(MatrixStack ms) {
@@ -237,60 +228,6 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		if(tile.canWork) {
 			this.infuserProgress.setMin(tile.processTime).setMax(tile.maxProcessTime);
 			this.infuserProgress.draw(matrixStack, this.minecraft);
-		}
-	}
-
-	/**
-	 * Draws an ItemStack. Copied from base class
-	 * 
-	 * The z index is increased by 32 (and not decreased afterwards), and the item
-	 * is then rendered at z=200.
-	 */
-	void drawItemStack(ItemStack stack, int x, int y, String altText) {
-		RenderSystem.translatef(0.0F, 0.0F, 32.0F);
-		this.setBlitOffset(200);
-		this.itemRenderer.zLevel = 200.0F;
-		net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
-		if (font == null)
-			font = this.font;
-		this.itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
-		this.itemRenderer.renderItemOverlayIntoGUI(font, stack, x, y - 0, altText);
-		this.setBlitOffset(0);
-		this.itemRenderer.zLevel = 0.0F;
-	}
-
-	static class TiledRecipe {
-		int size = 20;
-		InfuserScreen parent;
-		InfuseRecipe recipe;
-		int x;
-		int y;
-
-		public TiledRecipe(InfuserScreen self, InfuseRecipe recipe, int x, int y) {
-			parent = self;
-			this.recipe = recipe;
-			this.x = x;
-			this.y = y;
-		}
-
-		public void drawItemStack() {
-			// TODO: rotate on matching stacks with a timer, just like JEI
-			if(recipe.input.getMatchingStacks().length > 0) {
-				parent.drawItemStack(recipe.input.getMatchingStacks()[0], parent.guiLeft + x, parent.guiTop + y, "");
-			}
-		}
-
-		public void drawTooltip(MatrixStack ms, int actualMouseX, int actualMouseY) {
-			RenderSystem.translatef(0.0F, 0.0F, 33.0F);
-
-			String recipeSlug = recipe.resultModifier.getTooltip();
-
-			List<ITextComponent> text = new ArrayList<>();
-			text.add(new TranslationTextComponent(recipeSlug));
-
-			GuiUtils.drawHoveringText(ms, text, actualMouseX, actualMouseY, parent.width, parent.height, -1, parent.font);
-			
-			RenderSystem.translatef(0.0F, 0.0F, 0.0F);
 		}
 	}
 }

@@ -81,7 +81,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 	public boolean canWork = false;
 
     public int processTime = 0;
-    public int maxProcessTime = 17;
+    public int maxProcessTime = 20;
 
     public int fluidContained;
 	//modifiers cap out
@@ -309,8 +309,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     //Processes force Gems in the force infuser slot
     private void processForceGems() {
         FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
-
-        if (tank.getFluidAmount() < tank.getCapacity() - force.getAmount()) {
+		if(tank.getFluidAmount() + force.getAmount() <= tank.getCapacity()) {
             fill(force, FluidAction.EXECUTE);
             handler.getStackInSlot(SLOT_GEM).shrink(1);
 
@@ -1018,16 +1017,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public int fill(FluidStack resource, FluidAction action) {
         FluidStack resourceCopy = resource.copy();
 
-        if(action.execute()) {
-            if (tank.getFluid() != null) {
-                if (tank.getFluid().getFluid() == ForceFluids.FORCE_FLUID_SOURCE.get() || tank.getFluidAmount() == 0) {
-                    tank.fill(resourceCopy, action);
-                }
-            }
-            if (tank.getFluid() == null) {
-                tank.fill(resourceCopy, action);
-            }
-        }
+		if(action.execute()) {
+			if(tank.getFluid().isEmpty() || tank.getFluid().isFluidEqual(resource)) {
+				tank.fill(resourceCopy, action);
+			}
+		}
         return resource.getAmount();
     }
 
@@ -1104,10 +1098,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     public float getFluidPercentage() {
         return (float) tank.getFluidAmount() / (float) tank.getCapacity();
-    }
-
-    public int getFluidGuiHeight(int maxHeight) {
-        return (int) Math.ceil(getFluidPercentage() * (float) maxHeight);
     }
 
     protected boolean isFluidEqual(FluidStack fluid) {

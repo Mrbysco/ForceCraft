@@ -6,6 +6,7 @@ import mrbysco.forcecraft.container.ForceBeltContainer;
 import mrbysco.forcecraft.container.ForcePackContainer;
 import mrbysco.forcecraft.container.ItemCardContainer;
 import mrbysco.forcecraft.container.SpoilsBagContainer;
+import mrbysco.forcecraft.container.engine.ForceEngineContainer;
 import mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -33,4 +34,7 @@ public class ForceContainers {
 
 	public static final RegistryObject<ContainerType<ItemCardContainer>> ITEM_CARD = CONTAINERS.register("item_card", () ->
 			IForgeContainerType.create((windowId, inv, data) -> new ItemCardContainer(windowId, inv)));
+
+	public static final RegistryObject<ContainerType<ForceEngineContainer>> FORCE_ENGINE = CONTAINERS.register("force_engine", () ->
+			IForgeContainerType.create((windowId, inv, data) -> new ForceEngineContainer(windowId, inv, data)));
 }
