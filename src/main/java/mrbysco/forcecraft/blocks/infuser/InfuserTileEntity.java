@@ -1155,4 +1155,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     @Override
     public void setInventorySlotContents(int arg0, ItemStack arg1) {}
+
+	@Override
+	protected void invalidateCaps() {
+		super.invalidateCaps();
+		this.tankHolder.invalidate();
+		this.handlerHolder.invalidate();
+		this.energyHolder.invalidate();
+	}
 }
