@@ -5,6 +5,7 @@ import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.util.AdvancementUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IntReferenceHolder;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -49,22 +51,14 @@ public class InfuserContainer extends Container {
 
         //Modifier Slots [0, 7] around the outside starting at the top middle going clockwise
         int bookTier = tile.getBookTier();
-        if(bookTier >= 0)
-            this.addSlot(new MatrixUpdatingSlot(te.handler, 0, 80, 20));
-        if(bookTier >= 1)
-            this.addSlot(new MatrixUpdatingSlot(te.handler, 1, 104, 32));
-        if(bookTier >= 2)
-            this.addSlot(new MatrixUpdatingSlot(te.handler, 2, 116, 57));
-        if(bookTier >= 3)
-            this.addSlot(new MatrixUpdatingSlot(te.handler, 3, 104, 81));
-        if(bookTier >= 4)
-            this.addSlot(new MatrixUpdatingSlot(te.handler, 4, 80, 93));
-        if(bookTier >= 5)
-            this.addSlot(new MatrixUpdatingSlot(te.handler, 5, 56, 81));
-        if(bookTier >= 6)
-            this.addSlot(new MatrixUpdatingSlot(te.handler, 6, 44, 57));
-        if(bookTier >= 7)
-            this.addSlot(new MatrixUpdatingSlot(te.handler, 7, 56, 32));
+        this.addSlot(new UnlockableSlot(te.handler, 0, 80, 20));
+        this.addSlot(new UnlockableSlot(te.handler, 1, 104, 32));
+        this.addSlot(new UnlockableSlot(te.handler, 2, 116, 57));
+        this.addSlot(new UnlockableSlot(te.handler, 3, 104, 81));
+        this.addSlot(new UnlockableSlot(te.handler, 4, 80, 93));
+        this.addSlot(new UnlockableSlot(te.handler, 5, 56, 81));
+        this.addSlot(new UnlockableSlot(te.handler, 6, 44, 57));
+        this.addSlot(new UnlockableSlot(te.handler, 7, 56, 32));
 
         //Tools Slot in the middle
         this.addSlot(new MatrixUpdatingSlot(te.handler, InfuserTileEntity.SLOT_TOOL, 80, 57));
@@ -74,7 +68,7 @@ public class InfuserContainer extends Container {
 
         //Book Upgrade Slot top left
         this.addSlot(new MatrixUpdatingSlot(te.handler, InfuserTileEntity.SLOT_BOOK, 8, 5));
-        
+
         //player inventory here
         int xPos = 8;
         int yPos = 127;
@@ -124,7 +118,7 @@ public class InfuserContainer extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return !playerIn.isSpectator();
+        return this.tile.isUsableByPlayer(playerIn) && !playerIn.isSpectator();
     }
 
     @Override
@@ -138,7 +132,7 @@ public class InfuserContainer extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             final int tileSize = 11;
-            
+
             if (index < tileSize) {
                 if (!this.mergeItemStack(itemstack1, tileSize, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
@@ -206,6 +200,22 @@ public class InfuserContainer extends Container {
         public void onSlotChanged() {
             super.onSlotChanged();
             onCraftMatrixChanged(null);
+        }
+    }
+
+    public class UnlockableSlot extends MatrixUpdatingSlot {
+        public UnlockableSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return slotNumber <= tile.getBookTier();
+        }
+
+        @Override
+        public boolean isItemValid(@Nonnull ItemStack stack) {
+            return slotNumber <= tile.getBookTier() && super.isItemValid(stack);
         }
     }
 }
