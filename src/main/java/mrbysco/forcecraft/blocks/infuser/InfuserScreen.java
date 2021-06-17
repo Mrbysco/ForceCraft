@@ -9,11 +9,7 @@ import mrbysco.forcecraft.networking.message.InfuserMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.Texture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
@@ -43,7 +39,6 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		super(screenContainer, inv, titleIn);
 
 		this.ySize = 208;
-
 	}
 
 	@Override
