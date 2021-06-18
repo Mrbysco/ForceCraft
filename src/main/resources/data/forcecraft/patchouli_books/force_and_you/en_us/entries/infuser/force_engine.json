@@ -1,0 +1,24 @@
+{
+  "name": "info.forcecraft.book.force_engine.entry.name",
+  "category": "infuser",
+  "icon": "forcecraft:force_engine",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.force_engine_info.text"
+    },
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.force_engine_info_2.text"
+    },
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.force_engine_info_3.text"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forcecraft:force_engine",
+      "text": "info.forcecraft.book.force_engine_recipe.text"
+    }
+  ]
+}

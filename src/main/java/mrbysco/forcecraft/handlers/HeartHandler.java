@@ -1,10 +1,12 @@
 package mrbysco.forcecraft.handlers;
 
 import mrbysco.forcecraft.registry.ForceRegistry;
+import mrbysco.forcecraft.registry.ForceSounds;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -29,6 +31,7 @@ public class HeartHandler {
 			if (eclass == EntityClassification.MONSTER) {
 				// and its a monster, not sheep or squid or something
 				BlockPos pos = event.getEntity().getPosition();
+				world.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.HEART_PICKUP.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
 				world.addEntity(new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(ForceRegistry.RECOVERY_HEART.get())));
 			}
 		}

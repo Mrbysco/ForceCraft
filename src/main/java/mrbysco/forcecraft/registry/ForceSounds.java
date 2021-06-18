@@ -25,4 +25,7 @@ public class ForceSounds {
 	public static final RegistryObject<SoundEvent> INFUSER_DONE = SOUND_EVENTS.register("infuser.done", () ->
 			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "infuser.done")));
 
+	public static final RegistryObject<SoundEvent> HEART_PICKUP = SOUND_EVENTS.register("heart.pickup", () ->
+			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "heart.pickup")));
+
 }

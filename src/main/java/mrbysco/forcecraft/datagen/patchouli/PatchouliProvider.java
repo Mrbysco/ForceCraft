@@ -47,6 +47,12 @@ public class PatchouliProvider extends PatchouliBookProvider {
 				.addSpotlightPage(new ItemStack(ForceRegistry.UPGRADE_TOME.get()))
 				.setText("info.forcecraft.book.requirements_tome.text").build().build()
 
+				.addEntry("infuser/force_engine", "info.forcecraft.book.force_engine.entry.name", "forcecraft:force_engine")
+				.addTextPage("info.forcecraft.book.force_engine_info.text").build()
+				.addTextPage("info.forcecraft.book.force_engine_info_2.text").build()
+				.addTextPage("info.forcecraft.book.force_engine_info_3.text").build()
+				.addCraftingPage(new ResourceLocation(Reference.MOD_ID, "force_engine")).setText("info.forcecraft.book.force_engine_recipe.text").build().build()
+
 				.addEntry("infuser/furnace", "info.forcecraft.book.force_furnace.entry.name", "forcecraft:force_furnace")
 				.addTextPage("info.forcecraft.book.force_furnace_info.text").build()
 				.addSpotlightPage(new ItemStack(ForceRegistry.SPEED_CORE.get()))

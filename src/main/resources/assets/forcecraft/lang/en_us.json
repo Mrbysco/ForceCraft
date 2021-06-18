@@ -206,6 +206,7 @@
     "forcecraft.fairy.listen.subtitle": "Fairy yelling",
     "forcecraft.fairy.listen.special.subtitle": "Fairy wishing a happy birthday",
     "forcecraft.infuser.done.subtitle": "Infusion completes",
+    "forcecraft.heart.pickup.subtitle": "Heart Pickup",
 
     "_comment": "Misc.",
     "itemGroup.forcecraft": "ForceCraft",
@@ -510,6 +511,12 @@
     "info.forcecraft.book.infuser.entry.name": "Infuser",
     "info.forcecraft.book.infuser_recipe.text": "The $(item)Infuser$() Crafting Recipe",
     "info.forcecraft.book.infuser_info.text": "With the $(item)Infuser$() you can start exploring the infusions that can be applied.",
+
+    "info.forcecraft.book.force_engine.entry.name": "Force Engine",
+    "info.forcecraft.book.force_engine_info.text": "The $(item)Force Engine$() generates power in the form of $(4)RF$().$(br)To start generating power you have to insert a valid $(l)fuel$() into the left tank.$(br)The right tank is dedicated to $(l)Throttle Fluid$(). A throttle fluid acts as an output multiplier, it's not required but can highly increase the $(4)RF$() output.$(br)To activate the $(item)Force Engine$() you apply a redstone signal",
+    "info.forcecraft.book.force_engine_info_2.text": "after which it will start outputting $(4)RF$() into the block it's facing.$(br)$(br)A list of accepted Fuel and their $(4)RF$() rate:$(li)$(l)Lava$() - 5RF/tick / 100RF/1MB$(li)$(l)Fuel$() (if a mod adds a fuel fluid) - 10RF/tick / 200RF/1MB$(li)$(l)Bio-Fuel$() (if a mod adds a bio-fuel fluid) - 15RF/tick / 300RF/1MB$(li)$(l)Liquid Force$() - 20RF/tick / 400RF/1MB",
+    "info.forcecraft.book.force_engine_info_3.text": "A list of accepted Throttle Fluids and their Multiplier rate:$(li)$(l)Nothing$() - 1x$(li)$(l)Water$() - 2x$(li)$(l)Milk$() - 2.5x",
+    "info.forcecraft.book.force_engine_recipe.text": "The $(item)Force Engine$() Crafting Recipe",
 
     "info.forcecraft.book.force_furnace.entry.name": "Force Furnace",
     "info.forcecraft.book.force_furnace_recipe.text": "The $(item)Force Furnace$() Crafting Recipe",

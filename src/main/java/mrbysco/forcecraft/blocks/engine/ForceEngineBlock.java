@@ -7,6 +7,7 @@ import net.minecraft.block.DirectionalBlock;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
@@ -215,5 +216,19 @@ public class ForceEngineBlock extends DirectionalBlock {
 	@Override
 	public PushReaction getPushReaction(BlockState state) {
 		return PushReaction.DESTROY;
+	}
+
+	@Override
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (!state.matchesBlock(newState.getBlock())) {
+			TileEntity tileentity = worldIn.getTileEntity(pos);
+			if (tileentity instanceof ForceEngineTile) {
+				ForceEngineTile engineTile = (ForceEngineTile) tileentity;
+				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.handler.getStackInSlot(0));
+				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.throttleHandler.getStackInSlot(0));
+			}
+
+			super.onReplaced(state, worldIn, pos, newState, isMoving);
+		}
 	}
 }

@@ -29,10 +29,17 @@
         ]
     },
     "infuser.done" : {
-      "category" : "block",
-      "subtitle": "forcecraft.infuser.done.subtitle",
-      "sounds": [
-        "forcecraft:infuser_done"
-      ]
+        "category" : "block",
+        "subtitle": "forcecraft.infuser.done.subtitle",
+        "sounds": [
+            "forcecraft:infuser_done"
+        ]
+    },
+    "heart.pickup" : {
+        "category" : "neutral",
+        "subtitle": "forcecraft.heart.pickup.subtitle",
+        "sounds": [
+            "forcecraft:pickup"
+        ]
     }
 }
