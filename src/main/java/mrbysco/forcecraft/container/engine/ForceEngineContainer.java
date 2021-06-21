@@ -1,6 +1,7 @@
 package mrbysco.forcecraft.container.engine;
 
 import mrbysco.forcecraft.container.engine.slot.FuelSlot;
+import mrbysco.forcecraft.container.engine.slot.OutputSlot;
 import mrbysco.forcecraft.container.engine.slot.ThrottleSlot;
 import mrbysco.forcecraft.registry.ForceContainers;
 import mrbysco.forcecraft.tiles.ForceEngineTile;
@@ -44,7 +45,9 @@ public class ForceEngineContainer extends Container {
 		this.player = playerInventoryIn.player;
 
 		//Fuel slot
-		this.addSlot(new FuelSlot(te.handler, 0, 42, 33));
+		this.addSlot(new FuelSlot(te.handler, 0, 42, 23));
+		//Output slot
+		this.addSlot(new OutputSlot(te.handler, 1, 42, 42));
 
 		//Throttle slot
 		this.addSlot(new ThrottleSlot(te.throttleHandler, 0, 118, 33));

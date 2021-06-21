@@ -3,13 +3,48 @@ package mrbysco.forcecraft.entities.projectile;
 import mrbysco.forcecraft.items.flask.EntityFlaskItem;
 import mrbysco.forcecraft.registry.ForceEntities;
 import mrbysco.forcecraft.registry.ForceRegistry;
+import net.minecraft.client.renderer.entity.SnowManRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.merchant.villager.WanderingTraderEntity;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
+import net.minecraft.entity.monster.CaveSpiderEntity;
+import net.minecraft.entity.monster.EndermanEntity;
+import net.minecraft.entity.monster.SpiderEntity;
+import net.minecraft.entity.monster.ZombifiedPiglinEntity;
+import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
+import net.minecraft.entity.monster.piglin.PiglinEntity;
+import net.minecraft.entity.passive.BatEntity;
+import net.minecraft.entity.passive.BeeEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.entity.passive.DolphinEntity;
+import net.minecraft.entity.passive.FoxEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.passive.MooshroomEntity;
+import net.minecraft.entity.passive.PandaEntity;
+import net.minecraft.entity.passive.ParrotEntity;
 import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.passive.PolarBearEntity;
+import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.passive.SnowGolemEntity;
+import net.minecraft.entity.passive.SquidEntity;
+import net.minecraft.entity.passive.StriderEntity;
+import net.minecraft.entity.passive.TurtleEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.passive.fish.CodEntity;
+import net.minecraft.entity.passive.fish.PufferfishEntity;
+import net.minecraft.entity.passive.fish.SalmonEntity;
+import net.minecraft.entity.passive.fish.TropicalFishEntity;
+import net.minecraft.entity.passive.horse.DonkeyEntity;
+import net.minecraft.entity.passive.horse.HorseEntity;
+import net.minecraft.entity.passive.horse.LlamaEntity;
+import net.minecraft.entity.passive.horse.MuleEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
@@ -72,18 +107,84 @@ public class FlaskEntity extends ProjectileItemEntity implements IRendersAsItem 
 				} else {
 					if(entity.isAlive() && !(entity instanceof PlayerEntity) && entity instanceof LivingEntity && entity.canChangeDimension() && !forceFlask.isBlacklisted((LivingEntity)entity)) {
 						LivingEntity livingEntity = (LivingEntity)entity;
-						if(entity instanceof ChickenEntity) {
-							ItemStack chickenFlask = new ItemStack(ForceRegistry.CHICKEN_FLASK.get());
-							forceFlask.storeEntity(chickenFlask, livingEntity);
-							this.setItem(chickenFlask);
+						ItemStack entityFlask = null;
+						if(entity instanceof BatEntity) {
+							entityFlask = new ItemStack(ForceRegistry.BAT_FLASK.get());
+						} else if(entity instanceof BeeEntity) {
+							entityFlask = new ItemStack(ForceRegistry.BEE_FLASK.get());
+						} else if(entity instanceof CatEntity) {
+							entityFlask = new ItemStack(ForceRegistry.CAT_FLASK.get());
+						} else if(entity instanceof ChickenEntity) {
+							entityFlask = new ItemStack(ForceRegistry.CHICKEN_FLASK.get());
+						} else if(entity instanceof CaveSpiderEntity) {
+							entityFlask = new ItemStack(ForceRegistry.CAVE_SPIDER_FLASK.get());
+						} else if(entity instanceof CodEntity) {
+							entityFlask = new ItemStack(ForceRegistry.COD_FLASK.get());
+						} else if(entity instanceof CowEntity) {
+							entityFlask = new ItemStack(ForceRegistry.COW_FLASK.get());
+						} else if(entity instanceof DolphinEntity) {
+							entityFlask = new ItemStack(ForceRegistry.DOLPHIN_FLASK.get());
+						} else if(entity instanceof DonkeyEntity) {
+							entityFlask = new ItemStack(ForceRegistry.DONKEY_FLASK.get());
+						} else if(entity instanceof EndermanEntity) {
+							entityFlask = new ItemStack(ForceRegistry.ENDERMAN_FLASK.get());
+						} else if(entity instanceof FoxEntity) {
+							entityFlask = new ItemStack(ForceRegistry.FOX_FLASK.get());
+						} else if(entity instanceof HorseEntity) {
+							entityFlask = new ItemStack(ForceRegistry.HORSE_FLASK.get());
+						} else if(entity instanceof IronGolemEntity) {
+							entityFlask = new ItemStack(ForceRegistry.IRON_GOLEM_FLASK.get());
+						} else if(entity instanceof LlamaEntity) {
+							entityFlask = new ItemStack(ForceRegistry.LLAMA_FLASK.get());
+						} else if(entity instanceof MooshroomEntity) {
+							entityFlask = new ItemStack(ForceRegistry.MOOSHROOM_FLASK.get());
+						} else if(entity instanceof MuleEntity) {
+							entityFlask = new ItemStack(ForceRegistry.MULE_FLASK.get());
+						} else if(entity instanceof PandaEntity) {
+							entityFlask = new ItemStack(ForceRegistry.PANDA_FLASK.get());
+						} else if(entity instanceof ParrotEntity) {
+							entityFlask = new ItemStack(ForceRegistry.PARROT_FLASK.get());
 						} else if(entity instanceof PigEntity) {
-							ItemStack pigFlask = new ItemStack(ForceRegistry.PIG_FLASK.get());
-							forceFlask.storeEntity(pigFlask, livingEntity);
-							this.setItem(pigFlask);
+							entityFlask = new ItemStack(ForceRegistry.PIG_FLASK.get());
+						} else if(entity instanceof AbstractPiglinEntity) {
+							entityFlask = new ItemStack(ForceRegistry.PIGLIN_FLASK.get());
+						} else if(entity instanceof PolarBearEntity) {
+							entityFlask = new ItemStack(ForceRegistry.POLAR_BEAR_FLASK.get());
+						} else if(entity instanceof PufferfishEntity) {
+							entityFlask = new ItemStack(ForceRegistry.PUFFERFISH_FLASK.get());
+						} else if(entity instanceof RabbitEntity) {
+							entityFlask = new ItemStack(ForceRegistry.RABBIT_FLASK.get());
+						} else if(entity instanceof SalmonEntity) {
+							entityFlask = new ItemStack(ForceRegistry.SALMON_FLASK.get());
+						} else if(entity instanceof SheepEntity) {
+							entityFlask = new ItemStack(ForceRegistry.SHEEP_FLASK.get());
 						} else if(entity instanceof AbstractSkeletonEntity) {
-							ItemStack skeletonFlask = new ItemStack(ForceRegistry.SKELETON_FLASK.get());
-							forceFlask.storeEntity(skeletonFlask, livingEntity);
-							this.setItem(skeletonFlask);
+							entityFlask = new ItemStack(ForceRegistry.SKELETON_FLASK.get());
+						} else if(entity instanceof SnowGolemEntity) {
+							entityFlask = new ItemStack(ForceRegistry.SNOW_GOLEM_FLASK.get());
+						} else if(entity instanceof SpiderEntity) {
+							entityFlask = new ItemStack(ForceRegistry.SPIDER_FLASK.get());
+						} else if(entity instanceof SquidEntity) {
+							entityFlask = new ItemStack(ForceRegistry.SQUID_FLASK.get());
+						} else if(entity instanceof StriderEntity) {
+							entityFlask = new ItemStack(ForceRegistry.STRIDER_FLASK.get());
+						} else if(entity instanceof TropicalFishEntity) {
+							entityFlask = new ItemStack(ForceRegistry.TROPICAL_FISH_FLASK.get());
+						} else if(entity instanceof TurtleEntity) {
+							entityFlask = new ItemStack(ForceRegistry.TURTLE_FLASK.get());
+						} else if(entity instanceof VillagerEntity) {
+							entityFlask = new ItemStack(ForceRegistry.VILLAGER_FLASK.get());
+						} else if(entity instanceof WanderingTraderEntity) {
+							entityFlask = new ItemStack(ForceRegistry.WANDERING_TRADER_FLASK.get());
+						} else if(entity instanceof WolfEntity) {
+							entityFlask = new ItemStack(ForceRegistry.WOLF_FLASK.get());
+						} else if(entity instanceof ZombifiedPiglinEntity) {
+							entityFlask = new ItemStack(ForceRegistry.ZOMBIFIED_PIGLIN_FLASK.get());
+						}
+
+						if(entityFlask != null) {
+							forceFlask.storeEntity(entityFlask, livingEntity);
+							this.setItem(entityFlask);
 						} else {
 							forceFlask.storeEntity(stack, livingEntity);
 							this.setItem(stack);

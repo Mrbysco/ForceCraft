@@ -284,9 +284,44 @@ public class ForceRegistry {
     public static final RegistryObject<Item> FORCE_FILLED_FORCE_FLASK = ITEMS.register("force_filled_force_flask", () -> new ForceFilledForceFlask(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> RED_POTION = ITEMS.register("red_potion", () -> new RedPotionItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> ENTITY_FLASK = ITEMS.register("entity_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+
+    public static final RegistryObject<Item> BAT_FLASK = ITEMS.register("bat_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> BEE_FLASK = ITEMS.register("bee_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> CAT_FLASK = ITEMS.register("cat_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> CAVE_SPIDER_FLASK = ITEMS.register("cave_spider_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> CHICKEN_FLASK = ITEMS.register("chicken_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> COD_FLASK = ITEMS.register("cod_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> COW_FLASK = ITEMS.register("cow_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> DOLPHIN_FLASK = ITEMS.register("dolphin_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> DONKEY_FLASK = ITEMS.register("donkey_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> ENDERMAN_FLASK = ITEMS.register("enderman_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> FOX_FLASK = ITEMS.register("fox_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> HORSE_FLASK = ITEMS.register("horse_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> IRON_GOLEM_FLASK = ITEMS.register("iron_golem_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> LLAMA_FLASK = ITEMS.register("llama_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> MOOSHROOM_FLASK = ITEMS.register("mooshroom_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> MULE_FLASK = ITEMS.register("mule_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> PANDA_FLASK = ITEMS.register("panda_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> PARROT_FLASK = ITEMS.register("parrot_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> PIG_FLASK = ITEMS.register("pig_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> PIGLIN_FLASK = ITEMS.register("piglin_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> POLAR_BEAR_FLASK = ITEMS.register("polar_bear_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> PUFFERFISH_FLASK = ITEMS.register("pufferfish_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> RABBIT_FLASK = ITEMS.register("rabbit_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> SALMON_FLASK = ITEMS.register("salmon_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> SHEEP_FLASK = ITEMS.register("sheep_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> SKELETON_FLASK = ITEMS.register("skeleton_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> SNOW_GOLEM_FLASK = ITEMS.register("snow_golem_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> SPIDER_FLASK = ITEMS.register("spider_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> SQUID_FLASK = ITEMS.register("squid_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> STRIDER_FLASK = ITEMS.register("strider_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> TROPICAL_FISH_FLASK = ITEMS.register("tropical_fish_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> TURTLE_FLASK = ITEMS.register("turtle_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> VILLAGER_FLASK = ITEMS.register("villager_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> WANDERING_TRADER_FLASK = ITEMS.register("wandering_trader_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> WOLF_FLASK = ITEMS.register("wolf_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> ZOMBIFIED_PIGLIN_FLASK = ITEMS.register("zombified_piglin_flask", () -> new EntityFlaskItem(itemBuilder().containerItem(FORCE_FLASK.get()).group(ForceCraft.creativeTab)));
+
     public static final RegistryObject<Item> ITEM_CARD = ITEMS.register("item_card", () -> new ItemCardItem(itemBuilder().group(ForceCraft.creativeTab)));
 
     //Tools

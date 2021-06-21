@@ -24,6 +24,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -99,7 +100,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	};
 	private LazyOptional<IFluidHandler> throttleTankHolder = LazyOptional.of(() -> throttleTank);
 
-	public final ItemStackHandler handler = new ItemStackHandler(1) {
+	public final ItemStackHandler handler = new ItemStackHandler(2) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
 			if(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
@@ -112,17 +113,21 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
-			IFluidHandler fluidCap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
-			if(fluidCap != null) {
-				FluidStack fluidStack = fluidCap.getFluidInTank(0);
-				if(!fluidStack.isEmpty()) {
-					Fluid fluid = fluidStack.getFluid();
-					return fluid.isIn(ForceTags.FORCE) || fluid.isIn(FluidTags.LAVA) ||
-							fluid.isIn(ForceTags.FUEL) || fluid.isIn(ForceTags.BIOFUEL);
+			if(slot == 0) {
+				IFluidHandler fluidCap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
+				if(fluidCap != null) {
+					FluidStack fluidStack = fluidCap.getFluidInTank(0);
+					if(!fluidStack.isEmpty()) {
+						Fluid fluid = fluidStack.getFluid();
+						return fluid.isIn(ForceTags.FORCE) || fluid.isIn(FluidTags.LAVA) ||
+								fluid.isIn(ForceTags.FUEL) || fluid.isIn(ForceTags.BIOFUEL);
+					}
 				}
+				return stack.getItem().isIn(ForceTags.FORGE_GEM) || stack.getItem().isIn(Tags.Items.NETHER_STARS)||
+						(fluidCap != null && fluidCap.getFluidInTank(0).getFluid().isIn(ForceTags.FORCE));
+			} else {
+				return false;
 			}
-			return stack.getItem().isIn(ForceTags.FORGE_GEM) ||
-					(fluidCap != null && fluidCap.getFluidInTank(0).getFluid().isIn(ForceTags.FORCE));
 		}
 	};
 	private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
@@ -389,6 +394,19 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 			if(getFuelAmount() + force.getAmount() <= tank.getCapacity()) {
 				fillFuel(force, FluidAction.EXECUTE);
 				slotStack.shrink(1);
+			}
+		} else if(slotStack.getItem().isIn(Tags.Items.NETHER_STARS)) {
+			FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM * 10);
+
+			ItemStack extraSlot = handler.getStackInSlot(1);
+			if(getFuelAmount() + force.getAmount() <= tank.getCapacity() && extraSlot.getCount() < handler.getSlotLimit(1)) {
+				fillFuel(force, FluidAction.EXECUTE);
+				slotStack.shrink(1);
+				if(handler.getStackInSlot(1).isEmpty()) {
+					handler.setStackInSlot(1, new ItemStack(ForceRegistry.INERT_CORE.get()));
+				} else {
+					extraSlot.setCount(extraSlot.getCount() + 1);
+				}
 			}
 		} else {
 			FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, tank, Integer.MAX_VALUE, null, true);

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "forcecraft:item/cave_spider_force_flask"
+  }
+}

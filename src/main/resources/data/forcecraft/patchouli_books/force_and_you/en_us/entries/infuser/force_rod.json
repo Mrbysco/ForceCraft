@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.force_rod.entry.name",
+  "category": "infuser",
+  "icon": "forcecraft:force_rod",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.force_rod_info.text"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forcecraft:force_rod",
+      "text": "info.forcecraft.book.force_rod_recipe.text"
+    }
+  ]
+}

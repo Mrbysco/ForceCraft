@@ -7,7 +7,11 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import mrbysco.forcecraft.items.ExperienceTomeItem;
 import mrbysco.forcecraft.items.tools.ForceRodItem;
 import mrbysco.forcecraft.registry.ForceRegistry;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.ExperienceBottleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -19,10 +23,12 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 public class TransmutationRecipe implements ICraftingRecipe {
 	private final ResourceLocation id;
@@ -75,7 +81,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 					else inputs.add(itemstack);
 				} else {
 					if(itemstack.getItem() instanceof ExperienceTomeItem) {
-						if(itemstack.getOrCreateTag().getInt("Experience") < 100) {
+						if(itemstack.hasTag() && itemstack.getTag().getInt("Experience") < 100) {
 							return false;
 						} else {
 							ItemStack experienceTome = new ItemStack(ForceRegistry.EXPERIENCE_TOME.get());
@@ -108,6 +114,16 @@ public class TransmutationRecipe implements ICraftingRecipe {
 				CompoundNBT tag = itemstack.getOrCreateTag();
 				int count = Math.min((int)((float)tag.getInt("Experience") / 100f), 64);
 				resultStack.setCount(count);
+			}
+			if(itemstack.getItem() instanceof EnchantedBookItem && resultStack.getItem() instanceof ExperienceBottleItem) {
+				Map<Enchantment, Integer> enchantmentMap = EnchantmentHelper.getEnchantments(itemstack);
+				if(!enchantmentMap.isEmpty()) {
+					int amount = 0;
+					for(Map.Entry<Enchantment, Integer> entry : enchantmentMap.entrySet()) {
+						amount += entry.getValue();
+					}
+					resultStack.setCount(MathHelper.clamp(amount, 1, 64));
+				}
 			}
 		}
 		return resultStack;
