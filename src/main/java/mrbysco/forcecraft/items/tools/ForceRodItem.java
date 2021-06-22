@@ -95,7 +95,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 				}
 			} else {
 				List<Entity> list = worldIn.getEntitiesWithinAABB(ItemEntity.class,
-						new AxisAlignedBB(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())));
+						new AxisAlignedBB(new BlockPos(pos.getX(), pos.getY(), pos.getZ())).expand(0.5, 1, 0.5));
 				// If it is a subset of items, it will drop swap an item
 				for (Entity i : list) {
 					if (i instanceof ItemEntity) {

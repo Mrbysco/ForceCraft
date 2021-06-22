@@ -113,16 +113,6 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
                 light = val;
             }
 
-            @Override
-            public CompoundNBT serializeNBT() {
-                return null;
-            }
-
-            @Override
-            public void deserializeNBT(CompoundNBT nbt) {
-
-            }
-
 			@Override
 			public int getSpeedLevel() {
 				return speed;
@@ -137,6 +127,16 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
 			public void setSpeed(int newSpeed) {
 				speed = Math.min(3, newSpeed);
 			}
+
+            @Override
+            public CompoundNBT serializeNBT() {
+                return null;
+            }
+
+            @Override
+            public void deserializeNBT(CompoundNBT nbt) {
+
+            }
         };
     }
 }
