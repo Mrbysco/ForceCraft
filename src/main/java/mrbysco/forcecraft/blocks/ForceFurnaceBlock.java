@@ -6,6 +6,7 @@ import mrbysco.forcecraft.tiles.ForceFurnaceTileEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -164,5 +165,10 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
 		if (world.isRemote == false) {
 			world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), tankStack));
 		}
+	}
+
+	@Override
+	public PushReaction getPushReaction(BlockState state) {
+		return PushReaction.BLOCK;
 	}
 }

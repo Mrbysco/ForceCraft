@@ -215,7 +215,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 
 	@Override
 	public PushReaction getPushReaction(BlockState state) {
-		return PushReaction.DESTROY;
+		return PushReaction.BLOCK;
 	}
 
 	@Override
