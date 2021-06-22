@@ -7,6 +7,7 @@ import mrbysco.forcecraft.items.infuser.ForceToolData;
 import mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.PushReaction;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -68,6 +69,9 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
     private ActionResultType serializeNBT(World world, BlockPos pos, PlayerEntity player, Hand hand){
         ItemStack heldWrench = player.getHeldItem(hand);
         BlockState state = world.getBlockState(pos);
+        if(state.getPushReaction() == PushReaction.BLOCK) {
+            return ActionResultType.FAIL;
+        }
 
         IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
         if(wrenchCap != null) {
