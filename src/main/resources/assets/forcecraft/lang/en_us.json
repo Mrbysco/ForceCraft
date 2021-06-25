@@ -308,8 +308,8 @@
     "item.force_filled_force_flask.tooltip": "Force Potion Base",
     "item.entity_flask.tooltip": "Mob: ",
     "item.entity_flask.tooltip2": "Health: ",
-    "item.entity_flask.empty": "Invalid flask.",
-    "item.entity_flask.empty2": "Please capture the actual mob",
+    "item.entity_flask.empty": "Invalid flask. Missing valid captured mob",
+    "item.entity_flask.empty2": "Couldn't find valid captured mob. Converting to empty flask",
     "item.red_potion.tooltip": "Restores all Hearts",
 
     "_comment": "Fortunes",

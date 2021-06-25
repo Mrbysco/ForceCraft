@@ -18,6 +18,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -42,17 +43,21 @@ public class EntityFlaskItem extends BaseItem {
 		World worldIn = context.getWorld();
 		ItemStack stack = context.getItem();
 		PlayerEntity playerIn = context.getPlayer();
-		if (worldIn.isRemote || !hasEntityStored(stack)) return ActionResultType.FAIL;
+		if (worldIn.isRemote) return ActionResultType.FAIL;
 
-		Entity storedEntity = getStoredEntity(stack, worldIn);
-		BlockPos pos = context.getPos().offset(context.getFace());
-		storedEntity.setPositionAndRotation(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-		worldIn.addEntity(storedEntity);
+		if(hasEntityStored(stack)) {
+			Entity storedEntity = getStoredEntity(stack, worldIn);
+			BlockPos pos = context.getPos().offset(context.getFace());
+			storedEntity.setPositionAndRotation(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+			worldIn.addEntity(storedEntity);
 
-		CompoundNBT tag = stack.getOrCreateTag();
-		tag.remove("StoredEntity");
-		tag.remove("EntityData");
-		stack.setTag(tag);
+			CompoundNBT tag = stack.getOrCreateTag();
+			tag.remove("StoredEntity");
+			tag.remove("EntityData");
+			stack.setTag(tag);
+		} else {
+			playerIn.sendMessage(new TranslationTextComponent("item.entity_flask.empty2").mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
+		}
 
 		stack.shrink(1);
 		ItemStack emptyFlask = new ItemStack(ForceRegistry.FORCE_FLASK.get());
@@ -66,16 +71,20 @@ public class EntityFlaskItem extends BaseItem {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack itemstack = playerIn.getHeldItem(handIn);
 		if(playerIn.isSneaking()) {
-			worldIn.playSound((PlayerEntity)null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
-			if (!worldIn.isRemote) {
-				FlaskEntity flaskEntity = new FlaskEntity(worldIn, playerIn);
-				flaskEntity.setItem(itemstack);
-				flaskEntity.setDirectionAndMovement(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.5F, 1.0F);
-				worldIn.addEntity(flaskEntity);
-			}
+			if(!hasEntityStored(itemstack)) {
+				worldIn.playSound((PlayerEntity)null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+				if (!worldIn.isRemote) {
+					FlaskEntity flaskEntity = new FlaskEntity(worldIn, playerIn);
+					flaskEntity.setItem(itemstack);
+					flaskEntity.setDirectionAndMovement(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.5F, 1.0F);
+					worldIn.addEntity(flaskEntity);
+				}
 
-			if (!playerIn.abilities.isCreativeMode) {
-				itemstack.shrink(1);
+				if (!playerIn.abilities.isCreativeMode) {
+					itemstack.shrink(1);
+				}
+			} else {
+				playerIn.sendMessage(new TranslationTextComponent("item.entity_flask.empty").mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
 			}
 		}
 
@@ -130,9 +139,6 @@ public class EntityFlaskItem extends BaseItem {
 				tooltip.add(new TranslationTextComponent("item.entity_flask.tooltip2").mergeStyle(TextFormatting.GOLD).appendSibling(
 						new StringTextComponent(String.format("[%s]", tag.getCompound("EntityData").getDouble("Health"))).mergeStyle(TextFormatting.GRAY)));
 			}
-		} else {
-			tooltip.add(new TranslationTextComponent("item.entity_flask.empty").mergeStyle(TextFormatting.RED));
-			tooltip.add(new TranslationTextComponent("item.entity_flask.empty2").mergeStyle(TextFormatting.RED));
 		}
 	}
 }

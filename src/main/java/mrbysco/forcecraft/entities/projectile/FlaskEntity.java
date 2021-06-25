@@ -3,7 +3,6 @@ package mrbysco.forcecraft.entities.projectile;
 import mrbysco.forcecraft.items.flask.EntityFlaskItem;
 import mrbysco.forcecraft.registry.ForceEntities;
 import mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.client.renderer.entity.SnowManRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IRendersAsItem;
@@ -16,7 +15,6 @@ import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
-import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.entity.passive.BatEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.passive.CatEntity;
@@ -105,7 +103,7 @@ public class FlaskEntity extends ProjectileItemEntity implements IRendersAsItem 
 
 					this.setItem(new ItemStack(ForceRegistry.FORCE_FLASK.get()));
 				} else {
-					if(entity.isAlive() && !(entity instanceof PlayerEntity) && entity instanceof LivingEntity && entity.canChangeDimension() && !forceFlask.isBlacklisted((LivingEntity)entity)) {
+					if(entity.isAlive() && !entity.isInvulnerable() && !(entity instanceof PlayerEntity) && entity instanceof LivingEntity && entity.canChangeDimension() && !forceFlask.isBlacklisted((LivingEntity)entity)) {
 						LivingEntity livingEntity = (LivingEntity)entity;
 						ItemStack entityFlask = null;
 						if(entity instanceof BatEntity) {
