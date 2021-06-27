@@ -5,6 +5,7 @@ import mrbysco.forcecraft.ForceCraft;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
@@ -20,6 +21,7 @@ public class ConfigHandler {
         public final BooleanValue timeTorchEnabled;
         public final BooleanValue timeTorchLogging;
         public final IntValue baconatorMaxStacks;
+        public final DoubleValue sturdyDamageReduction;
         public final IntValue forceInfusingTime;
         public final ConfigValue<List<? extends String>> furnaceOutputBlacklist;
 
@@ -77,6 +79,10 @@ public class ConfigHandler {
             baconatorMaxStacks = builder
                     .comment("The max amount of food stacks stored in the baconator [Default: 4]")
                     .defineInRange("baconatorMaxStacks", 4, 1, Integer.MAX_VALUE);
+
+            sturdyDamageReduction = builder
+                    .comment("The max amount of damage blocked when all armor pieces have the Sturdy infusion [Default: 0.75]")
+                    .defineInRange("sturdyDamageReduction", 0.75, 0.0, 1.0);
 
             forceInfusingTime = builder
                     .comment("The max amount of ticks it takes to charge a tool with Force [Default: 120 (6 seconds)]")
