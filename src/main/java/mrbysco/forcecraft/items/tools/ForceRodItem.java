@@ -220,16 +220,9 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 		if(playerIn != null) {
 			stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
-				if (cap.isRodOfHealing(3)) {
-					playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 2, false, false));
-					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
-					playerIn.getCooldownTracker().setCooldown(this, 10);
-				} else if (cap.isRodOfHealing(2)) {
-					playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 1, false, false));
-					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
-					playerIn.getCooldownTracker().setCooldown(this, 10);
-				} else if (cap.isRodOfHealing(1)) {
-					playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, 0, false, false));
+				if(cap.getHealingLevel() > 0) {
+					int healingLevel = cap.getHealingLevel();
+					playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, healingLevel - 1, false, false));
 					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
 					playerIn.getCooldownTracker().setCooldown(this, 10);
 				}
@@ -318,12 +311,8 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
     	fd.attachInformation(tooltip);
     	
 		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
-			if (cap.isRodOfHealing(3)) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing3").mergeStyle(TextFormatting.RED));
-			} else if (cap.isRodOfHealing(2)) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing2").mergeStyle(TextFormatting.RED));
-			} else if (cap.isRodOfHealing(1)) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing1").mergeStyle(TextFormatting.RED));
+			if(cap.getHealingLevel() > 0) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing" + cap.getHealingLevel()).mergeStyle(TextFormatting.RED));
 			}
 			if (cap.getSpeedLevel() > 0) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));

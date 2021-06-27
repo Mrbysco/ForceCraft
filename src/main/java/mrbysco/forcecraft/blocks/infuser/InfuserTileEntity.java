@@ -1,6 +1,5 @@
 package mrbysco.forcecraft.blocks.infuser;
 
-import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
 import mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
@@ -84,8 +83,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public int maxProcessTime = 20;
 
     public int fluidContained;
-	//modifiers cap out
-	private static final int MAX_MODIFIER = 10;
 	// slots [0,7] are the surround
 	public static final int SLOT_TOOL = 8;
     public static final int SLOT_GEM = 9;
@@ -354,7 +351,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 //                    energyStorage.consumePower(ENERGY_COST_PER);
 
 					UpgradeTomeItem.onModifierApplied(this.getBookInSlot(), modifier, tool);
-					ForceCraft.LOGGER.info("process tool success {}, {}", this.getBookInSlot().getTag() , energyStorage.getEnergyStored());
+//					ForceCraft.LOGGER.info("process tool success {}, {}", this.getBookInSlot().getTag() , energyStorage.getEnergyStored());
 				}
 			}
 		}
@@ -471,9 +468,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 			}
 
 			return true;
-		} else {
-			ForceCraft.LOGGER.info(" apply returned false on {} to the tool {}", recipe.resultModifier, tool);
-		}
+		}// else {
+		//	ForceCraft.LOGGER.info(" apply returned false on {} to the tool {}", recipe.resultModifier, tool);
+		//}
 
         return false;
     }
@@ -590,9 +587,10 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     static boolean addBleedingModifier(ItemStack stack) {
         Item st = stack.getItem();
+        int MAX_CAP = ConfigHandler.COMMON.bleedCap.get();
 		if(st instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null && modifierCap.getBleedLevel() < 2) {
+			if(modifierCap != null && modifierCap.getBleedLevel() < MAX_CAP) {
 				modifierCap.incrementBleed();
 				addInfusedTag(stack);
 				return true;
@@ -600,7 +598,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		}
 		else if(st instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null && modifierCap.getBleedLevel() < 2) {
+			if(modifierCap != null && modifierCap.getBleedLevel() < MAX_CAP) {
 				modifierCap.incrementBleed();
 				addInfusedTag(stack);
 				return true;
@@ -609,15 +607,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		else if (st instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
-                if(modifierCap.getBleedLevel() == 0) {
-                    modifierCap.incrementBleed();
+				if(modifierCap.getBleedLevel() < MAX_CAP) {
+					modifierCap.incrementBleed();
 					addInfusedTag(stack);
-                    return true;
-                } else if(modifierCap.getBleedLevel() < 2) {
-                    modifierCap.incrementBleed();
-					addInfusedTag(stack);
-                    return true;
-                }
+					return true;
+				}
             }
         }
         return false;
@@ -665,19 +659,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         if (stack.getItem() instanceof ForceRodItem) {
             IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
             if(rodCap != null) {
-                if(!rodCap.isRodOfHealing(1)) {
-                    rodCap.setRodOfHealing(true, 1);
+				int MAX_CAP = ConfigHandler.COMMON.healingCap.get();
+				if(rodCap != null && rodCap.getHealingLevel() < MAX_CAP) {
+					rodCap.incrementHealing();
 					addInfusedTag(stack);
-                    return true;
-                } else if (!rodCap.isRodOfHealing(2) && rodCap.isRodOfHealing(1)) {
-                    rodCap.setRodOfHealing(true, 2);
-					addInfusedTag(stack);
-                    return true;
-                } else if (!rodCap.isRodOfHealing(3) && rodCap.isRodOfHealing(2) && rodCap.isRodOfHealing(1)) {
-                    rodCap.setRodOfHealing(true, 3);
-					addInfusedTag(stack);
-                    return true;
-                }
+					return true;
+				}
             }
         }
         return false;
@@ -746,18 +733,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         if(st instanceof ForceSwordItem || st instanceof ForceAxeItem || st instanceof ForceShovelItem || st instanceof ForcePickaxeItem || st instanceof ForceRodItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
-                if(modifierCap.getSturdyLevel() == 0) {
-                    modifierCap.incrementSturdy();
-                    stack.addEnchantment(Enchantments.UNBREAKING, 1);
+				if(modifierCap.getSturdyLevel() < ConfigHandler.COMMON.sturdyCap.get()) {
+					modifierCap.incrementSturdy();
+					EnchantUtils.incrementLevel(stack, Enchantments.UNBREAKING);
 					addInfusedTag(stack);
-                    return true;
-                }
-                else if(modifierCap.getSturdyLevel() < 3) {
-                    modifierCap.incrementSturdy();
-                    EnchantUtils.incrementLevel(stack, Enchantments.UNBREAKING);
-					addInfusedTag(stack);
-                    return true;
-                }
+					return true;
+				}
             }
         }
         else if (stack.getItem() instanceof ForceArmorItem) {
@@ -775,35 +756,24 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     static boolean addLuckModifier(ItemStack stack) {
         Item st = stack.getItem();
+        int MAX_CAP = ConfigHandler.COMMON.luckCap.get();
         if(st instanceof ForcePickaxeItem || st instanceof ForceShovelItem || st instanceof ForceAxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
-                if(modifierCap.getLuckLevel() == 0) {
-                    modifierCap.incrementLuck();
-                    stack.addEnchantment(Enchantments.FORTUNE, 1);
+				if(modifierCap.getLuckLevel() < MAX_CAP) {
+					modifierCap.incrementLuck();
+					EnchantUtils.incrementLevel(stack, Enchantments.FORTUNE);
 					addInfusedTag(stack);
-                    return true;
-                }
-                else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
-                    modifierCap.incrementLuck();
-                    EnchantUtils.incrementLevel(stack, Enchantments.FORTUNE);
-					addInfusedTag(stack);
-                    return true;
-                }
+					return true;
+				}
             }
         }
 		else if(st instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null ) {
-				if(modifierCap.getLuckLevel() == 0) {
+				if(modifierCap.getLuckLevel() < MAX_CAP) {
 					modifierCap.incrementLuck();
-					stack.addEnchantment(Enchantments.LOOTING, 1);
-					addInfusedTag(stack);
-					return true;
-				}
-				else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
-					modifierCap.incrementLuck();
-					EnchantUtils.incrementLevel(stack, Enchantments.LOOTING);
+					EnchantUtils.incrementLevel(stack, Enchantments.FORTUNE);
 					addInfusedTag(stack);
 					return true;
 				}
@@ -812,13 +782,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		else if(st instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null ) {
-				if(modifierCap.getLuckLevel() == 0) {
+				if(modifierCap.getLuckLevel() < MAX_CAP) {
 					modifierCap.incrementLuck();
-					addInfusedTag(stack);
-					return true;
-				}
-				else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
-					modifierCap.incrementLuck();
+					EnchantUtils.incrementLevel(stack, Enchantments.FORTUNE);
 					addInfusedTag(stack);
 					return true;
 				}
@@ -827,16 +793,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         else if (st instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
-                if(modifierCap.getLuckLevel() == 0) {
-                    modifierCap.incrementLuck();
+				if(modifierCap.getLuckLevel() < MAX_CAP) {
+					modifierCap.incrementLuck();
+					EnchantUtils.incrementLevel(stack, Enchantments.FORTUNE);
 					addInfusedTag(stack);
-                    return true;
-                }
-                else if(modifierCap.getLuckLevel() < MAX_MODIFIER) {
-                    modifierCap.incrementLuck();
-					addInfusedTag(stack);
-                    return true;
-                }
+					return true;
+				}
             }
         }
         return false;
@@ -844,27 +806,22 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     static boolean addDamageModifier(ItemStack stack) {
         Item st = stack.getItem();
+		int MAX_CAP = ConfigHandler.COMMON.damageCap.get();
         if(st instanceof ForceSwordItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
-                if(modifierCap.getSharpLevel() == 0) {
-                    modifierCap.incrementSharp();
-                    stack.addEnchantment(Enchantments.SHARPNESS, 2);
+				if(modifierCap.getSharpLevel() < MAX_CAP) {
+					modifierCap.incrementSharp();
+					EnchantUtils.incrementLevel(stack, Enchantments.SHARPNESS);
 					addInfusedTag(stack);
-                    return true;
-                }
-                else if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
-                    modifierCap.incrementSharp();
-                    EnchantUtils.incrementLevel(stack, Enchantments.SHARPNESS);
-					addInfusedTag(stack);
-                    return true;
-                }
+					return true;
+				}
             }
         }
         else if(st instanceof ForceBowItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
-                if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
+                if(modifierCap.getSharpLevel() < MAX_CAP) {
                     modifierCap.incrementSharp();
                     EnchantUtils.incrementLevel(stack, Enchantments.POWER);
 					addInfusedTag(stack);
@@ -873,19 +830,13 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             }
         }
         else if (st instanceof ForceArmorItem) {
-
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
-                if(modifierCap.getSharpLevel() == 0) {
-                    modifierCap.incrementSharp();
+				if(modifierCap.getSharpLevel() < MAX_CAP) {
+					modifierCap.incrementSharp();
 					addInfusedTag(stack);
-                    return true;
-                }
-                else if(modifierCap.getSharpLevel() < MAX_MODIFIER) {
-                    modifierCap.incrementSharp();
-					addInfusedTag(stack);
-                    return true;
-                }
+					return true;
+				}
             }
         }
         return false;
@@ -909,16 +860,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     static boolean addForceModifier(ItemStack stack) {
         Item st = stack.getItem();
+		int MAX_CAP = ConfigHandler.COMMON.forceCap.get();
         if(st instanceof ForceSwordItem || st instanceof ForceAxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
-                if(modifierCap.getForceLevel() == 0) {
-                    modifierCap.incrementForce();
-                    stack.addEnchantment(Enchantments.KNOCKBACK, 1);
-					addInfusedTag(stack);
-                    return true;
-                }
-                else if(modifierCap.getForceLevel() < MAX_MODIFIER) {
+               if(modifierCap.getForceLevel() < MAX_CAP) {
                     modifierCap.incrementForce();
                     EnchantUtils.incrementLevel(stack, Enchantments.KNOCKBACK);
 					addInfusedTag(stack);
@@ -966,27 +912,22 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addSpeedModifier(ItemStack stack) {
+    	int MAX_CAP = ConfigHandler.COMMON.speedCap.get();
         if(stack.getItem() instanceof ForceShovelItem || stack.getItem() instanceof ForcePickaxeItem || stack.getItem() instanceof ForceAxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
-                if(modifierCap.getSpeedLevel() == 0) {
-                    modifierCap.incrementSpeed();
-                    stack.addEnchantment(Enchantments.EFFICIENCY, 1);
+				if(modifierCap.getSpeedLevel() < MAX_CAP) {
+					modifierCap.incrementSpeed();
+					EnchantUtils.incrementLevel(stack, Enchantments.EFFICIENCY);
 					addInfusedTag(stack);
-                    return true;
-                }
-                else if(modifierCap.getSpeedLevel() < MAX_MODIFIER) {
-                    modifierCap.incrementSpeed();
-                    EnchantUtils.incrementLevel(stack, Enchantments.EFFICIENCY);
-					addInfusedTag(stack);
-                    return true;
-                }
+					return true;
+				}
             }
         }
         else if (stack.getItem() instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
-                if(modifierCap.getSpeedLevel() < MAX_MODIFIER) {
+                if(modifierCap.getSpeedLevel() == 0) {
                     modifierCap.incrementSpeed();
 					addInfusedTag(stack);
                     return true;
@@ -996,7 +937,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         else if (stack.getItem() instanceof ForceRodItem) {
             IForceRodModifier modifierCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
             if(modifierCap != null ) {
-                if(modifierCap.getSpeedLevel() < 3) {
+                if(modifierCap.getSpeedLevel() < ConfigHandler.COMMON.rodSpeedCap.get()) {
                     modifierCap.incrementSpeed();
 					addInfusedTag(stack);
                     return true;

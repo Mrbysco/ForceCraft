@@ -11,28 +11,6 @@ import net.minecraft.potion.EffectInstance;
 
 public class MobUtil {
 
-    public static void removeCreeperExplodeTask(CreeperEntity entity) {
-        entity.goalSelector.goals.removeIf(goal -> {
-            boolean flag = goal.getGoal() instanceof CreeperSwellGoal || goal.getGoal() instanceof MeleeAttackGoal;
-            if(flag) {
-                entity.setCreeperState(-1);
-            }
-            return flag;
-        });
-
-        entity.targetSelector.goals.removeIf(goal -> {
-            boolean flag = goal.getGoal() instanceof NearestAttackableTargetGoal;
-            if(flag) {
-                entity.setCreeperState(-1);
-            }
-            return flag;
-        });
-    }
-
-    public static void addBleedingEffect(ItemStack stack, LivingEntity target){
-
-    }
-
     public static void addBleedingEffect(int level, LivingEntity target){
         EffectInstance bleedingOne = new EffectBleeding(2);
         EffectInstance bleedingTwo = new EffectBleeding(4);

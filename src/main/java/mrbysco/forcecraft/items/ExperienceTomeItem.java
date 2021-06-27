@@ -1,7 +1,7 @@
 package mrbysco.forcecraft.items;
 
 import mrbysco.forcecraft.capablilities.experiencetome.ExperienceTomeProvider;
-import mrbysco.forcecraft.util.DartUtils;
+import mrbysco.forcecraft.util.ForceUtils;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -51,7 +51,7 @@ public class ExperienceTomeItem extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (DartUtils.isFakePlayer(player) || hand != Hand.MAIN_HAND || world.isRemote) {
+        if (ForceUtils.isFakePlayer(player) || hand != Hand.MAIN_HAND || world.isRemote) {
             return new ActionResult<>(ActionResultType.FAIL, stack);
         }
         int exp;

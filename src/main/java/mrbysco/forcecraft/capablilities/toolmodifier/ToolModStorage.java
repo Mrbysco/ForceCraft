@@ -38,13 +38,13 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.force" + cap.getForceLevel()));
 			}
 			if (cap.getSturdyLevel() > 0) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sturdy" + cap.getForceLevel()));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sturdy" + cap.getSturdyLevel()));
 			}
 			if (cap.hasWing()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.wing"));
 			}
 			if (cap.hasBleed()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bleed").mergeStyle(TextFormatting.RED));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bleed" + cap.getBleedLevel()).mergeStyle(TextFormatting.RED));
 			}
 			if (cap.hasRainbow()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.rainbow").mergeStyle(TextFormatting.GOLD));

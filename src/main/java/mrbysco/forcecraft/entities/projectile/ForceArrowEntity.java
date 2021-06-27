@@ -3,7 +3,7 @@ package mrbysco.forcecraft.entities.projectile;
 import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.registry.ForceEntities;
 import mrbysco.forcecraft.registry.ForceRegistry;
-import mrbysco.forcecraft.util.DartUtils;
+import mrbysco.forcecraft.util.ForceUtils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.CreeperSwellGoal;
@@ -16,7 +16,6 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -110,7 +109,7 @@ public class ForceArrowEntity extends ArrowEntity {
 		super.arrowHit(living);
 
 		if(isEnder()) {
-			DartUtils.teleportRandomly(living);
+			ForceUtils.teleportRandomly(living);
 		}
 
 		if(isBane()) {

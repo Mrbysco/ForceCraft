@@ -8,7 +8,7 @@ import mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import mrbysco.forcecraft.items.infuser.ForceToolData;
 import mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import mrbysco.forcecraft.registry.material.ModToolMaterial;
-import mrbysco.forcecraft.util.DartUtils;
+import mrbysco.forcecraft.util.ForceUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
-import static mrbysco.forcecraft.util.DartUtils.isLog;
+import static mrbysco.forcecraft.util.ForceUtils.isLog;
 
 public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 
@@ -57,7 +57,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
         if(toolModifierCap != null) {
             if(toolModifierCap.hasLumberjack()) {
                 if (player != null) {
-                    if (DartUtils.isTree(player.getEntityWorld(), pos)) {
+                    if (ForceUtils.isTree(player.getEntityWorld(), pos)) {
                         return fellTree(stack, pos, player);
                     }
                 }
@@ -145,7 +145,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
                 }
 
                 // break it, wooo!
-                DartUtils.breakExtraBlock(tool, world, player, pos, pos);
+                ForceUtils.breakExtraBlock(tool, world, player, pos, pos);
                 left--;
             }
         }

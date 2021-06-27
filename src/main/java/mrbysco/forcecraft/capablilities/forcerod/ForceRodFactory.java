@@ -14,23 +14,33 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
     @Override
     public IForceRodModifier call() throws Exception {
         return new IForceRodModifier() {
-
-            boolean[] rodOfHealing = {false, false, false};
             boolean camo = false;
             boolean ender = false;
             boolean sight = false;
             int speed = 0;
+            int healing = 0;
 
             GlobalPos homeLocation = null;
 
+
             @Override
-            public boolean isRodOfHealing(int level) {
-                return rodOfHealing[level - 1];
+            public int getHealingLevel() {
+                return healing;
             }
 
             @Override
-            public void setRodOfHealing(boolean newVal, int level) {
-                rodOfHealing[level - 1] = newVal;
+            public boolean hasHealing() {
+                return healing > 0;
+            }
+
+            @Override
+            public void incrementHealing() {
+                healing++;
+            }
+
+            @Override
+            public void setHealing(int newHealing) {
+                healing = newHealing;
             }
 
             @Override

@@ -4,7 +4,7 @@ public interface IToolModifier {
     /**
      * Modifier: Speed
      * Item: Sugar
-     * Levels: 5
+     * Levels: 5 on tools, 1 on armor, 3 on Force Rod
      * Effect: Gives Player Haste [Level] when holding the tool
      */
     int getSpeedLevel();
@@ -23,7 +23,7 @@ public interface IToolModifier {
     /**
      * Modifier: Force
      * Item: Force Nugget
-     * Levels: 3
+     * Levels: 2
      * Effect: Gives the Sword Knockback
      */
     int getForceLevel();
@@ -43,7 +43,7 @@ public interface IToolModifier {
     /**
      * Modifier: Sharpness
      * Item: Claw
-     * Levels: 10
+     * Levels: 5
      * Effect: Adds Sharpness to Force Sword
      */
     int getSharpLevel();
@@ -54,7 +54,7 @@ public interface IToolModifier {
     /**
      * Modifier: Luck
      * Item: Fortune
-     * Levels: 5
+     * Levels: 4
      * Effect: Adds Fortune to a tool or Looting to a sword
      */
     int getLuckLevel();
@@ -65,8 +65,8 @@ public interface IToolModifier {
     /**
      * Modifier: Sturdy
      * Item: Bricks/Obsidian
-     * Levels: 10
-     * Effect: Adds 1 Level of Unbreaking to tool up to 10
+     * Levels: 3 on tools, 1 per armor
+     * Effect: Adds 1 Level of Unbreaking to tool up to 3
      */
     int getSturdyLevel();
     boolean hasSturdy();
@@ -94,7 +94,7 @@ public interface IToolModifier {
     /**
      * Modifier: Bleeding
      * Items: Arrow
-     * Levels: 2
+     * Levels: 3
      * Effect: Applies Bleeding Potion Effect
      */
 

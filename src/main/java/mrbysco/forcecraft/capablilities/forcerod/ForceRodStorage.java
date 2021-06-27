@@ -20,9 +20,7 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
         CompoundNBT nbt  = new CompoundNBT();
 		nbt.putInt("speed", instance.getSpeedLevel());
         // why isn't this just an integer
-        nbt.putBoolean("healingOne", instance.isRodOfHealing(1));	
-        nbt.putBoolean("healingTwo", instance.isRodOfHealing(2));
-        nbt.putBoolean("healingThree", instance.isRodOfHealing(3));
+        nbt.putInt("healing", instance.getHealingLevel());
 
         if(instance.getHomeLocation() != null) {
             nbt.putBoolean("HasHome", true);
@@ -43,9 +41,7 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
         if(nbtIn instanceof CompoundNBT){
             CompoundNBT nbt = (CompoundNBT) nbtIn;
 			instance.setSpeed(nbt.getInt("speed"));
-            instance.setRodOfHealing(nbt.getBoolean("healingOne"), 1);
-            instance.setRodOfHealing(nbt.getBoolean("healingTwo"), 2);
-            instance.setRodOfHealing(nbt.getBoolean("healingThree"), 3);
+            instance.setHealing(nbt.getInt("healing"));
 
             if(nbt.getBoolean("HasHome")) {
                 BlockPos pos = BlockPos.fromLong(nbt.getLong("HomeLocation"));

@@ -34,7 +34,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import java.util.Map;
 import java.util.Stack;
 
-public class DartUtils {
+public class ForceUtils {
 
     public static void removeEnchant(Enchantment enchantment, ItemStack stack){
         Map<Enchantment, Integer> enchantMap = EnchantmentHelper.getEnchantments(stack);

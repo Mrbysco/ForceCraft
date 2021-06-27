@@ -23,6 +23,15 @@ public class ConfigHandler {
         public final IntValue forceInfusingTime;
         public final ConfigValue<List<? extends String>> furnaceOutputBlacklist;
 
+        public final IntValue bleedCap;
+        public final IntValue healingCap;
+        public final IntValue sturdyCap;
+        public final IntValue luckCap;
+        public final IntValue damageCap;
+        public final IntValue forceCap;
+        public final IntValue speedCap;
+        public final IntValue rodSpeedCap;
+
         public final BooleanValue ChuChuSpawning;
         public final IntValue ChuChuWeight;
         public final IntValue ChuChuMinGroup;
@@ -79,8 +88,44 @@ public class ConfigHandler {
                     .defineListAllowEmpty(Collections.singletonList("furnaceOutputBlacklist"), () -> Collections.singletonList("minecraft:hopper"), o -> (o instanceof String));
 
             builder.pop();
-            builder.comment("General settings")
-                    .push("general");
+            builder.comment("Infusion settings")
+                    .push("infusion");
+
+            bleedCap = builder
+                    .comment("The max level of Bleeding that can be applied [Default: 3]")
+                    .defineInRange("bleedCap", 3, 1, 5);
+
+            healingCap = builder
+                    .comment("The max level of Healing that can be applied [Default: 3]")
+                    .defineInRange("healingCap", 3, 1, 5);
+
+            sturdyCap = builder
+                    .comment("The max level of Sturdy that can be applied on force tools [Default: 3]")
+                    .defineInRange("sturdyToolCap", 3, 1, 10);
+
+            luckCap = builder
+                    .comment("The max level of Luck that can be applied [Default: 4]")
+                    .defineInRange("luckCap", 4, 1, 10);
+
+            damageCap = builder
+                    .comment("The max level of Damage that can be applied [Default: 5]")
+                    .defineInRange("luckCap", 5, 1, 10);
+
+            forceCap = builder
+                    .comment("The max level of Force that can be applied [Default: 2]")
+                    .defineInRange("forceCap", 2, 1, 10);
+
+            speedCap = builder
+                    .comment("The max level of Speed that can be applied [Default: 5]")
+                    .defineInRange("speedCap", 5, 1, 10);
+
+            rodSpeedCap = builder
+                    .comment("The max level of Speed that can be applied to a Force Rod [Default: 3]")
+                    .defineInRange("speedCap", 3, 1, 5);
+
+            builder.pop();
+            builder.comment("Mob settings")
+                    .push("mob");
 
             ChuChuSpawning = builder
                     .comment("Enable Chu Chu's to spawn [Default: true]")
