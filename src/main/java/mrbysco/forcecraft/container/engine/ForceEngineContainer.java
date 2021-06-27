@@ -18,8 +18,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import java.util.Objects;
 
 public class ForceEngineContainer extends Container {
-	public final int[] tankAmount = new int[2];
-
 	private ForceEngineTile tile;
 	private PlayerEntity player;
 
@@ -65,10 +63,62 @@ public class ForceEngineContainer extends Container {
 			this.addSlot(new Slot(playerInventoryIn, x, xPos + x * 18, yPos + 58));
 		}
 
-		this.tankAmount[0] = tile.getFuelAmount();
-		this.tankAmount[1] = tile.getThrottleAmount();
-		this.trackInt(IntReferenceHolder.create(this.tankAmount, 0));
-		this.trackInt(IntReferenceHolder.create(this.tankAmount, 1));
+		trackFluids();
+	}
+
+	private void trackFluids() {
+		// Dedicated server ints are actually truncated to short so we need to split our integer here (split our 32 bit integer into two 16 bit integers)
+		//Fuel Tank
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return tile.getFuelAmount() & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int fluidStored = tile.getFuelAmount() & 0xffff0000;
+				tile.setFuelAmount(fluidStored + (value & 0xffff));
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return (tile.getFuelAmount() >> 16) & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int fluidStored = tile.getFuelAmount() & 0x0000ffff;
+				tile.setFuelAmount(fluidStored | (value << 16));
+			}
+		});
+
+		//Throttle Tank
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return tile.getThrottleAmount() & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int fluidStored = tile.getThrottleAmount() & 0xffff0000;
+				tile.setThrottleAmount(fluidStored + (value & 0xffff));
+			}
+		});
+		trackInt(new IntReferenceHolder() {
+			@Override
+			public int get() {
+				return (tile.getThrottleAmount() >> 16) & 0xffff;
+			}
+
+			@Override
+			public void set(int value) {
+				int fluidStored = tile.getThrottleAmount() & 0x0000ffff;
+				tile.setThrottleAmount(fluidStored | (value << 16));
+			}
+		});
 	}
 
 	public ForceEngineTile getTile() {
@@ -123,8 +173,5 @@ public class ForceEngineContainer extends Container {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-
-		this.tankAmount[0] = tile.getFuelAmount();
-		this.tankAmount[1] = tile.getThrottleAmount();
 	}
 }

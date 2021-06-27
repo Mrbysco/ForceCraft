@@ -468,6 +468,14 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		return tank.getFluidAmount();
 	}
 
+	public void setFuelAmount(int amount) {
+		if(amount > 0) {
+			tank.getFluid().setAmount(amount);
+		} else {
+			tank.setFluid(FluidStack.EMPTY);
+		}
+	}
+
 	public Fluid getThrottleFluid() {
 		return throttleTank.getFluid().getFluid();
 	}
@@ -478,6 +486,14 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 
 	public int getThrottleAmount() {
 		return throttleTank.getFluidAmount();
+	}
+
+	public void setThrottleAmount(int amount) {
+		if(amount > 0) {
+			throttleTank.getFluid().setAmount(amount);
+		} else {
+			throttleTank.setFluid(FluidStack.EMPTY);
+		}
 	}
 
 	protected boolean isFluidEqual(FluidTank fluidTank, FluidStack fluid) {

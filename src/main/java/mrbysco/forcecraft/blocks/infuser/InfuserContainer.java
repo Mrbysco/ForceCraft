@@ -23,7 +23,6 @@ public class InfuserContainer extends Container {
     private InfuserTileEntity tile;
     private PlayerEntity player;
 
-    public final int[] powerStored = new int[1];
     public final int[] validRecipe = new int[1];
 
     public InfuserContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
@@ -80,15 +79,14 @@ public class InfuserContainer extends Container {
             this.addSlot(new Slot(playerInventoryIn, x, xPos + x * 18, yPos + 58));
         }
 
-        this.powerStored[0] = tile.getEnergyStored();
-        this.trackInt(IntReferenceHolder.create(this.powerStored, 0));
+        trackPower();
+        trackFluid();
 
         this.validRecipe[0] = tile.hasValidRecipe() ? 1 : 0;
         this.trackInt(IntReferenceHolder.create(this.validRecipe, 0));
 
         //set data that will sync server->client WITHOUT needing to call .markDirty()
 		trackInt(new IntReferenceHolder() {
-
 			@Override
 			public int get() {
 				return tile.processTime;
@@ -100,7 +98,6 @@ public class InfuserContainer extends Container {
 			}
 		});
 		trackInt(new IntReferenceHolder() {
-
 			@Override
 			public int get() {
 				return tile.maxProcessTime;
@@ -112,6 +109,62 @@ public class InfuserContainer extends Container {
 			}
 		});
         AdvancementUtil.unlockTierAdvancements(player, tile.getBookTier());
+    }
+
+    private void trackFluid() {
+        // Dedicated server ints are actually truncated to short so we need to split our integer here (split our 32 bit integer into two 16 bit integers)
+        trackInt(new IntReferenceHolder() {
+            @Override
+            public int get() {
+                return tile.getFluidAmount() & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+                int fluidStored = tile.getFluidAmount() & 0xffff0000;
+                tile.setFluidAmount(fluidStored + (value & 0xffff));
+            }
+        });
+        trackInt(new IntReferenceHolder() {
+            @Override
+            public int get() {
+                return (tile.getFluidAmount() >> 16) & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+                int fluidStored = tile.getFluidAmount() & 0x0000ffff;
+                tile.setFluidAmount(fluidStored | (value << 16));
+            }
+        });
+    }
+
+    private void trackPower() {
+        // Dedicated server ints are actually truncated to short so we need to split our integer here (split our 32 bit integer into two 16 bit integers)
+        trackInt(new IntReferenceHolder() {
+            @Override
+            public int get() {
+                return tile.getEnergyStored() & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+                int energyStored = tile.getEnergyStored() & 0xffff0000;
+                tile.setEnergyStored(energyStored + (value & 0xffff));
+            }
+        });
+        trackInt(new IntReferenceHolder() {
+            @Override
+            public int get() {
+                return (tile.getEnergyStored() >> 16) & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+                int energyStored = tile.getEnergyStored() & 0x0000ffff;
+                tile.setEnergyStored(energyStored | (value << 16));
+            }
+        });
     }
 
     @Override
@@ -173,8 +226,6 @@ public class InfuserContainer extends Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-
-        this.powerStored[0] = tile.getEnergyStored();
     }
 
     @Override

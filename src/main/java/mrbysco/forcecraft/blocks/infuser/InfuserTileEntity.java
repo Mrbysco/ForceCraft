@@ -210,7 +210,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
         if (canWork) {
         	processTime++;
-			energyStorage.consumePower(ENERGY_COST_PER);
+
+			if(energyStorage.getEnergyStored() > ENERGY_COST_PER) {
+				energyStorage.consumePower(ENERGY_COST_PER);
+			}
+
         	if(processTime < this.maxProcessTime) {
         		return;
         	}
@@ -343,7 +347,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				ItemStack tool = getFromToolSlot();
 				boolean success = applyModifier(tool, modifier, recipe);
 				if (success) {
-					world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_DONE.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 					// for EACH modifier
 					modifier.shrink(1);
@@ -355,6 +358,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
 			}
 		}
+		world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_DONE.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
 
         // TODO: is this notfiy needed?
         world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
@@ -999,6 +1003,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 	}
 
 	public boolean allSlotsMatchRecipe() {
+    	int requiredForce = 0;
 		for (int i = 0; i < SLOT_TOOL; i++) {
 			ItemStack modifier = getModifier(i);
 			if(modifier.isEmpty()) continue;
@@ -1008,6 +1013,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 			for(InfuseRecipe recipe : recipes) {
 				if(recipe.matchesModifier(this, modifier, false)) {
 					foundMatch = true;
+					requiredForce += FLUID_COST_PER;
 					break;
 				}
 			}
@@ -1015,7 +1021,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				return false;
 			}
 		}
-		return true;
+		return getFluidAmount() >+ requiredForce;
 	}
 
 	public int getBookTier() {
@@ -1029,12 +1035,24 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     	return ENERGY_COST_PER;
 	}
 
-    public int getFluidAmount() {
-        return tank.getFluidAmount();
-    }
+	public int getFluidAmount() {
+		return tank.getFluidAmount();
+	}
+
+	public void setFluidAmount(int amount) {
+    	if(amount > 0) {
+			tank.getFluid().setAmount(amount);
+		} else {
+    		tank.setFluid(FluidStack.EMPTY);
+		}
+	}
 
     public int getEnergyStored() {
         return energyStorage.getEnergyStored();
+    }
+
+    public void setEnergyStored(int energy) {
+        energyStorage.setEnergy(energy);
     }
 
     public float getFluidPercentage() {
