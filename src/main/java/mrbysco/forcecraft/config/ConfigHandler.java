@@ -91,7 +91,7 @@ public class ConfigHandler {
             furnaceOutputBlacklist = builder
                     .comment("An additional list of tile entities the Force Furnace can NOT insert into [Syntax: modid:tile_name]\n" +
                             "Examples: \"minecraft:shulker_box\" would stop it inserting into shulkers")
-                    .defineListAllowEmpty(Collections.singletonList("furnaceOutputBlacklist"), () -> Collections.singletonList("minecraft:hopper"), o -> (o instanceof String));
+                    .defineListAllowEmpty(Collections.singletonList("furnaceOutputBlacklist"), () -> Collections.singletonList(""), o -> (o instanceof String));
 
             builder.pop();
             builder.comment("Infusion settings")

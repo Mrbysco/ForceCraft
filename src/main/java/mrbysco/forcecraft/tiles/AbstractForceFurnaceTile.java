@@ -28,6 +28,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.HopperTileEntity;
+import net.minecraft.tileentity.IHopper;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -47,6 +48,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractForceFurnaceTile extends LockableTileEntity implements ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
@@ -58,6 +60,11 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	private static final int[] SLOTS_UP = new int[]{INPUT_SLOT};
 	private static final int[] SLOTS_DOWN = new int[]{OUTPUT_SLOT, FUEL_SLOT};
 	private static final int[] SLOTS_HORIZONTAL = new int[]{FUEL_SLOT};
+
+	private static final List<ResourceLocation> hopperBlacklist = Arrays.asList(ResourceLocation.tryCreate("hopper"), new ResourceLocation("cyclic", "hopper"),
+			new ResourceLocation("cyclic", "hopper_gold"), new ResourceLocation("cyclic", "hopper_fluid"),
+			new ResourceLocation("uppers", "upper"), new ResourceLocation("goldenhopper", "golden_hopper"),
+			new ResourceLocation("woodenhopper", "wooden_hopper"));
 
 	protected NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
 	private int burnTime;
@@ -319,14 +326,17 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 						BlockPos offPos = pos.offset(dir);
 						if(this.world.isAreaLoaded(pos, 1)) {
 							TileEntity foundTile = this.world.getTileEntity(offPos);
-							boolean flag = foundTile instanceof HopperTileEntity || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile;
-							boolean flag2 = foundTile != null && (additionalBlacklist.isEmpty() || additionalBlacklist.contains(foundTile.getType().toString()));
-							if(!flag && flag2 && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-								IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
-								ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
-								outputStack = rest;
-								if(outputStack.isEmpty()) {
-									break;
+							if(foundTile != null) {
+								ResourceLocation typeLocation = foundTile.getType().getRegistryName();
+								boolean flag = foundTile instanceof HopperTileEntity || foundTile instanceof IHopper || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile;
+								boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
+								if(!flag && flag2 && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+									IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
+									ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
+									outputStack = rest;
+									if(outputStack.isEmpty()) {
+										break;
+									}
 								}
 							}
 						} else {
@@ -353,14 +363,17 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 					BlockPos offPos = pos.offset(dir);
 					if(this.world.isAreaLoaded(pos, 1)) {
 						TileEntity foundTile = this.world.getTileEntity(offPos);
-						boolean flag = foundTile instanceof HopperTileEntity || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile;
-						boolean flag2 = foundTile != null && (additionalBlacklist.isEmpty() || additionalBlacklist.contains(foundTile.getType().toString()));
-						if(!flag && flag2 && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-							IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
-							ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
-							outputStack = rest;
-							if(outputStack.isEmpty()) {
-								break;
+						if(foundTile != null) {
+							ResourceLocation typeLocation = foundTile.getType().getRegistryName();
+							boolean flag = foundTile instanceof HopperTileEntity || foundTile instanceof IHopper || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile;
+							boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
+							if(!flag && flag2 && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+								IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
+								ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
+								outputStack = rest;
+								if(outputStack.isEmpty()) {
+									break;
+								}
 							}
 						}
 					} else {
