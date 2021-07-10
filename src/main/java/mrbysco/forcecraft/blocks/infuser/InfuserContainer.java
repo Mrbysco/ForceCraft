@@ -266,5 +266,10 @@ public class InfuserContainer extends Container {
         public boolean isItemValid(@Nonnull ItemStack stack) {
             return slotNumber <= tile.getBookTier() && super.isItemValid(stack);
         }
+
+        @Override
+        public int getSlotStackLimit() {
+            return 1;
+        }
     }
 }

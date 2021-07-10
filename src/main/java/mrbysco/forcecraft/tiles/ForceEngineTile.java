@@ -10,6 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -66,6 +67,13 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		}
 
 		@Override
+		public boolean isFluidValid(FluidStack stack) {
+			Fluid fluid = stack.getFluid();
+			return fluid.isIn(ForceTags.FORCE) || fluid.isIn(FluidTags.LAVA) ||
+					fluid.isIn(ForceTags.FUEL) || fluid.isIn(ForceTags.BIOFUEL);
+		}
+
+		@Override
 		public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
 			Fluid fluid = stack.getFluid();
 			return fluid.isIn(ForceTags.FORCE) || fluid.isIn(FluidTags.LAVA) ||
@@ -93,9 +101,15 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		}
 
 		@Override
+		public boolean isFluidValid(FluidStack stack) {
+			Fluid fluid = stack.getFluid();
+			return fluid.isEquivalentTo(Fluids.WATER) || fluid.isIn(ForceTags.MILK);
+		}
+
+		@Override
 		public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
 			Fluid fluid = stack.getFluid();
-			return fluid.isIn(FluidTags.WATER) || fluid.isIn(ForceTags.MILK);
+			return fluid.isEquivalentTo(Fluids.WATER) || fluid.isIn(ForceTags.MILK);
 		}
 	};
 	private LazyOptional<IFluidHandler> throttleTankHolder = LazyOptional.of(() -> throttleTank);
@@ -149,11 +163,10 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 				FluidStack fluidStack = fluidCap.getFluidInTank(0);
 				if(!fluidStack.isEmpty()) {
 					Fluid fluid = fluidStack.getFluid();
-					return fluid.isIn(FluidTags.WATER) || fluid.isIn(ForceTags.MILK);
+					return fluid.isEquivalentTo(Fluids.WATER) || fluid.isIn(ForceTags.MILK);
 				}
 			}
-			return stack.getItem().isIn(ForceTags.FORGE_GEM) ||
-					(fluidCap != null && fluidCap.getFluidInTank(0).getFluid().isIn(ForceTags.FORCE));
+			return false;
 		}
 	};
 	private LazyOptional<IItemHandler> throttleHolder = LazyOptional.of(() -> throttleHandler);
@@ -297,7 +310,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 			Fluid fluid = throttleStack.getFluid();
 			if(fluid.isIn(ForceTags.MILK)) {
 				return 2.5F;
-			} else if(fluid.isIn(FluidTags.WATER)) {
+			} else if(fluid.isEquivalentTo(Fluids.WATER)) {
 				return 2.0F;
 			}
 		}
@@ -342,7 +355,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 			Fluid fluid = fluidStack.getFluid();
 			if(fluid.isIn(ForceTags.MILK)) {
 				return 5;
-			} else if(fluid.isIn(FluidTags.WATER)) {
+			} else if(fluid.isEquivalentTo(Fluids.WATER)) {
 				return 5;
 			}
 		}
@@ -430,18 +443,9 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	private void processThrottleSlot() {
 		ItemStack slotStack = throttleHandler.getStackInSlot(0);
 
-		if(slotStack.getItem().isIn(ForceTags.FORGE_GEM)) {
-			FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
-
-			if(getFuelAmount() + force.getAmount() <= throttleTank.getCapacity()) {
-				fillThrottle(force, FluidAction.EXECUTE);
-				slotStack.shrink(1);
-			}
-		} else {
-			FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, throttleTank, Integer.MAX_VALUE, null, true);
-			if(result.isSuccess()) {
-				throttleHandler.setStackInSlot(0, result.getResult());
-			}
+		FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, throttleTank, Integer.MAX_VALUE, null, true);
+		if(result.isSuccess()) {
+			throttleHandler.setStackInSlot(0, result.getResult());
 		}
 	}
 

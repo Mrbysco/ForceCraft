@@ -194,9 +194,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 	}
 
 	public static ToIntFunction<BlockState> getLightValueActive(int lightValue) {
-		return (state) -> {
-			return state.get(ACTIVE) ? lightValue : 0;
-		};
+		return (state) -> state.get(ACTIVE) ? lightValue : 0;
 	}
 
 	@Override

@@ -128,18 +128,22 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public final ItemStackHandler handler = new ItemStackHandler(11) {
         @Override
         protected int getStackLimit(int slot, ItemStack stack) {
+        	if(slot == SLOT_GEM) {
+        		return 64;
+			}
             return 1;
         }
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
         	if(slot < SLOT_TOOL) {
-        		//is valid modifier TODO : fixing this check will fix placing and shift-clicking
+        		return matchesModifier(stack);
+        		// is valid modifier TODO : fixing this check will fix placing and shift-clicking
         		// non ingredients into the circle
         	}
         	else if(slot == SLOT_TOOL) {
-        		//dont hardcode validation here, check recipe "center" tag or item
-                return true;// stack.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
+        		// don't hardcode validation here, check recipe "center" tag or item
+                return matchesTool(stack);// stack.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
         	}
         	else if(slot == SLOT_BOOK) {
         		return stack.getItem() == ForceRegistry.UPGRADE_TOME.get();
@@ -289,6 +293,30 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 			}
 			return currentRecipes = matchingRecipes;
 		}
+	}
+
+	protected boolean matchesModifier(ItemStack stack) {
+		if(world != null) {
+			List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
+			for(InfuseRecipe recipe : recipes) {
+				if(recipe.matchesModifier(this, stack, false)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	protected boolean matchesTool(ItemStack toolStack) {
+		if(world != null) {
+			List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
+			for(InfuseRecipe recipe : recipes) {
+				if(recipe.matchesTool(this, toolStack, false)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	protected boolean recipesStillMatch() {

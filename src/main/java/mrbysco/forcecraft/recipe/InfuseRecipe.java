@@ -81,6 +81,10 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		}
 
 		//Does the center match
+		boolean centerMatches = matchesTool(inv, inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL), ignoreInfused);
+		if(!centerMatches) {
+			return false;
+		}
 		ItemStack cent = inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL);
 		if(!this.center.test(cent)) {
 			// center doesn't match this recipe. move over
@@ -108,6 +112,20 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 			return true;
 		}
 		return false;
+	}
+
+	public boolean matchesTool(InfuserTileEntity inv, ItemStack toolStack, boolean ignoreInfused) {
+		if(!this.center.test(toolStack)) {
+			// center doesn't match this recipe. move over
+			return false;
+		}
+		if(!ignoreInfused) {
+			//Ignore if the tool is infused in case of infusing for the first time
+			if((toolStack.hasTag() && toolStack.getTag().getBoolean("ForceInfused"))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

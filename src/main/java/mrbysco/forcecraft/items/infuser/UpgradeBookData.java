@@ -87,7 +87,7 @@ public class UpgradeBookData {
 		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
 		int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
 
-		ForceCraft.LOGGER.debug("can lvlup?  ?  " + recipesThisTier + " >= " + totalThisTier);
+//		ForceCraft.LOGGER.debug("can lvlup?  ?  " + recipesThisTier + " >= " + totalThisTier);
 
 		updateCache();
 
