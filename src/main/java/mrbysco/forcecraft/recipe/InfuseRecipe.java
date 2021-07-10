@@ -81,26 +81,24 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		}
 
 		//Does the center match
-		boolean centerMatches = matchesTool(inv, inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL), ignoreInfused);
-		if(!centerMatches) {
-			return false;
-		}
-		ItemStack cent = inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL);
-		if(!this.center.test(cent)) {
-			// center doesn't match this recipe. move over
-			return false;
-		}
-		if(!ignoreInfused) {
-			//Ignore if the tool is infused in case of infusing for the first time
-			if((cent.hasTag() && cent.getTag().getBoolean("ForceInfused"))) {
-				return false;
-			}
-		}
+		ItemStack centerStack = inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL);
+		boolean toolMatches = matchesTool(centerStack, ignoreInfused);
+		boolean modifierMatches = matchesModifier(centerStack, modifier);
 
 //		ForceCraft.LOGGER.info(cent + " does  match center for "+this.id);
 
-		if(modifier.getItem() == ForceRegistry.FORCE_PACK_UPGRADE.get()) {
-			IItemHandler handler = cent.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+
+		return toolMatches && modifierMatches;
+	}
+
+	public boolean matchesModifier(InfuserTileEntity inv, ItemStack modifierStack) {
+		ItemStack centerStack = inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL);
+		return matchesModifier(centerStack, modifierStack);
+	}
+
+	public boolean matchesModifier(ItemStack centerStack, ItemStack modifierStack) {
+		if(modifierStack.getItem() == ForceRegistry.FORCE_PACK_UPGRADE.get()) {
+			IItemHandler handler = centerStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 			if(handler instanceof PackItemStackHandler) {
 				if(((PackItemStackHandler) handler).getUpgrades() != getTier().ordinal() - 2) {
 					return false;
@@ -108,13 +106,13 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 			}
 		}
 
-		if(input.test(modifier)) {
-			return true;
+		if(!this.input.test(modifierStack)) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
-	public boolean matchesTool(InfuserTileEntity inv, ItemStack toolStack, boolean ignoreInfused) {
+	public boolean matchesTool(ItemStack toolStack, boolean ignoreInfused) {
 		if(!this.center.test(toolStack)) {
 			// center doesn't match this recipe. move over
 			return false;

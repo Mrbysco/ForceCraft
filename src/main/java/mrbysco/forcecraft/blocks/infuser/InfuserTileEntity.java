@@ -299,7 +299,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		if(world != null) {
 			List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
 			for(InfuseRecipe recipe : recipes) {
-				if(recipe.matchesModifier(this, stack, false)) {
+				if(recipe.matchesModifier(this, stack)) {
 					return true;
 				}
 			}
@@ -311,7 +311,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		if(world != null) {
 			List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
 			for(InfuseRecipe recipe : recipes) {
-				if(recipe.matchesTool(this, toolStack, false)) {
+				if(recipe.matchesTool(toolStack, false)) {
 					return true;
 				}
 			}

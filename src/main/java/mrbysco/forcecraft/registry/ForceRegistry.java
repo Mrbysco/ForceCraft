@@ -339,7 +339,7 @@ public class ForceRegistry {
             new ForceFluidBucketItem(itemBuilder().containerItem(Items.BUCKET).maxStackSize(1).group(ForceCraft.creativeTab), () -> ForceFluids.FORCE_FLUID_SOURCE.get()));
 
     //Experience Tome
-    public static final RegistryObject<Item> EXPERIENCE_TOME = ITEMS.register("experience_tome", () -> new ExperienceTomeItem(itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> EXPERIENCE_TOME = ITEMS.register("experience_tome", () -> new ExperienceTomeItem(itemBuilder().group(ForceCraft.creativeTab).maxStackSize(1)));
 
     //Spawn eggs
     public static final RegistryObject<Item> RED_CHU_CHU_SPAWN_EGG = ITEMS.register("red_chu_chu_spawn_egg", () -> new CustomSpawnEggItem(() -> ForceEntities.RED_CHU_CHU.get(), 15674931, 14483465, itemBuilder().group(ForceCraft.creativeTab)));

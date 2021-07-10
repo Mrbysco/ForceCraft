@@ -67,6 +67,16 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		}
 
 		@Override
+		public int fill(FluidStack resource, FluidAction action) {
+			return super.fill(resource, action);
+		}
+
+		@Override
+		protected void onContentsChanged() {
+			refreshClient();
+		}
+
+		@Override
 		public boolean isFluidValid(FluidStack stack) {
 			Fluid fluid = stack.getFluid();
 			return fluid.isIn(ForceTags.FORCE) || fluid.isIn(FluidTags.LAVA) ||
@@ -98,6 +108,16 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		@Override
 		public FluidStack drain(int maxDrain, FluidAction action) {
 			return super.drain(maxDrain, action);
+		}
+
+		@Override
+		public int fill(FluidStack resource, FluidAction action) {
+			return super.fill(resource, action);
+		}
+
+		@Override
+		protected void onContentsChanged() {
+			refreshClient();
 		}
 
 		@Override
@@ -474,7 +494,9 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 
 	public void setFuelAmount(int amount) {
 		if(amount > 0) {
-			tank.getFluid().setAmount(amount);
+			if(!tank.getFluid().isEmpty()) {
+				tank.getFluid().setAmount(amount);
+			}
 		} else {
 			tank.setFluid(FluidStack.EMPTY);
 		}
@@ -494,7 +516,9 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 
 	public void setThrottleAmount(int amount) {
 		if(amount > 0) {
-			throttleTank.getFluid().setAmount(amount);
+			if(!throttleTank.getFluid().isEmpty()) {
+				throttleTank.getFluid().setAmount(amount);
+			}
 		} else {
 			throttleTank.setFluid(FluidStack.EMPTY);
 		}
