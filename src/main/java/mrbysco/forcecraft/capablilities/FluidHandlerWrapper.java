@@ -20,8 +20,8 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 	protected final FluidTank tankOutput; // output is fuel
 
 	public FluidHandlerWrapper(FluidTank input, FluidTank output) {
-		this.tankOutput = input;
-		this.tankInput = output;
+		this.tankInput = input;
+		this.tankOutput  = output;
 	}
 
 	@Override
