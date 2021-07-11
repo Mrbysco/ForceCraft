@@ -43,12 +43,11 @@ public class ForceEngineContainer extends Container {
 		this.player = playerInventoryIn.player;
 
 		//Fuel slot
-		this.addSlot(new FuelSlot(te.handler, 0, 42, 23));
+		this.addSlot(new FuelSlot(te.inputHandler, 0, 42, 23));
+		this.addSlot(new ThrottleSlot(te.inputHandler, 1, 118, 23));
 		//Output slot
-		this.addSlot(new OutputSlot(te.handler, 1, 42, 42));
-
-		//Throttle slot
-		this.addSlot(new ThrottleSlot(te.throttleHandler, 0, 118, 33));
+		this.addSlot(new OutputSlot(te.outputHandler, 0, 42, 42));
+		this.addSlot(new OutputSlot(te.outputHandler, 1, 118, 42));
 
 		//player inventory here
 		int xPos = 8;

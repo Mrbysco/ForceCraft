@@ -15,7 +15,7 @@ public class ThrottleSlot extends SlotItemHandler {
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		return getItemHandler().isItemValid(0, stack);
+		return getItemHandler().isItemValid(getSlotIndex(), stack);
 	}
 
 	@Override

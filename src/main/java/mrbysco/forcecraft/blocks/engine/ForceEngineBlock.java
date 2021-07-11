@@ -222,8 +222,10 @@ public class ForceEngineBlock extends DirectionalBlock {
 			TileEntity tileentity = worldIn.getTileEntity(pos);
 			if (tileentity instanceof ForceEngineTile) {
 				ForceEngineTile engineTile = (ForceEngineTile) tileentity;
-				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.handler.getStackInSlot(0));
-				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.throttleHandler.getStackInSlot(0));
+				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.inputHandler.getStackInSlot(0));
+				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.inputHandler.getStackInSlot(1));
+				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.outputHandler.getStackInSlot(0));
+				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.outputHandler.getStackInSlot(1));
 			}
 
 			super.onReplaced(state, worldIn, pos, newState, isMoving);
