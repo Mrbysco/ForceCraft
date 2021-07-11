@@ -16,28 +16,28 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 
 	public static final String NBT_INPUT = "Input";
 	public static final String NBT_OUTPUT = "Output";
-	protected final FluidTank tankInput; // input is for example coolant
-	protected final FluidTank tankOutput; // output is fuel
+	protected final FluidTank throttleTank;
+	protected final FluidTank fuelTank;
 
-	public FluidHandlerWrapper(FluidTank input, FluidTank output) {
-		this.tankInput = input;
-		this.tankOutput  = output;
+	public FluidHandlerWrapper(FluidTank throttle, FluidTank fuel) {
+		this.throttleTank = throttle;
+		this.fuelTank = fuel;
 	}
 
 	@Override
 	public CompoundNBT serializeNBT() {
 		CompoundNBT nbt = new CompoundNBT();
-		nbt.put(NBT_INPUT, tankInput.writeToNBT(new CompoundNBT()));
-		nbt.put(NBT_OUTPUT, tankOutput.writeToNBT(new CompoundNBT()));
+		nbt.put(NBT_INPUT, throttleTank.writeToNBT(new CompoundNBT()));
+		nbt.put(NBT_OUTPUT, fuelTank.writeToNBT(new CompoundNBT()));
 		return nbt;
 	}
 
 	@Override
 	public void deserializeNBT(CompoundNBT nbt) {
 		if (nbt.contains(NBT_OUTPUT))
-			tankOutput.readFromNBT(nbt.getCompound(NBT_OUTPUT));
+			fuelTank.readFromNBT(nbt.getCompound(NBT_OUTPUT));
 		if (nbt.contains(NBT_INPUT))
-			tankInput.readFromNBT(nbt.getCompound(NBT_INPUT));
+			throttleTank.readFromNBT(nbt.getCompound(NBT_INPUT));
 
 	}
 
@@ -50,31 +50,40 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 	public FluidStack getFluidInTank(int tank) {
 		// TODO: we could make an array of tanks, or switch statement to clean up these
 		// maybe
-		return (tank == 0) ? this.tankOutput.getFluid() : tankInput.getFluid();
+		return (tank == 0) ? this.fuelTank.getFluid() : throttleTank.getFluid();
 	}
 
 	@Override
 	public int getTankCapacity(int tank) {
-		return (tank == 0) ? this.tankOutput.getCapacity() : tankInput.getCapacity();
+		return (tank == 0) ? this.fuelTank.getCapacity() : throttleTank.getCapacity();
 	}
 
 	@Override
 	public boolean isFluidValid(int tank, FluidStack stack) {
-		return (tank == 0) ? this.tankOutput.isFluidValid(stack) : tankInput.isFluidValid(stack);
+		return (tank == 0) ? this.fuelTank.isFluidValid(stack) : throttleTank.isFluidValid(stack);
 	}
 
 	@Override
 	public int fill(FluidStack resource, FluidAction action) {
-		return this.tankInput.fill(resource, action);
+		if(this.fuelTank.isFluidValid(resource)) {
+			return this.fuelTank.fill(resource, action);
+		}
+		return this.throttleTank.fill(resource, action);
 	}
 
 	@Override
 	public FluidStack drain(FluidStack resource, FluidAction action) {
-		return this.tankOutput.drain(resource, action);
+		if(this.fuelTank.getFluid().isFluidEqual(resource)) {
+			return this.fuelTank.drain(resource, action);
+		}
+		return this.throttleTank.drain(resource, action);
 	}
 
 	@Override
 	public FluidStack drain(int maxDrain, FluidAction action) {
-		return this.tankOutput.drain(maxDrain, action);
+		if(this.fuelTank.getFluidAmount() > 0) {
+			return this.fuelTank.drain(maxDrain, action);
+		}
+		return this.throttleTank.drain(maxDrain, action);
 	}
 }
