@@ -2,6 +2,7 @@ package mrbysco.forcecraft.tiles;
 
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.blocks.engine.ForceEngineBlock;
+import mrbysco.forcecraft.capablilities.FluidHandlerWrapper;
 import mrbysco.forcecraft.container.engine.ForceEngineContainer;
 import mrbysco.forcecraft.registry.ForceFluids;
 import mrbysco.forcecraft.registry.ForceRegistry;
@@ -48,27 +49,19 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class ForceEngineTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
-	protected FluidTank tank = new FluidTank(10000) {
+	private static final int MAX_FLUID = 10000;
+
+	protected FluidTank tankFuel = new FluidTank(MAX_FLUID) {
 		@Override
 		public FluidStack drain(FluidStack resource, FluidAction action) {
-			if (!isFluidEqual(tank, resource)) {
+			if (!isFluidEqual(this, resource)) {
 				return FluidStack.EMPTY;
 			}
 			if (action.simulate()) {
-				int amount = tank.getFluidAmount() - resource.getAmount() < 0 ? tank.getFluidAmount() : resource.getAmount();
-				return new FluidStack(tank.getFluid(), amount);
+				int amount = this.getFluidAmount() - resource.getAmount() < 0 ? this.getFluidAmount() : resource.getAmount();
+				return new FluidStack(this.getFluid(), amount);
 			}
 			return super.drain(resource.getAmount(), action);
-		}
-
-		@Override
-		public FluidStack drain(int maxDrain, FluidAction action) {
-			return super.drain(maxDrain, action);
-		}
-
-		@Override
-		public int fill(FluidStack resource, FluidAction action) {
-			return super.fill(resource, action);
 		}
 
 		@Override
@@ -90,29 +83,18 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 					fluid.isIn(ForceTags.FUEL) || fluid.isIn(ForceTags.BIOFUEL);
 		}
 	};
-	private LazyOptional<IFluidHandler> tankHolder = LazyOptional.of(() -> tank);
 
-	protected FluidTank throttleTank = new FluidTank(10000) {
+	protected FluidTank tankThrottle = new FluidTank(MAX_FLUID) {
 		@Override
 		public FluidStack drain(FluidStack resource, FluidAction action) {
-			if (!isFluidEqual(throttleTank, resource)) {
+			if (!isFluidEqual(this, resource)) {
 				return FluidStack.EMPTY;
 			}
 			if (action.simulate()) {
-				int amount = throttleTank.getFluidAmount() - resource.getAmount() < 0 ? throttleTank.getFluidAmount() : resource.getAmount();
-				return new FluidStack(throttleTank.getFluid(), amount);
+				int amount = this.getFluidAmount() - resource.getAmount() < 0 ? this.getFluidAmount() : resource.getAmount();
+				return new FluidStack(this.getFluid(), amount);
 			}
 			return super.drain(resource.getAmount(), action);
-		}
-
-		@Override
-		public FluidStack drain(int maxDrain, FluidAction action) {
-			return super.drain(maxDrain, action);
-		}
-
-		@Override
-		public int fill(FluidStack resource, FluidAction action) {
-			return super.fill(resource, action);
 		}
 
 		@Override
@@ -132,7 +114,9 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 			return fluid.isEquivalentTo(Fluids.WATER) || fluid.isIn(ForceTags.MILK);
 		}
 	};
-	private LazyOptional<IFluidHandler> throttleTankHolder = LazyOptional.of(() -> throttleTank);
+
+    private FluidHandlerWrapper tankWrapper = new FluidHandlerWrapper(tankThrottle, tankFuel);
+    private LazyOptional<IFluidHandler> tankWrapperCap = LazyOptional.of(() -> tankWrapper);
 
 	public final ItemStackHandler handler = new ItemStackHandler(2) {
 		@Override
@@ -222,11 +206,8 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		//Caps
 		handler.deserializeNBT(nbt.getCompound("fuelStackHandler"));
 		throttleHandler.deserializeNBT(nbt.getCompound("throttleStackHandler"));
-		if(nbt.contains("fuelTank"))
-			tank.readFromNBT(nbt.getCompound("fuelTank"));
-		if(nbt.contains("coolantTank"))
-			throttleTank.readFromNBT(nbt.getCompound("coolantTank"));
 
+	    this.tankWrapper.deserializeNBT(nbt.getCompound("fluid"));
 		super.read(state, nbt);
 	}
 
@@ -242,8 +223,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		//Caps
 		compound.put("fuelStackHandler", handler.serializeNBT());
 		compound.put("throttleStackHandler", throttleHandler.serializeNBT());
-		compound.put("fuelTank", tank.writeToNBT(new CompoundNBT()));
-		compound.put("coolantTank", throttleTank.writeToNBT(new CompoundNBT()));
+	    compound.put("fluid", tankWrapper.serializeNBT());
 
 		return compound;
 	}
@@ -279,7 +259,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 				insertPower();
 
 				if(processTime >= this.maxProcessTime) {
-					tank.drain(1, FluidAction.EXECUTE);
+					tankFuel.drain(1, FluidAction.EXECUTE);
 					processTime = 0;
 				}
 			}
@@ -287,7 +267,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 				throttleTime++;
 
 				if(throttleTime >= this.maxThrottleTime) {
-					throttleTank.drain(1, FluidAction.EXECUTE);
+					tankThrottle.drain(1, FluidAction.EXECUTE);
 					throttleTime = 0;
 				}
 			}
@@ -399,7 +379,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		if(tile != null) {
 			IEnergyStorage cap = tile.getCapability(CapabilityEnergy.ENERGY, getFacing().getOpposite()).orElse(null);
 			if(cap != null) {
-				return cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored() && !tank.getFluid().isEmpty();
+				return cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored() && !tankFuel.getFluid().isEmpty();
 			}
 		}
 		return false;
@@ -424,7 +404,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		if(slotStack.getItem().isIn(ForceTags.FORGE_GEM)) {
 			FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
 
-			if(getFuelAmount() + force.getAmount() <= tank.getCapacity()) {
+			if(getFuelAmount() + force.getAmount() <= tankFuel.getCapacity()) {
 				fillFuel(force, FluidAction.EXECUTE);
 				slotStack.shrink(1);
 			}
@@ -432,7 +412,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 			FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM * 10);
 
 			ItemStack extraSlot = handler.getStackInSlot(1);
-			if(getFuelAmount() + force.getAmount() <= tank.getCapacity() && extraSlot.getCount() < handler.getSlotLimit(1)) {
+			if(getFuelAmount() + force.getAmount() <= tankFuel.getCapacity() && extraSlot.getCount() < handler.getSlotLimit(1)) {
 				fillFuel(force, FluidAction.EXECUTE);
 				slotStack.shrink(1);
 				if(handler.getStackInSlot(1).isEmpty()) {
@@ -442,7 +422,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 				}
 			}
 		} else {
-			FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, tank, Integer.MAX_VALUE, null, true);
+			FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, tankFuel, Integer.MAX_VALUE, null, true);
 			if(result.isSuccess()) {
 				handler.setStackInSlot(0, result.getResult());
 			}
@@ -453,8 +433,8 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		FluidStack resourceCopy = resource.copy();
 
 		if(action.execute()) {
-			if(tank.getFluid().isEmpty() || tank.getFluid().isFluidEqual(resource)) {
-				tank.fill(resourceCopy, action);
+			if(tankFuel.getFluid().isEmpty() || tankFuel.getFluid().isFluidEqual(resource)) {
+				tankFuel.fill(resourceCopy, action);
 			}
 		}
 		return resource.getAmount();
@@ -463,7 +443,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	private void processThrottleSlot() {
 		ItemStack slotStack = throttleHandler.getStackInSlot(0);
 
-		FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, throttleTank, Integer.MAX_VALUE, null, true);
+		FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, tankThrottle, Integer.MAX_VALUE, null, true);
 		if(result.isSuccess()) {
 			throttleHandler.setStackInSlot(0, result.getResult());
 		}
@@ -473,54 +453,54 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		FluidStack resourceCopy = resource.copy();
 
 		if(action.execute()) {
-			if(throttleTank.getFluid().isEmpty() || throttleTank.getFluid().isFluidEqual(resource)) {
-				throttleTank.fill(resourceCopy, action);
+			if(tankThrottle.getFluid().isEmpty() || tankThrottle.getFluid().isFluidEqual(resource)) {
+				tankThrottle.fill(resourceCopy, action);
 			}
 		}
 		return resource.getAmount();
 	}
 
 	public Fluid getFuelFluid() {
-		return tank.getFluid().getFluid();
+		return getFuelFluidStack().getFluid();
 	}
 
 	public FluidStack getFuelFluidStack() {
-		return tank.getFluid();
+		return tankFuel.getFluid();
 	}
 
 	public int getFuelAmount() {
-		return tank.getFluidAmount();
+		return tankFuel.getFluidAmount();
 	}
 
 	public void setFuelAmount(int amount) {
 		if(amount > 0) {
-			if(!tank.getFluid().isEmpty()) {
-				tank.getFluid().setAmount(amount);
+			if(!tankFuel.getFluid().isEmpty()) {
+				tankFuel.getFluid().setAmount(amount);
 			}
 		} else {
-			tank.setFluid(FluidStack.EMPTY);
+			tankFuel.setFluid(FluidStack.EMPTY);
 		}
 	}
 
 	public Fluid getThrottleFluid() {
-		return throttleTank.getFluid().getFluid();
+		return getThrottleFluidStack().getFluid();
 	}
 
 	public FluidStack getThrottleFluidStack() {
-		return throttleTank.getFluid();
+		return tankThrottle.getFluid();
 	}
 
 	public int getThrottleAmount() {
-		return throttleTank.getFluidAmount();
+		return tankThrottle.getFluidAmount();
 	}
 
 	public void setThrottleAmount(int amount) {
 		if(amount > 0) {
-			if(!throttleTank.getFluid().isEmpty()) {
-				throttleTank.getFluid().setAmount(amount);
+			if(!tankThrottle.getFluid().isEmpty()) {
+				tankThrottle.getFluid().setAmount(amount);
 			}
 		} else {
-			throttleTank.setFluid(FluidStack.EMPTY);
+			tankThrottle.setFluid(FluidStack.EMPTY);
 		}
 	}
 
@@ -585,11 +565,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 			}
 		}
 		if (capability == FLUID_HANDLER_CAPABILITY) {
-			if(facing == getFacing() || facing == getFacing().getOpposite()) {
-				return tankHolder.cast();
-			} else {
-				return throttleTankHolder.cast();
-			}
+			return this.tankWrapperCap.cast();
 		}
 
 		return super.getCapability(capability, facing);
@@ -600,7 +576,6 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		super.invalidateCaps();
 		handlerHolder.invalidate();
 		throttleHolder.invalidate();
-		tankHolder.invalidate();
-		throttleTankHolder.invalidate();
+		tankWrapperCap.invalidate();
 	}
 }
