@@ -4,6 +4,7 @@ import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.registry.ForceEntities;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import mrbysco.forcecraft.util.ForceUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.CreeperSwellGoal;
@@ -28,6 +29,7 @@ public class ForceArrowEntity extends ArrowEntity {
 	private static final DataParameter<Boolean> ENDER = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> BANE = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> LUCK = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> SPEED = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
 
 	public ForceArrowEntity(EntityType<? extends ArrowEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -38,11 +40,18 @@ public class ForceArrowEntity extends ArrowEntity {
 		this.setShooter(shooter);
 	}
 
+	@Override
+	public void setDirectionAndMovement(Entity projectile, float x, float y, float z, float velocity, float inaccuracy) {
+		float newVelocity = isSpeedy() ? velocity + 1.0F : velocity;
+		super.setDirectionAndMovement(projectile, x, y, z, newVelocity, inaccuracy);
+	}
+
 	protected void registerData() {
 		super.registerData();
 		this.dataManager.register(ENDER, false);
 		this.dataManager.register(BANE, false);
 		this.dataManager.register(LUCK, 0);
+		this.dataManager.register(SPEED, false);
 	}
 
 	public boolean isBane() {
@@ -51,6 +60,14 @@ public class ForceArrowEntity extends ArrowEntity {
 
 	public void setBane() {
 		this.dataManager.set(BANE, true);
+	}
+
+	public boolean isSpeedy() {
+		return this.dataManager.get(SPEED);
+	}
+
+	public void setSpeedy() {
+		this.dataManager.set(SPEED, true);
 	}
 
 	public boolean isEnder() {

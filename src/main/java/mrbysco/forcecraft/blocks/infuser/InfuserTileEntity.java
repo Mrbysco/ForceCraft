@@ -955,7 +955,16 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 					return true;
 				}
             }
-        }
+        } else if (stack.getItem() instanceof ForceBowItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null ) {
+				if(modifierCap.getSpeedLevel() < 1) {
+					modifierCap.incrementSpeed();
+					addInfusedTag(stack);
+					return true;
+				}
+			}
+		}
         else if (stack.getItem() instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
@@ -966,16 +975,16 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 }
             }
         }
-        else if (stack.getItem() instanceof ForceRodItem) {
-            IForceRodModifier modifierCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-            if(modifierCap != null ) {
-                if(modifierCap.getSpeedLevel() < ConfigHandler.COMMON.rodSpeedCap.get()) {
-                    modifierCap.incrementSpeed();
+		else if (stack.getItem() instanceof ForceRodItem) {
+			IForceRodModifier modifierCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
+			if(modifierCap != null ) {
+				if(modifierCap.getSpeedLevel() < ConfigHandler.COMMON.rodSpeedCap.get()) {
+					modifierCap.incrementSpeed();
 					addInfusedTag(stack);
-                    return true;
-                }
-            }
-        }
+					return true;
+				}
+			}
+		}
         return false;
     }
 

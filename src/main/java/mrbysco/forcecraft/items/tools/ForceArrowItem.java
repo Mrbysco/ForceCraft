@@ -43,6 +43,9 @@ public class ForceArrowItem extends ArrowItem {
 						int luckValue = cap.getLuckLevel();
 						forceArrow.setLuck(luckValue);
 					}
+					if(cap.getSpeedLevel() > 0) {
+						forceArrow.setSpeedy();
+					}
 				});
 			}
 		}

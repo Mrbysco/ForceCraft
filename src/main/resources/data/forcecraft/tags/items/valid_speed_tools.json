@@ -5,6 +5,7 @@
     "forcecraft:force_pickaxe",
     "forcecraft:force_axe",
     "forcecraft:force_rod",
-	"#forcecraft:force_armor"
+    "forcecraft:force_bow",
+    "#forcecraft:force_armor"
   ]
 }

@@ -1,6 +1,6 @@
 package mrbysco.forcecraft.items;
 
-import net.minecraft.client.resources.I18n;
+import mrbysco.forcecraft.config.ConfigHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,21 +11,13 @@ import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FortuneItem extends BaseItem {
 
-    private String[] fortunes = new String[186];
-
     public FortuneItem(Item.Properties properties) {
         super(properties);
-
-        Arrays.fill(fortunes, "0");
-
-        for(int i = 0; i <= 185; i++) {
-            fortunes[i] = "text.forcecraft.fortune" + i;
-        }
     }
 
     @Override
@@ -44,15 +36,18 @@ public class FortuneItem extends BaseItem {
         }
 
         if(!worldIn.isRemote){
-            playerIn.sendMessage(new StringTextComponent(I18n.format(nbt.getString("message"))), Util.DUMMY_UUID);
+            playerIn.sendMessage(new StringTextComponent(nbt.getString("message")), Util.DUMMY_UUID);
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
     private void addMessage(ItemStack stack, CompoundNBT nbt) {
-        Random generator = new Random();
-        int rand = generator.nextInt(fortunes.length);
-        nbt.putString("message", fortunes[rand]);
+        List<String> messages = new ArrayList<>(ConfigHandler.COMMON.fortuneMessages.get());
+
+        int idx = random.nextInt(messages.size());
+        String message = messages.get(idx);
+
+        nbt.putString("message", message);
         stack.setTag(nbt);
     }
 }
