@@ -1,5 +1,6 @@
 package mrbysco.forcecraft.capablilities.forcerod;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -8,18 +9,51 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
+import java.util.List;
+
+import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
 
 public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
+    public ForceRodStorage() {
+    }
+
+    public static void attachInformation(ItemStack stack, List<ITextComponent> tooltip) {
+        stack.getCapability(CAPABILITY_FORCEROD).ifPresent(cap -> {
+            if(cap.hasHealing()) {
+                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing" + cap.getHealingLevel()).mergeStyle(TextFormatting.RED));
+            }
+            if (cap.getSpeedLevel() > 0) {
+                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
+            }
+            if (cap.hasCamoModifier()) {
+                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.camo").mergeStyle(TextFormatting.DARK_GREEN));
+            }
+            if (cap.hasEnderModifier()) {
+                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender").mergeStyle(TextFormatting.DARK_PURPLE));
+                tooltip.add(new TranslationTextComponent("forcecraft.ender_rod.text").mergeStyle(TextFormatting.GRAY));
+            }
+            if (cap.hasSightModifier()) {
+                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sight").mergeStyle(TextFormatting.LIGHT_PURPLE));
+            }
+            if (cap.hasLight()) {
+                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.light").mergeStyle(TextFormatting.YELLOW));
+            }
+        });
+    }
+
+
     @Nullable
     @Override
     public INBT writeNBT(Capability<IForceRodModifier> capability, IForceRodModifier instance, Direction side) {
         CompoundNBT nbt  = new CompoundNBT();
 		nbt.putInt("speed", instance.getSpeedLevel());
-        // why isn't this just an integer
         nbt.putInt("healing", instance.getHealingLevel());
 
         if(instance.getHomeLocation() != null) {
@@ -38,9 +72,34 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
 
     @Override
     public void readNBT(Capability<IForceRodModifier> capability, IForceRodModifier instance, Direction side, INBT nbtIn) {
-        if(nbtIn instanceof CompoundNBT){
+        deserializeNBT(instance, nbtIn);
+    }
+
+    public static CompoundNBT serializeNBT(IForceRodModifier instance) {
+        if (instance == null) {
+            return null;
+        }
+        CompoundNBT nbt  = new CompoundNBT();
+        nbt.putInt("speed", instance.getSpeedLevel());
+        nbt.putInt("healing", instance.getHealingLevel());
+
+        if(instance.getHomeLocation() != null) {
+            nbt.putBoolean("HasHome", true);
+            nbt.putLong("HomeLocation", instance.getHomeLocation().getPos().toLong());
+            nbt.putString("HomeDimension", instance.getHomeLocation().getDimension().getLocation().toString());
+        }
+
+        nbt.putBoolean("camo", instance.hasCamoModifier());
+        nbt.putBoolean("ender", instance.hasEnderModifier());
+        nbt.putBoolean("sight", instance.hasSightModifier());
+        nbt.putBoolean("light", instance.hasLight());
+        return nbt;
+    }
+
+    public static void deserializeNBT(IForceRodModifier instance, INBT nbtIn) {
+        if (nbtIn instanceof CompoundNBT) {
             CompoundNBT nbt = (CompoundNBT) nbtIn;
-			instance.setSpeed(nbt.getInt("speed"));
+            instance.setSpeed(nbt.getInt("speed"));
             instance.setHealing(nbt.getInt("healing"));
 
             if(nbt.getBoolean("HasHome")) {

@@ -2,6 +2,8 @@ package mrbysco.forcecraft.items.tools;
 
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcerod.ForceRodProvider;
+import mrbysco.forcecraft.capablilities.forcerod.ForceRodStorage;
+import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
 import mrbysco.forcecraft.items.BaseItem;
 import mrbysco.forcecraft.items.infuser.ForceToolData;
 import mrbysco.forcecraft.items.infuser.IForceChargingTool;
@@ -22,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResult;
@@ -33,8 +36,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -301,35 +302,40 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
 		return this.damageItem(stack, amount);
 	}
+
+	// ShareTag for server->client capability data sync
+	@Override
+	public CompoundNBT getShareTag(ItemStack stack) {
+		CompoundNBT nbt = super.getShareTag(stack);
+
+		IForceRodModifier cap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
+		if(cap != null) {
+			CompoundNBT shareTag = ForceRodStorage.serializeNBT(cap);
+			nbt.put(Reference.MOD_ID, shareTag);
+		}
+		return nbt;
+	}
+
+	@Override
+	public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+		if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
+			return;
+		}
+
+		IForceRodModifier cap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
+		if(cap != null) {
+			INBT shareTag = nbt.get(Reference.MOD_ID);
+			ForceRodStorage.deserializeNBT(cap, shareTag);
+		}
+		super.readShareTag(stack, nbt);
+	}
 	
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
-			ITooltipFlag flagIn) {
-		
-    	ForceToolData fd = new ForceToolData(stack);
-    	fd.attachInformation(tooltip);
-    	
-		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
-			if(cap.getHealingLevel() > 0) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing" + cap.getHealingLevel()).mergeStyle(TextFormatting.RED));
-			}
-			if (cap.getSpeedLevel() > 0) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
-			}
-			if (cap.hasCamoModifier()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.camo").mergeStyle(TextFormatting.DARK_GREEN));
-			}
-			if (cap.hasEnderModifier()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender").mergeStyle(TextFormatting.DARK_PURPLE));
-				tooltip.add(new TranslationTextComponent("forcecraft.ender_rod.text").mergeStyle(TextFormatting.GRAY));
-			}
-			if (cap.hasSightModifier()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sight").mergeStyle(TextFormatting.LIGHT_PURPLE));
-			}
-			if (cap.hasLight()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.light").mergeStyle(TextFormatting.YELLOW));
-			}
-		});
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+		ForceToolData fd = new ForceToolData(stack);
+		fd.attachInformation(lores);
+		ForceRodStorage.attachInformation(stack, lores);
+		super.addInformation(stack, worldIn, lores, flagIn);
 	}
 }
