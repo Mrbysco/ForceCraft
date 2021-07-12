@@ -35,6 +35,9 @@ public class ForceArrowItem extends ArrowItem {
 					if(cap.hasBane()) {
 						forceArrow.setBane();
 					}
+					if(cap.hasLight()) {
+						forceArrow.setAppliesGlowing();
+					}
 					if(cap.hasBleed()) {
 						EffectInstance bleedingEffect = new EffectInstance(ForceEffects.BLEEDING.get(), 20 * cap.getBleedLevel(), 0, false, false);
 						forceArrow.addEffect(bleedingEffect);

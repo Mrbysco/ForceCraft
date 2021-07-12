@@ -523,26 +523,35 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 	}
 
     static boolean addLightModifier(ItemStack stack) {
-        if (stack.getItem() instanceof ForceRodItem) {
+		Item item = stack.getItem();
+        if (item instanceof ForceRodItem) {
             IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
             if(rodCap != null && !rodCap.hasLight()) {
                 rodCap.setLight(true);
 				addInfusedTag(stack);
                 return true;
             }
-        }
+        } else if(item instanceof ForceBowItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(modifierCap != null && !modifierCap.hasLight()) {
+				modifierCap.setLight(true);
+				addInfusedTag(stack);
+				return true;
+			}
+		}
         return false;
     }
 
     private static boolean addCamoModifier(ItemStack stack) {
-		if (stack.getItem() instanceof ForceRodItem) {
+		Item item = stack.getItem();
+		if (item instanceof ForceRodItem) {
 			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
 			if(rodCap != null && !rodCap.hasCamoModifier()) {
 				rodCap.setCamoModifier(true);
 				addInfusedTag(stack);
 				return true;
 			}
-		} else if (stack.getItem() instanceof ForceArmorItem) {
+		} else if (item instanceof ForceArmorItem) {
 			IToolModifier toolCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(toolCap != null && !toolCap.hasCamo()) {
 				toolCap.setCamo(true);
@@ -566,7 +575,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addWingModifier(ItemStack stack) {
-        if (stack.getItem() instanceof ForceSwordItem) {
+		Item item = stack.getItem();
+        if (item instanceof ForceSwordItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null && !modifierCap.hasWing()) {
                 modifierCap.setWing(true);
@@ -574,7 +584,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 return true;
             }
         }
-        else if (stack.getItem() instanceof ForceArmorItem) {
+        else if (item instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null && !modifierCap.hasWing()) {
                 modifierCap.setWing(true);
@@ -587,8 +597,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addBaneModifier(ItemStack stack) {
-        Item st = stack.getItem();
-		if(st instanceof ForceSwordItem) {
+        Item item = stack.getItem();
+		if(item instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null && !modifierCap.hasBane()) {
 				modifierCap.setBane(1);
@@ -596,7 +606,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				return true;
 			}
 		}
-		else if(st instanceof ForceBowItem) {
+		else if(item instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null && !modifierCap.hasBane()) {
 				modifierCap.setBane(1);
@@ -604,7 +614,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				return true;
 			}
 		}
-		else if (st instanceof ForceArmorItem) {
+		else if (item instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
 				if(modifierCap != null && !modifierCap.hasBane()) {
@@ -618,9 +628,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addBleedingModifier(ItemStack stack) {
-        Item st = stack.getItem();
+        Item item = stack.getItem();
         int MAX_CAP = ConfigHandler.COMMON.bleedCap.get();
-		if(st instanceof ForceSwordItem) {
+		if(item instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null && modifierCap.getBleedLevel() < MAX_CAP) {
 				modifierCap.incrementBleed();
@@ -628,7 +638,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				return true;
 			}
 		}
-		else if(st instanceof ForceBowItem) {
+		else if(item instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null && modifierCap.getBleedLevel() < MAX_CAP) {
 				modifierCap.incrementBleed();
@@ -636,7 +646,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				return true;
 			}
 		}
-		else if (st instanceof ForceArmorItem) {
+		else if (item instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
 				if(modifierCap.getBleedLevel() < MAX_CAP) {
@@ -650,21 +660,22 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
 	static boolean addEnderModifier(ItemStack stack) {
-		if (stack.getItem() instanceof ForceRodItem) {
+		Item item = stack.getItem();
+		if (item instanceof ForceRodItem) {
 			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
 			if(rodCap != null && !rodCap.isRodofEnder()) {
 				rodCap.setEnderModifier(true);
 				addInfusedTag(stack);
 				return true;
 			}
-		} else if (stack.getItem() instanceof ForceSwordItem) {
+		} else if (item instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null && !modifierCap.hasEnder()) {
 				modifierCap.setEnder(true);
 				addInfusedTag(stack);
 				return true;
 			}
-		} else if (stack.getItem() instanceof ForceBowItem) {
+		} else if (item instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null && !modifierCap.hasEnder()) {
 				modifierCap.setEnder(true);
@@ -761,8 +772,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addSturdyModifier(ItemStack stack) {
-        Item st = stack.getItem();
-        if(st instanceof ForceSwordItem || st instanceof ForceAxeItem || st instanceof ForceShovelItem || st instanceof ForcePickaxeItem || st instanceof ForceRodItem) {
+        Item item = stack.getItem();
+        if(item instanceof ForceSwordItem || item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceRodItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
 				if(modifierCap.getSturdyLevel() < ConfigHandler.COMMON.sturdyCap.get()) {
@@ -773,7 +784,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
             }
         }
-        else if (stack.getItem() instanceof ForceArmorItem) {
+        else if (item instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(modifierCap.getSturdyLevel() == 0) {
@@ -787,9 +798,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addLuckModifier(ItemStack stack) {
-        Item st = stack.getItem();
+        Item item = stack.getItem();
         int MAX_CAP = ConfigHandler.COMMON.luckCap.get();
-        if(st instanceof ForcePickaxeItem || st instanceof ForceShovelItem || st instanceof ForceAxeItem) {
+        if(item instanceof ForcePickaxeItem || item instanceof ForceShovelItem || item instanceof ForceAxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
 				if(modifierCap.getLuckLevel() < MAX_CAP) {
@@ -800,7 +811,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
             }
         }
-		else if(st instanceof ForceSwordItem) {
+		else if(item instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null ) {
 				if(modifierCap.getLuckLevel() < MAX_CAP) {
@@ -811,7 +822,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
 			}
 		}
-		else if(st instanceof ForceBowItem) {
+		else if(item instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null ) {
 				if(modifierCap.getLuckLevel() < MAX_CAP) {
@@ -822,7 +833,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
 			}
 		}
-        else if (st instanceof ForceArmorItem) {
+        else if (item instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
 				if(modifierCap.getLuckLevel() < MAX_CAP) {
@@ -837,9 +848,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addDamageModifier(ItemStack stack) {
-        Item st = stack.getItem();
+        Item item = stack.getItem();
 		int MAX_CAP = ConfigHandler.COMMON.damageCap.get();
-        if(st instanceof ForceSwordItem) {
+        if(item instanceof ForceSwordItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
 				if(modifierCap.getSharpLevel() < MAX_CAP) {
@@ -850,7 +861,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
             }
         }
-        else if(st instanceof ForceBowItem) {
+        else if(item instanceof ForceBowItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(modifierCap.getSharpLevel() < MAX_CAP) {
@@ -861,7 +872,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 }
             }
         }
-        else if (st instanceof ForceArmorItem) {
+        else if (item instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
 				if(modifierCap.getSharpLevel() < MAX_CAP) {
@@ -875,8 +886,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addSilkTouchModifier(ItemStack stack) {
-        Item st = stack.getItem();
-        if(st instanceof ForceAxeItem || st instanceof ForceShovelItem || st instanceof ForcePickaxeItem) {
+        Item item = stack.getItem();
+        if(item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(!modifierCap.hasSilk()) {
@@ -891,9 +902,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addForceModifier(ItemStack stack) {
-        Item st = stack.getItem();
+        Item item = stack.getItem();
 		int MAX_CAP = ConfigHandler.COMMON.forceCap.get();
-        if(st instanceof ForceSwordItem || st instanceof ForceAxeItem) {
+        if(item instanceof ForceSwordItem || item instanceof ForceAxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
                if(modifierCap.getForceLevel() < MAX_CAP) {
@@ -908,8 +919,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addHeatModifier(ItemStack stack) {
-        Item st = stack.getItem();
-		if(st instanceof ForceShovelItem || st instanceof ForcePickaxeItem || st instanceof ForceShearsItem) {
+        Item item = stack.getItem();
+		if(item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceShearsItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null ) {
 				if(!modifierCap.hasHeat()) {
@@ -919,7 +930,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
 			}
 		}
-		else if (st instanceof ForceSwordItem || st instanceof ForceAxeItem) {
+		else if (item instanceof ForceSwordItem || item instanceof ForceAxeItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null ) {
 				if(!modifierCap.hasHeat()) {
@@ -930,7 +941,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
 			}
 		}
-        else if (stack.getItem() instanceof ForceArmorItem) {
+        else if (item instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(!modifierCap.hasHeat()) {
@@ -944,8 +955,9 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     static boolean addSpeedModifier(ItemStack stack) {
+		Item item = stack.getItem();
     	int MAX_CAP = ConfigHandler.COMMON.speedCap.get();
-        if(stack.getItem() instanceof ForceShovelItem || stack.getItem() instanceof ForcePickaxeItem || stack.getItem() instanceof ForceAxeItem) {
+        if(item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceAxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
 				if(modifierCap.getSpeedLevel() < MAX_CAP) {
@@ -955,7 +967,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 					return true;
 				}
             }
-        } else if (stack.getItem() instanceof ForceBowItem) {
+        } else if (item instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(modifierCap != null ) {
 				if(modifierCap.getSpeedLevel() < 1) {
@@ -965,7 +977,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
 			}
 		}
-        else if (stack.getItem() instanceof ForceArmorItem) {
+        else if (item instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
                 if(modifierCap.getSpeedLevel() == 0) {
@@ -975,7 +987,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
                 }
             }
         }
-		else if (stack.getItem() instanceof ForceRodItem) {
+		else if (item instanceof ForceRodItem) {
 			IForceRodModifier modifierCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
 			if(modifierCap != null ) {
 				if(modifierCap.getSpeedLevel() < ConfigHandler.COMMON.rodSpeedCap.get()) {

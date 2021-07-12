@@ -494,9 +494,9 @@
     "info.forcecraft.book.tier_7.name": "Tier 7 Infusions",
     "info.forcecraft.book.tier_7.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 7",
     "info.forcecraft.book.light.entry.name": "Light",
-    "info.forcecraft.book.light_info.text": "This infusion does the following:$(br)$(li)On a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$() (Max lvl: 1): Will imbue the rod with Light, allowing you to make the enemy glow (The effect can be removed by drinking milk)",
+    "info.forcecraft.book.light_info.text": "This infusion does the following:$(br)$(li)On a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$() (Max lvl: 1): Will imbue the rod with Light, allowing you to make the enemy glow (The effect can be removed by drinking milk)$(br)$(li)On a $(item)Force Bow$(): will imbue any projectile fired by the bow, causing enemies to start glowing for 10 seconds",
     "info.forcecraft.book.treasure.entry.name": "Treasure",
-    "info.forcecraft.book.treasure_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Sword$(): will imbue the sword with the 'treasure' property causing slain mobs to drop a $(item)Spoils Bag$()$(br)$(li)On a $(item)Force Axe$(): will imbue the axe with the 'treasure' property causing slain mobs to drop $(item)Cards$() which can be crafted into a $(item)Spoils Bag$()",
+    "info.forcecraft.book.treasure_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Sword$(): will imbue the sword with the 'treasure' property causing slain mobs to drop a $(item)Spoils Bag$()$(li)On a $(item)Force Axe$(): will imbue the axe with the 'treasure' property causing slain mobs to drop $(item)Cards$() which can be crafted into a $(item)Spoils Bag$()",
 
 
     "_comment": "Keybinds",

@@ -17,6 +17,8 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.potion.Potions;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -28,8 +30,9 @@ import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE
 public class ForceArrowEntity extends ArrowEntity {
 	private static final DataParameter<Boolean> ENDER = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> BANE = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> LUCK = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> SPEED = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> GLOWING = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> LUCK = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.VARINT);
 
 	public ForceArrowEntity(EntityType<? extends ArrowEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -52,6 +55,7 @@ public class ForceArrowEntity extends ArrowEntity {
 		this.dataManager.register(BANE, false);
 		this.dataManager.register(LUCK, 0);
 		this.dataManager.register(SPEED, false);
+		this.dataManager.register(GLOWING, false);
 	}
 
 	public boolean isBane() {
@@ -78,6 +82,14 @@ public class ForceArrowEntity extends ArrowEntity {
 		this.dataManager.set(ENDER, true);
 	}
 
+	public boolean appliesGlowing() {
+		return this.dataManager.get(GLOWING);
+	}
+
+	public void setAppliesGlowing() {
+		this.dataManager.set(GLOWING, true);
+	}
+
 	public int getLuck() {
 		return this.dataManager.get(LUCK);
 	}
@@ -96,6 +108,12 @@ public class ForceArrowEntity extends ArrowEntity {
 		if(compound.getBoolean("Ender")) {
 			setEnder();
 		}
+		if(compound.getBoolean("AppliesGlowing")) {
+			setAppliesGlowing();
+		}
+		if(compound.getBoolean("Speedy")) {
+			setSpeedy();
+		}
 		this.setLuck(compound.getInt("Luck"));
 	}
 
@@ -108,6 +126,12 @@ public class ForceArrowEntity extends ArrowEntity {
 		}
 		if(isEnder()) {
 			compound.putBoolean("Ender", true);
+		}
+		if(appliesGlowing()) {
+			compound.putBoolean("AppliesGlowing", true);
+		}
+		if(isSpeedy()) {
+			compound.putBoolean("Speedy", true);
 		}
 		compound.putInt("Luck", getLuck());
 	}
@@ -129,6 +153,10 @@ public class ForceArrowEntity extends ArrowEntity {
 			ForceUtils.teleportRandomly(living);
 		}
 
+		if(appliesGlowing()) {
+			living.addPotionEffect(new EffectInstance(Effects.GLOWING, 200, 0));
+		}
+
 		if(isBane()) {
 			if(living instanceof CreeperEntity){
 				CreeperEntity creeper = ((CreeperEntity) living);
@@ -138,7 +166,7 @@ public class ForceArrowEntity extends ArrowEntity {
 						creeper.getDataManager().set(CreeperEntity.IGNITED, false);
 						entityCap.setExplodeAbility(false);
 						creeper.goalSelector.goals.removeIf(goal -> goal.getGoal() instanceof CreeperSwellGoal);
-						ForceCraft.LOGGER.info("Added Bane to " + living.getName());
+						ForceCraft.LOGGER.debug("Added Bane to " + living.getName());
 					}
 				});
 			}
