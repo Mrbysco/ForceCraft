@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "forcecraft:block/furnace/force_furnace",
-		"particle": "forcecraft:block/furnace/force_furnace"
+		"0": "forcecraft:block/furnace/black_force_furnace",
+		"particle": "forcecraft:block/furnace/black_force_furnace"
 	},
 	"elements": [
 		{

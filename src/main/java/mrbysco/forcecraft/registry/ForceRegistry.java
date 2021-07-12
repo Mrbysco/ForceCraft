@@ -113,9 +113,22 @@ public class ForceRegistry {
     public static final RegistryObject<Block> FORCE_FLUID_BLOCK = BLOCKS.register("force_fluid", () ->
             new ForceFluidBlock(ForceFluids.FORCE_FLUID_SOURCE, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().setLightLevel(state -> 15).noDrops()));
 
-    public static final RegistryObject<Block> FORCE_FURNACE = BLOCKS.register("force_furnace", () ->
-            new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F)
-                    .setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> FORCE_FURNACE = BLOCKS.register("force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> BLACK_FORCE_FURNACE = BLOCKS.register("black_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> BLUE_FORCE_FURNACE = BLOCKS.register("blue_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> BROWN_FORCE_FURNACE = BLOCKS.register("brown_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> CYAN_FORCE_FURNACE = BLOCKS.register("cyan_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> GRAY_FORCE_FURNACE = BLOCKS.register("gray_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> GREEN_FORCE_FURNACE = BLOCKS.register("green_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> LIGHT_BLUE_FORCE_FURNACE = BLOCKS.register("light_blue_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> LIGHT_GRAY_FORCE_FURNACE = BLOCKS.register("light_gray_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> LIME_FORCE_FURNACE = BLOCKS.register("lime_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> MAGENTA_FORCE_FURNACE = BLOCKS.register("magenta_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> ORANGE_FORCE_FURNACE = BLOCKS.register("orange_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> PINK_FORCE_FURNACE = BLOCKS.register("pink_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> PURPLE_FORCE_FURNACE = BLOCKS.register("purple_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> RED_FORCE_FURNACE = BLOCKS.register("red_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
+    public static final RegistryObject<Block> WHITE_FORCE_FURNACE = BLOCKS.register("white_force_furnace", () -> new ForceFurnaceBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool().hardnessAndResistance(4.0F, 18.0F).setLightLevel(ForceFurnaceBlock.getLightValueLit(13))));
     public static final RegistryObject<Block> FORCE_ENGINE = BLOCKS.register("force_engine", () ->
             new ForceEngineBlock(AbstractBlock.Properties.create(Material.IRON).sound(SoundType.METAL).setRequiresTool().hardnessAndResistance(4.0F, 18.0F)
                     .setLightLevel(ForceEngineBlock.getLightValueActive(8))));
@@ -362,7 +375,11 @@ public class ForceRegistry {
             new InfuserTileEntity(), ForceRegistry.INFUSER.get()).build(null));
 
     public static final RegistryObject<TileEntityType<ForceFurnaceTileEntity>> FURNACE_TILE = TILES.register("furnace", () -> TileEntityType.Builder.create(() ->
-            new ForceFurnaceTileEntity(), ForceRegistry.FORCE_FURNACE.get()).build(null));
+            new ForceFurnaceTileEntity(), ForceRegistry.FORCE_FURNACE.get(), ForceRegistry.BLACK_FORCE_FURNACE.get(),  ForceRegistry.BLUE_FORCE_FURNACE.get(),
+                ForceRegistry.BROWN_FORCE_FURNACE.get(),  ForceRegistry.CYAN_FORCE_FURNACE.get(),  ForceRegistry.GRAY_FORCE_FURNACE.get(),  ForceRegistry.GREEN_FORCE_FURNACE.get(),
+                ForceRegistry.LIGHT_BLUE_FORCE_FURNACE.get(),  ForceRegistry.LIGHT_GRAY_FORCE_FURNACE.get(),  ForceRegistry.LIME_FORCE_FURNACE.get(),  ForceRegistry.MAGENTA_FORCE_FURNACE.get(),
+                ForceRegistry.ORANGE_FORCE_FURNACE.get(),  ForceRegistry.PINK_FORCE_FURNACE.get(),  ForceRegistry.PURPLE_FORCE_FURNACE.get(),  ForceRegistry.RED_FORCE_FURNACE.get(),
+                ForceRegistry.WHITE_FORCE_FURNACE.get()).build(null));
 
     public static final RegistryObject<TileEntityType<TimeTorchTileEntity>> TIME_TORCH_TILE = TILES.register("time_torch", () -> TileEntityType.Builder.create(() ->
             new TimeTorchTileEntity(), ForceRegistry.TIME_TORCH.get(), ForceRegistry.WALL_TIME_TORCH.get()).build(null));
@@ -384,6 +401,21 @@ public class ForceRegistry {
     public static final RegistryObject<Item> FORCE_PLANK_STAIRS_ITEM = ITEMS.register("force_plank_stairs", () -> new BlockItem(ForceRegistry.FORCE_PLANK_STAIRS.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_PLANK_SLAB_ITEM = ITEMS.register("force_plank_slab", () -> new BlockItem(ForceRegistry.FORCE_PLANK_SLAB.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_FURNACE_ITEM = ITEMS.register("force_furnace", () -> new BlockItem(ForceRegistry.FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> BLACK_FORCE_FURNACE_ITEM = ITEMS.register("black_force_furnace", () -> new BlockItem(ForceRegistry.BLACK_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> BLUE_FORCE_FURNACE_ITEM = ITEMS.register("blue_force_furnace", () -> new BlockItem(ForceRegistry.BLUE_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> BROWN_FORCE_FURNACE_ITEM = ITEMS.register("brown_force_furnace", () -> new BlockItem(ForceRegistry.BROWN_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> CYAN_FORCE_FURNACE_ITEM = ITEMS.register("cyan_force_furnace", () -> new BlockItem(ForceRegistry.CYAN_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> GRAY_FORCE_FURNACE_ITEM = ITEMS.register("gray_force_furnace", () -> new BlockItem(ForceRegistry.GRAY_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> GREEN_FORCE_FURNACE_ITEM = ITEMS.register("green_force_furnace", () -> new BlockItem(ForceRegistry.GREEN_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> LIGHT_BLUE_FORCE_FURNACE_ITEM = ITEMS.register("light_blue_force_furnace", () -> new BlockItem(ForceRegistry.LIGHT_BLUE_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> LIGHT_GRAY_FORCE_FURNACE_ITEM = ITEMS.register("light_gray_force_furnace", () -> new BlockItem(ForceRegistry.LIGHT_GRAY_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> LIME_FORCE_FURNACE_ITEM = ITEMS.register("lime_force_furnace", () -> new BlockItem(ForceRegistry.LIME_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> MAGENTA_FORCE_FURNACE_ITEM = ITEMS.register("magenta_force_furnace", () -> new BlockItem(ForceRegistry.MAGENTA_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> ORANGE_FORCE_FURNACE_ITEM = ITEMS.register("orange_force_furnace", () -> new BlockItem(ForceRegistry.ORANGE_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> PINK_FORCE_FURNACE_ITEM = ITEMS.register("pink_force_furnace", () -> new BlockItem(ForceRegistry.PINK_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> PURPLE_FORCE_FURNACE_ITEM = ITEMS.register("purple_force_furnace", () -> new BlockItem(ForceRegistry.PURPLE_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> RED_FORCE_FURNACE_ITEM = ITEMS.register("red_force_furnace", () -> new BlockItem(ForceRegistry.RED_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> WHITE_FORCE_FURNACE_ITEM = ITEMS.register("white_force_furnace", () -> new BlockItem(ForceRegistry.WHITE_FORCE_FURNACE.get(), itemBuilder().group(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_ENGINE_ITEM = ITEMS.register("force_engine", () -> new BlockItem(ForceRegistry.FORCE_ENGINE.get(), itemBuilder().group(ForceCraft.creativeTab)));
 
     public static final RegistryObject<Item> FORCE_BRICK_RED_ITEM = ITEMS.register("force_brick_red", () -> new BlockItem(FORCE_BRICK_RED.get(), itemBuilder().group(ForceCraft.creativeTab)));

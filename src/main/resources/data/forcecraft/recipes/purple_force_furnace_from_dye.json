@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forcecraft:force_furnace"
+    },
+    {
+      "tag": "forge:dyes/purple"
+    }
+  ],
+  "result": {
+    "item": "forcecraft:purple_force_furnace"
+  }
+}
