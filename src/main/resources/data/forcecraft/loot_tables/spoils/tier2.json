@@ -63,6 +63,38 @@
             }
           ],
           "name": "forcecraft:force_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 3.0,
+                "max": 11.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "forcecraft:force_arrow"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "forcecraft:fortune_cookie"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "forcecraft:life_card"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "forcecraft:darkness_card"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "forcecraft:undeath_card"
         }
       ]
     },
@@ -84,7 +116,7 @@
         },
         {
           "type": "minecraft:loot_table",
-          "name": "minecraft:chests/stronghold_crossing"
+          "name": "minecraft:chests/nether_bridge"
         }
       ]
     }

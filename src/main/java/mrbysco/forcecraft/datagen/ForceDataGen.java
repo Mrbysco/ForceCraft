@@ -84,9 +84,23 @@ public class ForceDataGen {
 				});
 
 				registerDropSelfLootTable(INFUSER.get());
-				registerLootTable(FORCE_FURNACE.get(), (furnace) -> {
-					return droppingWithName(FORCE_FURNACE.get());
-				});
+				registerLootTable(FORCE_FURNACE.get(), (furnace) -> droppingWithName(FORCE_FURNACE.get()));
+				registerLootTable(BLACK_FORCE_FURNACE.get(), (furnace) -> droppingWithName(BLACK_FORCE_FURNACE.get()));
+				registerLootTable(BLUE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(BLUE_FORCE_FURNACE.get()));
+				registerLootTable(BROWN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(BROWN_FORCE_FURNACE.get()));
+				registerLootTable(CYAN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(CYAN_FORCE_FURNACE.get()));
+				registerLootTable(GRAY_FORCE_FURNACE.get(), (furnace) -> droppingWithName(GRAY_FORCE_FURNACE.get()));
+				registerLootTable(GREEN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(GREEN_FORCE_FURNACE.get()));
+				registerLootTable(LIGHT_BLUE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(LIGHT_BLUE_FORCE_FURNACE.get()));
+				registerLootTable(LIGHT_GRAY_FORCE_FURNACE.get(), (furnace) -> droppingWithName(LIGHT_GRAY_FORCE_FURNACE.get()));
+				registerLootTable(LIME_FORCE_FURNACE.get(), (furnace) -> droppingWithName(LIME_FORCE_FURNACE.get()));
+				registerLootTable(MAGENTA_FORCE_FURNACE.get(), (furnace) -> droppingWithName(MAGENTA_FORCE_FURNACE.get()));
+				registerLootTable(ORANGE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(ORANGE_FORCE_FURNACE.get()));
+				registerLootTable(PINK_FORCE_FURNACE.get(), (furnace) -> droppingWithName(PINK_FORCE_FURNACE.get()));
+				registerLootTable(PURPLE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(PURPLE_FORCE_FURNACE.get()));
+				registerLootTable(RED_FORCE_FURNACE.get(), (furnace) -> droppingWithName(RED_FORCE_FURNACE.get()));
+				registerLootTable(WHITE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(WHITE_FORCE_FURNACE.get()));
+				registerLootTable(FORCE_ENGINE.get(), (furnace) -> droppingWithName(FORCE_ENGINE.get()));
 
 				registerDropSelfLootTable(FORCE_SAPLING.get());
 				registerDropSelfLootTable(FORCE_LOG.get());

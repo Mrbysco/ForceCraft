@@ -63,6 +63,41 @@
             }
           ],
           "name": "forcecraft:force_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 3.0,
+                "max": 11.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "forcecraft:force_arrow"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "forcecraft:fortune_cookie"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 12,
+          "name": "forcecraft:force_sapling"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "forcecraft:baconator"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "name": "minecraft:cake"
         }
       ]
     },

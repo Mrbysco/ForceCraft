@@ -63,6 +63,43 @@
             }
           ],
           "name": "forcecraft:force_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "name": "forcecraft:force_pickaxe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "name": "forcecraft:force_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "name": "forcecraft:force_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "name": "forcecraft:force_shears"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "name": "forcecraft:force_shovel"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "forcecraft:life_card"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "forcecraft:darkness_card"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "forcecraft:undeath_card"
         }
       ]
     },
@@ -81,6 +118,22 @@
         {
           "type": "minecraft:loot_table",
           "name": "minecraft:chests/stronghold_library"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "name": "minecraft:chests/stronghold_crossing"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "name": "minecraft:chests/bastion_treasure"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "name": "minecraft:chests/buried_treasure"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "name": "minecraft:chests/end_city_treasure"
         }
       ]
     }
