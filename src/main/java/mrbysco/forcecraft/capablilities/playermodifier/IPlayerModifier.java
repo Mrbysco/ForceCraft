@@ -19,6 +19,7 @@ public interface IPlayerModifier {
     float getHeatDamage();
     void setHeatDamage(float newDamage);
     void addHeatDamage(float newDamage);
+    boolean hasHeatDamage();
 
     float getDamage();
     void setDamage(float newDamage);

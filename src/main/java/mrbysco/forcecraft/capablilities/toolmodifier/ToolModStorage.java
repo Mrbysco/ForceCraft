@@ -67,7 +67,10 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 			if (cap.hasLight()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.light").mergeStyle(TextFormatting.GOLD));
 			}
-		}); 
+			if (cap.hasSharp()) {
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sharp" + cap.getSharpLevel()).mergeStyle(TextFormatting.GOLD));
+			}
+		});
 	}
 
 	@Nullable

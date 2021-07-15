@@ -67,6 +67,11 @@ public class PlayerModifierFactory implements Callable<IPlayerModifier> {
             }
 
             @Override
+            public boolean hasHeatDamage() {
+                return heatDamage > 0.0F;
+            }
+
+            @Override
             public void addHeatDamage(float newDamage) {
                 heatDamage += newDamage;
             }

@@ -5,6 +5,7 @@ import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.config.ConfigHandler;
 import mrbysco.forcecraft.potion.effects.TickableEffect;
 import mrbysco.forcecraft.registry.ForceEffects;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.CreeperSwellGoal;
 import net.minecraft.entity.monster.CreeperEntity;
@@ -13,11 +14,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE;
+import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class ToolModifierHandler {
@@ -41,29 +44,8 @@ public class ToolModifierHandler {
 		DamageSource source = event.getSource();
 
 		LivingEntity target = event.getEntityLiving();
-		if(target instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)target;
-			int sturdyLevel = 0;
-			for(ItemStack armorStack : player.getArmorInventoryList()) {
-				IToolModifier modifierCap = armorStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-				if(modifierCap != null && modifierCap.hasSturdy()) { {
-					sturdyLevel++;
-				}}
-			}
-			if(sturdyLevel > 0) {
-				double perArmor = ConfigHandler.COMMON.sturdyDamageReduction.get();
-				double percentage = sturdyLevel * perArmor;
-				float oldDamage = event.getAmount();
-				float newDamage = (float)(oldDamage - (oldDamage * percentage));
-				event.setAmount(newDamage);
-			}
-		}
-
-		if(source.getTrueSource() instanceof PlayerEntity) {
-			if(source.getTrueSource() == null
- 				|| !(source.getTrueSource() instanceof PlayerEntity)
- 				|| !(event.getEntity() instanceof LivingEntity)) return;
-
+		Entity trueSource = source.getTrueSource();
+		if(trueSource instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)source.getTrueSource();
 			player.getHeldItemMainhand().getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
 				if(cap.hasBane()) {
@@ -96,6 +78,34 @@ public class ToolModifierHandler {
 					ForceCraft.LOGGER.info("Added BLEEDING to " + target.getName());
 				}
 			});
+
+			player.getCapability(CAPABILITY_PLAYERMOD).ifPresent(playerCap -> {
+				float damage = event.getAmount();
+				damage += playerCap.getAttackDamage();
+				if(playerCap.hasHeatDamage()) {
+					damage += playerCap.getHeatDamage();
+					target.setFire(5);
+				}
+				event.setAmount(damage);
+			});
+		}
+
+		if(target instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)target;
+			int sturdyLevel = 0;
+			for(ItemStack armorStack : player.getArmorInventoryList()) {
+				IToolModifier modifierCap = armorStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+				if(modifierCap != null && modifierCap.hasSturdy()) { {
+					sturdyLevel++;
+				}}
+			}
+			if(sturdyLevel > 0) {
+				double perArmor = ConfigHandler.COMMON.sturdyDamageReduction.get();
+				double percentage = sturdyLevel * (perArmor / 4);
+				float oldDamage = event.getAmount();
+				float newDamage = (float)(oldDamage - (oldDamage * percentage));
+				event.setAmount(MathHelper.clamp(newDamage, 1.0F, Float.MAX_VALUE));
+			}
 		}
 	}
 }

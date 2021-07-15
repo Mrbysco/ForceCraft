@@ -336,6 +336,11 @@
     "item.infuser.tooltip.healing3": "Healing III",
     "item.infuser.tooltip.healing4": "Healing IV",
     "item.infuser.tooltip.healing5": "Healing V",
+    "item.infuser.tooltip.sharp1": "Force Punch I",
+    "item.infuser.tooltip.sharp2": "Force Punch II",
+    "item.infuser.tooltip.sharp3": "Force Punch III",
+    "item.infuser.tooltip.sharp4": "Force Punch IV",
+    "item.infuser.tooltip.sharp5": "Force Punch V",
 
     "item.milk_force_flask.tooltip": "Farm Fresh",
     "item.force_filled_force_flask.tooltip": "Force Potion Base",
