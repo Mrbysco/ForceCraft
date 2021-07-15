@@ -4,6 +4,7 @@ import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.registry.ForceEntities;
 import mrbysco.forcecraft.registry.ForceRegistry;
 import mrbysco.forcecraft.util.ForceUtils;
+import mrbysco.forcecraft.util.MobUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -33,6 +34,7 @@ public class ForceArrowEntity extends ArrowEntity {
 	private static final DataParameter<Boolean> SPEED = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> GLOWING = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> LUCK = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> BLEEDING = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.VARINT);
 
 	public ForceArrowEntity(EntityType<? extends ArrowEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -54,6 +56,7 @@ public class ForceArrowEntity extends ArrowEntity {
 		this.dataManager.register(ENDER, false);
 		this.dataManager.register(BANE, false);
 		this.dataManager.register(LUCK, 0);
+		this.dataManager.register(BLEEDING, 0);
 		this.dataManager.register(SPEED, false);
 		this.dataManager.register(GLOWING, false);
 	}
@@ -98,6 +101,14 @@ public class ForceArrowEntity extends ArrowEntity {
 		this.dataManager.set(LUCK, luck);
 	}
 
+	public int getBleeding() {
+		return this.dataManager.get(BLEEDING);
+	}
+
+	public void setBleeding(int bleeding) {
+		this.dataManager.set(BLEEDING, bleeding);
+	}
+
 	@Override
 	public void readAdditional(CompoundNBT compound) {
 		super.readAdditional(compound);
@@ -115,6 +126,7 @@ public class ForceArrowEntity extends ArrowEntity {
 			setSpeedy();
 		}
 		this.setLuck(compound.getInt("Luck"));
+		this.setBleeding(compound.getInt("Bleeding"));
 	}
 
 	@Override
@@ -134,6 +146,7 @@ public class ForceArrowEntity extends ArrowEntity {
 			compound.putBoolean("Speedy", true);
 		}
 		compound.putInt("Luck", getLuck());
+		compound.putInt("Bleeding", getBleeding());
 	}
 
 	@Override
@@ -155,6 +168,10 @@ public class ForceArrowEntity extends ArrowEntity {
 
 		if(appliesGlowing()) {
 			living.addPotionEffect(new EffectInstance(Effects.GLOWING, 200, 0));
+		}
+
+		if(getBleeding() > 0) {
+			MobUtil.addBleedingEffect(getBleeding(), living);
 		}
 
 		if(isBane()) {

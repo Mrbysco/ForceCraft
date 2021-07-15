@@ -39,8 +39,7 @@ public class ForceArrowItem extends ArrowItem {
 						forceArrow.setAppliesGlowing();
 					}
 					if(cap.hasBleed()) {
-						EffectInstance bleedingEffect = new EffectInstance(ForceEffects.BLEEDING.get(), 20 * cap.getBleedLevel(), 0, false, false);
-						forceArrow.addEffect(bleedingEffect);
+						forceArrow.setBleeding(cap.getBleedLevel());
 					}
 					if(cap.hasLuck()) {
 						int luckValue = cap.getLuckLevel();

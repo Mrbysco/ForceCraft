@@ -2,11 +2,6 @@ package mrbysco.forcecraft.util;
 
 import mrbysco.forcecraft.potion.effects.EffectBleeding;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.CreeperSwellGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 
 public class MobUtil {
