@@ -18,6 +18,7 @@ public class PlayerModifierFactory implements Callable<IPlayerModifier> {
             private float damage = attackDamage + heatDamage;
             private int luck;
             private boolean bane;
+            private int bleeding;
 
             @Override
             public float getAttackDamage() {
@@ -142,6 +143,21 @@ public class PlayerModifierFactory implements Callable<IPlayerModifier> {
             @Override
             public void setBane(boolean value) {
                 bane = value;
+            }
+
+            @Override
+            public boolean hasBleeding() {
+                return bleeding > 0;
+            }
+
+            @Override
+            public int getBleedingLevel() {
+                return bleeding;
+            }
+
+            @Override
+            public void setBleeding(int value) {
+                bleeding = value;
             }
         };
     }

@@ -97,7 +97,7 @@ public class PlayerCapHandler {
 					}
 					// Bleed
 					if (modifierCap.hasBleed()) {
-						bane += modifierCap.getBleedLevel();
+						bleed += modifierCap.getBleedLevel();
 					}
 				}
 			}
@@ -120,6 +120,9 @@ public class PlayerCapHandler {
 
 		int finalBane = bane;
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> cap.setBane(finalBane > 0));
+
+		int finalBleed = bleed;
+		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> cap.setBleeding(finalBleed));
 	}
 
 	@SubscribeEvent

@@ -22,6 +22,7 @@ public class PlayerModifierStorage implements Capability.IStorage<IPlayerModifie
         nbt.putInt("luckLevel", instance.getLuckLevel());
         nbt.putInt("armorPieces", instance.getArmorPieces());
         nbt.putBoolean("bane", instance.hasBane());
+        nbt.putInt("bleeding", instance.getBleedingLevel());
 
         return nbt;
     }
@@ -40,6 +41,7 @@ public class PlayerModifierStorage implements Capability.IStorage<IPlayerModifie
             instance.setLuckLevel(nbt.getInt("luckLevel"));
             instance.setArmorPieces(nbt.getInt("armorPieces"));
             instance.setBane(nbt.getBoolean("bane"));
+            instance.setBleeding(nbt.getInt("bleeding"));
         }
     }
 }

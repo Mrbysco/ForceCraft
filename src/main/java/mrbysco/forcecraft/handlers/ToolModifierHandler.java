@@ -44,7 +44,7 @@ public class ToolModifierHandler {
 					appliedBane = true;
 				}
 				if(toolCap.hasBleed()) {
-					MobUtil.addBleedingEffect(toolCap.getBleedLevel(), target);
+					MobUtil.addBleedingEffect(toolCap.getBleedLevel(), target, player);
 					ForceCraft.LOGGER.info("Added BLEEDING to " + target.getName());
 				}
 			}

@@ -40,4 +40,9 @@ public interface IPlayerModifier {
     //Bane
     boolean hasBane();
     void setBane(boolean value);
+
+    //Bleeding
+    boolean hasBleeding();
+    int getBleedingLevel();
+    void setBleeding(int value);
 }

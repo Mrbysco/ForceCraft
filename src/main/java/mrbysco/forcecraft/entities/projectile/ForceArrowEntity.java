@@ -171,7 +171,7 @@ public class ForceArrowEntity extends ArrowEntity {
 		}
 
 		if(getBleeding() > 0) {
-			MobUtil.addBleedingEffect(getBleeding(), living);
+			MobUtil.addBleedingEffect(getBleeding(), living, getShooter());
 		}
 
 		if(isBane()) {
