@@ -32,10 +32,13 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -200,6 +203,9 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 			if (cap.hasEnderModifier()) {
 				if(player.isSneaking()) {
 					cap.setHomeLocation(GlobalPos.getPosition(player.world.getDimensionKey(), player.getPosition()));
+					if(!worldIn.isRemote) {
+						player.sendMessage(new TranslationTextComponent("forcecraft.ender_rod.location.set").mergeStyle(TextFormatting.DARK_PURPLE), Util.DUMMY_UUID);
+					}
 				} else {
 					if(cap.getHomeLocation() != null) {
 						cap.teleportPlayerToLocation(player, cap.getHomeLocation());

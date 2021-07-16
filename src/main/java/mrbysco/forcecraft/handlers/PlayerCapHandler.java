@@ -40,7 +40,7 @@ public class PlayerCapHandler {
 			}
 
 			if (speed > 0) {
-				EffectInstance speedEffect = new EffectInstance(Effects.SPEED, SPEED_DURATION, speed, false, false);
+				EffectInstance speedEffect = new EffectInstance(Effects.SPEED, SPEED_DURATION, speed - 1, false, false);
 				if(!player.isPotionActive(Effects.SPEED) || (player.isPotionActive(Effects.SPEED) && player.getActivePotionEffect(Effects.SPEED).getDuration() <= 100)) {
 					player.addPotionEffect(speedEffect);
 				}

@@ -29,20 +29,28 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
             if(cap.hasHealing()) {
                 tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing" + cap.getHealingLevel()).mergeStyle(TextFormatting.RED));
             }
-            if (cap.getSpeedLevel() > 0) {
+            if(cap.getSpeedLevel() > 0) {
                 tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
             }
-            if (cap.hasCamoModifier()) {
+            if(cap.hasCamoModifier()) {
                 tooltip.add(new TranslationTextComponent("item.infuser.tooltip.camo").mergeStyle(TextFormatting.DARK_GREEN));
             }
-            if (cap.hasEnderModifier()) {
+            if(cap.hasEnderModifier()) {
                 tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender").mergeStyle(TextFormatting.DARK_PURPLE));
+
+                if(cap.getHomeLocation() != null) {
+                    GlobalPos globalPos = cap.getHomeLocation();
+                    BlockPos pos = globalPos.getPos();
+                    tooltip.add(new TranslationTextComponent("forcecraft.ender_rod.location", pos.getX(), pos.getY(), pos.getZ(), globalPos.getDimension().getLocation()).mergeStyle(TextFormatting.YELLOW));
+                } else {
+                    tooltip.add(new TranslationTextComponent("forcecraft.ender_rod.unset").mergeStyle(TextFormatting.RED));
+                }
                 tooltip.add(new TranslationTextComponent("forcecraft.ender_rod.text").mergeStyle(TextFormatting.GRAY));
             }
-            if (cap.hasSightModifier()) {
+            if(cap.hasSightModifier()) {
                 tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sight").mergeStyle(TextFormatting.LIGHT_PURPLE));
             }
-            if (cap.hasLight()) {
+            if(cap.hasLight()) {
                 tooltip.add(new TranslationTextComponent("item.infuser.tooltip.light").mergeStyle(TextFormatting.YELLOW));
             }
         });

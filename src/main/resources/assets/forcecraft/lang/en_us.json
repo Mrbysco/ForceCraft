@@ -296,6 +296,9 @@
   "forcecraft.magnet_glove.change": "Sneak Right-click to change modes",
   "forcecraft.ender_rod.text": "Shift-Right click to reset position",
   "forcecraft.ender_rod.dimension.text": "Can't teleport to another dimension",
+  "forcecraft.ender_rod.location.set": "Ender Rod location has been changed",
+  "forcecraft.ender_rod.location": "Bound to %s, %s, %s in %s",
+  "forcecraft.ender_rod.unset": "Coordinates Not Set",
 
   "item.infuser.tooltip.forcelevel": "Force: ",
   "item.infuser.tooltip.lumberjack": "Lumberjack",
