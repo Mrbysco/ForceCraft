@@ -4,7 +4,7 @@ import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.magnet.IMagnet;
 import mrbysco.forcecraft.capablilities.magnet.MagnetProvider;
 import mrbysco.forcecraft.items.BaseItem;
-import mrbysco.forcecraft.potion.effects.EffectMagnet;
+import mrbysco.forcecraft.registry.ForceEffects;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -69,8 +69,7 @@ public class MagnetGloveItem extends BaseItem {
             if(itemSlot >= 0 && itemSlot <= PlayerInventory.getHotbarSize()) {
                 IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
                 if (magnetCap != null && magnetCap.isActivated()) {
-                    EffectInstance magnet = new EffectMagnet(20);
-                    ((PlayerEntity)entityIn).addPotionEffect(magnet);
+                    ((PlayerEntity)entityIn).addPotionEffect(new EffectInstance(ForceEffects.MAGNET.get(), 20, 1, true, false));
                 }
             }
         }

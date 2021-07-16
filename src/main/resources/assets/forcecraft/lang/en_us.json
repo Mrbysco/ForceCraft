@@ -263,6 +263,10 @@
   "_comment": "Text",
   "forcecraft.guide_empty": "This is Broken. Report to Github Please.",
 
+  "_comment": "Potion",
+  "effect.forcecraft.bleeding": "Bleeding",
+  "effect.forcecraft.magnet": "Magnet",
+
   "_comment": "GUI",
   "forcecraft.gui.guide_book": "Book of Mudora",
   "forcecraft.container.belt": "Force Belt",

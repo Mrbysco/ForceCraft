@@ -1,33 +1,54 @@
-package mrbysco.forcecraft.potion.effects;
+package mrbysco.forcecraft.effects;
 
-import mrbysco.forcecraft.registry.ForceEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.EffectType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 
-public class EffectMagnet extends EffectInstance {
-
-    public EffectMagnet(int duration) {
-        super(ForceEffects.MAGNET.get(), duration, 1, true, false);
+public class MagnetEffect extends Effect {
+    public MagnetEffect() {
+        super(EffectType.BENEFICIAL, 0);
     }
 
     @Override
-    public void performEffect(LivingEntity entity) {
-        //Inspired by Botania Code
+    public boolean isInstant() {
+        return false;
+    }
 
+    @Override
+    public boolean isBeneficial() {
+        return true;
+    }
+
+    @Override
+    public boolean shouldRenderHUD(EffectInstance effect) {
+        return false;
+    }
+
+    @Override
+    public boolean isReady(int duration, int amplifier) {
+        return true;
+    }
+
+    @Override
+    public boolean shouldRender(EffectInstance effect) {
+        return false;
+    }
+
+    @Override
+    public void performEffect(LivingEntity entity, int amplifier) {
+        //Inspired by Botania Code
         double x = entity.getPosX();
         double y = entity.getPosY() + 0.75;;
         double z = entity.getPosZ();
         double range = 10.0d;
 
-        EffectInstance activePotionEffect = entity.getActivePotionEffect(ForceEffects.MAGNET.get());
-        if(activePotionEffect != null) {
-            range += activePotionEffect.getAmplifier() * 0.3f;
-        }
+        range += amplifier * 0.3f;
 
         List<ItemEntity> items = entity.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(x - range, y - range, z - range, x + range, y + range, z + range));
         for(ItemEntity item : items) {
@@ -48,5 +69,4 @@ public class EffectMagnet extends EffectInstance {
             item.setMotion(finalVector.mul(strength, strength, strength));
         }
     }
-
 }

@@ -72,6 +72,7 @@ public class PlayerCapHandler {
 		int heat = 0;
 		int luck = 0;
 		int bane = 0;
+		int bleed = 0;
 
 		for (ItemStack slotSelected : armor) {
 			if (slotSelected.getItem() instanceof ForceArmorItem) {
@@ -93,6 +94,10 @@ public class PlayerCapHandler {
 					// Bane
 					if (modifierCap.hasBane()) {
 						bane++;
+					}
+					// Bleed
+					if (modifierCap.hasBleed()) {
+						bane += modifierCap.getBleedLevel();
 					}
 				}
 			}

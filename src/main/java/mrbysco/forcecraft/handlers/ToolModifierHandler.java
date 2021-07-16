@@ -4,8 +4,6 @@ import mrbysco.forcecraft.ForceCraft;
 import mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.config.ConfigHandler;
-import mrbysco.forcecraft.potion.effects.TickableEffect;
-import mrbysco.forcecraft.registry.ForceEffects;
 import mrbysco.forcecraft.registry.ForceSounds;
 import mrbysco.forcecraft.util.MobUtil;
 import net.minecraft.entity.Entity;
@@ -18,24 +16,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
-import static mrbysco.forcecraft.capablilities.CapabilityHandler.PLAYER_CAP;
 
 public class ToolModifierHandler {
 
-	@SubscribeEvent
-	public void onLivingUpdateEvent(LivingUpdateEvent event) {
-		TickableEffect bleedingEffect = (TickableEffect) ForceEffects.BLEEDING.get();
-		if(event.getEntityLiving().isPotionActive(bleedingEffect)) {
-			bleedingEffect.tick(event);
-		}
-	}
-	
 	@SubscribeEvent
 	public void onLivingDamageEvent(LivingDamageEvent event) {
 		if(event.getSource() == null) {
