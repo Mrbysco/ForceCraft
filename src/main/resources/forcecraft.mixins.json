@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "mrbysco.forcecraft.mixin",
+  "refmap": "forcecraft.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "GrindstoneSlotMixin",
+    "GrindstoneSecondSlotMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
