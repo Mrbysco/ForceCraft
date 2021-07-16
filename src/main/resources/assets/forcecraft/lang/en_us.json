@@ -254,6 +254,9 @@
   "forcecraft.fairy.listen.subtitle": "Fairy yelling",
   "forcecraft.fairy.listen.special.subtitle": "Fairy wishing a happy birthday",
   "forcecraft.infuser.done.subtitle": "Infusion completes",
+  "forcecraft.infuser.working.subtitle": "Infuser processing",
+  "forcecraft.infuser.special.beep.subtitle": "Infuser beep",
+  "forcecraft.infuser.special.subtitle": "Infuser humming",
   "forcecraft.heart.pickup.subtitle": "Heart Pickup",
   "forcecraft.force.punch.subtitle": "Force Punched",
 

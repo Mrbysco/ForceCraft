@@ -204,7 +204,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 				if(player.isSneaking()) {
 					cap.setHomeLocation(GlobalPos.getPosition(player.world.getDimensionKey(), player.getPosition()));
 					if(!worldIn.isRemote) {
-						player.sendMessage(new TranslationTextComponent("forcecraft.ender_rod.location.set").mergeStyle(TextFormatting.DARK_PURPLE), Util.DUMMY_UUID);
+						player.sendStatusMessage(new TranslationTextComponent("forcecraft.ender_rod.location.set").mergeStyle(TextFormatting.DARK_PURPLE), true);
 					}
 				} else {
 					if(cap.getHomeLocation() != null) {

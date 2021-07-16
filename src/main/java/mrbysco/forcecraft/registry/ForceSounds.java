@@ -25,10 +25,20 @@ public class ForceSounds {
 	public static final RegistryObject<SoundEvent> INFUSER_DONE = SOUND_EVENTS.register("infuser.done", () ->
 			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "infuser.done")));
 
+	public static final RegistryObject<SoundEvent> INFUSER_WORKING = SOUND_EVENTS.register("infuser.working", () ->
+			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "infuser.working")));
+
+	public static final RegistryObject<SoundEvent> INFUSER_SPECIAL = SOUND_EVENTS.register("infuser.special", () ->
+			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "infuser.special")));
+
+	public static final RegistryObject<SoundEvent> INFUSER_SPECIAL_BEEP = SOUND_EVENTS.register("infuser.special.beep", () ->
+			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "infuser.special.beep")));
+
 	public static final RegistryObject<SoundEvent> HEART_PICKUP = SOUND_EVENTS.register("heart.pickup", () ->
 			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "heart.pickup")));
 
 	public static final RegistryObject<SoundEvent> FORCE_PUNCH = SOUND_EVENTS.register("force.punch", () ->
 			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "force.punch")));
+
 
 }

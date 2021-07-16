@@ -57,8 +57,11 @@ public class ToolModifierHandler {
 
 				float damage = event.getAmount();
 				if(playerCap.hasHeatDamage()) {
-					if(playerCap.getAttackDamage() == 0.0f)
+					if(playerCap.getAttackDamage() == 0.0f) {
 						damage += playerCap.getHeatDamage();
+					} else {
+						damage += playerCap.getAttackDamage();
+					}
 
 					target.forceFireTicks((30 * playerCap.getHeatPieces()));
 				} else {

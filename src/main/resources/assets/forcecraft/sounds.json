@@ -35,6 +35,27 @@
             "forcecraft:infuser_done"
         ]
     },
+    "infuser.working" : {
+        "category" : "block",
+        "subtitle": "forcecraft.infuser.working.subtitle",
+        "sounds": [
+            "forcecraft:chimes"
+        ]
+    },
+    "infuser.special" : {
+        "category" : "block",
+        "subtitle": "forcecraft.infuser.special.subtitle",
+        "sounds": [
+            "forcecraft:hum"
+        ]
+    },
+    "infuser.special.beep" : {
+        "category" : "block",
+        "subtitle": "forcecraft.infuser.special.beep.subtitle",
+        "sounds": [
+            "forcecraft:start_beep"
+        ]
+    },
     "heart.pickup" : {
         "category" : "neutral",
         "subtitle": "forcecraft.heart.pickup.subtitle",

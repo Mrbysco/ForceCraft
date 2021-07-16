@@ -17,6 +17,7 @@ import mrbysco.forcecraft.items.tools.ForceRodItem;
 import mrbysco.forcecraft.items.tools.ForceShearsItem;
 import mrbysco.forcecraft.items.tools.ForceShovelItem;
 import mrbysco.forcecraft.items.tools.ForceSwordItem;
+import mrbysco.forcecraft.networking.PacketHandler;
 import mrbysco.forcecraft.recipe.ForceRecipes;
 import mrbysco.forcecraft.recipe.InfuseRecipe;
 import mrbysco.forcecraft.registry.ForceFluids;
@@ -30,6 +31,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -51,6 +53,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -60,6 +63,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -78,6 +82,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     private static final int FLUID_CHARGE = 1000;
 
 	public boolean canWork = false;
+	public boolean makesSpecialSound = false;
 
     public int processTime = 0;
     public int maxProcessTime = 20;
@@ -215,6 +220,10 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         if (canWork) {
         	processTime++;
 
+			if(world.getGameTime() % 60 == 0) {
+				makeWorkSound();
+			}
+
 			if(energyStorage.getEnergyStored() > ENERGY_COST_PER) {
 				energyStorage.consumePower(ENERGY_COST_PER);
 			}
@@ -233,6 +242,17 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         		else if(recipesStillMatch()) {
         			processTool();
         		}
+
+				world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_DONE.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+        		if(!world.isRemote) {
+					BlockPos pos = getPos();
+					for(PlayerEntity playerentity : world.getPlayers()) {
+						if(playerentity.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) < 200) {
+							PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) playerentity), new mrbysco.forcecraft.networking.message.StopInfuserSoundMessage());
+						}
+					}
+				}
         	}
         	// auto turn off when done
         	//even if tool or book slot become empty, dont auto run next insert
@@ -258,8 +278,23 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         	canWork = false;
         	maxProcessTime = 0;
     	}
+    	if(canWork) {
+    		if(world.rand.nextInt(10) == 0) {
+    			makesSpecialSound = true;
+				world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_SPECIAL_BEEP.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+				makeWorkSound();
+			}
+		}
         refreshClient();
     }
+
+    public void makeWorkSound() {
+		if(makesSpecialSound) {
+			world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_SPECIAL.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+		} else {
+			world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_WORKING.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+		}
+	}
 
 	private void setMaxTimeFromRecipes() {
 		maxProcessTime = 0;
@@ -386,7 +421,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
 			}
 		}
-		world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_DONE.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
 
         // TODO: is this notfiy needed?
         world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);

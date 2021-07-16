@@ -8,6 +8,7 @@ import mrbysco.forcecraft.networking.message.PackChangeMessage;
 import mrbysco.forcecraft.networking.message.QuickUseBeltMessage;
 import mrbysco.forcecraft.networking.message.RecipeToCardMessage;
 import mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
+import mrbysco.forcecraft.networking.message.StopInfuserSoundMessage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.IPacket;
@@ -35,6 +36,7 @@ public class PacketHandler {
         CHANNEL.registerMessage(id++, OpenBeltMessage.class, OpenBeltMessage::encode, OpenBeltMessage::decode, OpenBeltMessage::handle);
         CHANNEL.registerMessage(id++, OpenPackMessage.class, OpenPackMessage::encode, OpenPackMessage::decode, OpenPackMessage::handle);
         CHANNEL.registerMessage(id++, QuickUseBeltMessage.class, QuickUseBeltMessage::encode, QuickUseBeltMessage::decode, QuickUseBeltMessage::handle);
+        CHANNEL.registerMessage(id++, StopInfuserSoundMessage.class, StopInfuserSoundMessage::encode, StopInfuserSoundMessage::decode, StopInfuserSoundMessage::handle);
     }
 
     public static void sendPacket(Entity player, IPacket<?> packet) {
