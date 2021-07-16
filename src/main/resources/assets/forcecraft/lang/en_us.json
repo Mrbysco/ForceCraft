@@ -267,6 +267,10 @@
   "effect.forcecraft.bleeding": "Bleeding",
   "effect.forcecraft.magnet": "Magnet",
 
+  "_comment": "Damage Source",
+  "death.attack.forcecraft.bleeding": "%1$s bled to death",
+  "death.attack.forcecraft.bleeding.player": "%1$s bled to death whilst trying to escape %2$s",
+
   "_comment": "GUI",
   "forcecraft.gui.guide_book": "Book of Mudora",
   "forcecraft.container.belt": "Force Belt",

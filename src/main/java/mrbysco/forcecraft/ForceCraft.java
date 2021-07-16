@@ -27,6 +27,7 @@ import mrbysco.forcecraft.world.WorldGenHandler;
 import mrbysco.forcecraft.world.feature.ForceFeatures;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
@@ -45,6 +46,8 @@ import org.apache.logging.log4j.Logger;
 public class ForceCraft {
 
     public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
+
+    public static final DamageSource BLEEDING_DAMAGE = new DamageSource(Reference.MOD_ID + ".bleeding").setMagicDamage().setDamageBypassesArmor();
 
     public static final ItemGroup creativeTab = (new ItemGroup(Reference.MOD_ID) {
         @OnlyIn(Dist.CLIENT)

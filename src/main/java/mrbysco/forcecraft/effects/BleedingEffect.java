@@ -1,12 +1,11 @@
 package mrbysco.forcecraft.effects;
 
+import mrbysco.forcecraft.ForceCraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
-import net.minecraft.util.DamageSource;
 
 public class BleedingEffect extends Effect {
-
     public BleedingEffect(){
         super(EffectType.HARMFUL, 0);
     }
@@ -30,8 +29,7 @@ public class BleedingEffect extends Effect {
 	public void performEffect(LivingEntity target, int amplifier) {
 		//once per tick
 		if(target.world.getGameTime() % 20 == 0) {
-			// TODO: we could make a custom damage source
-			target.attackEntityFrom(DamageSource.MAGIC, 2.0F);
+			target.attackEntityFrom(ForceCraft.BLEEDING_DAMAGE, 2.0F);
 		}
 	}
 }
