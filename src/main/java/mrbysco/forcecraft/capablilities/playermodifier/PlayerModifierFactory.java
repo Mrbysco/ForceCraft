@@ -13,8 +13,11 @@ public class PlayerModifierFactory implements Callable<IPlayerModifier> {
             private float wingPower = 0.0f;
             private float flightCounter = wingPower;
             private float heatDamage = 0.0f;
+            private int heatPieces = 0;
+            private int armorPieces = 0;
             private float damage = attackDamage + heatDamage;
             private int luck;
+            private boolean bane;
 
             @Override
             public float getAttackDamage() {
@@ -72,6 +75,16 @@ public class PlayerModifierFactory implements Callable<IPlayerModifier> {
             }
 
             @Override
+            public void setHeatPieces(int pieces) {
+                this.heatPieces = pieces;
+            }
+
+            @Override
+            public int getHeatPieces() {
+                return heatPieces;
+            }
+
+            @Override
             public void addHeatDamage(float newDamage) {
                 heatDamage += newDamage;
             }
@@ -101,6 +114,35 @@ public class PlayerModifierFactory implements Callable<IPlayerModifier> {
                 luck += newLuck;
             }
 
+            @Override
+            public boolean hasFullSet() {
+                return armorPieces == 4;
+            }
+
+            @Override
+            public int getArmorPieces() {
+                return armorPieces;
+            }
+
+            @Override
+            public void incrementArmorPieces() {
+                armorPieces++;
+            }
+
+            @Override
+            public void setArmorPieces(int value) {
+                armorPieces = value;
+            }
+
+            @Override
+            public boolean hasBane() {
+                return bane;
+            }
+
+            @Override
+            public void setBane(boolean value) {
+                bane = value;
+            }
         };
     }
 }

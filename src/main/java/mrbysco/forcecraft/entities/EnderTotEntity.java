@@ -73,6 +73,11 @@ public class EnderTotEntity extends EndermanEntity {
 	}
 
 	@Override
+	public boolean isChild() {
+		return true;
+	}
+
+	@Override
 	public boolean teleportRandomly() {
 		if (!this.world.isRemote() && this.isAlive() && !this.isInWaterOrBubbleColumn()) {
 			double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 32.0D;

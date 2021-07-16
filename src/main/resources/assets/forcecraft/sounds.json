@@ -41,5 +41,12 @@
         "sounds": [
             "forcecraft:pickup"
         ]
+    },
+    "force.punch" : {
+        "category" : "neutral",
+        "subtitle": "forcecraft.force.punch.subtitle",
+        "sounds": [
+            "forcecraft:force_punch"
+        ]
     }
 }

@@ -32,18 +32,20 @@ public class LootingHandler {
 		int level = event.getLootingLevel();
 
 		IPlayerModifier playerModifier = source.getTrueSource().getCapability(CAPABILITY_PLAYERMOD).orElse(null);
+		int customLevel = 0;
 		if(playerModifier != null) {
-			level += playerModifier.getLuckLevel();
+			customLevel += playerModifier.getLuckLevel();
 		}
 
 		if(source.getImmediateSource() instanceof ForceArrowEntity) {
 			ForceArrowEntity forceArrow = (ForceArrowEntity) source.getImmediateSource();
-			level += forceArrow.getLuck();
+			customLevel += forceArrow.getLuck();
 		}
 
-		if(level > 4) {
-			level = 4;
+		if(customLevel > 4) {
+			customLevel = 4;
 		}
+		level += customLevel;
 
 		event.setLootingLevel(level);
 	}

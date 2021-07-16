@@ -16,8 +16,7 @@
     },
     {
       "type": "spotlight",
-      "item": "forcecraft:bottled_wither",
-      "text": "info.forcecraft.book.inert_core_info3.text"
+      "item": "forcecraft:bottled_wither"
     }
   ]
 }

@@ -28,4 +28,7 @@ public class ForceSounds {
 	public static final RegistryObject<SoundEvent> HEART_PICKUP = SOUND_EVENTS.register("heart.pickup", () ->
 			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "heart.pickup")));
 
+	public static final RegistryObject<SoundEvent> FORCE_PUNCH = SOUND_EVENTS.register("force.punch", () ->
+			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "force.punch")));
+
 }

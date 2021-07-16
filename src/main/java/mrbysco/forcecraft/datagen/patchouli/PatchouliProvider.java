@@ -65,8 +65,8 @@ public class PatchouliProvider extends PatchouliBookProvider {
 				.addTextPage("info.forcecraft.book.inert_core_info.text").build()
 				.addImagePage(new ResourceLocation(Reference.MOD_ID, "textures/gui/entries/burning_inert.png"))
 					.setText("info.forcecraft.book.inert_core_info2.text").build()
-				.addSpotlightPage(new ItemStack(ForceRegistry.BOTTLED_WITHER.get()))
-					.setText("info.forcecraft.book.inert_core_info3.text").build().build()
+				.addSpotlightPage(new ItemStack(ForceRegistry.BOTTLED_WITHER.get())).build()
+				.build()
 
 				.addEntry("infuser/furnace", "info.forcecraft.book.force_furnace.entry.name", "forcecraft:force_furnace")
 				.addTextPage("info.forcecraft.book.force_furnace_info.text").build()

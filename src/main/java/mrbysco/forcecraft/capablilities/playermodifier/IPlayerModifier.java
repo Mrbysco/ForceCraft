@@ -20,6 +20,8 @@ public interface IPlayerModifier {
     void setHeatDamage(float newDamage);
     void addHeatDamage(float newDamage);
     boolean hasHeatDamage();
+    void setHeatPieces(int pieces);
+    int getHeatPieces();
 
     float getDamage();
     void setDamage(float newDamage);
@@ -28,4 +30,14 @@ public interface IPlayerModifier {
     int getLuckLevel();
     void setLuckLevel(int newLuck);
     void incrementLuckLevel(int newLuck);
+
+    //SetBonus
+    boolean hasFullSet();
+    int getArmorPieces();
+    void incrementArmorPieces();
+    void setArmorPieces(int value);
+
+    //Bane
+    boolean hasBane();
+    void setBane(boolean value);
 }

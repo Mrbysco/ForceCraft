@@ -1,5 +1,14 @@
 package mrbysco.forcecraft.capablilities.toolmodifier;
 
+import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
+import mrbysco.forcecraft.config.ConfigHandler;
+import mrbysco.forcecraft.items.ForceArmorItem;
+import mrbysco.forcecraft.items.tools.ForceBowItem;
+import mrbysco.forcecraft.items.tools.ForcePickaxeItem;
+import mrbysco.forcecraft.items.tools.ForceRodItem;
+import mrbysco.forcecraft.items.tools.ForceShearsItem;
+import mrbysco.forcecraft.items.tools.ForceShovelItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -12,6 +21,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class ToolModStorage implements Capability.IStorage<IToolModifier> {
@@ -21,24 +31,31 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 
 	public static void attachInformation(ItemStack stack, List<ITextComponent> tooltip) {
 		stack.getCapability(CAPABILITY_TOOLMOD).ifPresent(cap -> {
+			Item item = stack.getItem();
 
 			if (cap.getSpeedLevel() > 0) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()).mergeStyle(TextFormatting.YELLOW));
+				if (item instanceof ForceBowItem || item instanceof ForceArmorItem || item instanceof ForceRodItem) {
+					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()).mergeStyle(TextFormatting.YELLOW));
+				}
 			}
 			if (cap.hasLumberjack()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.lumberjack").mergeStyle(TextFormatting.YELLOW));
 			}
 			if(cap.getLuckLevel() > 0) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.luck" + cap.getLuckLevel()).mergeStyle(TextFormatting.GREEN));
+				if(item instanceof ForceBowItem || item instanceof ForceArmorItem) {
+					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.luck" + cap.getLuckLevel()).mergeStyle(TextFormatting.GREEN));
+				}
 			}
 			if(cap.getBaneLevel() > 0) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bane").mergeStyle(TextFormatting.LIGHT_PURPLE));
 			}
-			if (cap.getForceLevel() > 0) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.force" + cap.getForceLevel()));
-			}
+//			if (cap.getForceLevel() > 0) {
+//				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.force" + cap.getForceLevel()));
+//			}
 			if (cap.getSturdyLevel() > 0) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sturdy" + cap.getSturdyLevel()));
+				if(stack.getItem() instanceof ForceArmorItem) {
+					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sturdy" + cap.getSturdyLevel()).mergeStyle(TextFormatting.DARK_PURPLE));
+				}
 			}
 			if (cap.hasWing()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.wing"));
@@ -50,7 +67,9 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.rainbow").mergeStyle(TextFormatting.GOLD));
 			}
 			if (cap.hasHeat()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.heat").mergeStyle(TextFormatting.RED));
+				if(item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceShearsItem || item instanceof ForceArmorItem) {
+					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.heat").mergeStyle(TextFormatting.RED));
+				}
 			}
 			if (cap.hasCamo()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.camo").mergeStyle(TextFormatting.DARK_GREEN));
@@ -68,7 +87,9 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.light").mergeStyle(TextFormatting.GOLD));
 			}
 			if (cap.hasSharp()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sharp" + cap.getSharpLevel()).mergeStyle(TextFormatting.GOLD));
+				if(stack.getItem() instanceof ForceArmorItem) {
+					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sharp").mergeStyle(TextFormatting.GOLD));
+				}
 			}
 		});
 	}

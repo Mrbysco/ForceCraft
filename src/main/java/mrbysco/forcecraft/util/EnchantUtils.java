@@ -27,4 +27,17 @@ public final class EnchantUtils {
             stack.addEnchantment(enchantment, 1);
         }
     }
+
+    public static void incrementLevel(ItemStack stack, Enchantment enchantment, int levels) {
+        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+        if(enchantments.containsKey(enchantment)) {
+            int oldLevel = enchantments.get(enchantment);
+            enchantments.remove(enchantment);
+            enchantments.put(enchantment, oldLevel + levels);
+            EnchantmentHelper.setEnchantments(enchantments, stack);
+        }
+        else {
+            stack.addEnchantment(enchantment, levels);
+        }
+    }
 }

@@ -250,6 +250,11 @@ public class InfuserContainer extends Container {
             super.onSlotChanged();
             onCraftMatrixChanged(null);
         }
+
+        @Override
+        public int getSlotStackLimit() {
+            return 1;
+        }
     }
 
     public class UnlockableSlot extends MatrixUpdatingSlot {

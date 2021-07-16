@@ -13,12 +13,15 @@ public class PlayerModifierStorage implements Capability.IStorage<IPlayerModifie
     public INBT writeNBT(Capability<IPlayerModifier> capability, IPlayerModifier instance, Direction side) {
         CompoundNBT nbt = new CompoundNBT();
 
-        nbt.putFloat("damage", instance.getDamage());
+        nbt.putFloat("attackDamage", instance.getAttackDamage());
         nbt.putFloat("wingPower", instance.getWingPower());
         nbt.putFloat("flightCounter", instance.getFlightTimer());
+        nbt.putFloat("damage", instance.getDamage());
         nbt.putFloat("heatDamage", instance.getHeatDamage());
-        nbt.putFloat("attackDamage", instance.getAttackDamage());
+        nbt.putInt("heatPieces", instance.getHeatPieces());
         nbt.putInt("luckLevel", instance.getLuckLevel());
+        nbt.putInt("armorPieces", instance.getArmorPieces());
+        nbt.putBoolean("bane", instance.hasBane());
 
         return nbt;
     }
@@ -32,7 +35,11 @@ public class PlayerModifierStorage implements Capability.IStorage<IPlayerModifie
             instance.setWingPower(nbt.getFloat("wingPower"));
             instance.setFlightTimer(nbt.getFloat("flightCounter"));
             instance.setDamage(nbt.getFloat("damage"));
+            instance.setHeatDamage(nbt.getFloat("heatDamage"));
+            instance.setHeatPieces(nbt.getInt("heatPieces"));
             instance.setLuckLevel(nbt.getInt("luckLevel"));
+            instance.setArmorPieces(nbt.getInt("armorPieces"));
+            instance.setBane(nbt.getBoolean("bane"));
         }
     }
 }

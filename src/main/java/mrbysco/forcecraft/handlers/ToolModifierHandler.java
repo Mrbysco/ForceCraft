@@ -1,10 +1,13 @@
 package mrbysco.forcecraft.handlers;
 
 import mrbysco.forcecraft.ForceCraft;
+import mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
 import mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import mrbysco.forcecraft.config.ConfigHandler;
 import mrbysco.forcecraft.potion.effects.TickableEffect;
 import mrbysco.forcecraft.registry.ForceEffects;
+import mrbysco.forcecraft.registry.ForceSounds;
+import mrbysco.forcecraft.util.MobUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.CreeperSwellGoal;
@@ -12,7 +15,6 @@ import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -22,11 +24,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static mrbysco.forcecraft.capablilities.CapabilityHandler.PLAYER_CAP;
 
 public class ToolModifierHandler {
-	
-	// 10 seconds at 20 ticks/sec
-	private static final int BLEEDING_SECONDS = 10;
 
 	@SubscribeEvent
 	public void onLivingUpdateEvent(LivingUpdateEvent event) {
@@ -47,47 +47,42 @@ public class ToolModifierHandler {
 		Entity trueSource = source.getTrueSource();
 		if(trueSource instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)source.getTrueSource();
-			player.getHeldItemMainhand().getCapability(CAPABILITY_TOOLMOD).ifPresent((cap) -> {
-				if(cap.hasBane()) {
-					if(target instanceof CreeperEntity){
-						CreeperEntity creeper = ((CreeperEntity) target);
-						creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
-							if(entityCap.canExplode()){
-								creeper.setCreeperState(-1);
-								creeper.getDataManager().set(CreeperEntity.IGNITED, false);
-								entityCap.setExplodeAbility(false);
-								creeper.goalSelector.goals.removeIf(goal -> goal.getGoal() instanceof CreeperSwellGoal);
-								ForceCraft.LOGGER.info("Added Bane to " + target.getName());
-							}
-						});
-					}
-					if(event.getEntity() instanceof EndermanEntity){
-						EndermanEntity enderman = ((EndermanEntity) event.getEntity());
-						enderman.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
-							if(entityCap.canTeleport()){
-								entityCap.setTeleportAbility(false);
-								ForceCraft.LOGGER.info("Added Bane to " + target.getName());
-							}
-						});
-					}
-				}
-				if(cap.hasBleed()) {
-					EffectInstance bleedingEffect = new EffectInstance(ForceEffects.BLEEDING.get(), 20 * BLEEDING_SECONDS, cap.getBleedLevel());
+			boolean appliedBane = false;
 
-					target.addPotionEffect(bleedingEffect);
+			IToolModifier toolCap = player.getHeldItemMainhand().getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if(toolCap != null) {
+				if(toolCap.hasBane()) {
+					applyBane(target);
+					appliedBane = true;
+				}
+				if(toolCap.hasBleed()) {
+					MobUtil.addBleedingEffect(toolCap.getBleedLevel(), target);
 					ForceCraft.LOGGER.info("Added BLEEDING to " + target.getName());
 				}
-			});
+			}
 
-			player.getCapability(CAPABILITY_PLAYERMOD).ifPresent(playerCap -> {
-				float damage = event.getAmount();
-				damage += playerCap.getAttackDamage();
-				if(playerCap.hasHeatDamage()) {
-					damage += playerCap.getHeatDamage();
-					target.setFire(5);
+			IPlayerModifier playerCap = player.getCapability(CAPABILITY_PLAYERMOD).orElse(null);
+			if(playerCap != null) {
+				if(playerCap.hasBane() && !appliedBane) {
+					applyBane(target);
 				}
-				event.setAmount(damage);
-			});
+
+				float damage = event.getAmount();
+				if(playerCap.hasHeatDamage()) {
+					if(playerCap.getAttackDamage() == 0.0f)
+						damage += playerCap.getHeatDamage();
+
+					target.forceFireTicks((30 * playerCap.getHeatPieces()));
+				} else {
+					damage += playerCap.getAttackDamage();
+				}
+
+				if(player.getHeldItemMainhand().isEmpty()) {
+					player.world.playSound((PlayerEntity)null, target.getPosX(), target.getPosY(), target.getPosZ(), ForceSounds.FORCE_PUNCH.get(), player.getSoundCategory(), 1.0F, 1.0F);
+					event.setAmount(damage);
+				}
+			}
+
 		}
 
 		if(target instanceof PlayerEntity) {
@@ -106,6 +101,30 @@ public class ToolModifierHandler {
 				float newDamage = (float)(oldDamage - (oldDamage * percentage));
 				event.setAmount(MathHelper.clamp(newDamage, 1.0F, Float.MAX_VALUE));
 			}
+		}
+	}
+
+	private void applyBane(LivingEntity target) {
+		if(target instanceof CreeperEntity){
+			CreeperEntity creeper = ((CreeperEntity) target);
+			creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
+				if(entityCap.canExplode()){
+					creeper.setCreeperState(-1);
+					creeper.getDataManager().set(CreeperEntity.IGNITED, false);
+					entityCap.setExplodeAbility(false);
+					creeper.goalSelector.goals.removeIf(goal -> goal.getGoal() instanceof CreeperSwellGoal);
+					ForceCraft.LOGGER.info("Added Bane to " + target.getName());
+				}
+			});
+		}
+		if(target instanceof EndermanEntity){
+			EndermanEntity enderman = ((EndermanEntity) target);
+			enderman.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
+				if(entityCap.canTeleport()){
+					entityCap.setTeleportAbility(false);
+					ForceCraft.LOGGER.info("Added Bane to " + target.getName());
+				}
+			});
 		}
 	}
 }

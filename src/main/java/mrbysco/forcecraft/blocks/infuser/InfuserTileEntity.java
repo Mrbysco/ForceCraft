@@ -740,7 +740,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     static boolean addTreasureModifier(ItemStack stack) {
         if (stack.getItem() instanceof ForceSwordItem || stack.getItem() instanceof ForceAxeItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
+            if(modifierCap != null && !modifierCap.hasTreasure()) {
                 modifierCap.setTreasure(true);
 				addInfusedTag(stack);
                 return true;
@@ -776,7 +776,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         if(item instanceof ForceSwordItem || item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceRodItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
-				if(modifierCap.getSturdyLevel() < ConfigHandler.COMMON.sturdyCap.get()) {
+				if(modifierCap.getSturdyLevel() < ConfigHandler.COMMON.sturdyToolCap.get()) {
 					modifierCap.incrementSturdy();
 					EnchantUtils.incrementLevel(stack, Enchantments.UNBREAKING);
 					addInfusedTag(stack);
@@ -816,7 +816,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 			if(modifierCap != null ) {
 				if(modifierCap.getLuckLevel() < MAX_CAP) {
 					modifierCap.incrementLuck();
-					EnchantUtils.incrementLevel(stack, Enchantments.FORTUNE);
+					EnchantUtils.incrementLevel(stack, Enchantments.LOOTING);
 					addInfusedTag(stack);
 					return true;
 				}
@@ -827,7 +827,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 			if(modifierCap != null ) {
 				if(modifierCap.getLuckLevel() < MAX_CAP) {
 					modifierCap.incrementLuck();
-					EnchantUtils.incrementLevel(stack, Enchantments.FORTUNE);
 					addInfusedTag(stack);
 					return true;
 				}
@@ -838,7 +837,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             if(modifierCap != null ) {
 				if(modifierCap.getLuckLevel() < MAX_CAP) {
 					modifierCap.incrementLuck();
-					EnchantUtils.incrementLevel(stack, Enchantments.FORTUNE);
 					addInfusedTag(stack);
 					return true;
 				}
@@ -875,7 +873,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         else if (item instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null) {
-				if(modifierCap.getSharpLevel() < MAX_CAP) {
+				if(modifierCap.getSharpLevel() < 1) {
 					modifierCap.incrementSharp();
 					addInfusedTag(stack);
 					return true;
@@ -980,7 +978,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         else if (item instanceof ForceArmorItem) {
             IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
             if(modifierCap != null ) {
-                if(modifierCap.getSpeedLevel() == 0) {
+                if(modifierCap.getSpeedLevel() < 1) {
                     modifierCap.incrementSpeed();
 					addInfusedTag(stack);
                     return true;
@@ -1053,23 +1051,33 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
 	public boolean allSlotsMatchRecipe() {
     	int requiredForce = 0;
-		for (int i = 0; i < SLOT_TOOL; i++) {
-			ItemStack modifier = getModifier(i);
-			if(modifier.isEmpty()) continue;
 
-			List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
-			boolean foundMatch = false;
-			for(InfuseRecipe recipe : recipes) {
+		List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
+		boolean foundMatch = false;
+
+		for(InfuseRecipe recipe : recipes) {
+			ItemStack centerStack = getFromToolSlot();
+			int amountFound = 0;
+			for (int i = 0; i < SLOT_TOOL; i++) {
+				ItemStack modifier = getModifier(i);
+				if(modifier.isEmpty()) continue;
+
 				if(recipe.matchesModifier(this, modifier, false)) {
 					foundMatch = true;
+					amountFound++;
 					requiredForce += FLUID_COST_PER;
-					break;
+					continue;
 				}
 			}
-			if(!foundMatch) {
+			if(amountFound > 0 && amountFound > recipe.getModifier().getLevelCap(centerStack)) {
 				return false;
 			}
 		}
+
+		if(!foundMatch) {
+			return false;
+		}
+
 		return getFluidAmount() >+ requiredForce;
 	}
 

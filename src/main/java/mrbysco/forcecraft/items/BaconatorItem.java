@@ -150,11 +150,11 @@ public class BaconatorItem extends BaseItem {
 					}
 				}
 				if(stacks == 0) {
-					tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.nothing"));
+					tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.nothing").mergeStyle(TextFormatting.GRAY));
 				}
 			}
 		} else {
-			tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.text"));
+			tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.text").mergeStyle(TextFormatting.GRAY));
 		}
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}

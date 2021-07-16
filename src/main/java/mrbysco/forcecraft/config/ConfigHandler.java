@@ -23,13 +23,14 @@ public class ConfigHandler {
         public final BooleanValue timeTorchLogging;
         public final IntValue baconatorMaxStacks;
         public final DoubleValue sturdyDamageReduction;
+        public final DoubleValue forcePunchDamage;
         public final IntValue forceInfusingTime;
         public final ConfigValue<List<? extends String>> furnaceOutputBlacklist;
         public final ConfigValue<List<? extends String>> fortuneMessages;
 
         public final IntValue bleedCap;
         public final IntValue healingCap;
-        public final IntValue sturdyCap;
+        public final IntValue sturdyToolCap;
         public final IntValue luckCap;
         public final IntValue damageCap;
         public final IntValue forceCap;
@@ -85,6 +86,10 @@ public class ConfigHandler {
             sturdyDamageReduction = builder
                     .comment("The max amount of damage blocked when all armor pieces have the Sturdy infusion [Default: 0.75]")
                     .defineInRange("sturdyDamageReduction", 0.75, 0.0, 1.0);
+
+            forcePunchDamage = builder
+                    .comment("The amount of half hearts of damage given by Force Punch given by the Damage infusion on armor [Default: 0.75]")
+                    .defineInRange("forcePunchDamage", 2, 0.0, Double.MAX_VALUE);
 
             forceInfusingTime = builder
                     .comment("The max amount of ticks it takes to charge a tool with Force [Default: 120 (6 seconds)]")
@@ -306,7 +311,7 @@ public class ConfigHandler {
                     .comment("The max level of Healing that can be applied [Default: 3]")
                     .defineInRange("healingCap", 3, 1, 5);
 
-            sturdyCap = builder
+            sturdyToolCap = builder
                     .comment("The max level of Sturdy that can be applied on force tools [Default: 3]")
                     .defineInRange("sturdyToolCap", 3, 1, 10);
 
@@ -316,7 +321,7 @@ public class ConfigHandler {
 
             damageCap = builder
                     .comment("The max level of Damage that can be applied [Default: 5]")
-                    .defineInRange("luckCap", 5, 1, 10);
+                    .defineInRange("damageCap", 5, 1, 10);
 
             forceCap = builder
                     .comment("The max level of Force that can be applied [Default: 2]")
@@ -328,7 +333,7 @@ public class ConfigHandler {
 
             rodSpeedCap = builder
                     .comment("The max level of Speed that can be applied to a Force Rod [Default: 3]")
-                    .defineInRange("speedCap", 3, 1, 5);
+                    .defineInRange("rodSpeedCap", 3, 1, 5);
 
             builder.pop();
             builder.comment("Mob settings")

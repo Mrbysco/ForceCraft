@@ -8,7 +8,7 @@ import mrbysco.forcecraft.command.ForceCommands;
 import mrbysco.forcecraft.config.ConfigHandler;
 import mrbysco.forcecraft.handlers.BaneHandler;
 import mrbysco.forcecraft.handlers.HeartHandler;
-import mrbysco.forcecraft.handlers.LivingUpdateHandler;
+import mrbysco.forcecraft.handlers.PlayerCapHandler;
 import mrbysco.forcecraft.handlers.LootTableHandler;
 import mrbysco.forcecraft.handlers.LootingHandler;
 import mrbysco.forcecraft.handlers.ToolModifierHandler;
@@ -79,7 +79,7 @@ public class ForceCraft {
         MinecraftForge.EVENT_BUS.register(new ForceCommands());
         MinecraftForge.EVENT_BUS.register(new CapabilityAttachHandler());
         MinecraftForge.EVENT_BUS.register(new BaneHandler());
-        MinecraftForge.EVENT_BUS.register(new LivingUpdateHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerCapHandler());
         MinecraftForge.EVENT_BUS.register(new LootingHandler());
         MinecraftForge.EVENT_BUS.register(new LootTableHandler());
         MinecraftForge.EVENT_BUS.register(new ToolModifierHandler());

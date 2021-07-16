@@ -43,7 +43,7 @@ public interface IToolModifier {
     /**
      * Modifier: Sharpness
      * Item: Claw
-     * Levels: 5
+     * Levels: 1
      * Effect: Adds Sharpness to Force Sword
      */
     int getSharpLevel();

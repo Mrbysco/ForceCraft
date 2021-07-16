@@ -112,7 +112,8 @@ public class TransmutationRecipe implements ICraftingRecipe {
 			ItemStack itemstack = inv.getStackInSlot(j);
 			if((itemstack.getItem() instanceof ExperienceTomeItem)) {
 				CompoundNBT tag = itemstack.getOrCreateTag();
-				int count = Math.min((int)((float)tag.getInt("Experience") / 100f), 64);
+				int experience = tag.getInt("Experience");
+				int count = Math.min((int)((float)experience / 100f), 64);
 				resultStack.setCount(count);
 			}
 			if(itemstack.getItem() instanceof EnchantedBookItem && resultStack.getItem() instanceof ExperienceBottleItem) {
@@ -152,7 +153,21 @@ public class TransmutationRecipe implements ICraftingRecipe {
 					itemstack1.setDamage(itemstack1.getDamage() + damage);
 					nonnulllist.set(i, itemstack1);
 				}
-				break;
+				continue;
+			} else if((itemstack.getItem() instanceof ExperienceTomeItem)) {
+				ItemStack itemstack1 = itemstack.copy();
+				CompoundNBT tag = itemstack.getOrCreateTag();
+				int experience = tag.getInt("Experience");
+				int count = (int)((float)experience / 100f);
+				int newExperience;
+				if(count > 64) {
+					newExperience = experience - (64 * 100);
+				} else {
+					newExperience = experience - (count * 100);
+				}
+				tag.putInt("Experience", newExperience);
+				itemstack1.setTag(tag);
+				nonnulllist.set(i, itemstack1);
 			}
 		}
 
