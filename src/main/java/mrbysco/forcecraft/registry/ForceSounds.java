@@ -34,6 +34,9 @@ public class ForceSounds {
 	public static final RegistryObject<SoundEvent> INFUSER_SPECIAL_BEEP = SOUND_EVENTS.register("infuser.special.beep", () ->
 			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "infuser.special.beep")));
 
+	public static final RegistryObject<SoundEvent> INFUSER_SPECIAL_DONE = SOUND_EVENTS.register("infuser.special.done", () ->
+			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "infuser.special.done")));
+
 	public static final RegistryObject<SoundEvent> HEART_PICKUP = SOUND_EVENTS.register("heart.pickup", () ->
 			new SoundEvent(new ResourceLocation(Reference.MOD_ID, "heart.pickup")));
 

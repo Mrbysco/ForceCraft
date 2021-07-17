@@ -56,6 +56,13 @@
             "forcecraft:start_beep"
         ]
     },
+    "infuser.special.done" : {
+        "category" : "block",
+        "subtitle": "forcecraft.infuser.special.done.subtitle",
+        "sounds": [
+            "forcecraft:finish"
+        ]
+    },
     "heart.pickup" : {
         "category" : "neutral",
         "subtitle": "forcecraft.heart.pickup.subtitle",

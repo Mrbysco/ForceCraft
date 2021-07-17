@@ -68,7 +68,7 @@ public class ToolModifierHandler {
 					damage += playerCap.getAttackDamage();
 				}
 
-				if(player.getHeldItemMainhand().isEmpty()) {
+				if(playerCap.getAttackDamage() > 0 && player.getHeldItemMainhand().isEmpty()) {
 					player.world.playSound((PlayerEntity)null, target.getPosX(), target.getPosY(), target.getPosZ(), ForceSounds.FORCE_PUNCH.get(), player.getSoundCategory(), 1.0F, 1.0F);
 					event.setAmount(damage);
 				}

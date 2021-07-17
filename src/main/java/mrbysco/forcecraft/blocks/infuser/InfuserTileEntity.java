@@ -53,6 +53,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -112,6 +113,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             }
             return super.drain(resource.getAmount(), action);
         }
+
+		@Override
+		protected void onContentsChanged() {
+			refreshClient();
+		}
 
         @Override
         public FluidStack drain(int maxDrain, FluidAction action) {
@@ -243,8 +249,14 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         			processTool();
         		}
 
-				world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_DONE.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
 				stopWorkSound();
+
+        		if(makesSpecialSound) {
+					playSound(ForceSounds.INFUSER_SPECIAL_DONE.get(),1.0F, 1.0F);
+				} else {
+					playSound(ForceSounds.INFUSER_DONE.get(),1.0F, 1.0F);
+				}
+        		makesSpecialSound = false;
         	}
         	// auto turn off when done
         	//even if tool or book slot become empty, dont auto run next insert
@@ -271,10 +283,11 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         	maxProcessTime = 0;
     	}
     	if(canWork) {
+			stopWorkSound();
 			makesSpecialSound = false;
     		if(world.rand.nextInt(10) == 0) {
     			makesSpecialSound = true;
-				world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_SPECIAL_BEEP.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+				playSound(ForceSounds.INFUSER_SPECIAL_BEEP.get(),1.0F, 1.0F);
 			}
 			makeWorkSound();
 		}
@@ -282,12 +295,16 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     public void makeWorkSound() {
-		BlockPos pos = getPos();
 		if(makesSpecialSound) {
-			world.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.INFUSER_SPECIAL.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+			playSound(ForceSounds.INFUSER_SPECIAL.get(),1.0F, 1.0F);
 		} else {
-			world.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.INFUSER_WORKING.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+			playSound(ForceSounds.INFUSER_WORKING.get(),1.0F, 1.0F);
 		}
+	}
+
+	public void playSound(SoundEvent event, float volume, float pitch) {
+    	BlockPos pos = getPos();
+		world.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), event, SoundCategory.BLOCKS, volume, pitch);
 	}
 
 	public void stopWorkSound() {
@@ -1090,6 +1107,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
 	public boolean allSlotsMatchRecipe() {
     	int requiredForce = 0;
+    	int requiredPower = 0;
 
 		List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
 		boolean foundMatch = false;
@@ -1105,6 +1123,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 					foundMatch = true;
 					amountFound++;
 					requiredForce += FLUID_COST_PER;
+					requiredPower += recipe.getTime() * ENERGY_COST_PER;
 					continue;
 				}
 			}
@@ -1117,7 +1136,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 			return false;
 		}
 
-		return getFluidAmount() >+ requiredForce;
+		return getFluidAmount() >= requiredForce && getEnergy() >= requiredPower;
 	}
 
 	public int getBookTier() {
@@ -1131,13 +1150,19 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     	return ENERGY_COST_PER;
 	}
 
+	public int getEnergy() {
+		return energyStorage.getEnergyStored();
+	}
+
 	public int getFluidAmount() {
 		return tank.getFluidAmount();
 	}
 
 	public void setFluidAmount(int amount) {
     	if(amount > 0) {
-			tank.getFluid().setAmount(amount);
+    		if(!tank.getFluid().isEmpty()) {
+				tank.getFluid().setAmount(amount);
+			}
 		} else {
     		tank.setFluid(FluidStack.EMPTY);
 		}
