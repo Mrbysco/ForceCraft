@@ -43,10 +43,12 @@ public class ToolModifierHandler {
 					applyBane(target);
 					appliedBane = true;
 				}
+				int bleedLevel = 0;
 				if(toolCap.hasBleed()) {
-					MobUtil.addBleedingEffect(toolCap.getBleedLevel(), target, player);
+					bleedLevel = toolCap.getBleedLevel();
 					ForceCraft.LOGGER.info("Added BLEEDING to " + target.getName());
 				}
+				MobUtil.addBleedingEffect(bleedLevel, target, player);
 			}
 
 			IPlayerModifier playerCap = player.getCapability(CAPABILITY_PLAYERMOD).orElse(null);
