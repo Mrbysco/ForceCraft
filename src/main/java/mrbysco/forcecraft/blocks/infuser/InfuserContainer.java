@@ -207,14 +207,6 @@ public class InfuserContainer extends Container {
         return itemstack;
     }
 
-    public void setFluidAmount(int amount) {
-        tile.fluidContained = amount;
-    }
-
-    public int getFluidAmount(){
-        return tile.fluidContained;
-    }
-
     public boolean isWorkAllowed() {
         return tile.isWorkAllowed();
     }

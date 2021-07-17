@@ -88,7 +88,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public int processTime = 0;
     public int maxProcessTime = 20;
 
-    public int fluidContained;
 	// slots [0,7] are the surround
 	public static final int SLOT_TOOL = 8;
     public static final int SLOT_GEM = 9;
@@ -217,7 +216,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     	if(world.isRemote) {
     		return;
     	}
-        fluidContained = tank.getFluidAmount();
 
         if (handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
         	processForceGems();

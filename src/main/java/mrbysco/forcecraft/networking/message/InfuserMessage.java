@@ -11,28 +11,17 @@ import java.util.function.Supplier;
 public class InfuserMessage {
 
     public boolean isButtonPressed;
-    public int fluidAmount;
-
-    public InfuserMessage(boolean buttonPressed, int fluidAmount) {
-        this.isButtonPressed = buttonPressed;
-        this.fluidAmount = fluidAmount;
-    }
 
     public InfuserMessage(boolean buttonPressed) {
         this.isButtonPressed = buttonPressed;
     }
 
-    public InfuserMessage(int fluidAmount) {
-        this.fluidAmount = fluidAmount;
-    }
-
     public void encode(ByteBuf buf) {
         buf.writeBoolean(isButtonPressed);
-        buf.writeInt(fluidAmount);
     }
 
     public static InfuserMessage decode(final ByteBuf packetBuffer) {
-        return new InfuserMessage(packetBuffer.readBoolean(), packetBuffer.readInt());
+        return new InfuserMessage(packetBuffer.readBoolean());
     }
 
     public void handle(Supplier<Context> context) {
@@ -42,9 +31,7 @@ public class InfuserMessage {
             Container container = ctx.getSender().openContainer;
             if(container instanceof InfuserContainer) {
                 InfuserContainer ctr = (InfuserContainer) container;
-				this.fluidAmount = ctr.getFluidAmount();
-                ctr.setFluidAmount(fluidAmount);
-                
+
                 if(isButtonPressed) {
                     ctr.getTile().startWork();
                 }
