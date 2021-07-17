@@ -3,6 +3,7 @@ package mrbysco.forcecraft.items.tools;
 import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.magnet.IMagnet;
 import mrbysco.forcecraft.capablilities.magnet.MagnetProvider;
+import mrbysco.forcecraft.capablilities.magnet.MagnetStorage;
 import mrbysco.forcecraft.items.BaseItem;
 import mrbysco.forcecraft.registry.ForceEffects;
 import net.minecraft.client.util.ITooltipFlag;
@@ -12,15 +13,13 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.FakePlayer;
@@ -50,13 +49,8 @@ public class MagnetGloveItem extends BaseItem {
         if(playerIn.isSneaking()) {
             ItemStack stack = playerIn.getHeldItem(handIn);
             stack.getCapability(CAPABILITY_MAGNET).ifPresent((cap) -> {
-                if (this.getDamage(stack) == 1) {
-                    cap.deactivate();
-                    this.setDamage(stack, 0);
-                } else {
-                    cap.activate();
-                    this.setDamage(stack, 1);
-                }
+                boolean state = cap.isActivated();
+                cap.setActivation(!state);
                 worldIn.playSound((PlayerEntity)null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             });
         }
@@ -75,16 +69,39 @@ public class MagnetGloveItem extends BaseItem {
         }
     }
 
+    // ShareTag for server->client capability data sync
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        if(this.getDamage(stack) == 1) {
-            tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".magnet_glove.active").mergeStyle(TextFormatting.GREEN));
-        } else {
-            tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".magnet_glove.deactivated").mergeStyle(TextFormatting.RED));
-        }
-        tooltip.add(new StringTextComponent(" "));
-        tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.change").mergeStyle(TextFormatting.BOLD));
+    public CompoundNBT getShareTag(ItemStack stack) {
+        CompoundNBT nbt = super.getShareTag(stack);
 
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        IMagnet cap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
+        if(cap != null) {
+            CompoundNBT shareTag = MagnetStorage.serializeNBT(cap);
+            if(nbt == null) {
+                nbt = new CompoundNBT();
+            }
+            nbt.put(Reference.MOD_ID, shareTag);
+        }
+        return nbt;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+        if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
+            return;
+        }
+
+        IMagnet cap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
+        if(cap != null) {
+            INBT shareTag = nbt.get(Reference.MOD_ID);
+            MagnetStorage.deserializeNBT(cap, shareTag);
+        }
+        super.readShareTag(stack, nbt);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+        MagnetStorage.attachInformation(stack, lores);
+        super.addInformation(stack, worldIn, lores, flagIn);
     }
 }

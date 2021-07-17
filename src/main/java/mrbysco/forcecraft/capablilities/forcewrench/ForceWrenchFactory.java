@@ -1,7 +1,6 @@
 package mrbysco.forcecraft.capablilities.forcewrench;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
 
 import java.util.concurrent.Callable;
 
@@ -10,17 +9,13 @@ public class ForceWrenchFactory implements Callable<IForceWrench> {
     public IForceWrench call() throws Exception {
         return new IForceWrench() {
 
-            CompoundNBT storedBlockNBT = null;
+            net.minecraft.nbt.CompoundNBT storedBlockNBT = null;
             BlockState storedBlockState = null;
             String name = null;
 
-
             @Override
             public boolean hasBlockStored() {
-                if(storedBlockState == null)
-                    return false;
-                else
-                    return true;
+                return storedBlockState != null;
             }
 
             @Override
@@ -29,7 +24,7 @@ public class ForceWrenchFactory implements Callable<IForceWrench> {
             }
 
             @Override
-            public CompoundNBT getStoredBlockNBT() {
+            public net.minecraft.nbt.CompoundNBT getStoredBlockNBT() {
                 return storedBlockNBT;
             }
 
@@ -44,7 +39,7 @@ public class ForceWrenchFactory implements Callable<IForceWrench> {
             }
 
             @Override
-            public void storeBlockNBT(CompoundNBT nbt) {
+            public void storeBlockNBT(net.minecraft.nbt.CompoundNBT nbt) {
                 storedBlockNBT = nbt;
             }
 

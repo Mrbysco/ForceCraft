@@ -1,7 +1,6 @@
 package mrbysco.forcecraft.items.tools;
 
 import mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
-import mrbysco.forcecraft.registry.ForceEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;

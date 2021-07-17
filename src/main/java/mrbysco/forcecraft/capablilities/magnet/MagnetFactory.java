@@ -1,7 +1,5 @@
 package mrbysco.forcecraft.capablilities.magnet;
 
-import net.minecraft.nbt.CompoundNBT;
-
 import java.util.concurrent.Callable;
 
 public class MagnetFactory implements Callable<IMagnet> {
@@ -26,18 +24,8 @@ public class MagnetFactory implements Callable<IMagnet> {
             }
 
             @Override
-            public void setActivation(boolean active) {
-                this.active = active;
-            }
-
-            @Override
-            public CompoundNBT serializeNBT() {
-                return null;
-            }
-
-            @Override
-            public void deserializeNBT(CompoundNBT nbt) {
-
+            public void setActivation(boolean value) {
+                active = value;
             }
         };
     }

@@ -57,7 +57,7 @@ public class MagnetEffect extends Effect {
             }
 
             // constant force!
-            float strength = 0.07F;
+            float strength = 0.14F;
 
             Vector3d entityVector = new Vector3d(item.getPosX(), item.getPosY() - item.getYOffset() + item.getHeight() / 2, item.getPosZ());
             Vector3d finalVector = new Vector3d(x, y, z).subtract(entityVector);

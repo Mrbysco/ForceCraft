@@ -1,9 +1,10 @@
 package mrbysco.forcecraft.items.tools;
 
+import mrbysco.forcecraft.Reference;
 import mrbysco.forcecraft.capablilities.forcewrench.ForceWrenchProvider;
+import mrbysco.forcecraft.capablilities.forcewrench.ForceWrenchStorage;
 import mrbysco.forcecraft.capablilities.forcewrench.IForceWrench;
 import mrbysco.forcecraft.items.BaseItem;
-import mrbysco.forcecraft.items.infuser.ForceToolData;
 import mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,15 +16,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -117,17 +116,40 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
         return ActionResultType.SUCCESS;
     }
 
+    // ShareTag for server->client capability data sync
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    	ForceToolData fd = new ForceToolData(stack);
-    	fd.attachInformation(tooltip);
-    	stack.getCapability(CAPABILITY_FORCEWRENCH).ifPresent((cap) -> {
-            if(cap.getStoredName() != null){ // idk what this is
-                tooltip.add(new StringTextComponent("Stored: ").mergeStyle(TextFormatting.GOLD)
-                        .appendSibling(new TranslationTextComponent(cap.getStoredName()).mergeStyle(TextFormatting.GRAY)));
+    public CompoundNBT getShareTag(ItemStack stack) {
+        CompoundNBT nbt = super.getShareTag(stack);
+
+        IForceWrench cap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
+        if(cap != null) {
+            CompoundNBT shareTag = ForceWrenchStorage.serializeNBT(cap);
+            if(nbt == null) {
+                nbt = new CompoundNBT();
             }
-        });
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+            nbt.put(Reference.MOD_ID, shareTag);
+        }
+        return nbt;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+        if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
+            return;
+        }
+
+        IForceWrench cap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
+        if(cap != null) {
+            INBT shareTag = nbt.get(Reference.MOD_ID);
+            ForceWrenchStorage.deserializeNBT(cap, shareTag);
+        }
+        super.readShareTag(stack, nbt);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+        ForceWrenchStorage.attachInformation(stack, lores);
+        super.addInformation(stack, worldIn, lores, flagIn);
     }
 
 	@Override

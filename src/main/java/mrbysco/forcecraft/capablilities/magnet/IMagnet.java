@@ -1,14 +1,11 @@
 package mrbysco.forcecraft.capablilities.magnet;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.common.util.INBTSerializable;
-
-public interface IMagnet extends INBTSerializable<CompoundNBT> {
+public interface IMagnet {
 
     boolean isActivated();
 
     void activate();
     void deactivate();
 
-    void setActivation(boolean active);
+    void setActivation(boolean value);
 }

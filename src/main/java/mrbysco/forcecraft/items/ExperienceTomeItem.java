@@ -137,7 +137,6 @@ public class ExperienceTomeItem extends Item {
     }
 
     public static int getTotalExpForLevel(int level) {
-
         return level >= 32 ? (9 * level * level - 325 * level + 4440) / 2 : level >= 17 ? (5 * level * level - 81 * level + 720) / 2 : (level * level + 6 * level);
     }
 

@@ -1,7 +1,5 @@
 package mrbysco.forcecraft.capablilities.toolmodifier;
 
-import mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
-import mrbysco.forcecraft.config.ConfigHandler;
 import mrbysco.forcecraft.items.ForceArmorItem;
 import mrbysco.forcecraft.items.tools.ForceBowItem;
 import mrbysco.forcecraft.items.tools.ForcePickaxeItem;
@@ -21,7 +19,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
 import static mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class ToolModStorage implements Capability.IStorage<IToolModifier> {

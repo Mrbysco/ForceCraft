@@ -12,8 +12,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.IBooleanFunction;
@@ -44,7 +42,7 @@ public class InfuserBlock extends Block {
             Block.makeCuboidShape(12, 0, 12, 14, 5, 14),
             Block.makeCuboidShape(2, 0, 12, 4, 5, 14),
             Block.makeCuboidShape(2, 5, 2, 14, 10, 14)
-    ).reduce((v1, v2) -> { return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR); }).get();
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
 
     public InfuserBlock(AbstractBlock.Properties properties) {
         super(properties);

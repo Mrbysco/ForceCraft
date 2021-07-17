@@ -60,21 +60,7 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
     @Nullable
     @Override
     public INBT writeNBT(Capability<IForceRodModifier> capability, IForceRodModifier instance, Direction side) {
-        CompoundNBT nbt  = new CompoundNBT();
-		nbt.putInt("speed", instance.getSpeedLevel());
-        nbt.putInt("healing", instance.getHealingLevel());
-
-        if(instance.getHomeLocation() != null) {
-            nbt.putBoolean("HasHome", true);
-            nbt.putLong("HomeLocation", instance.getHomeLocation().getPos().toLong());
-            nbt.putString("HomeDimension", instance.getHomeLocation().getDimension().getLocation().toString());
-        }
-
-        nbt.putBoolean("camo", instance.hasCamoModifier());
-        nbt.putBoolean("ender", instance.hasEnderModifier());
-        nbt.putBoolean("sight", instance.hasSightModifier());
-        nbt.putBoolean("light", instance.hasLight());
-
+        CompoundNBT nbt = serializeNBT(instance);
         return nbt;
     }
 

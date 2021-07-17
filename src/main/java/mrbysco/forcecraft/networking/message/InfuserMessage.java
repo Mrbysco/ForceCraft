@@ -31,7 +31,6 @@ public class InfuserMessage {
             Container container = ctx.getSender().openContainer;
             if(container instanceof InfuserContainer) {
                 InfuserContainer ctr = (InfuserContainer) container;
-
                 if(isButtonPressed) {
                     ctr.getTile().startWork();
                 }

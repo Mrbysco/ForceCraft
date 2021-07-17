@@ -1122,7 +1122,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 					amountFound++;
 					requiredForce += FLUID_COST_PER;
 					requiredPower += recipe.getTime() * ENERGY_COST_PER;
-					continue;
 				}
 			}
 			if(amountFound > 0 && amountFound > recipe.getModifier().getLevelCap(centerStack)) {
