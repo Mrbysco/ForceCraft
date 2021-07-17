@@ -37,18 +37,18 @@ public class ToolModifierHandler {
 			PlayerEntity player = (PlayerEntity)source.getTrueSource();
 			boolean appliedBane = false;
 
+			int bleedLevel = 0;
 			IToolModifier toolCap = player.getHeldItemMainhand().getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(toolCap != null) {
 				if(toolCap.hasBane()) {
 					applyBane(target);
 					appliedBane = true;
 				}
-				int bleedLevel = 0;
 				if(toolCap.hasBleed()) {
 					bleedLevel = toolCap.getBleedLevel();
 				}
-				MobUtil.addBleedingEffect(bleedLevel, target, player);
 			}
+			MobUtil.addBleedingEffect(bleedLevel, target, player);
 
 			IPlayerModifier playerCap = player.getCapability(CAPABILITY_PLAYERMOD).orElse(null);
 			if(playerCap != null) {
