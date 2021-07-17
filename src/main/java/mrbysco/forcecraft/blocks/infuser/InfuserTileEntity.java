@@ -244,15 +244,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         		}
 
 				world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_DONE.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-        		if(!world.isRemote) {
-					BlockPos pos = getPos();
-					for(PlayerEntity playerentity : world.getPlayers()) {
-						if(playerentity.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) < 200) {
-							PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) playerentity), new mrbysco.forcecraft.networking.message.StopInfuserSoundMessage());
-						}
-					}
-				}
+				stopWorkSound();
         	}
         	// auto turn off when done
         	//even if tool or book slot become empty, dont auto run next insert
@@ -279,20 +271,33 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
         	maxProcessTime = 0;
     	}
     	if(canWork) {
+			makesSpecialSound = false;
     		if(world.rand.nextInt(10) == 0) {
     			makesSpecialSound = true;
 				world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_SPECIAL_BEEP.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
-				makeWorkSound();
 			}
+			makeWorkSound();
 		}
         refreshClient();
     }
 
     public void makeWorkSound() {
+		BlockPos pos = getPos();
 		if(makesSpecialSound) {
-			world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_SPECIAL.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.INFUSER_SPECIAL.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
 		} else {
-			world.playSound((PlayerEntity) null, getPos().getX(), getPos().getY(), getPos().getZ(), ForceSounds.INFUSER_WORKING.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.INFUSER_WORKING.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+		}
+	}
+
+	public void stopWorkSound() {
+		if(!world.isRemote) {
+			BlockPos pos = getPos();
+			for(PlayerEntity playerentity : world.getPlayers()) {
+				if(playerentity.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) < 200) {
+					PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) playerentity), new mrbysco.forcecraft.networking.message.StopInfuserSoundMessage());
+				}
+			}
 		}
 	}
 
