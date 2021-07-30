@@ -14,7 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.stats.Stats;
@@ -30,8 +29,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.function.ToIntFunction;
 
@@ -85,7 +82,6 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
         return new ForceFurnaceTileEntity();
     }
 
-
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.matchesBlock(newState.getBlock())) {
@@ -125,12 +121,6 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
     // TODO: tooltip?
 
 	@Override
-	public List<ItemStack> getDrops(BlockState state, net.minecraft.loot.LootContext.Builder builder) {
-		// because harvestBlock manually forces a drop, we must do this to dodge that
-		return new ArrayList<>();
-	}
-
-	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		if (tileentity instanceof AbstractForceFurnaceTile) {
@@ -149,21 +139,13 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
 	}
 
 	@Override
-	public void harvestBlock(World world, PlayerEntity player, BlockPos pos, BlockState state, TileEntity tileentity, ItemStack stackToolUsed) {
-		super.harvestBlock(world, player, pos, state, tileentity, stackToolUsed);
-
-	    ItemStack tankStack = new ItemStack(this); 
-	    
-		if (tileentity != null && tileentity instanceof AbstractForceFurnaceTile) {
-			AbstractForceFurnaceTile furnaceTile = (AbstractForceFurnaceTile) tileentity;
-			
-			CompoundNBT upgrade = new CompoundNBT();
-			furnaceTile.getUpgrade().write(upgrade);
-
-			tankStack.getOrCreateTag().put(NBT_UPGRADE, upgrade);
-		}
-		if (world.isRemote == false) {
-			world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), tankStack));
+	public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
+		super.harvestBlock(worldIn, player, pos, state, te, stack);
+		if(te instanceof ForceFurnaceTileEntity) {
+			ForceFurnaceTileEntity tile = (ForceFurnaceTileEntity) te;
+			if(!tile.getUpgrade().isEmpty()) {
+				worldIn.playSound((PlayerEntity) null, pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5F, 1.0F);
+			}
 		}
 	}
 
