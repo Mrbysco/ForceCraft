@@ -128,8 +128,8 @@ public class PlayerCapHandler {
 	public void harvestCheckEvent(HarvestCheck event) {
 		PlayerEntity player = event.getPlayer();
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-			if(player.getHeldItemMainhand().isEmpty()) {
-				if(cap.hasFullSet() && event.getTargetBlock().getBlock().getHarvestLevel(event.getTargetBlock()) <= 2) {
+			if(cap.hasFullSet() && player.getHeldItemMainhand().isEmpty()) {
+				if(event.getTargetBlock().getBlock().getHarvestLevel(event.getTargetBlock()) <= 2) {
 					event.setCanHarvest(true);
 				}
 			}
@@ -140,7 +140,7 @@ public class PlayerCapHandler {
 	public void breakSpeedEvent(BreakSpeed event) {
 		PlayerEntity player = event.getPlayer();
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-			if(player.getHeldItemMainhand().isEmpty()) {
+			if(cap.hasFullSet() && player.getHeldItemMainhand().isEmpty()) {
 				if(event.getOriginalSpeed() < 6) {
 					event.setNewSpeed(6);
 				}
