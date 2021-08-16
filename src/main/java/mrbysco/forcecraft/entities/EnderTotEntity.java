@@ -290,8 +290,8 @@ public class EnderTotEntity extends EndermanEntity {
 	static class PlaceBlockGoal extends Goal {
 		private final EnderTotEntity endertot;
 
-		public PlaceBlockGoal(EnderTotEntity p_i45843_1_) {
-			this.endertot = p_i45843_1_;
+		public PlaceBlockGoal(EnderTotEntity totEntity) {
+			this.endertot = totEntity;
 		}
 
 		/**

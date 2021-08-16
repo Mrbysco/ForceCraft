@@ -31,11 +31,13 @@ import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.EndermanRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -146,8 +148,11 @@ public class ClientHandler {
 	public static void registerItemColors(final ColorHandlerEvent.Item event) {
 		ItemColors colors = event.getItemColors();
 
-		for(CustomSpawnEggItem item : CustomSpawnEggItem.getCustomEggs()) {
-			colors.register((stack, tintIndex) -> item.getColor(tintIndex), item);
+		for(RegistryObject<Item> registryObject : ForceRegistry.ITEMS.getEntries()) {
+			if(registryObject.get() instanceof CustomSpawnEggItem) {
+				CustomSpawnEggItem spawnEgg = (CustomSpawnEggItem) registryObject.get();
+				colors.register((stack, tintIndex) -> spawnEgg.getColor(tintIndex), spawnEgg);
+			}
 		}
 
 		colors.register((stack, tintIndex) -> {
