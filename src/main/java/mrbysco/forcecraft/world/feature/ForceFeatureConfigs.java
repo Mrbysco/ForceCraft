@@ -13,12 +13,14 @@ import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureSpread;
 import net.minecraft.world.gen.feature.Features;
+import net.minecraft.world.gen.feature.Features.Placements;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.MultipleRandomFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.feature.TwoLayerFeature;
 import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
 import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
+import net.minecraft.world.gen.placement.DecoratedPlacement;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.treedecorator.BeehiveTreeDecorator;
 import net.minecraft.world.gen.trunkplacer.StraightTrunkPlacer;
@@ -45,6 +47,8 @@ public class ForceFeatureConfigs {
 			Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, FORCE_ORE, 6))
 					.range(64).square().count(20));
 
+	public static final ConfiguredFeature<?, ?> FORCE_TREE_VEGETATION = register("force_tree_vegetation",
+			FORCE_TREE_CONFIG.withPlacement(Placements.HEIGHTMAP_PLACEMENT).withPlacement(DecoratedPlacement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(1, 0.1F, 1))));
 
 	private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(String key, ConfiguredFeature<FC, ?> feature) {
 		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(Reference.MOD_ID, key), feature);
