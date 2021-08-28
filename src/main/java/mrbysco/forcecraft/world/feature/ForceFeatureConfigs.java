@@ -39,13 +39,9 @@ public class ForceFeatureConfigs {
 	public static final ConfiguredFeature<BaseTreeFeatureConfig, ?> FORCE_TREE_WITH_MORE_BEEHIVES_CONFIG = register("force_tree_with_bees", ForceFeatures.FORCE_TREE.get()
 			.withConfiguration((FORCE_TREE_CONFIG.getConfig().copy(ImmutableList.of(MANY_BEEHIVES)))));
 
-	public static final ConfiguredFeature<?, ?> TREES_FORCE = register("trees_force", Feature.RANDOM_SELECTOR.withConfiguration(
-			new MultipleRandomFeatureConfig(ImmutableList.of(FORCE_TREE_WITH_MORE_BEEHIVES_CONFIG.withChance(0.4F)), FORCE_TREE_CONFIG))
-			.withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT).withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(1, 0.1F, 1))));
-
 	public static ConfiguredFeature<?, ?> ORE_FORCE = register("ore_force",
 			Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, FORCE_ORE, 6))
-					.range(64).square().count(20));
+					.range(64).square().count(5));
 
 	public static final ConfiguredFeature<?, ?> FORCE_TREE_VEGETATION = register("force_tree_vegetation",
 			FORCE_TREE_CONFIG.withPlacement(Placements.HEIGHTMAP_PLACEMENT).withPlacement(DecoratedPlacement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(1, 0.1F, 1))));

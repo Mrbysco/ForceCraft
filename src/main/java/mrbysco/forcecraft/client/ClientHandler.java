@@ -66,6 +66,7 @@ public class ClientHandler {
 		ScreenManager.registerFactory(ForceContainers.ITEM_CARD.get(), ItemCardScreen::new);
 		ScreenManager.registerFactory(ForceContainers.FORCE_ENGINE.get(), ForceEngineScreen::new);
 
+		RenderTypeLookup.setRenderLayer(ForceRegistry.POWER_ORE.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_SAPLING.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_RED_TORCH.get(), RenderType.getCutout());
