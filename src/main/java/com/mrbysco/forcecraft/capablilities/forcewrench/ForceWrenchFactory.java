@@ -11,7 +11,7 @@ public class ForceWrenchFactory implements Callable<IForceWrench> {
 
             net.minecraft.nbt.CompoundNBT storedBlockNBT = null;
             BlockState storedBlockState = null;
-            String name = null;
+            String name = "";
 
             @Override
             public boolean hasBlockStored() {
@@ -57,7 +57,7 @@ public class ForceWrenchFactory implements Callable<IForceWrench> {
             public void clearBlockStorage() {
                 storedBlockState = null;
                 storedBlockNBT = null;
-                name = null;
+                name = "";
             }
         };
     }

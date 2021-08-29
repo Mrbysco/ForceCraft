@@ -26,7 +26,7 @@ public class ForceWrenchStorage implements Capability.IStorage<IForceWrench> {
         ForceToolData fd = new ForceToolData(stack);
         fd.attachInformation(tooltip);
         stack.getCapability(CAPABILITY_FORCEWRENCH).ifPresent((cap) -> {
-            if(cap.getStoredName() != null){ // idk what this is
+            if(cap.getStoredName() != null && cap.getStoredName().isEmpty()){ // idk what this is
                 tooltip.add(new StringTextComponent("Stored: ").mergeStyle(TextFormatting.GOLD)
                         .appendSibling(new TranslationTextComponent(cap.getStoredName()).mergeStyle(TextFormatting.GRAY)));
             }
@@ -57,7 +57,7 @@ public class ForceWrenchStorage implements Capability.IStorage<IForceWrench> {
         if(instance.getStoredBlockState() != null) {
             nbt.put("storedBlockState", NBTUtil.writeBlockState(instance.getStoredBlockState()));
         }
-        if(instance.getStoredName() != null) {
+        if(!instance.getStoredName().isEmpty()) {
             nbt.putString("name", instance.getStoredName());
         }
 
