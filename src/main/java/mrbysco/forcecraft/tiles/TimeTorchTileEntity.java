@@ -42,9 +42,10 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
     @Override
     public void tick() {
         if(this.world.isRemote) return;
-        //if(this.mode == 0 || this.speed == 0) return;
         this.updateCachedMode();
-        this.tickNeighbor();
+        if(this.world.getGameTime() % 20 == 0) {
+            this.tickNeighbor();
+        }
     }
 
     protected int speed(int base) { return base; }
