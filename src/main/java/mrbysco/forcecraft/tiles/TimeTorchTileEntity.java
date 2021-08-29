@@ -83,7 +83,8 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
             if(block.ticksRandomly(blockState) && !world.isRemote) {
                 for(int i = 0; i < this.speed; i++) {
                     if(getWorld().getBlockState(pos) != blockState) break;
-                    block.tick(blockState, (ServerWorld)this.world, pos, world.rand);
+                    if(getWorld().rand.nextBoolean())
+                    block.randomTick(blockState, (ServerWorld)this.world, pos, world.rand);
                 }
             }
             if(block.hasTileEntity(blockState)) {
@@ -96,6 +97,7 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
                         break;
                     }
                     if(tile instanceof ITickableTileEntity) {
+                        if(getWorld().rand.nextBoolean())
                         ((ITickableTileEntity) tile).tick();
                     }
                 }
