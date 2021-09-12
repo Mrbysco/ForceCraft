@@ -93,7 +93,6 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 				}
 
 				stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
-
 				return ActionResultType.SUCCESS;
 			}
 		}
@@ -129,6 +128,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					replacementMob.setFire(SET_FIRE_TIME);
 				}
 
+				stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
 				return ActionResultType.SUCCESS;
 			}
 			if (entity instanceof ChickenEntity) {
@@ -161,6 +161,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					replacementMob.setFire(SET_FIRE_TIME);
 				}
 
+				stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
 				return ActionResultType.SUCCESS;
 			}
 			if (entity instanceof PigEntity) {
@@ -192,6 +193,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					replacementMob.setFire(SET_FIRE_TIME);
 				}
 
+				stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
 				return ActionResultType.SUCCESS;
 			}
 		}
