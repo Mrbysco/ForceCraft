@@ -18,10 +18,10 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 import net.minecraftforge.fml.network.PacketDistributor;
 import org.lwjgl.opengl.GL11;
-import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,11 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		int x = 123;
 		int y = 16;
 		this.addButton(new Button(guiLeft + x, guiTop + y, 13, 13, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
-			PatchouliAPI.get().openBookGUI(new ResourceLocation("forcecraft:force_and_you"));
+			if(ModList.get().isLoaded("patchouli")) {
+				com.mrbysco.forcecraft.compat.patchouli.PatchouliCompat.openBook();
+			} else {
+				this.playerInventory.player.sendStatusMessage(new TranslationTextComponent("gui.forcecraft.infuser.patchouli"), false);
+			}
 		}) {
 			@Override
 			public void renderWidget(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
