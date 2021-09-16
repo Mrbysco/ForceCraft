@@ -50,10 +50,10 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 				176, 0);
 		
 		int btnSize = 13;
+
 		int x = 123;
 		int y = 16;
-
-		this.addButton(new Button(guiLeft + x, guiTop + y, 12, 12, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+		this.addButton(new Button(guiLeft + x, guiTop + y, 13, 13, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
 			PatchouliAPI.get().openBookGUI(new ResourceLocation("forcecraft:force_and_you"));
 		}) {
 			@Override

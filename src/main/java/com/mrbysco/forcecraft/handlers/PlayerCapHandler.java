@@ -7,8 +7,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerEvent.HarvestCheck;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
@@ -22,9 +22,9 @@ public class PlayerCapHandler {
 	private static final int SPEED_DURATION = 200;
 
 	@SubscribeEvent
-	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-		if (event.getEntityLiving() instanceof PlayerEntity) {
-			PlayerEntity player = ((PlayerEntity) event.getEntityLiving());
+	public void onPlayerUpdate(TickEvent.PlayerTickEvent event) {
+		if(event.phase == TickEvent.Phase.END && event.player.world.isRemote) {
+			PlayerEntity player = event.player;
 
 			Iterable<ItemStack> armor = player.getArmorInventoryList();
 			int speed = 0;

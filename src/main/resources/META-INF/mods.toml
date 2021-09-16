@@ -13,10 +13,15 @@ credits="Bluedart for the Original Mod"
 description='''
 A mod inspired by DartCraft
 '''
-
 [[dependencies.forcecraft]]
-modId="patchouli"
+modId="minecraft"
 mandatory=true
-versionRange="[1.16.4-50,)"
+versionRange="[1.16.5,1.17)"
 ordering="NONE"
 side="BOTH"
+#[[dependencies.forcecraft]]
+#modId="patchouli"
+#mandatory=true
+#versionRange="[1.16.4-50,)"
+#ordering="NONE"
+#side="BOTH"
