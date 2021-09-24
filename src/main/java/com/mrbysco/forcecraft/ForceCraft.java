@@ -25,6 +25,7 @@ import com.mrbysco.forcecraft.registry.ForceLootModifiers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.world.WorldGenHandler;
+import com.mrbysco.forcecraft.world.feature.ForceFeatureConfigs;
 import com.mrbysco.forcecraft.world.feature.ForceFeatures;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -109,6 +110,7 @@ public class ForceCraft {
         PacketHandler.init();
         CapabilityHandler.register();
         ForceEntities.registerSpawnPlacement();
+        ForceFeatureConfigs.initialize();
 
         event.enqueueWork(() -> {
             for(RegistryObject<Item> registryObject : ForceRegistry.ITEMS.getEntries()) {

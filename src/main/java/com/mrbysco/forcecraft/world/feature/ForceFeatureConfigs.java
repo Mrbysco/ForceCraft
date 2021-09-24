@@ -43,6 +43,10 @@ public class ForceFeatureConfigs {
 	public static final ConfiguredFeature<?, ?> FORCE_TREE_VEGETATION = register("force_tree_vegetation",
 			FORCE_TREE_CONFIG.withPlacement(Placements.HEIGHTMAP_PLACEMENT).withPlacement(DecoratedPlacement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(1, 0.1F, 1))));
 
+	public static void initialize() {
+
+	}
+
 	private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(String key, ConfiguredFeature<FC, ?> feature) {
 		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(Reference.MOD_ID, key), feature);
 	}
