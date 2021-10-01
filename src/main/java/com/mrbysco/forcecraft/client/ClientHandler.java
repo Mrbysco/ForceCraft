@@ -19,6 +19,7 @@ import com.mrbysco.forcecraft.client.renderer.ForceArrowRenderer;
 import com.mrbysco.forcecraft.client.renderer.GoldChuChuRenderer;
 import com.mrbysco.forcecraft.client.renderer.GreenChuChuRenderer;
 import com.mrbysco.forcecraft.client.renderer.RedChuChuRenderer;
+import com.mrbysco.forcecraft.items.BaconatorItem;
 import com.mrbysco.forcecraft.items.CustomSpawnEggItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.registry.ForceEntities;
@@ -128,6 +129,9 @@ public class ClientHandler {
 
 		ItemModelsProperties.registerProperty(ForceRegistry.ENTITY_FLASK.get(), new ResourceLocation("captured"), (stack, world, livingEntity) ->
 				stack.getOrCreateTag().contains("StoredEntity") ? 1.0F : 0.0F);
+
+		ItemModelsProperties.registerProperty(ForceRegistry.BACONATOR.get(), new ResourceLocation("filled"), (stack, world, livingEntity) ->
+				stack.getOrCreateTag().contains(BaconatorItem.HAS_FOOD_TAG) ? 1.0F : 0.0F);
 
 		ItemModelsProperties.registerProperty(ForceRegistry.FORCE_PACK.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
 				stack.getOrCreateTag().contains("Color") ? (1.0F / 16) * stack.getOrCreateTag().getInt("Color") : 0.9375F);

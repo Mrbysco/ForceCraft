@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class BaconatorItem extends BaseItem {
-	public final String HAS_FOOD_TAG = Reference.MOD_ID + ":hasItems";
+	public static final String HAS_FOOD_TAG = Reference.MOD_ID + ":hasItems";
 	public BaconatorItem(Properties properties) {
 		super(properties);
 	}
@@ -107,7 +107,7 @@ public class BaconatorItem extends BaseItem {
 	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if(stack.getDamage() == 1 && entityIn instanceof PlayerEntity && worldIn.getGameTime() % 20 == 0) {
 			PlayerEntity playerIn = (PlayerEntity)entityIn;
-			if(playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
+			if(!playerIn.abilities.isCreativeMode && playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
 				IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 				ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
 				if(!firstStack.isEmpty()) {

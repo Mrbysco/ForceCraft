@@ -2,5 +2,9 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "forcecraft:item/baconator"
-  }
+  },
+  "overrides": [
+    { "predicate": { "filled": 0.000000 }, "model": "forcecraft:item/baconator_empty" },
+    { "predicate": { "filled": 1.0 }, "model": "forcecraft:item/baconator_full" }
+  ]
 }
