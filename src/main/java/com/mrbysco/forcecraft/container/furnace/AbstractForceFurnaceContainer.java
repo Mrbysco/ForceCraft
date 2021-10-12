@@ -13,9 +13,11 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.RecipeBookContainer;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
@@ -193,6 +195,18 @@ public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<
 
 	public static boolean isUpgrade(ItemStack stack) {
 		return stack.getItem() instanceof UpgradeCoreItem;
+	}
+
+	@Override
+	public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+		if (slotId == 3) {
+			Slot slot = getSlot(slotId);
+			if (slot.getHasStack() && clickTypeIn != ClickType.QUICK_MOVE) {
+				player.world.playSound((PlayerEntity) null, player.getPosition(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				return ItemStack.EMPTY;
+			}
+		}
+		return super.slotClick(slotId, dragType, clickTypeIn, player);
 	}
 
 	@OnlyIn(Dist.CLIENT)

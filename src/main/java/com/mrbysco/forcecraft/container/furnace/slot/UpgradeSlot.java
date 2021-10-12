@@ -25,14 +25,6 @@ public class UpgradeSlot extends Slot {
 	}
 
 	@Override
-	public ItemStack onTake(PlayerEntity playerIn, ItemStack stack) {
-		inventory.setInventorySlotContents(slotIndex, stack.copy());
-		stack.shrink(1);
-		playerIn.world.playSound((PlayerEntity) null, playerIn.getPosition(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1.0F, 1.0F);
-		return super.onTake(playerIn, stack);
-	}
-
-	@Override
 	public boolean canTakeStack(PlayerEntity playerIn) {
 		return true;
 	}
