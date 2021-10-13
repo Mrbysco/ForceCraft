@@ -366,7 +366,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		if(world != null) {
 			List<InfuseRecipe> recipes = world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE);
 			for(InfuseRecipe recipe : recipes) {
-				if(recipe.matchesTool(toolStack, false)) {
+				if(recipe.matchesTool(toolStack, true)) {
 					return true;
 				}
 			}
@@ -757,7 +757,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
             IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
             if(rodCap != null) {
 				int MAX_CAP = ConfigHandler.COMMON.healingCap.get();
-				if(rodCap != null && rodCap.getHealingLevel() < MAX_CAP) {
+				if(rodCap.getHealingLevel() < MAX_CAP) {
 					rodCap.incrementHealing();
 					addInfusedTag(stack);
 					return true;

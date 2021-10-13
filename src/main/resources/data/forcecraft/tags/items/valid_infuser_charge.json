@@ -8,6 +8,7 @@
     "forcecraft:force_bow",
     "forcecraft:force_shears",
     "forcecraft:force_wrench",
-    "forcecraft:force_rod"
+    "forcecraft:force_rod",
+    "#forcecraft:force_armor"
   ]
 }

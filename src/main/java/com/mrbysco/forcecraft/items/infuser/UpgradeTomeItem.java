@@ -41,8 +41,7 @@ public class UpgradeTomeItem extends BaseItem {
         if(bd.getTier() == UpgradeBookTier.FINAL) {
             tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.max");
             tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-            tooltip.add(tt); 
-        }
+		}
         else {
 	        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.points");
 	        tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
@@ -52,10 +51,10 @@ public class UpgradeTomeItem extends BaseItem {
 	        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.nexttier");
 	        tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
 	        tt.appendString(" " + bd.nextTier());
-	        tooltip.add(tt);  
-        }
+		}
+		tooltip.add(tt);
 
-    }
+	}
 
 	public static void onModifierApplied(ItemStack bookInSlot, ItemStack modifier, ItemStack tool) {
 		UpgradeBookData bd = new UpgradeBookData(bookInSlot);

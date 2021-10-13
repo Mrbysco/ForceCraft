@@ -116,7 +116,7 @@ public class UpgradeBookData {
 					String id = tg.getString("id");
 
 					// i dont know where this bug comes from
-					if (!id.isEmpty() && "minecraft:".equalsIgnoreCase(id) == false)
+					if (!id.isEmpty() && !"minecraft:".equalsIgnoreCase(id))
 						tierSet.add(ResourceLocation.tryCreate(id));
 				}
 			}
@@ -138,7 +138,7 @@ public class UpgradeBookData {
 			ListNBT listTag = new ListNBT();
 			for (ResourceLocation id : tierSet) {
 				// i dont know where this bug comes from
-				if ("minecraft:".equalsIgnoreCase(id.toString()) == false) {
+				if (!"minecraft:".equalsIgnoreCase(id.toString())) {
 					CompoundNBT tg = new CompoundNBT();
 					tg.putString("id", id.toString());
 					listTag.add(tg);

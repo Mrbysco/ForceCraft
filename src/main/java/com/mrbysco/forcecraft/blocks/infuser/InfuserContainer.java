@@ -47,7 +47,6 @@ public class InfuserContainer extends Container {
         this.player = playerInventoryIn.player;
 
         //Modifier Slots [0, 7] around the outside starting at the top middle going clockwise
-        int bookTier = tile.getBookTier();
         this.addSlot(new UnlockableSlot(te.handler, 0, 80, 20));
         this.addSlot(new UnlockableSlot(te.handler, 1, 104, 32));
         this.addSlot(new UnlockableSlot(te.handler, 2, 116, 57));
