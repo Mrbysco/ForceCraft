@@ -31,7 +31,7 @@ public enum UpgradeBookTier {
 			return FINAL;
 		}
 		UpgradeBookTier nextTier = values()[nextVal];
-		ForceCraft.LOGGER.info("upgrade tome item: Tier level up {}", nextTier);
+//		ForceCraft.LOGGER.info("Upgrade tome item: Tier level up {}", nextTier);
 		return nextTier;
 	}
 

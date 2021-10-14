@@ -86,7 +86,6 @@ public class FairyEntity extends CreatureEntity implements IFlyingAnimal {
 	public SoundEvent collideSound(PlayerEntity playerEntity) {
 		int randomInt = world.rand.nextInt(100);
 		if(UUID.fromString("7135da42-d327-47bb-bb04-5ba4e212fb32").equals(playerEntity.getUniqueID())) {
-			ForceCraft.LOGGER.info("");
 			return ForceSounds.FAIRY_PICKUP.get();
 		}
 		if(randomInt <= 1 && UUID.fromString("10755ea6-9721-467a-8b5c-92adf689072c").equals(playerEntity.getUniqueID())) {

@@ -68,7 +68,7 @@ public enum InfuserModifierType {
 			// logic of which pack upgrade to use is inside
 			return InfuserTileEntity.upgradeBag(tool, bd);
 		case ITEM:
-			ForceCraft.LOGGER.info("i need to give you item {}", this);
+//			ForceCraft.LOGGER.info("i need to give you item {}", this);
 
 			return true;
 		case EXP:

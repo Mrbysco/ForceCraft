@@ -29,7 +29,7 @@ public class MobUtil {
         }
 
         if(adjustedLevel > 0) {
-            ForceCraft.LOGGER.info("Added BLEEDING to " + target.getName());
+//            ForceCraft.LOGGER.info("Added BLEEDING to " + target.getName());
             target.addPotionEffect(new EffectInstance(ForceEffects.BLEEDING.get(), BLEEDING_SECONDS * adjustedLevel, 0, false, true));
         }
     }
