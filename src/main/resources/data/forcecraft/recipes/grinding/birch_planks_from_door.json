@@ -1,11 +1,11 @@
 {
   "type": "forcecraft:grinding",
   "ingredient": {
-    "item": "minecraft:oak_door"
+    "item": "minecraft:birch_door"
   },
   "results": [
       {
-        "item": "minecraft:oak_planks",
+        "item": "minecraft:birch_planks",
         "count": 2
       }
   ],

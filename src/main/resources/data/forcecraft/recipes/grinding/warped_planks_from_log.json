@@ -1,12 +1,12 @@
 {
   "type": "forcecraft:grinding",
   "ingredient": {
-    "item": "minecraft:oak_door"
+    "tag": "minecraft:warped_stems"
   },
   "results": [
       {
-        "item": "minecraft:oak_planks",
-        "count": 2
+        "item": "minecraft:warped_planks",
+        "count": 6
       }
   ],
   "experience": 0.1,
