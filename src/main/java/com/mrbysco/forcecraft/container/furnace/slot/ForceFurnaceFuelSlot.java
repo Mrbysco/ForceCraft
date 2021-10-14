@@ -1,16 +1,16 @@
 package com.mrbysco.forcecraft.container.furnace.slot;
 
 import com.mrbysco.forcecraft.container.furnace.AbstractForceFurnaceContainer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class ForceFurnaceFuelSlot extends Slot {
+public class ForceFurnaceFuelSlot extends SlotItemHandler {
 	private final AbstractForceFurnaceContainer furnaceContainer;
 
-	public ForceFurnaceFuelSlot(AbstractForceFurnaceContainer furnaceContainer, IInventory furnaceInventory, int p_i50084_3_, int p_i50084_4_, int p_i50084_5_) {
-		super(furnaceInventory, p_i50084_3_, p_i50084_4_, p_i50084_5_);
+	public ForceFurnaceFuelSlot(AbstractForceFurnaceContainer furnaceContainer, IItemHandler furnaceInventory, int slotIndex, int xPosition, int yPosition) {
+		super(furnaceInventory, slotIndex, xPosition, yPosition);
 		this.furnaceContainer = furnaceContainer;
 	}
 

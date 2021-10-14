@@ -2,15 +2,15 @@ package com.mrbysco.forcecraft.container.furnace.slot;
 
 import com.mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class ForceFurnaceResultSlot extends Slot {
+public class ForceFurnaceResultSlot extends SlotItemHandler {
 	private final PlayerEntity player;
 	private int removeCount;
 
-	public ForceFurnaceResultSlot(PlayerEntity player, IInventory inventoryIn, int slotIndex, int xPosition, int yPosition) {
+	public ForceFurnaceResultSlot(PlayerEntity player, IItemHandler inventoryIn, int slotIndex, int xPosition, int yPosition) {
 		super(inventoryIn, slotIndex, xPosition, yPosition);
 		this.player = player;
 	}

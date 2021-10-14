@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(targets = {"net.minecraft.inventory.container.GrindstoneContainer$2"})
 public class GrindstoneSlotMixin {
-	@Inject(at = @At("HEAD"), method = "Lnet/minecraft/inventory/container/GrindstoneContainer$2;isItemValid(Lnet/minecraft/item/ItemStack;)Z", cancellable = true)
+	@Inject(at = @At("HEAD"), method = "isItemValid(Lnet/minecraft/item/ItemStack;)Z", cancellable = true)
 	private void forcecraftIsItemValid(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
 		if(stack.getItem().getRegistryName().getNamespace().equals(Reference.MOD_ID)) {
 			cir.setReturnValue(false);

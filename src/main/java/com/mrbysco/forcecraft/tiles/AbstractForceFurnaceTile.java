@@ -1,12 +1,14 @@
 package com.mrbysco.forcecraft.tiles;
 
 import com.google.common.collect.Lists;
-import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import com.mrbysco.forcecraft.config.ConfigHandler;
+import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.recipe.MultipleOutputFurnaceRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
+import com.mrbysco.forcecraft.util.ItemHandlerUtils;
+import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -16,7 +18,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.IRecipeHolder;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -25,6 +26,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.IHopper;
@@ -41,10 +43,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,12 +66,45 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	private static final int[] SLOTS_DOWN = new int[]{OUTPUT_SLOT, FUEL_SLOT};
 	private static final int[] SLOTS_HORIZONTAL = new int[]{FUEL_SLOT};
 
+	public final ItemStackHandler handler = new ItemStackHandler(4) {
+		@Override
+		protected int getStackLimit(int slot, ItemStack stack) {
+			if(slot == UPGRADE_SLOT) {
+				return 1;
+			}
+			return 64;
+		}
+
+		@Override
+		public boolean isItemValid(int slot, ItemStack stack) {
+			if (slot == UPGRADE_SLOT) {
+				return getStackInSlot(slot).isEmpty() && stack.getItem() instanceof UpgradeCoreItem && stack.getCount() == 1;
+			} else if (slot == OUTPUT_SLOT) {
+				return false;
+			} else if (slot != FUEL_SLOT) {
+				return true;
+			} else {
+				ItemStack itemstack = getStackInSlot(FUEL_SLOT);
+				return isFuel(stack) || stack.getItem() == Items.BUCKET && itemstack.getItem() != Items.BUCKET;
+			}
+		}
+
+		@Nonnull
+		@Override
+		public ItemStack extractItem(int slot, int amount, boolean simulate) {
+			if(slot == UPGRADE_SLOT) {
+				return ItemStack.EMPTY;
+			}
+			return super.extractItem(slot, amount, simulate);
+		}
+	};
+	private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
+
 	private static final List<ResourceLocation> hopperBlacklist = Arrays.asList(ResourceLocation.tryCreate("hopper"), new ResourceLocation("cyclic", "hopper"),
 			new ResourceLocation("cyclic", "hopper_gold"), new ResourceLocation("cyclic", "hopper_fluid"),
 			new ResourceLocation("uppers", "upper"), new ResourceLocation("goldenhopper", "golden_hopper"),
 			new ResourceLocation("woodenhopper", "wooden_hopper"));
 
-	protected NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
 	private int burnTime;
 	private int burnSpeed;
 	private int burnTimeTotal;
@@ -131,12 +169,12 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		return IRecipeType.SMELTING;
 	}
 
-	public ItemStack setUpgrade(ItemStack upgrade) {
-		return this.items.set(UPGRADE_SLOT, upgrade);
+	public void setUpgrade(ItemStack upgrade) {
+		this.handler.setStackInSlot(UPGRADE_SLOT, upgrade);
 	}
 
 	public ItemStack getUpgrade() {
-		return this.items.get(UPGRADE_SLOT);
+		return this.handler.getStackInSlot(UPGRADE_SLOT);
 	}
 
 	public boolean isEfficient() {
@@ -180,13 +218,24 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 
 	public void read(BlockState state, CompoundNBT nbt) {
 		super.read(state, nbt);
-		this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
-		ItemStackHelper.loadAllItems(nbt, this.items);
+		if(nbt.contains("ItemStackHandler")) {
+			handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
+		} else {
+			ListNBT listnbt = nbt.getList("Items", 10);
+
+			for(int i = 0; i < listnbt.size(); ++i) {
+				CompoundNBT compoundnbt = listnbt.getCompound(i);
+				int j = compoundnbt.getByte("Slot") & 255;
+				if (j >= 0 && j < this.getSizeInventory()) {
+					handler.setStackInSlot(j, ItemStack.read(compoundnbt));
+				}
+			}
+		}
 		this.burnTime = nbt.getInt("BurnTime");
 		this.burnSpeed = nbt.getInt("BurnSpeed");
 		this.cookTime = nbt.getInt("CookTime");
 		this.cookTimeTotal = nbt.getInt("CookTimeTotal");
-		this.burnTimeTotal = nbt.contains("BurnTimeTotal") ? nbt.getInt("BurnTimeTotal") : this.getBurnTime(this.items.get(FUEL_SLOT));
+		this.burnTimeTotal = nbt.contains("BurnTimeTotal") ? nbt.getInt("BurnTimeTotal") : this.getBurnTime(this.handler.getStackInSlot(FUEL_SLOT));
 		this.cookSpeed = nbt.getInt("CookSpeed");
 		CompoundNBT compoundnbt = nbt.getCompound("RecipesUsed");
 
@@ -203,7 +252,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		compound.putInt("CookTimeTotal", this.cookTimeTotal);
 		compound.putInt("BurnTimeTotal", this.burnTimeTotal);
 		compound.putInt("CookSpeed", this.cookSpeed);
-		ItemStackHelper.saveAllItems(compound, this.items);
+		compound.put("ItemStackHandler", handler.serializeNBT());
 		CompoundNBT compoundnbt = new CompoundNBT();
 		this.recipes.forEach((recipeId, craftedAmount) -> {
 			compoundnbt.putInt(recipeId.toString(), craftedAmount);
@@ -215,7 +264,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	public void tick() {
 		boolean wasBurning = this.isBurning();
 		boolean dirty = false;
-		if (this.isBurning() && !this.items.get(INPUT_SLOT).isEmpty()) {
+		if (this.isBurning() && canSmelt(currentRecipe)) {
 			int speed = getSpeed();
 			if(this.burnSpeed != speed) {
 				this.burnSpeed = speed;
@@ -224,8 +273,8 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		}
 
 		if (this.world != null && !this.world.isRemote) {
-			ItemStack fuel = this.items.get(FUEL_SLOT);
-			if (this.isBurning() || !fuel.isEmpty() && !this.items.get(INPUT_SLOT).isEmpty()) {
+			ItemStack fuel = this.handler.getStackInSlot(FUEL_SLOT);
+			if (this.isBurning() || !fuel.isEmpty() && !this.handler.getStackInSlot(INPUT_SLOT).isEmpty()) {
 				AbstractCookingRecipe irecipe = getRecipe();
 				boolean valid = this.canSmelt(irecipe);
 				if (!this.isBurning() && valid) {
@@ -234,12 +283,12 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 					if (this.isBurning()) {
 						dirty = true;
 						if (fuel.hasContainerItem())
-							this.items.set(FUEL_SLOT, fuel.getContainerItem());
+							this.handler.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
 						else
 						if (!fuel.isEmpty()) {
 							fuel.shrink(1);
 							if (fuel.isEmpty()) {
-								this.items.set(FUEL_SLOT, fuel.getContainerItem());
+								this.handler.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
 							}
 						}
 					}
@@ -278,12 +327,12 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	}
 
 	protected boolean canSmelt(@Nullable IRecipe<?> recipeIn) {
-		if (!this.items.get(INPUT_SLOT).isEmpty() && recipeIn != null) {
+		if (!this.handler.getStackInSlot(INPUT_SLOT).isEmpty() && recipeIn != null) {
 			ItemStack recipeOutput = recipeIn.getRecipeOutput();
 			if (recipeOutput.isEmpty()) {
 				return false;
 			} else {
-				ItemStack output = this.items.get(OUTPUT_SLOT);
+				ItemStack output = this.handler.getStackInSlot(OUTPUT_SLOT);
 				if (output.isEmpty()) {
 					return true;
 				} else if (!output.isItemEqual(recipeOutput)) {
@@ -301,7 +350,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 
 	private void smelt(@Nullable IRecipe<?> recipe) {
 		if (recipe != null && this.canSmelt(recipe)) {
-			ItemStack itemstack = this.items.get(INPUT_SLOT);
+			ItemStack itemstack = this.handler.getStackInSlot(INPUT_SLOT);
 			List<? extends String> additionalBlacklist = new ArrayList<>();
 			if(ConfigHandler.COMMON.furnaceOutputBlacklist.get() != null) {
 				if(!ConfigHandler.COMMON.furnaceOutputBlacklist.get().isEmpty() && !ConfigHandler.COMMON.furnaceOutputBlacklist.get().get(0).isEmpty()) {
@@ -355,9 +404,9 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 						ItemEntity itemEntity = new ItemEntity(world, getPos().getX(), getPos().getY() + 1, getPos().getZ(), outputStack);
 						world.addEntity(itemEntity);
 					} else {
-						ItemStack itemstack2 = this.items.get(OUTPUT_SLOT);
+						ItemStack itemstack2 = this.handler.getStackInSlot(OUTPUT_SLOT);
 						if (itemstack2.isEmpty() && !outputStack.isEmpty()) {
-							this.items.set(OUTPUT_SLOT, outputStack);
+							this.handler.setStackInSlot(OUTPUT_SLOT, outputStack);
 						} else if (itemstack2.getItem() == outputStacks.get(i).getItem()) {
 							itemstack2.grow(outputStack.getCount());
 						}
@@ -395,9 +444,9 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 					}
 				}
 
-				ItemStack itemstack2 = this.items.get(OUTPUT_SLOT);
+				ItemStack itemstack2 = this.handler.getStackInSlot(OUTPUT_SLOT);
 				if (itemstack2.isEmpty() && !outputStack.isEmpty()) {
-					this.items.set(OUTPUT_SLOT, outputStack);
+					this.handler.setStackInSlot(OUTPUT_SLOT, outputStack);
 				} else if (itemstack2.getItem() == itemstack1.getItem()) {
 					itemstack2.grow(outputStack.getCount());
 				}
@@ -407,8 +456,8 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 				this.setRecipeUsed(recipe);
 			}
 
-			if (itemstack.getItem() == Blocks.WET_SPONGE.asItem() && !this.items.get(FUEL_SLOT).isEmpty() && this.items.get(FUEL_SLOT).getItem() == Items.BUCKET) {
-				this.items.set(FUEL_SLOT, new ItemStack(Items.WATER_BUCKET));
+			if (itemstack.getItem() == Blocks.WET_SPONGE.asItem() && !this.handler.getStackInSlot(FUEL_SLOT).isEmpty() && this.handler.getStackInSlot(FUEL_SLOT).getItem() == Items.BUCKET) {
+				this.handler.setStackInSlot(FUEL_SLOT, new ItemStack(Items.WATER_BUCKET));
 			}
 
 			itemstack.shrink(1);
@@ -466,12 +515,12 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	 * Returns the number of slots in the inventory.
 	 */
 	public int getSizeInventory() {
-		return this.items.size();
+		return this.handler.getSlots();
 	}
 
 	public boolean isEmpty() {
-		for(ItemStack itemstack : this.items) {
-			if (!itemstack.isEmpty()) {
+		for(int i = 0; i < handler.getSlots(); i++) {
+			if (!handler.getStackInSlot(i).isEmpty()) {
 				return false;
 			}
 		}
@@ -483,32 +532,32 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	 * Returns the stack in the given slot.
 	 */
 	public ItemStack getStackInSlot(int index) {
-		return this.items.get(index);
+		return this.handler.getStackInSlot(index);
 	}
 
 	/**
 	 * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
 	 */
 	public ItemStack decrStackSize(int index, int count) {
-		return ItemStackHelper.getAndSplit(this.items, index, count);
+		return index == UPGRADE_SLOT ? ItemStack.EMPTY : ItemHandlerUtils.getAndSplit(this.handler, index, count);
 	}
 
 	/**
 	 * Removes a stack from the given slot and returns it.
 	 */
 	public ItemStack removeStackFromSlot(int index) {
-		return ItemStackHelper.getAndRemove(this.items, index);
+		return index == UPGRADE_SLOT ? ItemStack.EMPTY : ItemHandlerUtils.getAndRemove(this.handler, index);
 	}
 
 	/**
 	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
 	 */
 	public void setInventorySlotContents(int index, ItemStack stack) {
-		ItemStack itemstack = this.items.get(index);
-		boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
-		this.items.set(index, stack);
-		if (stack.getCount() > this.getInventoryStackLimit()) {
-			stack.setCount(this.getInventoryStackLimit());
+		ItemStack itemstack = this.handler.getStackInSlot(index);
+		boolean flag = handler.isItemValid(index, stack) && !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
+		this.handler.setStackInSlot(index, stack);
+		if (stack.getCount() > handler.getSlotLimit(index)) {
+			stack.setCount(handler.getSlotLimit(index));
 		}
 
 		if (index == 0 && !flag) {
@@ -516,7 +565,6 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 			this.cookTime = 0;
 			this.markDirty();
 		}
-
 	}
 
 	/**
@@ -536,18 +584,13 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	 */
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		if (index == 2) {
-			return false;
-		} else if (index != 1) {
-			return true;
-		} else {
-			ItemStack itemstack = this.items.get(FUEL_SLOT);
-			return isFuel(stack) || stack.getItem() == Items.BUCKET && itemstack.getItem() != Items.BUCKET;
-		}
+		return handler.isItemValid(index, stack);
 	}
 
 	public void clear() {
-		this.items.clear();
+		for(int i = 0; i < handler.getSlots(); i++) {
+			handler.setStackInSlot(i, ItemStack.EMPTY);
+		}
 	}
 
 	public void setRecipeUsed(@Nullable IRecipe<?> recipe) {
@@ -555,7 +598,6 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 			ResourceLocation resourcelocation = recipe.getId();
 			this.recipes.addTo(resourcelocation, 1);
 		}
-
 	}
 
 	@Nullable
@@ -601,24 +643,15 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	}
 
 	public void fillStackedContents(RecipeItemHelper helper) {
-		for(ItemStack itemstack : this.items) {
-			helper.accountStack(itemstack);
+		for(int i = 0; i < handler.getSlots(); i++) {
+			helper.accountStack(handler.getStackInSlot(i));
 		}
-
 	}
-
-	net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-			net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
 
 	@Override
 	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
 		if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			if (facing == Direction.UP)
-				return handlers[0].cast();
-			else if (facing == Direction.DOWN)
-				return handlers[1].cast();
-			else
-				return handlers[2].cast();
+			return handlerHolder.cast();
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -626,8 +659,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	@Override
 	protected void invalidateCaps() {
 		super.invalidateCaps();
-		for (int x = 0; x < handlers.length; x++)
-			handlers[x].invalidate();
+		handlerHolder.invalidate();
 	}
 
 	private class BiggestInventory implements Comparable<BiggestInventory> {
@@ -655,5 +687,9 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		public int compareTo(BiggestInventory otherInventory) {
 			return Integer.compare(this.inventorySize, otherInventory.inventorySize);
 		}
+	}
+
+	public IIntArray getFurnaceData() {
+		return furnaceData;
 	}
 }

@@ -18,6 +18,6 @@ public class ForceFurnaceTileEntity extends AbstractForceFurnaceTile {
 	}
 
 	protected Container createMenu(int id, PlayerInventory player) {
-		return new ForceFurnaceContainer(id, player, this, this.furnaceData);
+		return new ForceFurnaceContainer(id, player, this);
 	}
 }

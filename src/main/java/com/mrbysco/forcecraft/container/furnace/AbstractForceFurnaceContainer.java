@@ -5,115 +5,103 @@ import com.mrbysco.forcecraft.container.furnace.slot.ForceFurnaceResultSlot;
 import com.mrbysco.forcecraft.container.furnace.slot.UpgradeSlot;
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
+import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.RecipeBookContainer;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeBookCategory;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.item.crafting.ServerRecipePlacerFurnace;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<IInventory> {
-	private final IInventory furnaceInventory;
-	private final IIntArray furnaceData;
-	protected final World world;
-	private final RecipeBookCategory field_242384_g;
+import java.util.Objects;
 
-	protected AbstractForceFurnaceContainer(ContainerType<?> containerType, RecipeBookCategory recipeBookCategory, int containerID, PlayerInventory playerInventory) {
-		this(containerType, recipeBookCategory, containerID, playerInventory, new Inventory(4), new IntArray(4));
+public abstract class AbstractForceFurnaceContainer extends Container {
+	private AbstractForceFurnaceTile tile;
+	private PlayerEntity player;
+	private IItemHandler furnaceInventory;
+	private IIntArray furnaceData;
+	private World world;
+
+	public AbstractForceFurnaceContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
+		this(windowId, playerInventory, getTileEntity(playerInventory, data));
 	}
 
-	public int getBurn() {
-		return furnaceData.get(0);
+	protected static AbstractForceFurnaceTile getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
+		Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
+		Objects.requireNonNull(data, "data cannot be null!");
+		final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(data.readBlockPos());
+
+		if (tileAtPos instanceof AbstractForceFurnaceTile) {
+			return (AbstractForceFurnaceTile) tileAtPos;
+		}
+
+		throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
 	}
 
-	protected AbstractForceFurnaceContainer(ContainerType<?> containerType, RecipeBookCategory recipeBookCategory, int containerID, PlayerInventory playerInventory, IInventory inventory, IIntArray furnaceData) {
-		super(containerType, containerID);
-		this.field_242384_g = recipeBookCategory;
-		assertInventorySize(inventory, 3);
+	public AbstractForceFurnaceContainer(int id, PlayerInventory playerInventoryIn, AbstractForceFurnaceTile te) {
+		super(ForceContainers.FORCE_FURNACE.get(), id);
+		this.tile = te;
+		this.player = playerInventoryIn.player;
+		this.world = player.world;
+		this.furnaceInventory = tile.handler;
+		this.furnaceData = tile.getFurnaceData();
+
+		assertFurnaceSize(furnaceInventory, 4);
 		assertIntArraySize(furnaceData, 4);
-		this.furnaceInventory = inventory;
-		this.furnaceData = furnaceData;
-		this.world = playerInventory.player.world;
-		this.addSlot(new Slot(inventory, 0, 56, 17));
-		this.addSlot(new ForceFurnaceFuelSlot(this, inventory, 1, 56, 53));
-		this.addSlot(new ForceFurnaceResultSlot(playerInventory.player, inventory, 2, 116, 35));
-		this.addSlot(new UpgradeSlot(inventory, 3, 12, 12));
+
+		this.addSlot(new SlotItemHandler(furnaceInventory, 0, 56, 17));
+		this.addSlot(new ForceFurnaceFuelSlot(this, furnaceInventory, 1, 56, 53));
+		this.addSlot(new ForceFurnaceResultSlot(player, furnaceInventory, 2, 116, 35));
+		this.addSlot(new UpgradeSlot(furnaceInventory, 3, 12, 12));
 
 		for(int i = 0; i < 3; ++i) {
 			for(int j = 0; j < 9; ++j) {
-				this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlot(new Slot(playerInventoryIn, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 
 		for(int k = 0; k < 9; ++k) {
-			this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
+			this.addSlot(new Slot(playerInventoryIn, k, 8 + k * 18, 142));
 		}
 
 		this.trackIntArray(furnaceData);
 	}
 
-	public void fillStackedContents(RecipeItemHelper itemHelperIn) {
-		if (this.furnaceInventory instanceof IRecipeHelperPopulator) {
-			((IRecipeHelperPopulator)this.furnaceInventory).fillStackedContents(itemHelperIn);
+//	protected AbstractForceFurnaceContainer(ContainerType<?> containerType, RecipeBookCategory recipeBookCategory, int containerID, PlayerInventory playerInventory) {
+//		this(containerType, recipeBookCategory, containerID, playerInventory, null, new IntArray(4));
+//	}
+
+	public int getBurn() {
+		return furnaceData.get(0);
+	}
+
+	protected void assertFurnaceSize(IItemHandler inventoryIn, int minSize) {
+		int i = inventoryIn.getSlots();
+		if (i < minSize) {
+			throw new IllegalArgumentException("Container size " + i + " is smaller than expected " + minSize);
 		}
-
-	}
-
-	public void clear() {
-		this.furnaceInventory.clear();
-	}
-
-	public void func_217056_a(boolean p_217056_1_, IRecipe<?> recipeIn, ServerPlayerEntity player) {
-		(new ServerRecipePlacerFurnace<>(this)).place(player, (IRecipe<IInventory>) recipeIn, p_217056_1_);
-	}
-
-	public boolean matches(IRecipe<? super IInventory> recipeIn) {
-		return recipeIn.matches(this.furnaceInventory, this.world);
-	}
-
-	public int getOutputSlot() {
-		return 2;
-	}
-
-	public int getWidth() {
-		return 1;
-	}
-
-	public int getHeight() {
-		return 1;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public int getSize() {
-		return 3;
 	}
 
 	/**
 	 * Determines whether supplied player can use this container
 	 */
 	public boolean canInteractWith(PlayerEntity playerIn) {
-		return this.furnaceInventory.isUsableByPlayer(playerIn);
+		return this.tile.isUsableByPlayer(playerIn);
 	}
 
 	/**
@@ -229,10 +217,5 @@ public abstract class AbstractForceFurnaceContainer extends RecipeBookContainer<
 	@OnlyIn(Dist.CLIENT)
 	public boolean isBurning() {
 		return this.furnaceData.get(0) > 0;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public RecipeBookCategory func_241850_m() {
-		return this.field_242384_g;
 	}
 }

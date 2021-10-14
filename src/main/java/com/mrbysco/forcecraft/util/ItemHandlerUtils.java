@@ -3,6 +3,7 @@ package com.mrbysco.forcecraft.util;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.function.Predicate;
@@ -81,5 +82,21 @@ public class ItemHandlerUtils {
 			}
 		}
 		return false;
+	}
+
+
+
+	public static ItemStack getAndSplit(IItemHandler itemhandler, int index, int amount) {
+		return index >= 0 && index < itemhandler.getSlots() && !itemhandler.getStackInSlot(index).isEmpty() && amount > 0 ? itemhandler.getStackInSlot(index).split(amount) : ItemStack.EMPTY;
+	}
+
+	public static ItemStack getAndRemove(IItemHandler itemhandler, int index) {
+		if(index >= 0 && index < itemhandler.getSlots() && itemhandler instanceof IItemHandlerModifiable) {
+			IItemHandlerModifiable modifiable = ((IItemHandlerModifiable)itemhandler);
+			modifiable.setStackInSlot(index, ItemStack.EMPTY);
+			return modifiable.getStackInSlot(index);
+		} else {
+			return ItemStack.EMPTY;
+		}
 	}
 }

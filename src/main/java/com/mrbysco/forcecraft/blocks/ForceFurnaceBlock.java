@@ -11,8 +11,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -27,6 +27,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -49,7 +50,9 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
     protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
         if (tileentity instanceof ForceFurnaceTileEntity) {
-            player.openContainer((INamedContainerProvider)tileentity);
+			if (!worldIn.isRemote) {
+				NetworkHooks.openGui((ServerPlayerEntity) player, (ForceFurnaceTileEntity) tileentity, pos);
+			}
             player.addStat(Stats.INTERACT_WITH_FURNACE);
         }
     }
@@ -87,10 +90,10 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
         if (!state.matchesBlock(newState.getBlock())) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity instanceof AbstractForceFurnaceTile) {
-                IInventory inventory = ((AbstractForceFurnaceTile) tileentity);
-                for(int i = 0; i < inventory.getSizeInventory(); ++i) {
-                    if(!(inventory.getStackInSlot(i).getItem() instanceof UpgradeCoreItem)) {
-                        spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(i));
+				AbstractForceFurnaceTile furnaceTile = ((AbstractForceFurnaceTile) tileentity);
+                for(int i = 0; i < furnaceTile.getSizeInventory(); ++i) {
+                    if(!(furnaceTile.getStackInSlot(i).getItem() instanceof UpgradeCoreItem)) {
+                        spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), furnaceTile.getStackInSlot(i));
                     }
                 }
                 ((AbstractForceFurnaceTile)tileentity).grantStoredRecipeExperience(worldIn, Vector3d.copyCentered(pos));
@@ -116,9 +119,6 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
             worldIn.addEntity(itementity);
         }
     }
-    
-    // keep inventory feature  for upgrade only
-    // TODO: tooltip?
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {

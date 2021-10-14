@@ -2,15 +2,13 @@ package com.mrbysco.forcecraft.container.furnace.slot;
 
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class UpgradeSlot extends Slot {
+public class UpgradeSlot extends SlotItemHandler {
 	private final int slotIndex;
-	public UpgradeSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+	public UpgradeSlot(IItemHandler inventoryIn, int index, int xPosition, int yPosition) {
 		super(inventoryIn, index, xPosition, yPosition);
 		this.slotIndex = index;
 	}

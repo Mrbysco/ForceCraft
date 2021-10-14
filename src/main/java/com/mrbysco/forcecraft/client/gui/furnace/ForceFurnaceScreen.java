@@ -2,7 +2,6 @@ package com.mrbysco.forcecraft.client.gui.furnace;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
-import net.minecraft.client.gui.recipebook.FurnaceRecipeGui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -14,6 +13,6 @@ public class ForceFurnaceScreen extends AbstractForceFurnaceScreen<ForceFurnaceC
 	private static final ResourceLocation FURNACE_GUI_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/furnace_gui.png");
 
 	public ForceFurnaceScreen(ForceFurnaceContainer container, PlayerInventory playerInventory, ITextComponent title) {
-		super(container, new FurnaceRecipeGui(), playerInventory, title, FURNACE_GUI_TEXTURES);
+		super(container, playerInventory, title, FURNACE_GUI_TEXTURES);
 	}
 }

@@ -18,7 +18,7 @@ public class ForceContainers {
 	public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Reference.MOD_ID);
 
 	public static final RegistryObject<ContainerType<ForceFurnaceContainer>> FORCE_FURNACE = CONTAINERS.register("force_furnace", () ->
-			IForgeContainerType.create((windowId, inv, data) -> new ForceFurnaceContainer(windowId, inv)));
+			IForgeContainerType.create((windowId, inv, data) -> new ForceFurnaceContainer(windowId, inv, data)));
 
 	public static final RegistryObject<ContainerType<InfuserContainer>> INFUSER = CONTAINERS.register("infuser", () ->
 			IForgeContainerType.create((windowId, inv, data) -> new InfuserContainer(windowId, inv, data)));

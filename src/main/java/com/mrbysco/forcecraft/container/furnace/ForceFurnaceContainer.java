@@ -1,19 +1,18 @@
 package com.mrbysco.forcecraft.container.furnace;
 
 import com.mrbysco.forcecraft.registry.ForceContainers;
+import com.mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.crafting.RecipeBookCategory;
-import net.minecraft.util.IIntArray;
+import net.minecraft.network.PacketBuffer;
 
 public class ForceFurnaceContainer extends AbstractForceFurnaceContainer {
-    public ForceFurnaceContainer(int id, PlayerInventory playerInventoryIn) {
-        super(ForceContainers.FORCE_FURNACE.get(), RecipeBookCategory.FURNACE, id, playerInventoryIn);
+    public ForceFurnaceContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
+        super(windowId, playerInventory, data);
     }
 
-    public ForceFurnaceContainer(int id, PlayerInventory playerInventoryIn, IInventory furnaceInventoryIn, IIntArray furnaceData) {
-        super(ForceContainers.FORCE_FURNACE.get(), RecipeBookCategory.FURNACE, id, playerInventoryIn, furnaceInventoryIn, furnaceData);
+    public ForceFurnaceContainer(int id, PlayerInventory playerInventoryIn, AbstractForceFurnaceTile te) {
+        super(id, playerInventoryIn, te);
     }
 
     @Override
