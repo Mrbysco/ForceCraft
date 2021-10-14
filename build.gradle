@@ -131,6 +131,9 @@ dependencies {
     compile fg.deobf("curse.maven:pipez-443900:3273405")
     compile fg.deobf("curse.maven:CTM-267602:3137659")
 
+    compile fg.deobf("curse.maven:Mantle-74924:3482897")
+    compile fg.deobf("curse.maven:TConstruct-74072:3482903")
+
     compile fg.deobf("curse.maven:mmmmmmmmmmmm-225738:3279930")
 
     implementation fg.deobf("curse.maven:cyclic-239286:3391742")
