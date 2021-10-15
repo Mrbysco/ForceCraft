@@ -187,6 +187,9 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 
 	@Override
 	public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+		if(clickTypeIn == ClickType.PICKUP_ALL && player.inventory.getItemStack().getItem() instanceof UpgradeCoreItem) {
+			return ItemStack.EMPTY;
+		}
 		if (slotId == 3) {
 			Slot slot = getSlot(slotId);
 			if (slot.getHasStack() && clickTypeIn != ClickType.QUICK_MOVE) {

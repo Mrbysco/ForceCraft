@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.compat.multipleoutput;
+package com.mrbysco.forcecraft.compat.jei.multipleoutput;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
@@ -10,7 +10,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.util.Translator;
-import com.mrbysco.forcecraft.compat.JeiCompat;
+import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.recipe.MultipleOutputFurnaceRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.compat.transfer;
+package com.mrbysco.forcecraft.compat.jei.transfer;
 
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiIngredient;

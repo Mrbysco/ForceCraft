@@ -1,7 +1,7 @@
-package com.mrbysco.forcecraft.compat.multipleoutput;
+package com.mrbysco.forcecraft.compat.jei.multipleoutput;
 
 import mezz.jei.api.helpers.IGuiHelper;
-import com.mrbysco.forcecraft.compat.JeiCompat;
+import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.recipe.GrindingRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.util.ResourceLocation;

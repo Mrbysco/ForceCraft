@@ -1,11 +1,11 @@
-package com.mrbysco.forcecraft.compat;
+package com.mrbysco.forcecraft.compat.jei;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.client.gui.furnace.ForceFurnaceScreen;
-import com.mrbysco.forcecraft.compat.infuser.InfuserCategory;
-import com.mrbysco.forcecraft.compat.multipleoutput.FreezingCategory;
-import com.mrbysco.forcecraft.compat.multipleoutput.GrindingCategory;
-import com.mrbysco.forcecraft.compat.transfer.ItemCardTransferHandler;
+import com.mrbysco.forcecraft.compat.jei.infuser.InfuserCategory;
+import com.mrbysco.forcecraft.compat.jei.multipleoutput.FreezingCategory;
+import com.mrbysco.forcecraft.compat.jei.multipleoutput.GrindingCategory;
+import com.mrbysco.forcecraft.compat.jei.transfer.ItemCardTransferHandler;
 import com.mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.recipe.FreezingRecipe;

@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.compat.infuser;
+package com.mrbysco.forcecraft.compat.jei.infuser;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
@@ -10,7 +10,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.util.Translator;
 import com.mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
-import com.mrbysco.forcecraft.compat.JeiCompat;
+import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
