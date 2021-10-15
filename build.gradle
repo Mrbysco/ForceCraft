@@ -134,6 +134,8 @@ dependencies {
     compile fg.deobf("curse.maven:Mantle-74924:3482897")
     compile fg.deobf("curse.maven:TConstruct-74072:3482903")
 
+    compile fg.deobf("curse.maven:invtweaks-383070:3102237")
+
     compile fg.deobf("curse.maven:mmmmmmmmmmmm-225738:3279930")
 
     implementation fg.deobf("curse.maven:cyclic-239286:3391742")
