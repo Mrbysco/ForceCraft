@@ -29,6 +29,7 @@ public class UpgradeBookData {
 			// is not empty, load it up
 			this.read(book, tag);
 		}
+		updateCache();
 		// else its a new craft, or showing in JEI etc
 	}
 

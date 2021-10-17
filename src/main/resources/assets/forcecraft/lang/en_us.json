@@ -17,6 +17,7 @@
   "item.forcecraft.upgrade_tome.tt.max": "Mastered!",
   "item.forcecraft.upgrade_tome.tt.owner": "Owner:",
   "item.forcecraft.upgrade_tome.tt.points": "Force Points:",
+  "item.forcecraft.upgrade_tome.tt.point_info": "You get Force Points for applying infusions",
   "item.forcecraft.upgrade_tome.tt.nexttier": "Next Tier:",
   "item.forcecraft.claw": "Claw",
   "item.forcecraft.force_gear": "Force Gear",
@@ -430,7 +431,7 @@
   "info.forcecraft.book.requirements.entry.name": "Requirements",
   "info.forcecraft.book.requirements_info.text": "To get started, the following items are required:$(br)$(br)Firstly, the $(item)Infuser$() requires power in the form of $(4)RF$().",
   "info.forcecraft.book.requirements_gem.text": "The second requirement is $(6)Liquid Force$().$(br)Liquid force is added by inserting $(item)Force Gems$() into the slot above the liquid tank.",
-  "info.forcecraft.book.requirements_tome.text": "The third requirement is an $(item)Upgrade Tome$() which is required for infusions. Without it the $(item)Infuser$() will not function.",
+  "info.forcecraft.book.requirements_tome.text": "The third requirement is an $(item)Upgrade Tome$() which is required for infusions. Without it the $(item)Infuser$() will not function.$(br)$(br)To upgrade the Tome, you need to acquire Force Points and complete all infusions in the current tier",
 
   "info.forcecraft.book.upgrade_core.entry.name": "Upgrade Core",
   "info.forcecraft.book.upgrade_core_info.text": "The $(item)Upgrade Core$() can be used to craft $(l:forcecraft:infuser/furnace)$(item)Force Furnace$() upgrade cores. With these you can enhance aspects of the Furnace to suit your needs.",
@@ -439,14 +440,14 @@
   "info.forcecraft.book.upgrade_core_link.text": "You can check the page on the $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$() to learn how to craft it",
 
   "info.forcecraft.book.tier_0.name": "Tier 0 Infusions",
-  "info.forcecraft.book.tier_0.desc": "Infusions that can be executed by default",
+  "info.forcecraft.book.tier_0.desc": "Infusions that can be executed by default$(br)$(br)Complete all tier zero infusions to upgrade your Tome to the next tier (2 total)",
   "info.forcecraft.book.force.entry.name": "Force",
   "info.forcecraft.book.force_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Sword$(): Adds one level of Knockback per item",
   "info.forcecraft.book.damage.entry.name": "Damage",
   "info.forcecraft.book.damage_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Sword$(): Adds one level of Sharpness per item$(br)$(li)On a $(item)Force Bow$(): Adds one level of Power per level$(br)$(li)On $(item)Force Armor$(): Increases Force Punch damage by half a heart per item",
 
   "info.forcecraft.book.tier_1.name": "Tier 1 Infusions",
-  "info.forcecraft.book.tier_1.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 1",
+  "info.forcecraft.book.tier_1.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 1$(br)$(br)Complete all tier one infusions to upgrade your Tome to the next tier (3 total)",
   "info.forcecraft.book.speed.entry.name": "Speed",
   "info.forcecraft.book.speed_info.text": "This infusion does the following:$(br)$(li)On $(item)Force Tools$(): Increases the tool efficiency$(br)$(li)On a $(item)Force Bow$() (Max lvl: 1): Makes arrows fly faster and farther$(br)$(li)On $(item)Force Armor$() (Max lvl: 1): Increase player movement speed",
   "info.forcecraft.book.speed_info.text2": "$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(): Converts the Upgrade Core to an $(item)Speed Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()",
@@ -456,7 +457,7 @@
   "info.forcecraft.book.heat_info.text": "This infusion does the following:$(br)$(li)On $(item)Force Tools$(): Attempts to smelt any mined block drop$(br)$(li)On $(item)Force Armor$() (Max lvl: 1): Increases Force Punch damage by half a heart per item and sets mobs on fire",
 
   "info.forcecraft.book.tier_2.name": "Tier 2 Infusions",
-  "info.forcecraft.book.tier_2.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 2",
+  "info.forcecraft.book.tier_2.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 2$(br)$(br)Complete all tier two infusions to upgrade your Tome to the next tier (9 total)",
   "info.forcecraft.book.luck.entry.name": "Luck",
   "info.forcecraft.book.luck_info.text": "This infusion does the following:$(br)$(li)On $(item)Force Tools$(): Adds one level of Fortune per item$(br)$(li)On a $(item)Force Sword$(): Adds one level of Looting per item$(br)$(li)On a $(item)Force Bow$(): Adds one level of Looting per item which affects ranged kills",
   "info.forcecraft.book.luck_info.text2": "$(li)On $(item)Force Armor$() (Max lvl: 1): Increases Force Punch mob drops similar to Looting on weapons",
@@ -478,7 +479,7 @@
   "info.forcecraft.book.speed_core_info.text": "This infusion does the following:$(br)$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(): Converts the Upgrade Core to a $(item)Speed Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()",
 
   "info.forcecraft.book.tier_3.name": "Tier 3 Infusions",
-  "info.forcecraft.book.tier_3.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 3",
+  "info.forcecraft.book.tier_3.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 3$(br)$(br)Complete all tier three infusions to upgrade your Tome to the next tier (4 total)",
   "info.forcecraft.book.holding_2.entry.name": "Holding 2",
   "info.forcecraft.book.holding_2_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Pack$(): Adds an additional 8 storage slots. Allowing you to upgrade the $(item)Force Pack$() to 24 slots.",
   "info.forcecraft.book.bleeding.entry.name": "Bleeding",
@@ -490,7 +491,7 @@
   "info.forcecraft.book.silk_info.text": "This infusion does the following:$(br)$(li)On $(item)Force Tools$(): Will imbue the tools with Silk Touch",
 
   "info.forcecraft.book.tier_4.name": "Tier 4 Infusions",
-  "info.forcecraft.book.tier_4.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 4",
+  "info.forcecraft.book.tier_4.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 4$(br)$(br)Complete all tier four infusions to upgrade your Tome to the next tier (3 total)",
   "info.forcecraft.book.holding_3.entry.name": "Holding 3",
   "info.forcecraft.book.holding_3_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Pack$(): Adds an additional 8 storage slots. Allowing you to upgrade the $(item)Force Pack$() to 32 slots.",
   "info.forcecraft.book.bane.entry.name": "Bane",
@@ -500,7 +501,7 @@
   "info.forcecraft.book.heat_upgrade_info.text": "This infusion does the following:$(br)$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(): Converts the Upgrade Core to a $(item)Heat Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()",
 
   "info.forcecraft.book.tier_5.name": "Tier 5 Infusions",
-  "info.forcecraft.book.tier_5.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 5",
+  "info.forcecraft.book.tier_5.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 5$(br)$(br)Complete all tier five infusions to upgrade your Tome to the next tier (3 total)",
   "info.forcecraft.book.holding_4.entry.name": "Holding 4",
   "info.forcecraft.book.holding_4_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Pack$(): Adds an additional 8 storage slots. Allowing you to upgrade the $(item)Force Pack$() to 40 slots which is the maximum amount of slots the pack can handle.",
   "info.forcecraft.book.healing.entry.name": "Healing",
@@ -509,7 +510,7 @@
   "info.forcecraft.book.wing_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Sword$(): will allow the user to propel themselves forward while using some durability",
 
   "info.forcecraft.book.tier_6.name": "Tier 6 Infusions",
-  "info.forcecraft.book.tier_6.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 6",
+  "info.forcecraft.book.tier_6.desc": "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 6$(br)$(br)Complete all tier six infusions to upgrade your Tome to the next tier (3 total, 2 if the Time Torch is disabled)",
   "info.forcecraft.book.time.entry.name": "Time",
   "info.forcecraft.book.time_info.text": "This infusion does the following:$(br)$(li)On a $(item)Force Torch$(): Imbues the torch with time converting it to a $(item)Time Torch$()$(br)$(br)$(l)Note:$() If you're unable to execute the infusion it means the recipe has been disabled in the config",
   "info.forcecraft.book.ender.entry.name": "Ender",

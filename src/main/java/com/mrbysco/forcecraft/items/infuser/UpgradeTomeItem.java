@@ -22,7 +22,7 @@ public class UpgradeTomeItem extends BaseItem {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-
+		super.addInformation(stack, worldIn, tooltip, flagIn);
 		UpgradeBookData bd = new UpgradeBookData(stack);
 	
         TranslationTextComponent tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.tier");
@@ -33,11 +33,6 @@ public class UpgradeTomeItem extends BaseItem {
         }
         tooltip.add(tt);  
 
-        if(!Screen.hasShiftDown()) {
-		  tooltip.add(new TranslationTextComponent("forcecraft.tooltip.press_shift"));
-		  return;
-      	}
-        
         if(bd.getTier() == UpgradeBookTier.FINAL) {
             tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.max");
             tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
@@ -54,6 +49,14 @@ public class UpgradeTomeItem extends BaseItem {
 		}
 		tooltip.add(tt);
 
+
+		if(!Screen.hasShiftDown()) {
+			tooltip.add(new TranslationTextComponent("forcecraft.tooltip.press_shift"));
+			return;
+		}
+
+		tooltip.add(new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.point_info"));
+		tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
 	}
 
 	public static void onModifierApplied(ItemStack bookInSlot, ItemStack modifier, ItemStack tool) {

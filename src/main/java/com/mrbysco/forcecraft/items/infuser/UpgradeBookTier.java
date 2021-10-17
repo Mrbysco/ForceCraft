@@ -1,7 +1,5 @@
 package com.mrbysco.forcecraft.items.infuser;
 
-import com.mrbysco.forcecraft.ForceCraft;
-
 public enum UpgradeBookTier {
 	//zero is unused, but we want .ordinal() to match the meaning
 	ZERO(0), ONE(1),TWO(2),THREE(3),FOUR(4),FIVE(5),SIX(6),SEVEN(7);
