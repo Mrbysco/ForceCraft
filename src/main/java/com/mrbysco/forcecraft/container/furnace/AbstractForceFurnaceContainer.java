@@ -34,6 +34,7 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 	private AbstractForceFurnaceTile tile;
 	private PlayerEntity player;
 	private IItemHandler furnaceInventory;
+	private IItemHandler upgradeInventory;
 	private IIntArray furnaceData;
 	private World world;
 
@@ -59,15 +60,17 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 		this.player = playerInventoryIn.player;
 		this.world = player.world;
 		this.furnaceInventory = tile.handler;
+		this.upgradeInventory = tile.upgradeHandler;
 		this.furnaceData = tile.getFurnaceData();
 
-		assertFurnaceSize(furnaceInventory, 4);
+		assertFurnaceSize(furnaceInventory, 3);
+		assertFurnaceSize(upgradeInventory, 1);
 		assertIntArraySize(furnaceData, 4);
 
 		this.addSlot(new SlotItemHandler(furnaceInventory, 0, 56, 17));
 		this.addSlot(new ForceFurnaceFuelSlot(this, furnaceInventory, 1, 56, 53));
 		this.addSlot(new ForceFurnaceResultSlot(player, furnaceInventory, 2, 116, 35));
-		this.addSlot(new UpgradeSlot(furnaceInventory, 3, 12, 12));
+		this.addSlot(new UpgradeSlot(upgradeInventory, 0, 12, 12));
 
 		for(int i = 0; i < 3; ++i) {
 			for(int j = 0; j < 9; ++j) {
@@ -166,7 +169,7 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 
 	protected IRecipeType<? extends AbstractCookingRecipe> getRecipeType() {
 		IRecipeType<? extends AbstractCookingRecipe> recipeType = IRecipeType.SMELTING;
-		ItemStack upgrade = furnaceInventory.getStackInSlot(3);
+		ItemStack upgrade = upgradeInventory.getStackInSlot(0);
 		if(!upgrade.isEmpty()) {
 			if(upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
 				return ForceRecipes.FREEZING;

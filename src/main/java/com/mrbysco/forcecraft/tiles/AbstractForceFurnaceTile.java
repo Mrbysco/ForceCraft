@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.tiles;
 
 import com.google.common.collect.Lists;
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
@@ -43,6 +44,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -60,45 +62,46 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	public static final int INPUT_SLOT = 0;
 	public static final int FUEL_SLOT = 1;
 	public static final int OUTPUT_SLOT = 2;
-	public static final int UPGRADE_SLOT = 3;
+
+	public static final int UPGRADE_SLOT = 0;
 
 	private static final int[] SLOTS_UP = new int[]{INPUT_SLOT};
 	private static final int[] SLOTS_DOWN = new int[]{OUTPUT_SLOT, FUEL_SLOT};
 	private static final int[] SLOTS_HORIZONTAL = new int[]{FUEL_SLOT};
 
-	public final ItemStackHandler handler = new ItemStackHandler(4) {
+	public final ItemStackHandler handler = new ItemStackHandler(3) {
+		@Override
+		public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+			if (slot == FUEL_SLOT) {
+				ItemStack itemstack = getStackInSlot(FUEL_SLOT);
+				return isFuel(stack) || stack.getItem() == Items.BUCKET && itemstack.getItem() != Items.BUCKET;
+			} else if (slot == OUTPUT_SLOT) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+	};
+	private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
+
+	public final ItemStackHandler upgradeHandler = new ItemStackHandler(1) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
-			if(slot == UPGRADE_SLOT) {
-				return 1;
-			}
-			return 64;
+			return 1;
 		}
 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
-			if (slot == UPGRADE_SLOT) {
-				return getStackInSlot(slot).isEmpty() && stack.getItem() instanceof UpgradeCoreItem && stack.getCount() == 1;
-			} else if (slot == OUTPUT_SLOT) {
-				return false;
-			} else if (slot != FUEL_SLOT) {
-				return true;
-			} else {
-				ItemStack itemstack = getStackInSlot(FUEL_SLOT);
-				return isFuel(stack) || stack.getItem() == Items.BUCKET && itemstack.getItem() != Items.BUCKET;
-			}
+			return getStackInSlot(slot).isEmpty() && stack.getItem() instanceof UpgradeCoreItem && stack.getCount() == 1;
 		}
 
 		@Nonnull
 		@Override
 		public ItemStack extractItem(int slot, int amount, boolean simulate) {
-			if(slot == UPGRADE_SLOT) {
-				return ItemStack.EMPTY;
-			}
-			return super.extractItem(slot, amount, simulate);
+			return ItemStack.EMPTY;
 		}
 	};
-	private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
+	private LazyOptional<IItemHandler> upgradeHandlerHolder = LazyOptional.of(() -> upgradeHandler);
 
 	private static final List<ResourceLocation> hopperBlacklist = Arrays.asList(ResourceLocation.tryCreate("hopper"), new ResourceLocation("cyclic", "hopper"),
 			new ResourceLocation("cyclic", "hopper_gold"), new ResourceLocation("cyclic", "hopper_fluid"),
@@ -170,11 +173,11 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	}
 
 	public void setUpgrade(ItemStack upgrade) {
-		this.handler.setStackInSlot(UPGRADE_SLOT, upgrade);
+		this.upgradeHandler.setStackInSlot(UPGRADE_SLOT, upgrade);
 	}
 
 	public ItemStack getUpgrade() {
-		return this.handler.getStackInSlot(UPGRADE_SLOT);
+		return this.upgradeHandler.getStackInSlot(UPGRADE_SLOT);
 	}
 
 	public boolean isEfficient() {
@@ -218,19 +221,52 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 
 	public void read(BlockState state, CompoundNBT nbt) {
 		super.read(state, nbt);
-		if(nbt.contains("ItemStackHandler")) {
+		if(nbt.contains("UpgradeHandler") && nbt.contains("ItemStackHandler")) {
+			upgradeHandler.deserializeNBT(nbt.getCompound("UpgradeHandler"));
 			handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
 		} else {
-			ListNBT listnbt = nbt.getList("Items", 10);
+			if(nbt.contains("ItemStackHandler")) {
+				CompoundNBT handlerTag = nbt.getCompound("ItemStackHandler");
+				ListNBT tagList = handlerTag.getList("Items", Constants.NBT.TAG_COMPOUND);
+				upgradeHandler.setSize(1);
+				int size = handlerTag.getInt("Size");
+				if(size == 4) {
+					handler.setSize(3);
+					for (int i = 0; i < tagList.size(); i++) {
+						CompoundNBT itemTags = tagList.getCompound(i);
+						int slot = itemTags.getInt("Slot");
 
-			for(int i = 0; i < listnbt.size(); ++i) {
-				CompoundNBT compoundnbt = listnbt.getCompound(i);
-				int j = compoundnbt.getByte("Slot") & 255;
-				if (j >= 0 && j < this.getSizeInventory()) {
-					handler.setStackInSlot(j, ItemStack.read(compoundnbt));
+						if (slot >= 0 && slot < 4) {
+							if(slot == 3) {
+								upgradeHandler.setStackInSlot(0, ItemStack.read(itemTags));
+							} else {
+								handler.setStackInSlot(slot, ItemStack.read(itemTags));
+							}
+						}
+					}
+				} else {
+					handler.deserializeNBT(handlerTag);
+					upgradeHandler.setStackInSlot(0, ItemStack.EMPTY);
+				}
+			} else {
+				ListNBT listnbt = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+
+				handler.setSize(3);
+				upgradeHandler.setSize(1);
+				for(int i = 0; i < listnbt.size(); ++i) {
+					CompoundNBT compoundnbt = listnbt.getCompound(i);
+					int j = compoundnbt.getByte("Slot") & 255;
+					if (j >= 0 && j < this.getSizeInventory()) {
+						if(j == 3) {
+							upgradeHandler.setStackInSlot(0, ItemStack.read(compoundnbt));
+						} else {
+							handler.setStackInSlot(j, ItemStack.read(compoundnbt));
+						}
+					}
 				}
 			}
 		}
+
 		this.burnTime = nbt.getInt("BurnTime");
 		this.burnSpeed = nbt.getInt("BurnSpeed");
 		this.cookTime = nbt.getInt("CookTime");
@@ -252,6 +288,8 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		compound.putInt("CookTimeTotal", this.cookTimeTotal);
 		compound.putInt("BurnTimeTotal", this.burnTimeTotal);
 		compound.putInt("CookSpeed", this.cookSpeed);
+
+		compound.put("UpgradeHandler", upgradeHandler.serializeNBT());
 		compound.put("ItemStackHandler", handler.serializeNBT());
 		CompoundNBT compoundnbt = new CompoundNBT();
 		this.recipes.forEach((recipeId, craftedAmount) -> {
@@ -482,6 +520,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		return net.minecraftforge.common.ForgeHooks.getBurnTime(stack) > 0;
 	}
 
+	@Override
 	public int[] getSlotsForFace(Direction side) {
 		if (side == Direction.DOWN) {
 			return SLOTS_DOWN;
@@ -539,14 +578,14 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	 * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
 	 */
 	public ItemStack decrStackSize(int index, int count) {
-		return index == UPGRADE_SLOT ? ItemStack.EMPTY : ItemHandlerUtils.getAndSplit(this.handler, index, count);
+		return ItemHandlerUtils.getAndSplit(this.handler, index, count);
 	}
 
 	/**
 	 * Removes a stack from the given slot and returns it.
 	 */
 	public ItemStack removeStackFromSlot(int index) {
-		return index == UPGRADE_SLOT ? ItemStack.EMPTY : ItemHandlerUtils.getAndRemove(this.handler, index);
+		return ItemHandlerUtils.getAndRemove(this.handler, index);
 	}
 
 	/**
@@ -648,10 +687,18 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		}
 	}
 
+	net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
+			net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
+
 	@Override
 	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
 		if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return handlerHolder.cast();
+			if (facing == Direction.UP)
+				return handlers[0].cast();
+			else if (facing == Direction.DOWN)
+				return handlers[1].cast();
+			else
+				return handlers[2].cast();
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -659,7 +706,11 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	@Override
 	protected void invalidateCaps() {
 		super.invalidateCaps();
+		for (int x = 0; x < handlers.length; x++)
+			handlers[x].invalidate();
+
 		handlerHolder.invalidate();
+		upgradeHandlerHolder.invalidate();
 	}
 
 	private class BiggestInventory implements Comparable<BiggestInventory> {
