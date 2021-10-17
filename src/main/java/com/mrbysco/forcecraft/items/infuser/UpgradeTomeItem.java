@@ -19,8 +19,7 @@ public class UpgradeTomeItem extends BaseItem {
 		super(properties.maxStackSize(1));
 	}
 
-
-    @Override
+	@Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		UpgradeBookData bd = new UpgradeBookData(stack);

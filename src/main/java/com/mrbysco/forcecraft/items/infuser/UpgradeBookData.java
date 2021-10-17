@@ -28,8 +28,10 @@ public class UpgradeBookData {
 		if (tag != null && tag.contains("tier")) {
 			// is not empty, load it up
 			this.read(book, tag);
+		} else {
+			updateCache();
+			this.write(book);
 		}
-		updateCache();
 		// else its a new craft, or showing in JEI etc
 	}
 
@@ -77,9 +79,10 @@ public class UpgradeBookData {
 		//Update tooltip
 		Set<ResourceLocation> thisTier = this.recipesUsed.get(this.tier.ordinal());
 		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
-		int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
-
-		this.progressCache = recipesThisTier + "/" + totalThisTier;
+		if(!InfuseRecipe.RECIPESBYLEVEL.isEmpty()) {
+			int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
+			this.progressCache = recipesThisTier + "/" + totalThisTier;
+		}
 	}
 
 	private boolean canLevelUp() {
