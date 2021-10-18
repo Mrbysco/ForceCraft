@@ -196,7 +196,7 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 		if (slotId == 3) {
 			Slot slot = getSlot(slotId);
 			if (slot.getHasStack() && clickTypeIn != ClickType.QUICK_MOVE) {
-				player.world.playSound((PlayerEntity) null, player.getPosition(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				player.world.playSound((PlayerEntity) null, player.getPosition(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5F, 1.0F);
 				return ItemStack.EMPTY;
 			}
 		}
