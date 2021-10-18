@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
+import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -42,6 +43,8 @@ public class ForceArmorItem extends ArmorItem {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+		ForceToolData fd = new ForceToolData(stack);
+		fd.attachInformation(lores);
     	ToolModStorage.attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
