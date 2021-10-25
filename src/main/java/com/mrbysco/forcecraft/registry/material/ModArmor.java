@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.function.Supplier;
 
 public enum ModArmor implements IArmorMaterial {
-	FORCE_ARMOR(Reference.MOD_ID + ":force", 15, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4.0F, 0.1F, () -> {
+	FORCE_ARMOR(Reference.MOD_ID + ":force", 15, new int[]{3, 4, 6, 3}, 0, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4.0F, 0.1F, () -> {
 		return Ingredient.fromItems(Items.NETHERITE_INGOT);
 	});
 

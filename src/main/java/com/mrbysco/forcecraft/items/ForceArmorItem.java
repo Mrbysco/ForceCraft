@@ -5,8 +5,10 @@ import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
+import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
@@ -22,10 +24,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
-public class ForceArmorItem extends ArmorItem {
+public class ForceArmorItem extends ArmorItem implements IForceChargingTool {
 
     public ForceArmorItem(IArmorMaterial materialIn, EquipmentSlotType slot, Item.Properties builderIn) {
         super(materialIn, slot, builderIn);
@@ -48,6 +51,11 @@ public class ForceArmorItem extends ArmorItem {
     	ToolModStorage.attachInformation(stack, lores);
         super.addInformation(stack, worldIn, lores, flagIn);
     }
+
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return this.damageItem(stack,amount);
+	}
 
     @Override
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
