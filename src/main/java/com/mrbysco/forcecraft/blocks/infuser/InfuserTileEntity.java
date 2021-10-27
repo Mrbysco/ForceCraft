@@ -371,7 +371,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
 			}
 		}
-		return false;
+		return toolStack.getItem().isIn(ForceTags.VALID_INFUSER_CHARGE);
 	}
 
 	protected boolean recipesStillMatch() {

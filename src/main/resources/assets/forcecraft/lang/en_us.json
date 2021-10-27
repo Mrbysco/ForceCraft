@@ -304,6 +304,8 @@
   "forcecraft.ender_rod.location.set": "Ender Rod location has been changed",
   "forcecraft.ender_rod.location": "Bound to %s, %s, %s in %s",
   "forcecraft.ender_rod.unset": "Coordinates Not Set",
+  "forcecraft.wrench_rotate.insufficient": "Insufficient Force, need at least %s force to rotate a block",
+  "forcecraft.wrench_transport.insufficient": "Insufficient Force, need at least %s force to transport a block",
 
   "item.infuser.tooltip.forcelevel": "Force: ",
   "item.infuser.tooltip.lumberjack": "Lumberjack",
