@@ -36,11 +36,10 @@ public class ForceFluidBlock extends FlowingFluidBlock {
                 CreatureAttribute creatureAttribute = livingEntity.getCreatureAttribute();
                 EntityClassification classification = livingEntity.getClassification(false);
                 boolean secondPassed = worldIn.getGameTime() % 20 == 0;
-                if(classification == EntityClassification.MONSTER) {
-                    if(creatureAttribute == CreatureAttribute.UNDEAD && creatureAttribute == CreatureAttribute.UNDEFINED || creatureAttribute == CreatureAttribute.ARTHROPOD) {
-                        if(worldIn.getGameTime() % 10 == 0) {
-                            livingEntity.attackEntityFrom(ForceCraft.LIQUID_FORCE_DAMAGE, 1.0F);
-                        }
+                boolean damageEntity = creatureAttribute == CreatureAttribute.UNDEAD || creatureAttribute == CreatureAttribute.UNDEFINED || creatureAttribute == CreatureAttribute.ARTHROPOD;
+                if(classification == EntityClassification.MONSTER && damageEntity) {
+                    if(worldIn.getGameTime() % 10 == 0) {
+                        livingEntity.attackEntityFrom(ForceCraft.LIQUID_FORCE_DAMAGE, 1.0F);
                     }
                 } else {
                     if(worldIn.getGameTime() % 10 == 0) {
