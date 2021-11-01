@@ -23,6 +23,7 @@ import com.mrbysco.forcecraft.items.BaconatorItem;
 import com.mrbysco.forcecraft.items.CustomSpawnEggItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.registry.ForceEntities;
+import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -103,6 +104,9 @@ public class ClientHandler {
 		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_GRAY_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.TIME_TORCH.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_TIME_TORCH.get(), RenderType.getCutout());
+
+		RenderTypeLookup.setRenderLayer(ForceFluids.FORCE_FLUID_FLOWING.get(), RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ForceFluids.FORCE_FLUID_SOURCE.get(), RenderType.getTranslucent());
 
 		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_LEAVES.get(), RenderType.getCutoutMipped());
 

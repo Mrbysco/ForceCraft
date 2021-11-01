@@ -7,6 +7,7 @@ import com.mrbysco.forcecraft.client.KeybindHandler;
 import com.mrbysco.forcecraft.command.ForceCommands;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.handlers.BaneHandler;
+import com.mrbysco.forcecraft.handlers.ForceDeathHandler;
 import com.mrbysco.forcecraft.handlers.HeartHandler;
 import com.mrbysco.forcecraft.handlers.LootTableHandler;
 import com.mrbysco.forcecraft.handlers.LootingHandler;
@@ -53,6 +54,7 @@ public class ForceCraft {
     public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
 
     public static final DamageSource BLEEDING_DAMAGE = new DamageSource(Reference.MOD_ID + ".bleeding").setMagicDamage().setDamageBypassesArmor();
+    public static final DamageSource LIQUID_FORCE_DAMAGE = new DamageSource(Reference.MOD_ID + ".liquid_force").setMagicDamage().setDamageBypassesArmor();
 
     public static final ItemGroup creativeTab = (new ItemGroup(Reference.MOD_ID) {
         @OnlyIn(Dist.CLIENT)
@@ -84,6 +86,7 @@ public class ForceCraft {
         ForceRecipes.RECIPE_SERIALIZERS.register(eventBus);
 
         MinecraftForge.EVENT_BUS.register(new HeartHandler());
+        MinecraftForge.EVENT_BUS.register(new ForceDeathHandler());
         MinecraftForge.EVENT_BUS.register(new ForceCommands());
         MinecraftForge.EVENT_BUS.register(new CapabilityAttachHandler());
         MinecraftForge.EVENT_BUS.register(new BaneHandler());

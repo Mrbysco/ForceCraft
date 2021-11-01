@@ -108,17 +108,8 @@ public class EatGrassToRestoreGoal extends Goal {
 
 	public void transformMob() {
 		if(this.grassEaterEntity instanceof IColdMob) {
-			ResourceLocation originalLocation = ((IColdMob)this.grassEaterEntity).getOriginal();
-			Entity replacementMob = ForgeRegistries.ENTITIES.getValue(originalLocation).create(this.entityWorld);
-			if(replacementMob != null) {
-				replacementMob.copyLocationAndAnglesFrom(this.grassEaterEntity);
-				UUID mobUUID = replacementMob.getUniqueID();
-				replacementMob.copyDataFromOld(this.grassEaterEntity);
-				replacementMob.setUniqueId(mobUUID);
-
-				this.entityWorld.addEntity(replacementMob);
-				this.grassEaterEntity.remove(false);
-			}
+			IColdMob coldMob = (IColdMob)this.grassEaterEntity;
+			coldMob.transformMob(this.grassEaterEntity, this.entityWorld);
 		}
 	}
 }
