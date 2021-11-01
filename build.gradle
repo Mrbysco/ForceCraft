@@ -128,7 +128,7 @@ dependencies {
 
     compile fg.deobf("curse.maven:industrial-foregoing-266515:3425275")
     compile fg.deobf("curse.maven:titanium-287342:3346366")
-    compile fg.deobf("curse.maven:pipez-443900:3273405")
+    compile fg.deobf("curse.maven:pipez-443900:3508084")
     compile fg.deobf("curse.maven:CTM-267602:3137659")
 
     compile fg.deobf("curse.maven:Mantle-74924:3482897")

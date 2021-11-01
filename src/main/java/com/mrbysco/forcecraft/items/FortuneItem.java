@@ -51,7 +51,7 @@ public class FortuneItem extends BaseItem {
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
-    private void addMessage(ItemStack stack, CompoundNBT nbt) {
+    public static void addMessage(ItemStack stack, CompoundNBT nbt) {
         List<String> messages = new ArrayList<>(ConfigHandler.COMMON.fortuneMessages.get());
         String message = "No fortune for you";
         if(!messages.isEmpty()) {
