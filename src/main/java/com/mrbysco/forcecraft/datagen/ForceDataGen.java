@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.datagen.patchouli.PatchouliProvider;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.SlabBlock;
@@ -55,9 +54,9 @@ public class ForceDataGen {
 		ExistingFileHelper helper = event.getExistingFileHelper();
 
 		if (event.includeServer()) {
-//			generator.addProvider(new Loots(generator));
+			generator.addProvider(new Loots(generator));
 //			generator.addProvider(new Recipes(generator));
-			generator.addProvider(new PatchouliProvider(generator));
+//			generator.addProvider(new PatchouliProvider(generator));
 		}
 		if (event.includeClient()) {
 //			generator.addProvider(new Language(generator));
@@ -80,34 +79,35 @@ public class ForceDataGen {
 			@Override
 			protected void addTables() {
 				registerLootTable(POWER_ORE.get(), (ore) -> {
-					return droppingWithSilkTouch(POWER_ORE.get(), withExplosionDecay(POWER_ORE_ITEM.get(), ItemLootEntry.builder(FORCE_GEM.get()).acceptFunction(SetCount.builder(RandomValueRange.of(2.0F, 4.0F))).acceptFunction(ApplyBonus.uniformBonusCount(Enchantments.FORTUNE))));
+					return droppingWithSilkTouch(ore, withExplosionDecay(POWER_ORE_ITEM.get(), ItemLootEntry.builder(FORCE_GEM.get()).acceptFunction(SetCount.builder(RandomValueRange.of(2.0F, 4.0F))).acceptFunction(ApplyBonus.uniformBonusCount(Enchantments.FORTUNE))));
 				});
 
 				registerDropSelfLootTable(INFUSER.get());
-				registerLootTable(FORCE_FURNACE.get(), (furnace) -> droppingWithName(FORCE_FURNACE.get()));
-				registerLootTable(BLACK_FORCE_FURNACE.get(), (furnace) -> droppingWithName(BLACK_FORCE_FURNACE.get()));
-				registerLootTable(BLUE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(BLUE_FORCE_FURNACE.get()));
-				registerLootTable(BROWN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(BROWN_FORCE_FURNACE.get()));
-				registerLootTable(CYAN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(CYAN_FORCE_FURNACE.get()));
-				registerLootTable(GRAY_FORCE_FURNACE.get(), (furnace) -> droppingWithName(GRAY_FORCE_FURNACE.get()));
-				registerLootTable(GREEN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(GREEN_FORCE_FURNACE.get()));
-				registerLootTable(LIGHT_BLUE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(LIGHT_BLUE_FORCE_FURNACE.get()));
-				registerLootTable(LIGHT_GRAY_FORCE_FURNACE.get(), (furnace) -> droppingWithName(LIGHT_GRAY_FORCE_FURNACE.get()));
-				registerLootTable(LIME_FORCE_FURNACE.get(), (furnace) -> droppingWithName(LIME_FORCE_FURNACE.get()));
-				registerLootTable(MAGENTA_FORCE_FURNACE.get(), (furnace) -> droppingWithName(MAGENTA_FORCE_FURNACE.get()));
-				registerLootTable(ORANGE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(ORANGE_FORCE_FURNACE.get()));
-				registerLootTable(PINK_FORCE_FURNACE.get(), (furnace) -> droppingWithName(PINK_FORCE_FURNACE.get()));
-				registerLootTable(PURPLE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(PURPLE_FORCE_FURNACE.get()));
-				registerLootTable(RED_FORCE_FURNACE.get(), (furnace) -> droppingWithName(RED_FORCE_FURNACE.get()));
-				registerLootTable(WHITE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(WHITE_FORCE_FURNACE.get()));
-				registerLootTable(FORCE_ENGINE.get(), (furnace) -> droppingWithName(FORCE_ENGINE.get()));
+				registerLootTable(FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(BLACK_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(BLUE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(BROWN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(CYAN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(GRAY_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(GREEN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(LIGHT_BLUE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(LIGHT_GRAY_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(LIME_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(MAGENTA_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(ORANGE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(PINK_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(PURPLE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(RED_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				registerLootTable(WHITE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+
+				registerLootTable(FORCE_ENGINE.get(), (engine) -> droppingWithName(engine));
 
 				registerDropSelfLootTable(FORCE_SAPLING.get());
 				registerDropSelfLootTable(FORCE_LOG.get());
 				registerDropSelfLootTable(FORCE_WOOD.get());
 				registerDropSelfLootTable(FORCE_PLANKS.get());
 				registerLootTable(FORCE_LEAVES.get(), (leaves) -> {
-					return droppingWithChancesSticksAndApples(FORCE_PLANKS.get(), FORCE_SAPLING.get(), new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F});
+					return droppingWithChancesSticksAndApples(leaves, FORCE_SAPLING.get(), DEFAULT_SAPLING_DROP_RATES);
 				});
 
 				registerDropSelfLootTable(FORCE_TORCH.get());
@@ -187,58 +187,58 @@ public class ForceDataGen {
 
 				//Slabs
 				registerLootTable(FORCE_PLANK_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_PLANK_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_RED_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_RED_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_YELLOW_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_YELLOW_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_GREEN_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_GREEN_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_BLUE_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_BLUE_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_WHITE_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_WHITE_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_BLACK_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_BLACK_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_BROWN_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_BROWN_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_ORANGE_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_ORANGE_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_LIGHT_BLUE_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_LIGHT_BLUE_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_MAGENTA_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_MAGENTA_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_PINK_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_PINK_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_LIGHT_GRAY_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_LIGHT_GRAY_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_LIME_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_LIME_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_CYAN_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_CYAN_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_PURPLE_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_PURPLE_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_GRAY_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_GRAY_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 				registerLootTable(FORCE_BRICK_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)FORCE_BRICK_SLAB.get());
+					return droppingSlab((SlabBlock)slab);
 				});
 			}
 
