@@ -156,7 +156,7 @@ public class SpoilsBagItem extends BaseItem {
 
 	@Override
 	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if(!worldIn.isRemote && stack.getOrCreateTag().getBoolean("Filled")) {
+		if(!worldIn.isRemote && stack.hasTag() && stack.getTag().getBoolean("Filled")) {
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 			if(ItemHandlerUtils.isEmpty(handler)) {
 				stack.shrink(1);
@@ -166,8 +166,8 @@ public class SpoilsBagItem extends BaseItem {
 
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new StringTextComponent("Tier: " + tier).mergeStyle(TextFormatting.GRAY));
 		super.addInformation(stack, worldIn, tooltip, flagIn);
+		tooltip.add(new StringTextComponent("Tier: " + tier).mergeStyle(TextFormatting.GRAY));
 	}
 
 	@Nullable
