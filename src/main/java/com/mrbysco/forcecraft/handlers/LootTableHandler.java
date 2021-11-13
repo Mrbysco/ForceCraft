@@ -24,8 +24,7 @@ public class LootTableHandler {
                     .acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0.0F, 1.0F))))
                     .name("forcecraft_inject");
             builder.addEntry(EmptyLootEntry.func_216167_a()
-                    .weight(1)
-                    .acceptFunction(SetCount.builder(RandomValueRange.of(0.0F, 2.0F))))
+                    .weight(1))
                     .name("forcecraft_empty_roll");
             LootPool pool = builder.build();
 
