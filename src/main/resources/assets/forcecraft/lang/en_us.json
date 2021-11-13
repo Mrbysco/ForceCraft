@@ -416,6 +416,9 @@
   "info.forcecraft.book.inert_core_info.text": "The $(item)Inert Core$() is the inactive version of the $(l)Nether Star$() and is used to craft the $(l:forcecraft:infuser/inert_core)$(item)Bottled Wither$().$(br)$(br)To obtain the $(item)Inert Core$() one has to drain the $(l)Nether Star$() of its power.$(br)The $(l:forcecraft:infuser/force_engine)$(item)Force Engine$() is able to drain the star of its power.$(br)$(br)Once Inert it can be turned into a $(l:forcecraft:infuser/inert_core)$(item)Bottled Wither$()",
   "info.forcecraft.book.inert_core_info2.text": "Set the $(item)Inert Core$() on fire and Right-click with a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$() to craft a $(l:forcecraft:infuser/inert_core)$(item)Bottled Wither$()",
 
+  "info.forcecraft.book.claw.entry.name": "Claw",
+  "info.forcecraft.book.claw_info.text": "The $(item)Claw$() is an item that can be used to upgrade tools, weapons and armor with $(l:forcecraft:tier_0/damage)Damage$() $(br)$(br)It can be dropped by $(l)Bats$().",
+
   "info.forcecraft.book.bottled_wither.entry.name": "Bottled Wither",
   "info.forcecraft.book.bottled_wither_info.text": "The $(item)Bottled Wither$() is a portable $(l)Wither$() that can be spawned in by right-clicking the ground with the bottle. Be careful though, as it has no charge time and will immediately start destroying the area.$(br)$(br)It can be created by setting an $(l:forcecraft:infuser/inert_core)$(item)Inert Core$() on fire and right-clicking the fire with a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$()",
 

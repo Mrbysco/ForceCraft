@@ -57,6 +57,10 @@ public class PatchouliProvider extends PatchouliBookProvider {
 				.addTextPage("info.forcecraft.book.force_rod_info.text").build()
 				.addCraftingPage(new ResourceLocation(Reference.MOD_ID, "force_rod")).setText("info.forcecraft.book.force_rod_recipe.text").build().build()
 
+				.addEntry("infuser/claw", "info.forcecraft.book.claw.entry.name", "forcecraft:claw")
+				.addTextPage("info.forcecraft.book.claw_info.text").build()
+				.addEntityPage("minecraft:bat").build().build()
+
 				.addEntry("infuser/bottled_wither", "info.forcecraft.book.bottled_wither.entry.name", "forcecraft:bottled_wither")
 				.addTextPage("info.forcecraft.book.bottled_wither_info.text").build()
 				.addEntityPage("minecraft:wither").build().build()

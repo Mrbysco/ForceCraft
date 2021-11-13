@@ -88,14 +88,14 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public int processTime = 0;
     public int maxProcessTime = 20;
 
-	// slots [0,7] are the surround
+	// Slots [0,7] are the surround
 	public static final int SLOT_TOOL = 8;
     public static final int SLOT_GEM = 9;
 	public static final int SLOT_BOOK = 10;
-	//currently these costs are fixed PER infusing a thing once
+	// Currently, these costs are fixed PER infusing a thing once
 	public static final int ENERGY_COST_PER = 20;
     public static final int FLUID_COST_PER = 1000;
-    //ratio o f gem slot to fluid tank
+    // Ratio o f gem slot to fluid tank
 	private static final int FLUID_PER_GEM = 500;
 
 	protected Map<Integer, InfuseRecipe> currentRecipes = new HashMap<>();
