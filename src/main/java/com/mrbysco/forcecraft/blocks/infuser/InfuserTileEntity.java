@@ -414,7 +414,6 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
     private void processForceCharging() {
         ItemStack tool = getFromToolSlot();
-		addInfusedTag(tool);
 
         ForceToolData force = new ForceToolData(tool);
         force.charge(FLUID_CHARGE);
@@ -528,7 +527,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 	}
 
     public boolean isValidChargeableStack(ItemStack stack) {
-    	return stack.getItem().isIn(ForceTags.VALID_INFUSER_CHARGE) && stack.getCount() == 1;
+		CompoundNBT tag = stack.getTag();
+    	return stack.getItem().isIn(ForceTags.VALID_INFUSER_CHARGE) && tag != null && tag.contains("ForceInfused")&& stack.getCount() == 1;
 	}
 
     /**

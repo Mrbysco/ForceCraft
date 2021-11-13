@@ -93,7 +93,7 @@ public class ConfigHandler {
 
             forceInfusingTime = builder
                     .comment("The max amount of ticks it takes to charge a tool with Force [Default: 120 (6 seconds)]")
-                    .defineInRange("forceInfusingTime",120, 20, Integer.MAX_VALUE);
+                    .defineInRange("forceInfusingTime", 120, 20, Integer.MAX_VALUE);
 
             furnaceOutputBlacklist = builder
                     .comment("An additional list of tile entities the Force Furnace can NOT insert into [Syntax: modid:tile_name]\n" +
