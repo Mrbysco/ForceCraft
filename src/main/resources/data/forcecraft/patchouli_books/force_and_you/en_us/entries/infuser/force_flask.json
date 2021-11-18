@@ -1,0 +1,21 @@
+{
+  "name": "info.forcecraft.book.force_flask.entry.name",
+  "category": "infuser",
+  "icon": "forcecraft:force_flask",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.force_flask_info.text"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forcecraft:force_flask",
+      "text": "info.forcecraft.book.force_flask_recipe.text"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forcecraft:force_flask_from_entity",
+      "text": "info.forcecraft.book.force_flask_recipe2.text"
+    }
+  ]
+}
