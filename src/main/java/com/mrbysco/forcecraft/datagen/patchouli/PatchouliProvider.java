@@ -55,7 +55,37 @@ public class PatchouliProvider extends PatchouliBookProvider {
 
 				.addEntry("infuser/force_rod", "info.forcecraft.book.force_rod.entry.name", "forcecraft:force_rod")
 				.addTextPage("info.forcecraft.book.force_rod_info.text").build()
-				.addCraftingPage(new ResourceLocation(Reference.MOD_ID, "force_rod")).setText("info.forcecraft.book.force_rod_recipe.text").build().build()
+				.addCraftingPage(new ResourceLocation(Reference.MOD_ID, "force_rod"))
+					.setText("info.forcecraft.book.force_rod_recipe.text").build().build()
+
+				.addEntry("infuser/force_ingot", "info.forcecraft.book.force_ingot.entry.name", "forcecraft:force_ingot")
+				.addTextPage("info.forcecraft.book.force_ingot_info.text").build()
+				.addCraftingPage(new ResourceLocation(Reference.MOD_ID, "iron_to_force_ingot"))
+					.setText("info.forcecraft.book.force_ingot_recipe.text").build()
+				.addCraftingPage(new ResourceLocation(Reference.MOD_ID, "gold_to_force_ingot"))
+					.setText("info.forcecraft.book.force_ingot_recipe2.text").build()
+				.addCraftingPage(new ResourceLocation(Reference.MOD_ID, "nuggets_to_force_ingot"))
+					.setText("info.forcecraft.book.force_ingot_recipe3.text").build().build()
+
+				.addEntry("infuser/force_shears", "info.forcecraft.book.force_shears.entry.name", "forcecraft:force_shears")
+				.addTextPage("info.forcecraft.book.force_shears_info.text").build()
+				.addTextPage("info.forcecraft.book.force_shears_info2.text").build()
+				.addCraftingPage(new ResourceLocation(Reference.MOD_ID, "force_shears"))
+					.setText("info.forcecraft.book.force_shears_recipe.text").build().build()
+
+				.addEntry("infuser/baconator", "info.forcecraft.book.baconator.entry.name", "forcecraft:baconator")
+				.addTextPage("info.forcecraft.book.baconator_info.text").build()
+				.addCraftingPage(new ResourceLocation(Reference.MOD_ID, "baconator"))
+					.setText("info.forcecraft.book.baconator_recipe.text").build()
+				.build()
+
+				.addEntry("infuser/bacon", "info.forcecraft.book.bacon.entry.name", "forcecraft:raw_bacon")
+				.addTextPage("info.forcecraft.book.bacon_info.text").build()
+				.addSmeltingPage(new ResourceLocation(Reference.MOD_ID, "cooked_bacon_from_smelting"))
+					.setText("info.forcecraft.book.bacon_recipe.text").build()
+				.addEntityPage("minecraft:pig").build()
+				.addEntityPage("forcecraft:cold_pig").build()
+				.build()
 
 				.addEntry("infuser/claw", "info.forcecraft.book.claw.entry.name", "forcecraft:claw")
 				.addTextPage("info.forcecraft.book.claw_info.text").build()

@@ -20,7 +20,6 @@ public class SpoilsBagLootTables extends GiftLootTables {
 
 	@Override
 	public void accept(BiConsumer<ResourceLocation, Builder> consumer) {
-		super.accept(consumer);
 		consumer.accept(ForceTables.TIER_1, LootTable.builder()
 				.addLootPool(LootPool.builder().rolls(RandomValueRange.of(1.0F, 4.0F))
 						.name("Force Loot")

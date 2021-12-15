@@ -55,7 +55,7 @@ public class ForceDataGen {
 		ExistingFileHelper helper = event.getExistingFileHelper();
 
 		if (event.includeServer()) {
-//			generator.addProvider(new Loots(generator));
+			generator.addProvider(new Loots(generator));
 //			generator.addProvider(new Recipes(generator));
 			generator.addProvider(new PatchouliProvider(generator));
 		}

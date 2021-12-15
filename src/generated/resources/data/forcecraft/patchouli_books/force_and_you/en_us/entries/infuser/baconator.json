@@ -1,0 +1,16 @@
+{
+  "name": "info.forcecraft.book.baconator.entry.name",
+  "category": "infuser",
+  "icon": "forcecraft:baconator",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.baconator_info.text"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forcecraft:baconator",
+      "text": "info.forcecraft.book.baconator_recipe.text"
+    }
+  ]
+}

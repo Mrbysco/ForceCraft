@@ -1,0 +1,24 @@
+{
+  "name": "info.forcecraft.book.bacon.entry.name",
+  "category": "infuser",
+  "icon": "forcecraft:raw_bacon",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.bacon_info.text"
+    },
+    {
+      "type": "smelting",
+      "recipe": "forcecraft:cooked_bacon_from_smelting",
+      "text": "info.forcecraft.book.bacon_recipe.text"
+    },
+    {
+      "type": "entity",
+      "entity": "minecraft:pig"
+    },
+    {
+      "type": "entity",
+      "entity": "forcecraft:cold_pig"
+    }
+  ]
+}

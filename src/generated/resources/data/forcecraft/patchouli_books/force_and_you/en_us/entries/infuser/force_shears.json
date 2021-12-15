@@ -1,0 +1,20 @@
+{
+  "name": "info.forcecraft.book.force_shears.entry.name",
+  "category": "infuser",
+  "icon": "forcecraft:force_shears",
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.force_shears_info.text"
+    },
+    {
+      "type": "text",
+      "text": "info.forcecraft.book.force_shears_info2.text"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forcecraft:force_shears",
+      "text": "info.forcecraft.book.force_shears_recipe.text"
+    }
+  ]
+}

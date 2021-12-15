@@ -427,9 +427,28 @@
   "info.forcecraft.book.bottled_wither.entry.name": "Bottled Wither",
   "info.forcecraft.book.bottled_wither_info.text": "The $(item)Bottled Wither$() is a portable $(l)Wither$() that can be spawned in by right-clicking the ground with the bottle. Be careful though, as it has no charge time and will immediately start destroying the area.$(br)$(br)It can be created by setting an $(l:forcecraft:infuser/inert_core)$(item)Inert Core$() on fire and right-clicking the fire with a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$()",
 
+  "info.forcecraft.book.force_ingot.entry.name": "Force Ingot",
+  "info.forcecraft.book.force_ingot_info.text": "$(item)Force Ingots$() can be created by combining $(item)Force Gems$() and two of the same Iron or Gold Ingots.$(br)$(br)Doing so produces two or more $(item)Force Ingots$(), which are useable by a wide variety of tools and equipment.$(br)$(br)Just like any other ingot the $(item)Force Ingot$() can be crafted into 9 nuggets and back.",
+  "info.forcecraft.book.force_ingot_recipe.text": "The $(item)Force Ingot$() Crafting Recipe using Iron Ingots",
+  "info.forcecraft.book.force_ingot_recipe2.text": "The $(item)Force Ingot$() Crafting Recipe using Gold Ingots",
+  "info.forcecraft.book.force_ingot_recipe3.text": "The $(item)Force Ingot$() Crafting Recipe using Force Nuggets",
+
   "info.forcecraft.book.force_rod.entry.name": "Force Rod",
   "info.forcecraft.book.force_rod_info.text": "The $(item)Force Rod$() is used to transmutate various items and blocks.$(br)For example, when you craft a $(item)Force Rod$() together with an $(l)Enchanted Book$() it can create multiple $(l)Bottle o' Enchanting$() depending on the enchant power.$(br)$(br)Various tools can be transmuted back into the ores used to create them.",
   "info.forcecraft.book.force_rod_recipe.text": "The $(item)Force Rod$() Crafting Recipe",
+
+  "info.forcecraft.book.baconator.entry.name": "Baconator",
+  "info.forcecraft.book.baconator_info.text": "The $(item)Baconator$() is a tool that can automatically feed the user as long as there is $(l:forcecraft:infuser/bacon)Bacon$() in the $(item)Baconator$()'s magazine.$(br)$(br)To insert $(l:forcecraft:infuser/bacon)Bacon$() into the $(item)Baconator$() you shift right-click the baconator while there's $(l:forcecraft:infuser/bacon)Cooked Bacon$() in your inventory.",
+  "info.forcecraft.book.baconator_recipe.text": "The $(item)Baconator$() Crafting Recipe$(br)$(br)Once $(l:forcecraft:infuser/bacon)Bacon$() has been inserted you can either hold right-click to manually eat or shift right-click again to activate automatic eating.",
+
+  "info.forcecraft.book.bacon.entry.name": "Bacon",
+  "info.forcecraft.book.bacon_info.text": "$(item)Bacon$() is a food item added by ForceCraft.$(br)$(br)It can be obtained by using $(l:forcecraft:infuser/force_shears)Force Shears$() on a $(l)Pig$(), which will drop $(item)Raw Bacon$() or $(item)Cooked Bacon$() when infused with $(l:forcecraft:tier_4/heat_upgrade)Heat$()$(br)$(br)The $(item)Bacon$() can be eaten or inserted into a $(l:forcecraft:infuser/baconator)Baconator$() to allow for automated eating.",
+  "info.forcecraft.book.bacon_recipe.text": "The $(item)Bacon$() Smelting Recipe",
+
+  "info.forcecraft.book.force_shears.entry.name": "Force Shears",
+  "info.forcecraft.book.force_shears_info.text": "The $(item)Force Shears$() can do the same things a regular Shear can do but in addition to that they can be used to gather materials from certain mobs without hurting them.",
+  "info.forcecraft.book.force_shears_info2.text": "The list of mobs that can be sheared with $(item)Force Shears$() is as follows:$(br)$(li)On a $(l)Cow$(): Drops leather$(li)On a $(l)Pig$(): $(l:forcecraft:infuser/bacon)Raw Bacon$()$(li)On a $(l)Chicken$(): Drops feathers",
+  "info.forcecraft.book.force_shears_recipe.text": "The $(item)Force Shears$() Crafting Recipe",
 
   "info.forcecraft.book.force_furnace.entry.name": "Force Furnace",
   "info.forcecraft.book.force_furnace_recipe.text": "The $(item)Force Furnace$() Crafting Recipe",
