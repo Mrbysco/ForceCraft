@@ -4,18 +4,19 @@ import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.container.ForceBeltContainer;
 import com.mrbysco.forcecraft.items.ForceBeltItem;
 import com.mrbysco.forcecraft.util.FindingUtil;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
@@ -26,32 +27,32 @@ public class OpenBeltMessage {
 
 	}
 
-	public void encode(PacketBuffer buf) {
+	public void encode(FriendlyByteBuf buf) {
 
 	}
 
-	public static OpenBeltMessage decode(final PacketBuffer packetBuffer) {
+	public static OpenBeltMessage decode(final FriendlyByteBuf packetBuffer) {
 		return new OpenBeltMessage();
 	}
 
 	public void handle(Supplier<Context> context) {
-		Context ctx = context.get();
+		NetworkEvent.Context ctx = context.get();
 		ctx.enqueueWork(() -> {
 			if (ctx.getDirection().getReceptionSide().isServer() && ctx.getSender() != null) {
-				ServerPlayerEntity player = ctx.getSender();
+				ServerPlayer player = ctx.getSender();
 				Predicate<ItemStack> stackPredicate = (stack) -> stack.getItem() instanceof ForceBeltItem;
 				if (FindingUtil.hasSingleStackInHotbar(player, stackPredicate)) {
 					ItemStack beltStack = FindingUtil.findInstanceStack(player, stackPredicate);
 					if(!beltStack.isEmpty()) {
-						player.openMenu(new INamedContainerProvider() {
+						player.openMenu(new MenuProvider() {
 							@Override
-							public ITextComponent getDisplayName() {
-								return beltStack.hasCustomHoverName() ? ((TextComponent)beltStack.getHoverName()).withStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.belt");
+							public Component getDisplayName() {
+								return beltStack.hasCustomHoverName() ? ((BaseComponent)beltStack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.belt");
 							}
 
 							@Nullable
 							@Override
-							public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+							public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
 								return new ForceBeltContainer(id, inventory);
 							}
 						});

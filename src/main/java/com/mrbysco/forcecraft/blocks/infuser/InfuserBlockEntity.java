@@ -27,36 +27,36 @@ import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.tiles.energy.ForceEnergyStorage;
 import com.mrbysco.forcecraft.util.EnchantUtils;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.potion.PotionUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -64,10 +64,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,7 +78,7 @@ import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class InfuserTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventory {
+public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Container {
 
     private static final int FLUID_CHARGE = 1000;
 
@@ -173,98 +173,95 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     private NonNullList<ItemStack> infuserContents = NonNullList.create();
 
 
-    public InfuserTileEntity(TileEntityType<?> type) {
-        super(type);
+    public InfuserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
-    public InfuserTileEntity() {
-        this(ForceRegistry.INFUSER_TILE.get());
+    public InfuserBlockEntity(BlockPos pos, BlockState state) {
+        this(ForceRegistry.INFUSER_TILE.get(), pos, state);
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
-    	this.processTime = nbt.getInt("processTime");
-    	this.maxProcessTime = nbt.getInt("maxProcessTime");
+    public void load(CompoundTag compound) {
+    	this.processTime = compound.getInt("processTime");
+    	this.maxProcessTime = compound.getInt("maxProcessTime");
         //Items
-    	canWork = nbt.getBoolean("canWork");
-        handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
-        ItemStackHelper.loadAllItems(nbt, this.infuserContents);
-        energyStorage.setEnergy(nbt.getInt("EnergyHandler"));
-        tank.readFromNBT(nbt);
+    	canWork = compound.getBoolean("canWork");
+        handler.deserializeNBT(compound.getCompound("ItemStackHandler"));
+        ContainerHelper.loadAllItems(compound, this.infuserContents);
+        energyStorage.setEnergy(compound.getInt("EnergyHandler"));
+        tank.readFromNBT(compound);
 
-        super.load(state, nbt);
+        super.load(compound);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
-        compound = super.save(compound);
-
-        compound.putInt("processTime", this.processTime);
-        compound.putInt("maxProcessTime", this.maxProcessTime);
-        //Items
-        compound.putBoolean("canWork", canWork);
-        compound.put("ItemStackHandler", handler.serializeNBT());
-        compound.putInt("EnergyHandler", energyStorage.getEnergyStored());
-        ItemStackHelper.saveAllItems(compound, this.infuserContents);
-        tank.writeToNBT(compound);
-
-        return compound;
+    public CompoundTag save(CompoundTag compound) {
+		saveAdditional(compound);
+        return super.save(compound);
     }
 
-    @Override
-    public void tick() {
-    	if(level.isClientSide) {
-    		return;
-    	}
+	@Override
+	protected void saveAdditional(CompoundTag compound) {
+		compound.putInt("processTime", this.processTime);
+		compound.putInt("maxProcessTime", this.maxProcessTime);
+		//Items
+		compound.putBoolean("canWork", canWork);
+		compound.put("ItemStackHandler", handler.serializeNBT());
+		compound.putInt("EnergyHandler", energyStorage.getEnergyStored());
+		ContainerHelper.saveAllItems(compound, this.infuserContents);
+		tank.writeToNBT(compound);
+	}
 
-        if (handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
-        	processForceGems();
+	public static void serverTick(Level level, BlockPos pos, BlockState state, InfuserBlockEntity infuser) {
+        if (infuser.handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
+			infuser.processForceGems();
         }
 
-        if (canWork) {
-        	processTime++;
+        if (infuser.canWork) {
+			infuser.processTime++;
 
 			if(level.getGameTime() % 60 == 0) {
-				makeWorkSound();
+				infuser.makeWorkSound();
 			}
 
-			if(energyStorage.getEnergyStored() > ENERGY_COST_PER) {
-				energyStorage.consumePower(ENERGY_COST_PER);
+			if(infuser.energyStorage.getEnergyStored() > ENERGY_COST_PER) {
+				infuser.energyStorage.consumePower(ENERGY_COST_PER);
 			}
 
-        	if(processTime < this.maxProcessTime) {
+        	if(infuser.processTime < infuser.maxProcessTime) {
         		return;
         	}
-        	processTime = 0;
+			infuser.processTime = 0;
         	//working with No progress for now, just is valid and did i turn it on
 
         	//once we have a valid tool and have waited. go do the thing
-        	if(isWorkAllowed()) {
-        		if(areAllModifiersEmpty() && canCharge()) {
-        			processForceCharging();
+        	if(infuser.isWorkAllowed()) {
+        		if(infuser.areAllModifiersEmpty() && infuser.canCharge()) {
+					infuser.processForceCharging();
         		}
-        		else if(recipesStillMatch()) {
-        			processTool();
+        		else if(infuser.recipesStillMatch()) {
+					infuser.processTool();
         		}
 
-				stopWorkSound();
+				infuser.stopWorkSound();
 
-        		if(makesSpecialSound) {
-					playSound(ForceSounds.INFUSER_SPECIAL_DONE.get(),1.0F, 1.0F);
+        		if(infuser.makesSpecialSound) {
+					infuser.playSound(ForceSounds.INFUSER_SPECIAL_DONE.get(),1.0F, 1.0F);
 				} else {
-					playSound(ForceSounds.INFUSER_DONE.get(),1.0F, 1.0F);
+					infuser.playSound(ForceSounds.INFUSER_DONE.get(),1.0F, 1.0F);
 				}
-        		makesSpecialSound = false;
+				infuser.makesSpecialSound = false;
         	}
         	// auto turn off when done
         	//even if tool or book slot become empty, dont auto run next insert
-            canWork = false;
-        	processTime = 0;
+			infuser.canWork = false;
+			infuser.processTime = 0;
 
-            refreshClient();
+			infuser.refreshClient();
         }
         else {
-        	processTime = 0;
+			infuser.processTime = 0;
         }
     }
 
@@ -302,15 +299,15 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 
 	public void playSound(SoundEvent event, float volume, float pitch) {
     	BlockPos pos = getBlockPos();
-		level.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), event, SoundCategory.BLOCKS, volume, pitch);
+		level.playSound((Player) null, pos.getX(), pos.getY(), pos.getZ(), event, SoundSource.BLOCKS, volume, pitch);
 	}
 
 	public void stopWorkSound() {
 		if(!level.isClientSide) {
 			BlockPos pos = getBlockPos();
-			for(PlayerEntity playerentity : level.players()) {
+			for(Player playerentity : level.players()) {
 				if(playerentity.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 200) {
-					PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) playerentity), new com.mrbysco.forcecraft.networking.message.StopInfuserSoundMessage());
+					PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) playerentity), new com.mrbysco.forcecraft.networking.message.StopInfuserSoundMessage());
 				}
 			}
 		}
@@ -371,7 +368,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 				}
 			}
 		}
-		return toolStack.getItem().is(ForceTags.VALID_INFUSER_CHARGE);
+		return toolStack.is(ForceTags.VALID_INFUSER_CHARGE);
 	}
 
 	protected boolean recipesStillMatch() {
@@ -446,30 +443,30 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.worldPosition, 0, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-        this.load(getBlockState(), packet.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
+		load(packet.getTag());
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbt = new CompoundNBT();
-        this.save(nbt);
-        return nbt;
+    public CompoundTag getUpdateTag() {
+		CompoundTag tag = new CompoundTag();
+		saveAdditional(tag);
+		return tag;
     }
 
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        this.load(state, tag);
-    }
+	@Override
+	public void handleUpdateTag(CompoundTag tag) {
+		super.handleUpdateTag(tag);
+	}
 
     @Override
-    public CompoundNBT getTileData() {
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag getTileData() {
+        CompoundTag nbt = new CompoundTag();
         this.save(nbt);
         return nbt;
     }
@@ -527,8 +524,8 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 	}
 
     public boolean isValidChargeableStack(ItemStack stack) {
-		CompoundNBT tag = stack.getTag();
-    	return stack.getItem().is(ForceTags.VALID_INFUSER_CHARGE) && tag != null && tag.contains("ForceInfused")&& stack.getCount() == 1;
+		CompoundTag tag = stack.getTag();
+    	return stack.is(ForceTags.VALID_INFUSER_CHARGE) && tag != null && tag.contains("ForceInfused") && stack.getCount() == 1;
 	}
 
     /**
@@ -564,12 +561,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     // TODO: refactor these static below into another place, possibly InfuserModifier class
 
 	static boolean applyCamo(ItemStack tool, ItemStack mod) {
-		List<EffectInstance> effects = PotionUtils.getMobEffects(mod);
-		for (EffectInstance e : effects) {
-		    if (e.getEffect() == Effects.NIGHT_VISION) {
+		List<MobEffectInstance> effects = PotionUtils.getMobEffects(mod);
+		for (MobEffectInstance e : effects) {
+		    if (e.getEffect() == MobEffects.NIGHT_VISION) {
 		        return addSightModifier(tool);
 		    }
-		    if (e.getEffect() == Effects.INVISIBILITY) {
+		    if (e.getEffect() == MobEffects.INVISIBILITY) {
 		        return addCamoModifier(tool);
 		    }
 		}
@@ -806,13 +803,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     static boolean upgradeBag(ItemStack stack, UpgradeBookData bd) {
         if (stack.getItem() instanceof ForcePackItem) {
             IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-            if(handler instanceof PackItemStackHandler) {
-                PackItemStackHandler packHandler = (PackItemStackHandler)handler;
+            if(handler instanceof PackItemStackHandler packHandler) {
 
-                if(packHandler.canUpgrade(bd)) {
+				if(packHandler.canUpgrade(bd)) {
                     packHandler.applyUpgrade();
 
-                    CompoundNBT tag = stack.getOrCreateTag();
+                    CompoundTag tag = stack.getOrCreateTag();
                     tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(packHandler));
                     tag.putInt("BookTier", packHandler.getUpgrades());
 
@@ -1053,7 +1049,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
 	static void addInfusedTag(ItemStack stack) {
-    	CompoundNBT tag = stack.getOrCreateTag();
+    	CompoundTag tag = stack.getOrCreateTag();
     	if(!tag.contains("ForceInfused")) {
 			tag.putBoolean("ForceInfused", true);
 			stack.setTag(tag);
@@ -1186,12 +1182,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent(Reference.MOD_ID + ".container.infuser");
+    public Component getDisplayName() {
+        return new TranslatableComponent(Reference.MOD_ID + ".container.infuser");
     }
 
     @Override
-    public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
         return new InfuserContainer(id, playerInv, this);
     }
 
@@ -1221,11 +1217,12 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
 		if (this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		} else {
-			return !(player.distanceToSqr((double)this.worldPosition.getX() + 0.5D, (double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D) > 64.0D);
+			return !(player.distanceToSqr((double)this.worldPosition.getX() + 0.5D,
+					(double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D) > 64.0D);
 		}
     }
 
@@ -1238,7 +1235,7 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
     public void setItem(int arg0, ItemStack arg1) {}
 
 	@Override
-	protected void invalidateCaps() {
+	public void invalidateCaps() {
 		super.invalidateCaps();
 		this.tankHolder.invalidate();
 		this.handlerHolder.invalidate();

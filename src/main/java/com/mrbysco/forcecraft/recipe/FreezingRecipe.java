@@ -5,14 +5,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
@@ -27,27 +27,27 @@ public class FreezingRecipe extends MultipleOutputFurnaceRecipe{
 		return new ItemStack(ForceRegistry.FREEZING_CORE.get());
 	}
 
-	public IRecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<?> getSerializer() {
 		return ForceRecipes.FREEZING_SERIALIZER.get();
 	}
 
-	public static class SerializerFreezingRecipe extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FreezingRecipe> {
+	public static class SerializerFreezingRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FreezingRecipe> {
 		@Override
 		public FreezingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			String s = JSONUtils.getAsString(json, "group", "");
-			JsonElement jsonelement = (JsonElement)(JSONUtils.isArrayNode(json, "ingredient") ? JSONUtils.getAsJsonArray(json, "ingredient") : JSONUtils.getAsJsonObject(json, "ingredient"));
+			String s = GsonHelper.getAsString(json, "group", "");
+			JsonElement jsonelement = (JsonElement)(GsonHelper.isArrayNode(json, "ingredient") ? GsonHelper.getAsJsonArray(json, "ingredient") : GsonHelper.getAsJsonObject(json, "ingredient"));
 			Ingredient ingredient = Ingredient.fromJson(jsonelement);
 			//Forge: Check if primitive string to keep vanilla or a object which can contain a count field.
 			if (!json.has("results")) throw new com.google.gson.JsonSyntaxException("Missing results, expected to find a string or object");
-			NonNullList<ItemStack> nonnulllist = readItemStacks(JSONUtils.getAsJsonArray(json, "results"));
+			NonNullList<ItemStack> nonnulllist = readItemStacks(GsonHelper.getAsJsonArray(json, "results"));
 			if (nonnulllist.isEmpty()) {
 				throw new JsonParseException("No results for freezing recipe");
 			} else if (nonnulllist.size() > MAX_OUTPUT) {
 				throw new JsonParseException("Too many results for freezing recipe the max is " + MAX_OUTPUT);
 			}
 
-			float f = JSONUtils.getAsFloat(json, "experience", 0.0F);
-			int i = JSONUtils.getAsInt(json, "processtime", 200);
+			float f = GsonHelper.getAsFloat(json, "experience", 0.0F);
+			int i = GsonHelper.getAsInt(json, "processtime", 200);
 			return new FreezingRecipe(recipeId, s, ingredient, nonnulllist, f, i);
 		}
 
@@ -56,7 +56,7 @@ public class FreezingRecipe extends MultipleOutputFurnaceRecipe{
 
 			for(int i = 0; i < resultArray.size(); ++i) {
 				if(resultArray.get(i).isJsonObject()) {
-					ItemStack stack = ShapedRecipe.itemFromJson(resultArray.get(i).getAsJsonObject());
+					ItemStack stack = ShapedRecipe.itemStackFromJson(resultArray.get(i).getAsJsonObject());
 					nonnulllist.add(stack);
 				}
 			}
@@ -66,7 +66,7 @@ public class FreezingRecipe extends MultipleOutputFurnaceRecipe{
 
 		@Nullable
 		@Override
-		public FreezingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public FreezingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			String s = buffer.readUtf(32767);
 			Ingredient ingredient = Ingredient.fromNetwork(buffer);
 
@@ -82,7 +82,7 @@ public class FreezingRecipe extends MultipleOutputFurnaceRecipe{
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, FreezingRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, FreezingRecipe recipe) {
 			buffer.writeUtf(recipe.group);
 			recipe.ingredient.toNetwork(buffer);
 

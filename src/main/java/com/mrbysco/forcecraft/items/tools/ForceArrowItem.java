@@ -1,14 +1,14 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.world.World;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
@@ -18,15 +18,14 @@ public class ForceArrowItem extends ArrowItem {
 	}
 
 	@Override
-	public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
+	public AbstractArrow createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
 		ForceArrowEntity forceArrow = new ForceArrowEntity(worldIn, shooter);
-		if(shooter instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity) shooter;
+		if(shooter instanceof Player player) {
 			ItemStack heldItem = player.getUseItem();
 			if(heldItem.getItem() instanceof ForceBowItem) {
 				heldItem.getCapability(CAPABILITY_TOOLMOD).ifPresent(cap -> {
 					if(cap.hasFreezing()) {
-						forceArrow.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60, 2, false, false));
+						forceArrow.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2, false, false));
 					}
 					if(cap.hasEnder()) {
 						forceArrow.setEnder();

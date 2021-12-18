@@ -6,21 +6,21 @@ import com.mrbysco.forcecraft.capablilities.magnet.MagnetProvider;
 import com.mrbysco.forcecraft.capablilities.magnet.MagnetStorage;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.registry.ForceEffects;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.FakePlayer;
 
@@ -37,7 +37,7 @@ public class MagnetGloveItem extends BaseItem {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         if(CAPABILITY_MAGNET == null) {
             return null;
         }
@@ -45,25 +45,25 @@ public class MagnetGloveItem extends BaseItem {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         if(playerIn.isShiftKeyDown()) {
             ItemStack stack = playerIn.getItemInHand(handIn);
             stack.getCapability(CAPABILITY_MAGNET).ifPresent((cap) -> {
                 boolean state = cap.isActivated();
                 cap.setActivation(!state);
-                worldIn.playSound((PlayerEntity)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0F, 1.0F);
             });
         }
         return super.use(worldIn, playerIn, handIn);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(entityIn instanceof PlayerEntity && !(entityIn instanceof FakePlayer)) {
-            if(itemSlot >= 0 && itemSlot <= PlayerInventory.getSelectionSize()) {
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if(entityIn instanceof Player && !(entityIn instanceof FakePlayer)) {
+            if(itemSlot >= 0 && itemSlot <= Inventory.getSelectionSize()) {
                 IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
                 if (magnetCap != null && magnetCap.isActivated()) {
-                    ((PlayerEntity)entityIn).addEffect(new EffectInstance(ForceEffects.MAGNET.get(), 20, 1, true, false));
+                    ((Player)entityIn).addEffect(new MobEffectInstance(ForceEffects.MAGNET.get(), 20, 1, true, false));
                 }
             }
         }
@@ -71,14 +71,14 @@ public class MagnetGloveItem extends BaseItem {
 
     // ShareTag for server->client capability data sync
     @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-        CompoundNBT nbt = super.getShareTag(stack);
+    public CompoundTag getShareTag(ItemStack stack) {
+        CompoundTag nbt = super.getShareTag(stack);
 
         IMagnet cap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
         if(cap != null) {
-            CompoundNBT shareTag = MagnetStorage.serializeNBT(cap);
+            CompoundTag shareTag = MagnetStorage.serializeNBT(cap);
             if(nbt == null) {
-                nbt = new CompoundNBT();
+                nbt = new CompoundTag();
             }
             nbt.put(Reference.MOD_ID, shareTag);
         }
@@ -86,21 +86,21 @@ public class MagnetGloveItem extends BaseItem {
     }
 
     @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
         if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
             return;
         }
 
         IMagnet cap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
         if(cap != null) {
-            INBT shareTag = nbt.get(Reference.MOD_ID);
+            Tag shareTag = nbt.get(Reference.MOD_ID);
             MagnetStorage.deserializeNBT(cap, shareTag);
         }
         super.readShareTag(stack, nbt);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
         MagnetStorage.attachInformation(stack, lores);
         super.appendHoverText(stack, worldIn, lores, flagIn);
     }

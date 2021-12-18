@@ -3,11 +3,11 @@ package com.mrbysco.forcecraft.handlers;
 import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.entities.CreeperTotEntity;
 import com.mrbysco.forcecraft.registry.ForceEntities;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -16,20 +16,19 @@ public class ForceDeathHandler {
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
 		LivingEntity livingEntity = event.getEntityLiving();
-		World world = event.getEntity().level;
+		Level world = event.getEntity().level;
 		if (world.isClientSide) return;
 
 		if(event.getSource() != null && event.getSource() == ForceCraft.LIQUID_FORCE_DAMAGE) {
 			// Killed by Liquid Force
-			if(livingEntity instanceof MobEntity) {
-				MobEntity mob = (MobEntity)livingEntity;
-				CompoundNBT mobData = mob.getPersistentData();
+			if(livingEntity instanceof Mob mob) {
+				CompoundTag mobData = mob.getPersistentData();
 				if(!mobData.contains(SPAWNED_TAG)) {
 					if(livingEntity.getType().getRegistryName().equals(EntityType.CREEPER.getRegistryName())) {
 						CreeperTotEntity totEntity = ForceEntities.CREEPER_TOT.get().create(world);
 						if(totEntity != null) {
-							totEntity.absMoveTo(mob.getX(), mob.getY(), mob.getZ(), mob.yRot, mob.xRot);
-							CompoundNBT persistentData = totEntity.getPersistentData();
+							totEntity.absMoveTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), mob.getXRot());
+							CompoundTag persistentData = totEntity.getPersistentData();
 							persistentData.putBoolean(SPAWNED_TAG, true);
 							world.addFreshEntity(totEntity);
 						}
@@ -47,12 +46,12 @@ public class ForceDeathHandler {
 									stack.shrink(64);
 								}
 							});
-							MobEntity childMob = (MobEntity) mob.getType().create(world);
+							Mob childMob = (Mob) mob.getType().create(world);
 							if(childMob != null) {
 								childMob.setBaby(true);
-								childMob.absMoveTo(mob.getX(), mob.getY(), mob.getZ(), mob.yRot, mob.xRot);
+								childMob.absMoveTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), mob.getXRot());
 
-								CompoundNBT persistentData = childMob.getPersistentData();
+								CompoundTag persistentData = childMob.getPersistentData();
 								persistentData.putBoolean(SPAWNED_TAG, true);
 								world.addFreshEntity(childMob);
 							}

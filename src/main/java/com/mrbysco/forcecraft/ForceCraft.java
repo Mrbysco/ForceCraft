@@ -24,12 +24,13 @@ import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceLootModifiers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
+import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.world.WorldGenHandler;
 import com.mrbysco.forcecraft.world.feature.ForceFeatureConfigs;
 import com.mrbysco.forcecraft.world.feature.ForceFeatures;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
@@ -52,7 +53,7 @@ public class ForceCraft {
     public static final DamageSource BLEEDING_DAMAGE = new DamageSource(Reference.MOD_ID + ".bleeding").setMagic().bypassArmor();
     public static final DamageSource LIQUID_FORCE_DAMAGE = new DamageSource(Reference.MOD_ID + ".liquid_force").setMagic().bypassArmor();
 
-    public static final ItemGroup creativeTab = (new ItemGroup(Reference.MOD_ID) {
+    public static final CreativeModeTab creativeTab = (new CreativeModeTab(Reference.MOD_ID) {
         @OnlyIn(Dist.CLIENT)
         public ItemStack makeIcon() {
             return new ItemStack(ForceRegistry.FORCE_GEM.get());
@@ -70,7 +71,7 @@ public class ForceCraft {
         ForceFluids.registerFluids();
 
         ForceRegistry.BLOCKS.register(eventBus);
-        ForceRegistry.TILES.register(eventBus);
+        ForceRegistry.BLOCK_ENTITIES.register(eventBus);
         ForceRegistry.ITEMS.register(eventBus);
         ForceSounds.SOUND_EVENTS.register(eventBus);
         ForceFluids.FLUIDS.register(eventBus);
@@ -106,6 +107,7 @@ public class ForceCraft {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        ForceTags.initialize();
         PacketHandler.init();
         CapabilityHandler.register();
         ForceEntities.registerSpawnPlacement();

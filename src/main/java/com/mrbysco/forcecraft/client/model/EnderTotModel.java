@@ -1,10 +1,10 @@
 package com.mrbysco.forcecraft.client.model;
 
 import com.mrbysco.forcecraft.entities.EnderTotEntity;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
 
-public class EnderTotModel<T extends EnderTotEntity> extends BipedModel<T> {
+public class EnderTotModel<T extends EnderTotEntity> extends HumanoidModel<T> {
 	public boolean isCarrying;
 	public boolean isAttacking;
 
@@ -12,29 +12,29 @@ public class EnderTotModel<T extends EnderTotEntity> extends BipedModel<T> {
 		super(0.0F, 8F, 64, 32);
 		float f = 8F;
 
-		hat = new ModelRenderer(this);
+		hat = new ModelPart(this);
 		hat.setPos(0.0F, f, 0.0F);
 		hat.texOffs(0, 16).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, scale - 0.5F, false);
 
-		body = new ModelRenderer(this);
+		body = new ModelPart(this);
 		body.setPos(0.0F, f, 0.0F);
 		body.texOffs(32, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 8.0F, 4.0F, scale, false);
 
-		rightArm = new ModelRenderer(this);
+		rightArm = new ModelPart(this);
 		rightArm.setPos(5.0F, 9.0F, 0.0F);
 		setRotationAngle(rightArm, 0.0F, 0.0F, -0.1F);
 		rightArm.texOffs(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, scale, false);
 
-		leftArm = new ModelRenderer(this);
+		leftArm = new ModelPart(this);
 		leftArm.setPos(-5.0F, 9.0F, 0.0F);
 		setRotationAngle(leftArm, 0.0F, 0.0F, 0.1F);
 		leftArm.texOffs(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, scale, true);
 
-		rightLeg = new ModelRenderer(this);
+		rightLeg = new ModelPart(this);
 		rightLeg.setPos(2.0F, 16.0F, 0.0F);
 		rightLeg.texOffs(56, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F, scale, false);
 
-		leftLeg = new ModelRenderer(this);
+		leftLeg = new ModelPart(this);
 		leftLeg.setPos(-2.0F, 16.0F, 0.0F);
 		leftLeg.texOffs(56, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F, scale, true);
 	}
@@ -116,7 +116,7 @@ public class EnderTotModel<T extends EnderTotEntity> extends BipedModel<T> {
 	}
 
 
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+	public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
 		modelRenderer.xRot = x;
 		modelRenderer.yRot = y;
 		modelRenderer.zRot = z;

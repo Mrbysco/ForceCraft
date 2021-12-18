@@ -8,16 +8,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
@@ -44,12 +44,12 @@ public class ShapedNoRemainderRecipe extends ShapedRecipe {
 	}
 
 	@Override
-	public IRecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<?> getSerializer() {
 		return ForceRecipes.SHAPED_NO_REMAINDER_SERIALIZER.get();
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
+	public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
 		NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 
 		return nonnulllist;
@@ -140,7 +140,7 @@ public class ShapedNoRemainderRecipe extends ShapedRecipe {
 			throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
 		} else {
 			for(int i = 0; i < astring.length; ++i) {
-				String s = JSONUtils.convertToString(jsonArr.get(i), "pattern[" + i + "]");
+				String s = GsonHelper.convertToString(jsonArr.get(i), "pattern[" + i + "]");
 				if (s.length() > MAX_WIDTH) {
 					throw new JsonSyntaxException("Invalid pattern: too many columns, " + MAX_WIDTH + " is maximum");
 				}
@@ -179,7 +179,7 @@ public class ShapedNoRemainderRecipe extends ShapedRecipe {
 	}
 
 	public static ItemStack deserializeItem(JsonObject object) {
-		String s = JSONUtils.getAsString(object, "item");
+		String s = GsonHelper.getAsString(object, "item");
 		// the non-deprecated version. same one used by CraftingHelper
 		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(s));
         if (item == null) {
@@ -192,19 +192,19 @@ public class ShapedNoRemainderRecipe extends ShapedRecipe {
 		}
 	}
 
-	public static class SerializerShapedNoRemainderRecipe extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>>  implements IRecipeSerializer<ShapedNoRemainderRecipe> {
+	public static class SerializerShapedNoRemainderRecipe extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>>  implements RecipeSerializer<ShapedNoRemainderRecipe> {
 		public ShapedNoRemainderRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			String s = JSONUtils.getAsString(json, "group", "");
-			Map<String, Ingredient> map = ShapedNoRemainderRecipe.deserializeKey(JSONUtils.getAsJsonObject(json, "key"));
-			String[] astring = ShapedNoRemainderRecipe.shrink(ShapedNoRemainderRecipe.patternFromJson(JSONUtils.getAsJsonArray(json, "pattern")));
+			String s = GsonHelper.getAsString(json, "group", "");
+			Map<String, Ingredient> map = ShapedNoRemainderRecipe.deserializeKey(GsonHelper.getAsJsonObject(json, "key"));
+			String[] astring = ShapedNoRemainderRecipe.shrink(ShapedNoRemainderRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
 			int i = astring[0].length();
 			int j = astring.length;
 			NonNullList<Ingredient> nonnulllist = ShapedNoRemainderRecipe.deserializeIngredients(astring, map, i, j);
-			ItemStack itemstack = ShapedNoRemainderRecipe.deserializeItem(JSONUtils.getAsJsonObject(json, "result"));
+			ItemStack itemstack = ShapedNoRemainderRecipe.deserializeItem(GsonHelper.getAsJsonObject(json, "result"));
 			return new ShapedNoRemainderRecipe(recipeId, s, i, j, nonnulllist, itemstack);
 		}
 
-		public ShapedNoRemainderRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public ShapedNoRemainderRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			int i = buffer.readVarInt();
 			int j = buffer.readVarInt();
 			String s = buffer.readUtf(32767);
@@ -218,7 +218,7 @@ public class ShapedNoRemainderRecipe extends ShapedRecipe {
 			return new ShapedNoRemainderRecipe(recipeId, s, i, j, nonnulllist, itemstack);
 		}
 
-		public void toNetwork(PacketBuffer buffer, ShapedNoRemainderRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, ShapedNoRemainderRecipe recipe) {
 			buffer.writeVarInt(recipe.recipeWidth);
 			buffer.writeVarInt(recipe.recipeHeight);
 			buffer.writeUtf(recipe.group);

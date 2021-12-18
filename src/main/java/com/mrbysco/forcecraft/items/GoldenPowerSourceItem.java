@@ -1,6 +1,8 @@
 package com.mrbysco.forcecraft.items;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import org.jetbrains.annotations.Nullable;
 
 public class GoldenPowerSourceItem extends BaseItem{
 	public GoldenPowerSourceItem(Properties properties) {
@@ -8,7 +10,7 @@ public class GoldenPowerSourceItem extends BaseItem{
 	}
 
 	@Override
-	public int getBurnTime(ItemStack itemStack) {
+	public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
 		return 2000;
 	}
 }

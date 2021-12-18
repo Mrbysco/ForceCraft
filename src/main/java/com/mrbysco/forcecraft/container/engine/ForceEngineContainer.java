@@ -5,30 +5,30 @@ import com.mrbysco.forcecraft.container.engine.slot.OutputSlot;
 import com.mrbysco.forcecraft.container.engine.slot.ThrottleSlot;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.tiles.ForceEngineTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IntReferenceHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import java.util.Objects;
 
-public class ForceEngineContainer extends Container {
+public class ForceEngineContainer extends AbstractContainerMenu {
 	private ForceEngineTile tile;
-	private PlayerEntity player;
+	private Player player;
 
-	public ForceEngineContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
+	public ForceEngineContainer(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
 		this(windowId, playerInventory, getTileEntity(playerInventory, data));
 	}
 
-	private static ForceEngineTile getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
+	private static ForceEngineTile getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
 		Objects.requireNonNull(data, "data cannot be null!");
-		final TileEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
+		final BlockEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 
 		if (tileAtPos instanceof ForceEngineTile) {
 			return (ForceEngineTile) tileAtPos;
@@ -37,7 +37,7 @@ public class ForceEngineContainer extends Container {
 		throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
 	}
 
-	public ForceEngineContainer(int id, PlayerInventory playerInventoryIn, ForceEngineTile te) {
+	public ForceEngineContainer(int id, Inventory playerInventoryIn, ForceEngineTile te) {
 		super(ForceContainers.FORCE_ENGINE.get(), id);
 		this.tile = te;
 		this.player = playerInventoryIn.player;
@@ -68,7 +68,7 @@ public class ForceEngineContainer extends Container {
 	private void trackFluids() {
 		// Dedicated server ints are actually truncated to short so we need to split our integer here (split our 32 bit integer into two 16 bit integers)
 		//Fuel Tank
-		addDataSlot(new IntReferenceHolder() {
+		addDataSlot(new DataSlot() {
 			@Override
 			public int get() {
 				return tile.getFuelAmount() & 0xffff;
@@ -80,7 +80,7 @@ public class ForceEngineContainer extends Container {
 				tile.setFuelAmount(fluidStored + (value & 0xffff));
 			}
 		});
-		addDataSlot(new IntReferenceHolder() {
+		addDataSlot(new DataSlot() {
 			@Override
 			public int get() {
 				return (tile.getFuelAmount() >> 16) & 0xffff;
@@ -94,7 +94,7 @@ public class ForceEngineContainer extends Container {
 		});
 
 		//Throttle Tank
-		addDataSlot(new IntReferenceHolder() {
+		addDataSlot(new DataSlot() {
 			@Override
 			public int get() {
 				return tile.getThrottleAmount() & 0xffff;
@@ -106,7 +106,7 @@ public class ForceEngineContainer extends Container {
 				tile.setThrottleAmount(fluidStored + (value & 0xffff));
 			}
 		});
-		addDataSlot(new IntReferenceHolder() {
+		addDataSlot(new DataSlot() {
 			@Override
 			public int get() {
 				return (tile.getThrottleAmount() >> 16) & 0xffff;
@@ -125,12 +125,12 @@ public class ForceEngineContainer extends Container {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		return this.tile.isUsableByPlayer(playerIn);
 	}
 
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 

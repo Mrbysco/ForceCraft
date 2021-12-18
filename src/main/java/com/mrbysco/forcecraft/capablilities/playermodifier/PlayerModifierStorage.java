@@ -1,8 +1,8 @@
 package com.mrbysco.forcecraft.capablilities.playermodifier;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -10,8 +10,8 @@ import javax.annotation.Nullable;
 public class PlayerModifierStorage implements Capability.IStorage<IPlayerModifier> {
     @Nullable
     @Override
-    public INBT writeNBT(Capability<IPlayerModifier> capability, IPlayerModifier instance, Direction side) {
-        CompoundNBT nbt = new CompoundNBT();
+    public Tag writeNBT(Capability<IPlayerModifier> capability, IPlayerModifier instance, Direction side) {
+        CompoundTag nbt = new CompoundTag();
 
         nbt.putFloat("attackDamage", instance.getAttackDamage());
         nbt.putFloat("wingPower", instance.getWingPower());
@@ -28,9 +28,8 @@ public class PlayerModifierStorage implements Capability.IStorage<IPlayerModifie
     }
 
     @Override
-    public void readNBT(Capability<IPlayerModifier> capability, IPlayerModifier instance, Direction side, INBT nbtIn) {
-        if(nbtIn instanceof CompoundNBT){
-            CompoundNBT nbt = ((CompoundNBT) nbtIn);
+    public void readNBT(Capability<IPlayerModifier> capability, IPlayerModifier instance, Direction side, Tag nbtIn) {
+        if(nbtIn instanceof CompoundTag nbt){
 
             instance.setAttackDamage(nbt.getFloat("attackDamage"));
             instance.setWingPower(nbt.getFloat("wingPower"));

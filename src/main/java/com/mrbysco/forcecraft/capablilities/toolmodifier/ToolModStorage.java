@@ -6,14 +6,14 @@ import com.mrbysco.forcecraft.items.tools.ForcePickaxeItem;
 import com.mrbysco.forcecraft.items.tools.ForceRodItem;
 import com.mrbysco.forcecraft.items.tools.ForceShearsItem;
 import com.mrbysco.forcecraft.items.tools.ForceShovelItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -26,66 +26,66 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 	public ToolModStorage() {
 	}
 
-	public static void attachInformation(ItemStack stack, List<ITextComponent> tooltip) {
+	public static void attachInformation(ItemStack stack, List<Component> tooltip) {
 		stack.getCapability(CAPABILITY_TOOLMOD).ifPresent(cap -> {
 			Item item = stack.getItem();
 
 			if (cap.getSpeedLevel() > 0) {
 				if (item instanceof ForceBowItem || item instanceof ForceArmorItem || item instanceof ForceRodItem) {
-					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()).withStyle(TextFormatting.YELLOW));
+					tooltip.add(new TranslatableComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()).withStyle(ChatFormatting.YELLOW));
 				}
 			}
 			if (cap.hasLumberjack()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.lumberjack").withStyle(TextFormatting.YELLOW));
+				tooltip.add(new TranslatableComponent("item.infuser.tooltip.lumberjack").withStyle(ChatFormatting.YELLOW));
 			}
 			if(cap.getLuckLevel() > 0) {
 				if(item instanceof ForceBowItem || item instanceof ForceArmorItem) {
-					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.luck" + cap.getLuckLevel()).withStyle(TextFormatting.GREEN));
+					tooltip.add(new TranslatableComponent("item.infuser.tooltip.luck" + cap.getLuckLevel()).withStyle(ChatFormatting.GREEN));
 				}
 			}
 			if(cap.getBaneLevel() > 0) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bane").withStyle(TextFormatting.LIGHT_PURPLE));
+				tooltip.add(new TranslatableComponent("item.infuser.tooltip.bane").withStyle(ChatFormatting.LIGHT_PURPLE));
 			}
 //			if (cap.getForceLevel() > 0) {
 //				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.force" + cap.getForceLevel()));
 //			}
 			if (cap.getSturdyLevel() > 0) {
 				if(stack.getItem() instanceof ForceArmorItem) {
-					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sturdy" + cap.getSturdyLevel()).withStyle(TextFormatting.DARK_PURPLE));
+					tooltip.add(new TranslatableComponent("item.infuser.tooltip.sturdy" + cap.getSturdyLevel()).withStyle(ChatFormatting.DARK_PURPLE));
 				}
 			}
 			if (cap.hasWing()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.wing"));
+				tooltip.add(new TranslatableComponent("item.infuser.tooltip.wing"));
 			}
 			if (cap.hasBleed()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bleed" + cap.getBleedLevel()).withStyle(TextFormatting.RED));
+				tooltip.add(new TranslatableComponent("item.infuser.tooltip.bleed" + cap.getBleedLevel()).withStyle(ChatFormatting.RED));
 			}
 			if (cap.hasRainbow()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.rainbow").withStyle(TextFormatting.GOLD));
+				tooltip.add(new TranslatableComponent("item.infuser.tooltip.rainbow").withStyle(ChatFormatting.GOLD));
 			}
 			if (cap.hasHeat()) {
 				if(item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceShearsItem || item instanceof ForceArmorItem) {
-					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.heat").withStyle(TextFormatting.RED));
+					tooltip.add(new TranslatableComponent("item.infuser.tooltip.heat").withStyle(ChatFormatting.RED));
 				}
 			}
 			if (cap.hasCamo()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.camo").withStyle(TextFormatting.DARK_GREEN));
+				tooltip.add(new TranslatableComponent("item.infuser.tooltip.camo").withStyle(ChatFormatting.DARK_GREEN));
 			}
 			if (cap.hasEnder()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender").withStyle(TextFormatting.DARK_PURPLE));
+				tooltip.add(new TranslatableComponent("item.infuser.tooltip.ender").withStyle(ChatFormatting.DARK_PURPLE));
 			}
 			if (cap.hasFreezing()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.freezing").withStyle(TextFormatting.BLUE));
+				tooltip.add(new TranslatableComponent("item.infuser.tooltip.freezing").withStyle(ChatFormatting.BLUE));
 			}
 			if (cap.hasTreasure()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.treasure").withStyle(TextFormatting.GOLD));
+				tooltip.add(new TranslatableComponent("item.infuser.tooltip.treasure").withStyle(ChatFormatting.GOLD));
 			}
 			if (cap.hasLight()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.light").withStyle(TextFormatting.GOLD));
+				tooltip.add(new TranslatableComponent("item.infuser.tooltip.light").withStyle(ChatFormatting.GOLD));
 			}
 			if (cap.hasSharp()) {
 				if(stack.getItem() instanceof ForceArmorItem) {
-					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sharp").withStyle(TextFormatting.GOLD));
+					tooltip.add(new TranslatableComponent("item.infuser.tooltip.sharp").withStyle(ChatFormatting.GOLD));
 				}
 			}
 		});
@@ -93,21 +93,21 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 
 	@Nullable
 	@Override
-	public INBT writeNBT(Capability<IToolModifier> capability, IToolModifier instance, Direction side) {
-		CompoundNBT nbt = serializeNBT(instance);
+	public Tag writeNBT(Capability<IToolModifier> capability, IToolModifier instance, Direction side) {
+		CompoundTag nbt = serializeNBT(instance);
 		return nbt;
 	}
 
 	@Override
-	public void readNBT(Capability<IToolModifier> capability, IToolModifier instance, Direction side, INBT nbtIn) {
+	public void readNBT(Capability<IToolModifier> capability, IToolModifier instance, Direction side, Tag nbtIn) {
 		deserializeNBT(instance, nbtIn);
 	}
 
-	public static CompoundNBT serializeNBT(IToolModifier instance) {
+	public static CompoundTag serializeNBT(IToolModifier instance) {
 		if (instance == null) {
 			return null;
 		}
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		// Speed
 		nbt.putInt("speed", instance.getSpeedLevel());
 		// Heat
@@ -147,9 +147,8 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 		return nbt;
 	}
 
-	public static void deserializeNBT(IToolModifier instance, INBT nbtIn) {
-		if (nbtIn instanceof CompoundNBT) {
-			CompoundNBT nbt = (CompoundNBT) nbtIn;
+	public static void deserializeNBT(IToolModifier instance, Tag nbtIn) {
+		if (nbtIn instanceof CompoundTag nbt) {
 			instance.setSpeed(nbt.getInt("speed"));
 			instance.setHeat(nbt.getBoolean("heat"));
 			instance.setForce(nbt.getInt("force"));

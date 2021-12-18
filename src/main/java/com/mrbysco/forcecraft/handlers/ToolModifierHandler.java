@@ -5,15 +5,15 @@ import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.util.MobUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.CreeperSwellGoal;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.SwellGoal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.Mth;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -32,8 +32,8 @@ public class ToolModifierHandler {
 
 		LivingEntity target = event.getEntityLiving();
 		Entity trueSource = source.getEntity();
-		if(trueSource instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)source.getEntity();
+		if(trueSource instanceof Player) {
+			Player player = (Player)source.getEntity();
 			boolean appliedBane = false;
 
 			int bleedLevel = 0;
@@ -69,15 +69,14 @@ public class ToolModifierHandler {
 				}
 
 				if(playerCap.getAttackDamage() > 0 && player.getMainHandItem().isEmpty()) {
-					player.level.playSound((PlayerEntity)null, target.getX(), target.getY(), target.getZ(), ForceSounds.FORCE_PUNCH.get(), player.getSoundSource(), 1.0F, 1.0F);
+					player.level.playSound((Player)null, target.getX(), target.getY(), target.getZ(), ForceSounds.FORCE_PUNCH.get(), player.getSoundSource(), 1.0F, 1.0F);
 					event.setAmount(damage);
 				}
 			}
 
 		}
 
-		if(target instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)target;
+		if(target instanceof Player player) {
 			int sturdyLevel = 0;
 			for(ItemStack armorStack : player.getArmorSlots()) {
 				IToolModifier modifierCap = armorStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
@@ -90,26 +89,24 @@ public class ToolModifierHandler {
 				double percentage = sturdyLevel * (perArmor / 4);
 				float oldDamage = event.getAmount();
 				float newDamage = (float)(oldDamage - (oldDamage * percentage));
-				event.setAmount(MathHelper.clamp(newDamage, 1.0F, Float.MAX_VALUE));
+				event.setAmount(Mth.clamp(newDamage, 1.0F, Float.MAX_VALUE));
 			}
 		}
 	}
 
 	private void applyBane(LivingEntity target) {
-		if(target instanceof CreeperEntity){
-			CreeperEntity creeper = ((CreeperEntity) target);
+		if(target instanceof Creeper creeper){
 			creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
 				if(entityCap.canExplode()){
 					creeper.setSwellDir(-1);
-					creeper.getEntityData().set(CreeperEntity.DATA_IS_IGNITED, false);
+					creeper.getEntityData().set(Creeper.DATA_IS_IGNITED, false);
 					entityCap.setExplodeAbility(false);
-					creeper.goalSelector.availableGoals.removeIf(goal -> goal.getGoal() instanceof CreeperSwellGoal);
+					creeper.goalSelector.availableGoals.removeIf(goal -> goal.getGoal() instanceof SwellGoal);
 //					ForceCraft.LOGGER.info("Added Bane to " + target.getName());
 				}
 			});
 		}
-		if(target instanceof EndermanEntity){
-			EndermanEntity enderman = ((EndermanEntity) target);
+		if(target instanceof EnderMan enderman){
 			enderman.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
 				if(entityCap.canTeleport()){
 					entityCap.setTeleportAbility(false);

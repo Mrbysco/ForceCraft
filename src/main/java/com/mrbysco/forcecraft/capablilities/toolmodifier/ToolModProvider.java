@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.capablilities.toolmodifier;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
-public class ToolModProvider implements ICapabilitySerializable<INBT>, ICapabilityProvider {
+public class ToolModProvider implements ICapabilitySerializable<Tag>, ICapabilityProvider {
     private LazyOptional<IToolModifier> instance;
     private IToolModifier tool;
 
@@ -28,12 +28,12 @@ public class ToolModProvider implements ICapabilitySerializable<INBT>, ICapabili
     }
 
     @Override
-    public INBT serializeNBT() {
+    public Tag serializeNBT() {
         return CAPABILITY_TOOLMOD.writeNBT(tool, null);
     }
 
     @Override
-    public void deserializeNBT(INBT nbt) {
+    public void deserializeNBT(Tag nbt) {
         CAPABILITY_TOOLMOD.readNBT(tool, null, nbt);
     }
 

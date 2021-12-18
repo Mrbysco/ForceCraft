@@ -1,18 +1,18 @@
 package com.mrbysco.forcecraft.capablilities.forcerod;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -24,34 +24,34 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
     public ForceRodStorage() {
     }
 
-    public static void attachInformation(ItemStack stack, List<ITextComponent> tooltip) {
+    public static void attachInformation(ItemStack stack, List<Component> tooltip) {
         stack.getCapability(CAPABILITY_FORCEROD).ifPresent(cap -> {
             if(cap.hasHealing()) {
-                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.healing" + cap.getHealingLevel()).withStyle(TextFormatting.RED));
+                tooltip.add(new TranslatableComponent("item.infuser.tooltip.healing" + cap.getHealingLevel()).withStyle(ChatFormatting.RED));
             }
             if(cap.getSpeedLevel() > 0) {
-                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
+                tooltip.add(new TranslatableComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
             }
             if(cap.hasCamoModifier()) {
-                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.camo").withStyle(TextFormatting.DARK_GREEN));
+                tooltip.add(new TranslatableComponent("item.infuser.tooltip.camo").withStyle(ChatFormatting.DARK_GREEN));
             }
             if(cap.hasEnderModifier()) {
-                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender").withStyle(TextFormatting.DARK_PURPLE));
+                tooltip.add(new TranslatableComponent("item.infuser.tooltip.ender").withStyle(ChatFormatting.DARK_PURPLE));
 
                 if(cap.getHomeLocation() != null) {
                     GlobalPos globalPos = cap.getHomeLocation();
                     BlockPos pos = globalPos.pos();
-                    tooltip.add(new TranslationTextComponent("forcecraft.ender_rod.location", pos.getX(), pos.getY(), pos.getZ(), globalPos.dimension().location()).withStyle(TextFormatting.YELLOW));
+                    tooltip.add(new TranslatableComponent("forcecraft.ender_rod.location", pos.getX(), pos.getY(), pos.getZ(), globalPos.dimension().location()).withStyle(ChatFormatting.YELLOW));
                 } else {
-                    tooltip.add(new TranslationTextComponent("forcecraft.ender_rod.unset").withStyle(TextFormatting.RED));
+                    tooltip.add(new TranslatableComponent("forcecraft.ender_rod.unset").withStyle(ChatFormatting.RED));
                 }
-                tooltip.add(new TranslationTextComponent("forcecraft.ender_rod.text").withStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslatableComponent("forcecraft.ender_rod.text").withStyle(ChatFormatting.GRAY));
             }
             if(cap.hasSightModifier()) {
-                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sight").withStyle(TextFormatting.LIGHT_PURPLE));
+                tooltip.add(new TranslatableComponent("item.infuser.tooltip.sight").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             if(cap.hasLight()) {
-                tooltip.add(new TranslationTextComponent("item.infuser.tooltip.light").withStyle(TextFormatting.YELLOW));
+                tooltip.add(new TranslatableComponent("item.infuser.tooltip.light").withStyle(ChatFormatting.YELLOW));
             }
         });
     }
@@ -59,21 +59,21 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
 
     @Nullable
     @Override
-    public INBT writeNBT(Capability<IForceRodModifier> capability, IForceRodModifier instance, Direction side) {
-        CompoundNBT nbt = serializeNBT(instance);
+    public Tag writeNBT(Capability<IForceRodModifier> capability, IForceRodModifier instance, Direction side) {
+        CompoundTag nbt = serializeNBT(instance);
         return nbt;
     }
 
     @Override
-    public void readNBT(Capability<IForceRodModifier> capability, IForceRodModifier instance, Direction side, INBT nbtIn) {
+    public void readNBT(Capability<IForceRodModifier> capability, IForceRodModifier instance, Direction side, Tag nbtIn) {
         deserializeNBT(instance, nbtIn);
     }
 
-    public static CompoundNBT serializeNBT(IForceRodModifier instance) {
+    public static CompoundTag serializeNBT(IForceRodModifier instance) {
         if (instance == null) {
             return null;
         }
-        CompoundNBT nbt  = new CompoundNBT();
+        CompoundTag nbt  = new CompoundTag();
         nbt.putInt("speed", instance.getSpeedLevel());
         nbt.putInt("healing", instance.getHealingLevel());
 
@@ -90,9 +90,8 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
         return nbt;
     }
 
-    public static void deserializeNBT(IForceRodModifier instance, INBT nbtIn) {
-        if (nbtIn instanceof CompoundNBT) {
-            CompoundNBT nbt = (CompoundNBT) nbtIn;
+    public static void deserializeNBT(IForceRodModifier instance, Tag nbtIn) {
+        if (nbtIn instanceof CompoundTag nbt) {
             instance.setSpeed(nbt.getInt("speed"));
             instance.setHealing(nbt.getInt("healing"));
 
@@ -100,7 +99,7 @@ public class ForceRodStorage implements Capability.IStorage<IForceRodModifier> {
                 BlockPos pos = BlockPos.of(nbt.getLong("HomeLocation"));
                 ResourceLocation location = ResourceLocation.tryParse(nbt.getString("HomeDimension"));
                 if(location != null) {
-                    RegistryKey<World> dimension = RegistryKey.create(Registry.DIMENSION_REGISTRY, location);
+                    ResourceKey<Level> dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, location);
                     instance.setHomeLocation(GlobalPos.of(dimension, pos));
                 }
             }

@@ -2,35 +2,35 @@ package com.mrbysco.forcecraft.entities;
 
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
-public class CreeperTotEntity extends CreeperEntity {
+public class CreeperTotEntity extends Creeper {
 
-	public CreeperTotEntity(EntityType<? extends CreeperEntity> type, World worldIn) {
+	public CreeperTotEntity(EntityType<? extends Creeper> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	public static AttributeModifierMap.MutableAttribute generateAttributes() {
-		return MonsterEntity.createMonsterAttributes()
+	public static AttributeSupplier.Builder generateAttributes() {
+		return Monster.createMonsterAttributes()
 				.add(Attributes.MOVEMENT_SPEED, 0.25D)
 				.add(Attributes.MAX_HEALTH, 4.0D);
 	}
 
 	@Override
-	public EntityType<? extends CreeperEntity> getType() {
+	public EntityType<? extends Creeper> getType() {
 		return ForceEntities.CREEPER_TOT.get();
 	}
 
@@ -57,15 +57,15 @@ public class CreeperTotEntity extends CreeperEntity {
 	}
 
 	public void summonFireworkParticles(ItemStack fireworkRocket, double yOffset) {
-		CompoundNBT compoundnbt = fireworkRocket.isEmpty() ? null : fireworkRocket.getTagElement("Fireworks");
-		Vector3d vector3d = this.getDeltaMovement();
+		CompoundTag compoundnbt = fireworkRocket.isEmpty() ? null : fireworkRocket.getTagElement("Fireworks");
+		Vec3 vector3d = this.getDeltaMovement();
 		this.level.createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), vector3d.x, vector3d.y, vector3d.z, compoundnbt);
 	}
 
 	public ItemStack getFirework() {
 		ItemStack firework = new ItemStack(Items.FIREWORK_ROCKET);
-		firework.setTag(new CompoundNBT());
-		CompoundNBT nbt = new CompoundNBT();
+		firework.setTag(new CompoundTag());
+		CompoundTag nbt = new CompoundTag();
 		nbt.putBoolean("Flicker", true);
 
 		int[] colors = new int[16];
@@ -75,10 +75,10 @@ public class CreeperTotEntity extends CreeperEntity {
 		nbt.putIntArray("Colors", colors);
 		nbt.putByte("Type", (byte) 0);
 
-		ListNBT explosions = new ListNBT();
+		ListTag explosions = new ListTag();
 		explosions.add(nbt);
 
-		CompoundNBT fireworkTag = new CompoundNBT();
+		CompoundTag fireworkTag = new CompoundTag();
 		fireworkTag.put("Explosions", explosions);
 		firework.getOrCreateTag().put("Fireworks", fireworkTag);
 
@@ -87,8 +87,8 @@ public class CreeperTotEntity extends CreeperEntity {
 
 	public ItemStack getCreeperFirework() {
 		ItemStack firework = new ItemStack(Items.FIREWORK_ROCKET);
-		firework.setTag(new CompoundNBT());
-		CompoundNBT nbt = new CompoundNBT();
+		firework.setTag(new CompoundTag());
+		CompoundTag nbt = new CompoundTag();
 		nbt.putBoolean("Flicker", true);
 
 		int[] colors = new int[1];
@@ -96,10 +96,10 @@ public class CreeperTotEntity extends CreeperEntity {
 		nbt.putIntArray("Colors", colors);
 		nbt.putByte("Type", (byte) 3);
 
-		ListNBT explosions = new ListNBT();
+		ListTag explosions = new ListTag();
 		explosions.add(nbt);
 
-		CompoundNBT fireworkTag = new CompoundNBT();
+		CompoundTag fireworkTag = new CompoundTag();
 		fireworkTag.put("Explosions", explosions);
 		firework.getOrCreateTag().put("Fireworks", fireworkTag);
 

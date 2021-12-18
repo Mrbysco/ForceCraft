@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.client.model;
 
 import com.mrbysco.forcecraft.entities.ColdPigEntity;
-import net.minecraft.client.renderer.entity.model.PigModel;
+import net.minecraft.client.model.PigModel;
 
 public class ColdPigModel<T extends ColdPigEntity> extends PigModel<T> {
 	private float headRotationAngleX;

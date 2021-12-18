@@ -7,20 +7,20 @@ import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
-import com.mrbysco.forcecraft.registry.material.ModToolMaterial;
+import com.mrbysco.forcecraft.registry.material.ModToolTiers;
 import com.mrbysco.forcecraft.util.ForceUtils;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.TickEvent;
@@ -39,12 +39,12 @@ import static com.mrbysco.forcecraft.util.ForceUtils.isLog;
 public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 
     public ForceAxeItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE, 0F, -3.1F, properties);
+        super(ModToolTiers.FORCE, 0F, -3.1F, properties);
     }
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
     	if(CAPABILITY_TOOLMOD == null) {
             return null;
         }
@@ -52,7 +52,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, PlayerEntity player) {
+    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
         IToolModifier toolModifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
         if(toolModifierCap != null) {
             if(toolModifierCap.hasLumberjack()) {
@@ -67,7 +67,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
         return false;
     }
 
-    public static boolean fellTree(ItemStack stack, BlockPos pos, PlayerEntity player){
+    public static boolean fellTree(ItemStack stack, BlockPos pos, Player player){
         if(player.getCommandSenderWorld().isClientSide) {
             return true;
         }
@@ -76,15 +76,15 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     }
 
     public static class TreeChopTask{
-        public final World world;
-        public final PlayerEntity player;
+        public final Level world;
+        public final Player player;
         public final ItemStack tool;
         public final int blocksPerTick;
 
         public Queue<BlockPos> blocks = Lists.newLinkedList();
         public Set<BlockPos> visited = new HashSet<>();
 
-        public TreeChopTask(ItemStack tool, BlockPos start, PlayerEntity player, int blocksPerTick) {
+        public TreeChopTask(ItemStack tool, BlockPos start, Player player, int blocksPerTick) {
             this.world = player.getCommandSenderWorld();
             this.player = player;
             this.tool = tool;
@@ -158,25 +158,25 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     
     // ShareTag for server->client capability data sync
     @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-    	CompoundNBT nbt = super.getShareTag(stack);
+    public CompoundTag getShareTag(ItemStack stack) {
+    	CompoundTag nbt = super.getShareTag(stack);
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-			CompoundNBT shareTag = ToolModStorage.serializeNBT(cap);
+			CompoundTag shareTag = ToolModStorage.serializeNBT(cap);
 			nbt.put(Reference.MOD_ID, shareTag);
 		}
         return nbt;
     }
 
     @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
     	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
     		return;
     	}
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-	    	INBT shareTag = nbt.get(Reference.MOD_ID);
+	    	Tag shareTag = nbt.get(Reference.MOD_ID);
 	    	ToolModStorage.deserializeNBT(cap, shareTag);
 		}
         super.readShareTag(stack, nbt);
@@ -193,7 +193,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     }
     
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
     	ForceToolData fd = new ForceToolData(stack);
     	fd.attachInformation(lores);
     	ToolModStorage.attachInformation(stack, lores);

@@ -1,16 +1,16 @@
 package com.mrbysco.forcecraft.registry;
 
 import com.mrbysco.forcecraft.Reference;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ForceFluids {
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, Reference.MOD_ID);
@@ -31,7 +31,7 @@ public class ForceFluids {
             .viscosity(1000)
             .temperature(120)
             .color(0xFFFFFFFF)
-        ).bucket(ForceRegistry.BUCKET_FLUID_FORCE).block(() -> (FlowingFluidBlock) ForceRegistry.FORCE_FLUID_BLOCK.get());
+        ).bucket(ForceRegistry.BUCKET_FLUID_FORCE).block(() -> (LiquidBlock) ForceRegistry.FORCE_FLUID_BLOCK.get());
 
     public static void registerFluids(){
         FORCE_FLUID_SOURCE = FLUIDS.register("fluid_force_source", () -> new ForgeFlowingFluid.Source(FLUID_FORCE_PROPERTIES));

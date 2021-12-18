@@ -2,19 +2,19 @@ package com.mrbysco.forcecraft.items;
 
 import com.mrbysco.forcecraft.capablilities.experiencetome.ExperienceTomeProvider;
 import com.mrbysco.forcecraft.util.ForceUtils;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -31,17 +31,17 @@ public class ExperienceTomeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(!Screen.hasShiftDown()){
-  		  tooltip.add(new TranslationTextComponent("forcecraft.tooltip.press_shift"));
+  		  tooltip.add(new TranslatableComponent("forcecraft.tooltip.press_shift"));
             return;
         }
-        tooltip.add(new StringTextComponent(Float.toString(getExperience(stack)) + " / " + Float.toString(getMaxExperience(stack))));
+        tooltip.add(new TextComponent(Float.toString(getExperience(stack)) + " / " + Float.toString(getMaxExperience(stack))));
     }
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         if(CAPABILITY_EXPTOME == null) {
             return null;
         }
@@ -49,10 +49,10 @@ public class ExperienceTomeItem extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (ForceUtils.isFakePlayer(player) || hand != Hand.MAIN_HAND || world.isClientSide) {
-            return new ActionResult<>(ActionResultType.FAIL, stack);
+        if (ForceUtils.isFakePlayer(player) || hand != InteractionHand.MAIN_HAND || world.isClientSide) {
+            return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
         }
         int exp;
         int curLevel = player.experienceLevel;
@@ -85,22 +85,22 @@ public class ExperienceTomeItem extends Item {
                 modifyExperience(stack, exp);
             }
         }
-        return new ActionResult<>(ActionResultType.FAIL, stack);
+        return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
     }
 
-    public static int getPlayerExperience(PlayerEntity player) {
+    public static int getPlayerExperience(Player player) {
         return getTotalExpForLevel(player.experienceLevel) + getExtraPlayerExperience(player);
     }
 
-    public static int getLevelPlayerExperience(PlayerEntity player) {
+    public static int getLevelPlayerExperience(Player player) {
         return getTotalExpForLevel(player.experienceLevel);
     }
 
-    public static int getExtraPlayerExperience(PlayerEntity player) {
+    public static int getExtraPlayerExperience(Player player) {
         return Math.round(player.experienceProgress * player.getXpNeededForNextLevel());
     }
 
-    public static void setPlayerExperience(PlayerEntity player, int exp) {
+    public static void setPlayerExperience(Player player, int exp) {
         player.experienceLevel = 0;
         player.experienceProgress = 0.0F;
         player.totalExperience = 0;
@@ -108,12 +108,12 @@ public class ExperienceTomeItem extends Item {
         addExperienceToPlayer(player, exp);
     }
 
-    public static void setPlayerLevel(PlayerEntity player, int level) {
+    public static void setPlayerLevel(Player player, int level) {
         player.experienceLevel = level;
         player.experienceProgress = 0.0F;
     }
 
-    public static void addExperienceToPlayer(PlayerEntity player, int exp) {
+    public static void addExperienceToPlayer(Player player, int exp) {
         int i = Integer.MAX_VALUE - player.totalExperience;
 
         if (exp > i) {
@@ -126,7 +126,7 @@ public class ExperienceTomeItem extends Item {
         }
     }
 
-    public static void addExperienceLevelToPlayer(PlayerEntity player, int levels) {
+    public static void addExperienceLevelToPlayer(Player player, int levels) {
         player.experienceLevel += levels;
 
         if (player.experienceLevel < 0) {
@@ -148,7 +148,7 @@ public class ExperienceTomeItem extends Item {
         } else if (storedExp < 0) {
             storedExp = 0;
         }
-        CompoundNBT tag = stack.getOrCreateTag();
+        CompoundTag tag = stack.getOrCreateTag();
         tag.putInt("Experience", storedExp);
         stack.setTag(tag);
         return storedExp;
@@ -156,7 +156,7 @@ public class ExperienceTomeItem extends Item {
 
     public static int getExperience(ItemStack stack) {
         if (!stack.hasTag()) {
-            stack.setTag(new CompoundNBT());
+            stack.setTag(new CompoundTag());
         }
         return stack.getTag().getInt("Experience");
     }

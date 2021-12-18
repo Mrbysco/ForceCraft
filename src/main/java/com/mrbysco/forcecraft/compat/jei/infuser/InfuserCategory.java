@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.compat.jei.infuser;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
 import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
@@ -13,12 +13,12 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.util.Translator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +26,12 @@ import java.util.List;
 public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<InfuseRecipe> {
 	private final IDrawable background;
 	private final IDrawable icon;
-	private final String localizedName;
+	private final Component localizedName;
 
 	public InfuserCategory(IGuiHelper guiHelper) {
 		this.background = guiHelper.createDrawable(JeiCompat.RECIPE_INFUSER_JEI, 0, 0, 137, 109);
 		this.icon = guiHelper.createDrawableIngredient(new ItemStack(ForceRegistry.INFUSER.get()));
-		this.localizedName = Translator.translateToLocal("forcecraft.gui.jei.category.infuser");
+		this.localizedName = new TranslatableComponent("forcecraft.gui.jei.category.infuser");
 	}
 
 	@Override
@@ -90,15 +90,15 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 	}
 
 	@Override
-	public void draw(InfuseRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+	public void draw(InfuseRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 		Minecraft minecraft = Minecraft.getInstance();
-		FontRenderer font = minecraft.font;
-		font.draw(matrixStack, new TranslationTextComponent("forcecraft.gui.jei.category.infuser.tier", recipe.getTier().asInt()), 4, 4, 0xFFFFFFFF);
+		Font font = minecraft.font;
+		font.draw(matrixStack, new TranslatableComponent("forcecraft.gui.jei.category.infuser.tier", recipe.getTier().asInt()), 4, 4, 0xFFFFFFFF);
 
 	}
 
 	@Override
-	public String getTitle() {
+	public Component getTitle() {
 		return localizedName;
 	}
 

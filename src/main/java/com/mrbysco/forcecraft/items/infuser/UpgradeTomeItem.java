@@ -1,14 +1,14 @@
 package com.mrbysco.forcecraft.items.infuser;
 
 import com.mrbysco.forcecraft.items.BaseItem;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -20,12 +20,12 @@ public class UpgradeTomeItem extends BaseItem {
 	}
 
 	@Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 		UpgradeBookData bd = new UpgradeBookData(stack);
 	
-        TranslationTextComponent tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.tier");
-        tt.withStyle(Style.EMPTY.applyFormat(TextFormatting.AQUA));
+        TranslatableComponent tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.tier");
+        tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
         tt.append(" " + bd.getTier());
         if(!bd.getProgressCache().isEmpty()) {
         	tt.append(" : " + bd.getProgressCache());
@@ -33,29 +33,29 @@ public class UpgradeTomeItem extends BaseItem {
         tooltip.add(tt);  
 
         if(bd.getTier() == UpgradeBookTier.FINAL) {
-            tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.max");
-            tt.withStyle(Style.EMPTY.applyFormat(TextFormatting.AQUA));
+            tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.max");
+            tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
 		}
         else {
-	        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.points");
-	        tt.withStyle(Style.EMPTY.applyFormat(TextFormatting.AQUA));
+	        tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.points");
+	        tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
 	        tt.append(" " + bd.getPoints());
 	        tooltip.add(tt); 
         
-	        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.nexttier");
-	        tt.withStyle(Style.EMPTY.applyFormat(TextFormatting.AQUA));
+	        tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.nexttier");
+	        tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
 	        tt.append(" " + bd.nextTier());
 		}
 		tooltip.add(tt);
 
 
 		if(!Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("forcecraft.tooltip.press_shift"));
+			tooltip.add(new TranslatableComponent("forcecraft.tooltip.press_shift"));
 			return;
 		}
 
-		tooltip.add(new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.point_info"));
-		tt.withStyle(Style.EMPTY.applyFormat(TextFormatting.AQUA));
+		tooltip.add(new TranslatableComponent("item.forcecraft.upgrade_tome.tt.point_info"));
+		tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
 	}
 
 	public static void onModifierApplied(ItemStack bookInSlot, ItemStack modifier, ItemStack tool) {

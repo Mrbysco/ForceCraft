@@ -2,13 +2,13 @@ package com.mrbysco.forcecraft.items.heart;
 
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.registry.ForceSounds;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class RecoveryHeartItem extends BaseItem {
 
@@ -17,13 +17,12 @@ public class RecoveryHeartItem extends BaseItem {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 
-		if (!(entityIn instanceof PlayerEntity))
+		if (!(entityIn instanceof Player player))
 			return;
 
-		PlayerEntity player = (PlayerEntity) entityIn;
 		BlockPos pos = new BlockPos(player.getX(), player.getY() + player.getMyRidingOffset(), player.getZ());
 
 		int HEAL_AMT = 2;
@@ -32,14 +31,15 @@ public class RecoveryHeartItem extends BaseItem {
 			player.heal(HEAL_AMT);
 			stack.shrink(1);
 		}
-		player.level.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.HEART_PICKUP.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
+		player.level.playSound((Player) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.HEART_PICKUP.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 
 		for (int i1 = 0; i1 < 15; ++i1) {
-			double d0 = random.nextGaussian() * 0.02D;
-			double d1 = random.nextGaussian() * 0.02D;
-			double d2 = random.nextGaussian() * 0.02D;
+			double d0 = worldIn.random.nextGaussian() * 0.02D;
+			double d1 = worldIn.random.nextGaussian() * 0.02D;
+			double d2 = worldIn.random.nextGaussian() * 0.02D;
 
-			worldIn.addParticle(ParticleTypes.HEART, (double) ((float) pos.getX() + random.nextFloat()), ((double) pos.getY() + 1.0f) + (double) random.nextFloat() * 2.0f, (double) ((float) pos.getZ() + random.nextFloat()), d0, d1, d2);
+			worldIn.addParticle(ParticleTypes.HEART, (double) ((float) pos.getX() + worldIn.random.nextFloat()),
+					((double) pos.getY() + 1.0f) + (double) worldIn.random.nextFloat() * 2.0f, (double) ((float) pos.getZ() + worldIn.random.nextFloat()), d0, d1, d2);
 		}
 	}
 }

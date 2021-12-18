@@ -1,14 +1,16 @@
 package com.mrbysco.forcecraft.blocks.flammable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 
 import java.util.function.Supplier;
 
-public class FlammableStairs extends StairsBlock {
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
+public class FlammableStairs extends StairBlock {
 	public final int fireSpreadSpeed;
 	public final int flammability;
 
@@ -19,17 +21,17 @@ public class FlammableStairs extends StairsBlock {
 	}
 
 	@Override
-	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return this.fireSpreadSpeed;
 	}
 
 	@Override
-	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return this.flammability;
 	}
 
 	@Override
-	public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return true;
 	}
 }

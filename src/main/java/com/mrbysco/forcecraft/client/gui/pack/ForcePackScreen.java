@@ -1,14 +1,14 @@
 package com.mrbysco.forcecraft.client.gui.pack;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.container.ForcePackContainer;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
-public class ForcePackScreen extends ContainerScreen<ForcePackContainer> {
+public class ForcePackScreen extends AbstractContainerScreen<ForcePackContainer> {
 
     private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcepack.png");
     private ResourceLocation TEXTURE_UPGRADE_1 = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcepack_upgrade_1.png");
@@ -16,7 +16,7 @@ public class ForcePackScreen extends ContainerScreen<ForcePackContainer> {
     private ResourceLocation TEXTURE_UPGRADE_3 = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcepack_upgrade_3.png");
     private ResourceLocation TEXTURE_UPGRADE_4 = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcepack_upgrade_4.png");
 
-    public ForcePackScreen(ForcePackContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public ForcePackScreen(ForcePackContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
 
         this.imageHeight = 136 + (this.menu.getUpgrades() * 18);
@@ -24,30 +24,20 @@ public class ForcePackScreen extends ContainerScreen<ForcePackContainer> {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         switch (this.menu.getUpgrades()) {
-            default:
-                this.minecraft.getTextureManager().bind(this.TEXTURE);
-                break;
-            case 1:
-                this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_1);
-                break;
-            case 2:
-                this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_2);
-                break;
-            case 3:
-                this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_3);
-                break;
-            case 4:
-                this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_4);
-                break;
+            default -> this.minecraft.getTextureManager().bind(this.TEXTURE);
+            case 1 -> this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_1);
+            case 2 -> this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_2);
+            case 3 -> this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_3);
+            case 4 -> this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_4);
         }
         this.blit(matrixStack, this.leftPos, this.topPos, 0,0,this.imageWidth, this.imageHeight);
     }

@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.client.model;
 
 import com.mrbysco.forcecraft.entities.ColdCowEntity;
-import net.minecraft.client.renderer.entity.model.CowModel;
+import net.minecraft.client.model.CowModel;
 
 public class ColdCowModel<T extends ColdCowEntity> extends CowModel<T> {
 	private float headRotationAngleX;

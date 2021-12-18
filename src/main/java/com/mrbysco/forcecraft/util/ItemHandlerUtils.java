@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.util;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -70,7 +70,7 @@ public class ItemHandlerUtils {
 		return usedSlots;
 	}
 
-	public static boolean extractStackFromPlayer(PlayerInventory inventory, IItemHandler targetHandler, Predicate<ItemStack> stackPredicate) {
+	public static boolean extractStackFromPlayer(Inventory inventory, IItemHandler targetHandler, Predicate<ItemStack> stackPredicate) {
 		if(targetHandler != null) {
 			for(int i = 0; i < inventory.getContainerSize(); i++) {
 				ItemStack stack = inventory.getItem(i);
@@ -91,8 +91,7 @@ public class ItemHandlerUtils {
 	}
 
 	public static ItemStack getAndRemove(IItemHandler itemhandler, int index) {
-		if(index >= 0 && index < itemhandler.getSlots() && itemhandler instanceof IItemHandlerModifiable) {
-			IItemHandlerModifiable modifiable = ((IItemHandlerModifiable)itemhandler);
+		if(index >= 0 && index < itemhandler.getSlots() && itemhandler instanceof IItemHandlerModifiable modifiable) {
 			modifiable.setStackInSlot(index, ItemStack.EMPTY);
 			return modifiable.getStackInSlot(index);
 		} else {

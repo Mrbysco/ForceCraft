@@ -4,26 +4,26 @@ import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capablilities.pack.PackInventoryProvider;
 import com.mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.container.ForcePackContainer;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.SimpleNamedContainerProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -38,7 +38,7 @@ public class ForcePackItem extends BaseItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (playerIn.isShiftKeyDown()) {
@@ -47,7 +47,7 @@ public class ForcePackItem extends BaseItem {
 			}
 		} else {
 			if (!worldIn.isClientSide) {
-				NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.blockPosition());
+				NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(stack), playerIn.blockPosition());
 			}
 		}
 		// If it doesn't nothing bad happens
@@ -55,10 +55,10 @@ public class ForcePackItem extends BaseItem {
 	}
 
 	@Nullable
-	public INamedContainerProvider getContainer(ItemStack stack) {
-		return new SimpleNamedContainerProvider((id, inventory, player) -> {
+	public MenuProvider getContainer(ItemStack stack) {
+		return new SimpleMenuProvider((id, inventory, player) -> {
 			return new ForcePackContainer(id, inventory);
-		}, stack.hasCustomHoverName() ? ((TextComponent) stack.getHoverName()).withStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.pack"));
+		}, stack.hasCustomHoverName() ? ((BaseComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.pack"));
 	}
 
 	@Override
@@ -67,38 +67,37 @@ public class ForcePackItem extends BaseItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		int defaultAmount = 8;
-		CompoundNBT tag = stack.getOrCreateTag();
+		CompoundTag tag = stack.getOrCreateTag();
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		if (handler instanceof PackItemStackHandler) {
 			defaultAmount = ((PackItemStackHandler) handler).getSlotsInUse();
 		}
-		tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt(SLOTS_USED), defaultAmount)));
+		tooltip.add(new TextComponent(String.format("%s/%s Slots", tag.getInt(SLOTS_USED), defaultAmount)));
 
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack stack) {
-		return ((TextComponent) super.getName(stack)).withStyle(TextFormatting.YELLOW);
+	public Component getName(ItemStack stack) {
+		return ((BaseComponent) super.getName(stack)).withStyle(ChatFormatting.YELLOW);
 	}
 
 	@Nullable
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 		return new PackInventoryProvider();
 	}
 
 	// ShareTag for server->client capability data sync
 	@Override
-	public CompoundNBT getShareTag(ItemStack stack) {
-		CompoundNBT shareTag = stack.getOrCreateTag();
+	public CompoundTag getShareTag(ItemStack stack) {
+		CompoundTag shareTag = stack.getOrCreateTag();
 		// no capability, use all of it
 
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-		if (handler instanceof PackItemStackHandler) {
-			PackItemStackHandler packHandler = (PackItemStackHandler) handler;
+		if (handler instanceof PackItemStackHandler packHandler) {
 			shareTag.putInt(PackItemStackHandler.NBT_UPGRADES, packHandler.getUpgrades());
 		}
 
@@ -106,13 +105,12 @@ public class ForcePackItem extends BaseItem {
 	}
 
 	@Override
-	public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+	public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
 		if (nbt != null && nbt.contains(PackItemStackHandler.NBT_UPGRADES)) {
 			stack.getOrCreateTag().putInt(SLOTS_USED, nbt.getInt(SLOTS_USED));
 
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-			if (handler instanceof PackItemStackHandler) {
-				PackItemStackHandler packHandler = (PackItemStackHandler) handler;
+			if (handler instanceof PackItemStackHandler packHandler) {
 				packHandler.setUpgrades(nbt.getInt(PackItemStackHandler.NBT_UPGRADES));
 
 			}

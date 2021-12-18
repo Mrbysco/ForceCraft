@@ -3,45 +3,45 @@ package com.mrbysco.forcecraft.blocks.infuser;
 import com.mrbysco.forcecraft.container.slot.SlotForceGems;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.util.AdvancementUtil;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IntReferenceHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class InfuserContainer extends Container {
+public class InfuserContainer extends AbstractContainerMenu {
 
-    private InfuserTileEntity tile;
-    private PlayerEntity player;
+    private InfuserBlockEntity tile;
+    private Player player;
 
     public final int[] validRecipe = new int[1];
 
-    public InfuserContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
+    public InfuserContainer(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
         this(windowId, playerInventory, getTileEntity(playerInventory, data));
     }
 
-    private static InfuserTileEntity getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
+    private static InfuserBlockEntity getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
         Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
         Objects.requireNonNull(data, "data cannot be null!");
-        final TileEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        final BlockEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 
-        if (tileAtPos instanceof InfuserTileEntity) {
-            return (InfuserTileEntity) tileAtPos;
+        if (tileAtPos instanceof InfuserBlockEntity) {
+            return (InfuserBlockEntity) tileAtPos;
         }
 
         throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
     }
 
-    public InfuserContainer(int id, PlayerInventory playerInventoryIn, InfuserTileEntity te) {
+    public InfuserContainer(int id, Inventory playerInventoryIn, InfuserBlockEntity te) {
         super(ForceContainers.INFUSER.get(), id);
         this.tile = te;
         this.player = playerInventoryIn.player;
@@ -57,13 +57,13 @@ public class InfuserContainer extends Container {
         this.addSlot(new UnlockableSlot(te.handler, 7, 56, 32));
 
         //Tools Slot in the middle
-        this.addSlot(new MatrixUpdatingSlot(te.handler, InfuserTileEntity.SLOT_TOOL, 80, 57));
+        this.addSlot(new MatrixUpdatingSlot(te.handler, InfuserBlockEntity.SLOT_TOOL, 80, 57));
 
         //Force Gem Slot top left
-        this.addSlot(new SlotForceGems(te.handler, InfuserTileEntity.SLOT_GEM, 8, 23));
+        this.addSlot(new SlotForceGems(te.handler, InfuserBlockEntity.SLOT_GEM, 8, 23));
 
         //Book Upgrade Slot top left
-        this.addSlot(new MatrixUpdatingSlot(te.handler, InfuserTileEntity.SLOT_BOOK, 8, 5));
+        this.addSlot(new MatrixUpdatingSlot(te.handler, InfuserBlockEntity.SLOT_BOOK, 8, 5));
 
         //player inventory here
         int xPos = 8;
@@ -82,10 +82,10 @@ public class InfuserContainer extends Container {
         trackFluid();
 
         this.validRecipe[0] = tile.hasValidRecipe() ? 1 : 0;
-        this.addDataSlot(IntReferenceHolder.shared(this.validRecipe, 0));
+        this.addDataSlot(DataSlot.shared(this.validRecipe, 0));
 
         //set data that will sync server->client WITHOUT needing to call .markDirty()
-		addDataSlot(new IntReferenceHolder() {
+		addDataSlot(new DataSlot() {
 			@Override
 			public int get() {
 				return tile.processTime;
@@ -96,7 +96,7 @@ public class InfuserContainer extends Container {
 				tile.processTime = value;
 			}
 		});
-		addDataSlot(new IntReferenceHolder() {
+		addDataSlot(new DataSlot() {
 			@Override
 			public int get() {
 				return tile.maxProcessTime;
@@ -112,7 +112,7 @@ public class InfuserContainer extends Container {
 
     private void trackFluid() {
         // Dedicated server ints are actually truncated to short so we need to split our integer here (split our 32 bit integer into two 16 bit integers)
-        addDataSlot(new IntReferenceHolder() {
+        addDataSlot(new DataSlot() {
             @Override
             public int get() {
                 return tile.getFluidAmount() & 0xffff;
@@ -124,7 +124,7 @@ public class InfuserContainer extends Container {
                 tile.setFluidAmount(fluidStored + (value & 0xffff));
             }
         });
-        addDataSlot(new IntReferenceHolder() {
+        addDataSlot(new DataSlot() {
             @Override
             public int get() {
                 return (tile.getFluidAmount() >> 16) & 0xffff;
@@ -140,7 +140,7 @@ public class InfuserContainer extends Container {
 
     private void trackPower() {
         // Dedicated server ints are actually truncated to short so we need to split our integer here (split our 32 bit integer into two 16 bit integers)
-        addDataSlot(new IntReferenceHolder() {
+        addDataSlot(new DataSlot() {
             @Override
             public int get() {
                 return tile.getEnergyStored() & 0xffff;
@@ -152,7 +152,7 @@ public class InfuserContainer extends Container {
                 tile.setEnergyStored(energyStored + (value & 0xffff));
             }
         });
-        addDataSlot(new IntReferenceHolder() {
+        addDataSlot(new DataSlot() {
             @Override
             public int get() {
                 return (tile.getEnergyStored() >> 16) & 0xffff;
@@ -167,13 +167,13 @@ public class InfuserContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return this.tile.stillValid(playerIn) && !playerIn.isSpectator();
     }
 
     @Override
     @Nonnull
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
@@ -210,7 +210,7 @@ public class InfuserContainer extends Container {
         return tile.isWorkAllowed();
     }
 
-    public InfuserTileEntity getTile() {
+    public InfuserBlockEntity getTile() {
         return tile;
     }
 
@@ -220,7 +220,7 @@ public class InfuserContainer extends Container {
     }
 
     @Override
-    public void slotsChanged(IInventory inventoryIn) {
+    public void slotsChanged(Container inventoryIn) {
         if(inventoryIn != null) {
             super.slotsChanged(inventoryIn);
         }

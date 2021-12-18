@@ -1,28 +1,24 @@
 package com.mrbysco.forcecraft.items.nonburnable;
 
 import com.mrbysco.forcecraft.registry.ForceEntities;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 
 public class NonBurnableItemEntity extends ItemEntity {
 
-    public NonBurnableItemEntity(EntityType<? extends ItemEntity> entityType, World worldIn) {
+    public NonBurnableItemEntity(EntityType<? extends ItemEntity> entityType, Level worldIn) {
         super(entityType, worldIn);
     }
 
-    public NonBurnableItemEntity(World worldIn, double x, double y, double z) {
-        super(worldIn, x, y, z);
-    }
-
-    public NonBurnableItemEntity(World worldIn, double x, double y, double z, ItemStack stack) {
+    public NonBurnableItemEntity(Level worldIn, double x, double y, double z, ItemStack stack) {
         super(worldIn, x, y, z, stack);
     }
 
@@ -43,7 +39,7 @@ public class NonBurnableItemEntity extends ItemEntity {
 
     @Nonnull
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

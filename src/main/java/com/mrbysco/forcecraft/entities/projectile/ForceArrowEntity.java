@@ -5,42 +5,42 @@ import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.util.ForceUtils;
 import com.mrbysco.forcecraft.util.MobUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.CreeperSwellGoal;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.potion.Potions;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.SwellGoal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE;
 
-public class ForceArrowEntity extends ArrowEntity {
-	private static final DataParameter<Boolean> ENDER = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> BANE = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> SPEED = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> GLOWING = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> LUCK = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.INT);
-	private static final DataParameter<Integer> BLEEDING = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.INT);
+public class ForceArrowEntity extends Arrow {
+	private static final EntityDataAccessor<Boolean> ENDER = SynchedEntityData.defineId(ForceArrowEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> BANE = SynchedEntityData.defineId(ForceArrowEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> SPEED = SynchedEntityData.defineId(ForceArrowEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> GLOWING = SynchedEntityData.defineId(ForceArrowEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Integer> LUCK = SynchedEntityData.defineId(ForceArrowEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> BLEEDING = SynchedEntityData.defineId(ForceArrowEntity.class, EntityDataSerializers.INT);
 
-	public ForceArrowEntity(EntityType<? extends ArrowEntity> type, World worldIn) {
+	public ForceArrowEntity(EntityType<? extends Arrow> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	public ForceArrowEntity(World worldIn, LivingEntity shooter) {
+	public ForceArrowEntity(Level worldIn, LivingEntity shooter) {
 		super(worldIn, shooter);
 		this.setOwner(shooter);
 	}
@@ -110,7 +110,7 @@ public class ForceArrowEntity extends ArrowEntity {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 
 		if(compound.getBoolean("Bane")) {
@@ -130,7 +130,7 @@ public class ForceArrowEntity extends ArrowEntity {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 
 		if(isBane()) {
@@ -167,7 +167,7 @@ public class ForceArrowEntity extends ArrowEntity {
 		}
 
 		if(appliesGlowing()) {
-			living.addEffect(new EffectInstance(Effects.GLOWING, 200, 0));
+			living.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0));
 		}
 
 		if(getBleeding() > 0) {
@@ -175,14 +175,13 @@ public class ForceArrowEntity extends ArrowEntity {
 		}
 
 		if(isBane()) {
-			if(living instanceof CreeperEntity){
-				CreeperEntity creeper = ((CreeperEntity) living);
+			if(living instanceof Creeper creeper){
 				creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
 					if(entityCap.canExplode()){
 						creeper.setSwellDir(-1);
-						creeper.getEntityData().set(CreeperEntity.DATA_IS_IGNITED, false);
+						creeper.getEntityData().set(Creeper.DATA_IS_IGNITED, false);
 						entityCap.setExplodeAbility(false);
-						creeper.goalSelector.availableGoals.removeIf(goal -> goal.getGoal() instanceof CreeperSwellGoal);
+						creeper.goalSelector.availableGoals.removeIf(goal -> goal.getGoal() instanceof SwellGoal);
 						ForceCraft.LOGGER.debug("Added Bane to " + living.getName());
 					}
 				});
@@ -202,7 +201,7 @@ public class ForceArrowEntity extends ArrowEntity {
 
 	@Nonnull
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

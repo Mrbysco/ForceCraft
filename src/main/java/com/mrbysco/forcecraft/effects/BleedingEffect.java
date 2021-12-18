@@ -1,13 +1,13 @@
 package com.mrbysco.forcecraft.effects;
 
 import com.mrbysco.forcecraft.ForceCraft;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
-public class BleedingEffect extends Effect {
+public class BleedingEffect extends MobEffect {
     public BleedingEffect(){
-        super(EffectType.HARMFUL, 0);
+        super(MobEffectCategory.HARMFUL, 0);
     }
 
     @Override

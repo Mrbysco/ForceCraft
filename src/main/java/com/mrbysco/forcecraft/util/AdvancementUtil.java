@@ -3,14 +3,14 @@ package com.mrbysco.forcecraft.util;
 import com.mrbysco.forcecraft.Reference;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
 
 public class AdvancementUtil {
-	public static void unlockTierAdvancements(PlayerEntity player, int tier) {
+	public static void unlockTierAdvancements(Player player, int tier) {
 		if(!player.level.isClientSide) {
-			ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
+			ServerPlayer serverPlayer = (ServerPlayer)player;
 			if(tier >= 1) {
 				unlockAdvancement(serverPlayer, "tier1/tier");
 				unlockAdvancement(serverPlayer, "tier1/heat");
@@ -55,7 +55,7 @@ public class AdvancementUtil {
 		}
 	}
 
-	public static void unlockAdvancement(ServerPlayerEntity player, String name) {
+	public static void unlockAdvancement(ServerPlayer player, String name) {
 		Advancement advancementIn = player.getServer().getAdvancements().getAdvancement(new ResourceLocation(Reference.MOD_ID + ":" + name));
 		if(advancementIn != null) {
 			AdvancementProgress advancementprogress = player.getAdvancements().getOrStartProgress(advancementIn);

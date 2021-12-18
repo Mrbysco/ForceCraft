@@ -1,18 +1,23 @@
 package com.mrbysco.forcecraft.effects;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.EffectType;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.EffectRenderer;
 
 import java.util.List;
+import java.util.function.Consumer;
 
-public class MagnetEffect extends Effect {
+public class MagnetEffect extends MobEffect {
     public MagnetEffect() {
-        super(EffectType.BENEFICIAL, 0);
+        super(MobEffectCategory.BENEFICIAL, 0);
     }
 
     @Override
@@ -26,18 +31,8 @@ public class MagnetEffect extends Effect {
     }
 
     @Override
-    public boolean shouldRenderHUD(EffectInstance effect) {
-        return false;
-    }
-
-    @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
-    }
-
-    @Override
-    public boolean shouldRender(EffectInstance effect) {
-        return false;
     }
 
     @Override
@@ -50,7 +45,7 @@ public class MagnetEffect extends Effect {
 
         range += amplifier * 0.3f;
 
-        List<ItemEntity> items = entity.getCommandSenderWorld().getEntitiesOfClass(ItemEntity.class, new AxisAlignedBB(x - range, y - range, z - range, x + range, y + range, z + range));
+        List<ItemEntity> items = entity.getCommandSenderWorld().getEntitiesOfClass(ItemEntity.class, new AABB(x - range, y - range, z - range, x + range, y + range, z + range));
         for(ItemEntity item : items) {
             if(item.getItem().isEmpty() || !item.isAlive()) {
                 continue;
@@ -59,8 +54,8 @@ public class MagnetEffect extends Effect {
             // constant force!
             float strength = 0.14F;
 
-            Vector3d entityVector = new Vector3d(item.getX(), item.getY() - item.getMyRidingOffset() + item.getBbHeight() / 2, item.getZ());
-            Vector3d finalVector = new Vector3d(x, y, z).subtract(entityVector);
+            Vec3 entityVector = new Vec3(item.getX(), item.getY() - item.getMyRidingOffset() + item.getBbHeight() / 2, item.getZ());
+            Vec3 finalVector = new Vec3(x, y, z).subtract(entityVector);
 
             if (Math.sqrt(finalVector.x * finalVector.x + finalVector.y * finalVector.y + finalVector.z * finalVector.z) > 1) {
                 finalVector = finalVector.normalize();
@@ -68,5 +63,30 @@ public class MagnetEffect extends Effect {
 
             item.setDeltaMovement(finalVector.multiply(strength, strength, strength));
         }
+    }
+
+    @Override
+    public void initializeClient(Consumer<EffectRenderer> consumer) {
+        consumer.accept(new EffectRenderer() {
+            @Override
+            public boolean shouldRenderHUD(MobEffectInstance effect) {
+                return false;
+            }
+
+            @Override
+            public boolean shouldRender(MobEffectInstance effect) {
+                return false;
+            }
+
+            @Override
+            public void renderInventoryEffect(MobEffectInstance effect, EffectRenderingInventoryScreen<?> gui, PoseStack mStack, int x, int y, float z) {
+
+            }
+
+            @Override
+            public void renderHUDEffect(MobEffectInstance effect, GuiComponent gui, PoseStack mStack, int x, int y, float z, float alpha) {
+
+            }
+        });
     }
 }

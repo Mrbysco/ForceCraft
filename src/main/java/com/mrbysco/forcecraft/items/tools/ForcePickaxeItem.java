@@ -6,16 +6,16 @@ import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
-import com.mrbysco.forcecraft.registry.material.ModToolMaterial;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import com.mrbysco.forcecraft.registry.material.ModToolTiers;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -27,12 +27,12 @@ import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_
 public class ForcePickaxeItem extends PickaxeItem implements IForceChargingTool {
 
 	public ForcePickaxeItem(Item.Properties properties) {
-        super(ModToolMaterial.FORCE,-6, -2.8F, properties);
+        super(ModToolTiers.FORCE,-6, -2.8F, properties);
     }
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         if(CAPABILITY_TOOLMOD == null) {
             return null;
         }
@@ -40,7 +40,7 @@ public class ForcePickaxeItem extends PickaxeItem implements IForceChargingTool 
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
     	ForceToolData fd = new ForceToolData(stack);
     	fd.attachInformation(lores);
     	ToolModStorage.attachInformation(stack, lores);
@@ -64,25 +64,25 @@ public class ForcePickaxeItem extends PickaxeItem implements IForceChargingTool 
     
     // ShareTag for server->client capability data sync
     @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-    	CompoundNBT nbt = super.getShareTag(stack);
+    public CompoundTag getShareTag(ItemStack stack) {
+    	CompoundTag nbt = super.getShareTag(stack);
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-			CompoundNBT shareTag = ToolModStorage.serializeNBT(cap);
+			CompoundTag shareTag = ToolModStorage.serializeNBT(cap);
 			nbt.put(Reference.MOD_ID, shareTag);
 		}
         return nbt;
     }
 
     @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
     	if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
     		return;
     	}
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-	    	INBT shareTag = nbt.get(Reference.MOD_ID);
+	    	Tag shareTag = nbt.get(Reference.MOD_ID);
 	    	ToolModStorage.deserializeNBT(cap, shareTag);
 		}
 		super.readShareTag(stack, nbt);

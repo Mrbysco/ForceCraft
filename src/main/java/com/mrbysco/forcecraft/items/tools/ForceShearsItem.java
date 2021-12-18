@@ -11,31 +11,32 @@ import com.mrbysco.forcecraft.entities.IColdMob;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.ChickenEntity;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.entity.passive.MooshroomEntity;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShearsItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.MushroomCow;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -60,15 +61,15 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 	private static final Item[] WOOL = { Items.RED_WOOL, Items.BLUE_WOOL, Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.WHITE_WOOL, Items.ORANGE_WOOL, Items.MAGENTA_WOOL, Items.LIGHT_BLUE_WOOL, Items.YELLOW_WOOL, Items.LIME_WOOL, Items.PINK_WOOL, Items.GRAY_WOOL, Items.LIGHT_GRAY_WOOL,
 			Items.CYAN_WOOL, Items.PURPLE_WOOL, Items.BROWN_WOOL, Items.GREEN_WOOL };
 
-	private ItemStack getRandomWool(World world) {
-		return new ItemStack(WOOL[MathHelper.nextInt(world.random, 0, WOOL.length)]);
+	private ItemStack getRandomWool(Level world) {
+		return new ItemStack(WOOL[Mth.nextInt(world.random, 0, WOOL.length)]);
 	}
 
 	@Override
-	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
-		World world = entity.level;
+	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity entity, InteractionHand hand) {
+		Level world = entity.level;
 		if (world.isClientSide) {
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 
 		Random rand = world.random;
@@ -78,9 +79,8 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 		// dont drop wool from ALL IForgeShearable mobs, only sheep
 		// for example: snow golems and Mooshroom are both IForgeShearable, but they
 		// should not drop rainbow wool
-		if (toolModifier != null && toolModifier.hasRainbow() && entity instanceof SheepEntity) {
+		if (toolModifier != null && toolModifier.hasRainbow() && entity instanceof Sheep target) {
 
-			SheepEntity target = (SheepEntity) entity;
 			BlockPos pos = new BlockPos(entity.getX(), entity.getY(), entity.getZ());
 
 			if (target.isShearable(stack, world, pos)) {
@@ -93,15 +93,14 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 				}
 
 				stack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(hand));
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
 		boolean hasHeat = toolModifier != null && toolModifier.hasHeat();
 
 		// part 2 :
 		if (!(entity instanceof IColdMob)) {
-			if (entity instanceof CowEntity && !(entity instanceof MooshroomEntity)) {
-				CowEntity originalCow = (CowEntity) entity;
+			if (entity instanceof Cow originalCow && !(entity instanceof MushroomCow)) {
 
 				int i = 1 + rand.nextInt(3);
 
@@ -116,24 +115,23 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
-				MobEntity replacementMob = new ColdCowEntity(world, originalCow.getType().getRegistryName());
+				Mob replacementMob = new ColdCowEntity(world, originalCow.getType().getRegistryName());
 				replacementMob.copyPosition(originalCow);
 				UUID mobUUID = replacementMob.getUUID();
 				replacementMob.restoreFrom(originalCow);
 				replacementMob.setUUID(mobUUID);
 
-				originalCow.remove(false);
+				originalCow.remove(RemovalReason.DISCARDED);
 				world.addFreshEntity(replacementMob);
 				if (hasHeat) {
 					replacementMob.setSecondsOnFire(SET_FIRE_TIME);
 				}
 
 				stack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(hand));
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
-			if (entity instanceof ChickenEntity) {
-				ChickenEntity originalChicken = (ChickenEntity) entity;
-				World worldIn = originalChicken.level;
+			if (entity instanceof Chicken originalChicken) {
+				Level worldIn = originalChicken.level;
 
 				int i = 1 + rand.nextInt(3);
 
@@ -149,24 +147,23 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
-				MobEntity replacementMob = new ColdChickenEntity(worldIn, originalChicken.getType().getRegistryName());
+				Mob replacementMob = new ColdChickenEntity(worldIn, originalChicken.getType().getRegistryName());
 				replacementMob.copyPosition(originalChicken);
 				UUID mobUUID = replacementMob.getUUID();
 				replacementMob.restoreFrom(originalChicken);
 				replacementMob.setUUID(mobUUID);
 
-				originalChicken.remove(false);
+				originalChicken.remove(RemovalReason.DISCARDED);
 				worldIn.addFreshEntity(replacementMob);
 				if (hasHeat) {
 					replacementMob.setSecondsOnFire(SET_FIRE_TIME);
 				}
 
 				stack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(hand));
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
-			if (entity instanceof PigEntity) {
-				PigEntity originalPig = (PigEntity) entity;
-				World worldIn = originalPig.level;
+			if (entity instanceof Pig originalPig) {
+				Level worldIn = originalPig.level;
 
 				int i = 1 + rand.nextInt(2);
 
@@ -175,26 +172,26 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					drops.add(new ItemStack(hasHeat ? ForceRegistry.COOKED_BACON.get() : ForceRegistry.RAW_BACON.get(), 1));
 
 				drops.forEach(d -> {
-					net.minecraft.entity.item.ItemEntity ent = entity.spawnAtLocation(d, 1.0F);
+					net.minecraft.world.entity.item.ItemEntity ent = entity.spawnAtLocation(d, 1.0F);
 					ent.setDeltaMovement(ent.getDeltaMovement().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
 				});
 
 				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
-				MobEntity replacementMob = new ColdPigEntity(worldIn, originalPig.getType().getRegistryName());
+				Mob replacementMob = new ColdPigEntity(worldIn, originalPig.getType().getRegistryName());
 				replacementMob.copyPosition(originalPig);
 				UUID mobUUID = replacementMob.getUUID();
 				replacementMob.restoreFrom(originalPig);
 				replacementMob.setUUID(mobUUID);
 
-				originalPig.remove(false);
+				originalPig.remove(RemovalReason.DISCARDED);
 				worldIn.addFreshEntity(replacementMob);
 				if (hasHeat) {
 					replacementMob.setSecondsOnFire(SET_FIRE_TIME);
 				}
 
 				stack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(hand));
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
 
@@ -203,7 +200,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 	@Nullable
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 		if (CAPABILITY_TOOLMOD == null) {
 			return null;
 		}
@@ -212,7 +209,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
     	ForceToolData fd = new ForceToolData(stack);
     	fd.attachInformation(lores);
     	ToolModStorage.attachInformation(stack, lores);
@@ -235,25 +232,25 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 	}    
 	
 	@Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-    	CompoundNBT nbt = super.getShareTag(stack);
+    public CompoundTag getShareTag(ItemStack stack) {
+    	CompoundTag nbt = super.getShareTag(stack);
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-			CompoundNBT shareTag = ToolModStorage.serializeNBT(cap);
+			CompoundTag shareTag = ToolModStorage.serializeNBT(cap);
 			nbt.put(Reference.MOD_ID, shareTag);
 		}
         return nbt;
     }
 
     @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
     	if(nbt == null || !nbt.contains(Reference.MOD_ID)) { 
     		return;
     	}
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-	    	INBT shareTag = nbt.get(Reference.MOD_ID);
+	    	Tag shareTag = nbt.get(Reference.MOD_ID);
 	    	ToolModStorage.deserializeNBT(cap, shareTag);
 		}
 		super.readShareTag(stack, nbt);

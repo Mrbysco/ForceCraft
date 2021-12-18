@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.registry;
 
 import com.mrbysco.forcecraft.Reference;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class ForceTables {
 	public static final ResourceLocation TIER_1 = register("spoils/tier1");

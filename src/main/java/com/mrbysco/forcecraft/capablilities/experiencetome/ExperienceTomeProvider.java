@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.capablilities.experiencetome;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_EXPTOME;
 
-public class ExperienceTomeProvider implements ICapabilitySerializable<INBT>, ICapabilityProvider {
+public class ExperienceTomeProvider implements ICapabilitySerializable<Tag>, ICapabilityProvider {
     private LazyOptional<IExperienceTome> instance;
     private IExperienceTome experienceTome;
 
@@ -28,12 +28,12 @@ public class ExperienceTomeProvider implements ICapabilitySerializable<INBT>, IC
     }
 
     @Override
-    public INBT serializeNBT() {
+    public Tag serializeNBT() {
         return CAPABILITY_EXPTOME.writeNBT(experienceTome, null);
     }
 
     @Override
-    public void deserializeNBT(INBT nbt) {
+    public void deserializeNBT(Tag nbt) {
         CAPABILITY_EXPTOME.readNBT(experienceTome, null, nbt);
     }
 

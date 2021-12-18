@@ -1,18 +1,20 @@
 package com.mrbysco.forcecraft.capablilities;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+
 /**
  * Wraps two {@link ItemStackHandler}s: Input and Output. Input's slots come first then the Output's slots come after. Items can only be inserted into Input. Items can only be extracted from Output.
  * Note that the above only applies to operations on the wrapper, the backing handlers are not restricted. For persistence, either the backing {@link ItemStackHandler}s can be saved, or the wrapper
  * itself.
  */
-public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<CompoundNBT> {
+public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<CompoundTag> {
 
 	public static final String NBT_INPUT = "Input";
 	public static final String NBT_OUTPUT = "Output";
@@ -25,15 +27,15 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT nbt = new CompoundNBT();
-		nbt.put(NBT_INPUT, throttleTank.writeToNBT(new CompoundNBT()));
-		nbt.put(NBT_OUTPUT, fuelTank.writeToNBT(new CompoundNBT()));
+	public CompoundTag serializeNBT() {
+		CompoundTag nbt = new CompoundTag();
+		nbt.put(NBT_INPUT, throttleTank.writeToNBT(new CompoundTag()));
+		nbt.put(NBT_OUTPUT, fuelTank.writeToNBT(new CompoundTag()));
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		if (nbt.contains(NBT_OUTPUT))
 			fuelTank.readFromNBT(nbt.getCompound(NBT_OUTPUT));
 		if (nbt.contains(NBT_INPUT))

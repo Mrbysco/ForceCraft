@@ -1,21 +1,21 @@
 package com.mrbysco.forcecraft.util;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Predicate;
 
 public class FindingUtil {
-	public static ItemStack findInstanceStack(PlayerEntity player, Predicate<ItemStack> itemPredicate) {
-		PlayerInventory playerInventory = player.inventory;
+	public static ItemStack findInstanceStack(Player player, Predicate<ItemStack> itemPredicate) {
+		Inventory playerInventory = player.getInventory();
 		if(itemPredicate.test(player.getMainHandItem())) {
 			return player.getMainHandItem();
 		} else if(itemPredicate.test(player.getOffhandItem())) {
 			return player.getOffhandItem();
 		}
 
-		for (int i = 0; i <= PlayerInventory.getSelectionSize(); i++) {
+		for (int i = 0; i <= Inventory.getSelectionSize(); i++) {
 			ItemStack stack = playerInventory.getItem(i);
 			if (itemPredicate.test(stack))
 				return stack;
@@ -23,14 +23,14 @@ public class FindingUtil {
 		return ItemStack.EMPTY;
 	}
 
-	public static boolean hasSingleStackInHotbar(PlayerEntity player, Predicate<ItemStack> itemPredicate) {
-		PlayerInventory playerInventory = player.inventory;
+	public static boolean hasSingleStackInHotbar(Player player, Predicate<ItemStack> itemPredicate) {
+		Inventory playerInventory = player.getInventory();
 		int amountFound = 0;
 		if(itemPredicate.test(player.getOffhandItem())) {
 			amountFound++;
 		}
 
-		for (int i = 0; i <= PlayerInventory.getSelectionSize(); i++) {
+		for (int i = 0; i <= Inventory.getSelectionSize(); i++) {
 			ItemStack stack = playerInventory.getItem(i);
 			if (itemPredicate.test(stack))
 				amountFound++;

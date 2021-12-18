@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.container.slot;
 
 import com.mrbysco.forcecraft.registry.ForceTags;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 

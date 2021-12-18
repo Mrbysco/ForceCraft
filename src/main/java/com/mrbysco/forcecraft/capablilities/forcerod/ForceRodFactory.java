@@ -1,12 +1,12 @@
 package com.mrbysco.forcecraft.capablilities.forcerod;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.concurrent.Callable;
 
@@ -64,7 +64,7 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
             }
 
             @Override
-            public void teleportPlayerToLocation(PlayerEntity player, GlobalPos globalPos) {
+            public void teleportPlayerToLocation(Player player, GlobalPos globalPos) {
                 if(player.level.dimension().location().equals(globalPos.dimension().location())) {
                     BlockPos pos = globalPos.pos();
                     int x = pos.getX();
@@ -74,7 +74,7 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
                     player.randomTeleport(x, y, z, true);
                 } else {
                     if(!player.level.isClientSide) {
-                        player.sendMessage(new TranslationTextComponent("forcecraft.ender_rod.dimension.text").withStyle(TextFormatting.YELLOW), Util.NIL_UUID);
+                        player.sendMessage(new TranslatableComponent("forcecraft.ender_rod.dimension.text").withStyle(ChatFormatting.YELLOW), Util.NIL_UUID);
                     }
                 }
             }
@@ -139,12 +139,12 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
 			}
 
             @Override
-            public CompoundNBT serializeNBT() {
+            public CompoundTag serializeNBT() {
                 return null;
             }
 
             @Override
-            public void deserializeNBT(CompoundNBT nbt) {
+            public void deserializeNBT(CompoundTag nbt) {
 
             }
         };

@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.items.infuser;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface IForceChargingTool {
 

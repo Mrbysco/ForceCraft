@@ -9,12 +9,12 @@ import com.mrbysco.forcecraft.networking.message.QuickUseBeltMessage;
 import com.mrbysco.forcecraft.networking.message.RecipeToCardMessage;
 import com.mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
 import com.mrbysco.forcecraft.networking.message.StopInfuserSoundMessage;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 public class PacketHandler {
 
@@ -39,9 +39,9 @@ public class PacketHandler {
         CHANNEL.registerMessage(id++, StopInfuserSoundMessage.class, StopInfuserSoundMessage::encode, StopInfuserSoundMessage::decode, StopInfuserSoundMessage::handle);
     }
 
-    public static void sendPacket(Entity player, IPacket<?> packet) {
-        if(player instanceof ServerPlayerEntity && ((ServerPlayerEntity) player).connection != null) {
-            ((ServerPlayerEntity) player).connection.send(packet);
+    public static void sendPacket(Entity player, Packet<?> packet) {
+        if(player instanceof ServerPlayer && ((ServerPlayer) player).connection != null) {
+            ((ServerPlayer) player).connection.send(packet);
         }
     }
 }

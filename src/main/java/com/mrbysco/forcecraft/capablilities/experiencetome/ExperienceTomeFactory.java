@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.capablilities.experiencetome;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import java.util.concurrent.Callable;
 
@@ -32,12 +32,12 @@ public class ExperienceTomeFactory implements Callable<IExperienceTome> {
             }
 
             @Override
-            public CompoundNBT serializeNBT() {
+            public CompoundTag serializeNBT() {
                 return null;
             }
 
             @Override
-            public void deserializeNBT(CompoundNBT nbt) {
+            public void deserializeNBT(CompoundTag nbt) {
 
             }
         };

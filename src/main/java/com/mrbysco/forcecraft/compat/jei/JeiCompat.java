@@ -25,9 +25,9 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.util.ErrorUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -124,7 +124,7 @@ public class JeiCompat implements IModPlugin {
 		ErrorUtil.checkNotNull(grindingCategory, "grindingCategory");
 		ErrorUtil.checkNotNull(infuserCategory, "grindingCategory");
 
-		ClientWorld world = Objects.requireNonNull(Minecraft.getInstance().level);
+		ClientLevel world = Objects.requireNonNull(Minecraft.getInstance().level);
 		registration.addRecipes(world.getRecipeManager().getAllRecipesFor(ForceRecipes.FREEZING), FREEZING);
 		registration.addRecipes(world.getRecipeManager().getAllRecipesFor(ForceRecipes.GRINDING), GRINDING);
 		registration.addRecipes(world.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE), INFUSER);

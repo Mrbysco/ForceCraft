@@ -1,12 +1,12 @@
 package com.mrbysco.forcecraft.recipe;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 
 public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe {
 	protected final float secondaryChance;
@@ -14,14 +14,14 @@ public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe 
 
 	protected final NonNullList<ItemStack> resultItems;
 
-	public MultipleOutputFurnaceRecipe(IRecipeType<?> typeIn, ResourceLocation idIn, String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results, float secondaryChance, float experienceIn, int cookTimeIn) {
+	public MultipleOutputFurnaceRecipe(RecipeType<?> typeIn, ResourceLocation idIn, String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results, float secondaryChance, float experienceIn, int cookTimeIn) {
 		super(typeIn, idIn, groupIn, ingredientIn, results.get(0), experienceIn, cookTimeIn);
 		this.resultItems = results;
 		this.secondaryChance = secondaryChance;
 	}
 
 	@Override
-	public ItemStack assemble(IInventory inv) {
+	public ItemStack assemble(Container inv) {
 		return this.resultItems.get(0).copy();
 	}
 
@@ -30,7 +30,7 @@ public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe 
 		return this.resultItems.get(0);
 	}
 
-	public NonNullList<ItemStack> getCraftingResults(IInventory inv) {
+	public NonNullList<ItemStack> getCraftingResults(Container inv) {
 		NonNullList<ItemStack> results = NonNullList.create();
 		for(ItemStack stack : this.resultItems) {
 			results.add(stack.copy());

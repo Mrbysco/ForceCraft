@@ -1,22 +1,22 @@
 package com.mrbysco.forcecraft.blocks.infuser;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.client.gui.widgets.ProgressBar;
 import com.mrbysco.forcecraft.client.util.RenderHelper;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.InfuserMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.client.gui.GuiUtils;
@@ -26,7 +26,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfuserScreen extends ContainerScreen<InfuserContainer> {
+public class InfuserScreen extends AbstractContainerScreen<InfuserContainer> {
 
 	private ProgressBar infuserProgress;
 	// 12 by 107
@@ -35,7 +35,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	private final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forceinfuser.png");
 	private Button buttonInfuse;
 
-	public InfuserScreen(InfuserContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+	public InfuserScreen(InfuserContainer screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
 
 		this.imageHeight = 208;
@@ -53,15 +53,15 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 
 		int x = 123;
 		int y = 16;
-		this.addButton(new Button(leftPos + x, topPos + y, 13, 13, new TranslationTextComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+		this.addButton(new Button(leftPos + x, topPos + y, 13, 13, new TranslatableComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
 			if(ModList.get().isLoaded("patchouli")) {
 				com.mrbysco.forcecraft.compat.patchouli.PatchouliCompat.openBook();
 			} else {
-				this.inventory.player.displayClientMessage(new TranslationTextComponent("gui.forcecraft.infuser.patchouli"), false);
+				this.inventory.player.displayClientMessage(new TranslatableComponent("gui.forcecraft.infuser.patchouli"), false);
 			}
 		}) {
 			@Override
-			public void renderButton(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+			public void renderButton(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 				// skip drawing me
 
 				ItemStack bookStack = menu.getTile().getBookInSlot();
@@ -79,17 +79,17 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		});
 		x = 39;
 		y = 101;
-		buttonInfuse = this.addButton(new Button(leftPos + x, topPos + y, btnSize, btnSize, new TranslationTextComponent(""), (button) -> {
+		buttonInfuse = this.addButton(new Button(leftPos + x, topPos + y, btnSize, btnSize, new TranslatableComponent(""), (button) -> {
 			ItemStack bookStack = menu.getTile().getBookInSlot();
 			if (bookStack.isEmpty()) {
-				this.inventory.player.displayClientMessage(new TranslationTextComponent("gui.forcecraft.infuser.nobook"), false);
+				this.inventory.player.displayClientMessage(new TranslatableComponent("gui.forcecraft.infuser.nobook"), false);
 			} else {
 				PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
 			}
 //			container.getTile().canWork = false;
 		}) {
 			@Override
-			public void renderButton(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+			public void renderButton(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 				// skip drawing me
 				boolean flag = getMenu().validRecipe[0] == 1;
 				if(flag) {
@@ -119,7 +119,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -127,7 +127,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
 		this.minecraft.getTextureManager().bind(TEXTURE);
 		this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 		
@@ -138,62 +138,62 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 	}
 	
 	@Override
-	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+	protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
 		int actualMouseX = mouseX - ((this.width - this.imageWidth) / 2);
 		int actualMouseY = mouseY - ((this.height - this.imageHeight) / 2);
 
-		InfuserTileEntity tile = menu.getTile();
+		InfuserBlockEntity tile = menu.getTile();
 
 		if (isHovering(123, 16, 12, 12, mouseX, mouseY)
-				&& tile.handler.getStackInSlot(InfuserTileEntity.SLOT_GEM).isEmpty()) {
-			List<ITextComponent> text = new ArrayList<>();
-			text.add(new TranslationTextComponent("gui.forcecraft.infuser.help.tooltip")
-					.withStyle(TextFormatting.GRAY));
+				&& tile.handler.getStackInSlot(InfuserBlockEntity.SLOT_GEM).isEmpty()) {
+			List<Component> text = new ArrayList<>();
+			text.add(new TranslatableComponent("gui.forcecraft.infuser.help.tooltip")
+					.withStyle(ChatFormatting.GRAY));
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
 		if (isHovering(39, 101, 12, 12, mouseX, mouseY)) {
-			List<ITextComponent> text = new ArrayList<>();
+			List<Component> text = new ArrayList<>();
 			if(getMenu().isWorkAllowed()) {
-				text.add(new TranslationTextComponent("gui.forcecraft.infuser.start.tooltip")
-						.withStyle(TextFormatting.GRAY));
+				text.add(new TranslatableComponent("gui.forcecraft.infuser.start.tooltip")
+						.withStyle(ChatFormatting.GRAY));
 			} else {
 				boolean modifiersEmpty = tile.areAllModifiersEmpty();
 				if(!modifiersEmpty && tile.getEnergyStored() < tile.getEnergyCostPer()) {
-					text.add(new TranslationTextComponent("gui.forcecraft.infuser.missing.rf.tooltip")
-							.withStyle(TextFormatting.RED));
+					text.add(new TranslatableComponent("gui.forcecraft.infuser.missing.rf.tooltip")
+							.withStyle(ChatFormatting.RED));
 				} else {
-					text.add(new TranslationTextComponent("gui.forcecraft.infuser.missing.tooltip")
-							.withStyle(TextFormatting.RED));
+					text.add(new TranslatableComponent("gui.forcecraft.infuser.missing.tooltip")
+							.withStyle(ChatFormatting.RED));
 				}
 			}
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
 		if (isHovering(156, 8, 12, 112, mouseX, mouseY)) {
-			List<ITextComponent> text = new ArrayList<>();
-			IFormattableTextComponent tt = new StringTextComponent(tile.getEnergyStored() + " RF")
-					.withStyle(TextFormatting.GOLD);
+			List<Component> text = new ArrayList<>();
+			MutableComponent tt = new TextComponent(tile.getEnergyStored() + " RF")
+					.withStyle(ChatFormatting.GOLD);
 			text.add(tt);
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
 		if (isHovering(10, 41, 15, 82, mouseX, mouseY)) {
-			List<ITextComponent> text = new ArrayList<>();
+			List<Component> text = new ArrayList<>();
 			if (tile.getFluid() == null) {
-				text.add(new TranslationTextComponent("gui.forcecraft.infuser.empty.tooltip"));
+				text.add(new TranslatableComponent("gui.forcecraft.infuser.empty.tooltip"));
 			} else {
-				text.add(new TranslationTextComponent("fluid.forcecraft.fluid_force_source"));
+				text.add(new TranslatableComponent("fluid.forcecraft.fluid_force_source"));
 
-				text.add(new StringTextComponent(tile.getFluidAmount() + " mb")
-						.withStyle(TextFormatting.YELLOW));
+				text.add(new TextComponent(tile.getFluidAmount() + " mb")
+						.withStyle(ChatFormatting.YELLOW));
 			}
 
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 	}
 
-	private void drawFluidBar(MatrixStack matrixStack) {
+	private void drawFluidBar(PoseStack matrixStack) {
 		if (menu.getTile() == null || menu.getTile().getFluid() == null) {
 			return;
 		}
@@ -205,7 +205,7 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 		blit(matrixStack, leftPos + 8, topPos + 41, 188, 26, 16, 82);
 	}
 
-	private void drawEnergyBar(MatrixStack ms) {
+	private void drawEnergyBar(PoseStack ms) {
 		if (menu.getTile() == null || menu.getTile().energyStorage.getMaxEnergyStored() <= 0) {
 			return;
 		}
@@ -222,8 +222,8 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
 				width, (int) height);
 	}
 
-	private void drawProgressBar(MatrixStack matrixStack) {
-		InfuserTileEntity tile = menu.getTile();
+	private void drawProgressBar(PoseStack matrixStack) {
+		InfuserBlockEntity tile = menu.getTile();
 		if(tile.canWork) {
 			this.infuserProgress.setMin(tile.processTime).setMax(tile.maxProcessTime);
 			this.infuserProgress.draw(matrixStack, this.minecraft);

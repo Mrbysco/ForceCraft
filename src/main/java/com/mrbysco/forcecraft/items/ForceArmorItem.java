@@ -6,18 +6,18 @@ import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -30,13 +30,13 @@ import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_
 
 public class ForceArmorItem extends ArmorItem implements IForceChargingTool {
 
-    public ForceArmorItem(IArmorMaterial materialIn, EquipmentSlotType slot, Item.Properties builderIn) {
+    public ForceArmorItem(ArmorMaterial materialIn, EquipmentSlot slot, Item.Properties builderIn) {
         super(materialIn, slot, builderIn);
     }
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
     	if(CAPABILITY_TOOLMOD == null) {
             return null;
         }
@@ -45,7 +45,7 @@ public class ForceArmorItem extends ArmorItem implements IForceChargingTool {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
 		ForceToolData fd = new ForceToolData(stack);
 		fd.attachInformation(lores);
     	ToolModStorage.attachInformation(stack, lores);
@@ -64,15 +64,15 @@ public class ForceArmorItem extends ArmorItem implements IForceChargingTool {
 
     // ShareTag for server->client capability data sync
     @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-    	CompoundNBT nbt = stack.getOrCreateTag();
+    public CompoundTag getShareTag(ItemStack stack) {
+    	CompoundTag nbt = stack.getOrCreateTag();
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 	  
 		//on server  this runs . also has correct values.
 		//set data for sync to client
 		if(cap != null) {
-			CompoundNBT shareTag = ToolModStorage.serializeNBT(cap);
+			CompoundTag shareTag = ToolModStorage.serializeNBT(cap);
 			
 			nbt.put(Reference.MOD_ID, shareTag);
 //	        ForceCraft.LOGGER.info("(SERVER) getShareTag : ARMOR{}  ", shareTag);
@@ -82,13 +82,13 @@ public class ForceArmorItem extends ArmorItem implements IForceChargingTool {
     }
 
     @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
     	if(nbt != null && nbt.contains(Reference.MOD_ID)) {
 
     		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
     		//these logs run on client. and yes, on client speed:1 its going up as expected
     		if(cap != null) {
-        		INBT shareTag = nbt.get(Reference.MOD_ID);
+        		Tag shareTag = nbt.get(Reference.MOD_ID);
 	        	ToolModStorage.deserializeNBT(cap, shareTag);
 
 //            	ForceCraft.LOGGER.info("(CLIENT) readShareTag : ARMOR{}  ", shareTag);
@@ -101,7 +101,7 @@ public class ForceArmorItem extends ArmorItem implements IForceChargingTool {
 
 	@Nullable
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null && cap.hasCamo()) {
 			return "forcecraft:textures/models/armor/force_invisible.png";

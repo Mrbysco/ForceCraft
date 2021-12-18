@@ -1,17 +1,17 @@
 package com.mrbysco.forcecraft.capablilities.forcewrench;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
 
 public interface IForceWrench {
 
     boolean hasBlockStored();
     boolean canStoreBlock();
-    CompoundNBT getStoredBlockNBT();
+    CompoundTag getStoredBlockNBT();
     BlockState getStoredBlockState();
     String getStoredName();
 
-    void storeBlockNBT(CompoundNBT nbt);
+    void storeBlockNBT(CompoundTag nbt);
     void storeBlockState(BlockState base);
     void setBlockName(String name);
 

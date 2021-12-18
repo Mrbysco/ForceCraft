@@ -2,14 +2,14 @@ package com.mrbysco.forcecraft.client.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.Texture;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -22,9 +22,9 @@ public class RenderHelper {
 
 		ResourceLocation flowing = fluid.getFluid().getAttributes().getStillTexture(fluid);
 
-		Texture texture = Minecraft.getInstance().getTextureManager().getTexture(PlayerContainer.BLOCK_ATLAS);
-		if (texture instanceof AtlasTexture) {
-			TextureAtlasSprite sprite = ((AtlasTexture) texture).getSprite(flowing);
+		AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS);
+		if (texture instanceof TextureAtlas) {
+			TextureAtlasSprite sprite = ((TextureAtlas) texture).getSprite(flowing);
 			if (sprite != null) {
 				float minU = sprite.getU0();
 				float maxU = sprite.getU1();
@@ -33,7 +33,7 @@ public class RenderHelper {
 				float deltaV = maxV - minV;
 				double tankLevel = percent * height;
 
-				Minecraft.getInstance().textureManager.bind(PlayerContainer.BLOCK_ATLAS);
+				Minecraft.getInstance().textureManager.bind(InventoryMenu.BLOCK_ATLAS);
 
 				Color color = new Color(fluid.getFluid()
 						.getAttributes()
@@ -59,9 +59,9 @@ public class RenderHelper {
 	}
 
 	private static void drawQuad(double x, double y, double width, double height, float minU, float minV, float maxU, float maxV) {
-		Tessellator tessellator = Tessellator.getInstance();
+		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(x, y + height, 0).uv(minU, maxV).endVertex();
 		buffer.vertex(x + width, y + height, 0).uv(maxU, maxV).endVertex();
 		buffer.vertex(x + width, y, 0).uv(maxU, minV).endVertex();

@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.capablilities.forcerod;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
 
-public class ForceRodProvider implements ICapabilitySerializable<INBT>, ICapabilityProvider {
+public class ForceRodProvider implements ICapabilitySerializable<Tag>, ICapabilityProvider {
     private LazyOptional<IForceRodModifier> instance;
     private IForceRodModifier forceRod;
 
@@ -28,12 +28,12 @@ public class ForceRodProvider implements ICapabilitySerializable<INBT>, ICapabil
     }
 
     @Override
-    public INBT serializeNBT() {
+    public Tag serializeNBT() {
         return CAPABILITY_FORCEROD.writeNBT(forceRod, null);
     }
 
     @Override
-    public void deserializeNBT(INBT nbt) {
+    public void deserializeNBT(Tag nbt) {
         CAPABILITY_FORCEROD.readNBT(forceRod, null, nbt);
     }
 

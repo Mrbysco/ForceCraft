@@ -6,19 +6,19 @@ import com.mrbysco.forcecraft.recipe.GrindingRecipe.SerializerGrindingRecipe;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe.SerializeInfuserRecipe;
 import com.mrbysco.forcecraft.recipe.ShapedNoRemainderRecipe.SerializerShapedNoRemainderRecipe;
 import com.mrbysco.forcecraft.recipe.TransmutationRecipe.SerializerTransmutationRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ForceRecipes {
-	public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Reference.MOD_ID);
+	public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Reference.MOD_ID);
 
-	public static final IRecipeType<InfuseRecipe> INFUSER_TYPE = IRecipeType.register(new ResourceLocation(Reference.MOD_ID, "infuser").toString());
-	public static final IRecipeType<FreezingRecipe> FREEZING = IRecipeType.register(new ResourceLocation(Reference.MOD_ID, "freezing").toString());
-	public static final IRecipeType<GrindingRecipe> GRINDING = IRecipeType.register(new ResourceLocation(Reference.MOD_ID, "grinding").toString());
+	public static final RecipeType<InfuseRecipe> INFUSER_TYPE = RecipeType.register(new ResourceLocation(Reference.MOD_ID, "infuser").toString());
+	public static final RecipeType<FreezingRecipe> FREEZING = RecipeType.register(new ResourceLocation(Reference.MOD_ID, "freezing").toString());
+	public static final RecipeType<GrindingRecipe> GRINDING = RecipeType.register(new ResourceLocation(Reference.MOD_ID, "grinding").toString());
 
 	public static final RegistryObject<SerializeInfuserRecipe> INFUSER_SERIALIZER = RECIPE_SERIALIZERS.register("infuser", SerializeInfuserRecipe::new);
 	public static final RegistryObject<SerializerTransmutationRecipe> TRANSMUTATION_SERIALIZER = RECIPE_SERIALIZERS.register("transmutation", SerializerTransmutationRecipe::new);

@@ -2,30 +2,26 @@ package com.mrbysco.forcecraft.items;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.config.ConfigHandler;
+import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.ITagCollectionSupplier;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -47,18 +43,15 @@ public class BaconatorItem extends BaseItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack itemstack = playerIn.getItemInHand(handIn);
 		IItemHandler handler = itemstack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		if(playerIn.isShiftKeyDown()) {
 			boolean isFull = ItemHandlerUtils.isFull(handler);
 			if(!isFull) {
 				//Fill with food
-				boolean extracted = ItemHandlerUtils.extractStackFromPlayer(playerIn.inventory, handler, (stack) -> {
-					ITagCollectionSupplier tagCollection = TagCollectionManager.getInstance();
-					final ResourceLocation baconatorFood = new ResourceLocation(Reference.MOD_ID, "baconator_food");
-					Tag<Item> tag = (Tag<Item>) tagCollection.getItems().getTag(baconatorFood);
-					return !stack.isEmpty() && stack.isEdible() && tag != null && stack.getItem().is(tag);
+				boolean extracted = ItemHandlerUtils.extractStackFromPlayer(playerIn.getInventory(), handler, (stack) -> {
+					return !stack.isEmpty() && stack.isEdible() && stack.is(ForceTags.BACONATOR_FOOD);
 				});
 				boolean hasItems = ItemHandlerUtils.hasItems(handler);
 				if(!extracted) {
@@ -67,9 +60,9 @@ public class BaconatorItem extends BaseItem {
 						itemstack.setDamageValue(itemstack.getDamageValue() == 1 ? 0 : 1);
 					}
 				} else {
-					worldIn.playSound((PlayerEntity) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.ITEM_PICKUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					worldIn.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
-				CompoundNBT tag = itemstack.getOrCreateTag();
+				CompoundTag tag = itemstack.getOrCreateTag();
 				tag.putBoolean(HAS_FOOD_TAG, hasItems);
 			}
 		} else {
@@ -82,37 +75,36 @@ public class BaconatorItem extends BaseItem {
 				}
 			}
 		}
-		return ActionResult.pass(itemstack);
+		return InteractionResultHolder.pass(itemstack);
 	}
 
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
 		if(firstStack != null && !firstStack.isEmpty()) {
 			entityLiving.eat(worldIn, firstStack);
-			worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.PIG_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			worldIn.playSound((Player) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.PIG_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 		}
 		return stack;
 	}
 
 	@Override
-	public UseAction getUseAnimation(ItemStack stack) {
+	public UseAnim getUseAnimation(ItemStack stack) {
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
-		return firstStack != null && firstStack.getItem().isEdible() ? UseAction.EAT : UseAction.NONE;
+		return firstStack != null && firstStack.getItem().isEdible() ? UseAnim.EAT : UseAnim.NONE;
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if(stack.getDamageValue() == 1 && entityIn instanceof PlayerEntity && worldIn.getGameTime() % 20 == 0) {
-			PlayerEntity playerIn = (PlayerEntity)entityIn;
-			if(!playerIn.abilities.instabuild && playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
+	public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if(stack.getDamageValue() == 1 && entityIn instanceof Player playerIn && worldIn.getGameTime() % 20 == 0) {
+			if(!playerIn.getAbilities().instabuild && playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
 				IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 				ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
 				if(!firstStack.isEmpty()) {
 					playerIn.eat(worldIn, firstStack);
-					worldIn.playSound((PlayerEntity) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.PIG_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					worldIn.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.PIG_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
 			}
 		}
@@ -136,43 +128,40 @@ public class BaconatorItem extends BaseItem {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		if(Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.carrying").withStyle(TextFormatting.DARK_RED));
+			tooltip.add(new TranslatableComponent("forcecraft.baconator.shift.carrying").withStyle(ChatFormatting.DARK_RED));
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 			if(handler != null) {
 				int stacks = 0;
 				for(int i = 0; i < handler.getSlots(); i++) {
 					ItemStack foodStack = handler.getStackInSlot(i);
 					if(!foodStack.isEmpty()) {
-						tooltip.add(new StringTextComponent(foodStack.getCount() + "x ").append(foodStack.getHoverName()).withStyle(TextFormatting.GOLD));
+						tooltip.add(new TextComponent(foodStack.getCount() + "x ").append(foodStack.getHoverName()).withStyle(ChatFormatting.GOLD));
 						stacks++;
 					}
 				}
 				if(stacks == 0) {
-					tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.nothing").withStyle(TextFormatting.GRAY));
+					tooltip.add(new TranslatableComponent("forcecraft.baconator.shift.nothing").withStyle(ChatFormatting.GRAY));
 				}
 			}
 		} else {
-			tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.text").withStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslatableComponent("forcecraft.baconator.shift.text").withStyle(ChatFormatting.GRAY));
 		}
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 
 	@Nullable
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 		return new BaconatorItem.InventoryProvider();
 	}
 
-	private static class InventoryProvider implements ICapabilitySerializable<CompoundNBT> {
+	private static class InventoryProvider implements ICapabilitySerializable<CompoundTag> {
 		private final LazyOptional<ItemStackHandler> inventory = LazyOptional.of(() -> new ItemStackHandler(ConfigHandler.COMMON.baconatorMaxStacks.get()) {
 			@Override
 			public boolean isItemValid(int slot, ItemStack stack) {
-				ITagCollectionSupplier tagCollection = TagCollectionManager.getInstance();
-				final ResourceLocation baconatorFood = new ResourceLocation(Reference.MOD_ID, "baconator_food");
-				Tag<Item> tag = (Tag<Item>) tagCollection.getItems().getTag(baconatorFood);
-				return stack.isEdible() && tag != null && stack.getItem().is(tag);
+				return stack.isEdible() && stack.is(ForceTags.BACONATOR_FOOD);
 			}
 		});
 
@@ -185,15 +174,15 @@ public class BaconatorItem extends BaseItem {
 		}
 
 		@Override
-		public CompoundNBT serializeNBT() {
+		public CompoundTag serializeNBT() {
 			if (inventory.isPresent()) {
 				return inventory.resolve().get().serializeNBT();
 			}
-			return new CompoundNBT();
+			return new CompoundTag();
 		}
 
 		@Override
-		public void deserializeNBT(CompoundNBT nbt) {
+		public void deserializeNBT(CompoundTag nbt) {
 			inventory.ifPresent(h -> h.deserializeNBT(nbt));
 		}
 	}

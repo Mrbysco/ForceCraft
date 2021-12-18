@@ -1,8 +1,8 @@
 package com.mrbysco.forcecraft.capablilities.experiencetome;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
@@ -11,16 +11,15 @@ public class ExperienceTomeStorage implements Capability.IStorage<IExperienceTom
 
     @Nullable
     @Override
-    public INBT writeNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side) {
-        CompoundNBT nbt = new CompoundNBT();
+    public Tag writeNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side) {
+        CompoundTag nbt = new CompoundTag();
         nbt.putFloat("experience", instance.getExperienceValue());
         return nbt;
     }
 
     @Override
-    public void readNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side, INBT nbtIn) {
-        if(nbtIn instanceof CompoundNBT) {
-            CompoundNBT nbt = (CompoundNBT) nbtIn;
+    public void readNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side, Tag nbtIn) {
+        if(nbtIn instanceof CompoundTag nbt) {
             instance.setExperienceValue(nbt.getFloat("experience"));
         }
     }

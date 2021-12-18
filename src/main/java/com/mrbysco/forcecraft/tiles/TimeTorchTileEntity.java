@@ -2,24 +2,24 @@ package com.mrbysco.forcecraft.tiles;
 
 import com.mrbysco.forcecraft.blocks.torch.TimeTorchBlock;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 //All Code Heavily inspired by Torcherino. Credit to Moze_Intel, Sci4me and NinjaPhenix
-public class TimeTorchTileEntity extends TileEntity implements ITickableTileEntity {
+public class TimeTorchTileEntity extends BlockEntity implements TickableBlockEntity {
 
     private int xMin;
     private int yMin;
@@ -30,7 +30,7 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
 
     private byte speed;
 
-    public TimeTorchTileEntity(TileEntityType<?> tileTypeIn) {
+    public TimeTorchTileEntity(BlockEntityType<?> tileTypeIn) {
         super(tileTypeIn);
         this.speed = 3;
     }
@@ -77,18 +77,18 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
         if(blockState != null) {
             Block block = blockState.getBlock();
 
-            if(block == null || block instanceof FlowingFluidBlock || block instanceof TimeTorchBlock || block == Blocks.AIR)
+            if(block == null || block instanceof LiquidBlock || block instanceof TimeTorchBlock || block == Blocks.AIR)
                 return;
 
             if(block.isRandomlyTicking(blockState) && !level.isClientSide) {
                 for(int i = 0; i < this.speed; i++) {
                     if(getLevel().getBlockState(pos) != blockState) break;
                     if(getLevel().random.nextBoolean())
-                    block.randomTick(blockState, (ServerWorld)this.level, pos, level.random);
+                    block.randomTick(blockState, (ServerLevel)this.level, pos, level.random);
                 }
             }
             if(block.hasTileEntity(blockState)) {
-                TileEntity tile = this.level.getBlockEntity(pos);
+                BlockEntity tile = this.level.getBlockEntity(pos);
 
                 if(tile == null || tile.isRemoved()) return;
 
@@ -96,9 +96,9 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
                     if(tile.isRemoved()) {
                         break;
                     }
-                    if(tile instanceof ITickableTileEntity) {
+                    if(tile instanceof TickableBlockEntity) {
                         if(getLevel().random.nextBoolean())
-                        ((ITickableTileEntity) tile).tick();
+                        ((TickableBlockEntity) tile).tick();
                     }
                 }
             }
@@ -106,28 +106,28 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
-        CompoundNBT tag = super.save(compound);
+    public CompoundTag save(CompoundTag compound) {
+        CompoundTag tag = super.save(compound);
         tag.putByte("Speed", this.speed);
         return tag;
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         this.speed = nbt.getByte("Speed");
         super.load(state, nbt);
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT nbt = new CompoundNBT();
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        CompoundTag nbt = new CompoundTag();
         this.save(nbt);
-        return new SUpdateTileEntityPacket(getBlockPos(), 0, nbt);
+        return new ClientboundBlockEntityDataPacket(getBlockPos(), 0, nbt);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         super.onDataPacket(net, pkt);
         this.load(getBlockState(), pkt.getTag());
     }

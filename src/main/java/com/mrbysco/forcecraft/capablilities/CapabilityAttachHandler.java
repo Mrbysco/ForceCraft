@@ -3,11 +3,11 @@ package com.mrbysco.forcecraft.capablilities;
 import com.mrbysco.forcecraft.capablilities.banemodifier.BaneProvider;
 import com.mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
 import com.mrbysco.forcecraft.capablilities.playermodifier.PlayerModifierProvider;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.INBT;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -21,11 +21,11 @@ public class CapabilityAttachHandler {
 
     @SubscribeEvent
     public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof EndermanEntity || event.getObject() instanceof CreeperEntity){
+        if(event.getObject() instanceof EnderMan || event.getObject() instanceof Creeper){
             event.addCapability(BANE_CAP, new BaneProvider());
         }
 
-        if(event.getObject() instanceof PlayerEntity){
+        if(event.getObject() instanceof Player){
             event.addCapability(PLAYER_CAP, new PlayerModifierProvider());
         }
     }
@@ -35,13 +35,13 @@ public class CapabilityAttachHandler {
         // If not dead, player is returning from the End
         if (!event.isWasDeath()) return;
 
-        PlayerEntity original = event.getOriginal();
-        PlayerEntity clone = event.getPlayer();
+        Player original = event.getOriginal();
+        Player clone = event.getPlayer();
 
         final Capability<IPlayerModifier> capability = CAPABILITY_PLAYERMOD;
         original.getCapability(capability).ifPresent(dataOriginal ->
                 clone.getCapability(capability).ifPresent(dataClone -> {
-                    INBT nbt = capability.getStorage().writeNBT(capability, dataOriginal, null);
+                    Tag nbt = capability.getStorage().writeNBT(capability, dataOriginal, null);
                     capability.getStorage().readNBT(capability, dataClone, null, nbt);
                 })
         );

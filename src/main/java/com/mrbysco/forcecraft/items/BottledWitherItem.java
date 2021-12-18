@@ -1,13 +1,13 @@
 package com.mrbysco.forcecraft.items;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 public class BottledWitherItem extends BaseItem {
 
@@ -16,17 +16,17 @@ public class BottledWitherItem extends BaseItem {
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
-        World worldIn = context.getLevel();
+    public InteractionResult useOn(UseOnContext context) {
+        Level worldIn = context.getLevel();
         if (!worldIn.isClientSide) {
             BlockPos pos = context.getClickedPos();
-            WitherEntity wither = new WitherEntity(EntityType.WITHER, worldIn);
+            WitherBoss wither = new WitherBoss(EntityType.WITHER, worldIn);
             wither.moveTo(pos.getX(), pos.getY() + 2.0, pos.getZ(), 0.0F, 0.0F);
             worldIn.addFreshEntity(wither);
         }
 
-        PlayerEntity player = context.getPlayer();
-        if(player != null && !player.abilities.instabuild) {
+        Player player = context.getPlayer();
+        if(player != null && !player.getAbilities().instabuild) {
             context.getItemInHand().shrink(1);
         }
 

@@ -2,28 +2,28 @@ package com.mrbysco.forcecraft.entities;
 
 import com.mrbysco.forcecraft.entities.goal.EatGrassToRestoreGoal;
 import com.mrbysco.forcecraft.registry.ForceEntities;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ColdPigEntity extends PigEntity implements IColdMob {
+public class ColdPigEntity extends Pig implements IColdMob {
 	private int grassTimer;
 	private EatGrassToRestoreGoal eatGrassGoal;
 	private ResourceLocation originalTypeLocation;
 
-	public ColdPigEntity(EntityType<? extends PigEntity> type, World worldIn) {
+	public ColdPigEntity(EntityType<? extends Pig> type, Level worldIn) {
 		super(type, worldIn);
 		this.originalTypeLocation = new ResourceLocation("minecraft", "pig");
 	}
 
-	public ColdPigEntity(World worldIn, ResourceLocation typeLocation) {
+	public ColdPigEntity(Level worldIn, ResourceLocation typeLocation) {
 		super(ForceEntities.COLD_PIG.get(), worldIn);
 		if(typeLocation != null) {
 			this.originalTypeLocation = typeLocation;
@@ -31,12 +31,12 @@ public class ColdPigEntity extends PigEntity implements IColdMob {
 	}
 
 	@Override
-	public boolean canMate(AnimalEntity otherAnimal) {
+	public boolean canMate(Animal otherAnimal) {
 		return false;
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 
 		if(compound.getString("OriginalMob").isEmpty()) {
@@ -47,7 +47,7 @@ public class ColdPigEntity extends PigEntity implements IColdMob {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putString("OriginalMob", this.originalTypeLocation.toString());
 	}
@@ -59,8 +59,8 @@ public class ColdPigEntity extends PigEntity implements IColdMob {
 		this.goalSelector.addGoal(5, this.eatGrassGoal);
 	}
 
-	public static AttributeModifierMap.MutableAttribute generateAttributes() {
-		return PigEntity.createAttributes();
+	public static AttributeSupplier.Builder generateAttributes() {
+		return Pig.createAttributes();
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class ColdPigEntity extends PigEntity implements IColdMob {
 	public float getHeadRotationAngleX(float p_70890_1_) {
 		if (this.grassTimer > 4 && this.grassTimer <= 36) {
 			float f = ((float)(this.grassTimer - 4) - p_70890_1_) / 32.0F;
-			return ((float)Math.PI / 5F) + 0.21991149F * MathHelper.sin(f * 28.7F);
+			return ((float)Math.PI / 5F) + 0.21991149F * Mth.sin(f * 28.7F);
 		} else {
 			return this.grassTimer > 0 ? ((float)Math.PI / 5F) : this.xRot * ((float)Math.PI / 180F);
 		}

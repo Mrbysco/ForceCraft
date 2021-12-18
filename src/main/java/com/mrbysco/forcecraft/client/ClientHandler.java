@@ -25,16 +25,16 @@ import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.renderer.entity.EndermanRenderer;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.entity.SpriteRenderer;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.ItemEntityRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -57,58 +57,58 @@ public class ClientHandler {
 		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_7);
 		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_8);
 
-		ScreenManager.register(ForceContainers.FORCE_FURNACE.get(), ForceFurnaceScreen::new);
-		ScreenManager.register(ForceContainers.INFUSER.get(), InfuserScreen::new);
-		ScreenManager.register(ForceContainers.FORCE_BELT.get(), ForceBeltScreen::new);
-		ScreenManager.register(ForceContainers.FORCE_PACK.get(), ForcePackScreen::new);
-		ScreenManager.register(ForceContainers.SPOILS_BAG.get(), SpoilsBagScreen::new);
-		ScreenManager.register(ForceContainers.ITEM_CARD.get(), ItemCardScreen::new);
-		ScreenManager.register(ForceContainers.FORCE_ENGINE.get(), ForceEngineScreen::new);
+		MenuScreens.register(ForceContainers.FORCE_FURNACE.get(), ForceFurnaceScreen::new);
+		MenuScreens.register(ForceContainers.INFUSER.get(), InfuserScreen::new);
+		MenuScreens.register(ForceContainers.FORCE_BELT.get(), ForceBeltScreen::new);
+		MenuScreens.register(ForceContainers.FORCE_PACK.get(), ForcePackScreen::new);
+		MenuScreens.register(ForceContainers.SPOILS_BAG.get(), SpoilsBagScreen::new);
+		MenuScreens.register(ForceContainers.ITEM_CARD.get(), ItemCardScreen::new);
+		MenuScreens.register(ForceContainers.FORCE_ENGINE.get(), ForceEngineScreen::new);
 
-		RenderTypeLookup.setRenderLayer(ForceRegistry.POWER_ORE.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_SAPLING.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_RED_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_ORANGE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_GREEN_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_BLUE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_WHITE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_BLACK_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_BROWN_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_LIGHT_BLUE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_MAGENTA_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_PINK_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_LIGHT_GRAY_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_LIME_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_CYAN_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_PURPLE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_GRAY_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_RED_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_ORANGE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_GREEN_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_BLUE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_WHITE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_BLACK_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_BROWN_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_LIGHT_BLUE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_MAGENTA_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_PINK_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_LIGHT_GRAY_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_LIME_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_CYAN_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_PURPLE_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_FORCE_GRAY_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.TIME_TORCH.get(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ForceRegistry.WALL_TIME_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.POWER_ORE.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_SAPLING.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_RED_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_ORANGE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_GREEN_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_BLUE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_WHITE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_BLACK_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_BROWN_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_LIGHT_BLUE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_MAGENTA_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_PINK_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_LIGHT_GRAY_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_LIME_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_CYAN_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_PURPLE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_GRAY_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_RED_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_ORANGE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_GREEN_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_BLUE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_WHITE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_BLACK_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_BROWN_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_LIGHT_BLUE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_MAGENTA_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_PINK_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_LIGHT_GRAY_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_LIME_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_CYAN_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_PURPLE_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_GRAY_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.TIME_TORCH.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_TIME_TORCH.get(), RenderType.cutout());
 
-		RenderTypeLookup.setRenderLayer(ForceFluids.FORCE_FLUID_FLOWING.get(), RenderType.translucent());
-		RenderTypeLookup.setRenderLayer(ForceFluids.FORCE_FLUID_SOURCE.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(ForceFluids.FORCE_FLUID_FLOWING.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(ForceFluids.FORCE_FLUID_SOURCE.get(), RenderType.translucent());
 
-		RenderTypeLookup.setRenderLayer(ForceRegistry.FORCE_LEAVES.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_LEAVES.get(), RenderType.cutoutMipped());
 
-		net.minecraft.client.renderer.ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.NON_BURNABLE_ITEM.get(), renderManager -> new ItemRenderer(renderManager, itemRenderer));
+		net.minecraft.client.renderer.entity.ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.NON_BURNABLE_ITEM.get(), renderManager -> new ItemEntityRenderer(renderManager, itemRenderer));
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_CHICKEN.get(), ColdChickenRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_COW.get(), ColdCowRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.COLD_PIG.get(), ColdPigRenderer::new);
@@ -121,33 +121,33 @@ public class ClientHandler {
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.ENDER_TOT.get(), EnderTotRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.ANGRY_ENDERMAN.get(), EndermanRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FORCE_ARROW.get(), ForceArrowRenderer::new);
-		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FORCE_FLASK.get(), renderManager -> new SpriteRenderer<>(renderManager, Minecraft.getInstance().getItemRenderer()));
+		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FORCE_FLASK.get(), renderManager -> new ThrownItemRenderer<>(renderManager, Minecraft.getInstance().getItemRenderer()));
 
-		ItemModelsProperties.register(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity) -> {
+		ItemProperties.register(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity) -> {
 			IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
 			return magnetCap != null && magnetCap.isActivated() ? 1.0F : 0.0F;
 		});
 
-		ItemModelsProperties.register(ForceRegistry.ENTITY_FLASK.get(), new ResourceLocation("captured"), (stack, world, livingEntity) ->
+		ItemProperties.register(ForceRegistry.ENTITY_FLASK.get(), new ResourceLocation("captured"), (stack, world, livingEntity) ->
 				stack.hasTag() && stack.getTag().contains("StoredEntity") ? 1.0F : 0.0F);
 
-		ItemModelsProperties.register(ForceRegistry.BACONATOR.get(), new ResourceLocation("filled"), (stack, world, livingEntity) ->
+		ItemProperties.register(ForceRegistry.BACONATOR.get(), new ResourceLocation("filled"), (stack, world, livingEntity) ->
 				stack.hasTag() && stack.getTag().contains(BaconatorItem.HAS_FOOD_TAG) ? 1.0F : 0.0F);
 
-		ItemModelsProperties.register(ForceRegistry.FORCE_PACK.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
+		ItemProperties.register(ForceRegistry.FORCE_PACK.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
 				stack.hasTag() && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
 
-		ItemModelsProperties.register(ForceRegistry.FORCE_BELT.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
+		ItemProperties.register(ForceRegistry.FORCE_BELT.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
 				 stack.hasTag() && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
 
-		ItemModelsProperties.register(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pull"), (stack, world, livingEntity) -> {
+		ItemProperties.register(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pull"), (stack, world, livingEntity) -> {
 			if (livingEntity == null) {
 				return 0.0F;
 			} else {
 				return livingEntity.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration() - livingEntity.getUseItemRemainingTicks()) / 20.0F;
 			}
 		});
-		ItemModelsProperties.register(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pulling"), (stack, world, livingEntity) ->
+		ItemProperties.register(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pulling"), (stack, world, livingEntity) ->
 				livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 

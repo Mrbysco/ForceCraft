@@ -12,8 +12,8 @@ import com.mrbysco.forcecraft.items.tools.ForcePickaxeItem;
 import com.mrbysco.forcecraft.items.tools.ForceRodItem;
 import com.mrbysco.forcecraft.items.tools.ForceShovelItem;
 import com.mrbysco.forcecraft.items.tools.ForceSwordItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
@@ -26,47 +26,47 @@ public enum InfuserModifierType {
 	public boolean apply(ItemStack tool, ItemStack mod, UpgradeBookData bd) {
 		switch (this) {
 		case DAMAGE: // claw item
-			return InfuserTileEntity.addDamageModifier(tool);
+			return InfuserBlockEntity.addDamageModifier(tool);
 		case ENDER:
-			return InfuserTileEntity.addEnderModifier(tool);
+			return InfuserBlockEntity.addEnderModifier(tool);
 		case FORCE:
-			return InfuserTileEntity.addForceModifier(tool);
+			return InfuserBlockEntity.addForceModifier(tool);
 		case HEALING:
-			return InfuserTileEntity.addHealingModifier(tool);
+			return InfuserBlockEntity.addHealingModifier(tool);
 		case HEAT:
-			return InfuserTileEntity.addHeatModifier(tool);
+			return InfuserBlockEntity.addHeatModifier(tool);
 		case LIGHT:
-			return InfuserTileEntity.addLightModifier(tool);
+			return InfuserBlockEntity.addLightModifier(tool);
 		case FORTUNE:
-			return InfuserTileEntity.addLuckModifier(tool);
+			return InfuserBlockEntity.addLuckModifier(tool);
 		case LUMBERJACK:
-			return InfuserTileEntity.addLumberjackModifier(tool);
+			return InfuserBlockEntity.addLumberjackModifier(tool);
 		case SILK:
-			return InfuserTileEntity.addSilkTouchModifier(tool);
+			return InfuserBlockEntity.addSilkTouchModifier(tool);
 		case SPEED:
-			return InfuserTileEntity.addSpeedModifier(tool);
+			return InfuserBlockEntity.addSpeedModifier(tool);
 		case STURDY:
-			return InfuserTileEntity.addSturdyModifier(tool);
+			return InfuserBlockEntity.addSturdyModifier(tool);
 		case CAMO:
-			return InfuserTileEntity.applyCamo(tool, mod);
+			return InfuserBlockEntity.applyCamo(tool, mod);
 		case BANE:
-			return InfuserTileEntity.addBaneModifier(tool);
+			return InfuserBlockEntity.addBaneModifier(tool);
 		case BLEEDING:
-			return InfuserTileEntity.addBleedingModifier(tool);
+			return InfuserBlockEntity.addBleedingModifier(tool);
 		case WING:
-			return InfuserTileEntity.addWingModifier(tool);
+			return InfuserBlockEntity.addWingModifier(tool);
 		case RAINBOW:
-			return InfuserTileEntity.addRainbowModifier(tool);
+			return InfuserBlockEntity.addRainbowModifier(tool);
 		case TIME:
 			break;
 		case TREASURE:
-			return InfuserTileEntity.addTreasureModifier(tool);
+			return InfuserBlockEntity.addTreasureModifier(tool);
 		case PACK1:
 		case PACK2:
 		case PACK3:
 		case PACK4:
 			// logic of which pack upgrade to use is inside
-			return InfuserTileEntity.upgradeBag(tool, bd);
+			return InfuserBlockEntity.upgradeBag(tool, bd);
 		case ITEM:
 //			ForceCraft.LOGGER.info("i need to give you item {}", this);
 
@@ -74,7 +74,7 @@ public enum InfuserModifierType {
 		case EXP:
 			break;
 		case FREEZING:
-			return InfuserTileEntity.addFreezingModifier(tool);
+			return InfuserBlockEntity.addFreezingModifier(tool);
 		case GRINDING:
 			break;
 		case SIGHT:

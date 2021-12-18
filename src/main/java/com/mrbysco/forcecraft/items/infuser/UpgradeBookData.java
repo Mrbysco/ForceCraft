@@ -3,10 +3,11 @@ package com.mrbysco.forcecraft.items.infuser;
 import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,7 +25,7 @@ public class UpgradeBookData {
 			ForceCraft.LOGGER.error("invalid book data entering book {}", book);
 			return;
 		}
-		CompoundNBT tag = book.getTag();
+		CompoundTag tag = book.getTag();
 		if (tag != null && tag.contains("tier")) {
 			// is not empty, load it up
 			this.read(book, tag);
@@ -104,7 +105,7 @@ public class UpgradeBookData {
 		return recipesThisTier >= totalThisTier;
 	}
 
-	private void read(ItemStack book, CompoundNBT tag) {
+	private void read(ItemStack book, CompoundTag tag) {
 		progressCache = tag.getString("progressCache");
 		setTier(UpgradeBookTier.values()[tag.getInt("tier")]);
 		points = tag.getInt("points");
@@ -112,11 +113,11 @@ public class UpgradeBookData {
 		for (UpgradeBookTier tier : UpgradeBookTier.values()) {
 			Set<ResourceLocation> tierSet = new HashSet<>();
 
-			ListNBT listTag = (ListNBT) tag.get("tier" + tier.ordinal());
+			ListTag listTag = (ListTag) tag.get("tier" + tier.ordinal());
 
 			if (listTag != null) {
-				for (int i = 0; i < listTag.size(); i++) {
-					CompoundNBT tg = (CompoundNBT) listTag.get(i);
+				for (Tag value : listTag) {
+					CompoundTag tg = (CompoundTag) value;
 					String id = tg.getString("id");
 
 					// i dont know where this bug comes from
@@ -128,8 +129,8 @@ public class UpgradeBookData {
 		}
 	}
 
-	public CompoundNBT write(ItemStack bookInSlot) {
-		CompoundNBT tag = bookInSlot.getOrCreateTag();
+	public CompoundTag write(ItemStack bookInSlot) {
+		CompoundTag tag = bookInSlot.getOrCreateTag();
 		tag.putString("progressCache", progressCache);
 		tag.putInt("tier", getTier().ordinal());
 		tag.putInt("points", points);
@@ -139,11 +140,11 @@ public class UpgradeBookData {
 			if (tierSet == null) {
 				tierSet = new HashSet<>();
 			}
-			ListNBT listTag = new ListNBT();
+			ListTag listTag = new ListTag();
 			for (ResourceLocation id : tierSet) {
 				// i dont know where this bug comes from
 				if (!"minecraft:".equalsIgnoreCase(id.toString())) {
-					CompoundNBT tg = new CompoundNBT();
+					CompoundTag tg = new CompoundTag();
 					tg.putString("id", id.toString());
 					listTag.add(tg);
 				}

@@ -3,11 +3,11 @@ package com.mrbysco.forcecraft.networking.message;
 import com.mrbysco.forcecraft.container.ItemCardContainer;
 import com.mrbysco.forcecraft.items.ItemCardItem;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +20,14 @@ public class RecipeToCardMessage {
 		this.stacks = stacks;
 	}
 
-	public void encode(PacketBuffer buf) {
+	public void encode(FriendlyByteBuf buf) {
 		buf.writeInt(stacks.size());
 		for (ItemStack output : stacks) {
 			buf.writeItem(output);
 		}
 	}
 
-	public static RecipeToCardMessage decode(final PacketBuffer packetBuffer) {
+	public static RecipeToCardMessage decode(final FriendlyByteBuf packetBuffer) {
 		int size = packetBuffer.readInt();
 		List<ItemStack> outputs = new ArrayList<>(size);
 		for (int i = 0 ; i < size ; i++) {
@@ -40,7 +40,7 @@ public class RecipeToCardMessage {
 	public void handle(Supplier<Context> context) {
 		NetworkEvent.Context ctx = context.get();
 		ctx.enqueueWork(() -> {
-			PlayerEntity player = ctx.getSender();
+			Player player = ctx.getSender();
 			// Handle tablet version
 			ItemStack mainhand = ItemStack.EMPTY;
 			if(player.getMainHandItem().getItem() instanceof ItemCardItem) {
@@ -49,8 +49,7 @@ public class RecipeToCardMessage {
 				mainhand = player.getOffhandItem();
 			}
 			if (!mainhand.isEmpty() && mainhand.getItem() == ForceRegistry.ITEM_CARD.get()) {
-				if (player.containerMenu instanceof ItemCardContainer) {
-					ItemCardContainer itemCardContainer = (ItemCardContainer) player.containerMenu;
+				if (player.containerMenu instanceof ItemCardContainer itemCardContainer) {
 					itemCardContainer.setMatrixContents(player, stacks);
 				}
 			}

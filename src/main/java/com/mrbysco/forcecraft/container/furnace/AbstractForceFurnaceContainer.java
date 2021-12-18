@@ -8,21 +8,21 @@ import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
@@ -30,22 +30,22 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.Objects;
 
-public abstract class AbstractForceFurnaceContainer extends Container {
+public abstract class AbstractForceFurnaceContainer extends AbstractContainerMenu {
 	private AbstractForceFurnaceTile tile;
-	private PlayerEntity player;
+	private Player player;
 	private IItemHandler furnaceInventory;
 	private IItemHandler upgradeInventory;
-	private IIntArray furnaceData;
-	private World world;
+	private ContainerData furnaceData;
+	private Level world;
 
-	public AbstractForceFurnaceContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
+	public AbstractForceFurnaceContainer(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
 		this(windowId, playerInventory, getTileEntity(playerInventory, data));
 	}
 
-	protected static AbstractForceFurnaceTile getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
+	protected static AbstractForceFurnaceTile getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
 		Objects.requireNonNull(data, "data cannot be null!");
-		final TileEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
+		final BlockEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 
 		if (tileAtPos instanceof AbstractForceFurnaceTile) {
 			return (AbstractForceFurnaceTile) tileAtPos;
@@ -54,7 +54,7 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 		throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
 	}
 
-	public AbstractForceFurnaceContainer(int id, PlayerInventory playerInventoryIn, AbstractForceFurnaceTile te) {
+	public AbstractForceFurnaceContainer(int id, Inventory playerInventoryIn, AbstractForceFurnaceTile te) {
 		super(ForceContainers.FORCE_FURNACE.get(), id);
 		this.tile = te;
 		this.player = playerInventoryIn.player;
@@ -103,7 +103,7 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 	/**
 	 * Determines whether supplied player can use this container
 	 */
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		return this.tile.stillValid(playerIn);
 	}
 
@@ -111,7 +111,7 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 	 * Handle when the stack in slot {@code index} is shift-clicked. Normally this moves the stack between the player
 	 * inventory and the other inventory(s).
 	 */
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 		if (slot != null && slot.hasItem()) {
@@ -134,7 +134,7 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 					}
 				} else if (isUpgrade(itemstack1) && index == 3) {
 					itemstack1.shrink(1);
-					playerIn.level.playSound((PlayerEntity) null, playerIn.blockPosition(), SoundEvents.ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					playerIn.level.playSound((Player) null, playerIn.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
 					return ItemStack.EMPTY;
 				} else if (index >= 4 && index < 31) {
 					if (!this.moveItemStackTo(itemstack1, 31, 40, false)) {
@@ -164,11 +164,11 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 	}
 
 	protected boolean hasRecipe(ItemStack stack) {
-		return this.world.getRecipeManager().getRecipeFor((IRecipeType)this.getRecipeType(), new Inventory(stack), this.world).isPresent();
+		return this.world.getRecipeManager().getRecipeFor((RecipeType)this.getRecipeType(), new SimpleContainer(stack), this.world).isPresent();
 	}
 
-	protected IRecipeType<? extends AbstractCookingRecipe> getRecipeType() {
-		IRecipeType<? extends AbstractCookingRecipe> recipeType = IRecipeType.SMELTING;
+	protected RecipeType<? extends AbstractCookingRecipe> getRecipeType() {
+		RecipeType<? extends AbstractCookingRecipe> recipeType = RecipeType.SMELTING;
 		ItemStack upgrade = upgradeInventory.getStackInSlot(0);
 		if(!upgrade.isEmpty()) {
 			if(upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
@@ -189,14 +189,14 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+	public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
 		if(clickTypeIn == ClickType.PICKUP_ALL && player.inventory.getCarried().getItem() instanceof UpgradeCoreItem) {
 			return ItemStack.EMPTY;
 		}
 		if (slotId == 3) {
 			Slot slot = getSlot(slotId);
 			if (slot.hasItem() && clickTypeIn != ClickType.QUICK_MOVE) {
-				player.level.playSound((PlayerEntity) null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5F, 1.0F);
+				player.level.playSound((Player) null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.5F, 1.0F);
 				return ItemStack.EMPTY;
 			}
 		}

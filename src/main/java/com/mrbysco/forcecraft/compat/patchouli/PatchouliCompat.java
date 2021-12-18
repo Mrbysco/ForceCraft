@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.compat.patchouli;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class PatchouliCompat {
 	public static void openBook() {

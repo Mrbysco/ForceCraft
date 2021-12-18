@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.client.model;
 
 import com.mrbysco.forcecraft.entities.ColdChickenEntity;
-import net.minecraft.client.renderer.entity.model.ChickenModel;
+import net.minecraft.client.model.ChickenModel;
 
 public class ColdChickenModel<T extends ColdChickenEntity> extends ChickenModel<T> {
 	private float headRotationAngleX;

@@ -1,10 +1,10 @@
 package com.mrbysco.forcecraft.container.slot;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -19,7 +19,7 @@ public class SlotForceGems extends SlotItemHandler {
     @Override
     public boolean mayPlace(ItemStack stack) {
         final ResourceLocation gemTag = new ResourceLocation("forge", "gems/force");
-        ITag<Item> tag = ItemTags.getAllTags().getTagOrEmpty(gemTag);
+        Tag<Item> tag = ItemTags.getAllTags().getTagOrEmpty(gemTag);
         return stack.getItem().is(tag);
     }
 

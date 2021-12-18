@@ -1,9 +1,9 @@
 package com.mrbysco.forcecraft.entities;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.UUID;
@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface IColdMob {
 	ResourceLocation getOriginal();
 
-	default void transformMob(LivingEntity livingEntity, World entityWorld) {
+	default void transformMob(LivingEntity livingEntity, Level entityWorld) {
 		if(livingEntity instanceof IColdMob) {
 			ResourceLocation originalLocation = ((IColdMob)livingEntity).getOriginal();
 			Entity replacementMob = ForgeRegistries.ENTITIES.getValue(originalLocation).create(entityWorld);

@@ -1,32 +1,32 @@
 package com.mrbysco.forcecraft.blocks.engine;
 
 import com.mrbysco.forcecraft.tiles.ForceEngineTile;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DirectionalBlock;
-import net.minecraft.block.material.PushReaction;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -38,6 +38,8 @@ import java.util.Random;
 import java.util.function.ToIntFunction;
 import java.util.stream.Stream;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class ForceEngineBlock extends DirectionalBlock {
 
 	public static final VoxelShape SHAPE_UP = Stream.of(
@@ -47,7 +49,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 			Block.box(3, 4, 12, 13, 10, 14),
 			Block.box(3, 4, 2, 13, 10, 4),
 			Block.box(0, 0, 0, 16, 4, 16)
-	).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get();
+	).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
 	public static final VoxelShape SHAPE_DOWN = Stream.of(
 			Block.box(4, 0, 4, 12, 8, 12),
@@ -56,7 +58,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 			Block.box(3, 6, 2, 13, 12, 4),
 			Block.box(3, 6, 12, 13, 12, 14),
 			Block.box(0, 12, 0, 16, 16, 16)
-	).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get();
+	).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
 	public static final VoxelShape SHAPE_NORTH = Stream.of(
 			Block.box(4, 4, 0, 12, 12, 8),
@@ -65,7 +67,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 			Block.box(3, 12, 6, 13, 14, 12),
 			Block.box(3, 2, 6, 13, 4, 12),
 			Block.box(0, 0, 12, 16, 16, 16)
-	).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get();
+	).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
 	public static final VoxelShape SHAPE_EAST = Stream.of(
 			Block.box(8, 4, 4, 16, 12, 12),
@@ -74,7 +76,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 			Block.box(4, 12, 3, 10, 14, 13),
 			Block.box(4, 2, 3, 10, 4, 13),
 			Block.box(0, 0, 0, 4, 16, 16)
-	).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get();
+	).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
 	public static final VoxelShape SHAPE_SOUTH = Stream.of(
 			Block.box(4, 4, 8, 12, 12, 16),
@@ -83,7 +85,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 			Block.box(3, 2, 4, 13, 4, 10),
 			Block.box(3, 12, 4, 13, 14, 10),
 			Block.box(0, 0, 0, 16, 16, 4)
-	).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get();
+	).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
 	public static final VoxelShape SHAPE_WEST = Stream.of(
 			Block.box(0, 4, 4, 8, 12, 12),
@@ -92,7 +94,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 			Block.box(6, 2, 3, 12, 4, 13),
 			Block.box(6, 12, 3, 12, 14, 13),
 			Block.box(12, 0, 0, 16, 16, 16)
-	).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get();
+	).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
@@ -102,8 +104,8 @@ public class ForceEngineBlock extends DirectionalBlock {
 	}
 
 	@Override
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		TileEntity tileentity = worldIn.getBlockEntity(pos);
+	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+		BlockEntity tileentity = worldIn.getBlockEntity(pos);
 		if (tileentity instanceof ForceEngineTile) {
 			LazyOptional<IFluidHandler> fluidHandler = tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, hit.getDirection());
 			fluidHandler.ifPresent((handler) -> {
@@ -111,34 +113,27 @@ public class ForceEngineBlock extends DirectionalBlock {
 					FluidUtil.interactWithFluidHandler(player, handIn, worldIn, pos, hit.getDirection());
 				} else {
 					if (!worldIn.isClientSide) {
-						NetworkHooks.openGui((ServerPlayerEntity) player, (ForceEngineTile) tileentity, pos);
+						NetworkHooks.openGui((ServerPlayer) player, (ForceEngineTile) tileentity, pos);
 					}
 				}
 			});
 
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		switch (state.getValue(FACING)) {
-			case UP:
-				return SHAPE_UP;
-			case DOWN:
-				return SHAPE_DOWN;
-			case NORTH:
-				return SHAPE_NORTH;
-			case EAST:
-				return SHAPE_EAST;
-			case SOUTH:
-				return SHAPE_SOUTH;
-			case WEST:
-				return SHAPE_WEST;
-			default:
-				return super.getShape(state, worldIn, pos, context);
-		}
+	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+		return switch (state.getValue(FACING)) {
+			case UP -> SHAPE_UP;
+			case DOWN -> SHAPE_DOWN;
+			case NORTH -> SHAPE_NORTH;
+			case EAST -> SHAPE_EAST;
+			case SOUTH -> SHAPE_SOUTH;
+			case WEST -> SHAPE_WEST;
+			default -> super.getShape(state, worldIn, pos, context);
+		};
 	}
 
 	@Override
@@ -156,14 +151,14 @@ public class ForceEngineBlock extends DirectionalBlock {
 
 	@Nullable
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		Direction direction = context.getClickedFace();
 		BlockState blockstate = context.getLevel().getBlockState(context.getClickedPos().relative(direction.getOpposite()));
 		return blockstate.is(this) && blockstate.getValue(FACING) == direction ? this.defaultBlockState().setValue(FACING, direction).setValue(ACTIVE, Boolean.valueOf(context.getLevel().hasNeighborSignal(context.getClickedPos()))) :
 				this.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ACTIVE, Boolean.valueOf(context.getLevel().hasNeighborSignal(context.getClickedPos())));
 	}
 
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+	public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		if (!worldIn.isClientSide) {
 			boolean flag = state.getValue(ACTIVE);
 			if (flag != worldIn.hasNeighborSignal(pos)) {
@@ -176,7 +171,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 		}
 	}
 
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand) {
 		if (state.getValue(ACTIVE) && !worldIn.hasNeighborSignal(pos)) {
 			worldIn.setBlock(pos, state.cycle(ACTIVE), 2);
 		}
@@ -189,7 +184,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
 		return new ForceEngineTile();
 	}
 
@@ -198,7 +193,7 @@ public class ForceEngineBlock extends DirectionalBlock {
 	}
 
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
 		if (stateIn.getValue(ACTIVE)) {
 			Direction direction = stateIn.getValue(FACING);
 			double d0 = (double)pos.getX() + 0.55D - (double)(rand.nextFloat() * 0.1F);
@@ -217,15 +212,14 @@ public class ForceEngineBlock extends DirectionalBlock {
 	}
 
 	@Override
-	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+	public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		if (!state.is(newState.getBlock())) {
-			TileEntity tileentity = worldIn.getBlockEntity(pos);
-			if (tileentity instanceof ForceEngineTile) {
-				ForceEngineTile engineTile = (ForceEngineTile) tileentity;
-				InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.inputHandler.getStackInSlot(0));
-				InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.inputHandler.getStackInSlot(1));
-				InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.outputHandler.getStackInSlot(0));
-				InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.outputHandler.getStackInSlot(1));
+			BlockEntity tileentity = worldIn.getBlockEntity(pos);
+			if (tileentity instanceof ForceEngineTile engineTile) {
+				Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.inputHandler.getStackInSlot(0));
+				Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.inputHandler.getStackInSlot(1));
+				Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.outputHandler.getStackInSlot(0));
+				Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), engineTile.outputHandler.getStackInSlot(1));
 			}
 
 			super.onRemove(state, worldIn, pos, newState, isMoving);

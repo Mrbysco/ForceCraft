@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.capablilities.banemodifier;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE;
 
-public class BaneProvider implements ICapabilitySerializable<INBT>, ICapabilityProvider {
+public class BaneProvider implements ICapabilitySerializable<Tag>, ICapabilityProvider {
     private LazyOptional<IBaneModifier> instance;
     private IBaneModifier bane;
 
@@ -28,12 +28,12 @@ public class BaneProvider implements ICapabilitySerializable<INBT>, ICapabilityP
     }
 
     @Override
-    public INBT serializeNBT() {
+    public Tag serializeNBT() {
         return CAPABILITY_BANE.writeNBT(bane, null);
     }
 
     @Override
-    public void deserializeNBT(INBT nbt) {
+    public void deserializeNBT(Tag nbt) {
         CAPABILITY_BANE.readNBT(bane, null, nbt);
     }
 

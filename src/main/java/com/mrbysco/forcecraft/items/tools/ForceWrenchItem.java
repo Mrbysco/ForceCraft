@@ -7,28 +7,28 @@ import com.mrbysco.forcecraft.capablilities.forcewrench.IForceWrench;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.PushReaction;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -44,16 +44,16 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
-        World world = context.getLevel();
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        Player player = context.getPlayer();
+        Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        Hand hand = context.getHand();
+        InteractionHand hand = context.getHand();
         if (stack.getItem() instanceof ForceWrenchItem) {
             if(player.isCrouching()) {
                 IForceWrench wrenchCap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
                 if(wrenchCap != null) {
-                    if (world.getBlockEntity(pos) instanceof TileEntity && !wrenchCap.canStoreBlock()) {
+                    if (world.getBlockEntity(pos) instanceof BlockEntity && !wrenchCap.canStoreBlock()) {
                         return serializeNBT(world, pos, player, hand);
                     } else if(wrenchCap.canStoreBlock())
                         placeBlockFromWrench(world, pos, player, hand, context.getClickedFace());
@@ -68,7 +68,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
                         fd.write(stack);
                     }
                 } else {
-                    player.displayClientMessage(new TranslationTextComponent("forcecraft.wrench_rotate.insufficient", 10).withStyle(TextFormatting.RED), true);
+                    player.displayClientMessage(new TranslatableComponent("forcecraft.wrench_rotate.insufficient", 10).withStyle(ChatFormatting.RED), true);
                 }
             }
         }
@@ -77,29 +77,29 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         if(CAPABILITY_FORCEWRENCH == null) {
             return null;
         }
         return new ForceWrenchProvider();
     }
 
-    private ActionResultType serializeNBT(World world, BlockPos pos, PlayerEntity player, Hand hand){
+    private InteractionResult serializeNBT(Level world, BlockPos pos, Player player, InteractionHand hand){
         ItemStack heldWrench = player.getItemInHand(hand);
         ForceToolData fd = new ForceToolData(heldWrench);
         if(fd.getForce() >= 250) {
             BlockState state = world.getBlockState(pos);
             if(state.getPistonPushReaction() == PushReaction.BLOCK) {
-                return ActionResultType.FAIL;
+                return InteractionResult.FAIL;
             }
 
             IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
             if(wrenchCap != null) {
                 String blockName = state.getBlock().getDescriptionId();
-                TileEntity tileEntity = world.getBlockEntity(pos);
+                BlockEntity blockEntity = world.getBlockEntity(pos);
 
-                if(tileEntity != null){
-                    CompoundNBT nbt = tileEntity.save(new CompoundNBT());
+                if(blockEntity != null){
+                    CompoundTag nbt = blockEntity.saveWithoutMetadata();
                     wrenchCap.storeBlockNBT(nbt);
                     wrenchCap.storeBlockState(state);
                     wrenchCap.setBlockName(blockName);
@@ -110,48 +110,47 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
                 }
                 fd.setForce(fd.getForce() - 250);
                 fd.write(heldWrench);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         } else {
-            player.displayClientMessage(new TranslationTextComponent("forcecraft.wrench_transport.insufficient", 250).withStyle(TextFormatting.RED), true);
+            player.displayClientMessage(new TranslatableComponent("forcecraft.wrench_transport.insufficient", 250).withStyle(ChatFormatting.RED), true);
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
-    private ActionResultType placeBlockFromWrench(World world, BlockPos pos, PlayerEntity player, Hand hand, Direction side) {
+    private InteractionResult placeBlockFromWrench(Level world, BlockPos pos, Player player, InteractionHand hand, Direction side) {
         ItemStack heldWrench = player.getItemInHand(hand);
         IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
         if(wrenchCap != null) {
             if(wrenchCap.getStoredBlockState() != null) {
-                CompoundNBT tileCmp = wrenchCap.getStoredBlockNBT();
+                CompoundTag blockTag = wrenchCap.getStoredBlockNBT();
                 BlockState state = wrenchCap.getStoredBlockState();
-                TileEntity te = TileEntity.loadStatic(state, tileCmp);
                 BlockPos offPos = pos.relative(side);
+                BlockEntity be = BlockEntity.loadStatic(offPos, state, blockTag);
                 if(state != null) {
                     world.setBlockAndUpdate(offPos, state);
                 }
-                if(te != null) {
-                    te.load(state, tileCmp);
-                    te.setPosition(offPos);
-                    world.setBlockEntity(offPos, te);
+                if(be != null) {
+                    be.load(blockTag);
+                    world.setBlockEntity(be);
                 }
                 wrenchCap.clearBlockStorage();
             }
         }
 
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     // ShareTag for server->client capability data sync
     @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-        CompoundNBT nbt = super.getShareTag(stack);
+    public CompoundTag getShareTag(ItemStack stack) {
+        CompoundTag nbt = super.getShareTag(stack);
 
         IForceWrench cap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
         if(cap != null) {
-            CompoundNBT shareTag = ForceWrenchStorage.serializeNBT(cap);
+            CompoundTag shareTag = ForceWrenchStorage.serializeNBT(cap);
             if(nbt == null) {
-                nbt = new CompoundNBT();
+                nbt = new CompoundTag();
             }
             nbt.put(Reference.MOD_ID, shareTag);
         }
@@ -159,21 +158,21 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
     }
 
     @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
         if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
             return;
         }
 
         IForceWrench cap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
         if(cap != null) {
-            INBT shareTag = nbt.get(Reference.MOD_ID);
+            Tag shareTag = nbt.get(Reference.MOD_ID);
             ForceWrenchStorage.deserializeNBT(cap, shareTag);
         }
         super.readShareTag(stack, nbt);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
         ForceWrenchStorage.attachInformation(stack, lores);
         super.appendHoverText(stack, worldIn, lores, flagIn);
     }

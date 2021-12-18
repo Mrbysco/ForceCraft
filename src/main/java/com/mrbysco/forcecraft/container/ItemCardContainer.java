@@ -3,47 +3,47 @@ package com.mrbysco.forcecraft.container;
 import com.mrbysco.forcecraft.items.ItemCardItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.CraftingResultSlot;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.play.server.SSetSlotPacket;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ResultSlot;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
-public class ItemCardContainer extends Container {
-	private final CraftingInventory craftMatrix = new CraftingInventory(this, 3, 3);
-	private final CraftResultInventory craftResult = new CraftResultInventory();
-	private final IWorldPosCallable worldPosCallable;
-	private final PlayerEntity player;
+public class ItemCardContainer extends AbstractContainerMenu {
+	private final CraftingContainer craftMatrix = new CraftingContainer(this, 3, 3);
+	private final ResultContainer craftResult = new ResultContainer();
+	private final ContainerLevelAccess worldPosCallable;
+	private final Player player;
 	private ItemStack heldStack;
 
-	public ItemCardContainer(int id, PlayerInventory playerInventory) {
-		this(id, playerInventory, IWorldPosCallable.NULL);
+	public ItemCardContainer(int id, Inventory playerInventory) {
+		this(id, playerInventory, ContainerLevelAccess.NULL);
 	}
 
-	public ItemCardContainer(int id, PlayerInventory playerInventory, IWorldPosCallable worldPosCallable) {
+	public ItemCardContainer(int id, Inventory playerInventory, ContainerLevelAccess worldPosCallable) {
 		super(ForceContainers.ITEM_CARD.get(), id);
 		this.worldPosCallable = worldPosCallable;
 		this.player = playerInventory.player;
-		this.addSlot(new CraftingResultSlot(playerInventory.player, this.craftMatrix, this.craftResult, 0, 124, 35) {
+		this.addSlot(new ResultSlot(playerInventory.player, this.craftMatrix, this.craftResult, 0, 124, 35) {
 			@Override
-			public boolean mayPickup(PlayerEntity playerIn) {
+			public boolean mayPickup(Player playerIn) {
 				return false;
 			}
 		});
@@ -58,7 +58,7 @@ public class ItemCardContainer extends Container {
 
 					@Nonnull
 					@Override
-					public ItemStack onTake(final PlayerEntity player, @Nonnull final ItemStack stack) {
+					public ItemStack onTake(final Player player, @Nonnull final ItemStack stack) {
 						return ItemStack.EMPTY;
 					}
 
@@ -74,7 +74,7 @@ public class ItemCardContainer extends Container {
 					}
 
 					@Override
-					public boolean mayPickup(final PlayerEntity par1PlayerEntity) {
+					public boolean mayPickup(final Player par1PlayerEntity) {
 						return false;
 					}
 				});
@@ -93,9 +93,9 @@ public class ItemCardContainer extends Container {
 
 		heldStack = getCardStack(playerInventory);
 		if(heldStack.getItem() == ForceRegistry.ITEM_CARD.get()) {
-			CompoundNBT tag = heldStack.getOrCreateTag();
+			CompoundTag tag = heldStack.getOrCreateTag();
 			if(tag.contains("RecipeContents")) {
-				CompoundNBT recipeContents = tag.getCompound("RecipeContents");
+				CompoundTag recipeContents = tag.getCompound("RecipeContents");
 				if (!player.level.isClientSide) {
 					for(int i = 0; i < craftMatrix.getContainerSize(); i++) {
 						craftMatrix.setItem(i, ItemStack.of(recipeContents.getCompound("slot_" + i)));
@@ -106,8 +106,8 @@ public class ItemCardContainer extends Container {
 		}
 	}
 
-	public static ItemStack getCardStack(PlayerInventory playerInventory) {
-		PlayerEntity player = playerInventory.player;
+	public static ItemStack getCardStack(Inventory playerInventory) {
+		Player player = playerInventory.player;
 		if(player.getMainHandItem().getItem() instanceof ItemCardItem) {
 			return player.getMainHandItem();
 		} else if(player.getOffhandItem().getItem() instanceof ItemCardItem) {
@@ -116,10 +116,10 @@ public class ItemCardContainer extends Container {
 		return ItemStack.EMPTY;
 	}
 
-	protected void updateCraftingResult(World world, PlayerEntity player, CraftingInventory inventory, CraftResultInventory inventoryResult) {
+	protected void updateCraftingResult(Level world, Player player, CraftingContainer inventory, ResultContainer inventoryResult) {
 		if (!world.isClientSide) {
-			ServerPlayerEntity serverplayerentity = (ServerPlayerEntity) player;
-			final Optional<ICraftingRecipe> iRecipe = serverplayerentity.server.getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, inventory, world);
+			ServerPlayer serverplayerentity = (ServerPlayer) player;
+			final Optional<CraftingRecipe> iRecipe = serverplayerentity.server.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory, world);
 			final ItemStack stack;
 			if (iRecipe.isPresent() && (iRecipe.get().isSpecial()
 					|| !world.getGameRules().getBoolean(GameRules.RULE_LIMITED_CRAFTING)
@@ -128,12 +128,12 @@ public class ItemCardContainer extends Container {
 			{
 				stack = iRecipe.get().assemble(this.craftMatrix);
 				inventoryResult.setItem(0, stack);
-				serverplayerentity.connection.send(new SSetSlotPacket(this.containerId, 0, stack));
+				serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, stack));
 			}
 			else
 			{
 				inventoryResult.setItem(0, ItemStack.EMPTY);
-				serverplayerentity.connection.send(new SSetSlotPacket(this.containerId, 0, ItemStack.EMPTY));
+				serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, ItemStack.EMPTY));
 			}
 		}
 	}
@@ -141,7 +141,7 @@ public class ItemCardContainer extends Container {
 	/**
 	 * Callback for when the crafting matrix is changed.
 	 */
-	public void slotsChanged(IInventory inventoryIn) {
+	public void slotsChanged(Container inventoryIn) {
 		this.worldPosCallable.execute((world, pos) -> {
 			updateCraftingResult(world, this.player, this.craftMatrix, this.craftResult);
 		});
@@ -150,14 +150,14 @@ public class ItemCardContainer extends Container {
 	/**
 	 * Called when the container is closed.
 	 */
-	public void removed(PlayerEntity playerIn) {
+	public void removed(Player playerIn) {
 		super.removed(playerIn);
 	}
 
 	/**
 	 * Determines whether supplied player can use this container
 	 */
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		return true && !heldStack.isEmpty();
 	}
 
@@ -165,7 +165,7 @@ public class ItemCardContainer extends Container {
 	 * Handle when the stack in slot {@code index} is shift-clicked. Normally this moves the stack between the player
 	 * inventory and the other inventory(s).
 	 */
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
 		final int total_crafting_slots = 10;
 		if (index <= total_crafting_slots) {
 			return ItemStack.EMPTY;
@@ -206,7 +206,7 @@ public class ItemCardContainer extends Container {
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+	public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
 		if (slotId >= 1 && slotId < 10) {
 			// 1 is shift-click
 			if (clickTypeIn == ClickType.PICKUP
@@ -248,19 +248,19 @@ public class ItemCardContainer extends Container {
 		return slotIn.container != this.craftResult && super.canTakeItemForPickAll(stack, slotIn);
 	}
 
-	public CraftingInventory getCraftMatrix() {
+	public CraftingContainer getCraftMatrix() {
 		return craftMatrix;
 	}
 
-	public CraftResultInventory getCraftResult() {
+	public ResultContainer getCraftResult() {
 		return craftResult;
 	}
 
-	public PlayerEntity getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
 
-	public void setMatrixContents(PlayerEntity player, List<ItemStack> stacks) {
+	public void setMatrixContents(Player player, List<ItemStack> stacks) {
 		for(int i = 0; i < stacks.size(); i++) {
 			handleSlotClick(getSlot(i), stacks.get(i));
 		}

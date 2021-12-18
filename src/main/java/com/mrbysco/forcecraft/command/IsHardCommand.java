@@ -4,9 +4,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class IsHardCommand implements IForceCommand {
 	}
 
 	@Override
-	public int execute(CommandContext<CommandSource> ctx, List<String> arguments, PlayerEntity player) {
+	public int execute(CommandContext<CommandSourceStack> ctx, List<String> arguments, Player player) {
 		UpgradeBookTier bookTier;
 		try {
 			String arg = arguments.get(0);

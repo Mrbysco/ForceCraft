@@ -1,9 +1,9 @@
 package com.mrbysco.forcecraft.capablilities.experiencetome;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public interface IExperienceTome extends INBTSerializable<CompoundNBT> {
+public interface IExperienceTome extends INBTSerializable<CompoundTag> {
 
     float getExperienceValue();
     void addToExperienceValue();

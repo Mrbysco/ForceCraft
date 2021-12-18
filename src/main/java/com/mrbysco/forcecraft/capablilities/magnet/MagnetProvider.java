@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.capablilities.magnet;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_MAGNET;
 
-public class MagnetProvider implements ICapabilitySerializable<INBT>, ICapabilityProvider {
+public class MagnetProvider implements ICapabilitySerializable<Tag>, ICapabilityProvider {
     private LazyOptional<IMagnet> instance;
     private IMagnet magnet;
 
@@ -28,12 +28,12 @@ public class MagnetProvider implements ICapabilitySerializable<INBT>, ICapabilit
     }
 
     @Override
-    public INBT serializeNBT() {
+    public Tag serializeNBT() {
         return CAPABILITY_MAGNET.writeNBT(magnet, null);
     }
 
     @Override
-    public void deserializeNBT(INBT nbt) {
+    public void deserializeNBT(Tag nbt) {
         CAPABILITY_MAGNET.readNBT(magnet, null, nbt);
     }
 

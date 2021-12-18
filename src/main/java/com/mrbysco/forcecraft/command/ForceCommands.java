@@ -8,10 +8,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -19,9 +19,9 @@ public class ForceCommands {
 
 	@SubscribeEvent
 	public void onRegisterCommandsEvent(RegisterCommandsEvent event) {
-		CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
+		CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 
-		final LiteralArgumentBuilder<CommandSource> root = Commands.literal("force");
+		final LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("force");
 		root.requires((source) -> source.hasPermission(2))
 				.then(Commands.literal("ishard").executes(this::execute))
 				.then(Commands.literal("ishard").then(Commands.argument("tier", IntegerArgumentType.integer(0, 7)).executes(this::executeSpecific)));
@@ -29,8 +29,8 @@ public class ForceCommands {
 		dispatcher.register(root);
 	}
 
-	private int execute(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
-		final ServerPlayerEntity player = ctx.getSource().getPlayerOrException();
+	private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+		final ServerPlayer player = ctx.getSource().getPlayerOrException();
 
 		UpgradeBookTier bookTier = UpgradeBookTier.FINAL;
 
@@ -44,9 +44,9 @@ public class ForceCommands {
 		return 0;
 	}
 
-	private int executeSpecific(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+	private int executeSpecific(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		final int tier = IntegerArgumentType.getInteger(ctx, "tier");
-		final ServerPlayerEntity player = ctx.getSource().getPlayerOrException();
+		final ServerPlayer player = ctx.getSource().getPlayerOrException();
 
 		UpgradeBookTier bookTier = UpgradeBookTier.values()[tier];
 

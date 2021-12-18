@@ -2,32 +2,32 @@ package com.mrbysco.forcecraft.container;
 
 import com.mrbysco.forcecraft.items.SpoilsBagItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class SpoilsBagContainer extends Container {
+public class SpoilsBagContainer extends AbstractContainerMenu {
 
     private ItemStack heldStack;
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return !playerIn.isSpectator() && !heldStack.isEmpty();
     }
 
-    public SpoilsBagContainer(int id, PlayerInventory playerInventory) {
+    public SpoilsBagContainer(int id, Inventory playerInventory) {
         this(id, playerInventory, getSpoilsBag(playerInventory));
     }
 
-    public static ItemStack getSpoilsBag(PlayerInventory playerInventory) {
-        PlayerEntity player = playerInventory.player;
+    public static ItemStack getSpoilsBag(Inventory playerInventory) {
+        Player player = playerInventory.player;
         if(player.getMainHandItem().getItem() instanceof SpoilsBagItem) {
             return player.getMainHandItem();
         } else if(player.getOffhandItem().getItem() instanceof SpoilsBagItem) {
@@ -36,7 +36,7 @@ public class SpoilsBagContainer extends Container {
         return ItemStack.EMPTY;
     }
 
-    public SpoilsBagContainer(int id, PlayerInventory playerInventory, ItemStack forceBelt) {
+    public SpoilsBagContainer(int id, Inventory playerInventory, ItemStack forceBelt) {
         super(ForceContainers.SPOILS_BAG.get(), id);
         if (forceBelt == null || forceBelt.isEmpty()) {
             playerInventory.player.closeContainer();
@@ -78,13 +78,13 @@ public class SpoilsBagContainer extends Container {
     }
 
     @Override
-    public void removed(PlayerEntity playerIn) {
+    public void removed(Player playerIn) {
         super.removed(playerIn);
     }
 
     //Credit to Shadowfacts for this method
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
 
         if(index <= 8) {

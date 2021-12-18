@@ -8,33 +8,33 @@ import com.mrbysco.forcecraft.container.ItemCardContainer;
 import com.mrbysco.forcecraft.container.SpoilsBagContainer;
 import com.mrbysco.forcecraft.container.engine.ForceEngineContainer;
 import com.mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ForceContainers {
-	public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Reference.MOD_ID);
+	public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Reference.MOD_ID);
 
-	public static final RegistryObject<ContainerType<ForceFurnaceContainer>> FORCE_FURNACE = CONTAINERS.register("force_furnace", () ->
-			IForgeContainerType.create((windowId, inv, data) -> new ForceFurnaceContainer(windowId, inv, data)));
+	public static final RegistryObject<MenuType<ForceFurnaceContainer>> FORCE_FURNACE = CONTAINERS.register("force_furnace", () ->
+			IForgeMenuType.create((windowId, inv, data) -> new ForceFurnaceContainer(windowId, inv, data)));
 
-	public static final RegistryObject<ContainerType<InfuserContainer>> INFUSER = CONTAINERS.register("infuser", () ->
-			IForgeContainerType.create((windowId, inv, data) -> new InfuserContainer(windowId, inv, data)));
+	public static final RegistryObject<MenuType<InfuserContainer>> INFUSER = CONTAINERS.register("infuser", () ->
+			IForgeMenuType.create((windowId, inv, data) -> new InfuserContainer(windowId, inv, data)));
 
-	public static final RegistryObject<ContainerType<ForcePackContainer>> FORCE_PACK = CONTAINERS.register("force_pack", () ->
-			IForgeContainerType.create((windowId, inv, data) -> new ForcePackContainer(windowId, inv)));
+	public static final RegistryObject<MenuType<ForcePackContainer>> FORCE_PACK = CONTAINERS.register("force_pack", () ->
+			IForgeMenuType.create((windowId, inv, data) -> new ForcePackContainer(windowId, inv)));
 
-	public static final RegistryObject<ContainerType<ForceBeltContainer>> FORCE_BELT = CONTAINERS.register("force_belt", () ->
-			IForgeContainerType.create((windowId, inv, data) -> new ForceBeltContainer(windowId, inv)));
+	public static final RegistryObject<MenuType<ForceBeltContainer>> FORCE_BELT = CONTAINERS.register("force_belt", () ->
+			IForgeMenuType.create((windowId, inv, data) -> new ForceBeltContainer(windowId, inv)));
 
-	public static final RegistryObject<ContainerType<SpoilsBagContainer>> SPOILS_BAG = CONTAINERS.register("spoils_bag", () ->
-			IForgeContainerType.create((windowId, inv, data) -> new SpoilsBagContainer(windowId, inv)));
+	public static final RegistryObject<MenuType<SpoilsBagContainer>> SPOILS_BAG = CONTAINERS.register("spoils_bag", () ->
+			IForgeMenuType.create((windowId, inv, data) -> new SpoilsBagContainer(windowId, inv)));
 
-	public static final RegistryObject<ContainerType<ItemCardContainer>> ITEM_CARD = CONTAINERS.register("item_card", () ->
-			IForgeContainerType.create((windowId, inv, data) -> new ItemCardContainer(windowId, inv)));
+	public static final RegistryObject<MenuType<ItemCardContainer>> ITEM_CARD = CONTAINERS.register("item_card", () ->
+			IForgeMenuType.create((windowId, inv, data) -> new ItemCardContainer(windowId, inv)));
 
-	public static final RegistryObject<ContainerType<ForceEngineContainer>> FORCE_ENGINE = CONTAINERS.register("force_engine", () ->
-			IForgeContainerType.create((windowId, inv, data) -> new ForceEngineContainer(windowId, inv, data)));
+	public static final RegistryObject<MenuType<ForceEngineContainer>> FORCE_ENGINE = CONTAINERS.register("force_engine", () ->
+			IForgeMenuType.create((windowId, inv, data) -> new ForceEngineContainer(windowId, inv, data)));
 }

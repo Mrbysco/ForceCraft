@@ -3,21 +3,21 @@ package com.mrbysco.forcecraft.tiles;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class ForceFurnaceTileEntity extends AbstractForceFurnaceTile {
 	public ForceFurnaceTileEntity() {
 		super(ForceRegistry.FURNACE_TILE.get());
 	}
 
-	protected ITextComponent getDefaultName() {
-		return new TranslationTextComponent(Reference.MOD_ID + ".container.force_furnace");
+	protected Component getDefaultName() {
+		return new TranslatableComponent(Reference.MOD_ID + ".container.force_furnace");
 	}
 
-	protected Container createMenu(int id, PlayerInventory player) {
+	protected AbstractContainerMenu createMenu(int id, Inventory player) {
 		return new ForceFurnaceContainer(id, player, this);
 	}
 }

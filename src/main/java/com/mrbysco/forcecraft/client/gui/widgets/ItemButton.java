@@ -1,15 +1,17 @@
 package com.mrbysco.forcecraft.client.gui.widgets;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+
+import net.minecraft.client.gui.components.Button.OnPress;
 
 public class ItemButton extends Button {
 	protected final ItemStack buttonStack;
-	public ItemButton(int x, int y, int width, int height, ITextComponent title, ItemStack stack, IPressable pressedAction) {
+	public ItemButton(int x, int y, int width, int height, Component title, ItemStack stack, OnPress pressedAction) {
 		super(x, y, width, height, title, pressedAction);
 		this.buttonStack = stack;
 	}
@@ -19,7 +21,7 @@ public class ItemButton extends Button {
 	}
 
 	@Override
-	public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		//RENDER THE STACK
 		Minecraft minecraft = Minecraft.getInstance();
 		ItemRenderer itemRender = minecraft.getItemRenderer();

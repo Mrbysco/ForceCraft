@@ -1,10 +1,10 @@
 package com.mrbysco.forcecraft.items.infuser;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -21,18 +21,18 @@ public class ForceToolData {
 	}
 
 	public ForceToolData(ItemStack tool) {
-		CompoundNBT tag = tool.getTag();
+		CompoundTag tag = tool.getTag();
 		if (tag != null && tag.contains("force")) {
 			this.read(tool, tag);
 		}
 	}
 
-	private void read(ItemStack tool, CompoundNBT tag) {
+	private void read(ItemStack tool, CompoundTag tag) {
 		force = tag.getInt("force");
 	}
 
-	public CompoundNBT write(ItemStack tool) {
-		CompoundNBT tag = tool.getOrCreateTag();
+	public CompoundTag write(ItemStack tool) {
+		CompoundTag tag = tool.getOrCreateTag();
 		tag.putInt("force", force);
 		return tag;
 	}
@@ -41,11 +41,11 @@ public class ForceToolData {
 		force += incoming;
 	}
 
-	public void attachInformation(List<ITextComponent> tooltip) {
+	public void attachInformation(List<Component> tooltip) {
 		if (this.force > 0) {
-			TranslationTextComponent t = new TranslationTextComponent("item.infuser.tooltip.forcelevel");
+			TranslatableComponent t = new TranslatableComponent("item.infuser.tooltip.forcelevel");
 			t.append("" + this.force);
-			t.withStyle(TextFormatting.GOLD);
+			t.withStyle(ChatFormatting.GOLD);
 			tooltip.add(t);
 		}
 	}

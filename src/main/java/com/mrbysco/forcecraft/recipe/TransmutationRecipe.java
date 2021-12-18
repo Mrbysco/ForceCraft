@@ -7,30 +7,30 @@ import com.mrbysco.forcecraft.items.ExperienceTomeItem;
 import com.mrbysco.forcecraft.items.tools.ForceRodItem;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.ExperienceBottleItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.ExperienceBottleItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class TransmutationRecipe implements ICraftingRecipe {
+public class TransmutationRecipe implements CraftingRecipe {
 	private final ResourceLocation id;
 	private final String group;
 	private final ItemStack recipeOutput;
@@ -49,7 +49,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 		return this.id;
 	}
 
-	public IRecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<?> getSerializer() {
 		return ForceRecipes.TRANSMUTATION_SERIALIZER.get();
 	}
 
@@ -66,8 +66,8 @@ public class TransmutationRecipe implements ICraftingRecipe {
 	}
 
 	@Override
-	public boolean matches(CraftingInventory inv, World worldIn) {
-		RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
+	public boolean matches(CraftingContainer inv, Level worldIn) {
+		StackedContents recipeitemhelper = new StackedContents();
 		java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
 		int i = 0;
 
@@ -85,7 +85,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 							return false;
 						} else {
 							ItemStack experienceTome = new ItemStack(ForceRegistry.EXPERIENCE_TOME.get());
-							CompoundNBT nbt = experienceTome.getOrCreateTag();
+							CompoundTag nbt = experienceTome.getOrCreateTag();
 							nbt.putInt("Experience", 100);
 							experienceTome.setTag(nbt);
 							if (isSimple)
@@ -106,12 +106,12 @@ public class TransmutationRecipe implements ICraftingRecipe {
 		return i == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this, (IntList)null) : net.minecraftforge.common.util.RecipeMatcher.findMatches(inputs,  this.recipeItems) != null);
 	}
 
-	public ItemStack assemble(CraftingInventory inv) {
+	public ItemStack assemble(CraftingContainer inv) {
 		ItemStack resultStack = this.recipeOutput.copy();
 		for(int j = 0; j < inv.getContainerSize(); ++j) {
 			ItemStack itemstack = inv.getItem(j);
 			if((itemstack.getItem() instanceof ExperienceTomeItem)) {
-				CompoundNBT tag = itemstack.getOrCreateTag();
+				CompoundTag tag = itemstack.getOrCreateTag();
 				int experience = tag.getInt("Experience");
 				int count = Math.min((int)((float)experience / 100f), 64);
 				resultStack.setCount(count);
@@ -123,7 +123,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 					for(Map.Entry<Enchantment, Integer> entry : enchantmentMap.entrySet()) {
 						amount += entry.getValue();
 					}
-					resultStack.setCount(MathHelper.clamp(amount, 1, 64));
+					resultStack.setCount(Mth.clamp(amount, 1, 64));
 				}
 			}
 		}
@@ -136,7 +136,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
+	public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
 		NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 		for(int i = 0; i < nonnulllist.size(); ++i) {
 			ItemStack itemstack = inv.getItem(i);
@@ -156,7 +156,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 				continue;
 			} else if((itemstack.getItem() instanceof ExperienceTomeItem)) {
 				ItemStack itemstack1 = itemstack.copy();
-				CompoundNBT tag = itemstack.getOrCreateTag();
+				CompoundTag tag = itemstack.getOrCreateTag();
 				int experience = tag.getInt("Experience");
 				int count = (int)((float)experience / 100f);
 				int newExperience;
@@ -174,17 +174,17 @@ public class TransmutationRecipe implements ICraftingRecipe {
 		return nonnulllist;
 	}
 
-	public static class SerializerTransmutationRecipe extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<TransmutationRecipe> {
+	public static class SerializerTransmutationRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<TransmutationRecipe> {
 		@Override
 		public TransmutationRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			String s = JSONUtils.getAsString(json, "group", "");
-			NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getAsJsonArray(json, "ingredients"));
+			String s = GsonHelper.getAsString(json, "group", "");
+			NonNullList<Ingredient> nonnulllist = readIngredients(GsonHelper.getAsJsonArray(json, "ingredients"));
 			if (nonnulllist.isEmpty()) {
 				throw new JsonParseException("No ingredients for shapeless recipe");
 			} else if (nonnulllist.size() > 3 * 3) {
 				throw new JsonParseException("Too many ingredients for shapeless recipe the max is " + (3 * 3));
 			} else {
-				ItemStack itemstack = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "result"));
+				ItemStack itemstack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
 				return new TransmutationRecipe(recipeId, s, itemstack, nonnulllist);
 			}
 		}
@@ -204,7 +204,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 
 		@Nullable
 		@Override
-		public TransmutationRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public TransmutationRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			String s = buffer.readUtf(32767);
 			int i = buffer.readVarInt();
 			NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
@@ -218,7 +218,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, TransmutationRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, TransmutationRecipe recipe) {
 			buffer.writeUtf(recipe.group);
 			buffer.writeVarInt(recipe.recipeItems.size());
 

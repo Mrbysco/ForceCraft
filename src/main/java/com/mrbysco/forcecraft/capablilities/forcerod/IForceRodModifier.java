@@ -1,11 +1,11 @@
 package com.mrbysco.forcecraft.capablilities.forcerod;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.GlobalPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.GlobalPos;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public interface IForceRodModifier extends INBTSerializable<CompoundNBT> {
+public interface IForceRodModifier extends INBTSerializable<CompoundTag> {
 
     /**
      * Modifier: Healing
@@ -24,7 +24,7 @@ public interface IForceRodModifier extends INBTSerializable<CompoundNBT> {
 
     GlobalPos getHomeLocation();
     void setHomeLocation(GlobalPos pos);
-    void teleportPlayerToLocation(PlayerEntity player, GlobalPos pos);
+    void teleportPlayerToLocation(Player player, GlobalPos pos);
     boolean hasEnderModifier();
     void setEnderModifier(boolean newVal);
     boolean isRodofEnder();

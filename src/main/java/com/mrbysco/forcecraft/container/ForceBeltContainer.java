@@ -6,26 +6,26 @@ import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.util.FindingUtil;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class ForceBeltContainer extends Container {
+public class ForceBeltContainer extends AbstractContainerMenu {
 
     private ItemStack heldStack;
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return !playerIn.isSpectator() && !heldStack.isEmpty();
     }
 
-    public ForceBeltContainer(int id, PlayerInventory playerInventory) {
+    public ForceBeltContainer(int id, Inventory playerInventory) {
         super(ForceContainers.FORCE_BELT.get(), id);
         this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForceBeltItem);
         if (heldStack == null || heldStack.isEmpty()) {
@@ -62,10 +62,10 @@ public class ForceBeltContainer extends Container {
     }
 
     @Override
-    public void removed(PlayerEntity playerIn) {
+    public void removed(Player playerIn) {
         IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler != null) {
-            CompoundNBT tag = heldStack.getOrCreateTag();
+            CompoundTag tag = heldStack.getOrCreateTag();
             tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(itemHandler));
             tag.putInt(ForcePackItem.SLOTS_TOTAL, itemHandler.getSlots());
             heldStack.setTag(tag);
@@ -75,7 +75,7 @@ public class ForceBeltContainer extends Container {
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
         if (slotId >= 0) {
             if (getSlot(slotId).getItem().getItem() instanceof ForceBeltItem)
                 return ItemStack.EMPTY;
@@ -88,7 +88,7 @@ public class ForceBeltContainer extends Container {
 
     //Credit to Shadowfacts for this method
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = slots.get(index);
 

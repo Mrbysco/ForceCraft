@@ -4,22 +4,22 @@ import com.google.gson.JsonObject;
 import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
-import com.mrbysco.forcecraft.blocks.infuser.InfuserTileEntity;
+import com.mrbysco.forcecraft.blocks.infuser.InfuserBlockEntity;
 import com.mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
+public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 	private static final int MAX_SLOTS = 8;
 	private static final Set<String> HASHES = new HashSet<>();
 	public static final Map<Integer, List<InfuseRecipe>> RECIPESBYLEVEL = new HashMap<>();
@@ -62,17 +62,17 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	}
 
 	@Override
-	public boolean matches(InfuserTileEntity inv, World worldIn) {
+	public boolean matches(InfuserBlockEntity inv, Level worldIn) {
 		for(int i = 0; i < inv.handler.getSlots(); i++) {
 			ItemStack stack = inv.handler.getStackInSlot(i);
-			if (i < InfuserTileEntity.SLOT_TOOL) {
+			if (i < InfuserBlockEntity.SLOT_TOOL) {
 				return matchesModifier(inv, stack, false);
 			}
 		}
 		return false;
 	}
 
-	public boolean matchesModifier(InfuserTileEntity inv, ItemStack modifier, boolean ignoreInfused) {
+	public boolean matchesModifier(InfuserBlockEntity inv, ItemStack modifier, boolean ignoreInfused) {
 		//Has the correct tier
 		UpgradeBookData bd = new UpgradeBookData(inv.getBookInSlot());
 		int bookTier = bd.getTier().ordinal();
@@ -81,7 +81,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		}
 
 		//Does the center match
-		ItemStack centerStack = inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL);
+		ItemStack centerStack = inv.handler.getStackInSlot(InfuserBlockEntity.SLOT_TOOL);
 		boolean toolMatches = matchesTool(centerStack, ignoreInfused);
 		boolean modifierMatches = matchesModifier(centerStack, modifier);
 
@@ -91,8 +91,8 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		return toolMatches && modifierMatches;
 	}
 
-	public boolean matchesModifier(InfuserTileEntity inv, ItemStack modifierStack) {
-		ItemStack centerStack = inv.handler.getStackInSlot(InfuserTileEntity.SLOT_TOOL);
+	public boolean matchesModifier(InfuserBlockEntity inv, ItemStack modifierStack) {
+		ItemStack centerStack = inv.handler.getStackInSlot(InfuserBlockEntity.SLOT_TOOL);
 		return matchesModifier(centerStack, modifierStack);
 	}
 
@@ -141,7 +141,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	}
 
 	@Override
-	public ItemStack assemble(InfuserTileEntity inv) {
+	public ItemStack assemble(InfuserBlockEntity inv) {
 		return getResultItem();
 	}
 
@@ -151,7 +151,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	}
 
 	@Override
-	public IRecipeType<?> getType() {
+	public RecipeType<?> getType() {
 		return ForceRecipes.INFUSER_TYPE;
 	}
 
@@ -188,32 +188,32 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 	}
 
 	@Override
-	public IRecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<?> getSerializer() {
 		return ForceRecipes.INFUSER_SERIALIZER.get();
 	}
 
-	public static class SerializeInfuserRecipe extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<InfuseRecipe> {
+	public static class SerializeInfuserRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<InfuseRecipe> {
 
 		@Override
 		public InfuseRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			InfuseRecipe recipe = null;
 			try {
-				Ingredient ingredient = Ingredient.fromJson(JSONUtils.getAsJsonObject(json, "ingredient"));
-				Ingredient center = Ingredient.fromJson(JSONUtils.getAsJsonObject(json, "center"));
+				Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
+				Ingredient center = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "center"));
 				
-				String result = JSONUtils.getAsString(json, "result");
+				String result = GsonHelper.getAsString(json, "result");
 
 				// hardcoded mod id: no api support rip
 				InfuserModifierType modifier = InfuserModifierType.valueOf(result.replace(Reference.MOD_ID + ":","").toUpperCase());
 				
 		        ItemStack output = ItemStack.EMPTY;
-		        if(modifier == InfuserModifierType.ITEM && JSONUtils.isValidNode(json, "output") ) {
-		        	output = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "output"));
+		        if(modifier == InfuserModifierType.ITEM && GsonHelper.isValidNode(json, "output") ) {
+		        	output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
 		        }
-				int tier = JSONUtils.getAsInt(json, "tier");
+				int tier = GsonHelper.getAsInt(json, "tier");
 				
 				recipe = new InfuseRecipe(recipeId, center, ingredient, modifier, UpgradeBookTier.values()[tier], output);
-				recipe.setTime(JSONUtils.getAsInt(json, "time"));
+				recipe.setTime(GsonHelper.getAsInt(json, "time"));
 				addRecipe(recipe);
 				return recipe;
 			} catch (Exception e) {
@@ -223,7 +223,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		}
 
 		@Override
-		public InfuseRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public InfuseRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			Ingredient center = Ingredient.fromNetwork(buffer);
 			Ingredient ing = Ingredient.fromNetwork(buffer);
 			int enumlon = buffer.readVarInt();
@@ -238,7 +238,7 @@ public class InfuseRecipe implements IRecipe<InfuserTileEntity> {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, InfuseRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, InfuseRecipe recipe) {
 			recipe.center.toNetwork(buffer);
 			recipe.input.toNetwork(buffer);
 			buffer.writeVarInt(recipe.resultModifier.ordinal());

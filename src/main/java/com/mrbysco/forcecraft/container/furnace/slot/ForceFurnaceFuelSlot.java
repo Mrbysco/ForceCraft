@@ -1,8 +1,8 @@
 package com.mrbysco.forcecraft.container.furnace.slot;
 
 import com.mrbysco.forcecraft.container.furnace.AbstractForceFurnaceContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 

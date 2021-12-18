@@ -3,10 +3,10 @@ package com.mrbysco.forcecraft.handlers;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.items.ForceArmorItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -24,7 +24,7 @@ public class PlayerCapHandler {
 	@SubscribeEvent
 	public void onPlayerUpdate(TickEvent.PlayerTickEvent event) {
 		if(event.phase == TickEvent.Phase.END && !event.player.level.isClientSide) {
-			PlayerEntity player = event.player;
+			Player player = event.player;
 
 			Iterable<ItemStack> armor = player.getArmorSlots();
 			int speed = 0;
@@ -39,8 +39,8 @@ public class PlayerCapHandler {
 			}
 
 			if (speed > 0) {
-				EffectInstance speedEffect = new EffectInstance(Effects.MOVEMENT_SPEED, SPEED_DURATION, speed - 1, false, false);
-				if(!player.hasEffect(Effects.MOVEMENT_SPEED) || (player.hasEffect(Effects.MOVEMENT_SPEED) && player.getEffect(Effects.MOVEMENT_SPEED).getDuration() <= 100)) {
+				MobEffectInstance speedEffect = new MobEffectInstance(MobEffects.MOVEMENT_SPEED, SPEED_DURATION, speed - 1, false, false);
+				if(!player.hasEffect(MobEffects.MOVEMENT_SPEED) || (player.hasEffect(MobEffects.MOVEMENT_SPEED) && player.getEffect(MobEffects.MOVEMENT_SPEED).getDuration() <= 100)) {
 					player.addEffect(speedEffect);
 				}
 			}
@@ -49,22 +49,20 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void onLogin(PlayerLoggedInEvent event) {
-		if (event.getEntityLiving() instanceof PlayerEntity) {
+		if (event.getEntityLiving() instanceof Player player) {
 			//Sync on login
-			PlayerEntity player = ((PlayerEntity) event.getEntityLiving());
 			updateArmorProperties(player);
 		}
 	}
 
 	@SubscribeEvent
 	public void equipmentChangeEvent(LivingEquipmentChangeEvent event) {
-		if(event.getEntityLiving() instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+		if(event.getEntityLiving() instanceof Player player) {
 			updateArmorProperties(player);
 		}
 	}
 
-	public static void updateArmorProperties(PlayerEntity player) {
+	public static void updateArmorProperties(Player player) {
 		Iterable<ItemStack> armor = player.getArmorSlots();
 		int armorPieces = 0;
 		int damage = 0;
@@ -126,10 +124,10 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void harvestCheckEvent(HarvestCheck event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
 			if(cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
-				if(event.getTargetBlock().getBlock().getHarvestLevel(event.getTargetBlock()) <= 2) {
+				if(event.getTargetBlock().getBlock().getExplosionResistance() <= 2) {
 					event.setCanHarvest(true);
 				}
 			}
@@ -138,7 +136,7 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void breakSpeedEvent(BreakSpeed event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
 			if(cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
 				if(event.getOriginalSpeed() < 6) {

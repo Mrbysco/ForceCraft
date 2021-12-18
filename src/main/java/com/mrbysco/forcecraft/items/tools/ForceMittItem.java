@@ -2,66 +2,66 @@ package com.mrbysco.forcecraft.items.tools;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
+import com.mojang.datafixers.util.Pair;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.registry.ForceSounds;
-import com.mrbysco.forcecraft.registry.material.ModToolMaterial;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.ToolItem;
-import net.minecraft.network.play.server.SChangeBlockPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext.FluidMode;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import com.mrbysco.forcecraft.registry.ForceTags;
+import com.mrbysco.forcecraft.registry.material.ModToolTiers;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ClipContext.Fluid;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.ToolType;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Set;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-public class ForceMittItem extends ToolItem {
+public class ForceMittItem extends DiggerItem {
 
     private final float attackDamage;
-    private final IItemTier itemTier = ModToolMaterial.FORCE;
+    private final Tier itemTier = ModToolTiers.FORCE;
 
     public ForceMittItem(Item.Properties properties) {
-        super(8.0F, 8.0F, ModToolMaterial.FORCE, Collections.emptySet(), properties.durability(1000));
+        super(8.0F, 8.0F, ModToolTiers.FORCE, ForceTags.MINEABLE_WITH_MITTS, properties.durability(1000));
         this.attackDamage = 3.0F;
     }
 
     @Override
-    public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if(entityLiving instanceof PlayerEntity && state.getMaterial() == Material.LEAVES) {
-            PlayerEntity player = (PlayerEntity)entityLiving;
-            BlockRayTraceResult traceResult = getPlayerPOVHitResult(worldIn, player, FluidMode.NONE);
+    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+        if(entityLiving instanceof Player player && state.getMaterial() == Material.LEAVES) {
+            BlockHitResult traceResult = getPlayerPOVHitResult(worldIn, player, Fluid.NONE);
             switch (traceResult.getDirection().getAxis()) {
-                case X:
+                case X -> {
                     breakBlockAt(player, worldIn, stack, pos.above());
                     breakBlockAt(player, worldIn, stack, pos.below());
                     breakBlockAt(player, worldIn, stack, pos.north());
@@ -70,8 +70,8 @@ public class ForceMittItem extends ToolItem {
                     breakBlockAt(player, worldIn, stack, pos.south());
                     breakBlockAt(player, worldIn, stack, pos.south().above());
                     breakBlockAt(player, worldIn, stack, pos.south().below());
-                    break;
-                case Z:
+                }
+                case Z -> {
                     breakBlockAt(player, worldIn, stack, pos.above());
                     breakBlockAt(player, worldIn, stack, pos.below());
                     breakBlockAt(player, worldIn, stack, pos.west());
@@ -80,8 +80,8 @@ public class ForceMittItem extends ToolItem {
                     breakBlockAt(player, worldIn, stack, pos.east());
                     breakBlockAt(player, worldIn, stack, pos.east().above());
                     breakBlockAt(player, worldIn, stack, pos.east().below());
-                    break;
-                case Y:
+                }
+                case Y -> {
                     breakBlockAt(player, worldIn, stack, pos.north());
                     breakBlockAt(player, worldIn, stack, pos.east());
                     breakBlockAt(player, worldIn, stack, pos.west());
@@ -90,22 +90,22 @@ public class ForceMittItem extends ToolItem {
                     breakBlockAt(player, worldIn, stack, pos.east());
                     breakBlockAt(player, worldIn, stack, pos.east().north());
                     breakBlockAt(player, worldIn, stack, pos.east().east());
-                    break;
+                }
             }
 
-            worldIn.playSound((PlayerEntity) null, pos, ForceSounds.WHOOSH.get(), SoundCategory.PLAYERS, 1.0F, 1.0F);
+            worldIn.playSound((Player) null, pos, ForceSounds.WHOOSH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
         return super.mineBlock(stack, worldIn, state, pos, entityLiving);
     }
 
-    public void breakBlockAt(PlayerEntity player, World worldIn, ItemStack stack, BlockPos pos) {
-        TileEntity tileEntity = worldIn.getBlockEntity(pos);
+    public void breakBlockAt(Player player, Level worldIn, ItemStack stack, BlockPos pos) {
+        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
         if(worldIn.getBlockState(pos).getMaterial() == Material.LEAVES) {
             BlockState state = worldIn.getBlockState(pos);
-            if(!ForgeHooks.canHarvestBlock(state, player, worldIn, pos)) return;
+            if(!ForgeHooks.isCorrectToolForDrops(state, player)) return;
 
             if(!worldIn.isClientSide) {
-                int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayerEntity) player).gameMode.getGameModeForPlayer(), (ServerPlayerEntity) player, pos);
+                int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos);
                 if(xp == -1) {
                     return;
                 }
@@ -113,30 +113,16 @@ public class ForceMittItem extends ToolItem {
                 FluidState fluidState = worldIn.getFluidState(pos);
                 Block block = state.getBlock();
 
-                if(block.removedByPlayer(state, worldIn, pos, player, true, fluidState)) {
+                if(block.onDestroyedByPlayer(state, worldIn, pos, player, true, fluidState)) {
                     block.playerWillDestroy(worldIn, pos, state, player);
                     block.playerDestroy(worldIn, player, pos, state, tileEntity, stack);
-                    block.popExperience((ServerWorld) worldIn, pos, xp);
+                    block.popExperience((ServerLevel) worldIn, pos, xp);
                 }
 
-                ((ServerWorld)worldIn).sendParticles(ParticleTypes.SWEEP_ATTACK, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 1, 0, 0, 0, 0.0D);
-                PacketHandler.sendPacket(player, new SChangeBlockPacket(worldIn, pos));
+                ((ServerLevel)worldIn).sendParticles(ParticleTypes.SWEEP_ATTACK, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 1, 0, 0, 0, 0.0D);
+                PacketHandler.sendPacket(player, new ClientboundBlockUpdatePacket(worldIn, pos));
             }
         }
-    }
-
-    @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
-        if(tool == ToolType.PICKAXE) {
-            return itemTier.getLevel();
-        } else if(tool == ToolType.AXE) {
-            return itemTier.getLevel();
-        } else if(tool == ToolType.SHOVEL) {
-            return itemTier.getLevel();
-        } else if(tool == ToolType.get("sword")) {
-            return itemTier.getLevel();
-        }
-        return super.getHarvestLevel(stack, tool, player, blockState);
     }
 
     @Override
@@ -151,65 +137,63 @@ public class ForceMittItem extends ToolItem {
 
     @SuppressWarnings("deprecation")
 	@Override
-    public ActionResultType useOn(ItemUseContext context) {
-        World world = context.getLevel();
+    public InteractionResult useOn(UseOnContext context) {
+        Level level = context.getLevel();
         BlockPos blockpos = context.getClickedPos();
+        BlockState blockstate = level.getBlockState(blockpos);
+        Player player = context.getPlayer();
+        ItemStack itemstack = context.getItemInHand();
+
+        Pair<Predicate<UseOnContext>, Consumer<UseOnContext>> pair = HoeItem.TILLABLES.get(level.getBlockState(blockpos).getBlock());
         int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(context);
-        if (hook != 0) return hook > 0 ? ActionResultType.SUCCESS : ActionResultType.FAIL;
-        if (context.getClickedFace() != Direction.DOWN && world.isEmptyBlock(blockpos.above())) {
-            BlockState blockstate = world.getBlockState(blockpos).getToolModifiedState(world, blockpos, context.getPlayer(), context.getItemInHand(), net.minecraftforge.common.ToolType.HOE);
-            if (blockstate != null) {
-                PlayerEntity playerentity = context.getPlayer();
-                world.playSound(playerentity, blockpos, SoundEvents.HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                if (!world.isClientSide) {
-                    world.setBlock(blockpos, blockstate, 11);
-                    if (playerentity != null) {
-                        context.getItemInHand().hurtAndBreak(1, playerentity, (player) -> player.broadcastBreakEvent(context.getHand()));
+        if (hook != 0) return hook > 0 ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+        if (context.getClickedFace() != Direction.DOWN && level.isEmptyBlock(blockpos.above())) {
+            if (pair == null) {
+                return InteractionResult.PASS;
+            } else {
+                Predicate<UseOnContext> predicate = pair.getFirst();
+                Consumer<UseOnContext> consumer = pair.getSecond();
+                if (predicate.test(context)) {
+                    level.playSound(player, blockpos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    if (!level.isClientSide) {
+                        consumer.accept(context);
+                        if (player != null) {
+                            context.getItemInHand().hurtAndBreak(1, player, (p_150845_) -> {
+                                p_150845_.broadcastBreakEvent(context.getHand());
+                            });
+                        }
                     }
-                }
 
-                return ActionResultType.sidedSuccess(world.isClientSide);
-            }
-        }
-
-        BlockState blockstate = world.getBlockState(blockpos);
-        BlockState block = blockstate.getToolModifiedState(world, blockpos, context.getPlayer(), context.getItemInHand(), net.minecraftforge.common.ToolType.AXE);
-        if (block != null) {
-            PlayerEntity playerentity = context.getPlayer();
-            world.playSound(playerentity, blockpos, SoundEvents.AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            if (!world.isClientSide) {
-                world.setBlock(blockpos, block, 11);
-                if (playerentity != null) {
-                    context.getItemInHand().hurtAndBreak(1, playerentity, (p_220040_1_) -> {
-                        p_220040_1_.broadcastBreakEvent(context.getHand());
-                    });
+                    return InteractionResult.sidedSuccess(level.isClientSide);
+                } else {
+                    return InteractionResult.PASS;
                 }
             }
+        }
+        Optional<BlockState> optional = Optional.ofNullable(blockstate.getToolModifiedState(level, blockpos, player, context.getItemInHand(),
+                net.minecraftforge.common.ToolActions.AXE_STRIP));
+        if (optional.isPresent()) {
+            level.playSound(player, blockpos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (player instanceof ServerPlayer) {
+                CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer)player, blockpos, itemstack);
+            }
 
-            return ActionResultType.sidedSuccess(world.isClientSide);
+            level.setBlock(blockpos, optional.get(), 11);
+            if (player != null) {
+                itemstack.hurtAndBreak(1, player, (player1) -> {
+                    player1.broadcastBreakEvent(context.getHand());
+                });
+            }
+
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
-
-    private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
-            // Pickaxe
-            Material.STONE, Material.METAL, Material.ICE, Material.GLASS, Material.PISTON, Material.HEAVY_METAL, Material.DECORATION,
-
-            // Axe
-            Material.WOOD, Material.NETHER_WOOD, Material.PLANT, Material.REPLACEABLE_PLANT, Material.BAMBOO, Material.VEGETABLE,
-
-            // Shovel
-            Material.REPLACEABLE_WATER_PLANT, Material.DIRT, Material.SAND, Material.TOP_SNOW, Material.SNOW, Material.CLAY,
-
-            // Shear / Mitt
-            Material.LEAVES
-    );
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        Material material = state.getMaterial();
-        return EFFECTIVE_MATERIALS.contains(material) ? 14.0F : super.getDestroySpeed(stack, state);
+        return this.blocks.contains(state.getBlock()) ? 14.0F : 1.0F;
     }
 
     public float getAttackDamage() {
@@ -218,14 +202,14 @@ public class ForceMittItem extends ToolItem {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        stack.hurtAndBreak(1, attacker, (attackerEntity) -> attackerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+        stack.hurtAndBreak(1, attacker, (attackerEntity) -> attackerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
         return true;
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
         Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(equipmentSlot);
-        if (equipmentSlot == EquipmentSlotType.MAINHAND) {
+        if (equipmentSlot == EquipmentSlot.MAINHAND) {
             if(multimap != null) {
                 Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
                 builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon damage modifier", (double)this.attackDamage, Operation.ADDITION));
@@ -234,10 +218,5 @@ public class ForceMittItem extends ToolItem {
             }
         }
         return multimap;
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(BlockState blockIn) {
-        return EFFECTIVE_MATERIALS.contains(blockIn.getMaterial()) || blockIn.is(Blocks.COBWEB);
     }
 }

@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.capablilities.playermodifier;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
 
-public class PlayerModifierProvider implements ICapabilitySerializable<INBT>, ICapabilityProvider {
+public class PlayerModifierProvider implements ICapabilitySerializable<Tag>, ICapabilityProvider {
     private LazyOptional<IPlayerModifier> instance;
     private IPlayerModifier playerModifier;
 
@@ -28,12 +28,12 @@ public class PlayerModifierProvider implements ICapabilitySerializable<INBT>, IC
     }
 
     @Override
-    public INBT serializeNBT() {
+    public Tag serializeNBT() {
         return CAPABILITY_PLAYERMOD.writeNBT(playerModifier, null);
     }
 
     @Override
-    public void deserializeNBT(INBT nbt) {
+    public void deserializeNBT(Tag nbt) {
         CAPABILITY_PLAYERMOD.readNBT(playerModifier, null, nbt);
     }
 

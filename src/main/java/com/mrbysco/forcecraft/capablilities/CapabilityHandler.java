@@ -22,7 +22,7 @@ import com.mrbysco.forcecraft.capablilities.playermodifier.PlayerModifierStorage
 import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolFactory;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;

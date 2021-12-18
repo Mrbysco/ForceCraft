@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.capablilities.pack;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -10,7 +10,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class PackInventoryProvider implements ICapabilitySerializable<CompoundNBT> {
+public class PackInventoryProvider implements ICapabilitySerializable<CompoundTag> {
 	private final LazyOptional<PackItemStackHandler> inventory = LazyOptional.of(() -> new PackItemStackHandler());
 
 	@Nonnull
@@ -23,15 +23,15 @@ public class PackInventoryProvider implements ICapabilitySerializable<CompoundNB
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
+	public CompoundTag serializeNBT() {
 		if (inventory.isPresent()) {
 			return inventory.resolve().get().serializeNBT();
 		}
-		return new CompoundNBT();
+		return new CompoundTag();
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		inventory.ifPresent(h -> h.deserializeNBT(nbt));
 	}
 }

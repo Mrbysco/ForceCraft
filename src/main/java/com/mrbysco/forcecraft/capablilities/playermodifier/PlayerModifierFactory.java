@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.capablilities.playermodifier;
 
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.concurrent.Callable;
 

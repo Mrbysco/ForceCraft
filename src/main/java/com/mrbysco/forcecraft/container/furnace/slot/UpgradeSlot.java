@@ -1,8 +1,8 @@
 package com.mrbysco.forcecraft.container.furnace.slot;
 
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -23,7 +23,7 @@ public class UpgradeSlot extends SlotItemHandler {
 	}
 
 	@Override
-	public boolean mayPickup(PlayerEntity playerIn) {
+	public boolean mayPickup(Player playerIn) {
 		return true;
 	}
 

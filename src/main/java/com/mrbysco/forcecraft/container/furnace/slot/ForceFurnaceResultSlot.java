@@ -1,16 +1,16 @@
 package com.mrbysco.forcecraft.container.furnace.slot;
 
 import com.mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ForceFurnaceResultSlot extends SlotItemHandler {
-	private final PlayerEntity player;
+	private final Player player;
 	private int removeCount;
 
-	public ForceFurnaceResultSlot(PlayerEntity player, IItemHandler inventoryIn, int slotIndex, int xPosition, int yPosition) {
+	public ForceFurnaceResultSlot(Player player, IItemHandler inventoryIn, int slotIndex, int xPosition, int yPosition) {
 		super(inventoryIn, slotIndex, xPosition, yPosition);
 		this.player = player;
 	}
@@ -33,7 +33,7 @@ public class ForceFurnaceResultSlot extends SlotItemHandler {
 		return super.remove(amount);
 	}
 
-	public ItemStack onTake(PlayerEntity thePlayer, ItemStack stack) {
+	public ItemStack onTake(Player thePlayer, ItemStack stack) {
 		this.checkTakeAchievements(stack);
 		super.onTake(thePlayer, stack);
 		return stack;

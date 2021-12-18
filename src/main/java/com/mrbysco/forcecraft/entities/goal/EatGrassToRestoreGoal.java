@@ -1,28 +1,28 @@
 package com.mrbysco.forcecraft.entities.goal;
 
 import com.mrbysco.forcecraft.entities.IColdMob;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.pattern.BlockStateMatcher;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
 public class EatGrassToRestoreGoal extends Goal {
-	private static final Predicate<BlockState> IS_GRASS = BlockStateMatcher.forBlock(Blocks.GRASS);
+	private static final Predicate<BlockState> IS_GRASS = BlockStatePredicate.forBlock(Blocks.GRASS);
 	/** The entity owner of this AITask */
-	private final MobEntity grassEaterEntity;
+	private final Mob grassEaterEntity;
 	/** The world the grass eater entity is eating from */
-	private final World entityWorld;
+	private final Level entityWorld;
 	/** Number of ticks since the entity started to eat grass */
 	private int eatingGrassTimer;
 
-	public EatGrassToRestoreGoal(MobEntity grassEaterEntityIn) {
+	public EatGrassToRestoreGoal(Mob grassEaterEntityIn) {
 		this.grassEaterEntity = grassEaterEntityIn;
 		this.entityWorld = grassEaterEntityIn.level;
 		this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.JUMP));
@@ -103,8 +103,7 @@ public class EatGrassToRestoreGoal extends Goal {
 	}
 
 	public void transformMob() {
-		if(this.grassEaterEntity instanceof IColdMob) {
-			IColdMob coldMob = (IColdMob)this.grassEaterEntity;
+		if(this.grassEaterEntity instanceof IColdMob coldMob) {
 			coldMob.transformMob(this.grassEaterEntity, this.entityWorld);
 		}
 	}

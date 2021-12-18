@@ -3,27 +3,27 @@ package com.mrbysco.forcecraft.blocks;
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import com.mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
 import com.mrbysco.forcecraft.tiles.ForceFurnaceTileEntity;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.AbstractFurnaceBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.PushReaction;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.stats.Stats;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -36,7 +36,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
 
 	private static final String NBT_UPGRADE = "upgrade";
 
-	public ForceFurnaceBlock(AbstractBlock.Properties builder) {
+	public ForceFurnaceBlock(BlockBehaviour.Properties builder) {
 		super(builder);
 	}
 
@@ -46,24 +46,24 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
         };
     }
 
-    protected void openContainer(World worldIn, BlockPos pos, PlayerEntity player) {
-        TileEntity tileentity = worldIn.getBlockEntity(pos);
+    protected void openContainer(Level worldIn, BlockPos pos, Player player) {
+        BlockEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof ForceFurnaceTileEntity) {
 			if (!worldIn.isClientSide) {
-				NetworkHooks.openGui((ServerPlayerEntity) player, (ForceFurnaceTileEntity) tileentity, pos);
+				NetworkHooks.openGui((ServerPlayer) player, (ForceFurnaceTileEntity) tileentity, pos);
 			}
             player.awardStat(Stats.INTERACT_WITH_FURNACE);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
         if (stateIn.getValue(LIT)) {
             double d0 = (double)pos.getX() + 0.5D;
             double d1 = (double)pos.getY();
             double d2 = (double)pos.getZ() + 0.5D;
             if (rand.nextDouble() < 0.1D) {
-                worldIn.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+                worldIn.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
             }
 
             Direction direction = stateIn.getValue(FACING);
@@ -80,22 +80,21 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
 
     @Nullable
     @Override
-    public TileEntity newBlockEntity(IBlockReader worldIn) {
+    public BlockEntity newBlockEntity(BlockGetter worldIn) {
         return new ForceFurnaceTileEntity();
     }
 
     @Override
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
-            TileEntity tileentity = worldIn.getBlockEntity(pos);
-            if (tileentity instanceof AbstractForceFurnaceTile) {
-				AbstractForceFurnaceTile furnaceTile = ((AbstractForceFurnaceTile) tileentity);
-                for(int i = 0; i < furnaceTile.getContainerSize(); ++i) {
+            BlockEntity tileentity = worldIn.getBlockEntity(pos);
+            if (tileentity instanceof AbstractForceFurnaceTile furnaceTile) {
+				for(int i = 0; i < furnaceTile.getContainerSize(); ++i) {
                     if(!(furnaceTile.getItem(i).getItem() instanceof UpgradeCoreItem)) {
                         spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), furnaceTile.getItem(i));
                     }
                 }
-                ((AbstractForceFurnaceTile)tileentity).grantStoredRecipeExperience(worldIn, Vector3d.atCenterOf(pos));
+                ((AbstractForceFurnaceTile)tileentity).grantStoredRecipeExperience(worldIn, Vec3.atCenterOf(pos));
                 worldIn.updateNeighbourForOutputSignal(pos, this);
             }
 
@@ -103,7 +102,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
         }
     }
 
-    public static void spawnItemStack(World worldIn, double x, double y, double z, ItemStack stack) {
+    public static void spawnItemStack(Level worldIn, double x, double y, double z, ItemStack stack) {
         double d0 = (double) EntityType.ITEM.getWidth();
         double d1 = 1.0D - d0;
         double d2 = d0 / 2.0D;
@@ -120,11 +119,10 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
     }
 
 	@Override
-	public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		TileEntity tileentity = worldIn.getBlockEntity(pos);
-		if (tileentity instanceof AbstractForceFurnaceTile) {
+	public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		BlockEntity tileentity = worldIn.getBlockEntity(pos);
+		if (tileentity instanceof AbstractForceFurnaceTile furnaceTile) {
 
-			AbstractForceFurnaceTile furnaceTile = (AbstractForceFurnaceTile) tileentity;
 			if (stack.hasCustomHoverName()) {
 				furnaceTile.setCustomName(stack.getHoverName());
 			}
@@ -138,12 +136,11 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
 	}
 
 	@Override
-	public void playerDestroy(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
+	public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
 		super.playerDestroy(worldIn, player, pos, state, te, stack);
-		if(te instanceof ForceFurnaceTileEntity) {
-			ForceFurnaceTileEntity tile = (ForceFurnaceTileEntity) te;
+		if(te instanceof ForceFurnaceTileEntity tile) {
 			if(!tile.getUpgrade().isEmpty()) {
-				worldIn.playSound((PlayerEntity) null, pos, SoundEvents.ITEM_BREAK, SoundCategory.BLOCKS, 0.5F, 1.0F);
+				worldIn.playSound((Player) null, pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5F, 1.0F);
 			}
 		}
 	}
