@@ -57,23 +57,23 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 	public List<Reference.MODIFIERS> applicableModifiers = new ArrayList<>();
 
 	public ForceRodItem(Item.Properties properties) {
-		super(properties.maxDamage(75));
+		super(properties.durability(75));
 		setApplicableModifiers();
 	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		World worldIn = context.getWorld();
-		BlockPos pos = context.getPos();
-		Direction facing = context.getFace();
+	public ActionResultType useOn(ItemUseContext context) {
+		World worldIn = context.getLevel();
+		BlockPos pos = context.getClickedPos();
+		Direction facing = context.getClickedFace();
 		PlayerEntity player = context.getPlayer();
 		Hand handIn = context.getHand();
-		ItemStack stack = context.getItem();
-		if (!worldIn.isRemote && player != null) {
+		ItemStack stack = context.getItemInHand();
+		if (!worldIn.isClientSide && player != null) {
 			if (worldIn.getBlockState(pos).getBlock() instanceof FireBlock) {
 				worldIn.removeBlock(pos, false);
-				List<Entity> list = worldIn.getEntitiesWithinAABB(ItemEntity.class,
-						new AxisAlignedBB(new BlockPos(pos.getX(), pos.getY(), pos.getZ())).expand(0.5, 1, 0.5));
+				List<Entity> list = worldIn.getEntitiesOfClass(ItemEntity.class,
+						new AxisAlignedBB(new BlockPos(pos.getX(), pos.getY(), pos.getZ())).expandTowards(0.5, 1, 0.5));
 				boolean bw = false;
 				for (Entity i : list) {
 					if (i instanceof ItemEntity) {
@@ -81,8 +81,8 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 							ItemEntity bottledWither = new NonBurnableItemEntity(worldIn, pos.getX(), pos.getY() + 1,
 									pos.getZ(), new ItemStack(ForceRegistry.BOTTLED_WITHER.get(),
 											((ItemEntity) i).getItem().getCount()));
-							worldIn.addEntity(bottledWither);
-							stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+							worldIn.addFreshEntity(bottledWither);
+							stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 							bw = true;
 						}
 					}
@@ -97,99 +97,99 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 					}
 				}
 			} else {
-				List<Entity> list = worldIn.getEntitiesWithinAABB(ItemEntity.class,
-						new AxisAlignedBB(new BlockPos(pos.getX(), pos.getY(), pos.getZ())).expand(0.5, 1, 0.5));
+				List<Entity> list = worldIn.getEntitiesOfClass(ItemEntity.class,
+						new AxisAlignedBB(new BlockPos(pos.getX(), pos.getY(), pos.getZ())).expandTowards(0.5, 1, 0.5));
 				// If it is a subset of items, it will drop swap an item
 				for (Entity i : list) {
 					if (i instanceof ItemEntity) {
 						// Armor
 						if (((ItemEntity) i).getItem().getItem() instanceof ArmorItem) {
 							if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-									.getEquipmentSlot() == EquipmentSlotType.CHEST) {
+									.getSlot() == EquipmentSlotType.CHEST) {
 								if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.IRON) {
+										.getMaterial() == ArmorMaterial.IRON) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.IRON_INGOT, 6)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.GOLD) {
+										.getMaterial() == ArmorMaterial.GOLD) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.GOLD_INGOT, 6)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.LEATHER) {
+										.getMaterial() == ArmorMaterial.LEATHER) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(ForceRegistry.FORCE_CHEST.get(), 1)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								}
 							}
 							if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-									.getEquipmentSlot() == EquipmentSlotType.LEGS) {
+									.getSlot() == EquipmentSlotType.LEGS) {
 								if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.IRON) {
+										.getMaterial() == ArmorMaterial.IRON) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.IRON_INGOT, 5)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.GOLD) {
+										.getMaterial() == ArmorMaterial.GOLD) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.GOLD_INGOT, 5)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.LEATHER) {
+										.getMaterial() == ArmorMaterial.LEATHER) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(ForceRegistry.FORCE_LEGS.get(), 1)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								}
 							}
 							if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-									.getEquipmentSlot() == EquipmentSlotType.FEET) {
+									.getSlot() == EquipmentSlotType.FEET) {
 								if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.IRON) {
+										.getMaterial() == ArmorMaterial.IRON) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.IRON_INGOT, 3)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.GOLD) {
+										.getMaterial() == ArmorMaterial.GOLD) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.GOLD_INGOT, 3)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.LEATHER) {
+										.getMaterial() == ArmorMaterial.LEATHER) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(ForceRegistry.FORCE_BOOTS.get(), 1)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								}
 							}
 							if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-									.getEquipmentSlot() == EquipmentSlotType.HEAD) {
+									.getSlot() == EquipmentSlotType.HEAD) {
 								if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.IRON) {
+										.getMaterial() == ArmorMaterial.IRON) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.IRON_INGOT, 4)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.GOLD) {
+										.getMaterial() == ArmorMaterial.GOLD) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.GOLD_INGOT, 4)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) ((ItemEntity) i).getItem().getItem())
-										.getArmorMaterial() == ArmorMaterial.LEATHER) {
+										.getMaterial() == ArmorMaterial.LEATHER) {
 									i.remove();
-									worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(ForceRegistry.FORCE_HELMET.get(), 1)));
-									stack.damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								}
 							}
 						}
@@ -200,18 +200,18 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
 			if (cap.hasEnderModifier()) {
-				if(player.isSneaking()) {
-					cap.setHomeLocation(GlobalPos.getPosition(player.world.getDimensionKey(), player.getPosition()));
-					if(!worldIn.isRemote) {
-						player.sendStatusMessage(new TranslationTextComponent("forcecraft.ender_rod.location.set").mergeStyle(TextFormatting.DARK_PURPLE), true);
+				if(player.isShiftKeyDown()) {
+					cap.setHomeLocation(GlobalPos.of(player.level.dimension(), player.blockPosition()));
+					if(!worldIn.isClientSide) {
+						player.displayClientMessage(new TranslationTextComponent("forcecraft.ender_rod.location.set").withStyle(TextFormatting.DARK_PURPLE), true);
 					}
 				} else {
 					if(cap.getHomeLocation() != null) {
 						cap.teleportPlayerToLocation(player, cap.getHomeLocation());
-						stack.damageItem(1, player, (playerIn) -> player.sendBreakAnimation(handIn));
-						player.getCooldownTracker().setCooldown(this, 10);
-						worldIn.playSound((PlayerEntity)null, player.prevPosX, player.prevPosY, player.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, player.getSoundCategory(), 1.0F, 1.0F);
-						player.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+						stack.hurtAndBreak(1, player, (playerIn) -> player.broadcastBreakEvent(handIn));
+						player.getCooldowns().addCooldown(this, 10);
+						worldIn.playSound((PlayerEntity)null, player.xo, player.yo, player.zo, SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
+						player.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 					}
 				}
 			}
@@ -221,72 +221,72 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if(playerIn != null) {
 			stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
 				if(cap.getHealingLevel() > 0) {
 					int healingLevel = cap.getHealingLevel();
-					playerIn.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, healingLevel - 1, false, false));
-					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
-					playerIn.getCooldownTracker().setCooldown(this, 10);
+					playerIn.addEffect(new EffectInstance(Effects.REGENERATION, 100, healingLevel - 1, false, false));
+					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+					playerIn.getCooldowns().addCooldown(this, 10);
 				}
 
 				if (cap.hasCamoModifier()) {
-					playerIn.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 1000, 0, false, false));
-					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
-					playerIn.getCooldownTracker().setCooldown(this, 10);
+					playerIn.addEffect(new EffectInstance(Effects.INVISIBILITY, 1000, 0, false, false));
+					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+					playerIn.getCooldowns().addCooldown(this, 10);
 				}
 
 				if (cap.hasEnderModifier()) {
-					if(playerIn.isSneaking()) {
-						cap.setHomeLocation(GlobalPos.getPosition(playerIn.world.getDimensionKey(), playerIn.getPosition()));
+					if(playerIn.isShiftKeyDown()) {
+						cap.setHomeLocation(GlobalPos.of(playerIn.level.dimension(), playerIn.blockPosition()));
 					} else {
 						if(cap.getHomeLocation() != null) {
 							cap.teleportPlayerToLocation(playerIn, cap.getHomeLocation());
-							stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
-							playerIn.getCooldownTracker().setCooldown(this, 10);
-							worldIn.playSound((PlayerEntity)null, playerIn.prevPosX, playerIn.prevPosY, playerIn.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, playerIn.getSoundCategory(), 1.0F, 1.0F);
-							playerIn.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+							stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+							playerIn.getCooldowns().addCooldown(this, 10);
+							worldIn.playSound((PlayerEntity)null, playerIn.xo, playerIn.yo, playerIn.zo, SoundEvents.ENDERMAN_TELEPORT, playerIn.getSoundSource(), 1.0F, 1.0F);
+							playerIn.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 						}
 					}
 				}
 
 				if (cap.hasSightModifier()) {
-					playerIn.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 1000, 0, false, false));
-					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
-					playerIn.getCooldownTracker().setCooldown(this, 10);
+					playerIn.addEffect(new EffectInstance(Effects.NIGHT_VISION, 1000, 0, false, false));
+					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+					playerIn.getCooldowns().addCooldown(this, 10);
 				}
 
 				if (cap.hasLight()) {
-					playerIn.addPotionEffect(new EffectInstance(Effects.GLOWING, 1000, 0, false, false));
-					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
-					playerIn.getCooldownTracker().setCooldown(this, 10);
+					playerIn.addEffect(new EffectInstance(Effects.GLOWING, 1000, 0, false, false));
+					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+					playerIn.getCooldowns().addCooldown(this, 10);
 				}
 				if (cap.getSpeedLevel() > 0) {
-					playerIn.addPotionEffect(new EffectInstance(Effects.SPEED, 10 * 20, cap.getSpeedLevel() - 1, false, false));
-					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
-					playerIn.getCooldownTracker().setCooldown(this, 10);
+					playerIn.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 10 * 20, cap.getSpeedLevel() - 1, false, false));
+					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+					playerIn.getCooldowns().addCooldown(this, 10);
 				}
 			});
 		}
 
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		return super.use(worldIn, playerIn, handIn);
 	}
 
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand handIn) {
+	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand handIn) {
 		if(playerIn != null) {
 			stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
 				if(cap.hasLight()) {
-					target.addPotionEffect(new EffectInstance(Effects.GLOWING, 2400, 0, false, false));
-					stack.damageItem(1, playerIn, (player) -> player.sendBreakAnimation(handIn));
-					playerIn.getCooldownTracker().setCooldown(this, 10);
+					target.addEffect(new EffectInstance(Effects.GLOWING, 2400, 0, false, false));
+					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+					playerIn.getCooldowns().addCooldown(this, 10);
 				}
 			});
 		}
-		return super.itemInteractionForEntity(stack, playerIn, target, handIn);
+		return super.interactLivingEntity(stack, playerIn, target, handIn);
 	}
 
 	@Nullable
@@ -337,10 +337,10 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 	
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
 		ForceToolData fd = new ForceToolData(stack);
 		fd.attachInformation(lores);
 		ForceRodStorage.attachInformation(stack, lores);
-		super.addInformation(stack, worldIn, lores, flagIn);
+		super.appendHoverText(stack, worldIn, lores, flagIn);
 	}
 }

@@ -16,7 +16,7 @@ public class MagnetEffect extends Effect {
     }
 
     @Override
-    public boolean isInstant() {
+    public boolean isInstantenous() {
         return false;
     }
 
@@ -31,7 +31,7 @@ public class MagnetEffect extends Effect {
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }
 
@@ -41,16 +41,16 @@ public class MagnetEffect extends Effect {
     }
 
     @Override
-    public void performEffect(LivingEntity entity, int amplifier) {
+    public void applyEffectTick(LivingEntity entity, int amplifier) {
         //Inspired by Botania Code
-        double x = entity.getPosX();
-        double y = entity.getPosY() + 0.75;;
-        double z = entity.getPosZ();
+        double x = entity.getX();
+        double y = entity.getY() + 0.75;;
+        double z = entity.getZ();
         double range = 10.0d;
 
         range += amplifier * 0.3f;
 
-        List<ItemEntity> items = entity.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(x - range, y - range, z - range, x + range, y + range, z + range));
+        List<ItemEntity> items = entity.getCommandSenderWorld().getEntitiesOfClass(ItemEntity.class, new AxisAlignedBB(x - range, y - range, z - range, x + range, y + range, z + range));
         for(ItemEntity item : items) {
             if(item.getItem().isEmpty() || !item.isAlive()) {
                 continue;
@@ -59,14 +59,14 @@ public class MagnetEffect extends Effect {
             // constant force!
             float strength = 0.14F;
 
-            Vector3d entityVector = new Vector3d(item.getPosX(), item.getPosY() - item.getYOffset() + item.getHeight() / 2, item.getPosZ());
+            Vector3d entityVector = new Vector3d(item.getX(), item.getY() - item.getMyRidingOffset() + item.getBbHeight() / 2, item.getZ());
             Vector3d finalVector = new Vector3d(x, y, z).subtract(entityVector);
 
             if (Math.sqrt(finalVector.x * finalVector.x + finalVector.y * finalVector.y + finalVector.z * finalVector.z) > 1) {
                 finalVector = finalVector.normalize();
             }
 
-            item.setMotion(finalVector.mul(strength, strength, strength));
+            item.setDeltaMovement(finalVector.multiply(strength, strength, strength));
         }
     }
 }

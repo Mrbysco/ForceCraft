@@ -23,12 +23,12 @@ public class MagnetStorage implements Capability.IStorage<IMagnet> {
     public static void attachInformation(ItemStack stack, List<ITextComponent> tooltip) {
         stack.getCapability(CAPABILITY_MAGNET).ifPresent(cap -> {
             if(cap.isActivated()) {
-                tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.active").mergeStyle(TextFormatting.GREEN));
+                tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.active").withStyle(TextFormatting.GREEN));
             } else {
-                tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.deactivated").mergeStyle(TextFormatting.RED));
+                tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.deactivated").withStyle(TextFormatting.RED));
             }
             tooltip.add(StringTextComponent.EMPTY);
-            tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.change").mergeStyle(TextFormatting.BOLD));
+            tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.change").withStyle(TextFormatting.BOLD));
         });
     }
 

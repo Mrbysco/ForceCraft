@@ -5,6 +5,6 @@ import net.minecraft.block.Block;
 
 public class BaseBlock extends Block {
     public BaseBlock(AbstractBlock.Properties properties) {
-        super(properties.hardnessAndResistance(2.0F));
+        super(properties.strength(2.0F));
     }
 }

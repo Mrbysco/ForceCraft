@@ -11,7 +11,7 @@ public class BleedingEffect extends Effect {
     }
 
     @Override
-    public boolean isInstant() {
+    public boolean isInstantenous() {
         return false;
     }
 
@@ -21,15 +21,15 @@ public class BleedingEffect extends Effect {
     }
 
     @Override
-    public boolean isReady(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }
 
 	@Override
-	public void performEffect(LivingEntity target, int amplifier) {
+	public void applyEffectTick(LivingEntity target, int amplifier) {
 		//once per tick
-		if(target.world.getGameTime() % 20 == 0) {
-			target.attackEntityFrom(ForceCraft.BLEEDING_DAMAGE, 2.0F);
+		if(target.level.getGameTime() % 20 == 0) {
+			target.hurt(ForceCraft.BLEEDING_DAMAGE, 2.0F);
 		}
 	}
 }

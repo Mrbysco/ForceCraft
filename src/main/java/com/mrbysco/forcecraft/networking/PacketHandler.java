@@ -41,7 +41,7 @@ public class PacketHandler {
 
     public static void sendPacket(Entity player, IPacket<?> packet) {
         if(player instanceof ServerPlayerEntity && ((ServerPlayerEntity) player).connection != null) {
-            ((ServerPlayerEntity) player).connection.sendPacket(packet);
+            ((ServerPlayerEntity) player).connection.send(packet);
         }
     }
 }

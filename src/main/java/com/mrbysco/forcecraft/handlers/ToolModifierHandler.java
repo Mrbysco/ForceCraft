@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.handlers;
 
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.config.ConfigHandler;
@@ -32,13 +31,13 @@ public class ToolModifierHandler {
 		DamageSource source = event.getSource();
 
 		LivingEntity target = event.getEntityLiving();
-		Entity trueSource = source.getTrueSource();
+		Entity trueSource = source.getEntity();
 		if(trueSource instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)source.getTrueSource();
+			PlayerEntity player = (PlayerEntity)source.getEntity();
 			boolean appliedBane = false;
 
 			int bleedLevel = 0;
-			IToolModifier toolCap = player.getHeldItemMainhand().getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			IToolModifier toolCap = player.getMainHandItem().getCapability(CAPABILITY_TOOLMOD).orElse(null);
 			if(toolCap != null) {
 				if(toolCap.hasBane()) {
 					applyBane(target);
@@ -64,13 +63,13 @@ public class ToolModifierHandler {
 						damage += playerCap.getAttackDamage();
 					}
 
-					target.forceFireTicks((30 * playerCap.getHeatPieces()));
+					target.setRemainingFireTicks((30 * playerCap.getHeatPieces()));
 				} else {
 					damage += playerCap.getAttackDamage();
 				}
 
-				if(playerCap.getAttackDamage() > 0 && player.getHeldItemMainhand().isEmpty()) {
-					player.world.playSound((PlayerEntity)null, target.getPosX(), target.getPosY(), target.getPosZ(), ForceSounds.FORCE_PUNCH.get(), player.getSoundCategory(), 1.0F, 1.0F);
+				if(playerCap.getAttackDamage() > 0 && player.getMainHandItem().isEmpty()) {
+					player.level.playSound((PlayerEntity)null, target.getX(), target.getY(), target.getZ(), ForceSounds.FORCE_PUNCH.get(), player.getSoundSource(), 1.0F, 1.0F);
 					event.setAmount(damage);
 				}
 			}
@@ -80,7 +79,7 @@ public class ToolModifierHandler {
 		if(target instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)target;
 			int sturdyLevel = 0;
-			for(ItemStack armorStack : player.getArmorInventoryList()) {
+			for(ItemStack armorStack : player.getArmorSlots()) {
 				IToolModifier modifierCap = armorStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 				if(modifierCap != null && modifierCap.hasSturdy()) { {
 					sturdyLevel++;
@@ -101,10 +100,10 @@ public class ToolModifierHandler {
 			CreeperEntity creeper = ((CreeperEntity) target);
 			creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
 				if(entityCap.canExplode()){
-					creeper.setCreeperState(-1);
-					creeper.getDataManager().set(CreeperEntity.IGNITED, false);
+					creeper.setSwellDir(-1);
+					creeper.getEntityData().set(CreeperEntity.DATA_IS_IGNITED, false);
 					entityCap.setExplodeAbility(false);
-					creeper.goalSelector.goals.removeIf(goal -> goal.getGoal() instanceof CreeperSwellGoal);
+					creeper.goalSelector.availableGoals.removeIf(goal -> goal.getGoal() instanceof CreeperSwellGoal);
 //					ForceCraft.LOGGER.info("Added Bane to " + target.getName());
 				}
 			});

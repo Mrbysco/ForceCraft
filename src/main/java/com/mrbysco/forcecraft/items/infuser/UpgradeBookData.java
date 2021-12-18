@@ -121,7 +121,7 @@ public class UpgradeBookData {
 
 					// i dont know where this bug comes from
 					if (!id.isEmpty() && !"minecraft:".equalsIgnoreCase(id))
-						tierSet.add(ResourceLocation.tryCreate(id));
+						tierSet.add(ResourceLocation.tryParse(id));
 				}
 			}
 			recipesUsed.put(tier.ordinal(), tierSet);

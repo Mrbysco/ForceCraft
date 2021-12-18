@@ -17,17 +17,17 @@ public class EnderTotHeldBlockLayer extends LayerRenderer<EnderTotEntity, EnderT
 	}
 
 	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EnderTotEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		BlockState blockstate = entitylivingbaseIn.getHeldBlockState();
+		BlockState blockstate = entitylivingbaseIn.getCarriedBlock();
 		if (blockstate != null) {
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			matrixStackIn.translate(0.0D, 1.0D, -0.625D);
-			matrixStackIn.rotate(Vector3f.XP.rotationDegrees(20.0F));
-			matrixStackIn.rotate(Vector3f.YP.rotationDegrees(45.0F));
+			matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(20.0F));
+			matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(45.0F));
 			matrixStackIn.translate(0.25D, 0.1875D, 0.25D);
 			matrixStackIn.scale(-0.5F, -0.5F, 0.5F);
-			matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90.0F));
-			Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(blockstate, matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
-			matrixStackIn.pop();
+			matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+			Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockstate, matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY);
+			matrixStackIn.popPose();
 		}
 	}
 }

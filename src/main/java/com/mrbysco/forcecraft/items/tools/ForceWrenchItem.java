@@ -40,35 +40,35 @@ import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_
 public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 
     public ForceWrenchItem(Item.Properties name){
-        super(name.maxStackSize(1));
+        super(name.stacksTo(1));
     }
 
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
+        World world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
         Hand hand = context.getHand();
         if (stack.getItem() instanceof ForceWrenchItem) {
             if(player.isCrouching()) {
                 IForceWrench wrenchCap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
                 if(wrenchCap != null) {
-                    if (world.getTileEntity(pos) instanceof TileEntity && !wrenchCap.canStoreBlock()) {
+                    if (world.getBlockEntity(pos) instanceof TileEntity && !wrenchCap.canStoreBlock()) {
                         return serializeNBT(world, pos, player, hand);
                     } else if(wrenchCap.canStoreBlock())
-                        placeBlockFromWrench(world, pos, player, hand, context.getFace());
+                        placeBlockFromWrench(world, pos, player, hand, context.getClickedFace());
                 }
             } else {
                 ForceToolData fd = new ForceToolData(stack);
                 if(fd.getForce() >= 10) {
                     BlockState state = world.getBlockState(pos);
                     if(state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
-                        world.setBlockState(pos, state.rotate(world, pos, Rotation.CLOCKWISE_90));
+                        world.setBlockAndUpdate(pos, state.rotate(world, pos, Rotation.CLOCKWISE_90));
                         fd.setForce(fd.getForce() - 10);
                         fd.write(stack);
                     }
                 } else {
-                    player.sendStatusMessage(new TranslationTextComponent("forcecraft.wrench_rotate.insufficient", 10).mergeStyle(TextFormatting.RED), true);
+                    player.displayClientMessage(new TranslationTextComponent("forcecraft.wrench_rotate.insufficient", 10).withStyle(TextFormatting.RED), true);
                 }
             }
         }
@@ -85,55 +85,55 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
     }
 
     private ActionResultType serializeNBT(World world, BlockPos pos, PlayerEntity player, Hand hand){
-        ItemStack heldWrench = player.getHeldItem(hand);
+        ItemStack heldWrench = player.getItemInHand(hand);
         ForceToolData fd = new ForceToolData(heldWrench);
         if(fd.getForce() >= 250) {
             BlockState state = world.getBlockState(pos);
-            if(state.getPushReaction() == PushReaction.BLOCK) {
+            if(state.getPistonPushReaction() == PushReaction.BLOCK) {
                 return ActionResultType.FAIL;
             }
 
             IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
             if(wrenchCap != null) {
-                String blockName = state.getBlock().getTranslationKey();
-                TileEntity tileEntity = world.getTileEntity(pos);
+                String blockName = state.getBlock().getDescriptionId();
+                TileEntity tileEntity = world.getBlockEntity(pos);
 
                 if(tileEntity != null){
-                    CompoundNBT nbt = tileEntity.write(new CompoundNBT());
+                    CompoundNBT nbt = tileEntity.save(new CompoundNBT());
                     wrenchCap.storeBlockNBT(nbt);
                     wrenchCap.storeBlockState(state);
                     wrenchCap.setBlockName(blockName);
-                    world.removeTileEntity(pos);
-                    BlockState airState = Blocks.AIR.getDefaultState();
+                    world.removeBlockEntity(pos);
+                    BlockState airState = Blocks.AIR.defaultBlockState();
                     world.removeBlock(pos, false);
-                    world.markBlockRangeForRenderUpdate(pos, state, airState);
+                    world.setBlocksDirty(pos, state, airState);
                 }
                 fd.setForce(fd.getForce() - 250);
                 fd.write(heldWrench);
                 return ActionResultType.SUCCESS;
             }
         } else {
-            player.sendStatusMessage(new TranslationTextComponent("forcecraft.wrench_transport.insufficient", 250).mergeStyle(TextFormatting.RED), true);
+            player.displayClientMessage(new TranslationTextComponent("forcecraft.wrench_transport.insufficient", 250).withStyle(TextFormatting.RED), true);
         }
         return ActionResultType.FAIL;
     }
 
     private ActionResultType placeBlockFromWrench(World world, BlockPos pos, PlayerEntity player, Hand hand, Direction side) {
-        ItemStack heldWrench = player.getHeldItem(hand);
+        ItemStack heldWrench = player.getItemInHand(hand);
         IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
         if(wrenchCap != null) {
             if(wrenchCap.getStoredBlockState() != null) {
                 CompoundNBT tileCmp = wrenchCap.getStoredBlockNBT();
                 BlockState state = wrenchCap.getStoredBlockState();
-                TileEntity te = TileEntity.readTileEntity(state, tileCmp);
-                BlockPos offPos = pos.offset(side);
+                TileEntity te = TileEntity.loadStatic(state, tileCmp);
+                BlockPos offPos = pos.relative(side);
                 if(state != null) {
-                    world.setBlockState(offPos, state);
+                    world.setBlockAndUpdate(offPos, state);
                 }
                 if(te != null) {
-                    te.read(state, tileCmp);
-                    te.setPos(offPos);
-                    world.setTileEntity(offPos, te);
+                    te.load(state, tileCmp);
+                    te.setPosition(offPos);
+                    world.setBlockEntity(offPos, te);
                 }
                 wrenchCap.clearBlockStorage();
             }
@@ -173,9 +173,9 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
         ForceWrenchStorage.attachInformation(stack, lores);
-        super.addInformation(stack, worldIn, lores, flagIn);
+        super.appendHoverText(stack, worldIn, lores, flagIn);
     }
 
 	@Override

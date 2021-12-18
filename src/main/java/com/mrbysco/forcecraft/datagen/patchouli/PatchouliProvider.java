@@ -288,7 +288,7 @@ public class PatchouliProvider extends PatchouliBookProvider {
 				.build();
 
 		ItemStack potionStack = new ItemStack(Items.POTION);
-		PotionUtils.addPotionToItemStack(potionStack, Potions.INVISIBILITY);
+		PotionUtils.setPotion(potionStack, Potions.INVISIBILITY);
 		tierCategory.addEntry("tier_3/camo", "info.forcecraft.book.camo.entry.name", potionStack).setSecret(true)
 				.setAdvancement("forcecraft:tier3/tier")
 				.addTextPage("info.forcecraft.book.camo_info.text").build()

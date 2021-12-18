@@ -34,11 +34,11 @@ public class SmeltingModifier extends LootModifier {
 	}
 
 	private static ItemStack smelt(ItemStack stack, LootContext context) {
-		ItemStack ctxTool = context.get(LootParameters.TOOL);
+		ItemStack ctxTool = context.getParamOrNull(LootParameters.TOOL);
 		IToolModifier toolModifierCap = ctxTool.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(toolModifierCap != null && toolModifierCap.hasHeat()) {
-			return context.getWorld().getRecipeManager().getRecipe(IRecipeType.SMELTING, new Inventory(stack), context.getWorld())
-					.map(FurnaceRecipe::getRecipeOutput)
+			return context.getLevel().getRecipeManager().getRecipeFor(IRecipeType.SMELTING, new Inventory(stack), context.getLevel())
+					.map(FurnaceRecipe::getResultItem)
 					.filter(itemStack -> !itemStack.isEmpty())
 					.map(itemStack -> ItemHandlerHelper.copyStackWithSize(itemStack, stack.getCount() * itemStack.getCount()))
 					.orElse(stack);

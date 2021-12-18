@@ -72,11 +72,11 @@ public class ItemHandlerUtils {
 
 	public static boolean extractStackFromPlayer(PlayerInventory inventory, IItemHandler targetHandler, Predicate<ItemStack> stackPredicate) {
 		if(targetHandler != null) {
-			for(int i = 0; i < inventory.getSizeInventory(); i++) {
-				ItemStack stack = inventory.getStackInSlot(i);
+			for(int i = 0; i < inventory.getContainerSize(); i++) {
+				ItemStack stack = inventory.getItem(i);
 				if(stackPredicate.test(stack)) {
 					ItemStack restStack = ItemHandlerHelper.insertItem(targetHandler, stack, false);
-					inventory.setInventorySlotContents(i, restStack);
+					inventory.setItem(i, restStack);
 					return true;
 				}
 			}

@@ -83,27 +83,27 @@ public class FlaskEntity extends ProjectileItemEntity implements IRendersAsItem 
 		return ForceRegistry.ENTITY_FLASK.get();
 	}
 
-	protected float getGravityVelocity() {
+	protected float getGravity() {
 		return 0.05F;
 	}
 
 	@Override
-	protected void onEntityHit(EntityRayTraceResult result) {
-		super.onEntityHit(result);
-		if (!this.world.isRemote) {
+	protected void onHitEntity(EntityRayTraceResult result) {
+		super.onHitEntity(result);
+		if (!this.level.isClientSide) {
 			ItemStack stack = getItem();
 			if(stack.getItem() instanceof EntityFlaskItem) {
 				Entity entity = result.getEntity();
 				EntityFlaskItem forceFlask = (EntityFlaskItem) stack.getItem();
 				if(forceFlask.hasEntityStored(stack)) {
-					Entity storedEntity = forceFlask.getStoredEntity(stack, this.world);
-					BlockPos pos = entity.getPosition();
-					storedEntity.setPositionAndRotation(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-					this.world.addEntity(storedEntity);
+					Entity storedEntity = forceFlask.getStoredEntity(stack, this.level);
+					BlockPos pos = entity.blockPosition();
+					storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+					this.level.addFreshEntity(storedEntity);
 
 					this.setItem(new ItemStack(ForceRegistry.FORCE_FLASK.get()));
 				} else {
-					if(entity.isAlive() && !entity.isInvulnerable() && !(entity instanceof PlayerEntity) && entity instanceof LivingEntity && entity.canChangeDimension() && !forceFlask.isBlacklisted((LivingEntity)entity)) {
+					if(entity.isAlive() && !entity.isInvulnerable() && !(entity instanceof PlayerEntity) && entity instanceof LivingEntity && entity.canChangeDimensions() && !forceFlask.isBlacklisted((LivingEntity)entity)) {
 						LivingEntity livingEntity = (LivingEntity)entity;
 						ItemStack entityFlask = null;
 						if(entity instanceof BatEntity) {
@@ -195,35 +195,35 @@ public class FlaskEntity extends ProjectileItemEntity implements IRendersAsItem 
 		}
 	}
 
-	protected void func_230299_a_(BlockRayTraceResult result) {
-		super.func_230299_a_(result);
-		if (!this.world.isRemote) {
+	protected void onHitBlock(BlockRayTraceResult result) {
+		super.onHitBlock(result);
+		if (!this.level.isClientSide) {
 			ItemStack stack = this.getItem();
 			if(stack.getItem() instanceof EntityFlaskItem) {
 				EntityFlaskItem forceFlask = (EntityFlaskItem) stack.getItem();
 				if(forceFlask.hasEntityStored(stack)) {
-					Entity storedEntity = forceFlask.getStoredEntity(stack, this.world);
-					BlockPos pos = result.getPos().offset(result.getFace());
-					storedEntity.setPositionAndRotation(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-					this.world.addEntity(storedEntity);
+					Entity storedEntity = forceFlask.getStoredEntity(stack, this.level);
+					BlockPos pos = result.getBlockPos().relative(result.getDirection());
+					storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+					this.level.addFreshEntity(storedEntity);
 				}
 				this.setItem(new ItemStack(ForceRegistry.FORCE_FLASK.get()));
 			}
 		}
 	}
 
-	protected void onImpact(RayTraceResult result) {
-		super.onImpact(result);
-		if (!this.world.isRemote) {
-			this.entityDropItem(this.getItem(), 0.5F);
+	protected void onHit(RayTraceResult result) {
+		super.onHit(result);
+		if (!this.level.isClientSide) {
+			this.spawnAtLocation(this.getItem(), 0.5F);
 
-			this.world.setEntityState(this, (byte)3);
+			this.level.broadcastEntityEvent(this, (byte)3);
 			this.remove();
 		}
 	}
 
 	@Override
-	public IPacket<?> createSpawnPacket() {
+	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

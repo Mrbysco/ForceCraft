@@ -21,12 +21,12 @@ public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe 
 	}
 
 	@Override
-	public ItemStack getCraftingResult(IInventory inv) {
+	public ItemStack assemble(IInventory inv) {
 		return this.resultItems.get(0).copy();
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		return this.resultItems.get(0);
 	}
 

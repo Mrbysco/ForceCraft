@@ -24,7 +24,7 @@ public class PackItemStackHandler extends ItemStackHandler {
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack) {
 		//Make sure there's no ForcePack-ception
-		return !(stack.getItem() instanceof ForcePackItem) && !stack.getItem().isIn(ForceTags.HOLDS_ITEMS) && super.isItemValid(slot, stack);
+		return !(stack.getItem() instanceof ForcePackItem) && !stack.getItem().is(ForceTags.HOLDS_ITEMS) && super.isItemValid(slot, stack);
 	}
 	
 	public int getSlotsInUse() {
@@ -102,7 +102,7 @@ public class PackItemStackHandler extends ItemStackHandler {
 			if (!stacks.get(i).isEmpty()) {
 				CompoundNBT itemTag = new CompoundNBT();
 				itemTag.putInt("Slot", i);
-				stacks.get(i).write(itemTag);
+				stacks.get(i).save(itemTag);
 				nbtTagList.add(itemTag);
 			}
 		}
@@ -125,7 +125,7 @@ public class PackItemStackHandler extends ItemStackHandler {
 
 			if (slot >= 0 && slot < stacks.size())
 			{
-				stacks.set(slot, ItemStack.read(itemTags));
+				stacks.set(slot, ItemStack.of(itemTags));
 			}
 		}
 		onLoad();

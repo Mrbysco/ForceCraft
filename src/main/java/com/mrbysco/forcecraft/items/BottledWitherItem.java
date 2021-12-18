@@ -16,20 +16,20 @@ public class BottledWitherItem extends BaseItem {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        World worldIn = context.getWorld();
-        if (!worldIn.isRemote) {
-            BlockPos pos = context.getPos();
+    public ActionResultType useOn(ItemUseContext context) {
+        World worldIn = context.getLevel();
+        if (!worldIn.isClientSide) {
+            BlockPos pos = context.getClickedPos();
             WitherEntity wither = new WitherEntity(EntityType.WITHER, worldIn);
-            wither.setLocationAndAngles(pos.getX(), pos.getY() + 2.0, pos.getZ(), 0.0F, 0.0F);
-            worldIn.addEntity(wither);
+            wither.moveTo(pos.getX(), pos.getY() + 2.0, pos.getZ(), 0.0F, 0.0F);
+            worldIn.addFreshEntity(wither);
         }
 
         PlayerEntity player = context.getPlayer();
-        if(player != null && !player.abilities.isCreativeMode) {
-            context.getItem().shrink(1);
+        if(player != null && !player.abilities.instabuild) {
+            context.getItemInHand().shrink(1);
         }
 
-        return super.onItemUse(context);
+        return super.useOn(context);
     }
 }

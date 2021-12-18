@@ -22,8 +22,8 @@ public class FortuneItem extends BaseItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack stack = playerIn.getItemInHand(handIn);
         CompoundNBT nbt;
         if(stack.hasTag()) {
             nbt = stack.getTag();
@@ -35,20 +35,20 @@ public class FortuneItem extends BaseItem {
             addMessage(stack, nbt);
         }
 
-        if(!worldIn.isRemote) {
-            if(playerIn != null && playerIn.isSneaking()) {
-                if(!playerIn.abilities.isCreativeMode) {
+        if(!worldIn.isClientSide) {
+            if(playerIn != null && playerIn.isShiftKeyDown()) {
+                if(!playerIn.abilities.instabuild) {
                     stack.shrink(1);
                 }
                 ItemStack paperStack = new ItemStack(Items.PAPER);
-                if(!playerIn.addItemStackToInventory(paperStack)) {
-                    playerIn.entityDropItem(paperStack);
+                if(!playerIn.addItem(paperStack)) {
+                    playerIn.spawnAtLocation(paperStack);
                 }
             } else {
-                playerIn.sendMessage(new StringTextComponent(nbt.getString("message")), Util.DUMMY_UUID);
+                playerIn.sendMessage(new StringTextComponent(nbt.getString("message")), Util.NIL_UUID);
             }
         }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.use(worldIn, playerIn, handIn);
     }
 
     public static void addMessage(ItemStack stack, CompoundNBT nbt) {

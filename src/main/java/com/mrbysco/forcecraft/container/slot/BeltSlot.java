@@ -18,22 +18,22 @@ public class BeltSlot extends SlotItemHandler {
 	}
 
 	@Override
-	public boolean isItemValid(@Nonnull ItemStack stack) {
-		return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem) && stack.getItem().isIn(ForceTags.VALID_FORCE_BELT);
+	public boolean mayPlace(@Nonnull ItemStack stack) {
+		return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem) && stack.getItem().is(ForceTags.VALID_FORCE_BELT);
 	}
 
 	@Override
-	public int getSlotStackLimit() {
+	public int getMaxStackSize() {
 		return 1;
 	}
 
 	@Override
-	public int getItemStackLimit(@Nonnull ItemStack stack) {
+	public int getMaxStackSize(@Nonnull ItemStack stack) {
 		return 1;
 	}
 
 	@Override
-	public void putStack(@Nonnull ItemStack stack) {
-		super.putStack(stack);
+	public void set(@Nonnull ItemStack stack) {
+		super.set(stack);
 	}
 }

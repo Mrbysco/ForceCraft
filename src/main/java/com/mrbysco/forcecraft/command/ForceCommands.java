@@ -22,7 +22,7 @@ public class ForceCommands {
 		CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
 
 		final LiteralArgumentBuilder<CommandSource> root = Commands.literal("force");
-		root.requires((source) -> source.hasPermissionLevel(2))
+		root.requires((source) -> source.hasPermission(2))
 				.then(Commands.literal("ishard").executes(this::execute))
 				.then(Commands.literal("ishard").then(Commands.argument("tier", IntegerArgumentType.integer(0, 7)).executes(this::executeSpecific)));
 
@@ -30,7 +30,7 @@ public class ForceCommands {
 	}
 
 	private int execute(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
-		final ServerPlayerEntity player = ctx.getSource().asPlayer();
+		final ServerPlayerEntity player = ctx.getSource().getPlayerOrException();
 
 		UpgradeBookTier bookTier = UpgradeBookTier.FINAL;
 
@@ -39,14 +39,14 @@ public class ForceCommands {
 		bd.setTier(bookTier);
 		bd.write(book);
 
-		player.addItemStackToInventory(book);
+		player.addItem(book);
 
 		return 0;
 	}
 
 	private int executeSpecific(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
 		final int tier = IntegerArgumentType.getInteger(ctx, "tier");
-		final ServerPlayerEntity player = ctx.getSource().asPlayer();
+		final ServerPlayerEntity player = ctx.getSource().getPlayerOrException();
 
 		UpgradeBookTier bookTier = UpgradeBookTier.values()[tier];
 
@@ -55,7 +55,7 @@ public class ForceCommands {
 		bd.setTier(bookTier);
 		bd.write(book);
 
-		player.addItemStackToInventory(book);
+		player.addItem(book);
 
 		return 0;
 	}

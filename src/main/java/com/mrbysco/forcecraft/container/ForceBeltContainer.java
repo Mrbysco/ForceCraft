@@ -21,7 +21,7 @@ public class ForceBeltContainer extends Container {
     private ItemStack heldStack;
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return !playerIn.isSpectator() && !heldStack.isEmpty();
     }
 
@@ -29,7 +29,7 @@ public class ForceBeltContainer extends Container {
         super(ForceContainers.FORCE_BELT.get(), id);
         this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForceBeltItem);
         if (heldStack == null || heldStack.isEmpty()) {
-            playerInventory.player.closeScreen();
+            playerInventory.player.closeContainer();
             return;
         }
 
@@ -57,12 +57,12 @@ public class ForceBeltContainer extends Container {
                 this.addSlot(new Slot(playerInventory, x, xPos + x * 18, yPos + 58));
             }
         } else {
-            playerInventory.player.closeScreen();
+            playerInventory.player.closeContainer();
         }
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
+    public void removed(PlayerEntity playerIn) {
         IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler != null) {
             CompoundNBT tag = heldStack.getOrCreateTag();
@@ -71,48 +71,48 @@ public class ForceBeltContainer extends Container {
             heldStack.setTag(tag);
         }
 
-        super.onContainerClosed(playerIn);
+        super.removed(playerIn);
     }
 
     @Override
-    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
         if (slotId >= 0) {
-            if (getSlot(slotId).getStack().getItem() instanceof ForceBeltItem)
+            if (getSlot(slotId).getItem().getItem() instanceof ForceBeltItem)
                 return ItemStack.EMPTY;
         }
         if (clickTypeIn == ClickType.SWAP)
             return ItemStack.EMPTY;
 
-        return super.slotClick(slotId, dragType, clickTypeIn, player);
+        return super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
     //Credit to Shadowfacts for this method
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(PlayerEntity player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(index);
+        Slot slot = slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
             if(itemstack.getItem() instanceof ForceBeltItem)
                 return ItemStack.EMPTY;
 
-            int containerSlots = inventorySlots.size() - player.inventory.mainInventory.size();
+            int containerSlots = slots.size() - player.inventory.items.size();
 
             if (index < containerSlots) {
-                if (!this.mergeItemStack(itemstack1, containerSlots, inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, containerSlots, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, containerSlots, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, containerSlots, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {

@@ -25,20 +25,20 @@ public class LootingHandler {
 	@SubscribeEvent
 	public void onLooting(LootingLevelEvent event) {
 		final DamageSource source = event.getDamageSource();
-		if (source == null || source.getTrueSource() == null) {
+		if (source == null || source.getEntity() == null) {
 			return;
 		}
 
 		int level = event.getLootingLevel();
 
-		IPlayerModifier playerModifier = source.getTrueSource().getCapability(CAPABILITY_PLAYERMOD).orElse(null);
+		IPlayerModifier playerModifier = source.getEntity().getCapability(CAPABILITY_PLAYERMOD).orElse(null);
 		int customLevel = 0;
 		if(playerModifier != null) {
 			customLevel += playerModifier.getLuckLevel();
 		}
 
-		if(source.getImmediateSource() instanceof ForceArrowEntity) {
-			ForceArrowEntity forceArrow = (ForceArrowEntity) source.getImmediateSource();
+		if(source.getDirectEntity() instanceof ForceArrowEntity) {
+			ForceArrowEntity forceArrow = (ForceArrowEntity) source.getDirectEntity();
 			customLevel += forceArrow.getLuck();
 		}
 
@@ -52,19 +52,19 @@ public class LootingHandler {
 
 	@SubscribeEvent
 	public void onTreasureDrop(LivingDropsEvent event) {
-		if (event.getSource() == null || event.getSource().getTrueSource() == null) {
+		if (event.getSource() == null || event.getSource().getEntity() == null) {
 			return;
 		}
 
-		Entity source = event.getSource().getTrueSource();
+		Entity source = event.getSource().getEntity();
 		if(source instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) source;
-			player.getHeldItemMainhand().getCapability(CapabilityHandler.CAPABILITY_TOOLMOD).ifPresent(cap -> {
+			player.getMainHandItem().getCapability(CapabilityHandler.CAPABILITY_TOOLMOD).ifPresent(cap -> {
 				if(cap.hasTreasure()) {
-					Random rand = player.getRNG();
+					Random rand = player.getRandom();
 					int looting = event.getLootingLevel();
 					LivingEntity entity = event.getEntityLiving();
-					BlockPos entityPos = entity.getPosition();
+					BlockPos entityPos = entity.blockPosition();
 
 					int chanceMax = 20;
 					if(looting > 0) {
@@ -75,13 +75,13 @@ public class LootingHandler {
 					}
 					float dropChance = rand.nextInt(chanceMax);
 					if(dropChance == 0) {
-						if(entity.isEntityUndead()) {
-							event.getDrops().add(new ItemEntity(entity.world, entityPos.getX(), entityPos.getY(), entityPos.getZ(), new ItemStack(ForceRegistry.UNDEATH_CARD.get(), rand.nextInt(Math.max(1, looting)) + 1)));
+						if(entity.isInvertedHealAndHarm()) {
+							event.getDrops().add(new ItemEntity(entity.level, entityPos.getX(), entityPos.getY(), entityPos.getZ(), new ItemStack(ForceRegistry.UNDEATH_CARD.get(), rand.nextInt(Math.max(1, looting)) + 1)));
 						} else {
 							if(entity instanceof MonsterEntity) {
-								event.getDrops().add(new ItemEntity(entity.world, entityPos.getX(), entityPos.getY(), entityPos.getZ(), new ItemStack(ForceRegistry.DARKNESS_CARD.get(), rand.nextInt(Math.max(1, looting)) + 1)));
+								event.getDrops().add(new ItemEntity(entity.level, entityPos.getX(), entityPos.getY(), entityPos.getZ(), new ItemStack(ForceRegistry.DARKNESS_CARD.get(), rand.nextInt(Math.max(1, looting)) + 1)));
 							} else {
-								event.getDrops().add(new ItemEntity(entity.world, entityPos.getX(), entityPos.getY(), entityPos.getZ(), new ItemStack(ForceRegistry.LIFE_CARD.get(), rand.nextInt(Math.max(1, looting)) + 1)));
+								event.getDrops().add(new ItemEntity(entity.level, entityPos.getX(), entityPos.getY(), entityPos.getZ(), new ItemStack(ForceRegistry.LIFE_CARD.get(), rand.nextInt(Math.max(1, looting)) + 1)));
 							}
 						}
 					}

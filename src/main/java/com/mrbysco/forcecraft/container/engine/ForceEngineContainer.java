@@ -28,7 +28,7 @@ public class ForceEngineContainer extends Container {
 	private static ForceEngineTile getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
 		Objects.requireNonNull(data, "data cannot be null!");
-		final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(data.readBlockPos());
+		final TileEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 
 		if (tileAtPos instanceof ForceEngineTile) {
 			return (ForceEngineTile) tileAtPos;
@@ -68,7 +68,7 @@ public class ForceEngineContainer extends Container {
 	private void trackFluids() {
 		// Dedicated server ints are actually truncated to short so we need to split our integer here (split our 32 bit integer into two 16 bit integers)
 		//Fuel Tank
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return tile.getFuelAmount() & 0xffff;
@@ -80,7 +80,7 @@ public class ForceEngineContainer extends Container {
 				tile.setFuelAmount(fluidStored + (value & 0xffff));
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return (tile.getFuelAmount() >> 16) & 0xffff;
@@ -94,7 +94,7 @@ public class ForceEngineContainer extends Container {
 		});
 
 		//Throttle Tank
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return tile.getThrottleAmount() & 0xffff;
@@ -106,7 +106,7 @@ public class ForceEngineContainer extends Container {
 				tile.setThrottleAmount(fluidStored + (value & 0xffff));
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return (tile.getThrottleAmount() >> 16) & 0xffff;
@@ -125,17 +125,17 @@ public class ForceEngineContainer extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
+	public boolean stillValid(PlayerEntity playerIn) {
 		return this.tile.isUsableByPlayer(playerIn);
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
+		Slot slot = this.slots.get(index);
 
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
+		if (slot != null && slot.hasItem()) {
+			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
 			final int tileSize = 2;
 
@@ -146,17 +146,17 @@ public class ForceEngineContainer extends Container {
 			}
 
 			if (index < tileSize) {
-				if (!this.mergeItemStack(itemstack1, tileSize, inventorySlots.size(), true)) {
+				if (!this.moveItemStackTo(itemstack1, tileSize, slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 0, tileSize, false)) {
+			} else if (!this.moveItemStackTo(itemstack1, 0, tileSize, false)) {
 				return ItemStack.EMPTY;
 			}
 
 			if (itemstack1.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 
 			if (itemstack1.getCount() == itemstack.getCount()) {
@@ -170,7 +170,7 @@ public class ForceEngineContainer extends Container {
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 	}
 }

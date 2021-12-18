@@ -10,7 +10,7 @@ public class BaseItem extends Item {
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 0;
     }
 

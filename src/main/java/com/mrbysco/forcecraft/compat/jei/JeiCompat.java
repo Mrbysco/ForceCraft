@@ -124,9 +124,9 @@ public class JeiCompat implements IModPlugin {
 		ErrorUtil.checkNotNull(grindingCategory, "grindingCategory");
 		ErrorUtil.checkNotNull(infuserCategory, "grindingCategory");
 
-		ClientWorld world = Objects.requireNonNull(Minecraft.getInstance().world);
-		registration.addRecipes(world.getRecipeManager().getRecipesForType(ForceRecipes.FREEZING), FREEZING);
-		registration.addRecipes(world.getRecipeManager().getRecipesForType(ForceRecipes.GRINDING), GRINDING);
-		registration.addRecipes(world.getRecipeManager().getRecipesForType(ForceRecipes.INFUSER_TYPE), INFUSER);
+		ClientWorld world = Objects.requireNonNull(Minecraft.getInstance().level);
+		registration.addRecipes(world.getRecipeManager().getAllRecipesFor(ForceRecipes.FREEZING), FREEZING);
+		registration.addRecipes(world.getRecipeManager().getAllRecipesFor(ForceRecipes.GRINDING), GRINDING);
+		registration.addRecipes(world.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE), INFUSER);
 	}
 }

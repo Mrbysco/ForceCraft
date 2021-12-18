@@ -1,9 +1,9 @@
 package com.mrbysco.forcecraft.compat.jei.multipleoutput;
 
-import mezz.jei.api.helpers.IGuiHelper;
 import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.recipe.FreezingRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
+import mezz.jei.api.helpers.IGuiHelper;
 import net.minecraft.util.ResourceLocation;
 
 public class FreezingCategory extends AbstractMultiOutputCategory<FreezingRecipe> {

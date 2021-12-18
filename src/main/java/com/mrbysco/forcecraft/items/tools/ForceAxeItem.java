@@ -57,7 +57,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
         if(toolModifierCap != null) {
             if(toolModifierCap.hasLumberjack()) {
                 if (player != null) {
-                    if (ForceUtils.isTree(player.getEntityWorld(), pos)) {
+                    if (ForceUtils.isTree(player.getCommandSenderWorld(), pos)) {
                         return fellTree(stack, pos, player);
                     }
                 }
@@ -68,7 +68,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     }
 
     public static boolean fellTree(ItemStack stack, BlockPos pos, PlayerEntity player){
-        if(player.getEntityWorld().isRemote) {
+        if(player.getCommandSenderWorld().isClientSide) {
             return true;
         }
         MinecraftForge.EVENT_BUS.register(new TreeChopTask(stack, pos, player, 10));
@@ -85,7 +85,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
         public Set<BlockPos> visited = new HashSet<>();
 
         public TreeChopTask(ItemStack tool, BlockPos start, PlayerEntity player, int blocksPerTick) {
-            this.world = player.getEntityWorld();
+            this.world = player.getCommandSenderWorld();
             this.player = player;
             this.tool = tool;
             this.blocksPerTick = blocksPerTick;
@@ -100,7 +100,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
                 return;
             }
             // only if same dimension
-            if(event.world.getDimensionKey().getLocation().equals(world.getDimensionKey().getLocation())) {
+            if(event.world.dimension().location().equals(world.dimension().location())) {
                 return;
             }
 
@@ -128,7 +128,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 
                 // save its neighbours
                 for(Direction facing : new Direction[] { Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST }) {
-                    BlockPos pos2 = pos.offset(facing);
+                    BlockPos pos2 = pos.relative(facing);
                     if(!visited.contains(pos2)) {
                         blocks.add(pos2);
                     }
@@ -137,7 +137,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
                 // also add the layer above.. stupid acacia trees
                 for(int x = 0; x < 3; x++) {
                     for(int z = 0; z < 3; z++) {
-                        BlockPos pos2 = pos.add(-1 + x, 1, -1 + z);
+                        BlockPos pos2 = pos.offset(-1 + x, 1, -1 + z);
                         if(!visited.contains(pos2)) {
                             blocks.add(pos2);
                         }
@@ -183,7 +183,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 0;
     }
 
@@ -193,11 +193,11 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     }
     
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
     	ForceToolData fd = new ForceToolData(stack);
     	fd.attachInformation(lores);
     	ToolModStorage.attachInformation(stack, lores);
-        super.addInformation(stack, worldIn, lores, flagIn);
+        super.appendHoverText(stack, worldIn, lores, flagIn);
     }
     
 	@Override

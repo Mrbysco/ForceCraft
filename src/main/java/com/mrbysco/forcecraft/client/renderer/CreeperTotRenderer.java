@@ -18,8 +18,8 @@ public class CreeperTotRenderer extends MobRenderer<CreeperTotEntity, CreeperTot
 		this.addLayer(new CreeperTotChargeLayer(this));
 	}
 
-	protected void preRenderCallback(CreeperTotEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
-		float f = entitylivingbaseIn.getCreeperFlashIntensity(partialTickTime);
+	protected void scale(CreeperTotEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
+		float f = entitylivingbaseIn.getSwelling(partialTickTime);
 		float f1 = 1.0F + MathHelper.sin(f * 100.0F) * f * 0.01F;
 		f = MathHelper.clamp(f, 0.0F, 1.0F);
 		f = f * f;
@@ -29,12 +29,12 @@ public class CreeperTotRenderer extends MobRenderer<CreeperTotEntity, CreeperTot
 		matrixStackIn.scale(f2, f3, f2);
 	}
 
-	protected float getOverlayProgress(CreeperTotEntity livingEntityIn, float partialTicks) {
-		float f = livingEntityIn.getCreeperFlashIntensity(partialTicks);
+	protected float getWhiteOverlayProgress(CreeperTotEntity livingEntityIn, float partialTicks) {
+		float f = livingEntityIn.getSwelling(partialTicks);
 		return (int)(f * 10.0F) % 2 == 0 ? 0.0F : MathHelper.clamp(f, 0.5F, 1.0F);
 	}
 	@Override
-	public ResourceLocation getEntityTexture(CreeperTotEntity entity) {
+	public ResourceLocation getTextureLocation(CreeperTotEntity entity) {
 		return CREEPER_TEXTURES;
 	}
 }

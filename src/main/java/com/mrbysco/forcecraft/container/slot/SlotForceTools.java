@@ -13,12 +13,12 @@ public class SlotForceTools extends SlotItemHandler {
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
-        return stack.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
+    public boolean mayPlace(ItemStack stack) {
+        return stack.getItem().is(ForceTags.VALID_INFUSER_TOOLS);
     }
 
     @Override
-    public int getItemStackLimit(@Nonnull ItemStack stack) {
+    public int getMaxStackSize(@Nonnull ItemStack stack) {
         return 1;
     }
 }

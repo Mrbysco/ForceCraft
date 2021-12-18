@@ -31,7 +31,7 @@ public class ForcePackContainer extends Container {
     private int upgrades;
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return !playerIn.isSpectator();
     }
 
@@ -39,7 +39,7 @@ public class ForcePackContainer extends Container {
         super(ForceContainers.FORCE_PACK.get(), id);
         this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForcePackItem);
         if (heldStack == null || heldStack.isEmpty()) {
-            playerInventory.player.closeScreen();
+            playerInventory.player.closeContainer();
             return;
         }
 		
@@ -59,7 +59,7 @@ public class ForcePackContainer extends Container {
                 for (int k = 0; k < 8; ++k) {
                     this.addSlot(new SlotItemHandler(itemHandler, k + j * 8, xPosC + k * 18, yPosC + j * 18) {
                         @Override
-                        public boolean isItemValid(@Nonnull ItemStack stack) {
+                        public boolean mayPlace(@Nonnull ItemStack stack) {
                             return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem);
                         }
                     });
@@ -82,12 +82,12 @@ public class ForcePackContainer extends Container {
                 this.addSlot(new Slot(playerInventory, x, xPos + x * 18, yPos + 58));
             }
         } else {
-            playerInventory.player.closeScreen();
+            playerInventory.player.closeContainer();
         }
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
+    public void removed(PlayerEntity playerIn) {
         IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler instanceof PackItemStackHandler) {
             for(int i = 0; i < itemHandler.getSlots(); i++) {
@@ -98,7 +98,7 @@ public class ForcePackContainer extends Container {
                     NonNullList<ItemStack> ingredientList = NonNullList.create();
                     List<ItemStack> mergeList = new ArrayList<>();
                     for(int j = 0; j < 9; j++) {
-                        ItemStack recipeStack = ItemStack.read(recipeContents.getCompound("slot_" + j));
+                        ItemStack recipeStack = ItemStack.of(recipeContents.getCompound("slot_" + j));
                         if(!recipeStack.isEmpty()) {
                             if(ingredientList.isEmpty()) {
                                 ingredientList.add(recipeStack);
@@ -114,7 +114,7 @@ public class ForcePackContainer extends Container {
                             for (Iterator<ItemStack> iterator = ingredientList.iterator(); iterator.hasNext();) {
                                 ItemStack ingredient = iterator.next();
                                 if(ingredient != null && !ingredient.isEmpty()) {
-                                    if(areItemsAndTagsEqual(ingredient, recipeStack)) {
+                                    if(consideredTheSameItem(ingredient, recipeStack)) {
                                         int addedCount = ingredient.getCount() + recipeStack.getCount();
                                         int maxCount = ingredient.getMaxStackSize();
                                         if (addedCount <= maxCount) {
@@ -152,7 +152,7 @@ public class ForcePackContainer extends Container {
                     for(ItemStack ingredient : ingredientList) {
                         int countPossible = 0;
                         for(ItemStack rest : restList) {
-                            if(ingredient.getItem() == rest.getItem() && ItemStack.areItemStackTagsEqual(ingredient, rest)) {
+                            if(ingredient.getItem() == rest.getItem() && ItemStack.tagMatches(ingredient, rest)) {
                                 countPossible += (double)rest.getCount() / ingredient.getCount();
                             }
                         }
@@ -166,12 +166,12 @@ public class ForcePackContainer extends Container {
                         }
                     }
 
-                    ItemStack craftStack = ItemStack.read(recipeContents.getCompound("result"));
+                    ItemStack craftStack = ItemStack.of(recipeContents.getCompound("result"));
                     if(canCraft && craftCount > 0) {
                         for(int l = 0; l < craftCount; l++) {
                             for(ItemStack ingredient : ingredientList) {
                                 for(ItemStack rest : restList) {
-                                    if(ingredient.getItem() == rest.getItem() && ItemStack.areItemStackTagsEqual(ingredient, rest)) {
+                                    if(ingredient.getItem() == rest.getItem() && ItemStack.tagMatches(ingredient, rest)) {
                                         if(rest.getCount() >= ingredient.getCount()) {
                                             rest.shrink(ingredient.getCount());
                                         }
@@ -182,7 +182,7 @@ public class ForcePackContainer extends Container {
                             ItemStack stackCopy = craftStack.copy();
                             ItemStack craftedStack = ItemHandlerHelper.insertItem(itemHandler, stackCopy, false);
                             if(!craftedStack.isEmpty()) {
-                                playerIn.dropItem(craftedStack, true);
+                                playerIn.drop(craftedStack, true);
                             }
                         }
                     }
@@ -194,19 +194,19 @@ public class ForcePackContainer extends Container {
             heldStack.setTag(tag);
         }
 
-        super.onContainerClosed(playerIn);
+        super.removed(playerIn);
     }
 
     @Override
-    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
         if (slotId >= 0) {
-            if (getSlot(slotId).getStack().getItem() instanceof ForcePackItem)
+            if (getSlot(slotId).getItem().getItem() instanceof ForcePackItem)
                 return ItemStack.EMPTY;
         }
         if (clickTypeIn == ClickType.SWAP)
             return ItemStack.EMPTY;
 
-        return super.slotClick(slotId, dragType, clickTypeIn, player);
+        return super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
     public int getUpgrades() {
@@ -215,31 +215,31 @@ public class ForcePackContainer extends Container {
 
     //Credit to Shadowfacts for this method
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(PlayerEntity player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(index);
+        Slot slot = slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
             if(itemstack.getItem() instanceof ForcePackItem)
                 return ItemStack.EMPTY;
 
-            int containerSlots = inventorySlots.size() - player.inventory.mainInventory.size();
+            int containerSlots = slots.size() - player.inventory.items.size();
 
             if (index < containerSlots) {
-                if (!this.mergeItemStack(itemstack1, containerSlots, inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, containerSlots, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, containerSlots, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, containerSlots, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.getCount() == 0) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {

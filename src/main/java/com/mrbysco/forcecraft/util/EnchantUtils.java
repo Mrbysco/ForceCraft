@@ -24,7 +24,7 @@ public final class EnchantUtils {
             EnchantmentHelper.setEnchantments(enchantments, stack);
         }
         else {
-            stack.addEnchantment(enchantment, 1);
+            stack.enchant(enchantment, 1);
         }
     }
 
@@ -37,7 +37,7 @@ public final class EnchantUtils {
             EnchantmentHelper.setEnchantments(enchantments, stack);
         }
         else {
-            stack.addEnchantment(enchantment, levels);
+            stack.enchant(enchantment, levels);
         }
     }
 }

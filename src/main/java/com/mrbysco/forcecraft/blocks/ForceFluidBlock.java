@@ -26,20 +26,20 @@ public class ForceFluidBlock extends FlowingFluidBlock {
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+    public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
         if (entityIn instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity)entityIn;
 
             if(livingEntity instanceof PlayerEntity) {
-                ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.REGENERATION, 10, 0, false, false));
+                ((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.REGENERATION, 10, 0, false, false));
             } else {
-                CreatureAttribute creatureAttribute = livingEntity.getCreatureAttribute();
+                CreatureAttribute creatureAttribute = livingEntity.getMobType();
                 EntityClassification classification = livingEntity.getClassification(false);
                 boolean secondPassed = worldIn.getGameTime() % 20 == 0;
                 boolean damageEntity = creatureAttribute == CreatureAttribute.UNDEAD || creatureAttribute == CreatureAttribute.UNDEFINED || creatureAttribute == CreatureAttribute.ARTHROPOD;
                 if(classification == EntityClassification.MONSTER && damageEntity) {
                     if(worldIn.getGameTime() % 10 == 0) {
-                        livingEntity.attackEntityFrom(ForceCraft.LIQUID_FORCE_DAMAGE, 1.0F);
+                        livingEntity.hurt(ForceCraft.LIQUID_FORCE_DAMAGE, 1.0F);
                     }
                 } else {
                     if(worldIn.getGameTime() % 10 == 0) {

@@ -16,35 +16,35 @@ import java.util.List;
 public class UpgradeTomeItem extends BaseItem {
 
 	public UpgradeTomeItem(Properties properties) {
-		super(properties.maxStackSize(1));
+		super(properties.stacksTo(1));
 	}
 
 	@Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 		UpgradeBookData bd = new UpgradeBookData(stack);
 	
         TranslationTextComponent tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.tier");
-        tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-        tt.appendString(" " + bd.getTier());
+        tt.withStyle(Style.EMPTY.applyFormat(TextFormatting.AQUA));
+        tt.append(" " + bd.getTier());
         if(!bd.getProgressCache().isEmpty()) {
-        	tt.appendString(" : " + bd.getProgressCache());
+        	tt.append(" : " + bd.getProgressCache());
         }
         tooltip.add(tt);  
 
         if(bd.getTier() == UpgradeBookTier.FINAL) {
             tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.max");
-            tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
+            tt.withStyle(Style.EMPTY.applyFormat(TextFormatting.AQUA));
 		}
         else {
 	        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.points");
-	        tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-	        tt.appendString(" " + bd.getPoints());
+	        tt.withStyle(Style.EMPTY.applyFormat(TextFormatting.AQUA));
+	        tt.append(" " + bd.getPoints());
 	        tooltip.add(tt); 
         
 	        tt = new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.nexttier");
-	        tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
-	        tt.appendString(" " + bd.nextTier());
+	        tt.withStyle(Style.EMPTY.applyFormat(TextFormatting.AQUA));
+	        tt.append(" " + bd.nextTier());
 		}
 		tooltip.add(tt);
 
@@ -55,7 +55,7 @@ public class UpgradeTomeItem extends BaseItem {
 		}
 
 		tooltip.add(new TranslationTextComponent("item.forcecraft.upgrade_tome.tt.point_info"));
-		tt.mergeStyle(Style.EMPTY.applyFormatting(TextFormatting.AQUA));
+		tt.withStyle(Style.EMPTY.applyFormat(TextFormatting.AQUA));
 	}
 
 	public static void onModifierApplied(ItemStack bookInSlot, ItemStack modifier, ItemStack tool) {

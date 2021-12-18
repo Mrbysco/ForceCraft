@@ -22,18 +22,18 @@ public class RenderHelper {
 
 		ResourceLocation flowing = fluid.getFluid().getAttributes().getStillTexture(fluid);
 
-		Texture texture = Minecraft.getInstance().getTextureManager().getTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+		Texture texture = Minecraft.getInstance().getTextureManager().getTexture(PlayerContainer.BLOCK_ATLAS);
 		if (texture instanceof AtlasTexture) {
 			TextureAtlasSprite sprite = ((AtlasTexture) texture).getSprite(flowing);
 			if (sprite != null) {
-				float minU = sprite.getMinU();
-				float maxU = sprite.getMaxU();
-				float minV = sprite.getMinV();
-				float maxV = sprite.getMaxV();
+				float minU = sprite.getU0();
+				float maxU = sprite.getU1();
+				float minV = sprite.getV0();
+				float maxV = sprite.getV1();
 				float deltaV = maxV - minV;
 				double tankLevel = percent * height;
 
-				Minecraft.getInstance().textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+				Minecraft.getInstance().textureManager.bind(PlayerContainer.BLOCK_ATLAS);
 
 				Color color = new Color(fluid.getFluid()
 						.getAttributes()
@@ -60,13 +60,13 @@ public class RenderHelper {
 
 	private static void drawQuad(double x, double y, double width, double height, float minU, float minV, float maxU, float maxV) {
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuilder();
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(x, y + height, 0).tex(minU, maxV).endVertex();
-		buffer.pos(x + width, y + height, 0).tex(maxU, maxV).endVertex();
-		buffer.pos(x + width, y, 0).tex(maxU, minV).endVertex();
-		buffer.pos(x, y, 0).tex(minU, minV).endVertex();
-		tessellator.draw();
+		buffer.vertex(x, y + height, 0).uv(minU, maxV).endVertex();
+		buffer.vertex(x + width, y + height, 0).uv(maxU, maxV).endVertex();
+		buffer.vertex(x + width, y, 0).uv(maxU, minV).endVertex();
+		buffer.vertex(x, y, 0).uv(minU, minV).endVertex();
+		tessellator.end();
 	}
 
 	public static float getTankPercentage(int fluidAmount, int fluidMax) {

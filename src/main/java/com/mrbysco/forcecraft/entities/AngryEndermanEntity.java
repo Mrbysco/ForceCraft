@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 public class AngryEndermanEntity extends EndermanEntity {
 	public AngryEndermanEntity(EntityType<? extends EndermanEntity> type, World worldIn) {
 		super(type, worldIn);
-		this.setPathPriority(PathNodeType.WATER, 8.0F); //Reset to default as like Ender Tots, Angry Enderman aren't afraid of water
+		this.setPathfindingMalus(PathNodeType.WATER, 8.0F); //Reset to default as like Ender Tots, Angry Enderman aren't afraid of water
 	}
 
 	protected void registerGoals() {
@@ -38,27 +38,27 @@ public class AngryEndermanEntity extends EndermanEntity {
 		this.goalSelector.addGoal(7, new RandomWalkingGoal(this, 1.0D));
 		this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
-		this.targetSelector.addGoal(1, new AngryEndermanEntity.FindPlayerGoal(this, this::func_233680_b_));
+		this.targetSelector.addGoal(1, new AngryEndermanEntity.FindPlayerGoal(this, this::isAngryAt));
 		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, EndermiteEntity.class, 10, true, false, field_213627_bA));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, EndermiteEntity.class, 10, true, false, ENDERMITE_SELECTOR));
 		this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));
 	}
 
 	public static AttributeModifierMap.MutableAttribute generateAttributes() {
-		return MonsterEntity.func_234295_eP_()
-				.createMutableAttribute(Attributes.MAX_HEALTH, 40.0D)
-				.createMutableAttribute(Attributes.MOVEMENT_SPEED, (double)0.3F)
-				.createMutableAttribute(Attributes.ATTACK_DAMAGE, 7.0D)
-				.createMutableAttribute(Attributes.FOLLOW_RANGE, 64.0D);
+		return MonsterEntity.createMonsterAttributes()
+				.add(Attributes.MAX_HEALTH, 40.0D)
+				.add(Attributes.MOVEMENT_SPEED, (double)0.3F)
+				.add(Attributes.ATTACK_DAMAGE, 7.0D)
+				.add(Attributes.FOLLOW_RANGE, 64.0D);
 	}
 
 	@Override
-	public boolean teleportRandomly() {
-		if (!this.world.isRemote() && this.isAlive() && !this.isInWaterOrBubbleColumn()) {
-			double d0 = this.getPosX() + (this.rand.nextDouble() - 0.5D) * 64.0D;
-			double d1 = this.getPosY() + (double)(this.rand.nextInt(64) - 32);
-			double d2 = this.getPosZ() + (this.rand.nextDouble() - 0.5D) * 64.0D;
-			return this.teleportTo(d0, d1, d2);
+	public boolean teleport() {
+		if (!this.level.isClientSide() && this.isAlive() && !this.isInWaterOrBubble()) {
+			double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
+			double d1 = this.getY() + (double)(this.random.nextInt(64) - 32);
+			double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
+			return this.teleport(d0, d1, d2);
 		} else {
 			return false;
 		}
@@ -70,35 +70,35 @@ public class AngryEndermanEntity extends EndermanEntity {
 
 		public StareGoal(EndermanEntity endermanIn) {
 			this.enderman = endermanIn;
-			this.setMutexFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
+			this.setFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
 		}
 
 		/**
 		 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
 		 * method as well.
 		 */
-		public boolean shouldExecute() {
-			this.targetPlayer = this.enderman.getAttackTarget();
+		public boolean canUse() {
+			this.targetPlayer = this.enderman.getTarget();
 			if (!(this.targetPlayer instanceof PlayerEntity)) {
 				return false;
 			} else {
-				double d0 = this.targetPlayer.getDistanceSq(this.enderman);
-				return d0 > 256.0D ? false : this.enderman.shouldAttackPlayer((PlayerEntity)this.targetPlayer);
+				double d0 = this.targetPlayer.distanceToSqr(this.enderman);
+				return d0 > 256.0D ? false : this.enderman.isLookingAtMe((PlayerEntity)this.targetPlayer);
 			}
 		}
 
 		/**
 		 * Execute a one shot task or start executing a continuous task
 		 */
-		public void startExecuting() {
-			this.enderman.getNavigator().clearPath();
+		public void start() {
+			this.enderman.getNavigation().stop();
 		}
 
 		/**
 		 * Keep ticking a continuous task that has already been started
 		 */
 		public void tick() {
-			this.enderman.getLookController().setLookPosition(this.targetPlayer.getPosX(), this.targetPlayer.getPosYEye(), this.targetPlayer.getPosZ());
+			this.enderman.getLookControl().setLookAt(this.targetPlayer.getX(), this.targetPlayer.getEyeY(), this.targetPlayer.getZ());
 		}
 	}
 
@@ -108,14 +108,14 @@ public class AngryEndermanEntity extends EndermanEntity {
 		private PlayerEntity player;
 		private int aggroTime;
 		private int teleportTime;
-		private final EntityPredicate field_220791_m;
-		private final EntityPredicate field_220792_n = (new EntityPredicate()).setIgnoresLineOfSight();
+		private final EntityPredicate startAggroTargetConditions;
+		private final EntityPredicate continueAggroTargetConditions = (new EntityPredicate()).allowUnseeable();
 
 		public FindPlayerGoal(AngryEndermanEntity endermantIn, @Nullable Predicate<LivingEntity> p_i241912_2_) {
 			super(endermantIn, PlayerEntity.class, 10, false, false, p_i241912_2_);
 			this.enderman = endermantIn;
-			this.field_220791_m = (new EntityPredicate()).setDistance(this.getTargetDistance()).setCustomPredicate((p_220790_1_) -> {
-				return endermantIn.shouldAttackPlayer((PlayerEntity)p_220790_1_);
+			this.startAggroTargetConditions = (new EntityPredicate()).range(this.getFollowDistance()).selector((p_220790_1_) -> {
+				return endermantIn.isLookingAtMe((PlayerEntity)p_220790_1_);
 			});
 		}
 
@@ -123,41 +123,41 @@ public class AngryEndermanEntity extends EndermanEntity {
 		 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
 		 * method as well.
 		 */
-		public boolean shouldExecute() {
-			this.player = this.enderman.world.getClosestPlayer(this.field_220791_m, this.enderman);
+		public boolean canUse() {
+			this.player = this.enderman.level.getNearestPlayer(this.startAggroTargetConditions, this.enderman);
 			return this.player != null;
 		}
 
 		/**
 		 * Execute a one shot task or start executing a continuous task
 		 */
-		public void startExecuting() {
+		public void start() {
 			this.aggroTime = 5;
 			this.teleportTime = 0;
-			this.enderman.func_226538_eu_();
+			this.enderman.setBeingStaredAt();
 		}
 
 		/**
 		 * Reset the task's internal state. Called when this task is interrupted by another one
 		 */
-		public void resetTask() {
+		public void stop() {
 			this.player = null;
-			super.resetTask();
+			super.stop();
 		}
 
 		/**
 		 * Returns whether an in-progress EntityAIBase should continue executing
 		 */
-		public boolean shouldContinueExecuting() {
+		public boolean canContinueToUse() {
 			if (this.player != null) {
-				if (!this.enderman.shouldAttackPlayer(this.player)) {
+				if (!this.enderman.isLookingAtMe(this.player)) {
 					return false;
 				} else {
-					this.enderman.faceEntity(this.player, 10.0F, 10.0F);
+					this.enderman.lookAt(this.player, 10.0F, 10.0F);
 					return true;
 				}
 			} else {
-				return this.nearestTarget != null && this.field_220792_n.canTarget(this.enderman, this.nearestTarget) ? true : super.shouldContinueExecuting();
+				return this.target != null && this.continueAggroTargetConditions.test(this.enderman, this.target) ? true : super.canContinueToUse();
 			}
 		}
 
@@ -165,25 +165,25 @@ public class AngryEndermanEntity extends EndermanEntity {
 		 * Keep ticking a continuous task that has already been started
 		 */
 		public void tick() {
-			if (this.enderman.getAttackTarget() == null) {
-				super.setNearestTarget((LivingEntity)null);
+			if (this.enderman.getTarget() == null) {
+				super.setTarget((LivingEntity)null);
 			}
 
 			if (this.player != null) {
 				if (--this.aggroTime <= 0) {
-					this.nearestTarget = this.player;
+					this.target = this.player;
 					this.player = null;
-					super.startExecuting();
+					super.start();
 				}
 			} else {
-				if (this.nearestTarget != null && !this.enderman.isPassenger()) {
-					if (this.enderman.shouldAttackPlayer((PlayerEntity)this.nearestTarget)) {
-						if (this.nearestTarget.getDistanceSq(this.enderman) < 16.0D) {
-							this.enderman.teleportRandomly();
+				if (this.target != null && !this.enderman.isPassenger()) {
+					if (this.enderman.isLookingAtMe((PlayerEntity)this.target)) {
+						if (this.target.distanceToSqr(this.enderman) < 16.0D) {
+							this.enderman.teleport();
 						}
 
 						this.teleportTime = 0;
-					} else if (this.nearestTarget.getDistanceSq(this.enderman) > 128.0D && this.teleportTime++ >= 30 && this.enderman.teleportToEntity(this.nearestTarget)) {
+					} else if (this.target.distanceToSqr(this.enderman) > 128.0D && this.teleportTime++ >= 30 && this.enderman.teleportTowards(this.target)) {
 						this.teleportTime = 0;
 					}
 				}

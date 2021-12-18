@@ -27,16 +27,16 @@ public class EnderTotRenderer extends MobRenderer<EnderTotEntity, EnderTotModel<
 
 	@Override
 	public void render(EnderTotEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-		BlockState blockstate = entityIn.getHeldBlockState();
-		EnderTotModel<EnderTotEntity> endertotModel = this.getEntityModel();
+		BlockState blockstate = entityIn.getCarriedBlock();
+		EnderTotModel<EnderTotEntity> endertotModel = this.getModel();
 		endertotModel.isCarrying = blockstate != null;
-		endertotModel.isAttacking = entityIn.isScreaming();
+		endertotModel.isAttacking = entityIn.isCreepy();
 		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 	}
 
 	@Override
 	public Vector3d getRenderOffset(EnderTotEntity entityIn, float partialTicks) {
-		if (entityIn.isScreaming()) {
+		if (entityIn.isCreepy()) {
 			double d0 = 0.02D;
 			return new Vector3d(this.rnd.nextGaussian() * d0, 0.0D, this.rnd.nextGaussian() * d0);
 		} else {
@@ -47,7 +47,7 @@ public class EnderTotRenderer extends MobRenderer<EnderTotEntity, EnderTotModel<
 	/**
 	 * Returns the location of an entity's texture.
 	 */
-	public ResourceLocation getEntityTexture(EnderTotEntity entity) {
+	public ResourceLocation getTextureLocation(EnderTotEntity entity) {
 		return ENDERTOT_TEXTURES;
 	}
 }

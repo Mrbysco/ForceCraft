@@ -11,7 +11,7 @@ public class OutputSlot extends SlotItemHandler {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack stack) {
+	public boolean mayPlace(ItemStack stack) {
 		return getItemHandler().isItemValid(1, stack);
 	}
 }

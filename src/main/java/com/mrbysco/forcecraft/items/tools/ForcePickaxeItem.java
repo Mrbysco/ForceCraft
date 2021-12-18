@@ -40,11 +40,11 @@ public class ForcePickaxeItem extends PickaxeItem implements IForceChargingTool 
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
     	ForceToolData fd = new ForceToolData(stack);
     	fd.attachInformation(lores);
     	ToolModStorage.attachInformation(stack, lores);
-        super.addInformation(stack, worldIn, lores, flagIn);
+        super.appendHoverText(stack, worldIn, lores, flagIn);
     }
     
 	@Override
@@ -53,7 +53,7 @@ public class ForcePickaxeItem extends PickaxeItem implements IForceChargingTool 
 	}
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 0;
     }
 

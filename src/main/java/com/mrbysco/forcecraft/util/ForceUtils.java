@@ -54,10 +54,10 @@ public class ForceUtils {
         while(!candidates.isEmpty()) {
             BlockPos candidate = candidates.pop();
             if((pos == null || candidate.getY() > pos.getY()) && isLog(world, candidate)) {
-                pos = candidate.up();
+                pos = candidate.above();
                 // go up
                 while(isLog(world, pos)) {
-                    pos = pos.up();
+                    pos = pos.above();
                 }
                 // check if we still have a way diagonally up
                 candidates.add(pos.north());
@@ -81,9 +81,9 @@ public class ForceUtils {
         for(int x = 0; x < d; x++) {
             for(int y = 0; y < d; y++) {
                 for(int z = 0; z < d; z++) {
-                    BlockPos leaf = pos.add(o + x, o + y, o + z);
+                    BlockPos leaf = pos.offset(o + x, o + y, o + z);
                     BlockState state = world.getBlockState(leaf);
-                    if(state.getBlock().isIn(BlockTags.LEAVES)) {
+                    if(state.getBlock().is(BlockTags.LEAVES)) {
                         if(++leaves >= 5) {
                             return true;
                         }
@@ -97,7 +97,7 @@ public class ForceUtils {
     }
 
     public static boolean isLog(World world, BlockPos pos){
-        if(world.getBlockState(pos).getBlock().isIn(BlockTags.LOGS) || world.getBlockState(pos).getBlock() instanceof ForceLogBlock)
+        if(world.getBlockState(pos).getBlock().is(BlockTags.LOGS) || world.getBlockState(pos).getBlock() instanceof ForceLogBlock)
             return true;
         else
             return false;
@@ -113,24 +113,24 @@ public class ForceUtils {
         Block block = state.getBlock();
 
         // callback to the tool the player uses. Called on both sides. This damages the tool n stuff.
-        stack.onBlockDestroyed(world, state, pos, player);
+        stack.mineBlock(world, state, pos, player);
 
         // server sided handling
-        if(!world.isRemote) {
+        if(!world.isClientSide) {
             // send the blockbreak event
-            int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayerEntity) player).interactionManager.getGameType(), (ServerPlayerEntity) player, pos);
+            int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayerEntity) player).gameMode.getGameModeForPlayer(), (ServerPlayerEntity) player, pos);
             if(xp == -1) {
                 return;
             }
 
             // serverside we reproduce ItemInWorldManager.tryHarvestBlock
 
-            TileEntity tileEntity = world.getTileEntity(pos);
+            TileEntity tileEntity = world.getBlockEntity(pos);
             // ItemInWorldManager.removeBlock
             if(block.removedByPlayer(state, world, pos, player, true, fluidState)) { // boolean is if block can be harvested, checked above
-                block.onBlockHarvested(world, pos, state, player);
-                block.harvestBlock(world, player, pos, state, tileEntity, stack);
-                block.dropXpOnBlockBreak((ServerWorld) world, pos, xp);
+                block.playerWillDestroy(world, pos, state, player);
+                block.playerDestroy(world, player, pos, state, tileEntity, stack);
+                block.popExperience((ServerWorld) world, pos, xp);
             }
 
             // always send block update to client
@@ -142,29 +142,29 @@ public class ForceUtils {
             // the code above, executed on the server, sends a block-updates that give us the correct state of the block we destroy.
 
             // following code can be found in PlayerControllerMP.onPlayerDestroyBlock
-            world.playBroadcastSound(2001, pos, Block.getStateId(state));
+            world.globalLevelEvent(2001, pos, Block.getId(state));
             if(block.removedByPlayer(state, world, pos, player, true, fluidState)) {
-                block.onBlockHarvested(world, pos, state, player);
+                block.playerWillDestroy(world, pos, state, player);
             }
             // callback to the tool
-            stack.onBlockDestroyed(world, state, pos, player);
+            stack.mineBlock(world, state, pos, player);
 
-            if(stack.getCount() == 0 && stack == player.getHeldItemMainhand()) {
+            if(stack.getCount() == 0 && stack == player.getMainHandItem()) {
                 ForgeEventFactory.onPlayerDestroyItem(player, stack, Hand.MAIN_HAND);
-                player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                player.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
             }
 
             // send an update to the server, so we get an update back
             //if(PHConstruct.extraBlockUpdates)
             ClientPlayNetHandler netHandlerPlayClient = Minecraft.getInstance().getConnection();
             assert netHandlerPlayClient != null;
-            netHandlerPlayClient.sendPacket(new CPlayerDiggingPacket(CPlayerDiggingPacket.Action.STOP_DESTROY_BLOCK, pos, Direction.DOWN)); //.getInstance().objectMouseOver.sideHit
+            netHandlerPlayClient.send(new CPlayerDiggingPacket(CPlayerDiggingPacket.Action.STOP_DESTROY_BLOCK, pos, Direction.DOWN)); //.getInstance().objectMouseOver.sideHit
         }
     }
 
     private static boolean canBreakExtraBlock(ItemStack stack, World world, PlayerEntity player, BlockPos pos, BlockPos refPos) {
         // prevent calling that stuff for air blocks, could lead to unexpected behaviour since it fires events
-        if(world.isAirBlock(pos)) {
+        if(world.isEmptyBlock(pos)) {
             return false;
         }
 
@@ -178,8 +178,8 @@ public class ForceUtils {
         //TODO: Check for Effective
 
         BlockState refState = world.getBlockState(refPos);
-        float refStrength = refState.getPlayerRelativeBlockHardness( player, world, refPos);
-        float strength = state.getPlayerRelativeBlockHardness(player, world, pos);
+        float refStrength = refState.getDestroyProgress( player, world, refPos);
+        float strength = state.getDestroyProgress(player, world, pos);
 
         // only harvestable blocks that aren't impossibly slow to harvest
         if(!ForgeHooks.canHarvestBlock(state, player, world, pos) || refStrength / strength > 10f) {
@@ -188,14 +188,14 @@ public class ForceUtils {
 
         // From this point on it's clear that the player CAN break the block
 
-        if(player.abilities.isCreativeMode) {
-            block.onBlockHarvested(world, pos, state, player);
+        if(player.abilities.instabuild) {
+            block.playerWillDestroy(world, pos, state, player);
             if(block.removedByPlayer(state, world, pos, player, false, fluidState)) {
-                block.onBlockHarvested(world, pos, state, player);
+                block.playerWillDestroy(world, pos, state, player);
             }
 
             // send update to client
-            if(!world.isRemote) {
+            if(!world.isClientSide) {
                 PacketHandler.sendPacket(player, new SChangeBlockPacket(world, pos));
             }
             return false;
@@ -216,10 +216,10 @@ public class ForceUtils {
     }
 
     public static void teleportRandomly(LivingEntity livingEntity) {
-        if (!livingEntity.world.isRemote() && livingEntity.isAlive() && !livingEntity.isInWaterOrBubbleColumn()) {
-            double d0 = livingEntity.getPosX() + (livingEntity.getRNG().nextDouble() - 0.5D) * 32.0D;
-            double d1 = livingEntity.getPosY() + (double) (livingEntity.getRNG().nextInt(32) - 16);
-            double d2 = livingEntity.getPosZ() + (livingEntity.getRNG().nextDouble() - 0.5D) * 32.0D;
+        if (!livingEntity.level.isClientSide() && livingEntity.isAlive() && !livingEntity.isInWaterOrBubble()) {
+            double d0 = livingEntity.getX() + (livingEntity.getRandom().nextDouble() - 0.5D) * 32.0D;
+            double d1 = livingEntity.getY() + (double) (livingEntity.getRandom().nextInt(32) - 16);
+            double d2 = livingEntity.getZ() + (livingEntity.getRandom().nextDouble() - 0.5D) * 32.0D;
             teleportTo(livingEntity, d0, d1, d2);
         }
     }
@@ -227,20 +227,20 @@ public class ForceUtils {
     public static void teleportTo(LivingEntity living, double x, double y, double z) {
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(x, y, z);
 
-        while(blockpos$mutable.getY() > 0 && !living.world.getBlockState(blockpos$mutable).getMaterial().blocksMovement()) {
+        while(blockpos$mutable.getY() > 0 && !living.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
             blockpos$mutable.move(Direction.DOWN);
         }
 
-        BlockState blockstate = living.world.getBlockState(blockpos$mutable);
-        boolean flag = blockstate.getMaterial().blocksMovement();
-        boolean flag1 = blockstate.getFluidState().isTagged(FluidTags.WATER);
+        BlockState blockstate = living.level.getBlockState(blockpos$mutable);
+        boolean flag = blockstate.getMaterial().blocksMotion();
+        boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
         if (flag && !flag1) {
             net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent(living, x, y, z, 0);
             if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return;
-            boolean flag2 = living.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+            boolean flag2 = living.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
             if (flag2 && !living.isSilent()) {
-                living.world.playSound((PlayerEntity)null, living.prevPosX, living.prevPosY, living.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, living.getSoundCategory(), 1.0F, 1.0F);
-                living.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+                living.level.playSound((PlayerEntity)null, living.xo, living.yo, living.zo, SoundEvents.ENDERMAN_TELEPORT, living.getSoundSource(), 1.0F, 1.0F);
+                living.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
             }
         }
     }

@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class AdvancementUtil {
 	public static void unlockTierAdvancements(PlayerEntity player, int tier) {
-		if(!player.world.isRemote) {
+		if(!player.level.isClientSide) {
 			ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
 			if(tier >= 1) {
 				unlockAdvancement(serverPlayer, "tier1/tier");
@@ -56,12 +56,12 @@ public class AdvancementUtil {
 	}
 
 	public static void unlockAdvancement(ServerPlayerEntity player, String name) {
-		Advancement advancementIn = player.getServer().getAdvancementManager().getAdvancement(new ResourceLocation(Reference.MOD_ID + ":" + name));
+		Advancement advancementIn = player.getServer().getAdvancements().getAdvancement(new ResourceLocation(Reference.MOD_ID + ":" + name));
 		if(advancementIn != null) {
-			AdvancementProgress advancementprogress = player.getAdvancements().getProgress(advancementIn);
+			AdvancementProgress advancementprogress = player.getAdvancements().getOrStartProgress(advancementIn);
 			if (!advancementprogress.isDone()) {
-				for(String s : advancementprogress.getRemaningCriteria()) {
-					player.getAdvancements().grantCriterion(advancementIn, s);
+				for(String s : advancementprogress.getRemainingCriteria()) {
+					player.getAdvancements().award(advancementIn, s);
 				}
 			}
 		}

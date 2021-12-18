@@ -31,7 +31,7 @@ public class ExperienceTomeItem extends Item {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if(!Screen.hasShiftDown()){
   		  tooltip.add(new TranslationTextComponent("forcecraft.tooltip.press_shift"));
             return;
@@ -49,15 +49,15 @@ public class ExperienceTomeItem extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (ForceUtils.isFakePlayer(player) || hand != Hand.MAIN_HAND || world.isRemote) {
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (ForceUtils.isFakePlayer(player) || hand != Hand.MAIN_HAND || world.isClientSide) {
             return new ActionResult<>(ActionResultType.FAIL, stack);
         }
         int exp;
         int curLevel = player.experienceLevel;
 
-        if (player.isSneaking()) {
+        if (player.isShiftKeyDown()) {
             if (getExtraPlayerExperience(player) > 0) {
                 exp = Math.min(getTotalExpForLevel(player.experienceLevel + 1) - getTotalExpForLevel(player.experienceLevel) - getExtraPlayerExperience(player), getExperience(stack));
             } else {
@@ -97,31 +97,31 @@ public class ExperienceTomeItem extends Item {
     }
 
     public static int getExtraPlayerExperience(PlayerEntity player) {
-        return Math.round(player.experience * player.xpBarCap());
+        return Math.round(player.experienceProgress * player.getXpNeededForNextLevel());
     }
 
     public static void setPlayerExperience(PlayerEntity player, int exp) {
         player.experienceLevel = 0;
-        player.experience = 0.0F;
-        player.experienceTotal = 0;
+        player.experienceProgress = 0.0F;
+        player.totalExperience = 0;
 
         addExperienceToPlayer(player, exp);
     }
 
     public static void setPlayerLevel(PlayerEntity player, int level) {
         player.experienceLevel = level;
-        player.experience = 0.0F;
+        player.experienceProgress = 0.0F;
     }
 
     public static void addExperienceToPlayer(PlayerEntity player, int exp) {
-        int i = Integer.MAX_VALUE - player.experienceTotal;
+        int i = Integer.MAX_VALUE - player.totalExperience;
 
         if (exp > i) {
             exp = i;
         }
-        player.experience += (float) exp / (float) player.xpBarCap();
-        for (player.experienceTotal += exp; player.experience >= 1.0F; player.experience /= (float) player.xpBarCap()) {
-            player.experience = (player.experience - 1.0F) * (float) player.xpBarCap();
+        player.experienceProgress += (float) exp / (float) player.getXpNeededForNextLevel();
+        for (player.totalExperience += exp; player.experienceProgress >= 1.0F; player.experienceProgress /= (float) player.getXpNeededForNextLevel()) {
+            player.experienceProgress = (player.experienceProgress - 1.0F) * (float) player.getXpNeededForNextLevel();
             addExperienceLevelToPlayer(player, 1);
         }
     }
@@ -131,8 +131,8 @@ public class ExperienceTomeItem extends Item {
 
         if (player.experienceLevel < 0) {
             player.experienceLevel = 0;
-            player.experience = 0.0F;
-            player.experienceTotal = 0;
+            player.experienceProgress = 0.0F;
+            player.totalExperience = 0;
         }
     }
 

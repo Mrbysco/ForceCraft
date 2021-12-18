@@ -22,11 +22,11 @@ public class ForceArrowItem extends ArrowItem {
 		ForceArrowEntity forceArrow = new ForceArrowEntity(worldIn, shooter);
 		if(shooter instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) shooter;
-			ItemStack heldItem = player.getActiveItemStack();
+			ItemStack heldItem = player.getUseItem();
 			if(heldItem.getItem() instanceof ForceBowItem) {
 				heldItem.getCapability(CAPABILITY_TOOLMOD).ifPresent(cap -> {
 					if(cap.hasFreezing()) {
-						forceArrow.addEffect(new EffectInstance(Effects.SLOWNESS, 60, 2, false, false));
+						forceArrow.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60, 2, false, false));
 					}
 					if(cap.hasEnder()) {
 						forceArrow.setEnder();
@@ -50,7 +50,7 @@ public class ForceArrowItem extends ArrowItem {
 				});
 			}
 		}
-		forceArrow.setPotionEffect(stack);
+		forceArrow.setEffectsFromItem(stack);
 		return forceArrow;
 	}
 }

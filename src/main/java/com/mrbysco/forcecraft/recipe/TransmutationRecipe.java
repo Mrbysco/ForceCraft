@@ -3,10 +3,10 @@ package com.mrbysco.forcecraft.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import it.unimi.dsi.fastutil.ints.IntList;
 import com.mrbysco.forcecraft.items.ExperienceTomeItem;
 import com.mrbysco.forcecraft.items.tools.ForceRodItem;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.CraftingInventory;
@@ -57,7 +57,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 		return this.group;
 	}
 
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		return this.recipeOutput;
 	}
 
@@ -71,13 +71,13 @@ public class TransmutationRecipe implements ICraftingRecipe {
 		java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
 		int i = 0;
 
-		for(int j = 0; j < inv.getSizeInventory(); ++j) {
-			ItemStack itemstack = inv.getStackInSlot(j);
+		for(int j = 0; j < inv.getContainerSize(); ++j) {
+			ItemStack itemstack = inv.getItem(j);
 			if (!itemstack.isEmpty()) { //TEMP fix!
 				++i;
 				if((itemstack.getItem() instanceof ForceRodItem)) {
 					if (isSimple)
-						recipeitemhelper.func_221264_a(itemstack, 1);
+						recipeitemhelper.accountStack(itemstack, 1);
 					else inputs.add(itemstack);
 				} else {
 					if(itemstack.getItem() instanceof ExperienceTomeItem) {
@@ -89,13 +89,13 @@ public class TransmutationRecipe implements ICraftingRecipe {
 							nbt.putInt("Experience", 100);
 							experienceTome.setTag(nbt);
 							if (isSimple)
-								recipeitemhelper.func_221264_a(experienceTome, 1);
+								recipeitemhelper.accountStack(experienceTome, 1);
 							else inputs.add(experienceTome);
 						}
 					} else {
 						if(!itemstack.isDamaged()) {
 							if (isSimple)
-								recipeitemhelper.func_221264_a(itemstack, 1);
+								recipeitemhelper.accountStack(itemstack, 1);
 							else inputs.add(itemstack);
 						}
 					}
@@ -106,10 +106,10 @@ public class TransmutationRecipe implements ICraftingRecipe {
 		return i == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this, (IntList)null) : net.minecraftforge.common.util.RecipeMatcher.findMatches(inputs,  this.recipeItems) != null);
 	}
 
-	public ItemStack getCraftingResult(CraftingInventory inv) {
+	public ItemStack assemble(CraftingInventory inv) {
 		ItemStack resultStack = this.recipeOutput.copy();
-		for(int j = 0; j < inv.getSizeInventory(); ++j) {
-			ItemStack itemstack = inv.getStackInSlot(j);
+		for(int j = 0; j < inv.getContainerSize(); ++j) {
+			ItemStack itemstack = inv.getItem(j);
 			if((itemstack.getItem() instanceof ExperienceTomeItem)) {
 				CompoundNBT tag = itemstack.getOrCreateTag();
 				int experience = tag.getInt("Experience");
@@ -131,15 +131,15 @@ public class TransmutationRecipe implements ICraftingRecipe {
 	}
 
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canCraftInDimensions(int width, int height) {
 		return width * height >= this.recipeItems.size();
 	}
 
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
-		NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+		NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 		for(int i = 0; i < nonnulllist.size(); ++i) {
-			ItemStack itemstack = inv.getStackInSlot(i);
+			ItemStack itemstack = inv.getItem(i);
 			if (itemstack.hasContainerItem()) {
 				nonnulllist.set(i, itemstack.getContainerItem());
 			} else if (itemstack.getItem() instanceof ForceRodItem) {
@@ -150,7 +150,7 @@ public class TransmutationRecipe implements ICraftingRecipe {
 				if(itemstack1.getItem().getDamage(itemstack1) >= itemstack1.getMaxDamage()) {
 					itemstack1.shrink(1);
 				} else {
-					itemstack1.setDamage(itemstack1.getDamage() + damage);
+					itemstack1.setDamageValue(itemstack1.getDamageValue() + damage);
 					nonnulllist.set(i, itemstack1);
 				}
 				continue;
@@ -176,15 +176,15 @@ public class TransmutationRecipe implements ICraftingRecipe {
 
 	public static class SerializerTransmutationRecipe extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<TransmutationRecipe> {
 		@Override
-		public TransmutationRecipe read(ResourceLocation recipeId, JsonObject json) {
-			String s = JSONUtils.getString(json, "group", "");
-			NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
+		public TransmutationRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+			String s = JSONUtils.getAsString(json, "group", "");
+			NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getAsJsonArray(json, "ingredients"));
 			if (nonnulllist.isEmpty()) {
 				throw new JsonParseException("No ingredients for shapeless recipe");
 			} else if (nonnulllist.size() > 3 * 3) {
 				throw new JsonParseException("Too many ingredients for shapeless recipe the max is " + (3 * 3));
 			} else {
-				ItemStack itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+				ItemStack itemstack = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "result"));
 				return new TransmutationRecipe(recipeId, s, itemstack, nonnulllist);
 			}
 		}
@@ -193,8 +193,8 @@ public class TransmutationRecipe implements ICraftingRecipe {
 			NonNullList<Ingredient> nonnulllist = NonNullList.create();
 
 			for(int i = 0; i < ingredientArray.size(); ++i) {
-				Ingredient ingredient = Ingredient.deserialize(ingredientArray.get(i));
-				if (!ingredient.hasNoMatchingItems()) {
+				Ingredient ingredient = Ingredient.fromJson(ingredientArray.get(i));
+				if (!ingredient.isEmpty()) {
 					nonnulllist.add(ingredient);
 				}
 			}
@@ -204,29 +204,29 @@ public class TransmutationRecipe implements ICraftingRecipe {
 
 		@Nullable
 		@Override
-		public TransmutationRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-			String s = buffer.readString(32767);
+		public TransmutationRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+			String s = buffer.readUtf(32767);
 			int i = buffer.readVarInt();
 			NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
 
 			for(int j = 0; j < nonnulllist.size(); ++j) {
-				nonnulllist.set(j, Ingredient.read(buffer));
+				nonnulllist.set(j, Ingredient.fromNetwork(buffer));
 			}
 
-			ItemStack itemstack = buffer.readItemStack();
+			ItemStack itemstack = buffer.readItem();
 			return new TransmutationRecipe(recipeId, s, itemstack, nonnulllist);
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, TransmutationRecipe recipe) {
-			buffer.writeString(recipe.group);
+		public void toNetwork(PacketBuffer buffer, TransmutationRecipe recipe) {
+			buffer.writeUtf(recipe.group);
 			buffer.writeVarInt(recipe.recipeItems.size());
 
 			for(Ingredient ingredient : recipe.recipeItems) {
-				ingredient.write(buffer);
+				ingredient.toNetwork(buffer);
 			}
 
-			buffer.writeItemStack(recipe.recipeOutput);
+			buffer.writeItem(recipe.recipeOutput);
 		}
 	}
 }

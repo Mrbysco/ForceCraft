@@ -32,18 +32,18 @@ public class NonBurnableItemEntity extends ItemEntity {
     }
 
     @Override
-    public boolean isImmuneToFire() {
+    public boolean fireImmune() {
         return true;
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        return source.getDamageType().equals(DamageSource.OUT_OF_WORLD.damageType);
+    public boolean hurt(DamageSource source, float amount) {
+        return source.getMsgId().equals(DamageSource.OUT_OF_WORLD.msgId);
     }
 
     @Nonnull
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

@@ -16,7 +16,7 @@ public class ForceArrowRenderer extends ArrowRenderer<ForceArrowEntity> {
 	/**
 	 * Returns the location of an entity's texture.
 	 */
-	public ResourceLocation getEntityTexture(ForceArrowEntity entity) {
+	public ResourceLocation getTextureLocation(ForceArrowEntity entity) {
 		return FORCE_ARROW;
 	}
 }

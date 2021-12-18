@@ -17,14 +17,14 @@ public class SlotForceGems extends SlotItemHandler {
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean mayPlace(ItemStack stack) {
         final ResourceLocation gemTag = new ResourceLocation("forge", "gems/force");
-        ITag<Item> tag = ItemTags.getCollection().getTagByID(gemTag);
-        return stack.getItem().isIn(tag);
+        ITag<Item> tag = ItemTags.getAllTags().getTagOrEmpty(gemTag);
+        return stack.getItem().is(tag);
     }
 
     @Override
-    public int getItemStackLimit(@Nonnull ItemStack stack) {
+    public int getMaxStackSize(@Nonnull ItemStack stack) {
         return 64;
     }
 }

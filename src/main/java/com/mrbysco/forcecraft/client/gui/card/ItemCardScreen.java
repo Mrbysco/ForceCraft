@@ -26,7 +26,7 @@ public class ItemCardScreen extends ContainerScreen<ItemCardContainer> {
 
 	protected void init() {
 		super.init();
-		this.titleX = 29;
+		this.titleLabelX = 29;
 
 		this.buttonSave = this.addButton(new Button(this.width / 2 + 62, this.height / 2 - 76, 20, 20, saveText, (button) -> {
 			PacketHandler.CHANNEL.sendToServer(new SaveCardRecipeMessage());
@@ -36,7 +36,7 @@ public class ItemCardScreen extends ContainerScreen<ItemCardContainer> {
 	public void tick() {
 		super.tick();
 
-		ItemStack resultStack = getContainer().getCraftResult().getStackInSlot(0);
+		ItemStack resultStack = getMenu().getCraftResult().getItem(0);
 		if(resultStack.isEmpty()) {
 			if(this.buttonSave.getMessage().getString() != invalidText.getString()) {
 				this.buttonSave.setMessage(invalidText);
@@ -57,14 +57,14 @@ public class ItemCardScreen extends ContainerScreen<ItemCardContainer> {
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		this.renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(ITEM_CARD_GUI);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(ITEM_CARD_GUI);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 	}
 }

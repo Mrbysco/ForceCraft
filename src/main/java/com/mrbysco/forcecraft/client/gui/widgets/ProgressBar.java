@@ -64,7 +64,7 @@ public class ProgressBar extends AbstractGui {
     public void draw(MatrixStack matrixStack, Minecraft mc) {
 //        GlStateManager.color4f(232.0F, 244.0F, 66.0F, 12.0F);
 //
-        mc.getTextureManager().bindTexture(texture);
+        mc.getTextureManager().bind(texture);
         switch (direction) {
             case DIAGONAL_UP_LEFT:
                 this.blit(matrixStack, positionX, positionY, textureX, textureY, width, height);

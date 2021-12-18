@@ -54,24 +54,24 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 	private static final int SET_FIRE_TIME = 10;
 	private static final int SHEARS_DMG = 238; // vanilla shears have this max damage
 	public ForceShearsItem(Item.Properties properties) {
-		super(properties.maxStackSize(1).maxDamage(SHEARS_DMG * 4));
+		super(properties.stacksTo(1).durability(SHEARS_DMG * 4));
 	}
 
 	private static final Item[] WOOL = { Items.RED_WOOL, Items.BLUE_WOOL, Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.WHITE_WOOL, Items.ORANGE_WOOL, Items.MAGENTA_WOOL, Items.LIGHT_BLUE_WOOL, Items.YELLOW_WOOL, Items.LIME_WOOL, Items.PINK_WOOL, Items.GRAY_WOOL, Items.LIGHT_GRAY_WOOL,
 			Items.CYAN_WOOL, Items.PURPLE_WOOL, Items.BROWN_WOOL, Items.GREEN_WOOL };
 
 	private ItemStack getRandomWool(World world) {
-		return new ItemStack(WOOL[MathHelper.nextInt(world.rand, 0, WOOL.length)]);
+		return new ItemStack(WOOL[MathHelper.nextInt(world.random, 0, WOOL.length)]);
 	}
 
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
-		World world = entity.world;
-		if (world.isRemote) {
+	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
+		World world = entity.level;
+		if (world.isClientSide) {
 			return ActionResultType.PASS;
 		}
 
-		Random rand = world.rand;
+		Random rand = world.random;
 
 		IToolModifier toolModifier = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 
@@ -81,18 +81,18 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 		if (toolModifier != null && toolModifier.hasRainbow() && entity instanceof SheepEntity) {
 
 			SheepEntity target = (SheepEntity) entity;
-			BlockPos pos = new BlockPos(entity.getPosX(), entity.getPosY(), entity.getPosZ());
+			BlockPos pos = new BlockPos(entity.getX(), entity.getY(), entity.getZ());
 
 			if (target.isShearable(stack, world, pos)) {
-				List<ItemStack> drops = target.onSheared(playerIn, stack, world, pos, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack));
+				List<ItemStack> drops = target.onSheared(playerIn, stack, world, pos, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack));
 
 				// get drops to test and see the COUNT of how many we should drop
 				for (int i = 0; i < drops.size(); i++) {
-					ItemEntity ent = entity.entityDropItem(getRandomWool(world), 1.0F);
-					ent.setMotion(ent.getMotion().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+					ItemEntity ent = entity.spawnAtLocation(getRandomWool(world), 1.0F);
+					ent.setDeltaMovement(ent.getDeltaMovement().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
 				}
 
-				stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
+				stack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(hand));
 				return ActionResultType.SUCCESS;
 			}
 		}
@@ -110,30 +110,30 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					drops.add(new ItemStack(Items.LEATHER, 1));
 
 				drops.forEach(d -> {
-					ItemEntity ent = entity.entityDropItem(d, 1.0F);
-					ent.setMotion(ent.getMotion().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+					ItemEntity ent = entity.spawnAtLocation(d, 1.0F);
+					ent.setDeltaMovement(ent.getDeltaMovement().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
 				});
 
-				entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
 				MobEntity replacementMob = new ColdCowEntity(world, originalCow.getType().getRegistryName());
-				replacementMob.copyLocationAndAnglesFrom(originalCow);
-				UUID mobUUID = replacementMob.getUniqueID();
-				replacementMob.copyDataFromOld(originalCow);
-				replacementMob.setUniqueId(mobUUID);
+				replacementMob.copyPosition(originalCow);
+				UUID mobUUID = replacementMob.getUUID();
+				replacementMob.restoreFrom(originalCow);
+				replacementMob.setUUID(mobUUID);
 
 				originalCow.remove(false);
-				world.addEntity(replacementMob);
+				world.addFreshEntity(replacementMob);
 				if (hasHeat) {
-					replacementMob.setFire(SET_FIRE_TIME);
+					replacementMob.setSecondsOnFire(SET_FIRE_TIME);
 				}
 
-				stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
+				stack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(hand));
 				return ActionResultType.SUCCESS;
 			}
 			if (entity instanceof ChickenEntity) {
 				ChickenEntity originalChicken = (ChickenEntity) entity;
-				World worldIn = originalChicken.world;
+				World worldIn = originalChicken.level;
 
 				int i = 1 + rand.nextInt(3);
 
@@ -143,30 +143,30 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 				}
 
 				drops.forEach(d -> {
-					ItemEntity ent = entity.entityDropItem(d, 1.0F);
-					ent.setMotion(ent.getMotion().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+					ItemEntity ent = entity.spawnAtLocation(d, 1.0F);
+					ent.setDeltaMovement(ent.getDeltaMovement().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
 				});
 
-				entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
 				MobEntity replacementMob = new ColdChickenEntity(worldIn, originalChicken.getType().getRegistryName());
-				replacementMob.copyLocationAndAnglesFrom(originalChicken);
-				UUID mobUUID = replacementMob.getUniqueID();
-				replacementMob.copyDataFromOld(originalChicken);
-				replacementMob.setUniqueId(mobUUID);
+				replacementMob.copyPosition(originalChicken);
+				UUID mobUUID = replacementMob.getUUID();
+				replacementMob.restoreFrom(originalChicken);
+				replacementMob.setUUID(mobUUID);
 
 				originalChicken.remove(false);
-				worldIn.addEntity(replacementMob);
+				worldIn.addFreshEntity(replacementMob);
 				if (hasHeat) {
-					replacementMob.setFire(SET_FIRE_TIME);
+					replacementMob.setSecondsOnFire(SET_FIRE_TIME);
 				}
 
-				stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
+				stack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(hand));
 				return ActionResultType.SUCCESS;
 			}
 			if (entity instanceof PigEntity) {
 				PigEntity originalPig = (PigEntity) entity;
-				World worldIn = originalPig.world;
+				World worldIn = originalPig.level;
 
 				int i = 1 + rand.nextInt(2);
 
@@ -175,30 +175,30 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					drops.add(new ItemStack(hasHeat ? ForceRegistry.COOKED_BACON.get() : ForceRegistry.RAW_BACON.get(), 1));
 
 				drops.forEach(d -> {
-					net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
-					ent.setMotion(ent.getMotion().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+					net.minecraft.entity.item.ItemEntity ent = entity.spawnAtLocation(d, 1.0F);
+					ent.setDeltaMovement(ent.getDeltaMovement().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
 				});
 
-				entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
 				MobEntity replacementMob = new ColdPigEntity(worldIn, originalPig.getType().getRegistryName());
-				replacementMob.copyLocationAndAnglesFrom(originalPig);
-				UUID mobUUID = replacementMob.getUniqueID();
-				replacementMob.copyDataFromOld(originalPig);
-				replacementMob.setUniqueId(mobUUID);
+				replacementMob.copyPosition(originalPig);
+				UUID mobUUID = replacementMob.getUUID();
+				replacementMob.restoreFrom(originalPig);
+				replacementMob.setUUID(mobUUID);
 
 				originalPig.remove(false);
-				worldIn.addEntity(replacementMob);
+				worldIn.addFreshEntity(replacementMob);
 				if (hasHeat) {
-					replacementMob.setFire(SET_FIRE_TIME);
+					replacementMob.setSecondsOnFire(SET_FIRE_TIME);
 				}
 
-				stack.damageItem(1, entity, e -> e.sendBreakAnimation(hand));
+				stack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(hand));
 				return ActionResultType.SUCCESS;
 			}
 		}
 
-		return super.itemInteractionForEntity(stack, playerIn, entity, hand);
+		return super.interactLivingEntity(stack, playerIn, entity, hand);
 	}
 
 	@Nullable
@@ -212,11 +212,11 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
     	ForceToolData fd = new ForceToolData(stack);
     	fd.attachInformation(lores);
     	ToolModStorage.attachInformation(stack, lores);
-		super.addInformation(stack, worldIn, lores, flagIn);
+		super.appendHoverText(stack, worldIn, lores, flagIn);
 	}
 
 	@Override
@@ -225,7 +225,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 	}
 
 	@Override
-	public int getItemEnchantability() {
+	public int getEnchantmentValue() {
 		return 0;
 	}
 

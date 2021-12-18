@@ -14,17 +14,17 @@ public class FuelSlot extends SlotItemHandler {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack stack) {
+	public boolean mayPlace(ItemStack stack) {
 		return getItemHandler().isItemValid(0, stack);
 	}
 
 	@Override
-	public int getItemStackLimit(@Nonnull ItemStack stack) {
+	public int getMaxStackSize(@Nonnull ItemStack stack) {
 		if(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
 			if(stack.getMaxStackSize() > 1) {
 				return 1;
 			}
 		}
-		return super.getItemStackLimit(stack);
+		return super.getMaxStackSize(stack);
 	}
 }

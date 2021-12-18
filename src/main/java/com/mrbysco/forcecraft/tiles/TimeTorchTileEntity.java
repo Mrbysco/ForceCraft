@@ -41,9 +41,9 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
 
     @Override
     public void tick() {
-        if(this.world.isRemote) return;
+        if(this.level.isClientSide) return;
         this.updateCachedMode();
-        if(this.world.getGameTime() % 20 == 0) {
+        if(this.level.getGameTime() % 20 == 0) {
             this.tickNeighbor();
         }
     }
@@ -61,34 +61,34 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
     }
 
     private void updateCachedMode() {
-        this.xMin = this.pos.getX() - 1;
-        this.yMin = this.pos.getY() - 1;
-        this.zMin = this.pos.getZ() - 1;
-        this.xMax = this.pos.getX() + 1;
-        this.yMax = this.pos.getY() + 1;
-        this.zMax = this.pos.getZ() + 1;
+        this.xMin = this.worldPosition.getX() - 1;
+        this.yMin = this.worldPosition.getY() - 1;
+        this.zMin = this.worldPosition.getZ() - 1;
+        this.xMax = this.worldPosition.getX() + 1;
+        this.yMax = this.worldPosition.getY() + 1;
+        this.zMax = this.worldPosition.getZ() + 1;
     }
 
     @SuppressWarnings("deprecation")
     private void tickBlock(@Nonnull BlockPos pos) {
-        if(pos.equals(getPos())) return;
+        if(pos.equals(getBlockPos())) return;
 
-        BlockState blockState = this.world.getBlockState(pos);
+        BlockState blockState = this.level.getBlockState(pos);
         if(blockState != null) {
             Block block = blockState.getBlock();
 
             if(block == null || block instanceof FlowingFluidBlock || block instanceof TimeTorchBlock || block == Blocks.AIR)
                 return;
 
-            if(block.ticksRandomly(blockState) && !world.isRemote) {
+            if(block.isRandomlyTicking(blockState) && !level.isClientSide) {
                 for(int i = 0; i < this.speed; i++) {
-                    if(getWorld().getBlockState(pos) != blockState) break;
-                    if(getWorld().rand.nextBoolean())
-                    block.randomTick(blockState, (ServerWorld)this.world, pos, world.rand);
+                    if(getLevel().getBlockState(pos) != blockState) break;
+                    if(getLevel().random.nextBoolean())
+                    block.randomTick(blockState, (ServerWorld)this.level, pos, level.random);
                 }
             }
             if(block.hasTileEntity(blockState)) {
-                TileEntity tile = this.world.getTileEntity(pos);
+                TileEntity tile = this.level.getBlockEntity(pos);
 
                 if(tile == null || tile.isRemoved()) return;
 
@@ -97,7 +97,7 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
                         break;
                     }
                     if(tile instanceof ITickableTileEntity) {
-                        if(getWorld().rand.nextBoolean())
+                        if(getLevel().random.nextBoolean())
                         ((ITickableTileEntity) tile).tick();
                     }
                 }
@@ -106,29 +106,29 @@ public class TimeTorchTileEntity extends TileEntity implements ITickableTileEnti
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        CompoundNBT tag = super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        CompoundNBT tag = super.save(compound);
         tag.putByte("Speed", this.speed);
         return tag;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundNBT nbt) {
         this.speed = nbt.getByte("Speed");
-        super.read(state, nbt);
+        super.load(state, nbt);
     }
 
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         CompoundNBT nbt = new CompoundNBT();
-        this.write(nbt);
-        return new SUpdateTileEntityPacket(getPos(), 0, nbt);
+        this.save(nbt);
+        return new SUpdateTileEntityPacket(getBlockPos(), 0, nbt);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
-        this.read(getBlockState(), pkt.getNbtCompound());
+        this.load(getBlockState(), pkt.getTag());
     }
 }

@@ -32,7 +32,7 @@ public class InfuserContainer extends Container {
     private static InfuserTileEntity getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
         Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
         Objects.requireNonNull(data, "data cannot be null!");
-        final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(data.readBlockPos());
+        final TileEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 
         if (tileAtPos instanceof InfuserTileEntity) {
             return (InfuserTileEntity) tileAtPos;
@@ -82,10 +82,10 @@ public class InfuserContainer extends Container {
         trackFluid();
 
         this.validRecipe[0] = tile.hasValidRecipe() ? 1 : 0;
-        this.trackInt(IntReferenceHolder.create(this.validRecipe, 0));
+        this.addDataSlot(IntReferenceHolder.shared(this.validRecipe, 0));
 
         //set data that will sync server->client WITHOUT needing to call .markDirty()
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return tile.processTime;
@@ -96,7 +96,7 @@ public class InfuserContainer extends Container {
 				tile.processTime = value;
 			}
 		});
-		trackInt(new IntReferenceHolder() {
+		addDataSlot(new IntReferenceHolder() {
 			@Override
 			public int get() {
 				return tile.maxProcessTime;
@@ -112,7 +112,7 @@ public class InfuserContainer extends Container {
 
     private void trackFluid() {
         // Dedicated server ints are actually truncated to short so we need to split our integer here (split our 32 bit integer into two 16 bit integers)
-        trackInt(new IntReferenceHolder() {
+        addDataSlot(new IntReferenceHolder() {
             @Override
             public int get() {
                 return tile.getFluidAmount() & 0xffff;
@@ -124,7 +124,7 @@ public class InfuserContainer extends Container {
                 tile.setFluidAmount(fluidStored + (value & 0xffff));
             }
         });
-        trackInt(new IntReferenceHolder() {
+        addDataSlot(new IntReferenceHolder() {
             @Override
             public int get() {
                 return (tile.getFluidAmount() >> 16) & 0xffff;
@@ -140,7 +140,7 @@ public class InfuserContainer extends Container {
 
     private void trackPower() {
         // Dedicated server ints are actually truncated to short so we need to split our integer here (split our 32 bit integer into two 16 bit integers)
-        trackInt(new IntReferenceHolder() {
+        addDataSlot(new IntReferenceHolder() {
             @Override
             public int get() {
                 return tile.getEnergyStored() & 0xffff;
@@ -152,7 +152,7 @@ public class InfuserContainer extends Container {
                 tile.setEnergyStored(energyStored + (value & 0xffff));
             }
         });
-        trackInt(new IntReferenceHolder() {
+        addDataSlot(new IntReferenceHolder() {
             @Override
             public int get() {
                 return (tile.getEnergyStored() >> 16) & 0xffff;
@@ -167,41 +167,41 @@ public class InfuserContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.tile.isUsableByPlayer(playerIn) && !playerIn.isSpectator();
+    public boolean stillValid(PlayerEntity playerIn) {
+        return this.tile.stillValid(playerIn) && !playerIn.isSpectator();
     }
 
     @Override
     @Nonnull
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
+        Slot slot = this.slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             final int tileSize = 11;
 
             if (index < tileSize) {
-                if (!this.mergeItemStack(itemstack1, tileSize, this.inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, tileSize, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
             else {
             	// change to fix all the manual moving. and fix books going to book slots, etc
-                if (!this.mergeItemStack(itemstack1, 0, tileSize, true)) {
+                if (!this.moveItemStackTo(itemstack1, 0, tileSize, true)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
-        this.onCraftMatrixChanged(null);
+        this.slotsChanged(null);
 
         return itemstack;
     }
@@ -215,17 +215,17 @@ public class InfuserContainer extends Container {
     }
 
     @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+    public void broadcastChanges() {
+        super.broadcastChanges();
     }
 
     @Override
-    public void onCraftMatrixChanged(IInventory inventoryIn) {
+    public void slotsChanged(IInventory inventoryIn) {
         if(inventoryIn != null) {
-            super.onCraftMatrixChanged(inventoryIn);
+            super.slotsChanged(inventoryIn);
         }
 
-        if(!player.world.isRemote) {
+        if(!player.level.isClientSide) {
             this.validRecipe[0] = tile.updateValidRecipe() ? 1 : 0;
         }
         AdvancementUtil.unlockTierAdvancements(player, tile.getBookTier());
@@ -237,13 +237,13 @@ public class InfuserContainer extends Container {
         }
 
         @Override
-        public void onSlotChanged() {
-            super.onSlotChanged();
-            onCraftMatrixChanged(null);
+        public void setChanged() {
+            super.setChanged();
+            slotsChanged(null);
         }
 
         @Override
-        public int getSlotStackLimit() {
+        public int getMaxStackSize() {
             return 1;
         }
     }
@@ -254,17 +254,17 @@ public class InfuserContainer extends Container {
         }
 
         @Override
-        public boolean isEnabled() {
-            return slotNumber <= tile.getBookTier();
+        public boolean isActive() {
+            return slot <= tile.getBookTier();
         }
 
         @Override
-        public boolean isItemValid(@Nonnull ItemStack stack) {
-            return slotNumber <= tile.getBookTier() && super.isItemValid(stack);
+        public boolean mayPlace(@Nonnull ItemStack stack) {
+            return slot <= tile.getBookTier() && super.mayPlace(stack);
         }
 
         @Override
-        public int getSlotStackLimit() {
+        public int getMaxStackSize() {
             return 1;
         }
     }

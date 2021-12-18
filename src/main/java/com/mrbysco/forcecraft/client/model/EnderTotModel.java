@@ -12,113 +12,113 @@ public class EnderTotModel<T extends EnderTotEntity> extends BipedModel<T> {
 		super(0.0F, 8F, 64, 32);
 		float f = 8F;
 
-		bipedHeadwear = new ModelRenderer(this);
-		bipedHeadwear.setRotationPoint(0.0F, f, 0.0F);
-		bipedHeadwear.setTextureOffset(0, 16).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, scale - 0.5F, false);
+		hat = new ModelRenderer(this);
+		hat.setPos(0.0F, f, 0.0F);
+		hat.texOffs(0, 16).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, scale - 0.5F, false);
 
-		bipedBody = new ModelRenderer(this);
-		bipedBody.setRotationPoint(0.0F, f, 0.0F);
-		bipedBody.setTextureOffset(32, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 8.0F, 4.0F, scale, false);
+		body = new ModelRenderer(this);
+		body.setPos(0.0F, f, 0.0F);
+		body.texOffs(32, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 8.0F, 4.0F, scale, false);
 
-		bipedRightArm = new ModelRenderer(this);
-		bipedRightArm.setRotationPoint(5.0F, 9.0F, 0.0F);
-		setRotationAngle(bipedRightArm, 0.0F, 0.0F, -0.1F);
-		bipedRightArm.setTextureOffset(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, scale, false);
+		rightArm = new ModelRenderer(this);
+		rightArm.setPos(5.0F, 9.0F, 0.0F);
+		setRotationAngle(rightArm, 0.0F, 0.0F, -0.1F);
+		rightArm.texOffs(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, scale, false);
 
-		bipedLeftArm = new ModelRenderer(this);
-		bipedLeftArm.setRotationPoint(-5.0F, 9.0F, 0.0F);
-		setRotationAngle(bipedLeftArm, 0.0F, 0.0F, 0.1F);
-		bipedLeftArm.setTextureOffset(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, scale, true);
+		leftArm = new ModelRenderer(this);
+		leftArm.setPos(-5.0F, 9.0F, 0.0F);
+		setRotationAngle(leftArm, 0.0F, 0.0F, 0.1F);
+		leftArm.texOffs(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, scale, true);
 
-		bipedRightLeg = new ModelRenderer(this);
-		bipedRightLeg.setRotationPoint(2.0F, 16.0F, 0.0F);
-		bipedRightLeg.setTextureOffset(56, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F, scale, false);
+		rightLeg = new ModelRenderer(this);
+		rightLeg.setPos(2.0F, 16.0F, 0.0F);
+		rightLeg.texOffs(56, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F, scale, false);
 
-		bipedLeftLeg = new ModelRenderer(this);
-		bipedLeftLeg.setRotationPoint(-2.0F, 16.0F, 0.0F);
-		bipedLeftLeg.setTextureOffset(56, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F, scale, true);
+		leftLeg = new ModelRenderer(this);
+		leftLeg.setPos(-2.0F, 16.0F, 0.0F);
+		leftLeg.texOffs(56, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F, scale, true);
 	}
 
 	@Override
-	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-		this.bipedHead.showModel = true;
+	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+		super.setupAnim(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+		this.head.visible = true;
 		float f = 8.0F;
-		this.bipedBody.rotateAngleX = 0.0F;
-		this.bipedBody.rotationPointY = f;
-		this.bipedBody.rotationPointZ = -0.0F;
-		this.bipedRightLeg.rotateAngleX -= 0.0F;
-		this.bipedLeftLeg.rotateAngleX -= 0.0F;
-		this.bipedRightArm.rotateAngleX = (float)((double)this.bipedRightArm.rotateAngleX * 0.5D);
-		this.bipedLeftArm.rotateAngleX = (float)((double)this.bipedLeftArm.rotateAngleX * 0.5D);
-		this.bipedRightLeg.rotateAngleX = (float)((double)this.bipedRightLeg.rotateAngleX * 0.5D);
-		this.bipedLeftLeg.rotateAngleX = (float)((double)this.bipedLeftLeg.rotateAngleX * 0.5D);
+		this.body.xRot = 0.0F;
+		this.body.y = f;
+		this.body.z = -0.0F;
+		this.rightLeg.xRot -= 0.0F;
+		this.leftLeg.xRot -= 0.0F;
+		this.rightArm.xRot = (float)((double)this.rightArm.xRot * 0.5D);
+		this.leftArm.xRot = (float)((double)this.leftArm.xRot * 0.5D);
+		this.rightLeg.xRot = (float)((double)this.rightLeg.xRot * 0.5D);
+		this.leftLeg.xRot = (float)((double)this.leftLeg.xRot * 0.5D);
 		float f1 = 0.4F;
-		if (this.bipedRightArm.rotateAngleX > f1) {
-			this.bipedRightArm.rotateAngleX = f1;
+		if (this.rightArm.xRot > f1) {
+			this.rightArm.xRot = f1;
 		}
 
-		if (this.bipedLeftArm.rotateAngleX > f1) {
-			this.bipedLeftArm.rotateAngleX = f1;
+		if (this.leftArm.xRot > f1) {
+			this.leftArm.xRot = f1;
 		}
 
-		if (this.bipedRightArm.rotateAngleX < -f1) {
-			this.bipedRightArm.rotateAngleX = -f1;
+		if (this.rightArm.xRot < -f1) {
+			this.rightArm.xRot = -f1;
 		}
 
-		if (this.bipedLeftArm.rotateAngleX < -f1) {
-			this.bipedLeftArm.rotateAngleX = -f1;
+		if (this.leftArm.xRot < -f1) {
+			this.leftArm.xRot = -f1;
 		}
 
-		if (this.bipedRightLeg.rotateAngleX > f1) {
-			this.bipedRightLeg.rotateAngleX = f1;
+		if (this.rightLeg.xRot > f1) {
+			this.rightLeg.xRot = f1;
 		}
 
-		if (this.bipedLeftLeg.rotateAngleX > f1) {
-			this.bipedLeftLeg.rotateAngleX = f1;
+		if (this.leftLeg.xRot > f1) {
+			this.leftLeg.xRot = f1;
 		}
 
-		if (this.bipedRightLeg.rotateAngleX < -f1) {
-			this.bipedRightLeg.rotateAngleX = -f1;
+		if (this.rightLeg.xRot < -f1) {
+			this.rightLeg.xRot = -f1;
 		}
 
-		if (this.bipedLeftLeg.rotateAngleX < -f1) {
-			this.bipedLeftLeg.rotateAngleX = -f1;
+		if (this.leftLeg.xRot < -f1) {
+			this.leftLeg.xRot = -f1;
 		}
 
 		if (this.isCarrying) {
-			this.bipedRightArm.rotateAngleX = -0.5F;
-			this.bipedLeftArm.rotateAngleX = -0.5F;
-			this.bipedRightArm.rotateAngleZ = 0.05F;
-			this.bipedLeftArm.rotateAngleZ = -0.05F;
+			this.rightArm.xRot = -0.5F;
+			this.leftArm.xRot = -0.5F;
+			this.rightArm.zRot = 0.05F;
+			this.leftArm.zRot = -0.05F;
 		}
 
-		this.bipedRightArm.rotationPointZ = 0.0F;
-		this.bipedLeftArm.rotationPointZ = 0.0F;
-		this.bipedRightLeg.rotationPointZ = 0.0F;
-		this.bipedLeftLeg.rotationPointZ = 0.0F;
-		this.bipedRightLeg.rotationPointY = 16.0F;
-		this.bipedLeftLeg.rotationPointY = 16.0F;
-		this.bipedHead.rotationPointZ = -0.0F;
-		this.bipedHead.rotationPointY = f;
-		this.bipedHeadwear.rotationPointX = this.bipedHead.rotationPointX;
-		this.bipedHeadwear.rotationPointY = 8.5F;
-		this.bipedHeadwear.rotationPointZ = this.bipedHead.rotationPointZ;
-		this.bipedHeadwear.rotateAngleX = this.bipedHead.rotateAngleX;
-		this.bipedHeadwear.rotateAngleY = this.bipedHead.rotateAngleY;
-		this.bipedHeadwear.rotateAngleZ = this.bipedHead.rotateAngleZ;
+		this.rightArm.z = 0.0F;
+		this.leftArm.z = 0.0F;
+		this.rightLeg.z = 0.0F;
+		this.leftLeg.z = 0.0F;
+		this.rightLeg.y = 16.0F;
+		this.leftLeg.y = 16.0F;
+		this.head.z = -0.0F;
+		this.head.y = f;
+		this.hat.x = this.head.x;
+		this.hat.y = 8.5F;
+		this.hat.z = this.head.z;
+		this.hat.xRot = this.head.xRot;
+		this.hat.yRot = this.head.yRot;
+		this.hat.zRot = this.head.zRot;
 		if (this.isAttacking) {
-			this.bipedHead.rotationPointY -= 5.0F;
+			this.head.y -= 5.0F;
 		}
 
-		this.bipedRightArm.setRotationPoint(-5.0F, 9.0F, 0.0F);
-		this.bipedLeftArm.setRotationPoint(5.0F, 9.0F, 0.0F);
+		this.rightArm.setPos(-5.0F, 9.0F, 0.0F);
+		this.leftArm.setPos(5.0F, 9.0F, 0.0F);
 	}
 
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

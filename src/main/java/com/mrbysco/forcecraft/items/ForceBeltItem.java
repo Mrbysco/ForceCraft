@@ -37,42 +37,42 @@ import java.util.List;
 public class ForceBeltItem extends BaseItem {
 
     public ForceBeltItem(Item.Properties properties) {
-        super(properties.maxStackSize(1));
+        super(properties.stacksTo(1));
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        if(playerIn.isSneaking()) {
-            if(worldIn.isRemote) {
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack stack = playerIn.getItemInHand(handIn);
+        if(playerIn.isShiftKeyDown()) {
+            if(worldIn.isClientSide) {
                 com.mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen.openScreen(stack, handIn);
             }
         } else {
-            if (!worldIn.isRemote) {
-                NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.getPosition());
+            if (!worldIn.isClientSide) {
+                NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.blockPosition());
             }
         }
         //If it doesn't nothing bad happens
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.use(worldIn, playerIn, handIn);
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
-        ItemStack stack = context.getItem();
-        if(player != null && !context.getWorld().isRemote && stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-            player.openContainer(getContainer(stack));
+        ItemStack stack = context.getItemInHand();
+        if(player != null && !context.getLevel().isClientSide && stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+            player.openMenu(getContainer(stack));
             return ActionResultType.PASS;
         }
         //If it doesn't nothing bad happens
-        return super.onItemUse(context);
+        return super.useOn(context);
     }
 
     @Nullable
     public INamedContainerProvider getContainer(ItemStack stack) {
         return new SimpleNamedContainerProvider((id, inventory, player) -> {
             return new ForceBeltContainer(id, inventory);
-        }, stack.hasDisplayName() ? ((TextComponent)stack.getDisplayName()).mergeStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.belt"));
+        }, stack.hasCustomHoverName() ? ((TextComponent)stack.getHoverName()).withStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.belt"));
     }
 
     @Override
@@ -81,19 +81,19 @@ public class ForceBeltItem extends BaseItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         CompoundNBT tag = stack.getOrCreateTag();
         if(tag.contains(ForcePackItem.SLOTS_USED) &&  tag.contains(ForcePackItem.SLOTS_TOTAL)) {
             tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt(ForcePackItem.SLOTS_USED), tag.getInt(ForcePackItem.SLOTS_TOTAL))));
         } else {
             tooltip.add(new StringTextComponent("0/8 Slots"));
         }
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
-        return ((TextComponent)super.getDisplayName(stack)).mergeStyle(TextFormatting.YELLOW);
+    public ITextComponent getName(ItemStack stack) {
+        return ((TextComponent)super.getName(stack)).withStyle(TextFormatting.YELLOW);
     }
 
     @Nullable
@@ -107,7 +107,7 @@ public class ForceBeltItem extends BaseItem {
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
                 //Make sure there's no ForceBelt-ception
-                return !(stack.getItem() instanceof ForceBeltItem) && stack.getItem().isIn(ForceTags.VALID_FORCE_BELT) && super.isItemValid(slot, stack);
+                return !(stack.getItem() instanceof ForceBeltItem) && stack.getItem().is(ForceTags.VALID_FORCE_BELT) && super.isItemValid(slot, stack);
             }
         });
 

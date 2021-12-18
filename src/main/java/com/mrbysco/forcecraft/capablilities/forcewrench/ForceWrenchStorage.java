@@ -27,8 +27,8 @@ public class ForceWrenchStorage implements Capability.IStorage<IForceWrench> {
         fd.attachInformation(tooltip);
         stack.getCapability(CAPABILITY_FORCEWRENCH).ifPresent((cap) -> {
             if(cap.getStoredName() != null && !cap.getStoredName().isEmpty()){ // idk what this is
-                tooltip.add(new StringTextComponent("Stored: ").mergeStyle(TextFormatting.GOLD)
-                        .appendSibling(new TranslationTextComponent(cap.getStoredName()).mergeStyle(TextFormatting.GRAY)));
+                tooltip.add(new StringTextComponent("Stored: ").withStyle(TextFormatting.GOLD)
+                        .append(new TranslationTextComponent(cap.getStoredName()).withStyle(TextFormatting.GRAY)));
             }
         });
     }

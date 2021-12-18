@@ -24,9 +24,9 @@ public class CreeperTotEntity extends CreeperEntity {
 	}
 
 	public static AttributeModifierMap.MutableAttribute generateAttributes() {
-		return MonsterEntity.func_234295_eP_()
-				.createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
-				.createMutableAttribute(Attributes.MAX_HEALTH, 4.0D);
+		return MonsterEntity.createMonsterAttributes()
+				.add(Attributes.MOVEMENT_SPEED, 0.25D)
+				.add(Attributes.MAX_HEALTH, 4.0D);
 	}
 
 	@Override
@@ -35,8 +35,8 @@ public class CreeperTotEntity extends CreeperEntity {
 	}
 
 	@Override
-	public void explode() {
-		if(this.world.isRemote) {
+	public void explodeCreeper() {
+		if(this.level.isClientSide) {
 			for(int i = 0; i < 4; i++) {
 				summonFireworkParticles(getFirework(), 0.5D);
 			}
@@ -44,12 +44,12 @@ public class CreeperTotEntity extends CreeperEntity {
 			summonFireworkParticles(getCreeperFirework(), 2.5D);
 		}
 
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			this.dead = true;
-			this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
+			this.playSound(SoundEvents.GENERIC_EXPLODE, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
 
-			if(this.world.getGameRules().getBoolean(GameRules.DO_MOB_LOOT) && this.getRNG().nextInt(4) == 0) {
-				entityDropItem(new ItemStack(ForceRegistry.PILE_OF_GUNPOWDER.get(), this.getRNG().nextInt(2) + 1));
+			if(this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT) && this.getRandom().nextInt(4) == 0) {
+				spawnAtLocation(new ItemStack(ForceRegistry.PILE_OF_GUNPOWDER.get(), this.getRandom().nextInt(2) + 1));
 			}
 
 			this.remove();
@@ -57,9 +57,9 @@ public class CreeperTotEntity extends CreeperEntity {
 	}
 
 	public void summonFireworkParticles(ItemStack fireworkRocket, double yOffset) {
-		CompoundNBT compoundnbt = fireworkRocket.isEmpty() ? null : fireworkRocket.getChildTag("Fireworks");
-		Vector3d vector3d = this.getMotion();
-		this.world.makeFireworks(this.getPosX(), this.getPosY() + yOffset, this.getPosZ(), vector3d.x, vector3d.y, vector3d.z, compoundnbt);
+		CompoundNBT compoundnbt = fireworkRocket.isEmpty() ? null : fireworkRocket.getTagElement("Fireworks");
+		Vector3d vector3d = this.getDeltaMovement();
+		this.level.createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), vector3d.x, vector3d.y, vector3d.z, compoundnbt);
 	}
 
 	public ItemStack getFirework() {

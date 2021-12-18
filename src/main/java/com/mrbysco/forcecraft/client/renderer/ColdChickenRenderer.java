@@ -18,16 +18,16 @@ public class ColdChickenRenderer extends MobRenderer<ColdChickenEntity, ColdChic
 	/**
 	 * Returns the location of an entity's texture.
 	 */
-	public ResourceLocation getEntityTexture(ColdChickenEntity entity) {
+	public ResourceLocation getTextureLocation(ColdChickenEntity entity) {
 		return CHICKEN_TEXTURES;
 	}
 
 	/**
 	 * Defines what float the third param in setRotationAngles of ModelBase is
 	 */
-	protected float handleRotationFloat(ColdChickenEntity livingBase, float partialTicks) {
-		float f = MathHelper.lerp(partialTicks, livingBase.oFlap, livingBase.wingRotation);
-		float f1 = MathHelper.lerp(partialTicks, livingBase.oFlapSpeed, livingBase.destPos);
+	protected float getBob(ColdChickenEntity livingBase, float partialTicks) {
+		float f = MathHelper.lerp(partialTicks, livingBase.oFlap, livingBase.flap);
+		float f1 = MathHelper.lerp(partialTicks, livingBase.oFlapSpeed, livingBase.flapSpeed);
 		return (MathHelper.sin(f) + 1.0F) * f1;
 	}
 }

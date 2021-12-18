@@ -45,7 +45,7 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 	protected static AbstractForceFurnaceTile getTileEntity(final PlayerInventory playerInventory, final PacketBuffer data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
 		Objects.requireNonNull(data, "data cannot be null!");
-		final TileEntity tileAtPos = playerInventory.player.world.getTileEntity(data.readBlockPos());
+		final TileEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 
 		if (tileAtPos instanceof AbstractForceFurnaceTile) {
 			return (AbstractForceFurnaceTile) tileAtPos;
@@ -58,14 +58,14 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 		super(ForceContainers.FORCE_FURNACE.get(), id);
 		this.tile = te;
 		this.player = playerInventoryIn.player;
-		this.world = player.world;
+		this.world = player.level;
 		this.furnaceInventory = tile.handler;
 		this.upgradeInventory = tile.upgradeHandler;
 		this.furnaceData = tile.getFurnaceData();
 
 		assertFurnaceSize(furnaceInventory, 3);
 		assertFurnaceSize(upgradeInventory, 1);
-		assertIntArraySize(furnaceData, 4);
+		checkContainerDataCount(furnaceData, 4);
 
 		this.addSlot(new SlotItemHandler(furnaceInventory, 0, 56, 17));
 		this.addSlot(new ForceFurnaceFuelSlot(this, furnaceInventory, 1, 56, 53));
@@ -82,7 +82,7 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 			this.addSlot(new Slot(playerInventoryIn, k, 8 + k * 18, 142));
 		}
 
-		this.trackIntArray(furnaceData);
+		this.addDataSlots(furnaceData);
 	}
 
 //	protected AbstractForceFurnaceContainer(ContainerType<?> containerType, RecipeBookCategory recipeBookCategory, int containerID, PlayerInventory playerInventory) {
@@ -103,54 +103,54 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 	/**
 	 * Determines whether supplied player can use this container
 	 */
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return this.tile.isUsableByPlayer(playerIn);
+	public boolean stillValid(PlayerEntity playerIn) {
+		return this.tile.stillValid(playerIn);
 	}
 
 	/**
 	 * Handle when the stack in slot {@code index} is shift-clicked. Normally this moves the stack between the player
 	 * inventory and the other inventory(s).
 	 */
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
+		Slot slot = this.slots.get(index);
+		if (slot != null && slot.hasItem()) {
+			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
 			if (index == 2) {
-				if (!this.mergeItemStack(itemstack1, 4, 40, true)) {
+				if (!this.moveItemStackTo(itemstack1, 4, 40, true)) {
 					return ItemStack.EMPTY;
 				}
 
-				slot.onSlotChange(itemstack1, itemstack);
+				slot.onQuickCraft(itemstack1, itemstack);
 			} else if (index != 1 && index != 0) {
 				if (this.hasRecipe(itemstack1)) {
-					if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+					if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
 						return ItemStack.EMPTY;
 					}
 				} else if (this.isFuel(itemstack1)) {
-					if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
+					if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
 						return ItemStack.EMPTY;
 					}
 				} else if (isUpgrade(itemstack1) && index == 3) {
 					itemstack1.shrink(1);
-					playerIn.world.playSound((PlayerEntity) null, playerIn.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					playerIn.level.playSound((PlayerEntity) null, playerIn.blockPosition(), SoundEvents.ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					return ItemStack.EMPTY;
 				} else if (index >= 4 && index < 31) {
-					if (!this.mergeItemStack(itemstack1, 31, 40, false)) {
+					if (!this.moveItemStackTo(itemstack1, 31, 40, false)) {
 						return ItemStack.EMPTY;
 					}
-				} else if (index >= 31 && index < 40 && !this.mergeItemStack(itemstack1, 4, 31, false)) {
+				} else if (index >= 31 && index < 40 && !this.moveItemStackTo(itemstack1, 4, 31, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 4, 40, false)) {
+			} else if (!this.moveItemStackTo(itemstack1, 4, 40, false)) {
 				return ItemStack.EMPTY;
 			}
 
 			if (itemstack1.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 
 			if (itemstack1.getCount() == itemstack.getCount()) {
@@ -164,7 +164,7 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 	}
 
 	protected boolean hasRecipe(ItemStack stack) {
-		return this.world.getRecipeManager().getRecipe((IRecipeType)this.getRecipeType(), new Inventory(stack), this.world).isPresent();
+		return this.world.getRecipeManager().getRecipeFor((IRecipeType)this.getRecipeType(), new Inventory(stack), this.world).isPresent();
 	}
 
 	protected IRecipeType<? extends AbstractCookingRecipe> getRecipeType() {
@@ -189,18 +189,18 @@ public abstract class AbstractForceFurnaceContainer extends Container {
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
-		if(clickTypeIn == ClickType.PICKUP_ALL && player.inventory.getItemStack().getItem() instanceof UpgradeCoreItem) {
+	public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+		if(clickTypeIn == ClickType.PICKUP_ALL && player.inventory.getCarried().getItem() instanceof UpgradeCoreItem) {
 			return ItemStack.EMPTY;
 		}
 		if (slotId == 3) {
 			Slot slot = getSlot(slotId);
-			if (slot.getHasStack() && clickTypeIn != ClickType.QUICK_MOVE) {
-				player.world.playSound((PlayerEntity) null, player.getPosition(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5F, 1.0F);
+			if (slot.hasItem() && clickTypeIn != ClickType.QUICK_MOVE) {
+				player.level.playSound((PlayerEntity) null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5F, 1.0F);
 				return ItemStack.EMPTY;
 			}
 		}
-		return super.slotClick(slotId, dragType, clickTypeIn, player);
+		return super.clicked(slotId, dragType, clickTypeIn, player);
 	}
 
 	@OnlyIn(Dist.CLIENT)

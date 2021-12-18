@@ -43,10 +43,10 @@ public class OpenBeltMessage {
 				if (FindingUtil.hasSingleStackInHotbar(player, stackPredicate)) {
 					ItemStack beltStack = FindingUtil.findInstanceStack(player, stackPredicate);
 					if(!beltStack.isEmpty()) {
-						player.openContainer(new INamedContainerProvider() {
+						player.openMenu(new INamedContainerProvider() {
 							@Override
 							public ITextComponent getDisplayName() {
-								return beltStack.hasDisplayName() ? ((TextComponent)beltStack.getDisplayName()).mergeStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.belt");
+								return beltStack.hasCustomHoverName() ? ((TextComponent)beltStack.getHoverName()).withStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.belt");
 							}
 
 							@Nullable

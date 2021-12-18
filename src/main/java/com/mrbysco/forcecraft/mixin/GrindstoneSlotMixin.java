@@ -7,12 +7,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(targets = {"net.minecraft.inventory.container.GrindstoneContainer$2"})
+@Mixin(targets = { "net/minecraft/inventory/container/GrindstoneContainer$2", "net/minecraft/inventory/container/GrindstoneContainer$3" })
 public class GrindstoneSlotMixin {
-	@Inject(at = @At("HEAD"), method = "isItemValid(Lnet/minecraft/item/ItemStack;)Z", cancellable = true)
-	private void forcecraftIsItemValid(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-		if(stack.getItem().getRegistryName().getNamespace().equals(Reference.MOD_ID)) {
+	@Inject(at = @At("HEAD"), method = "mayPlace(Lnet/minecraft/item/ItemStack;)Z", cancellable = true)
+	private void forcecraftMayPlace(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+		if(stack.getItem().getRegistryName().getNamespace().equals(Reference.MOD_ID))
 			cir.setReturnValue(false);
-		}
 	}
 }

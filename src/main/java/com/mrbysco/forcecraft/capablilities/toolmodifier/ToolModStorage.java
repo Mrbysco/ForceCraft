@@ -32,60 +32,60 @@ public class ToolModStorage implements Capability.IStorage<IToolModifier> {
 
 			if (cap.getSpeedLevel() > 0) {
 				if (item instanceof ForceBowItem || item instanceof ForceArmorItem || item instanceof ForceRodItem) {
-					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()).mergeStyle(TextFormatting.YELLOW));
+					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()).withStyle(TextFormatting.YELLOW));
 				}
 			}
 			if (cap.hasLumberjack()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.lumberjack").mergeStyle(TextFormatting.YELLOW));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.lumberjack").withStyle(TextFormatting.YELLOW));
 			}
 			if(cap.getLuckLevel() > 0) {
 				if(item instanceof ForceBowItem || item instanceof ForceArmorItem) {
-					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.luck" + cap.getLuckLevel()).mergeStyle(TextFormatting.GREEN));
+					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.luck" + cap.getLuckLevel()).withStyle(TextFormatting.GREEN));
 				}
 			}
 			if(cap.getBaneLevel() > 0) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bane").mergeStyle(TextFormatting.LIGHT_PURPLE));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bane").withStyle(TextFormatting.LIGHT_PURPLE));
 			}
 //			if (cap.getForceLevel() > 0) {
 //				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.force" + cap.getForceLevel()));
 //			}
 			if (cap.getSturdyLevel() > 0) {
 				if(stack.getItem() instanceof ForceArmorItem) {
-					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sturdy" + cap.getSturdyLevel()).mergeStyle(TextFormatting.DARK_PURPLE));
+					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sturdy" + cap.getSturdyLevel()).withStyle(TextFormatting.DARK_PURPLE));
 				}
 			}
 			if (cap.hasWing()) {
 				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.wing"));
 			}
 			if (cap.hasBleed()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bleed" + cap.getBleedLevel()).mergeStyle(TextFormatting.RED));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.bleed" + cap.getBleedLevel()).withStyle(TextFormatting.RED));
 			}
 			if (cap.hasRainbow()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.rainbow").mergeStyle(TextFormatting.GOLD));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.rainbow").withStyle(TextFormatting.GOLD));
 			}
 			if (cap.hasHeat()) {
 				if(item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceShearsItem || item instanceof ForceArmorItem) {
-					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.heat").mergeStyle(TextFormatting.RED));
+					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.heat").withStyle(TextFormatting.RED));
 				}
 			}
 			if (cap.hasCamo()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.camo").mergeStyle(TextFormatting.DARK_GREEN));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.camo").withStyle(TextFormatting.DARK_GREEN));
 			}
 			if (cap.hasEnder()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender").mergeStyle(TextFormatting.DARK_PURPLE));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.ender").withStyle(TextFormatting.DARK_PURPLE));
 			}
 			if (cap.hasFreezing()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.freezing").mergeStyle(TextFormatting.BLUE));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.freezing").withStyle(TextFormatting.BLUE));
 			}
 			if (cap.hasTreasure()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.treasure").mergeStyle(TextFormatting.GOLD));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.treasure").withStyle(TextFormatting.GOLD));
 			}
 			if (cap.hasLight()) {
-				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.light").mergeStyle(TextFormatting.GOLD));
+				tooltip.add(new TranslationTextComponent("item.infuser.tooltip.light").withStyle(TextFormatting.GOLD));
 			}
 			if (cap.hasSharp()) {
 				if(stack.getItem() instanceof ForceArmorItem) {
-					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sharp").mergeStyle(TextFormatting.GOLD));
+					tooltip.add(new TranslationTextComponent("item.infuser.tooltip.sharp").withStyle(TextFormatting.GOLD));
 				}
 			}
 		});

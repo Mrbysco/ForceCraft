@@ -28,36 +28,36 @@ public class KeybindHandler {
 	}
 
 	public static void onClientTick(TickEvent.ClientTickEvent event) {
-		if (KEY_OPEN_HOTBAR_PACK.isPressed()) {
+		if (KEY_OPEN_HOTBAR_PACK.consumeClick()) {
 			PacketHandler.CHANNEL.sendToServer(new OpenPackMessage());
 		}
 
-		if (KEY_OPEN_HOTBAR_BELT.isPressed()) {
+		if (KEY_OPEN_HOTBAR_BELT.consumeClick()) {
 			PacketHandler.CHANNEL.sendToServer(new OpenBeltMessage());
 		}
 
-		if (KEY_QUICK_USE_1.isPressed()) {
+		if (KEY_QUICK_USE_1.consumeClick()) {
 			PacketHandler.CHANNEL.sendToServer(new QuickUseBeltMessage(0));
 		}
-		if (KEY_QUICK_USE_2.isPressed()) {
+		if (KEY_QUICK_USE_2.consumeClick()) {
 			PacketHandler.CHANNEL.sendToServer(new QuickUseBeltMessage(1));
 		}
-		if (KEY_QUICK_USE_3.isPressed()) {
+		if (KEY_QUICK_USE_3.consumeClick()) {
 			PacketHandler.CHANNEL.sendToServer(new QuickUseBeltMessage(2));
 		}
-		if (KEY_QUICK_USE_4.isPressed()) {
+		if (KEY_QUICK_USE_4.consumeClick()) {
 			PacketHandler.CHANNEL.sendToServer(new QuickUseBeltMessage(3));
 		}
-		if (KEY_QUICK_USE_5.isPressed()) {
+		if (KEY_QUICK_USE_5.consumeClick()) {
 			PacketHandler.CHANNEL.sendToServer(new QuickUseBeltMessage(4));
 		}
-		if (KEY_QUICK_USE_6.isPressed()) {
+		if (KEY_QUICK_USE_6.consumeClick()) {
 			PacketHandler.CHANNEL.sendToServer(new QuickUseBeltMessage(5));
 		}
-		if (KEY_QUICK_USE_7.isPressed()) {
+		if (KEY_QUICK_USE_7.consumeClick()) {
 			PacketHandler.CHANNEL.sendToServer(new QuickUseBeltMessage(6));
 		}
-		if (KEY_QUICK_USE_8.isPressed()) {
+		if (KEY_QUICK_USE_8.consumeClick()) {
 			PacketHandler.CHANNEL.sendToServer(new QuickUseBeltMessage(7));
 		}
 	}

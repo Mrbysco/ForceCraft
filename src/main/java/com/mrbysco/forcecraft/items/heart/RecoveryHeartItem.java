@@ -24,7 +24,7 @@ public class RecoveryHeartItem extends BaseItem {
 			return;
 
 		PlayerEntity player = (PlayerEntity) entityIn;
-		BlockPos pos = new BlockPos(player.getPosX(), player.getPosY() + player.getYOffset(), player.getPosZ());
+		BlockPos pos = new BlockPos(player.getX(), player.getY() + player.getMyRidingOffset(), player.getZ());
 
 		int HEAL_AMT = 2;
 		for(int i = 0; i < stack.getCount(); i++) {
@@ -32,7 +32,7 @@ public class RecoveryHeartItem extends BaseItem {
 			player.heal(HEAL_AMT);
 			stack.shrink(1);
 		}
-		player.world.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.HEART_PICKUP.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
+		player.level.playSound((PlayerEntity) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.HEART_PICKUP.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
 
 		for (int i1 = 0; i1 < 15; ++i1) {
 			double d0 = random.nextGaussian() * 0.02D;

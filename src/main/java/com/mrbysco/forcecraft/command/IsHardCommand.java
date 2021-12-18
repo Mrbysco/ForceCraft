@@ -39,7 +39,7 @@ public class IsHardCommand implements IForceCommand {
 		bd.setTier(bookTier);
 		bd.write(book);
 		
-		player.addItemStackToInventory(book);
+		player.addItem(book);
 
 		return 0;
 	}

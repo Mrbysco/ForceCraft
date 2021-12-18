@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.util;
 
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
 import com.mrbysco.forcecraft.registry.ForceEffects;
 import net.minecraft.entity.Entity;
@@ -30,7 +29,7 @@ public class MobUtil {
 
         if(adjustedLevel > 0) {
 //            ForceCraft.LOGGER.info("Added BLEEDING to " + target.getName());
-            target.addPotionEffect(new EffectInstance(ForceEffects.BLEEDING.get(), BLEEDING_SECONDS * adjustedLevel, 0, false, true));
+            target.addEffect(new EffectInstance(ForceEffects.BLEEDING.get(), BLEEDING_SECONDS * adjustedLevel, 0, false, true));
         }
     }
 }

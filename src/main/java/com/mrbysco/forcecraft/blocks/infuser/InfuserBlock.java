@@ -36,13 +36,13 @@ import java.util.stream.Stream;
 public class InfuserBlock extends Block {
 
     private static final VoxelShape SHAPE = Stream.of(
-            Block.makeCuboidShape(3, 10, 3, 13, 11, 13),
-            Block.makeCuboidShape(2, 0, 2, 4, 5, 4),
-            Block.makeCuboidShape(12, 0, 2, 14, 5, 4),
-            Block.makeCuboidShape(12, 0, 12, 14, 5, 14),
-            Block.makeCuboidShape(2, 0, 12, 4, 5, 14),
-            Block.makeCuboidShape(2, 5, 2, 14, 10, 14)
-    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
+            Block.box(3, 10, 3, 13, 11, 13),
+            Block.box(2, 0, 2, 4, 5, 4),
+            Block.box(12, 0, 2, 14, 5, 4),
+            Block.box(12, 0, 12, 14, 5, 14),
+            Block.box(2, 0, 12, 4, 5, 14),
+            Block.box(2, 5, 2, 14, 10, 14)
+    ).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get();
 
     public InfuserBlock(AbstractBlock.Properties properties) {
         super(properties);
@@ -65,15 +65,15 @@ public class InfuserBlock extends Block {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult hit) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult hit) {
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof InfuserTileEntity) {
-            LazyOptional<IFluidHandler> fluidHandler = tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, hit.getFace());
+            LazyOptional<IFluidHandler> fluidHandler = tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, hit.getDirection());
             fluidHandler.ifPresent((handler) -> {
-                if(playerIn.getHeldItem(handIn).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
-                    FluidUtil.interactWithFluidHandler(playerIn, handIn, worldIn, pos, hit.getFace());
+                if(playerIn.getItemInHand(handIn).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+                    FluidUtil.interactWithFluidHandler(playerIn, handIn, worldIn, pos, hit.getDirection());
                 } else {
-                    if (!worldIn.isRemote) {
+                    if (!worldIn.isClientSide) {
                         NetworkHooks.openGui((ServerPlayerEntity) playerIn, (InfuserTileEntity) tileentity, pos);
                     }
                 }
@@ -86,29 +86,29 @@ public class InfuserBlock extends Block {
 
     @SuppressWarnings("deprecation")
 	@Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.matchesBlock(newState.getBlock())) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            TileEntity tileentity = worldIn.getBlockEntity(pos);
             if (tileentity instanceof InfuserTileEntity) {
                 tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
                     for(int i = 0; i < handler.getSlots(); ++i) {
-                        InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));
+                        InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));
                     }
                 });
             }
 
-            super.onReplaced(state, worldIn, pos, newState, isMoving);
+            super.onRemove(state, worldIn, pos, newState, isMoving);
         }
     }
 
     @Override
-    public PushReaction getPushReaction(BlockState state) {
+    public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.BLOCK;
     }
 
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+        TileEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof InfuserTileEntity) {
             InfuserTileEntity infuserTile = (InfuserTileEntity) tileentity;
             if(infuserTile.processTime > 0) {
@@ -121,9 +121,9 @@ public class InfuserBlock extends Block {
                 for(int i = 0; i < 3; i++) {
                     double d3 = 0.52D;
                     double d4 = rand.nextDouble() * 0.6D - 0.3D;
-                    double d5 = direction$axis == Direction.Axis.X ? (double)direction.getXOffset() * d3 : d4;
+                    double d5 = direction$axis == Direction.Axis.X ? (double)direction.getStepX() * d3 : d4;
                     double d6 = rand.nextDouble() * 6.0D / 16.0D;
-                    double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getZOffset() * d3 : d4;
+                    double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * d3 : d4;
                     worldIn.addParticle(ParticleTypes.REVERSE_PORTAL, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
                 }
             }

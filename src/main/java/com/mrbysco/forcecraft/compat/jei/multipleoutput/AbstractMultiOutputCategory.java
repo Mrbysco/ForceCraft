@@ -1,6 +1,8 @@
 package com.mrbysco.forcecraft.compat.jei.multipleoutput;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mrbysco.forcecraft.compat.jei.JeiCompat;
+import com.mrbysco.forcecraft.recipe.MultipleOutputFurnaceRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -10,8 +12,6 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.util.Translator;
-import com.mrbysco.forcecraft.compat.jei.JeiCompat;
-import com.mrbysco.forcecraft.recipe.MultipleOutputFurnaceRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
@@ -77,7 +77,7 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 				@Override
 				public void onTooltip(int slot, boolean input, ItemStack stack, List<ITextComponent> list) {
 					if(!input && slot == 2) {
-						list.add(new StringTextComponent(recipe.getSecondaryChance() * 100 + " ").appendSibling(new TranslationTextComponent("forcecraft.gui.jei.category.grinding.tooltip")).mergeStyle(TextFormatting.YELLOW));
+						list.add(new StringTextComponent(recipe.getSecondaryChance() * 100 + " ").append(new TranslationTextComponent("forcecraft.gui.jei.category.grinding.tooltip")).withStyle(TextFormatting.YELLOW));
 					}
 				}
 			});

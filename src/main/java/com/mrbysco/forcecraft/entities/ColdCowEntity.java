@@ -31,13 +31,13 @@ public class ColdCowEntity extends CowEntity implements IColdMob {
 	}
 
 	@Override
-	public boolean canMateWith(AnimalEntity otherAnimal) {
+	public boolean canMate(AnimalEntity otherAnimal) {
 		return false;
 	}
 
 	@Override
-	public void readAdditional(CompoundNBT compound) {
-		super.readAdditional(compound);
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
 
 		if(compound.getString("OriginalMob").isEmpty()) {
 			this.originalTypeLocation = new ResourceLocation("minecraft", "cow");
@@ -47,8 +47,8 @@ public class ColdCowEntity extends CowEntity implements IColdMob {
 	}
 
 	@Override
-	public void writeAdditional(CompoundNBT compound) {
-		super.writeAdditional(compound);
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
 		compound.putString("OriginalMob", this.originalTypeLocation.toString());
 	}
 
@@ -60,29 +60,29 @@ public class ColdCowEntity extends CowEntity implements IColdMob {
 	}
 	
 	public static AttributeModifierMap.MutableAttribute generateAttributes() {
-		return CowEntity.registerAttributes();
+		return CowEntity.createAttributes();
 	}
 
 	@Override
-	protected void updateAITasks() {
+	protected void customServerAiStep() {
 		this.grassTimer = this.eatGrassGoal.getEatingGrassTimer();
-		super.updateAITasks();
+		super.customServerAiStep();
 	}
 
-	public void livingTick() {
-		if (this.world.isRemote) {
+	public void aiStep() {
+		if (this.level.isClientSide) {
 			this.grassTimer = Math.max(0, this.grassTimer - 1);
 		}
 
-		super.livingTick();
+		super.aiStep();
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void handleStatusUpdate(byte id) {
+	public void handleEntityEvent(byte id) {
 		if (id == 10) {
 			this.grassTimer = 40;
 		} else {
-			super.handleStatusUpdate(id);
+			super.handleEntityEvent(id);
 		}
 
 	}
@@ -104,7 +104,7 @@ public class ColdCowEntity extends CowEntity implements IColdMob {
 			float f = ((float)(this.grassTimer - 4) - p_70890_1_) / 32.0F;
 			return ((float)Math.PI / 5F) + 0.21991149F * MathHelper.sin(f * 28.7F);
 		} else {
-			return this.grassTimer > 0 ? ((float)Math.PI / 5F) : this.rotationPitch * ((float)Math.PI / 180F);
+			return this.grassTimer > 0 ? ((float)Math.PI / 5F) : this.xRot * ((float)Math.PI / 180F);
 		}
 	}
 

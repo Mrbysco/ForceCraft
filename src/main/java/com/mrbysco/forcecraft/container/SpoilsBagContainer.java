@@ -18,7 +18,7 @@ public class SpoilsBagContainer extends Container {
     private ItemStack heldStack;
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return !playerIn.isSpectator() && !heldStack.isEmpty();
     }
 
@@ -28,10 +28,10 @@ public class SpoilsBagContainer extends Container {
 
     public static ItemStack getSpoilsBag(PlayerInventory playerInventory) {
         PlayerEntity player = playerInventory.player;
-        if(player.getHeldItemMainhand().getItem() instanceof SpoilsBagItem) {
-            return player.getHeldItemMainhand();
-        } else if(player.getHeldItemOffhand().getItem() instanceof SpoilsBagItem) {
-            return player.getHeldItemOffhand();
+        if(player.getMainHandItem().getItem() instanceof SpoilsBagItem) {
+            return player.getMainHandItem();
+        } else if(player.getOffhandItem().getItem() instanceof SpoilsBagItem) {
+            return player.getOffhandItem();
         }
         return ItemStack.EMPTY;
     }
@@ -39,7 +39,7 @@ public class SpoilsBagContainer extends Container {
     public SpoilsBagContainer(int id, PlayerInventory playerInventory, ItemStack forceBelt) {
         super(ForceContainers.SPOILS_BAG.get(), id);
         if (forceBelt == null || forceBelt.isEmpty()) {
-            playerInventory.player.closeScreen();
+            playerInventory.player.closeContainer();
             return;
         }
 
@@ -53,7 +53,7 @@ public class SpoilsBagContainer extends Container {
             for (int k = 0; k < 8; ++k) {
                 this.addSlot(new SlotItemHandler(itemHandler, k, xPosC + k * 18, yPosC) {
                     @Override
-                    public boolean isItemValid(@Nonnull ItemStack stack) {
+                    public boolean mayPlace(@Nonnull ItemStack stack) {
                         return false;
                     }
                 });
@@ -73,44 +73,44 @@ public class SpoilsBagContainer extends Container {
                 this.addSlot(new Slot(playerInventory, x, xPos + x * 18, yPos + 58));
             }
         } else {
-            playerInventory.player.closeScreen();
+            playerInventory.player.closeContainer();
         }
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
-        super.onContainerClosed(playerIn);
+    public void removed(PlayerEntity playerIn) {
+        super.removed(playerIn);
     }
 
     //Credit to Shadowfacts for this method
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(PlayerEntity player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
 
         if(index <= 8) {
-            Slot slot = inventorySlots.get(index);
+            Slot slot = slots.get(index);
 
-            if (slot != null && slot.getHasStack()) {
-                ItemStack itemstack1 = slot.getStack();
+            if (slot != null && slot.hasItem()) {
+                ItemStack itemstack1 = slot.getItem();
                 itemstack = itemstack1.copy();
 
                 if(itemstack.getItem() instanceof SpoilsBagItem)
                     return ItemStack.EMPTY;
 
-                int containerSlots = inventorySlots.size() - player.inventory.mainInventory.size();
+                int containerSlots = slots.size() - player.inventory.items.size();
                 
                 if (index < containerSlots) {
-                    if (!this.mergeItemStack(itemstack1, containerSlots, inventorySlots.size(), true)) {
+                    if (!this.moveItemStackTo(itemstack1, containerSlots, slots.size(), true)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.mergeItemStack(itemstack1, 0, containerSlots, false)) {
+                } else if (!this.moveItemStackTo(itemstack1, 0, containerSlots, false)) {
                     return ItemStack.EMPTY;
                 }
 
                 if (itemstack1.getCount() == 0) {
-                    slot.putStack(ItemStack.EMPTY);
+                    slot.set(ItemStack.EMPTY);
                 } else {
-                    slot.onSlotChanged();
+                    slot.setChanged();
                 }
 
                 if (itemstack1.getCount() == itemstack.getCount()) {

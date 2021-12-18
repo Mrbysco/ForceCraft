@@ -20,7 +20,7 @@ public class WorldGenHandler {
 				builder.getFeatures(GenerationStage.Decoration.UNDERGROUND_ORES).add(() -> ForceFeatureConfigs.ORE_FORCE);
 			}
 			if(ConfigHandler.COMMON.generateForceTree.get() && category == Category.FOREST) {
-				builder.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ForceFeatureConfigs.FORCE_TREE_VEGETATION);
+				builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ForceFeatureConfigs.FORCE_TREE_VEGETATION);
 			}
 		}
 	}

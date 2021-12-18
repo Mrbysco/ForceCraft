@@ -33,33 +33,33 @@ public class ItemCardItem extends BaseItem {
 	}
 
 
-	private static final ITextComponent BAD_READ = new StringTextComponent("BAD READ. TRY AGAIN.").mergeStyle(TextFormatting.RED);
-	private static final ITextComponent TOO_SLOW = new StringTextComponent("TOO SLOW. TRY AGAIN.").mergeStyle(TextFormatting.RED);
-	private static final ITextComponent TOO_FAST = new StringTextComponent("TOO FAST. TRY AGAIN.").mergeStyle(TextFormatting.RED);
+	private static final ITextComponent BAD_READ = new StringTextComponent("BAD READ. TRY AGAIN.").withStyle(TextFormatting.RED);
+	private static final ITextComponent TOO_SLOW = new StringTextComponent("TOO SLOW. TRY AGAIN.").withStyle(TextFormatting.RED);
+	private static final ITextComponent TOO_FAST = new StringTextComponent("TOO FAST. TRY AGAIN.").withStyle(TextFormatting.RED);
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		if(playerIn.isSneaking()) {
-			if (!worldIn.isRemote) {
-				NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(worldIn, playerIn.getPosition()), playerIn.getPosition());
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		if(playerIn.isShiftKeyDown()) {
+			if (!worldIn.isClientSide) {
+				NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(worldIn, playerIn.blockPosition()), playerIn.blockPosition());
 			}
 		}
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		return super.use(worldIn, playerIn, handIn);
 	}
 
 	@Nullable
 	public INamedContainerProvider getContainer(World worldIn, BlockPos pos) {
 		return new SimpleNamedContainerProvider((id, inventory, player) -> {
-			return new ItemCardContainer(id, inventory, IWorldPosCallable.of(worldIn, pos));
+			return new ItemCardContainer(id, inventory, IWorldPosCallable.create(worldIn, pos));
 		}, new TranslationTextComponent(Reference.MOD_ID + ".container.card"));
 	}
 
 	@Override
-	public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
-		World worldIn = playerIn.world;
-		worldIn.playSound((PlayerEntity)null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.BLOCK_NOTE_BLOCK_DIDGERIDOO, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+	public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
+		World worldIn = playerIn.level;
+		worldIn.playSound((PlayerEntity)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.NOTE_BLOCK_DIDGERIDOO, SoundCategory.NEUTRAL, 1.0F, 1.0F);
 
-		if(worldIn.isRemote) {
+		if(worldIn.isClientSide) {
 			int rand = random.nextInt(3);
 			ITextComponent message;
 			switch (rand) {
@@ -73,26 +73,26 @@ public class ItemCardItem extends BaseItem {
 					message = TOO_FAST;
 					break;
 			}
-			playerIn.sendStatusMessage(message, true);
+			playerIn.displayClientMessage(message, true);
 		}
 
-		return super.itemInteractionForEntity(stack, playerIn, target, hand);
+		return super.interactLivingEntity(stack, playerIn, target, hand);
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		CompoundNBT tag = stack.getOrCreateTag();
 		if(tag.contains("RecipeContents")) {
 			CompoundNBT recipeContents = tag.getCompound("RecipeContents");
-			ItemStack resultStack = ItemStack.read(recipeContents.getCompound("result"));
+			ItemStack resultStack = ItemStack.of(recipeContents.getCompound("result"));
 			tooltip.add(new TranslationTextComponent("forcecraft.item_card.recipe_output",
-					new StringTextComponent(resultStack.getCount() + " " + resultStack.getDisplayName().getString()).mergeStyle(TextFormatting.GRAY)).mergeStyle(TextFormatting.YELLOW));
+					new StringTextComponent(resultStack.getCount() + " " + resultStack.getHoverName().getString()).withStyle(TextFormatting.GRAY)).withStyle(TextFormatting.YELLOW));
 		} else {
-			tooltip.add(new TranslationTextComponent("forcecraft.item_card.unset").mergeStyle(TextFormatting.RED));
+			tooltip.add(new TranslationTextComponent("forcecraft.item_card.unset").withStyle(TextFormatting.RED));
 		}
 		tooltip.add(new StringTextComponent(" "));
-		tooltip.add(new TranslationTextComponent("forcecraft.item_card.recipe_set").mergeStyle(TextFormatting.BOLD));
+		tooltip.add(new TranslationTextComponent("forcecraft.item_card.recipe_set").withStyle(TextFormatting.BOLD));
 
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 }

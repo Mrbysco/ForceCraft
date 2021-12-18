@@ -9,13 +9,13 @@ import net.minecraft.client.renderer.entity.layers.AbstractEyesLayer;
 import net.minecraft.util.ResourceLocation;
 
 public class EndertotEyesLayer<T extends EnderTotEntity> extends AbstractEyesLayer<T, EnderTotModel<T>> {
-	private static final RenderType RENDER_TYPE = RenderType.getEyes(new ResourceLocation(Reference.MOD_ID, "textures/entity/ender_tot_eyes.png"));
+	private static final RenderType RENDER_TYPE = RenderType.eyes(new ResourceLocation(Reference.MOD_ID, "textures/entity/ender_tot_eyes.png"));
 
 	public EndertotEyesLayer(IEntityRenderer<T, EnderTotModel<T>> rendererIn) {
 		super(rendererIn);
 	}
 
-	public RenderType getRenderType() {
+	public RenderType renderType() {
 		return RENDER_TYPE;
 	}
 }

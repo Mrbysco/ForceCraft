@@ -44,8 +44,8 @@ public class ForceToolData {
 	public void attachInformation(List<ITextComponent> tooltip) {
 		if (this.force > 0) {
 			TranslationTextComponent t = new TranslationTextComponent("item.infuser.tooltip.forcelevel");
-			t.appendString("" + this.force);
-			t.mergeStyle(TextFormatting.GOLD);
+			t.append("" + this.force);
+			t.withStyle(TextFormatting.GOLD);
 			tooltip.add(t);
 		}
 	}

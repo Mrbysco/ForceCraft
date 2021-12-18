@@ -28,24 +28,24 @@ public class RedPotionItem extends BaseItem {
     }
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-        if (!worldIn.isRemote) entityLiving.heal(Float.MAX_VALUE);
+    public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+        if (!worldIn.isClientSide) entityLiving.heal(Float.MAX_VALUE);
 
         if (entityLiving instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)entityLiving;
             CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
-            serverplayerentity.addStat(Stats.ITEM_USED.get(this));
+            serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
         }
 
         ItemStack flaskStack = ForceRegistry.FORCE_FLASK.get().getDefaultInstance();
         if (entityLiving instanceof PlayerEntity) {
             PlayerEntity playerIn = (PlayerEntity)entityLiving;
-            if(!playerIn.abilities.isCreativeMode) {
+            if(!playerIn.abilities.instabuild) {
                 stack.shrink(1);
             }
 
-            if(!playerIn.inventory.addItemStackToInventory(flaskStack)) {
-                playerIn.entityDropItem(flaskStack, 0F);
+            if(!playerIn.inventory.add(flaskStack)) {
+                playerIn.spawnAtLocation(flaskStack, 0F);
             }
         }
 
@@ -56,17 +56,17 @@ public class RedPotionItem extends BaseItem {
         return 32;
     }
 
-    public UseAction getUseAction(ItemStack stack) {
+    public UseAction getUseAnimation(ItemStack stack) {
         return UseAction.DRINK;
     }
 
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        return DrinkHelper.startDrinking(worldIn, playerIn, handIn);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        return DrinkHelper.useDrink(worldIn, playerIn, handIn);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.red_potion.tooltip").mergeStyle(TextFormatting.GRAY));
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("item.red_potion.tooltip").withStyle(TextFormatting.GRAY));
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

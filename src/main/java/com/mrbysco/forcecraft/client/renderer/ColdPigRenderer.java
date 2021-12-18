@@ -19,7 +19,7 @@ public class ColdPigRenderer extends MobRenderer<ColdPigEntity, ColdPigModel<Col
 	/**
 	 * Returns the location of an entity's texture.
 	 */
-	public ResourceLocation getEntityTexture(ColdPigEntity entity) {
+	public ResourceLocation getTextureLocation(ColdPigEntity entity) {
 		return PIG_TEXTURES;
 	}
 }

@@ -15,15 +15,15 @@ public class CreeperTotChargeLayer extends EnergyLayer<CreeperTotEntity, Creeper
 		super(p_i50947_1_);
 	}
 
-	protected float func_225634_a_(float p_225634_1_) {
+	protected float xOffset(float p_225634_1_) {
 		return p_225634_1_ * 0.01F;
 	}
 
-	protected ResourceLocation func_225633_a_() {
+	protected ResourceLocation getTextureLocation() {
 		return LIGHTNING_TEXTURE;
 	}
 
-	protected EntityModel<CreeperTotEntity> func_225635_b_() {
+	protected EntityModel<CreeperTotEntity> model() {
 		return this.creeperModel;
 	}
 }

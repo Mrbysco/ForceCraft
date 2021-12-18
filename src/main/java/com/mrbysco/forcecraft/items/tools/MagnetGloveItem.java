@@ -32,7 +32,7 @@ import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_
 public class MagnetGloveItem extends BaseItem {
 
     public MagnetGloveItem(Item.Properties properties) {
-        super(properties.maxStackSize(1));
+        super(properties.stacksTo(1));
     }
 
     @Nullable
@@ -45,25 +45,25 @@ public class MagnetGloveItem extends BaseItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        if(playerIn.isSneaking()) {
-            ItemStack stack = playerIn.getHeldItem(handIn);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        if(playerIn.isShiftKeyDown()) {
+            ItemStack stack = playerIn.getItemInHand(handIn);
             stack.getCapability(CAPABILITY_MAGNET).ifPresent((cap) -> {
                 boolean state = cap.isActivated();
                 cap.setActivation(!state);
-                worldIn.playSound((PlayerEntity)null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                worldIn.playSound((PlayerEntity)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             });
         }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.use(worldIn, playerIn, handIn);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if(entityIn instanceof PlayerEntity && !(entityIn instanceof FakePlayer)) {
-            if(itemSlot >= 0 && itemSlot <= PlayerInventory.getHotbarSize()) {
+            if(itemSlot >= 0 && itemSlot <= PlayerInventory.getSelectionSize()) {
                 IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
                 if (magnetCap != null && magnetCap.isActivated()) {
-                    ((PlayerEntity)entityIn).addPotionEffect(new EffectInstance(ForceEffects.MAGNET.get(), 20, 1, true, false));
+                    ((PlayerEntity)entityIn).addEffect(new EffectInstance(ForceEffects.MAGNET.get(), 20, 1, true, false));
                 }
             }
         }
@@ -100,8 +100,8 @@ public class MagnetGloveItem extends BaseItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
         MagnetStorage.attachInformation(stack, lores);
-        super.addInformation(stack, worldIn, lores, flagIn);
+        super.appendHoverText(stack, worldIn, lores, flagIn);
     }
 }

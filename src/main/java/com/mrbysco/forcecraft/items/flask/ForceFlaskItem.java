@@ -25,44 +25,44 @@ public class ForceFlaskItem extends BaseItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        if(playerIn.isSneaking()) {
-            worldIn.playSound((PlayerEntity)null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
-            if (!worldIn.isRemote) {
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack itemstack = playerIn.getItemInHand(handIn);
+        if(playerIn.isShiftKeyDown()) {
+            worldIn.playSound((PlayerEntity)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.SPLASH_POTION_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+            if (!worldIn.isClientSide) {
                 FlaskEntity flaskEntity = new FlaskEntity(worldIn, playerIn);
                 flaskEntity.setItem(new ItemStack(ForceRegistry.ENTITY_FLASK.get()));
-                flaskEntity.setDirectionAndMovement(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.5F, 1.0F);
-                worldIn.addEntity(flaskEntity);
+                flaskEntity.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, -20.0F, 0.5F, 1.0F);
+                worldIn.addFreshEntity(flaskEntity);
             }
 
-            playerIn.addStat(Stats.ITEM_USED.get(this));
-            if (!playerIn.abilities.isCreativeMode) {
+            playerIn.awardStat(Stats.ITEM_USED.get(this));
+            if (!playerIn.abilities.instabuild) {
                 itemstack.shrink(1);
             }
         }
 
-        return ActionResult.func_233538_a_(itemstack, worldIn.isRemote());
+        return ActionResult.sidedSuccess(itemstack, worldIn.isClientSide());
     }
 
     @Override
-    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
-        World world = entity.world;
-        if (world.isRemote)
+    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity entity, Hand hand) {
+        World world = entity.level;
+        if (world.isClientSide)
             return ActionResultType.PASS;
 
-        if(entity instanceof CowEntity && !entity.isChild()) {
-            playerIn.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+        if(entity instanceof CowEntity && !entity.isBaby()) {
+            playerIn.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
             ItemStack milkStack = ForceRegistry.MILK_FORCE_FLASK.get().getDefaultInstance();
-            if(!playerIn.inventory.addItemStackToInventory(milkStack)) {
-                playerIn.entityDropItem(milkStack, 0F);
+            if(!playerIn.inventory.add(milkStack)) {
+                playerIn.spawnAtLocation(milkStack, 0F);
             }
-            if(!playerIn.abilities.isCreativeMode)
+            if(!playerIn.abilities.instabuild)
                 stack.shrink(1);
 
             return ActionResultType.SUCCESS;
         }
-        return super.itemInteractionForEntity(stack, playerIn, entity, hand);
+        return super.interactLivingEntity(stack, playerIn, entity, hand);
     }
 
     @Override

@@ -16,15 +16,15 @@ public class SlotForceFuel extends Slot {
         super(inventoryIn, slotIndex, xPos, yPos);
     }
 
-    public boolean isItemValid(ItemStack stack) {
+    public boolean mayPlace(ItemStack stack) {
         final ResourceLocation gemTag = new ResourceLocation(Reference.MOD_ID, "force_fuel");
-        ITag<Item> tag = ItemTags.getCollection().getTagByID(gemTag);
-        return stack.getItem().isIn(tag);
+        ITag<Item> tag = ItemTags.getAllTags().getTagOrEmpty(gemTag);
+        return stack.getItem().is(tag);
     }
 
-    public int getItemStackLimit(ItemStack stack)
+    public int getMaxStackSize(ItemStack stack)
     {
-        return isBucket(stack) ? 1 : super.getItemStackLimit(stack);
+        return isBucket(stack) ? 1 : super.getMaxStackSize(stack);
     }
 
     public static boolean isBucket(ItemStack stack)

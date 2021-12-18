@@ -39,56 +39,56 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		World worldIn = context.getWorld();
-		ItemStack stack = context.getItem();
+	public ActionResultType useOn(ItemUseContext context) {
+		World worldIn = context.getLevel();
+		ItemStack stack = context.getItemInHand();
 		PlayerEntity playerIn = context.getPlayer();
-		if (worldIn.isRemote) return ActionResultType.FAIL;
+		if (worldIn.isClientSide) return ActionResultType.FAIL;
 
 		if(hasEntityStored(stack)) {
 			Entity storedEntity = getStoredEntity(stack, worldIn);
-			BlockPos pos = context.getPos().offset(context.getFace());
-			storedEntity.setPositionAndRotation(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-			worldIn.addEntity(storedEntity);
+			BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
+			storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+			worldIn.addFreshEntity(storedEntity);
 
 			CompoundNBT tag = stack.getOrCreateTag();
 			tag.remove("StoredEntity");
 			tag.remove("EntityData");
 			stack.setTag(tag);
 		} else {
-			playerIn.sendMessage(new TranslationTextComponent("item.entity_flask.empty2").mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
+			playerIn.sendMessage(new TranslationTextComponent("item.entity_flask.empty2").withStyle(TextFormatting.RED), Util.NIL_UUID);
 		}
 
 		stack.shrink(1);
 		ItemStack emptyFlask = new ItemStack(ForceRegistry.FORCE_FLASK.get());
-		if(!playerIn.inventory.addItemStackToInventory(emptyFlask)) {
-			playerIn.entityDropItem(emptyFlask, 0F);
+		if(!playerIn.inventory.add(emptyFlask)) {
+			playerIn.spawnAtLocation(emptyFlask, 0F);
 		}
-		return super.onItemUse(context);
+		return super.useOn(context);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack itemstack = playerIn.getHeldItem(handIn);
-		if(playerIn.isSneaking()) {
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack itemstack = playerIn.getItemInHand(handIn);
+		if(playerIn.isShiftKeyDown()) {
 			if(!hasEntityStored(itemstack)) {
-				worldIn.playSound((PlayerEntity)null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
-				if (!worldIn.isRemote) {
+				worldIn.playSound((PlayerEntity)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.SPLASH_POTION_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+				if (!worldIn.isClientSide) {
 					FlaskEntity flaskEntity = new FlaskEntity(worldIn, playerIn);
 					flaskEntity.setItem(itemstack);
-					flaskEntity.setDirectionAndMovement(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, -20.0F, 0.5F, 1.0F);
-					worldIn.addEntity(flaskEntity);
+					flaskEntity.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, -20.0F, 0.5F, 1.0F);
+					worldIn.addFreshEntity(flaskEntity);
 				}
 
-				if (!playerIn.abilities.isCreativeMode) {
+				if (!playerIn.abilities.instabuild) {
 					itemstack.shrink(1);
 				}
 			} else {
-				playerIn.sendMessage(new TranslationTextComponent("item.entity_flask.empty").mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
+				playerIn.sendMessage(new TranslationTextComponent("item.entity_flask.empty").withStyle(TextFormatting.RED), Util.NIL_UUID);
 			}
 		}
 
-		return ActionResult.func_233538_a_(itemstack, worldIn.isRemote());
+		return ActionResult.sidedSuccess(itemstack, worldIn.isClientSide());
 	}
 
 	public boolean hasEntityStored(ItemStack stack) {
@@ -96,10 +96,10 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	public Entity getStoredEntity(ItemStack stack, World worldIn) {
-		EntityType<?> type = ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryCreate(stack.getTag().getString("StoredEntity")));
+		EntityType<?> type = ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryParse(stack.getTag().getString("StoredEntity")));
 		if (type != null) {
 			Entity entity = type.create(worldIn);
-			entity.read(stack.getTag().getCompound("EntityData"));
+			entity.load(stack.getTag().getCompound("EntityData"));
 			return entity;
 		}
 		return null;
@@ -110,7 +110,7 @@ public class EntityFlaskItem extends BaseItem {
 		tag.putString("StoredEntity", EntityType.getKey(livingEntity.getType()).toString());
 
 		CompoundNBT entityTag = new CompoundNBT();
-		livingEntity.writeWithoutTypeId(entityTag);
+		livingEntity.saveWithoutId(entityTag);
 		tag.put("EntityData", entityTag);
 
 		stack.setTag(tag);
@@ -122,22 +122,22 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack stack) {
+	public ITextComponent getName(ItemStack stack) {
 		if (hasEntityStored(stack))
-			return new TranslationTextComponent(super.getTranslationKey(stack), stack.getTag().getString("StoredEntity"));
-		return new TranslationTextComponent(super.getTranslationKey(stack), "Empty");
+			return new TranslationTextComponent(super.getDescriptionId(stack), stack.getTag().getString("StoredEntity"));
+		return new TranslationTextComponent(super.getDescriptionId(stack), "Empty");
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 		if (hasEntityStored(stack)) {
 			CompoundNBT tag = stack.getOrCreateTag();
-			tooltip.add(new TranslationTextComponent("item.entity_flask.tooltip").mergeStyle(TextFormatting.GOLD).appendSibling(
-					new StringTextComponent(String.format("[%s]", tag.getString("StoredEntity"))).mergeStyle(TextFormatting.GRAY)));
+			tooltip.add(new TranslationTextComponent("item.entity_flask.tooltip").withStyle(TextFormatting.GOLD).append(
+					new StringTextComponent(String.format("[%s]", tag.getString("StoredEntity"))).withStyle(TextFormatting.GRAY)));
 			if(tag.contains("EntityData")) {
-				tooltip.add(new TranslationTextComponent("item.entity_flask.tooltip2").mergeStyle(TextFormatting.GOLD).appendSibling(
-						new StringTextComponent(String.format("[%s]", tag.getCompound("EntityData").getDouble("Health"))).mergeStyle(TextFormatting.GRAY)));
+				tooltip.add(new TranslationTextComponent("item.entity_flask.tooltip2").withStyle(TextFormatting.GOLD).append(
+						new StringTextComponent(String.format("[%s]", tag.getCompound("EntityData").getDouble("Health"))).withStyle(TextFormatting.GRAY)));
 			}
 		}
 	}

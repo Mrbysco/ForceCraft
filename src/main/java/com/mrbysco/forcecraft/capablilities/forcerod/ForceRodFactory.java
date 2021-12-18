@@ -65,16 +65,16 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
 
             @Override
             public void teleportPlayerToLocation(PlayerEntity player, GlobalPos globalPos) {
-                if(player.world.getDimensionKey().getLocation().equals(globalPos.getDimension().getLocation())) {
-                    BlockPos pos = globalPos.getPos();
+                if(player.level.dimension().location().equals(globalPos.dimension().location())) {
+                    BlockPos pos = globalPos.pos();
                     int x = pos.getX();
                     int y = pos.getY() + 1;
                     int z = pos.getZ();
 
-                    player.attemptTeleport(x, y, z, true);
+                    player.randomTeleport(x, y, z, true);
                 } else {
-                    if(!player.world.isRemote) {
-                        player.sendMessage(new TranslationTextComponent("forcecraft.ender_rod.dimension.text").mergeStyle(TextFormatting.YELLOW), Util.DUMMY_UUID);
+                    if(!player.level.isClientSide) {
+                        player.sendMessage(new TranslationTextComponent("forcecraft.ender_rod.dimension.text").withStyle(TextFormatting.YELLOW), Util.NIL_UUID);
                     }
                 }
             }

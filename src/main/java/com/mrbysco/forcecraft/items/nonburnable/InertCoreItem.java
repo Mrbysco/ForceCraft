@@ -25,14 +25,14 @@ public class InertCoreItem extends BaseItem {
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        ItemEntity entity = new NonBurnableItemEntity(world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
+        ItemEntity entity = new NonBurnableItemEntity(world, location.getX(), location.getY(), location.getZ(), itemstack);
         if (location instanceof ItemEntity) {
             CompoundNBT tag = new CompoundNBT();
-            location.writeWithoutTypeId(tag);
-            entity.setPickupDelay(tag.getShort("PickupDelay"));
+            location.saveWithoutId(tag);
+            entity.setPickUpDelay(tag.getShort("PickupDelay"));
         }
-        Vector3d locMotion = location.getMotion();
-        entity.setMotion(locMotion.x, locMotion.y, locMotion.z);
+        Vector3d locMotion = location.getDeltaMovement();
+        entity.setDeltaMovement(locMotion.x, locMotion.y, locMotion.z);
         return entity;
     }
 }
