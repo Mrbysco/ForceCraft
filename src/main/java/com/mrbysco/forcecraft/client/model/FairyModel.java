@@ -15,20 +15,14 @@ public class FairyModel<T extends FairyEntity> extends HierarchicalModel<T> {
 	private final ModelPart root;
 	private final ModelPart inner;
 	private final ModelPart leftWings;
-	private final ModelPart leftTopWingR1;
 	private final ModelPart rightWings;
-	private final ModelPart rightTopWingR1;
-	private final ModelPart outer;
 
 	public FairyModel(ModelPart root) {
 		super(RenderType::entityTranslucent);
 		this.root = root;
 		this.inner = root.getChild("inner");
-		this.leftWings = root.getChild("left_wings");
-		this.leftTopWingR1 = root.getChild("left_wings_top");
-		this.rightWings = root.getChild("right_wings");
-		this.rightTopWingR1 = root.getChild("right_wings_top");
-		this.outer = root.getChild("outer");
+		this.leftWings = inner.getChild("left_wings");
+		this.rightWings = inner.getChild("right_wings");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -54,7 +48,7 @@ public class FairyModel<T extends FairyEntity> extends HierarchicalModel<T> {
 						.texOffs(22, 0).addBox(-3.0F, -4.0F, 0.0F, 3.0F, 5.0F, 0.0F),
 				PartPose.offsetAndRotation(-2.0F, -3.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
 
-		partdefinition.addOrReplaceChild("inner", CubeListBuilder.create()
+		partdefinition.addOrReplaceChild("outer", CubeListBuilder.create()
 						.texOffs(0, 0).addBox(-2.0F, -4.0F, -2.0F, 4.0F, 4.0F, 4.0F),
 				PartPose.offset(0.0F, 24.0F, 0.0F));
 
