@@ -28,6 +28,9 @@ import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.world.WorldGenHandler;
 import com.mrbysco.forcecraft.world.feature.ForceFeatureConfigs;
 import com.mrbysco.forcecraft.world.feature.ForceFeatures;
+import com.mrbysco.forcecraft.world.feature.ForcePlacements;
+import com.mrbysco.forcecraft.world.feature.ForceVegetation;
+import com.mrbysco.forcecraft.world.feature.ForceVegetationPlacements;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -115,6 +118,9 @@ public class ForceCraft {
         PacketHandler.init();
         ForceEntities.registerSpawnPlacement();
         ForceFeatureConfigs.initialize();
+        ForcePlacements.initialize();
+        ForceVegetation.initialize();
+        ForceVegetationPlacements.initialize();
     }
 }
 
