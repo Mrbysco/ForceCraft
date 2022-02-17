@@ -1,7 +1,6 @@
 package com.mrbysco.forcecraft.tiles;
 
 import com.google.common.collect.Lists;
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
