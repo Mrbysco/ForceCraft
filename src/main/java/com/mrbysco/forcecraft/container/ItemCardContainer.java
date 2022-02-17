@@ -3,22 +3,22 @@ package com.mrbysco.forcecraft.container;
 import com.mrbysco.forcecraft.items.ItemCardItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.ResultContainer;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.Container;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
@@ -58,8 +58,8 @@ public class ItemCardContainer extends AbstractContainerMenu {
 
 					@Nonnull
 					@Override
-					public ItemStack onTake(final Player player, @Nonnull final ItemStack stack) {
-						return ItemStack.EMPTY;
+					public void onTake(final Player player, @Nonnull final ItemStack stack) {
+
 					}
 
 					@Nonnull
@@ -128,12 +128,12 @@ public class ItemCardContainer extends AbstractContainerMenu {
 			{
 				stack = iRecipe.get().assemble(this.craftMatrix);
 				inventoryResult.setItem(0, stack);
-				serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, stack));
+				serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, 0, stack));
 			}
 			else
 			{
 				inventoryResult.setItem(0, ItemStack.EMPTY);
-				serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, ItemStack.EMPTY));
+				serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, 0, ItemStack.EMPTY));
 			}
 		}
 	}
@@ -206,7 +206,7 @@ public class ItemCardContainer extends AbstractContainerMenu {
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+	public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
 		if (slotId >= 1 && slotId < 10) {
 			// 1 is shift-click
 			if (clickTypeIn == ClickType.PICKUP
@@ -214,18 +214,19 @@ public class ItemCardContainer extends AbstractContainerMenu {
 					|| clickTypeIn == ClickType.SWAP)
 			{
 				final Slot slot = this.slots.get(slotId);
-				final ItemStack dropping = player.inventory.getCarried();
-				return handleSlotClick(slot, dropping);
+				final ItemStack dropping = this.getCarried();
+				handleSlotClick(slot, dropping);
+				return;
 			}
 
-			return ItemStack.EMPTY;
+			return;
 		}
 
 		if (clickTypeIn == ClickType.QUICK_MOVE) {
-			return ItemStack.EMPTY;
+			return;
 		}
 
-		return super.clicked(slotId, dragType, clickTypeIn, player);
+		super.clicked(slotId, dragType, clickTypeIn, player);
 	}
 
 	public ItemStack handleSlotClick(final Slot slotId, final ItemStack stack) {

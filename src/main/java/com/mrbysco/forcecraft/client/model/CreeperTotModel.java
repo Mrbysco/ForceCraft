@@ -1,68 +1,70 @@
 package com.mrbysco.forcecraft.client.model;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.client.model.ListModel;
+import net.minecraft.client.model.HeadedModel;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 
-public class CreeperTotModel<T extends Entity> extends ListModel<T> {
-	private final ModelPart Head;
-	private final ModelPart HeadWear;
-	private final ModelPart Torso;
-	private final ModelPart Leg2;
-	private final ModelPart Leg4;
-	private final ModelPart Leg3;
-	private final ModelPart Leg1;
+public class CreeperTotModel<T extends Entity> extends HierarchicalModel<T> implements HeadedModel {
+	private final ModelPart root;
+	private final ModelPart head;
+	private final ModelPart rightHindLeg;
+	private final ModelPart leftHindLeg;
+	private final ModelPart rightFrontLeg;
+	private final ModelPart leftFrontLeg;
 
-	public CreeperTotModel() {
-		this(0.0F);
+	public CreeperTotModel(ModelPart root) {
+		this.root = root;
+		this.head = root.getChild("head");
+		this.leftHindLeg = root.getChild("right_hind_leg");
+		this.rightHindLeg = root.getChild("left_hind_leg");
+		this.leftFrontLeg = root.getChild("right_front_leg");
+		this.rightFrontLeg = root.getChild("left_front_leg");
 	}
 
-	public CreeperTotModel(float size) {
-		texWidth = 64;
-		texHeight = 32;
+	public static LayerDefinition createBodyLayer() {
+		CubeDeformation cubeDeformation = CubeDeformation.NONE;
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+		partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
+				PartPose.offset(0.0F, 6.0F, 0.0F));
+		partdefinition.addOrReplaceChild("body", CubeListBuilder.create()
+				.texOffs(16, 16).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, cubeDeformation),
+				PartPose.offset(0.0F, 6.0F, 0.0F));
 
-		Head = new ModelPart(this);
-		Head.setPos(0.0F, 14.0F, 0.0F);
-		Head.texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, size, false);
-
-		HeadWear = new ModelPart(this);
-		HeadWear.setPos(0.0F, 14.0F, 0.0F);
-		HeadWear.texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, size + 0.5F, false);
-
-		Torso = new ModelPart(this);
-		Torso.setPos(0.0F, 20.0F, 0.0F);
-		Torso.texOffs(16, 16).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, size, false);
-
-		Leg2 = new ModelPart(this);
-		Leg2.setPos(-2.0F, 20.0F, 4.0F);
-		Leg2.texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, size, false);
-
-		Leg4 = new ModelPart(this);
-		Leg4.setPos(-2.0F, 20.0F, -4.0F);
-		Leg4.texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, size, false);
-
-		Leg3 = new ModelPart(this);
-		Leg3.setPos(2.0F, 20.0F, -4.0F);
-		Leg3.texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, size, false);
-
-		Leg1 = new ModelPart(this);
-		Leg1.setPos(2.0F, 20.0F, 4.0F);
-		Leg1.texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, size, false);
+		CubeListBuilder cubelistbuilder = CubeListBuilder.create()
+				.texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, cubeDeformation);
+		partdefinition.addOrReplaceChild("right_hind_leg", cubelistbuilder, PartPose.offset(-2.0F, 18.0F, 4.0F));
+		partdefinition.addOrReplaceChild("left_hind_leg", cubelistbuilder, PartPose.offset(2.0F, 18.0F, 4.0F));
+		partdefinition.addOrReplaceChild("right_front_leg", cubelistbuilder, PartPose.offset(-2.0F, 18.0F, -4.0F));
+		partdefinition.addOrReplaceChild("left_front_leg", cubelistbuilder, PartPose.offset(2.0F, 18.0F, -4.0F));
+		return LayerDefinition.create(meshdefinition, 64, 32);
 	}
 
-	public Iterable<ModelPart> parts() {
-		return ImmutableList.of(this.Head, this.Torso, this.Leg1, this.Leg2, this.Leg3, this.Leg4);
+	public ModelPart root() {
+		return this.root;
 	}
 
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		this.Head.yRot = netHeadYaw * ((float)Math.PI / 180F);
-		this.Head.xRot = headPitch * ((float)Math.PI / 180F);
-		this.Leg1.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.Leg2.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-		this.Leg3.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-		this.Leg4.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
+		this.head.xRot = headPitch * ((float)Math.PI / 180F);
+		this.rightHindLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.leftHindLeg.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+		this.rightFrontLeg.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+		this.leftFrontLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+	}
+
+	@Override
+	public ModelPart getHead() {
+		return head;
 	}
 }

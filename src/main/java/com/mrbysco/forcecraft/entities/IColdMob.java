@@ -22,7 +22,7 @@ public interface IColdMob {
 				replacementMob.setUUID(mobUUID);
 
 				entityWorld.addFreshEntity(replacementMob);
-				livingEntity.remove(false);
+				livingEntity.discard();
 			}
 		}
 	};

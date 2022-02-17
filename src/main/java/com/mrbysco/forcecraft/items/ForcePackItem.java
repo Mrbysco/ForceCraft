@@ -38,20 +38,20 @@ public class ForcePackItem extends BaseItem {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (playerIn.isShiftKeyDown()) {
-			if (worldIn.isClientSide) {
+			if (level.isClientSide) {
 				com.mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen.openScreen(stack, handIn);
 			}
 		} else {
-			if (!worldIn.isClientSide) {
+			if (!level.isClientSide) {
 				NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(stack), playerIn.blockPosition());
 			}
 		}
 		// If it doesn't nothing bad happens
-		return super.use(worldIn, playerIn, handIn);
+		return super.use(level, playerIn, handIn);
 	}
 
 	@Nullable
@@ -67,7 +67,7 @@ public class ForcePackItem extends BaseItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		int defaultAmount = 8;
 		CompoundTag tag = stack.getOrCreateTag();
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
@@ -76,7 +76,7 @@ public class ForcePackItem extends BaseItem {
 		}
 		tooltip.add(new TextComponent(String.format("%s/%s Slots", tag.getInt(SLOTS_USED), defaultAmount)));
 
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, level, tooltip, flagIn);
 	}
 
 	@Override

@@ -57,70 +57,70 @@ public class ForceMittItem extends DiggerItem {
     }
 
     @Override
-    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if(entityLiving instanceof Player player && state.getMaterial() == Material.LEAVES) {
-            BlockHitResult traceResult = getPlayerPOVHitResult(worldIn, player, Fluid.NONE);
+            BlockHitResult traceResult = getPlayerPOVHitResult(level, player, Fluid.NONE);
             switch (traceResult.getDirection().getAxis()) {
                 case X -> {
-                    breakBlockAt(player, worldIn, stack, pos.above());
-                    breakBlockAt(player, worldIn, stack, pos.below());
-                    breakBlockAt(player, worldIn, stack, pos.north());
-                    breakBlockAt(player, worldIn, stack, pos.north().above());
-                    breakBlockAt(player, worldIn, stack, pos.north().below());
-                    breakBlockAt(player, worldIn, stack, pos.south());
-                    breakBlockAt(player, worldIn, stack, pos.south().above());
-                    breakBlockAt(player, worldIn, stack, pos.south().below());
+                    breakBlockAt(player, level, stack, pos.above());
+                    breakBlockAt(player, level, stack, pos.below());
+                    breakBlockAt(player, level, stack, pos.north());
+                    breakBlockAt(player, level, stack, pos.north().above());
+                    breakBlockAt(player, level, stack, pos.north().below());
+                    breakBlockAt(player, level, stack, pos.south());
+                    breakBlockAt(player, level, stack, pos.south().above());
+                    breakBlockAt(player, level, stack, pos.south().below());
                 }
                 case Z -> {
-                    breakBlockAt(player, worldIn, stack, pos.above());
-                    breakBlockAt(player, worldIn, stack, pos.below());
-                    breakBlockAt(player, worldIn, stack, pos.west());
-                    breakBlockAt(player, worldIn, stack, pos.west().above());
-                    breakBlockAt(player, worldIn, stack, pos.west().below());
-                    breakBlockAt(player, worldIn, stack, pos.east());
-                    breakBlockAt(player, worldIn, stack, pos.east().above());
-                    breakBlockAt(player, worldIn, stack, pos.east().below());
+                    breakBlockAt(player, level, stack, pos.above());
+                    breakBlockAt(player, level, stack, pos.below());
+                    breakBlockAt(player, level, stack, pos.west());
+                    breakBlockAt(player, level, stack, pos.west().above());
+                    breakBlockAt(player, level, stack, pos.west().below());
+                    breakBlockAt(player, level, stack, pos.east());
+                    breakBlockAt(player, level, stack, pos.east().above());
+                    breakBlockAt(player, level, stack, pos.east().below());
                 }
                 case Y -> {
-                    breakBlockAt(player, worldIn, stack, pos.north());
-                    breakBlockAt(player, worldIn, stack, pos.east());
-                    breakBlockAt(player, worldIn, stack, pos.west());
-                    breakBlockAt(player, worldIn, stack, pos.west().north());
-                    breakBlockAt(player, worldIn, stack, pos.west().east());
-                    breakBlockAt(player, worldIn, stack, pos.east());
-                    breakBlockAt(player, worldIn, stack, pos.east().north());
-                    breakBlockAt(player, worldIn, stack, pos.east().east());
+                    breakBlockAt(player, level, stack, pos.north());
+                    breakBlockAt(player, level, stack, pos.east());
+                    breakBlockAt(player, level, stack, pos.west());
+                    breakBlockAt(player, level, stack, pos.west().north());
+                    breakBlockAt(player, level, stack, pos.west().east());
+                    breakBlockAt(player, level, stack, pos.east());
+                    breakBlockAt(player, level, stack, pos.east().north());
+                    breakBlockAt(player, level, stack, pos.east().east());
                 }
             }
 
-            worldIn.playSound((Player) null, pos, ForceSounds.WHOOSH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            level.playSound((Player) null, pos, ForceSounds.WHOOSH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
-        return super.mineBlock(stack, worldIn, state, pos, entityLiving);
+        return super.mineBlock(stack, level, state, pos, entityLiving);
     }
 
-    public void breakBlockAt(Player player, Level worldIn, ItemStack stack, BlockPos pos) {
-        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        if(worldIn.getBlockState(pos).getMaterial() == Material.LEAVES) {
-            BlockState state = worldIn.getBlockState(pos);
+    public void breakBlockAt(Player player, Level level, ItemStack stack, BlockPos pos) {
+        BlockEntity tileEntity = level.getBlockEntity(pos);
+        if(level.getBlockState(pos).getMaterial() == Material.LEAVES) {
+            BlockState state = level.getBlockState(pos);
             if(!ForgeHooks.isCorrectToolForDrops(state, player)) return;
 
-            if(!worldIn.isClientSide) {
-                int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos);
+            if(!level.isClientSide) {
+                int xp = ForgeHooks.onBlockBreakEvent(level, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos);
                 if(xp == -1) {
                     return;
                 }
 
-                FluidState fluidState = worldIn.getFluidState(pos);
+                FluidState fluidState = level.getFluidState(pos);
                 Block block = state.getBlock();
 
-                if(block.onDestroyedByPlayer(state, worldIn, pos, player, true, fluidState)) {
-                    block.playerWillDestroy(worldIn, pos, state, player);
-                    block.playerDestroy(worldIn, player, pos, state, tileEntity, stack);
-                    block.popExperience((ServerLevel) worldIn, pos, xp);
+                if(block.onDestroyedByPlayer(state, level, pos, player, true, fluidState)) {
+                    block.playerWillDestroy(level, pos, state, player);
+                    block.playerDestroy(level, player, pos, state, tileEntity, stack);
+                    block.popExperience((ServerLevel) level, pos, xp);
                 }
 
-                ((ServerLevel)worldIn).sendParticles(ParticleTypes.SWEEP_ATTACK, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 1, 0, 0, 0, 0.0D);
-                PacketHandler.sendPacket(player, new ClientboundBlockUpdatePacket(worldIn, pos));
+                ((ServerLevel)level).sendParticles(ParticleTypes.SWEEP_ATTACK, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 1, 0, 0, 0, 0.0D);
+                PacketHandler.sendPacket(player, new ClientboundBlockUpdatePacket(level, pos));
             }
         }
     }

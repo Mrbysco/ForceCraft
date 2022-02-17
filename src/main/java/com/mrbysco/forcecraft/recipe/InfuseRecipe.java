@@ -3,8 +3,8 @@ package com.mrbysco.forcecraft.recipe;
 import com.google.gson.JsonObject;
 import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
-import com.mrbysco.forcecraft.blocks.infuser.InfuserBlockEntity;
+import com.mrbysco.forcecraft.blockentities.InfuserModifierType;
+import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookTier;
@@ -52,6 +52,11 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 		resultModifier = result; 
 		this.setTier(tier);
 	}
+
+	@Override
+	public boolean isSpecial() {
+		return true;
+	}
 	
 	public int getTime() {
 		return time;
@@ -62,7 +67,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 	}
 
 	@Override
-	public boolean matches(InfuserBlockEntity inv, Level worldIn) {
+	public boolean matches(InfuserBlockEntity inv, Level level) {
 		for(int i = 0; i < inv.handler.getSlots(); i++) {
 			ItemStack stack = inv.handler.getStackInSlot(i);
 			if (i < InfuserBlockEntity.SLOT_TOOL) {

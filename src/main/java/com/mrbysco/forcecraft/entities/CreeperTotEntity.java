@@ -2,6 +2,9 @@ package com.mrbysco.forcecraft.entities;
 
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -10,17 +13,14 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class CreeperTotEntity extends Creeper {
 
-	public CreeperTotEntity(EntityType<? extends Creeper> type, Level worldIn) {
-		super(type, worldIn);
+	public CreeperTotEntity(EntityType<? extends Creeper> type, Level level) {
+		super(type, level);
 	}
 
 	public static AttributeSupplier.Builder generateAttributes() {
@@ -52,7 +52,7 @@ public class CreeperTotEntity extends Creeper {
 				spawnAtLocation(new ItemStack(ForceRegistry.PILE_OF_GUNPOWDER.get(), this.getRandom().nextInt(2) + 1));
 			}
 
-			this.remove();
+			this.discard();
 		}
 	}
 
@@ -70,7 +70,7 @@ public class CreeperTotEntity extends Creeper {
 
 		int[] colors = new int[16];
 		for (int i = 0; i < 16; i++) {
-			colors[i] = DyeColor.byId(i).getColorValue();
+			colors[i] = DyeColor.byId(i).getFireworkColor();
 		}
 		nbt.putIntArray("Colors", colors);
 		nbt.putByte("Type", (byte) 0);
@@ -92,7 +92,7 @@ public class CreeperTotEntity extends Creeper {
 		nbt.putBoolean("Flicker", true);
 
 		int[] colors = new int[1];
-		colors[0] = DyeColor.LIME.getColorValue();
+		colors[0] = DyeColor.LIME.getFireworkColor();
 		nbt.putIntArray("Colors", colors);
 		nbt.putByte("Type", (byte) 3);
 

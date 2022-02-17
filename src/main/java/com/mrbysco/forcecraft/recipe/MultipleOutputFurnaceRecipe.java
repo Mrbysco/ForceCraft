@@ -21,6 +21,11 @@ public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe 
 	}
 
 	@Override
+	public boolean isSpecial() {
+		return true;
+	}
+
+	@Override
 	public ItemStack assemble(Container inv) {
 		return this.resultItems.get(0).copy();
 	}

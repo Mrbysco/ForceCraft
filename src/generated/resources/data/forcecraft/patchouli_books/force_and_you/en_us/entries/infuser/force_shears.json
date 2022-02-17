@@ -1,18 +1,18 @@
 {
   "name": "info.forcecraft.book.force_shears.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:force_shears",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.force_shears_info.text"
     },
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.force_shears_info2.text"
     },
     {
-      "type": "crafting",
+      "type": "patchouli:crafting",
       "recipe": "forcecraft:force_shears",
       "text": "info.forcecraft.book.force_shears_recipe.text"
     }

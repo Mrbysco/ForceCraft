@@ -3,40 +3,40 @@ package com.mrbysco.forcecraft.client.model;
 import com.mrbysco.forcecraft.entities.EnderTotEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class EnderTotModel<T extends EnderTotEntity> extends HumanoidModel<T> {
 	public boolean isCarrying;
 	public boolean isAttacking;
 
-	public EnderTotModel(float scale) {
-		super(0.0F, 8F, 64, 32);
-		float f = 8F;
+	public EnderTotModel(ModelPart root) {
+		super(root);
+	}
 
-		hat = new ModelPart(this);
-		hat.setPos(0.0F, f, 0.0F);
-		hat.texOffs(0, 16).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, scale - 0.5F, false);
-
-		body = new ModelPart(this);
-		body.setPos(0.0F, f, 0.0F);
-		body.texOffs(32, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 8.0F, 4.0F, scale, false);
-
-		rightArm = new ModelPart(this);
-		rightArm.setPos(5.0F, 9.0F, 0.0F);
-		setRotationAngle(rightArm, 0.0F, 0.0F, -0.1F);
-		rightArm.texOffs(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, scale, false);
-
-		leftArm = new ModelPart(this);
-		leftArm.setPos(-5.0F, 9.0F, 0.0F);
-		setRotationAngle(leftArm, 0.0F, 0.0F, 0.1F);
-		leftArm.texOffs(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, scale, true);
-
-		rightLeg = new ModelPart(this);
-		rightLeg.setPos(2.0F, 16.0F, 0.0F);
-		rightLeg.texOffs(56, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F, scale, false);
-
-		leftLeg = new ModelPart(this);
-		leftLeg.setPos(-2.0F, 16.0F, 0.0F);
-		leftLeg.texOffs(56, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F, scale, true);
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = HumanoidModel.createMesh(CubeDeformation.NONE, -14.0F);
+		PartDefinition partdefinition = meshdefinition.getRoot();
+		PartPose partpose = PartPose.offset(0.0F, -13.0F, 0.0F);
+		partdefinition.addOrReplaceChild("hat", CubeListBuilder.create()
+				.texOffs(0, 16).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(-0.5F)), partpose);
+		partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
+				.texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F), partpose);
+		partdefinition.addOrReplaceChild("body", CubeListBuilder.create()
+				.texOffs(32, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 8.0F, 4.0F), PartPose.offset(0.0F, -14.0F, 0.0F));
+		partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create()
+				.texOffs(56, 0).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F), PartPose.offset(-5.0F, -12.0F, 0.0F));
+		partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create()
+				.texOffs(56, 0).mirror().addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F), PartPose.offset(5.0F, -12.0F, 0.0F));
+		partdefinition.addOrReplaceChild("right_leg", CubeListBuilder.create()
+				.texOffs(56, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F), PartPose.offset(-2.0F, -5.0F, 0.0F));
+		partdefinition.addOrReplaceChild("left_leg", CubeListBuilder.create()
+				.texOffs(56, 0).mirror().addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F), PartPose.offset(2.0F, -5.0F, 0.0F));
+		return LayerDefinition.create(meshdefinition, 64, 32);
 	}
 
 	@Override

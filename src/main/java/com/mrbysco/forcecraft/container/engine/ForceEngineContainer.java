@@ -4,7 +4,7 @@ import com.mrbysco.forcecraft.container.engine.slot.FuelSlot;
 import com.mrbysco.forcecraft.container.engine.slot.OutputSlot;
 import com.mrbysco.forcecraft.container.engine.slot.ThrottleSlot;
 import com.mrbysco.forcecraft.registry.ForceContainers;
-import com.mrbysco.forcecraft.tiles.ForceEngineTile;
+import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -18,26 +18,26 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import java.util.Objects;
 
 public class ForceEngineContainer extends AbstractContainerMenu {
-	private ForceEngineTile tile;
+	private ForceEngineBlockEntity tile;
 	private Player player;
 
 	public ForceEngineContainer(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
 		this(windowId, playerInventory, getTileEntity(playerInventory, data));
 	}
 
-	private static ForceEngineTile getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
+	private static ForceEngineBlockEntity getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
 		Objects.requireNonNull(data, "data cannot be null!");
 		final BlockEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 
-		if (tileAtPos instanceof ForceEngineTile) {
-			return (ForceEngineTile) tileAtPos;
+		if (tileAtPos instanceof ForceEngineBlockEntity) {
+			return (ForceEngineBlockEntity) tileAtPos;
 		}
 
 		throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
 	}
 
-	public ForceEngineContainer(int id, Inventory playerInventoryIn, ForceEngineTile te) {
+	public ForceEngineContainer(int id, Inventory playerInventoryIn, ForceEngineBlockEntity te) {
 		super(ForceContainers.FORCE_ENGINE.get(), id);
 		this.tile = te;
 		this.player = playerInventoryIn.player;
@@ -120,7 +120,7 @@ public class ForceEngineContainer extends AbstractContainerMenu {
 		});
 	}
 
-	public ForceEngineTile getTile() {
+	public ForceEngineBlockEntity getTile() {
 		return tile;
 	}
 

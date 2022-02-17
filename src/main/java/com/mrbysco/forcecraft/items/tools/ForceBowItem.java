@@ -2,8 +2,7 @@ package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
+import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModCapability;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
@@ -41,13 +40,13 @@ public class ForceBowItem extends BowItem implements IForceChargingTool {
         super(properties.stacksTo(1).durability(332));
     }
 
-	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
+	public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
 		if (entityLiving instanceof Player playerentity) {
 			boolean flag = playerentity.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
 			ItemStack itemstack = playerentity.getProjectile(stack);
 
 			int i = this.getUseDuration(stack) - timeLeft;
-			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, playerentity, i, !itemstack.isEmpty() || flag);
+			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, level, playerentity, i, !itemstack.isEmpty() || flag);
 			if (i < 0) return;
 
 			if (!itemstack.isEmpty() || flag) {
@@ -58,9 +57,9 @@ public class ForceBowItem extends BowItem implements IForceChargingTool {
 				float f = getPowerForTime(i);
 				if (!((double)f < 0.1D)) {
 					boolean flag1 = playerentity.getAbilities().instabuild || (itemstack.getItem() instanceof ForceArrowItem && ((ForceArrowItem)itemstack.getItem()).isInfinite(itemstack, stack, playerentity));
-					if (!worldIn.isClientSide) {
+					if (!level.isClientSide) {
 						ForceArrowItem arrowitem = (ForceArrowItem)(itemstack.getItem() instanceof ForceArrowItem ? itemstack.getItem() : ForceRegistry.FORCE_ARROW.get());
-						AbstractArrow abstractarrowentity = arrowitem.createArrow(worldIn, itemstack, playerentity);
+						AbstractArrow abstractarrowentity = arrowitem.createArrow(level, itemstack, playerentity);
 						abstractarrowentity = customArrow(abstractarrowentity);
 						abstractarrowentity.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, f * 3.0F, 1.0F);
 						if (f == 1.0F) {
@@ -88,10 +87,10 @@ public class ForceBowItem extends BowItem implements IForceChargingTool {
 							abstractarrowentity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 						}
 
-						worldIn.addFreshEntity(abstractarrowentity);
+						level.addFreshEntity(abstractarrowentity);
 					}
 
-					worldIn.playSound((Player)null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS,
+					level.playSound((Player)null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS,
 							1.0F, 1.0F / (playerentity.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 					if (!flag1 && !playerentity.getAbilities().instabuild) {
 						itemstack.shrink(1);
@@ -112,7 +111,7 @@ public class ForceBowItem extends BowItem implements IForceChargingTool {
     	if(CAPABILITY_TOOLMOD == null) {
             return null;
         }
-        return new ToolModProvider();
+        return new ToolModCapability();
     }
     
     // ShareTag for server->client capability data sync
@@ -125,7 +124,7 @@ public class ForceBowItem extends BowItem implements IForceChargingTool {
 			if(normal == null) {
 				normal = new CompoundTag();
 			}
-			CompoundTag newTag = ToolModStorage.serializeNBT(cap);
+			CompoundTag newTag = ToolModCapability.writeNBT(cap);
 			normal.put(Reference.MOD_ID, newTag);
 		}
 
@@ -140,8 +139,8 @@ public class ForceBowItem extends BowItem implements IForceChargingTool {
 
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-			Tag shareTag = nbt.get(Reference.MOD_ID);
-			ToolModStorage.deserializeNBT(cap, shareTag);
+			CompoundTag shareTag = nbt.getCompound(Reference.MOD_ID);
+			ToolModCapability.readNBT(cap, shareTag);
 		}
 		super.readShareTag(stack, nbt);
 	}
@@ -157,11 +156,11 @@ public class ForceBowItem extends BowItem implements IForceChargingTool {
 	}
     
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lores, TooltipFlag flagIn) {
     	ForceToolData fd = new ForceToolData(stack);
     	fd.attachInformation(lores);
-    	ToolModStorage.attachInformation(stack, lores);
-        super.appendHoverText(stack, worldIn, lores, flagIn);
+    	ToolModCapability.attachInformation(stack, lores);
+        super.appendHoverText(stack, level, lores, flagIn);
     }
 
 	@Override

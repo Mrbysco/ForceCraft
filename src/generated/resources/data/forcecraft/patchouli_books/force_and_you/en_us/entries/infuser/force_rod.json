@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.force_rod.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:force_rod",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.force_rod_info.text"
     },
     {
-      "type": "crafting",
+      "type": "patchouli:crafting",
       "recipe": "forcecraft:force_rod",
       "text": "info.forcecraft.book.force_rod_recipe.text"
     }

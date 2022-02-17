@@ -40,16 +40,16 @@ public class EntityFlaskItem extends BaseItem {
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
-		Level worldIn = context.getLevel();
+		Level level = context.getLevel();
 		ItemStack stack = context.getItemInHand();
 		Player playerIn = context.getPlayer();
-		if (worldIn.isClientSide) return InteractionResult.FAIL;
+		if (level.isClientSide) return InteractionResult.FAIL;
 
 		if(hasEntityStored(stack)) {
-			Entity storedEntity = getStoredEntity(stack, worldIn);
+			Entity storedEntity = getStoredEntity(stack, level);
 			BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
 			storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-			worldIn.addFreshEntity(storedEntity);
+			level.addFreshEntity(storedEntity);
 
 			CompoundTag tag = stack.getOrCreateTag();
 			tag.remove("StoredEntity");
@@ -68,17 +68,17 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack itemstack = playerIn.getItemInHand(handIn);
 		if(playerIn.isShiftKeyDown()) {
 			if(!hasEntityStored(itemstack)) {
-				worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(),
-						SoundEvents.SPLASH_POTION_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (worldIn.random.nextFloat() * 0.4F + 0.8F));
-				if (!worldIn.isClientSide) {
-					FlaskEntity flaskEntity = new FlaskEntity(worldIn, playerIn);
+				level.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(),
+						SoundEvents.SPLASH_POTION_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.random.nextFloat() * 0.4F + 0.8F));
+				if (!level.isClientSide) {
+					FlaskEntity flaskEntity = new FlaskEntity(level, playerIn);
 					flaskEntity.setItem(itemstack);
 					flaskEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), -20.0F, 0.5F, 1.0F);
-					worldIn.addFreshEntity(flaskEntity);
+					level.addFreshEntity(flaskEntity);
 				}
 
 				if (!playerIn.getAbilities().instabuild) {
@@ -89,17 +89,17 @@ public class EntityFlaskItem extends BaseItem {
 			}
 		}
 
-		return InteractionResultHolder.sidedSuccess(itemstack, worldIn.isClientSide());
+		return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
 	}
 
 	public boolean hasEntityStored(ItemStack stack) {
 		return stack.getOrCreateTag().contains("StoredEntity");
 	}
 
-	public Entity getStoredEntity(ItemStack stack, Level worldIn) {
+	public Entity getStoredEntity(ItemStack stack, Level level) {
 		EntityType<?> type = ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryParse(stack.getTag().getString("StoredEntity")));
 		if (type != null) {
-			Entity entity = type.create(worldIn);
+			Entity entity = type.create(level);
 			entity.load(stack.getTag().getCompound("EntityData"));
 			return entity;
 		}
@@ -130,8 +130,8 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		super.appendHoverText(stack, level, tooltip, flagIn);
 		if (hasEntityStored(stack)) {
 			CompoundTag tag = stack.getOrCreateTag();
 			tooltip.add(new TranslatableComponent("item.entity_flask.tooltip").withStyle(ChatFormatting.GOLD).append(

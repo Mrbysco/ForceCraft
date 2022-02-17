@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.damage.entry.name",
-  "category": "tier_0",
+  "category": "forcecraft:tier_0",
   "icon": "forcecraft:claw",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.damage_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:claw"
     }
   ],

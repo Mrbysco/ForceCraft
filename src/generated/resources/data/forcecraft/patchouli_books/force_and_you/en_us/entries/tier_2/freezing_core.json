@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.freezing_core.entry.name",
-  "category": "tier_2",
+  "category": "forcecraft:tier_2",
   "icon": "forcecraft:snow_cookie",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.freezing_core_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:snow_cookie",
       "text": "info.forcecraft.book.upgrade_core_link.text"
     }

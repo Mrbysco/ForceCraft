@@ -7,14 +7,14 @@ import com.mrbysco.forcecraft.items.ItemCardItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.util.FindingUtil;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.NonNullList;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -22,7 +22,6 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ForcePackContainer extends AbstractContainerMenu {
@@ -113,7 +112,7 @@ public class ForcePackContainer extends AbstractContainerMenu {
                             List<ItemStack> buffer = new ArrayList<>();
                             for (ItemStack ingredient : ingredientList) {
                                 if (ingredient != null && !ingredient.isEmpty()) {
-                                    if (consideredTheSameItem(ingredient, recipeStack)) {
+                                    if (ItemStack.isSameItemSameTags(ingredient, recipeStack)) {
                                         int addedCount = ingredient.getCount() + recipeStack.getCount();
                                         int maxCount = ingredient.getMaxStackSize();
                                         if (addedCount <= maxCount) {
@@ -197,15 +196,15 @@ public class ForcePackContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+    public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
         if (slotId >= 0) {
             if (getSlot(slotId).getItem().getItem() instanceof ForcePackItem)
-                return ItemStack.EMPTY;
+                return;
         }
         if (clickTypeIn == ClickType.SWAP)
-            return ItemStack.EMPTY;
+            return;
 
-        return super.clicked(slotId, dragType, clickTypeIn, player);
+        super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
     public int getUpgrades() {
@@ -225,7 +224,7 @@ public class ForcePackContainer extends AbstractContainerMenu {
             if(itemstack.getItem() instanceof ForcePackItem)
                 return ItemStack.EMPTY;
 
-            int containerSlots = slots.size() - player.inventory.items.size();
+            int containerSlots = slots.size() - player.getInventory().items.size();
 
             if (index < containerSlots) {
                 if (!this.moveItemStackTo(itemstack1, containerSlots, slots.size(), true)) {

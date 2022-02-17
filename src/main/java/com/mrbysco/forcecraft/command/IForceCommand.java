@@ -7,10 +7,10 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 
 public interface IForceCommand {
+	boolean needsOp();
 
-	  public boolean needsOp();
+	String getName();
 
-	  public String getName();
+	int execute(CommandContext<CommandSourceStack> ctx, List<String> arguments, Player player);
 
-	  public int execute(CommandContext<CommandSourceStack> ctx, List<String> arguments, Player player);
 }

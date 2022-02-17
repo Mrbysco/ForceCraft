@@ -7,7 +7,7 @@ import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import com.mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
+import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.SimpleContainer;
@@ -31,7 +31,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import java.util.Objects;
 
 public abstract class AbstractForceFurnaceContainer extends AbstractContainerMenu {
-	private AbstractForceFurnaceTile tile;
+	private AbstractForceFurnaceBlockEntity tile;
 	private Player player;
 	private IItemHandler furnaceInventory;
 	private IItemHandler upgradeInventory;
@@ -42,19 +42,19 @@ public abstract class AbstractForceFurnaceContainer extends AbstractContainerMen
 		this(windowId, playerInventory, getTileEntity(playerInventory, data));
 	}
 
-	protected static AbstractForceFurnaceTile getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
+	protected static AbstractForceFurnaceBlockEntity getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
 		Objects.requireNonNull(data, "data cannot be null!");
 		final BlockEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
 
-		if (tileAtPos instanceof AbstractForceFurnaceTile) {
-			return (AbstractForceFurnaceTile) tileAtPos;
+		if (tileAtPos instanceof AbstractForceFurnaceBlockEntity) {
+			return (AbstractForceFurnaceBlockEntity) tileAtPos;
 		}
 
 		throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
 	}
 
-	public AbstractForceFurnaceContainer(int id, Inventory playerInventoryIn, AbstractForceFurnaceTile te) {
+	public AbstractForceFurnaceContainer(int id, Inventory playerInventoryIn, AbstractForceFurnaceBlockEntity te) {
 		super(ForceContainers.FORCE_FURNACE.get(), id);
 		this.tile = te;
 		this.player = playerInventoryIn.player;
@@ -181,7 +181,7 @@ public abstract class AbstractForceFurnaceContainer extends AbstractContainerMen
 	}
 
 	public boolean isFuel(ItemStack stack) {
-		return AbstractForceFurnaceTile.isFuel(stack);
+		return AbstractForceFurnaceBlockEntity.isFuel(stack);
 	}
 
 	public static boolean isUpgrade(ItemStack stack) {
@@ -189,18 +189,18 @@ public abstract class AbstractForceFurnaceContainer extends AbstractContainerMen
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-		if(clickTypeIn == ClickType.PICKUP_ALL && player.inventory.getCarried().getItem() instanceof UpgradeCoreItem) {
-			return ItemStack.EMPTY;
+	public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+		if(clickTypeIn == ClickType.PICKUP_ALL && this.getCarried().getItem() instanceof UpgradeCoreItem) {
+			return;
 		}
 		if (slotId == 3) {
 			Slot slot = getSlot(slotId);
 			if (slot.hasItem() && clickTypeIn != ClickType.QUICK_MOVE) {
 				player.level.playSound((Player) null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.5F, 1.0F);
-				return ItemStack.EMPTY;
+				return;
 			}
 		}
-		return super.clicked(slotId, dragType, clickTypeIn, player);
+		super.clicked(slotId, dragType, clickTypeIn, player);
 	}
 
 	@OnlyIn(Dist.CLIENT)

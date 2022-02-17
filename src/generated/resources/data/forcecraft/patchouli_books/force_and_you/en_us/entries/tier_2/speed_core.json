@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.speed_core.entry.name",
-  "category": "tier_2",
+  "category": "forcecraft:tier_2",
   "icon": "minecraft:sugar",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.speed_core_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:sugar",
       "text": "info.forcecraft.book.upgrade_core_link.text"
     }

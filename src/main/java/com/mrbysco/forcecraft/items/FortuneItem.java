@@ -24,7 +24,7 @@ public class FortuneItem extends BaseItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
         ItemStack stack = playerIn.getItemInHand(handIn);
         CompoundTag nbt;
         if(stack.hasTag()) {
@@ -37,7 +37,7 @@ public class FortuneItem extends BaseItem {
             addMessage(stack, nbt);
         }
 
-        if(!worldIn.isClientSide) {
+        if(!level.isClientSide) {
             if(playerIn != null && playerIn.isShiftKeyDown()) {
                 if(!playerIn.getAbilities().instabuild) {
                     stack.shrink(1);
@@ -50,7 +50,7 @@ public class FortuneItem extends BaseItem {
                 playerIn.sendMessage(new TextComponent(nbt.getString("message")), Util.NIL_UUID);
             }
         }
-        return super.use(worldIn, playerIn, handIn);
+        return super.use(level, playerIn, handIn);
     }
 
     public static void addMessage(ItemStack stack, CompoundTag nbt) {

@@ -4,10 +4,9 @@ import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import com.mrbysco.forcecraft.registry.ForceTags;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class PackItemStackHandler extends ItemStackHandler {
@@ -24,7 +23,7 @@ public class PackItemStackHandler extends ItemStackHandler {
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack) {
 		//Make sure there's no ForcePack-ception
-		return !(stack.getItem() instanceof ForcePackItem) && !stack.getItem().is(ForceTags.HOLDS_ITEMS) && super.isItemValid(slot, stack);
+		return !(stack.getItem() instanceof ForcePackItem) && !stack.is(ForceTags.HOLDS_ITEMS) && super.isItemValid(slot, stack);
 	}
 	
 	public int getSlotsInUse() {
@@ -114,10 +113,10 @@ public class PackItemStackHandler extends ItemStackHandler {
 
 	@Override
 	public void deserializeNBT(CompoundTag nbt) {
-		setUpgrades(nbt.contains(NBT_UPGRADES, Constants.NBT.TAG_INT) ? nbt.getInt(NBT_UPGRADES) : upgrades);
+		setUpgrades(nbt.contains(NBT_UPGRADES, CompoundTag.TAG_INT) ? nbt.getInt(NBT_UPGRADES) : upgrades);
 //		setSize((getUpgrades() + 1) * 8);
 
-		ListTag tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+		ListTag tagList = nbt.getList("Items", CompoundTag.TAG_COMPOUND);
 		for (int i = 0; i < tagList.size(); i++)
 		{
 			CompoundTag itemTags = tagList.getCompound(i);

@@ -1,19 +1,19 @@
 {
   "name": "info.forcecraft.book.requirements.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:infuser",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.requirements_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:force_gem",
       "text": "info.forcecraft.book.requirements_gem.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:upgrade_tome",
       "text": "info.forcecraft.book.requirements_tome.text"
     }

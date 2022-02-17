@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.force.entry.name",
-  "category": "tier_0",
+  "category": "forcecraft:tier_0",
   "icon": "forcecraft:force_nugget",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.force_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:force_nugget"
     }
   ],

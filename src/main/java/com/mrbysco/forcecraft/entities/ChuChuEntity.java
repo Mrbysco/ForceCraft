@@ -20,8 +20,8 @@ import java.util.Random;
 
 public class ChuChuEntity extends Slime {
 
-	public ChuChuEntity(EntityType<? extends Slime> type, Level worldIn) {
-		super(type, worldIn);
+	public ChuChuEntity(EntityType<? extends Slime> type, Level level) {
+		super(type, level);
 	}
 
 	@Override
@@ -49,20 +49,20 @@ public class ChuChuEntity extends Slime {
 		this.xpReward = 1;
 	}
 
-	public static boolean canSpawnHere(EntityType<ChuChuEntity> p_223366_0_, LevelAccessor p_223366_1_, MobSpawnType reason, BlockPos p_223366_3_, Random randomIn) {
-		if (p_223366_1_.getDifficulty() != Difficulty.PEACEFUL) {
-			if (Objects.equals(p_223366_1_.getBiomeName(p_223366_3_), Optional.of(Biomes.SWAMP)) && p_223366_3_.getY() > 50 && p_223366_3_.getY() < 70 && randomIn.nextFloat() < 0.5F && randomIn.nextFloat() < p_223366_1_.getMoonBrightness() && p_223366_1_.getMaxLocalRawBrightness(p_223366_3_) <= randomIn.nextInt(8)) {
-				return checkMobSpawnRules(p_223366_0_, p_223366_1_, reason, p_223366_3_, randomIn);
+	public static boolean canSpawnHere(EntityType<ChuChuEntity> chuEntityEntityType, LevelAccessor level, MobSpawnType reason, BlockPos pos, Random randomIn) {
+		if (level.getDifficulty() != Difficulty.PEACEFUL) {
+			if (Objects.equals(level.getBiomeName(pos), Optional.of(Biomes.SWAMP)) && pos.getY() > 50 && pos.getY() < 70 && randomIn.nextFloat() < 0.5F && randomIn.nextFloat() < level.getMoonBrightness() && level.getMaxLocalRawBrightness(pos) <= randomIn.nextInt(8)) {
+				return checkMobSpawnRules(chuEntityEntityType, level, reason, pos, randomIn);
 			}
 
-			if (!(p_223366_1_ instanceof WorldGenLevel)) {
+			if (!(level instanceof WorldGenLevel)) {
 				return false;
 			}
 
-			ChunkPos chunkpos = new ChunkPos(p_223366_3_);
-			boolean flag = WorldgenRandom.seedSlimeChunk(chunkpos.x, chunkpos.z, ((WorldGenLevel)p_223366_1_).getSeed(), 987234911L).nextInt(10) == 0;
-			if (randomIn.nextInt(10) == 0 && flag && p_223366_3_.getY() < 40) {
-				return checkMobSpawnRules(p_223366_0_, p_223366_1_, reason, p_223366_3_, randomIn);
+			ChunkPos chunkpos = new ChunkPos(pos);
+			boolean flag = WorldgenRandom.seedSlimeChunk(chunkpos.x, chunkpos.z, ((WorldGenLevel)level).getSeed(), 987234911L).nextInt(10) == 0;
+			if (randomIn.nextInt(10) == 0 && flag && pos.getY() < 40) {
+				return checkMobSpawnRules(chuEntityEntityType, level, reason, pos, randomIn);
 			}
 		}
 

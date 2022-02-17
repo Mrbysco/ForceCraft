@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.client.gui.widgets;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -61,33 +62,33 @@ public class ProgressBar extends GuiComponent {
         return (int) (min != 0 && max != 0 ? min / max * height : 0);
     }
 
-    public void draw(PoseStack matrixStack, Minecraft mc) {
+    public void draw(PoseStack poseStack, Minecraft mc) {
 //        GlStateManager.color4f(232.0F, 244.0F, 66.0F, 12.0F);
 //
-        mc.getTextureManager().bind(texture);
+        RenderSystem.setShaderTexture(0, texture);
         switch (direction) {
             case DIAGONAL_UP_LEFT -> {
-                this.blit(matrixStack, positionX, positionY, textureX, textureY, width, height);
-                this.blit(matrixStack, positionX, positionY, positionX, positionY, width - getAdjustedWidth(), height - getAdjustedHeight());
+                this.blit(poseStack, positionX, positionY, textureX, textureY, width, height);
+                this.blit(poseStack, positionX, positionY, positionX, positionY, width - getAdjustedWidth(), height - getAdjustedHeight());
             }
             case DIAGONAL_UP_RIGHT -> {
-                this.blit(matrixStack, positionX, positionY, textureX, textureY, width, height);
-                this.blit(matrixStack, positionX + getAdjustedWidth(), positionY, positionX + getAdjustedWidth(), positionY, width - getAdjustedWidth(), height - getAdjustedHeight());
+                this.blit(poseStack, positionX, positionY, textureX, textureY, width, height);
+                this.blit(poseStack, positionX + getAdjustedWidth(), positionY, positionX + getAdjustedWidth(), positionY, width - getAdjustedWidth(), height - getAdjustedHeight());
             }
             case DIAGONAL_DOWN_LEFT -> {
-                this.blit(matrixStack, positionX, positionY, textureX, textureY, width, height);
-                this.blit(matrixStack, positionX, positionY + getAdjustedHeight(), positionX, positionY + getAdjustedHeight(), width - getAdjustedWidth(), height - getAdjustedHeight());
+                this.blit(poseStack, positionX, positionY, textureX, textureY, width, height);
+                this.blit(poseStack, positionX, positionY + getAdjustedHeight(), positionX, positionY + getAdjustedHeight(), width - getAdjustedWidth(), height - getAdjustedHeight());
             }
-            case DIAGONAL_DOWN_RIGHT -> this.blit(matrixStack, positionX, positionY, textureX, textureY, getAdjustedWidth(), getAdjustedHeight());
+            case DIAGONAL_DOWN_RIGHT -> this.blit(poseStack, positionX, positionY, textureX, textureY, getAdjustedWidth(), getAdjustedHeight());
             case DOWN_TO_UP -> //the only one that gets used
-                    this.blit(matrixStack, positionX, positionY, textureX, textureY, width, height - getAdjustedHeight());
-            case LEFT_TO_RIGHT -> this.blit(matrixStack, positionX, positionY, textureX, textureY, getAdjustedWidth(), height);
+                    this.blit(poseStack, positionX, positionY, textureX, textureY, width, height - getAdjustedHeight());
+            case LEFT_TO_RIGHT -> this.blit(poseStack, positionX, positionY, textureX, textureY, getAdjustedWidth(), height);
             case RIGHT_TO_LEFT -> {
-                this.blit(matrixStack, positionX, positionY, textureX, textureY, width, height);
-                this.blit(matrixStack, positionX, positionY, positionX, positionY, width - getAdjustedWidth(), height);
+                this.blit(poseStack, positionX, positionY, textureX, textureY, width, height);
+                this.blit(poseStack, positionX, positionY, positionX, positionY, width - getAdjustedWidth(), height);
             }
-            case UP_TO_DOWN -> this.blit(matrixStack, positionX, positionY, textureX, textureY, width, getAdjustedHeight());
-            default -> this.blit(matrixStack, positionX, positionY, textureX, textureY, width, height);
+            case UP_TO_DOWN -> this.blit(poseStack, positionX, positionY, textureX, textureY, width, getAdjustedHeight());
+            default -> this.blit(poseStack, positionX, positionY, textureX, textureY, width, height);
         }
     }
 

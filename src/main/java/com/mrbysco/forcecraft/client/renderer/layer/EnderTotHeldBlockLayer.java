@@ -1,19 +1,19 @@
 package com.mrbysco.forcecraft.client.renderer.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.mrbysco.forcecraft.client.model.EnderTotModel;
 import com.mrbysco.forcecraft.entities.EnderTotEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import com.mojang.math.Vector3f;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class EnderTotHeldBlockLayer extends RenderLayer<EnderTotEntity, EnderTotModel<EnderTotEntity>> {
-	public EnderTotHeldBlockLayer(RenderLayerParent<EnderTotEntity, EnderTotModel<EnderTotEntity>> p_i50949_1_) {
-		super(p_i50949_1_);
+	public EnderTotHeldBlockLayer(RenderLayerParent<EnderTotEntity, EnderTotModel<EnderTotEntity>> renderLayerParent) {
+		super(renderLayerParent);
 	}
 
 	public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EnderTotEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {

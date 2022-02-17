@@ -25,16 +25,16 @@ public class ForceFlaskItem extends BaseItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         if(playerIn.isShiftKeyDown()) {
-            worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.SPLASH_POTION_THROW,
-                    SoundSource.NEUTRAL, 0.5F, 0.4F / (worldIn.random.nextFloat() * 0.4F + 0.8F));
-            if (!worldIn.isClientSide) {
-                FlaskEntity flaskEntity = new FlaskEntity(worldIn, playerIn);
+            level.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.SPLASH_POTION_THROW,
+                    SoundSource.NEUTRAL, 0.5F, 0.4F / (level.random.nextFloat() * 0.4F + 0.8F));
+            if (!level.isClientSide) {
+                FlaskEntity flaskEntity = new FlaskEntity(level, playerIn);
                 flaskEntity.setItem(new ItemStack(ForceRegistry.ENTITY_FLASK.get()));
                 flaskEntity.shootFromRotation(playerIn, playerIn.xRotO, playerIn.getYRot(), -20.0F, 0.5F, 1.0F);
-                worldIn.addFreshEntity(flaskEntity);
+                level.addFreshEntity(flaskEntity);
             }
 
             playerIn.awardStat(Stats.ITEM_USED.get(this));
@@ -43,7 +43,7 @@ public class ForceFlaskItem extends BaseItem {
             }
         }
 
-        return InteractionResultHolder.sidedSuccess(itemstack, worldIn.isClientSide());
+        return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
     }
 
     @Override

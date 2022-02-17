@@ -28,9 +28,9 @@ import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.world.WorldGenHandler;
 import com.mrbysco.forcecraft.world.feature.ForceFeatureConfigs;
 import com.mrbysco.forcecraft.world.feature.ForceFeatures;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
@@ -94,6 +94,8 @@ public class ForceCraft {
         MinecraftForge.EVENT_BUS.register(new WorldGenHandler());
         MinecraftForge.EVENT_BUS.addListener(NonBurnableItemEntity.EventHandler::onExpire); //Expire event of NonBurnableItemEntity
 
+        MinecraftForge.EVENT_BUS.addListener(CapabilityHandler::register);
+
         MinecraftForge.EVENT_BUS.addListener(ForceEntities::addSpawns);
         eventBus.addListener(ForceEntities::registerEntityAttributes);
 
@@ -101,6 +103,8 @@ public class ForceCraft {
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             eventBus.addListener(ClientHandler::onClientSetup);
+            eventBus.addListener(ClientHandler::registerEntityRenders);
+            eventBus.addListener(ClientHandler::registerLayerDefinitions);
             eventBus.addListener(ClientHandler::registerItemColors);
             MinecraftForge.EVENT_BUS.addListener(KeybindHandler::onClientTick);
         });
@@ -109,7 +113,6 @@ public class ForceCraft {
     private void setup(final FMLCommonSetupEvent event) {
         ForceTags.initialize();
         PacketHandler.init();
-        CapabilityHandler.register();
         ForceEntities.registerSpawnPlacement();
         ForceFeatureConfigs.initialize();
     }

@@ -1,19 +1,19 @@
 package com.mrbysco.forcecraft.client.gui.engine;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
 import com.mrbysco.forcecraft.client.util.RenderHelper;
 import com.mrbysco.forcecraft.container.engine.ForceEngineContainer;
-import com.mrbysco.forcecraft.tiles.ForceEngineTile;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,28 +31,28 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineContai
 	}
 
 	@Override
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(matrixStack);
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(poseStack);
 
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(matrixStack, mouseX, mouseY);
+		super.render(poseStack, mouseX, mouseY, partialTicks);
+		this.renderTooltip(poseStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
-		this.minecraft.getTextureManager().bind(TEXTURE);
-		this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+	protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
+		RenderSystem.setShaderTexture(0, TEXTURE);
+		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
-		this.drawFuelTank(matrixStack);
-		this.drawThrottleTank(matrixStack);
+		this.drawFuelTank(poseStack);
+		this.drawThrottleTank(poseStack);
 	}
 
 	@Override
-	protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
 		int actualMouseX = mouseX - ((this.width - this.imageWidth) / 2);
 		int actualMouseY = mouseY - ((this.height - this.imageHeight) / 2);
 
-		ForceEngineTile tile = getMenu().getTile();
+		ForceEngineBlockEntity tile = getMenu().getTile();
 		if (isHovering(66, 11, 16, 58, mouseX, mouseY)) {
 			List<Component> text = new ArrayList<>();
 			if (tile.getFuelFluid() == null) {
@@ -65,7 +65,7 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineContai
 				}
 			}
 
-			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
+			renderComponentTooltip(poseStack, text, actualMouseX, actualMouseY);
 		}
 
 		if (isHovering(94, 11, 16, 58, mouseX, mouseY)) {
@@ -80,11 +80,11 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineContai
 				}
 			}
 
-			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
+			renderComponentTooltip(poseStack, text, actualMouseX, actualMouseY);
 		}
 	}
 
-	private void drawFuelTank(PoseStack matrixStack) {
+	private void drawFuelTank(PoseStack poseStack) {
 		if (menu.getTile() == null || menu.getTile().getFuelFluid() == null) {
 			return;
 		}
@@ -92,11 +92,11 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineContai
 		float tankPercentage = RenderHelper.getTankPercentage(getMenu().getTile().getFuelAmount(), 10000);
 		RenderHelper.drawFluidTankInGUI(fluidStack, leftPos + 66, topPos + 11, tankPercentage, 58);
 
-		minecraft.textureManager.bind(TEXTURE);
-		blit(matrixStack, leftPos + 66, topPos + 11, 176, 0, 16, 64);
+		RenderSystem.setShaderTexture(0, TEXTURE);
+		blit(poseStack, leftPos + 66, topPos + 11, 176, 0, 16, 64);
 	}
 
-	private void drawThrottleTank(PoseStack matrixStack) {
+	private void drawThrottleTank(PoseStack poseStack) {
 		if (menu.getTile() == null || menu.getTile().getThrottleFluid() == null) {
 			return;
 		}
@@ -104,8 +104,8 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineContai
 		float tankPercentage = RenderHelper.getTankPercentage(getMenu().getTile().getThrottleAmount(), 10000);
 		RenderHelper.drawFluidTankInGUI(fluidStack, leftPos + 94, topPos + 11, tankPercentage, 58);
 
-		minecraft.textureManager.bind(TEXTURE);
-		blit(matrixStack, leftPos + 94, topPos + 11, 176, 0, 16, 64);
+		RenderSystem.setShaderTexture(0, TEXTURE);
+		blit(poseStack, leftPos + 94, topPos + 11, 176, 0, 16, 64);
 	}
 
 }

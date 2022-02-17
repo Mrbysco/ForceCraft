@@ -23,6 +23,11 @@ public class FreezingRecipe extends MultipleOutputFurnaceRecipe{
 		super(ForceRecipes.FREEZING, idIn, groupIn, ingredientIn, results, 1.0F, experienceIn, cookTimeIn);
 	}
 
+	@Override
+	public boolean isSpecial() {
+		return true;
+	}
+
 	public ItemStack getToastSymbol() {
 		return new ItemStack(ForceRegistry.FREEZING_CORE.get());
 	}

@@ -19,7 +19,7 @@ public class SlotForceFuel extends Slot {
     public boolean mayPlace(ItemStack stack) {
         final ResourceLocation gemTag = new ResourceLocation(Reference.MOD_ID, "force_fuel");
         Tag<Item> tag = ItemTags.getAllTags().getTagOrEmpty(gemTag);
-        return stack.getItem().is(tag);
+        return stack.is(tag);
     }
 
     public int getMaxStackSize(ItemStack stack)

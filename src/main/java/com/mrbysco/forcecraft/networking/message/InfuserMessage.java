@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.networking.message;
 
-import com.mrbysco.forcecraft.blocks.infuser.InfuserContainer;
+import com.mrbysco.forcecraft.container.infuser.InfuserContainer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.network.NetworkEvent;

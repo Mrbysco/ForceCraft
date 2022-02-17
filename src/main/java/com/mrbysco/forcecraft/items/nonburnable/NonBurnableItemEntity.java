@@ -14,12 +14,12 @@ import javax.annotation.Nonnull;
 
 public class NonBurnableItemEntity extends ItemEntity {
 
-    public NonBurnableItemEntity(EntityType<? extends ItemEntity> entityType, Level worldIn) {
-        super(entityType, worldIn);
+    public NonBurnableItemEntity(EntityType<? extends ItemEntity> entityType, Level level) {
+        super(entityType, level);
     }
 
-    public NonBurnableItemEntity(Level worldIn, double x, double y, double z, ItemStack stack) {
-        super(worldIn, x, y, z, stack);
+    public NonBurnableItemEntity(Level level, double x, double y, double z, ItemStack stack) {
+        super(level, x, y, z, stack);
     }
 
     @Override

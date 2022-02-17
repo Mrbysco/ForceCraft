@@ -4,10 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
-
-import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemButton extends Button {
 	protected final ItemStack buttonStack;
@@ -21,11 +19,11 @@ public class ItemButton extends Button {
 	}
 
 	@Override
-	public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
 		//RENDER THE STACK
 		Minecraft minecraft = Minecraft.getInstance();
 		ItemRenderer itemRender = minecraft.getItemRenderer();
 		itemRender.renderGuiItem(this.buttonStack, this.x, this.y);
-//		super.renderWidget(matrixStack, mouseX, mouseY, partialTicks);
+//		super.renderWidget(poseStack, mouseX, mouseY, partialTicks);
 	}
 }

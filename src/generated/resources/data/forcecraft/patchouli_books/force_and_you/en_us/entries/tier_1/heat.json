@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.heat.entry.name",
-  "category": "tier_1",
+  "category": "forcecraft:tier_1",
   "icon": "forcecraft:golden_power_source",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.heat_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:golden_power_source"
     }
   ],

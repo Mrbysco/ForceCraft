@@ -1,12 +1,13 @@
 package com.mrbysco.forcecraft.client.gui.pack;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.container.ForcePackContainer;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 public class ForcePackScreen extends AbstractContainerScreen<ForcePackContainer> {
 
@@ -24,21 +25,21 @@ public class ForcePackScreen extends AbstractContainerScreen<ForcePackContainer>
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(poseStack);
+        super.render(poseStack, mouseX, mouseY, partialTicks);
+        this.renderTooltip(poseStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
         switch (this.menu.getUpgrades()) {
-            default -> this.minecraft.getTextureManager().bind(this.TEXTURE);
-            case 1 -> this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_1);
-            case 2 -> this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_2);
-            case 3 -> this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_3);
-            case 4 -> this.minecraft.getTextureManager().bind(this.TEXTURE_UPGRADE_4);
+            default -> RenderSystem.setShaderTexture(0, this.TEXTURE);
+            case 1 -> RenderSystem.setShaderTexture(0, this.TEXTURE_UPGRADE_1);
+            case 2 -> RenderSystem.setShaderTexture(0, this.TEXTURE_UPGRADE_2);
+            case 3 -> RenderSystem.setShaderTexture(0, this.TEXTURE_UPGRADE_3);
+            case 4 -> RenderSystem.setShaderTexture(0, this.TEXTURE_UPGRADE_4);
         }
-        this.blit(matrixStack, this.leftPos, this.topPos, 0,0,this.imageWidth, this.imageHeight);
+        this.blit(poseStack, this.leftPos, this.topPos, 0,0,this.imageWidth, this.imageHeight);
     }
 }

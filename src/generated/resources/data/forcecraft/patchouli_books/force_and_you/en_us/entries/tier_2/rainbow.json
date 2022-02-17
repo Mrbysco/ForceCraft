@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.rainbow.entry.name",
-  "category": "tier_2",
+  "category": "forcecraft:tier_2",
   "icon": "minecraft:blue_dye",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.rainbow_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:blue_dye"
     }
   ],

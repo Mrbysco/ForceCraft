@@ -17,12 +17,12 @@ public class BottledWitherItem extends BaseItem {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        Level worldIn = context.getLevel();
-        if (!worldIn.isClientSide) {
+        Level level = context.getLevel();
+        if (!level.isClientSide) {
             BlockPos pos = context.getClickedPos();
-            WitherBoss wither = new WitherBoss(EntityType.WITHER, worldIn);
+            WitherBoss wither = new WitherBoss(EntityType.WITHER, level);
             wither.moveTo(pos.getX(), pos.getY() + 2.0, pos.getZ(), 0.0F, 0.0F);
-            worldIn.addFreshEntity(wither);
+            level.addFreshEntity(wither);
         }
 
         Player player = context.getPlayer();

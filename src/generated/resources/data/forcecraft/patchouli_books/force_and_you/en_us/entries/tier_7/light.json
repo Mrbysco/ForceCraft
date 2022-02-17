@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.light.entry.name",
-  "category": "tier_7",
+  "category": "forcecraft:tier_7",
   "icon": "minecraft:glowstone",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.light_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:glowstone"
     }
   ],

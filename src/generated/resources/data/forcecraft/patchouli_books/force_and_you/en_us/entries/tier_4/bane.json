@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.bane.entry.name",
-  "category": "tier_4",
+  "category": "forcecraft:tier_4",
   "icon": "minecraft:spider_eye",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.bane_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:spider_eye",
       "text": "info.forcecraft.book.bane_info.text2"
     }

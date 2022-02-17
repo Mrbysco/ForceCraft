@@ -1,8 +1,7 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.forcewrench.ForceWrenchProvider;
-import com.mrbysco.forcecraft.capablilities.forcewrench.ForceWrenchStorage;
+import com.mrbysco.forcecraft.capablilities.forcewrench.ForceWrenchCapability;
 import com.mrbysco.forcecraft.capablilities.forcewrench.IForceWrench;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
@@ -81,7 +80,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
         if(CAPABILITY_FORCEWRENCH == null) {
             return null;
         }
-        return new ForceWrenchProvider();
+        return new ForceWrenchCapability();
     }
 
     private InteractionResult serializeNBT(Level world, BlockPos pos, Player player, InteractionHand hand){
@@ -148,7 +147,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 
         IForceWrench cap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
         if(cap != null) {
-            CompoundTag shareTag = ForceWrenchStorage.serializeNBT(cap);
+            CompoundTag shareTag = ForceWrenchCapability.writeNBT(cap);
             if(nbt == null) {
                 nbt = new CompoundTag();
             }
@@ -165,16 +164,16 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 
         IForceWrench cap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
         if(cap != null) {
-            Tag shareTag = nbt.get(Reference.MOD_ID);
-            ForceWrenchStorage.deserializeNBT(cap, shareTag);
+            CompoundTag shareTag = nbt.getCompound(Reference.MOD_ID);
+            ForceWrenchCapability.readNBT(cap, shareTag);
         }
         super.readShareTag(stack, nbt);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
-        ForceWrenchStorage.attachInformation(stack, lores);
-        super.appendHoverText(stack, worldIn, lores, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lores, TooltipFlag flagIn) {
+        ForceWrenchCapability.attachInformation(stack, lores);
+        super.appendHoverText(stack, level, lores, flagIn);
     }
 
 	@Override

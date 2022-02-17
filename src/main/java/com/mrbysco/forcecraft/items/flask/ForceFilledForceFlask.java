@@ -30,8 +30,8 @@ public class ForceFilledForceFlask extends BaseItem {
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
-        if (!worldIn.isClientSide) entityLiving.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 600, 2, false, false));
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
+        if (!level.isClientSide) entityLiving.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 600, 2, false, false));
 
         if (entityLiving instanceof ServerPlayer serverplayerentity) {
             CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
@@ -60,14 +60,14 @@ public class ForceFilledForceFlask extends BaseItem {
         return UseAnim.DRINK;
     }
 
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
-        return ItemUtils.startUsingInstantly(worldIn, playerIn, handIn);
+    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+        return ItemUtils.startUsingInstantly(level, playerIn, handIn);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
         tooltip.add(new TranslatableComponent("item.force_filled_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, level, tooltip, flagIn);
     }
 
     @Override

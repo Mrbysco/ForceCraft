@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.sturdy.entry.name",
-  "category": "tier_6",
+  "category": "forcecraft:tier_6",
   "icon": "minecraft:obsidian",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.sturdy_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:obsidian"
     }
   ],

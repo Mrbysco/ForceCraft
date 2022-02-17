@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.bottled_wither.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:bottled_wither",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.bottled_wither_info.text"
     },
     {
-      "type": "entity",
+      "type": "patchouli:entity",
       "entity": "minecraft:wither"
     }
   ]

@@ -2,10 +2,11 @@ package com.mrbysco.forcecraft.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.client.ClientHandler;
 import com.mrbysco.forcecraft.client.model.CreeperTotModel;
 import com.mrbysco.forcecraft.client.renderer.layer.CreeperTotChargeLayer;
 import com.mrbysco.forcecraft.entities.CreeperTotEntity;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -13,9 +14,9 @@ import net.minecraft.util.Mth;
 public class CreeperTotRenderer extends MobRenderer<CreeperTotEntity, CreeperTotModel<CreeperTotEntity>> {
 	private static final ResourceLocation CREEPER_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/creeper_tot.png");
 
-	public CreeperTotRenderer(EntityRenderDispatcher renderManagerIn) {
-		super(renderManagerIn, new CreeperTotModel<>(), 0.2F);
-		this.addLayer(new CreeperTotChargeLayer(this));
+	public CreeperTotRenderer(EntityRendererProvider.Context context) {
+		super(context, new CreeperTotModel(context.bakeLayer(ClientHandler.CREEPER_TOT)), 0.2F);
+		this.addLayer(new CreeperTotChargeLayer(this, context.getModelSet()));
 	}
 
 	protected void scale(CreeperTotEntity entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {

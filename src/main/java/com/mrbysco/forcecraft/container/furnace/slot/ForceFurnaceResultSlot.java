@@ -1,8 +1,9 @@
 package com.mrbysco.forcecraft.container.furnace.slot;
 
-import com.mrbysco.forcecraft.tiles.AbstractForceFurnaceTile;
+import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -33,10 +34,9 @@ public class ForceFurnaceResultSlot extends SlotItemHandler {
 		return super.remove(amount);
 	}
 
-	public ItemStack onTake(Player thePlayer, ItemStack stack) {
+	public void onTake(Player thePlayer, ItemStack stack) {
 		this.checkTakeAchievements(stack);
 		super.onTake(thePlayer, stack);
-		return stack;
 	}
 
 	/**
@@ -53,11 +53,11 @@ public class ForceFurnaceResultSlot extends SlotItemHandler {
 	 */
 	protected void checkTakeAchievements(ItemStack stack) {
 		stack.onCraftedBy(this.player.level, this.player, this.removeCount);
-		if (!this.player.level.isClientSide && this.container instanceof AbstractForceFurnaceTile) {
-			((AbstractForceFurnaceTile)this.container).unlockRecipes(this.player);
+		if (!this.player.level.isClientSide && this.container instanceof AbstractForceFurnaceBlockEntity) {
+			((AbstractForceFurnaceBlockEntity)this.container).unlockRecipes(this.player);
 		}
 
 		this.removeCount = 0;
-		net.minecraftforge.fml.hooks.BasicEventHooks.firePlayerSmeltedEvent(this.player, stack);
+		ForgeEventFactory.firePlayerSmeltedEvent(this.player, stack);
 	}
 }

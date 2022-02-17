@@ -23,6 +23,11 @@ public class GrindingRecipe extends MultipleOutputFurnaceRecipe{
 		super(ForceRecipes.GRINDING, idIn, groupIn, ingredientIn, results, chance, experienceIn, cookTimeIn);
 	}
 
+	@Override
+	public boolean isSpecial() {
+		return true;
+	}
+
 	public ItemStack getToastSymbol() {
 		return new ItemStack(ForceRegistry.GRINDING_CORE.get());
 	}

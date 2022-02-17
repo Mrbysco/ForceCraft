@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.wing.entry.name",
-  "category": "tier_5",
+  "category": "forcecraft:tier_5",
   "icon": "minecraft:feather",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.wing_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:feather"
     }
   ],

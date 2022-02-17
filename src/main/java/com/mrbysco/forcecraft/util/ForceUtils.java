@@ -47,17 +47,17 @@ public class ForceUtils {
     }
 
     //Credit to Slimeknights for this code until I can logic through it on my own
-    public static boolean isTree(Level world, BlockPos origin){
+    public static boolean isTree(Level level, BlockPos origin){
         BlockPos pos = null;
         Stack<BlockPos> candidates = new Stack<>();
         candidates.add(origin);
 
         while(!candidates.isEmpty()) {
             BlockPos candidate = candidates.pop();
-            if((pos == null || candidate.getY() > pos.getY()) && isLog(world, candidate)) {
+            if((pos == null || candidate.getY() > pos.getY()) && isLog(level, candidate)) {
                 pos = candidate.above();
                 // go up
-                while(isLog(world, pos)) {
+                while(isLog(level, pos)) {
                     pos = pos.above();
                 }
                 // check if we still have a way diagonally up
@@ -83,7 +83,7 @@ public class ForceUtils {
             for(int y = 0; y < d; y++) {
                 for(int z = 0; z < d; z++) {
                     BlockPos leaf = pos.offset(o + x, o + y, o + z);
-                    BlockState state = world.getBlockState(leaf);
+                    BlockState state = level.getBlockState(leaf);
                     if(state.is(BlockTags.LEAVES)) {
                         if(++leaves >= 5) {
                             return true;
@@ -97,42 +97,42 @@ public class ForceUtils {
         return false;
     }
 
-    public static boolean isLog(Level world, BlockPos pos){
-        return world.getBlockState(pos).is(BlockTags.LOGS) || world.getBlockState(pos).getBlock() instanceof ForceLogBlock;
+    public static boolean isLog(Level level, BlockPos pos){
+        return level.getBlockState(pos).is(BlockTags.LOGS) || level.getBlockState(pos).getBlock() instanceof ForceLogBlock;
     }
 
-    public static void breakExtraBlock(ItemStack stack, Level world, Player player, BlockPos pos, BlockPos refPos) {
-        if(!canBreakExtraBlock(stack, world, player, pos, refPos)) {
+    public static void breakExtraBlock(ItemStack stack, Level level, Player player, BlockPos pos, BlockPos refPos) {
+        if(!canBreakExtraBlock(stack, level, player, pos, refPos)) {
             return;
         }
 
-        BlockState state = world.getBlockState(pos);
-        FluidState fluidState = world.getFluidState(pos);
+        BlockState state = level.getBlockState(pos);
+        FluidState fluidState = level.getFluidState(pos);
         Block block = state.getBlock();
 
         // callback to the tool the player uses. Called on both sides. This damages the tool n stuff.
-        stack.mineBlock(world, state, pos, player);
+        stack.mineBlock(level, state, pos, player);
 
         // server sided handling
-        if(!world.isClientSide) {
+        if(!level.isClientSide) {
             // send the blockbreak event
-            int xp = ForgeHooks.onBlockBreakEvent(world, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos);
+            int xp = ForgeHooks.onBlockBreakEvent(level, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos);
             if(xp == -1) {
                 return;
             }
 
             // serverside we reproduce ItemInWorldManager.tryHarvestBlock
 
-            BlockEntity tileEntity = world.getBlockEntity(pos);
+            BlockEntity tileEntity = level.getBlockEntity(pos);
             // ItemInWorldManager.removeBlock
-            if(block.onDestroyedByPlayer(state, world, pos, player, true, fluidState)) { // boolean is if block can be harvested, checked above
-                block.playerWillDestroy(world, pos, state, player);
-                block.playerDestroy(world, player, pos, state, tileEntity, stack);
-                block.popExperience((ServerLevel) world, pos, xp);
+            if(block.onDestroyedByPlayer(state, level, pos, player, true, fluidState)) { // boolean is if block can be harvested, checked above
+                block.playerWillDestroy(level, pos, state, player);
+                block.playerDestroy(level, player, pos, state, tileEntity, stack);
+                block.popExperience((ServerLevel) level, pos, xp);
             }
 
             // always send block update to client
-            PacketHandler.sendPacket(player, new ClientboundBlockUpdatePacket(world, pos));
+            PacketHandler.sendPacket(player, new ClientboundBlockUpdatePacket(level, pos));
         }
         // client sided handling
         else {
@@ -140,12 +140,12 @@ public class ForceUtils {
             // the code above, executed on the server, sends a block-updates that give us the correct state of the block we destroy.
 
             // following code can be found in PlayerControllerMP.onPlayerDestroyBlock
-            world.globalLevelEvent(2001, pos, Block.getId(state));
-            if(block.onDestroyedByPlayer(state, world, pos, player, true, fluidState)) {
-                block.playerWillDestroy(world, pos, state, player);
+            level.globalLevelEvent(2001, pos, Block.getId(state));
+            if(block.onDestroyedByPlayer(state, level, pos, player, true, fluidState)) {
+                block.playerWillDestroy(level, pos, state, player);
             }
             // callback to the tool
-            stack.mineBlock(world, state, pos, player);
+            stack.mineBlock(level, state, pos, player);
 
             if(stack.getCount() == 0 && stack == player.getMainHandItem()) {
                 ForgeEventFactory.onPlayerDestroyItem(player, stack, InteractionHand.MAIN_HAND);
@@ -160,24 +160,24 @@ public class ForceUtils {
         }
     }
 
-    private static boolean canBreakExtraBlock(ItemStack stack, Level world, Player player, BlockPos pos, BlockPos refPos) {
+    private static boolean canBreakExtraBlock(ItemStack stack, Level level, Player player, BlockPos pos, BlockPos refPos) {
         // prevent calling that stuff for air blocks, could lead to unexpected behaviour since it fires events
-        if(world.isEmptyBlock(pos)) {
+        if(level.isEmptyBlock(pos)) {
             return false;
         }
 
         // check if the block can be broken, since extra block breaks shouldn't instantly break stuff like obsidian
         // or precious ores you can't harvest while mining stone
-        BlockState state = world.getBlockState(pos);
-        FluidState fluidState = world.getFluidState(pos);
+        BlockState state = level.getBlockState(pos);
+        FluidState fluidState = level.getFluidState(pos);
         Block block = state.getBlock();
 
         // only effective materials
         //TODO: Check for Effective
 
-        BlockState refState = world.getBlockState(refPos);
-        float refStrength = refState.getDestroyProgress( player, world, refPos);
-        float strength = state.getDestroyProgress(player, world, pos);
+        BlockState refState = level.getBlockState(refPos);
+        float refStrength = refState.getDestroyProgress( player, level, refPos);
+        float strength = state.getDestroyProgress(player, level, pos);
 
         // only harvestable blocks that aren't impossibly slow to harvest
         if(!ForgeHooks.isCorrectToolForDrops(state, player) || refStrength / strength > 10f) {
@@ -187,14 +187,14 @@ public class ForceUtils {
         // From this point on it's clear that the player CAN break the block
 
         if(player.getAbilities().instabuild) {
-            block.playerWillDestroy(world, pos, state, player);
-            if(block.onDestroyedByPlayer(state, world, pos, player, false, fluidState)) {
-                block.playerWillDestroy(world, pos, state, player);
+            block.playerWillDestroy(level, pos, state, player);
+            if(block.onDestroyedByPlayer(state, level, pos, player, false, fluidState)) {
+                block.playerWillDestroy(level, pos, state, player);
             }
 
             // send update to client
-            if(!world.isClientSide) {
-                PacketHandler.sendPacket(player, new ClientboundBlockUpdatePacket(world, pos));
+            if(!level.isClientSide) {
+                PacketHandler.sendPacket(player, new ClientboundBlockUpdatePacket(level, pos));
             }
             return false;
         }

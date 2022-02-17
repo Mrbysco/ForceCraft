@@ -63,20 +63,20 @@ import net.minecraftforge.network.PlayMessages.SpawnEntity;
 		_interface = ItemSupplier.class
 )
 public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier {
-	public FlaskEntity(EntityType<? extends FlaskEntity> typeIn, Level worldIn) {
-		super(typeIn, worldIn);
+	public FlaskEntity(EntityType<? extends FlaskEntity> typeIn, Level level) {
+		super(typeIn, level);
 	}
 
-	public FlaskEntity(Level worldIn, LivingEntity livingEntityIn) {
-		super(ForceEntities.FORCE_FLASK.get(), livingEntityIn, worldIn);
+	public FlaskEntity(Level level, LivingEntity livingEntityIn) {
+		super(ForceEntities.FORCE_FLASK.get(), livingEntityIn, level);
 	}
 
-	public FlaskEntity(Level worldIn, double x, double y, double z) {
-		super(ForceEntities.FORCE_FLASK.get(), x, y, z, worldIn);
+	public FlaskEntity(Level level, double x, double y, double z) {
+		super(ForceEntities.FORCE_FLASK.get(), x, y, z, level);
 	}
 
-	public FlaskEntity(SpawnEntity spawnEntity, Level worldIn) {
-		this(ForceEntities.FORCE_FLASK.get(), worldIn);
+	public FlaskEntity(SpawnEntity spawnEntity, Level level) {
+		this(ForceEntities.FORCE_FLASK.get(), level);
 	}
 
 	protected Item getDefaultItem() {

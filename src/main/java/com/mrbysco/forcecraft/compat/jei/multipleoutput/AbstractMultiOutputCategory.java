@@ -53,7 +53,7 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 	}
 
 	@Override
-	public void draw(T recipe, PoseStack matrixStack, double mouseX, double mouseY) {
+	public void draw(T recipe, PoseStack poseStack, double mouseX, double mouseY) {
 
 	}
 

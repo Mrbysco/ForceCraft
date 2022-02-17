@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.baconator.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:baconator",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.baconator_info.text"
     },
     {
-      "type": "crafting",
+      "type": "patchouli:crafting",
       "recipe": "forcecraft:baconator",
       "text": "info.forcecraft.book.baconator_recipe.text"
     }

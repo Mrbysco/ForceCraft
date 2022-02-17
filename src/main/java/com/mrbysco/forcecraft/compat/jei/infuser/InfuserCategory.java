@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.compat.jei.infuser;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mrbysco.forcecraft.blocks.infuser.InfuserModifierType;
+import com.mrbysco.forcecraft.blockentities.InfuserModifierType;
 import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
@@ -90,10 +90,10 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 	}
 
 	@Override
-	public void draw(InfuseRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
+	public void draw(InfuseRecipe recipe, PoseStack poseStack, double mouseX, double mouseY) {
 		Minecraft minecraft = Minecraft.getInstance();
 		Font font = minecraft.font;
-		font.draw(matrixStack, new TranslatableComponent("forcecraft.gui.jei.category.infuser.tier", recipe.getTier().asInt()), 4, 4, 0xFFFFFFFF);
+		font.draw(poseStack, new TranslatableComponent("forcecraft.gui.jei.category.infuser.tier", recipe.getTier().asInt()), 4, 4, 0xFFFFFFFF);
 
 	}
 

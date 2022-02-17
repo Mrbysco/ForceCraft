@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.infuser.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:infuser",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.infuser_info.text"
     },
     {
-      "type": "crafting",
+      "type": "patchouli:crafting",
       "recipe": "forcecraft:transmutation/infuser",
       "text": "info.forcecraft.book.infuser_recipe.text"
     }

@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.holding_2.entry.name",
-  "category": "tier_3",
+  "category": "forcecraft:tier_3",
   "icon": "forcecraft:force_pack_upgrade",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.holding_2_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:force_pack_upgrade"
     }
   ],

@@ -2,17 +2,20 @@ package com.mrbysco.forcecraft.client.renderer.layer;
 
 import com.mrbysco.forcecraft.client.model.CreeperTotModel;
 import com.mrbysco.forcecraft.entities.CreeperTotEntity;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.resources.ResourceLocation;
 
 public class CreeperTotChargeLayer extends EnergySwirlLayer<CreeperTotEntity, CreeperTotModel<CreeperTotEntity>> {
 	private static final ResourceLocation LIGHTNING_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
-	private final CreeperTotModel<CreeperTotEntity> creeperModel = new CreeperTotModel<>(2.0F);
+	private final CreeperTotModel<CreeperTotEntity> creeperModel;
 
-	public CreeperTotChargeLayer(RenderLayerParent<CreeperTotEntity, CreeperTotModel<CreeperTotEntity>> p_i50947_1_) {
-		super(p_i50947_1_);
+	public CreeperTotChargeLayer(RenderLayerParent<CreeperTotEntity, CreeperTotModel<CreeperTotEntity>> renderLayerParent, EntityModelSet modelSet) {
+		super(renderLayerParent);
+		this.creeperModel = new CreeperTotModel<>(modelSet.bakeLayer(ModelLayers.CREEPER_ARMOR));
 	}
 
 	protected float xOffset(float p_225634_1_) {

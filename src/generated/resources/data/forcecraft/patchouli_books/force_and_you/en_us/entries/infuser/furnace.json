@@ -1,39 +1,39 @@
 {
   "name": "info.forcecraft.book.force_furnace.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:force_furnace",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.force_furnace_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:speed_core",
       "text": "info.forcecraft.book.force_furnace_speed_core.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:heat_core",
       "text": "info.forcecraft.book.force_furnace_heat_core.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:grinding_core",
       "text": "info.forcecraft.book.force_furnace_grinding_core.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:freezing_core",
       "text": "info.forcecraft.book.force_furnace_freezing_core.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:experience_core",
       "text": "info.forcecraft.book.force_furnace_experience_core.text"
     },
     {
-      "type": "crafting",
+      "type": "patchouli:crafting",
       "recipe": "forcecraft:force_furnace",
       "text": "info.forcecraft.book.force_furnace_recipe.text"
     }

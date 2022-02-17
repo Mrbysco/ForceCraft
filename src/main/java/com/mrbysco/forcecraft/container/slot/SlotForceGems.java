@@ -20,7 +20,7 @@ public class SlotForceGems extends SlotItemHandler {
     public boolean mayPlace(ItemStack stack) {
         final ResourceLocation gemTag = new ResourceLocation("forge", "gems/force");
         Tag<Item> tag = ItemTags.getAllTags().getTagOrEmpty(gemTag);
-        return stack.getItem().is(tag);
+        return stack.is(tag);
     }
 
     @Override

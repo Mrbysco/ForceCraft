@@ -13,8 +13,7 @@ import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_
 public class BaneHandler {
     @SubscribeEvent
     public void onEnderTeleportEvent(EntityTeleportEvent.EnderEntity event){
-        if(event.getEntity() instanceof EnderMan){
-            EnderMan enderman = ((EnderMan) event.getEntity());
+        if(event.getEntity() instanceof EnderMan enderman){
             enderman.getCapability(CAPABILITY_BANE).ifPresent((cap) -> {
                 if(!cap.canTeleport()){
                     event.setCanceled(true);

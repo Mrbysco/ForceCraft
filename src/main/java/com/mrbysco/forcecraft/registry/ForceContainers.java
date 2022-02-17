@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.registry;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.blocks.infuser.InfuserContainer;
+import com.mrbysco.forcecraft.container.infuser.InfuserContainer;
 import com.mrbysco.forcecraft.container.ForceBeltContainer;
 import com.mrbysco.forcecraft.container.ForcePackContainer;
 import com.mrbysco.forcecraft.container.ItemCardContainer;

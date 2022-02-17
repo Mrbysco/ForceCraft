@@ -2,9 +2,9 @@ package com.mrbysco.forcecraft.client.gui.furnace;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.experience.entry.name",
-  "category": "tier_2",
+  "category": "forcecraft:tier_2",
   "icon": "minecraft:experience_bottle",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.experience_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:experience_bottle"
     }
   ],

@@ -19,11 +19,11 @@ public class CustomFoodItem extends Item {
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
         if(this.isEdible()) {
             Item item = stack.getItem();
-            ItemStack returnStack = entityLiving.eat(worldIn, stack);
-            if(!worldIn.isClientSide) {
+            ItemStack returnStack = entityLiving.eat(level, stack);
+            if(!level.isClientSide) {
                 if (entityLiving instanceof Player player) {
                     if(item == ForceRegistry.FORTUNE_COOKIE.get()){
                         ItemStack fortuneItem = new ItemStack(ForceRegistry.FORTUNE.get());

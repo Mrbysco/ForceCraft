@@ -75,15 +75,14 @@ public class ForceBeltContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+    public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
         if (slotId >= 0) {
             if (getSlot(slotId).getItem().getItem() instanceof ForceBeltItem)
-                return ItemStack.EMPTY;
+                return;
         }
         if (clickTypeIn == ClickType.SWAP)
-            return ItemStack.EMPTY;
-
-        return super.clicked(slotId, dragType, clickTypeIn, player);
+            return;
+        super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
     //Credit to Shadowfacts for this method
@@ -99,7 +98,7 @@ public class ForceBeltContainer extends AbstractContainerMenu {
             if(itemstack.getItem() instanceof ForceBeltItem)
                 return ItemStack.EMPTY;
 
-            int containerSlots = slots.size() - player.inventory.items.size();
+            int containerSlots = slots.size() - player.getInventory().items.size();
 
             if (index < containerSlots) {
                 if (!this.moveItemStackTo(itemstack1, containerSlots, slots.size(), true)) {

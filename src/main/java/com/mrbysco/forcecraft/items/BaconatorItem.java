@@ -43,7 +43,7 @@ public class BaconatorItem extends BaseItem {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack itemstack = playerIn.getItemInHand(handIn);
 		IItemHandler handler = itemstack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		if(playerIn.isShiftKeyDown()) {
@@ -60,7 +60,7 @@ public class BaconatorItem extends BaseItem {
 						itemstack.setDamageValue(itemstack.getDamageValue() == 1 ? 0 : 1);
 					}
 				} else {
-					worldIn.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+					level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
 				CompoundTag tag = itemstack.getOrCreateTag();
 				tag.putBoolean(HAS_FOOD_TAG, hasItems);
@@ -79,12 +79,12 @@ public class BaconatorItem extends BaseItem {
 	}
 
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
+	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
 		if(firstStack != null && !firstStack.isEmpty()) {
-			entityLiving.eat(worldIn, firstStack);
-			worldIn.playSound((Player) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.PIG_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+			entityLiving.eat(level, firstStack);
+			level.playSound((Player) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.PIG_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 		}
 		return stack;
 	}
@@ -97,14 +97,14 @@ public class BaconatorItem extends BaseItem {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if(stack.getDamageValue() == 1 && entityIn instanceof Player playerIn && worldIn.getGameTime() % 20 == 0) {
+	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) {
+		if(stack.getDamageValue() == 1 && entityIn instanceof Player playerIn && level.getGameTime() % 20 == 0) {
 			if(!playerIn.getAbilities().instabuild && playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
 				IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 				ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
 				if(!firstStack.isEmpty()) {
-					playerIn.eat(worldIn, firstStack);
-					worldIn.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.PIG_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+					playerIn.eat(level, firstStack);
+					level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.PIG_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
 			}
 		}
@@ -128,7 +128,7 @@ public class BaconatorItem extends BaseItem {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		if(Screen.hasShiftDown()) {
 			tooltip.add(new TranslatableComponent("forcecraft.baconator.shift.carrying").withStyle(ChatFormatting.DARK_RED));
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
@@ -148,7 +148,7 @@ public class BaconatorItem extends BaseItem {
 		} else {
 			tooltip.add(new TranslatableComponent("forcecraft.baconator.shift.text").withStyle(ChatFormatting.GRAY));
 		}
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, level, tooltip, flagIn);
 	}
 
 	@Nullable

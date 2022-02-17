@@ -1,24 +1,24 @@
 {
   "name": "info.forcecraft.book.force_ingot.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:force_ingot",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.force_ingot_info.text"
     },
     {
-      "type": "crafting",
+      "type": "patchouli:crafting",
       "recipe": "forcecraft:iron_to_force_ingot",
       "text": "info.forcecraft.book.force_ingot_recipe.text"
     },
     {
-      "type": "crafting",
+      "type": "patchouli:crafting",
       "recipe": "forcecraft:gold_to_force_ingot",
       "text": "info.forcecraft.book.force_ingot_recipe2.text"
     },
     {
-      "type": "crafting",
+      "type": "patchouli:crafting",
       "recipe": "forcecraft:nuggets_to_force_ingot",
       "text": "info.forcecraft.book.force_ingot_recipe3.text"
     }

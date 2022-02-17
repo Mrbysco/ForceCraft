@@ -1,21 +1,21 @@
 {
   "name": "info.forcecraft.book.inert_core.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:inert_core",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.inert_core_info.text"
     },
     {
-      "type": "image",
+      "type": "patchouli:image",
       "images": [
         "forcecraft:textures/gui/entries/burning_inert.png"
       ],
       "text": "info.forcecraft.book.inert_core_info2.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:bottled_wither"
     }
   ]

@@ -19,7 +19,7 @@ public class BeltSlot extends SlotItemHandler {
 
 	@Override
 	public boolean mayPlace(@Nonnull ItemStack stack) {
-		return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem) && stack.getItem().is(ForceTags.VALID_FORCE_BELT);
+		return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem) && stack.is(ForceTags.VALID_FORCE_BELT);
 	}
 
 	@Override

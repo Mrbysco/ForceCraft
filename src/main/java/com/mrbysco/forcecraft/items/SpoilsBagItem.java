@@ -53,12 +53,12 @@ public class SpoilsBagItem extends BaseItem {
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
-		Level worldIn = context.getLevel();
+		Level level = context.getLevel();
 		ItemStack stack = context.getItemInHand();
-		populateBag(worldIn, stack);
+		populateBag(level, stack);
 		BlockPos pos = context.getClickedPos();
 		Direction face = context.getClickedFace();
-		BlockEntity tile = worldIn.getBlockEntity(pos);
+		BlockEntity tile = level.getBlockEntity(pos);
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		if (handler != null && tile != null && tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent()) {
 			IItemHandler tileInventory = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).orElse(null);
@@ -82,15 +82,15 @@ public class SpoilsBagItem extends BaseItem {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		if(handler != null) {
-			this.populateBag(worldIn, stack);
+			this.populateBag(level, stack);
 			playerIn.openMenu(this.getContainer(stack));
 			return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, stack);
 		}
-		return super.use(worldIn, playerIn, handIn);
+		return super.use(level, playerIn, handIn);
 	}
 
 	public ResourceLocation getTable() {
@@ -101,16 +101,16 @@ public class SpoilsBagItem extends BaseItem {
 		};
 	}
 
-	public void populateBag(Level worldIn, ItemStack stack) {
-		if(!worldIn.isClientSide && !stack.getOrCreateTag().getBoolean("Filled")) {
+	public void populateBag(Level level, ItemStack stack) {
+		if(!level.isClientSide && !stack.getOrCreateTag().getBoolean("Filled")) {
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 			if(handler instanceof ItemStackHandler) {
 				if(ItemHandlerUtils.isEmpty(handler)) {
 					CompoundTag tag = stack.getOrCreateTag();
 					List<ItemStack> stacks = new ArrayList<>();
 					do {
-						LootContext ctx = new LootContext.Builder((ServerLevel) worldIn).create(LootContextParamSets.EMPTY);
-						List<ItemStack> lootStacks = ((ServerLevel) worldIn).getServer().getLootTables()
+						LootContext ctx = new LootContext.Builder((ServerLevel) level).create(LootContextParamSets.EMPTY);
+						List<ItemStack> lootStacks = ((ServerLevel) level).getServer().getLootTables()
 								.get(getTable()).getRandomItems(ctx);
 						if (lootStacks.isEmpty()) {
 							return;
@@ -121,7 +121,7 @@ public class SpoilsBagItem extends BaseItem {
 					} while (stacks.isEmpty() );
 
 					if(stacks.size() > 7) {
-						int newSize = Math.min(8, Math.max(5, worldIn.random.nextInt(stacks.size())));
+						int newSize = Math.min(8, Math.max(5, level.random.nextInt(stacks.size())));
 						if(stacks.size() < newSize) {
 							newSize = stacks.size();
 						}
@@ -151,8 +151,8 @@ public class SpoilsBagItem extends BaseItem {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if(!worldIn.isClientSide && stack.hasTag() && stack.getTag().getBoolean("Filled")) {
+	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) {
+		if(!level.isClientSide && stack.hasTag() && stack.getTag().getBoolean("Filled")) {
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 			if(ItemHandlerUtils.isEmpty(handler)) {
 				stack.shrink(1);
@@ -161,8 +161,8 @@ public class SpoilsBagItem extends BaseItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		super.appendHoverText(stack, level, tooltip, flagIn);
 		tooltip.add(new TextComponent("Tier: " + tier).withStyle(ChatFormatting.GRAY));
 	}
 

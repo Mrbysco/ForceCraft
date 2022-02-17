@@ -2,8 +2,7 @@ package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
+import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModCapability;
 import com.mrbysco.forcecraft.entities.ColdChickenEntity;
 import com.mrbysco.forcecraft.entities.ColdCowEntity;
 import com.mrbysco.forcecraft.entities.ColdPigEntity;
@@ -131,7 +130,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 				return InteractionResult.SUCCESS;
 			}
 			if (entity instanceof Chicken originalChicken) {
-				Level worldIn = originalChicken.level;
+				Level level = originalChicken.level;
 
 				int i = 1 + rand.nextInt(3);
 
@@ -147,14 +146,14 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
-				Mob replacementMob = new ColdChickenEntity(worldIn, originalChicken.getType().getRegistryName());
+				Mob replacementMob = new ColdChickenEntity(level, originalChicken.getType().getRegistryName());
 				replacementMob.copyPosition(originalChicken);
 				UUID mobUUID = replacementMob.getUUID();
 				replacementMob.restoreFrom(originalChicken);
 				replacementMob.setUUID(mobUUID);
 
 				originalChicken.remove(RemovalReason.DISCARDED);
-				worldIn.addFreshEntity(replacementMob);
+				level.addFreshEntity(replacementMob);
 				if (hasHeat) {
 					replacementMob.setSecondsOnFire(SET_FIRE_TIME);
 				}
@@ -163,7 +162,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 				return InteractionResult.SUCCESS;
 			}
 			if (entity instanceof Pig originalPig) {
-				Level worldIn = originalPig.level;
+				Level level = originalPig.level;
 
 				int i = 1 + rand.nextInt(2);
 
@@ -178,14 +177,14 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
-				Mob replacementMob = new ColdPigEntity(worldIn, originalPig.getType().getRegistryName());
+				Mob replacementMob = new ColdPigEntity(level, originalPig.getType().getRegistryName());
 				replacementMob.copyPosition(originalPig);
 				UUID mobUUID = replacementMob.getUUID();
 				replacementMob.restoreFrom(originalPig);
 				replacementMob.setUUID(mobUUID);
 
 				originalPig.remove(RemovalReason.DISCARDED);
-				worldIn.addFreshEntity(replacementMob);
+				level.addFreshEntity(replacementMob);
 				if (hasHeat) {
 					replacementMob.setSecondsOnFire(SET_FIRE_TIME);
 				}
@@ -204,16 +203,16 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 		if (CAPABILITY_TOOLMOD == null) {
 			return null;
 		}
-		return new ToolModProvider();
+		return new ToolModCapability();
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lores, TooltipFlag flagIn) {
     	ForceToolData fd = new ForceToolData(stack);
     	fd.attachInformation(lores);
-    	ToolModStorage.attachInformation(stack, lores);
-		super.appendHoverText(stack, worldIn, lores, flagIn);
+    	ToolModCapability.attachInformation(stack, lores);
+		super.appendHoverText(stack, level, lores, flagIn);
 	}
 
 	@Override
@@ -237,7 +236,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-			CompoundTag shareTag = ToolModStorage.serializeNBT(cap);
+			CompoundTag shareTag = ToolModCapability.writeNBT(cap);
 			nbt.put(Reference.MOD_ID, shareTag);
 		}
         return nbt;
@@ -250,8 +249,8 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
     	}
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-	    	Tag shareTag = nbt.get(Reference.MOD_ID);
-	    	ToolModStorage.deserializeNBT(cap, shareTag);
+			CompoundTag shareTag = nbt.getCompound(Reference.MOD_ID);
+			ToolModCapability.readNBT(cap, shareTag);
 		}
 		super.readShareTag(stack, nbt);
 	}

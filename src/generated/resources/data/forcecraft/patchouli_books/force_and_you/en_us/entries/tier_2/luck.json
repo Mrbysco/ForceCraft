@@ -1,22 +1,22 @@
 {
   "name": "info.forcecraft.book.luck.entry.name",
-  "category": "tier_2",
+  "category": "forcecraft:tier_2",
   "icon": "forcecraft:fortune",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.luck_info.text"
     },
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.luck_info.text2"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:fortune"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:fortune_cookie"
     }
   ],

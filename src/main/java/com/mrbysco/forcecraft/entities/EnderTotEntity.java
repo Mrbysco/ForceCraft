@@ -2,43 +2,41 @@ package com.mrbysco.forcecraft.entities;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceEntities;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+import com.mrbysco.forcecraft.registry.ForceTags;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.TagContainer;
-import net.minecraft.tags.SerializationTags;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -48,8 +46,8 @@ import java.util.function.Predicate;
 public class EnderTotEntity extends EnderMan {
 	private static final ResourceLocation TOT_HOLDABLE = new ResourceLocation(Reference.MOD_ID, "endertot_holdable");
 
-	public EnderTotEntity(EntityType<? extends EnderMan> type, Level worldIn) {
-		super(type, worldIn);
+	public EnderTotEntity(EntityType<? extends EnderMan> type, Level level) {
+		super(type, level);
 		this.setPathfindingMalus(BlockPathTypes.WATER, 8.0F); //Reset to default as Ender Tots aren't afraid of water
 	}
 
@@ -64,7 +62,7 @@ public class EnderTotEntity extends EnderMan {
 		this.goalSelector.addGoal(11, new EnderTotEntity.TakeBlockGoal(this));
 		this.targetSelector.addGoal(1, new EnderTotEntity.FindPlayerGoal(this, this::isAngryAt));
 		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Endermite.class, 10, true, false, ENDERMITE_SELECTOR));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Endermite.class, true, false));
 		this.targetSelector.addGoal(4, new ResetUniversalAngerTargetGoal<>(this, false));
 	}
 
@@ -157,12 +155,12 @@ public class EnderTotEntity extends EnderMan {
 		private int aggroTime;
 		private int teleportTime;
 		private final TargetingConditions startAggroTargetConditions;
-		private final TargetingConditions continueAggroTargetConditions = (new TargetingConditions()).allowUnseeable();
+		private final TargetingConditions continueAggroTargetConditions = TargetingConditions.forCombat().ignoreLineOfSight();
 
 		public FindPlayerGoal(EnderTotEntity enderTotIn, @Nullable Predicate<LivingEntity> p_i241912_2_) {
 			super(enderTotIn, Player.class, 10, false, false, p_i241912_2_);
 			this.endertot = enderTotIn;
-			this.startAggroTargetConditions = (new TargetingConditions()).range(this.getFollowDistance()).selector((p_220790_1_) -> enderTotIn.isLookingAtMe((Player)p_220790_1_));
+			this.startAggroTargetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector((livingEntity) -> enderTotIn.isLookingAtMe((Player)livingEntity));
 		}
 
 		/**
@@ -271,14 +269,11 @@ public class EnderTotEntity extends EnderMan {
 			int k = Mth.floor(this.endertot.getZ() - 2.0D + random.nextDouble() * 4.0D);
 			BlockPos blockpos = new BlockPos(i, j, k);
 			BlockState blockstate = world.getBlockState(blockpos);
-			Block block = blockstate.getBlock();
 			Vec3 vector3d = new Vec3((double)Mth.floor(this.endertot.getX()) + 0.5D, (double)j + 0.5D, (double)Mth.floor(this.endertot.getZ()) + 0.5D);
 			Vec3 vector3d1 = new Vec3((double)i + 0.5D, (double)j + 0.5D, (double)k + 0.5D);
-			BlockHitResult blockraytraceresult = world.clip(new ClipContext(vector3d, vector3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.endertot));
-			boolean flag = blockraytraceresult.getBlockPos().equals(blockpos);
-			TagContainer tagCollection = SerializationTags.getInstance();
-			Tag<Block> holdableTag = tagCollection.getBlocks().getTag(TOT_HOLDABLE);
-			if (holdableTag != null && block.is(holdableTag) && flag) {
+			BlockHitResult blockHitResult = world.clip(new ClipContext(vector3d, vector3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.endertot));
+			boolean flag = blockHitResult.getBlockPos().equals(blockpos);
+			if (blockstate.is(ForceTags.ENDERTOT_HOLDABLE) && flag) {
 				world.removeBlock(blockpos, false);
 				this.endertot.setCarriedBlock(blockstate.getBlock().defaultBlockState());
 			}
@@ -318,22 +313,21 @@ public class EnderTotEntity extends EnderMan {
 			int k = Mth.floor(this.endertot.getZ() - 1.0D + random.nextDouble() * 2.0D);
 			BlockPos blockpos = new BlockPos(i, j, k);
 			BlockState blockstate = world.getBlockState(blockpos);
-			BlockPos blockpos1 = blockpos.below();
-			BlockState blockstate1 = world.getBlockState(blockpos1);
-			BlockState blockstate2 = this.endertot.getCarriedBlock();
-			if (blockstate2 != null) {
-				blockstate2 = Block.updateFromNeighbourShapes(blockstate2, this.endertot.level, blockpos);
-				if (this.canPlaceBlock(world, blockpos, blockstate2, blockstate, blockstate1, blockpos1) && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace(endertot, net.minecraftforge.common.util.BlockSnapshot.create(world.dimension(), world, blockpos1), net.minecraft.core.Direction.UP)) {
-					world.setBlock(blockpos, blockstate2, 3);
+			BlockPos belowPos = blockpos.below();
+			BlockState belowState = world.getBlockState(belowPos);
+			BlockState carriedState = this.endertot.getCarriedBlock();
+			if (carriedState != null) {
+				carriedState = Block.updateFromNeighbourShapes(carriedState, this.endertot.level, blockpos);
+				if (this.canPlaceBlock(world, blockpos, carriedState, blockstate, belowState, belowPos) && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace(endertot, net.minecraftforge.common.util.BlockSnapshot.create(world.dimension(), world, belowPos), net.minecraft.core.Direction.UP)) {
+					world.setBlock(blockpos, carriedState, 3);
 					this.endertot.setCarriedBlock((BlockState)null);
 				}
 
 			}
 		}
 
-		@SuppressWarnings("deprecation")
-		private boolean canPlaceBlock(Level p_220836_1_, BlockPos p_220836_2_, BlockState p_220836_3_, BlockState p_220836_4_, BlockState p_220836_5_, BlockPos p_220836_6_) {
-			return p_220836_4_.isAir(p_220836_1_, p_220836_2_) && !p_220836_5_.isAir(p_220836_1_, p_220836_6_) && !p_220836_5_.is(Blocks.BEDROCK) && !p_220836_5_.is(net.minecraftforge.common.Tags.Blocks.ENDERMAN_PLACE_ON_BLACKLIST) && p_220836_5_.isCollisionShapeFullBlock(p_220836_1_, p_220836_6_) && p_220836_3_.canSurvive(p_220836_1_, p_220836_2_) && p_220836_1_.getEntities(this.endertot, AABB.unitCubeFromLowerCorner(Vec3.atLowerCornerOf(p_220836_2_))).isEmpty();
+		private boolean canPlaceBlock(Level level, BlockPos p_32560_, BlockState p_32561_, BlockState p_32562_, BlockState p_32563_, BlockPos p_32564_) {
+			return p_32562_.isAir() && !p_32563_.isAir() && !p_32563_.is(Blocks.BEDROCK) && !p_32563_.is(net.minecraftforge.common.Tags.Blocks.ENDERMAN_PLACE_ON_BLACKLIST) && p_32563_.isCollisionShapeFullBlock(level, p_32564_) && p_32561_.canSurvive(level, p_32560_) && level.getEntities(this.endertot, AABB.unitCubeFromLowerCorner(Vec3.atLowerCornerOf(p_32560_))).isEmpty();
 		}
 	}
 }

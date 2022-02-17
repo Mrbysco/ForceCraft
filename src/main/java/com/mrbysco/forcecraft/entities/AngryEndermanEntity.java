@@ -1,33 +1,33 @@
 package com.mrbysco.forcecraft.entities;
 
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
 public class AngryEndermanEntity extends EnderMan {
-	public AngryEndermanEntity(EntityType<? extends EnderMan> type, Level worldIn) {
-		super(type, worldIn);
+	public AngryEndermanEntity(EntityType<? extends EnderMan> type, Level level) {
+		super(type, level);
 		this.setPathfindingMalus(BlockPathTypes.WATER, 8.0F); //Reset to default as like Ender Tots, Angry Enderman aren't afraid of water
 	}
 
@@ -40,7 +40,7 @@ public class AngryEndermanEntity extends EnderMan {
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(1, new AngryEndermanEntity.FindPlayerGoal(this, this::isAngryAt));
 		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Endermite.class, 10, true, false, ENDERMITE_SELECTOR));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Endermite.class, true, false));
 		this.targetSelector.addGoal(4, new ResetUniversalAngerTargetGoal<>(this, false));
 	}
 
@@ -109,13 +109,13 @@ public class AngryEndermanEntity extends EnderMan {
 		private int aggroTime;
 		private int teleportTime;
 		private final TargetingConditions startAggroTargetConditions;
-		private final TargetingConditions continueAggroTargetConditions = (new TargetingConditions()).allowUnseeable();
+		private final TargetingConditions continueAggroTargetConditions = TargetingConditions.forCombat().ignoreLineOfSight();
 
 		public FindPlayerGoal(AngryEndermanEntity endermantIn, @Nullable Predicate<LivingEntity> p_i241912_2_) {
 			super(endermantIn, Player.class, 10, false, false, p_i241912_2_);
 			this.enderman = endermantIn;
-			this.startAggroTargetConditions = (new TargetingConditions()).range(this.getFollowDistance()).selector((p_220790_1_) -> {
-				return endermantIn.isLookingAtMe((Player)p_220790_1_);
+			this.startAggroTargetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector((livingEntity) -> {
+				return endermantIn.isLookingAtMe((Player)livingEntity);
 			});
 		}
 

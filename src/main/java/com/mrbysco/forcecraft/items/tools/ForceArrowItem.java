@@ -18,8 +18,8 @@ public class ForceArrowItem extends ArrowItem {
 	}
 
 	@Override
-	public AbstractArrow createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		ForceArrowEntity forceArrow = new ForceArrowEntity(worldIn, shooter);
+	public AbstractArrow createArrow(Level level, ItemStack stack, LivingEntity shooter) {
+		ForceArrowEntity forceArrow = new ForceArrowEntity(level, shooter);
 		if(shooter instanceof Player player) {
 			ItemStack heldItem = player.getUseItem();
 			if(heldItem.getItem() instanceof ForceBowItem) {

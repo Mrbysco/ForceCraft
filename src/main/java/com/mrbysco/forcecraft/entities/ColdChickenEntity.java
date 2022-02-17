@@ -18,13 +18,13 @@ public class ColdChickenEntity extends Chicken implements IColdMob {
 	private EatGrassToRestoreGoal eatGrassGoal;
 	private ResourceLocation originalTypeLocation;
 
-	public ColdChickenEntity(EntityType<? extends Chicken> type, Level worldIn) {
-		super(type, worldIn);
+	public ColdChickenEntity(EntityType<? extends Chicken> type, Level level) {
+		super(type, level);
 		this.originalTypeLocation = new ResourceLocation("minecraft", "chicken");
 	}
 
-	public ColdChickenEntity(Level worldIn, ResourceLocation typeLocation) {
-		super(ForceEntities.COLD_CHICKEN.get(), worldIn);
+	public ColdChickenEntity(Level level, ResourceLocation typeLocation) {
+		super(ForceEntities.COLD_CHICKEN.get(), level);
 		if(typeLocation != null) {
 			this.originalTypeLocation = typeLocation;
 		}
@@ -104,7 +104,7 @@ public class ColdChickenEntity extends Chicken implements IColdMob {
 			float f = ((float)(this.grassTimer - 4) - p_70890_1_) / 32.0F;
 			return ((float)Math.PI / 5F) + 0.21991149F * Mth.sin(f * 28.7F);
 		} else {
-			return this.grassTimer > 0 ? ((float)Math.PI / 5F) : this.xRot * ((float)Math.PI / 180F);
+			return this.grassTimer > 0 ? ((float)Math.PI / 5F) : this.getXRot() * ((float)Math.PI / 180F);
 		}
 	}
 

@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.claw.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:claw",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.claw_info.text"
     },
     {
-      "type": "entity",
+      "type": "patchouli:entity",
       "entity": "minecraft:bat"
     }
   ]

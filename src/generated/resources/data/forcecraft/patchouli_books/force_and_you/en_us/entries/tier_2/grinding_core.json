@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.grinding_core.entry.name",
-  "category": "tier_2",
+  "category": "forcecraft:tier_2",
   "icon": "minecraft:flint",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.grinding_core_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:flint",
       "text": "info.forcecraft.book.upgrade_core_link.text"
     }

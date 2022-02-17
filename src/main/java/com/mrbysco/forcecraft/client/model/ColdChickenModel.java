@@ -2,12 +2,13 @@ package com.mrbysco.forcecraft.client.model;
 
 import com.mrbysco.forcecraft.entities.ColdChickenEntity;
 import net.minecraft.client.model.ChickenModel;
+import net.minecraft.client.model.geom.ModelPart;
 
 public class ColdChickenModel<T extends ColdChickenEntity> extends ChickenModel<T> {
 	private float headRotationAngleX;
 
-	public ColdChickenModel() {
-		super();
+	public ColdChickenModel(ModelPart root) {
+		super(root);
 	}
 
 	public void prepareMobModel(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {

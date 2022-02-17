@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.items;
 
-import com.mrbysco.forcecraft.capablilities.experiencetome.ExperienceTomeProvider;
+import com.mrbysco.forcecraft.capablilities.experiencetome.ExperienceTomeCapability;
 import com.mrbysco.forcecraft.util.ForceUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -31,7 +31,7 @@ public class ExperienceTomeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
         if(!Screen.hasShiftDown()){
   		  tooltip.add(new TranslatableComponent("forcecraft.tooltip.press_shift"));
             return;
@@ -45,7 +45,7 @@ public class ExperienceTomeItem extends Item {
         if(CAPABILITY_EXPTOME == null) {
             return null;
         }
-        return new ExperienceTomeProvider();
+        return new ExperienceTomeCapability();
     }
 
     @Override

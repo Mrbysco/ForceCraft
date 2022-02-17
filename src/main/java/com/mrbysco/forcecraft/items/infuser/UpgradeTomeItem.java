@@ -20,8 +20,8 @@ public class UpgradeTomeItem extends BaseItem {
 	}
 
 	@Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		super.appendHoverText(stack, level, tooltip, flagIn);
 		UpgradeBookData bd = new UpgradeBookData(stack);
 	
         TranslatableComponent tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.tier");

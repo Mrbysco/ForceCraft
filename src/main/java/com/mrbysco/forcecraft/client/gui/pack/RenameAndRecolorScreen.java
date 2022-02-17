@@ -1,22 +1,23 @@
 package com.mrbysco.forcecraft.client.gui.pack;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.client.gui.widgets.ItemButton;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.PackChangeMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.PacketDistributor;
 
 public class RenameAndRecolorScreen extends Screen {
 	private ItemStack itemstack;
@@ -40,7 +41,7 @@ public class RenameAndRecolorScreen extends Screen {
 		super.init();
 		selectedColor = itemstack.getOrCreateTag().getInt("Color");
 		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-		this.addButton(new ItemButton(this.width / 2 - 89, this.height / 2 + 5, 18, 18, CommonComponents.GUI_DONE, this.itemstack, (button) -> {
+		this.addRenderableWidget(new ItemButton(this.width / 2 - 89, this.height / 2 + 5, 18, 18, CommonComponents.GUI_DONE, this.itemstack, (button) -> {
 			ItemButton itemButton = (ItemButton)button;
 			this.selectedColor++;
 			if(selectedColor > 15) {
@@ -54,11 +55,11 @@ public class RenameAndRecolorScreen extends Screen {
 			this.itemstack = itemButton.getButtonStack();
 		}));
 
-		this.addButton(new Button(this.width / 2 - 34, this.height / 2 + 3, 60, 20, CommonComponents.GUI_CANCEL, (p_238847_1_) -> {
+		this.addRenderableWidget(new Button(this.width / 2 - 34, this.height / 2 + 3, 60, 20, CommonComponents.GUI_CANCEL, (p_238847_1_) -> {
 			this.minecraft.setScreen((Screen)null);
 		}));
 
-		this.addButton(new Button(this.width / 2 + 31, this.height / 2 + 3, 60, 20, CommonComponents.GUI_DONE, (p_238847_1_) -> {
+		this.addRenderableWidget(new Button(this.width / 2 + 31, this.height / 2 + 3, 60, 20, CommonComponents.GUI_DONE, (p_238847_1_) -> {
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new PackChangeMessage(usedHand, textfield.getValue(), this.selectedColor));
 			this.minecraft.setScreen((Screen)null);
 		}));
@@ -67,7 +68,7 @@ public class RenameAndRecolorScreen extends Screen {
 		this.textfield.setMaxLength(31);
 		this.textfield.setValue(itemstack.getHoverName().getString());
 		this.textfield.setTextColor(-1);
-		this.children.add(this.textfield);
+		this.addWidget(this.textfield);
 		setInitialFocus(textfield);
 	}
 
@@ -84,20 +85,20 @@ public class RenameAndRecolorScreen extends Screen {
 	}
 
 	@Override
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(matrixStack);
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(poseStack);
 		final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/rename_screen.png");
-		this.minecraft.getTextureManager().bind(TEXTURE);
+		RenderSystem.setShaderTexture(0, TEXTURE);
 
 		int xSize = 197;
 		int ySize = 66;
 		int guiLeft = (this.width - xSize) / 2;
 		int guiTop = (this.height - ySize) / 2;
 
-		this.blit(matrixStack, guiLeft, guiTop, 0,0, xSize, ySize);
+		this.blit(poseStack, guiLeft, guiTop, 0,0, xSize, ySize);
 
-		this.textfield.render(matrixStack, mouseX, mouseY, partialTicks);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		font.draw(matrixStack, new TextComponent("Color"), this.width / 2 - 68, this.height / 2 + 9, 5592405);
+		this.textfield.render(poseStack, mouseX, mouseY, partialTicks);
+		super.render(poseStack, mouseX, mouseY, partialTicks);
+		font.draw(poseStack, new TextComponent("Color"), this.width / 2 - 68, this.height / 2 + 9, 5592405);
 	}
 }

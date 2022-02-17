@@ -55,13 +55,13 @@ public class AdvancementUtil {
 		}
 	}
 
-	public static void unlockAdvancement(ServerPlayer player, String name) {
-		Advancement advancementIn = player.getServer().getAdvancements().getAdvancement(new ResourceLocation(Reference.MOD_ID + ":" + name));
+	public static void unlockAdvancement(ServerPlayer serverPlayer, String name) {
+		Advancement advancementIn = serverPlayer.getServer().getAdvancements().getAdvancement(new ResourceLocation(Reference.MOD_ID + ":" + name));
 		if(advancementIn != null) {
-			AdvancementProgress advancementprogress = player.getAdvancements().getOrStartProgress(advancementIn);
+			AdvancementProgress advancementprogress = serverPlayer.getAdvancements().getOrStartProgress(advancementIn);
 			if (!advancementprogress.isDone()) {
 				for(String s : advancementprogress.getRemainingCriteria()) {
-					player.getAdvancements().award(advancementIn, s);
+					serverPlayer.getAdvancements().award(advancementIn, s);
 				}
 			}
 		}

@@ -38,28 +38,28 @@ public class ItemCardItem extends BaseItem {
 	private static final Component TOO_FAST = new TextComponent("TOO FAST. TRY AGAIN.").withStyle(ChatFormatting.RED);
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		if(playerIn.isShiftKeyDown()) {
-			if (!worldIn.isClientSide) {
-				NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(worldIn, playerIn.blockPosition()), playerIn.blockPosition());
+			if (!level.isClientSide) {
+				NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(level, playerIn.blockPosition()), playerIn.blockPosition());
 			}
 		}
-		return super.use(worldIn, playerIn, handIn);
+		return super.use(level, playerIn, handIn);
 	}
 
 	@Nullable
-	public MenuProvider getContainer(Level worldIn, BlockPos pos) {
+	public MenuProvider getContainer(Level level, BlockPos pos) {
 		return new SimpleMenuProvider((id, inventory, player) -> {
-			return new ItemCardContainer(id, inventory, ContainerLevelAccess.create(worldIn, pos));
+			return new ItemCardContainer(id, inventory, ContainerLevelAccess.create(level, pos));
 		}, new TranslatableComponent(Reference.MOD_ID + ".container.card"));
 	}
 
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
-		Level worldIn = playerIn.level;
-		worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.NOTE_BLOCK_DIDGERIDOO, SoundSource.NEUTRAL, 1.0F, 1.0F);
+		Level level = playerIn.level;
+		level.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.NOTE_BLOCK_DIDGERIDOO, SoundSource.NEUTRAL, 1.0F, 1.0F);
 
-		if(worldIn.isClientSide) {
+		if(level.isClientSide) {
 			int rand = playerIn.getRandom().nextInt(3);
 			Component message = switch (rand) {
 				default -> BAD_READ;
@@ -73,7 +73,7 @@ public class ItemCardItem extends BaseItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		CompoundTag tag = stack.getOrCreateTag();
 		if(tag.contains("RecipeContents")) {
 			CompoundTag recipeContents = tag.getCompound("RecipeContents");
@@ -86,6 +86,6 @@ public class ItemCardItem extends BaseItem {
 		tooltip.add(new TextComponent(" "));
 		tooltip.add(new TranslatableComponent("forcecraft.item_card.recipe_set").withStyle(ChatFormatting.BOLD));
 
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, level, tooltip, flagIn);
 	}
 }

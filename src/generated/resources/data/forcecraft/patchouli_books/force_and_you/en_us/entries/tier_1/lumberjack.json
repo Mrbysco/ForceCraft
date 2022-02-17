@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.lumberjack.entry.name",
-  "category": "tier_1",
+  "category": "forcecraft:tier_1",
   "icon": "forcecraft:force_log",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.lumberjack_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "forcecraft:force_log"
     }
   ],

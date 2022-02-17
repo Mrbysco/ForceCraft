@@ -28,8 +28,8 @@ public class MilkFlaskItem extends BaseItem {
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
-        if (!worldIn.isClientSide) entityLiving.curePotionEffects(stack);
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
+        if (!level.isClientSide) entityLiving.curePotionEffects(stack);
 
         if (entityLiving instanceof ServerPlayer serverplayerentity) {
             CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
@@ -58,14 +58,14 @@ public class MilkFlaskItem extends BaseItem {
         return UseAnim.DRINK;
     }
 
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
-        return ItemUtils.startUsingInstantly(worldIn, playerIn, handIn);
+    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+        return ItemUtils.startUsingInstantly(level, playerIn, handIn);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
         tooltip.add(new TranslatableComponent("item.milk_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, level, tooltip, flagIn);
     }
 
     @Override

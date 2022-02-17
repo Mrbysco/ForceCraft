@@ -3,8 +3,7 @@ package com.mrbysco.forcecraft.items.tools;
 import com.google.common.collect.Lists;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
+import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModCapability;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import com.mrbysco.forcecraft.registry.material.ModToolTiers;
@@ -48,7 +47,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     	if(CAPABILITY_TOOLMOD == null) {
             return null;
         }
-        return new ToolModProvider();
+        return new ToolModCapability();
     }
 
     @Override
@@ -163,7 +162,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-			CompoundTag shareTag = ToolModStorage.serializeNBT(cap);
+			CompoundTag shareTag = ToolModCapability.writeNBT(cap);
 			nbt.put(Reference.MOD_ID, shareTag);
 		}
         return nbt;
@@ -176,8 +175,8 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     	}
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-	    	Tag shareTag = nbt.get(Reference.MOD_ID);
-	    	ToolModStorage.deserializeNBT(cap, shareTag);
+            CompoundTag shareTag = nbt.getCompound(Reference.MOD_ID);
+            ToolModCapability.readNBT(cap, shareTag);
 		}
         super.readShareTag(stack, nbt);
     }
@@ -193,11 +192,11 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
     }
     
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lores, TooltipFlag flagIn) {
     	ForceToolData fd = new ForceToolData(stack);
     	fd.attachInformation(lores);
-    	ToolModStorage.attachInformation(stack, lores);
-        super.appendHoverText(stack, worldIn, lores, flagIn);
+    	ToolModCapability.attachInformation(stack, lores);
+        super.appendHoverText(stack, level, lores, flagIn);
     }
     
 	@Override

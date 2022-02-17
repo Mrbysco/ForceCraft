@@ -14,7 +14,7 @@ public class SlotForceTools extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return stack.getItem().is(ForceTags.VALID_INFUSER_TOOLS);
+        return stack.is(ForceTags.VALID_INFUSER_TOOLS);
     }
 
     @Override

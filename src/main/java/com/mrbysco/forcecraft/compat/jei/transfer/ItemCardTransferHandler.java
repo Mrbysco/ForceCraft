@@ -9,13 +9,15 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardContainer> {
+public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardContainer, CraftingRecipe> {
 	public ItemCardTransferHandler() {
 
 	}
@@ -27,9 +29,14 @@ public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardC
 		return ItemCardContainer.class;
 	}
 
+	@Override
+	public Class getRecipeClass() {
+		return CraftingRecipe.class;
+	}
+
 	@Nullable
 	@Override
-	public IRecipeTransferError transferRecipe(ItemCardContainer container, Object recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
+	public IRecipeTransferError transferRecipe(ItemCardContainer container, CraftingRecipe recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
 		Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
 		List<ItemStack> items = new ArrayList<>(10);
 		for (int i = 0; i < 10; i++) {

@@ -3,7 +3,8 @@ package com.mrbysco.forcecraft.client.renderer;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.client.model.ColdChickenModel;
 import com.mrbysco.forcecraft.entities.ColdChickenEntity;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -11,8 +12,8 @@ import net.minecraft.util.Mth;
 public class ColdChickenRenderer extends MobRenderer<ColdChickenEntity, ColdChickenModel<ColdChickenEntity>> {
 	private static final ResourceLocation CHICKEN_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/cold_chicken.png");
 
-	public ColdChickenRenderer(EntityRenderDispatcher renderManagerIn) {
-		super(renderManagerIn, new ColdChickenModel<>(), 0.3F);
+	public ColdChickenRenderer(EntityRendererProvider.Context context) {
+		super(context, new ColdChickenModel(context.bakeLayer(ModelLayers.CHICKEN)), 0.3F);
 	}
 
 	/**

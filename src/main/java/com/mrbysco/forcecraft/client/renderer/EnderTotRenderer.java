@@ -2,15 +2,16 @@ package com.mrbysco.forcecraft.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.client.ClientHandler;
 import com.mrbysco.forcecraft.client.model.EnderTotModel;
 import com.mrbysco.forcecraft.client.renderer.layer.EnderTotHeldBlockLayer;
 import com.mrbysco.forcecraft.client.renderer.layer.EndertotEyesLayer;
 import com.mrbysco.forcecraft.entities.EnderTotEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
@@ -19,8 +20,8 @@ public class EnderTotRenderer extends MobRenderer<EnderTotEntity, EnderTotModel<
 	private static final ResourceLocation ENDERTOT_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/ender_tot.png");
 	private final Random rnd = new Random();
 
-	public EnderTotRenderer(EntityRenderDispatcher renderManagerIn) {
-		super(renderManagerIn, new EnderTotModel<>(0.0F), 0.5F);
+	public EnderTotRenderer(EntityRendererProvider.Context context) {
+		super(context, new EnderTotModel(context.bakeLayer(ClientHandler.ENDERTOT)), 0.5F);
 		this.addLayer(new EndertotEyesLayer<>(this));
 		this.addLayer(new EnderTotHeldBlockLayer(this));
 	}

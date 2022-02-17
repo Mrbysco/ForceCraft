@@ -5,6 +5,13 @@ import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.util.ForceUtils;
 import com.mrbysco.forcecraft.util.MobUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,16 +20,9 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 
@@ -36,12 +36,12 @@ public class ForceArrowEntity extends Arrow {
 	private static final EntityDataAccessor<Integer> LUCK = SynchedEntityData.defineId(ForceArrowEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> BLEEDING = SynchedEntityData.defineId(ForceArrowEntity.class, EntityDataSerializers.INT);
 
-	public ForceArrowEntity(EntityType<? extends Arrow> type, Level worldIn) {
-		super(type, worldIn);
+	public ForceArrowEntity(EntityType<? extends Arrow> type, Level level) {
+		super(type, level);
 	}
 
-	public ForceArrowEntity(Level worldIn, LivingEntity shooter) {
-		super(worldIn, shooter);
+	public ForceArrowEntity(Level level, LivingEntity shooter) {
+		super(level, shooter);
 		this.setOwner(shooter);
 	}
 

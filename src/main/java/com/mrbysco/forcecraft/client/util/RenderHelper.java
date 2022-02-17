@@ -1,17 +1,17 @@
 package com.mrbysco.forcecraft.client.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.world.inventory.InventoryMenu;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat.Mode;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 
@@ -33,18 +33,16 @@ public class RenderHelper {
 				float deltaV = maxV - minV;
 				double tankLevel = percent * height;
 
-				Minecraft.getInstance().textureManager.bind(InventoryMenu.BLOCK_ATLAS);
+				RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
 
 				Color color = new Color(fluid.getFluid()
 						.getAttributes()
 						.getColor());
 
-				RenderSystem.color4f(
-						(float) color.getRed() / 255.0F,
+				RenderSystem.setShaderColor((float) color.getRed() / 255.0F,
 						(float) color.getGreen() / 255.0F,
 						(float) color.getBlue() / 255.0F,
-						(float) color.getAlpha() / 255.0F
-				);
+						(float) color.getAlpha() / 255.0F);
 				RenderSystem.enableBlend();
 				int count = 1 + ((int) Math.ceil(tankLevel)) / 16;
 				for(int i = 0; i < count; i++) {
@@ -53,7 +51,7 @@ public class RenderHelper {
 					drawQuad(x, y + offsetY, 16, subHeight, minU, (float) (maxV - deltaV * (subHeight / 16.0)), maxU, maxV);
 				}
 				RenderSystem.disableBlend();
-				RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			}
 		}
 	}
@@ -61,7 +59,7 @@ public class RenderHelper {
 	private static void drawQuad(double x, double y, double width, double height, float minU, float minV, float maxU, float maxV) {
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
+		buffer.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(x, y + height, 0).uv(minU, maxV).endVertex();
 		buffer.vertex(x + width, y + height, 0).uv(maxU, maxV).endVertex();
 		buffer.vertex(x + width, y, 0).uv(maxU, minV).endVertex();

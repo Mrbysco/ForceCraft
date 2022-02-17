@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.camo.entry.name",
-  "category": "tier_3",
+  "category": "forcecraft:tier_3",
   "icon": "minecraft:potion{\"Potion\":\"minecraft:invisibility\"}",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.camo_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:potion{\"Potion\":\"minecraft:invisibility\"}"
     }
   ],

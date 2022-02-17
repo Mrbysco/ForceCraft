@@ -2,16 +2,13 @@ package com.mrbysco.forcecraft.client.model;
 
 import com.mrbysco.forcecraft.entities.ColdPigEntity;
 import net.minecraft.client.model.PigModel;
+import net.minecraft.client.model.geom.ModelPart;
 
 public class ColdPigModel<T extends ColdPigEntity> extends PigModel<T> {
 	private float headRotationAngleX;
 
-	public ColdPigModel() {
-		super();
-	}
-
-	public ColdPigModel(float scale) {
-		super(scale);
+	public ColdPigModel(ModelPart root) {
+		super(root);
 	}
 
 	public void prepareMobModel(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {

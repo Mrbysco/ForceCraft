@@ -2,8 +2,7 @@ package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModProvider;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModStorage;
+import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModCapability;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import com.mrbysco.forcecraft.registry.material.ModToolTiers;
@@ -43,7 +42,7 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
         ItemStack heldStack = playerIn.getItemInHand(handIn);
 		IToolModifier toolCap = heldStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(toolCap != null) {
@@ -54,17 +53,17 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
 				playerIn.setDeltaMovement(vec.x * wantedVelocity,vec.y * wantedVelocity,vec.z * wantedVelocity);
 				heldStack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
 				playerIn.getCooldowns().addCooldown(this, 20);
-				worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.8F);
+				level.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (level.random.nextFloat() - level.random.nextFloat()) * 0.8F);
 			}
 			//Ender Modifier
 			if(toolCap.hasEnder()) {
-				BlockHitResult traceResult = getPlayerPOVHitResult(worldIn, playerIn, Fluid.NONE);
+				BlockHitResult traceResult = getPlayerPOVHitResult(level, playerIn, Fluid.NONE);
 				BlockPos lookPos = traceResult.getBlockPos().relative(traceResult.getDirection());
 				EntityTeleportEvent event = new EntityTeleportEvent(playerIn, lookPos.getX(), lookPos.getY(), lookPos.getZ());
 				if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) {
 					boolean flag2 = playerIn.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 					if (flag2 && !playerIn.isSilent()) {
-						worldIn.playSound((Player)null, playerIn.xo, playerIn.yo, playerIn.zo, SoundEvents.ENDERMAN_TELEPORT, playerIn.getSoundSource(), 1.0F, 1.0F);
+						level.playSound((Player)null, playerIn.xo, playerIn.yo, playerIn.zo, SoundEvents.ENDERMAN_TELEPORT, playerIn.getSoundSource(), 1.0F, 1.0F);
 						playerIn.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 						heldStack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
 						playerIn.getCooldowns().addCooldown(this, 10);
@@ -72,7 +71,7 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
 				}
 			}
 		}
-        return super.use(worldIn, playerIn, handIn);
+        return super.use(level, playerIn, handIn);
     }
 
     @Nullable
@@ -81,16 +80,16 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
         if(CAPABILITY_TOOLMOD == null) {
             return null;
         }
-        return new ToolModProvider();
+        return new ToolModCapability();
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lores, TooltipFlag flagIn) {
     	ForceToolData fd = new ForceToolData(stack);
     	fd.attachInformation(lores);
-    	ToolModStorage.attachInformation(stack, lores);
-        super.appendHoverText(stack, worldIn, lores, flagIn);
+    	ToolModCapability.attachInformation(stack, lores);
+        super.appendHoverText(stack, level, lores, flagIn);
     }
 
 	@Override
@@ -115,7 +114,7 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
     	
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-			CompoundTag shareTag = ToolModStorage.serializeNBT(cap);
+			CompoundTag shareTag = ToolModCapability.writeNBT(cap);
 			nbt.put(Reference.MOD_ID, shareTag);
 		}
         return nbt;
@@ -129,8 +128,8 @@ public class ForceSwordItem extends SwordItem implements IForceChargingTool {
 
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if(cap != null) {
-	    	Tag shareTag = nbt.get(Reference.MOD_ID);
-	    	ToolModStorage.deserializeNBT(cap, shareTag);
+			CompoundTag shareTag = nbt.getCompound(Reference.MOD_ID);
+			ToolModCapability.readNBT(cap, shareTag);
 		}
 		super.readShareTag(stack, nbt);
 	}

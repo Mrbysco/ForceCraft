@@ -4,10 +4,11 @@
     {
       "name": "Force Loot",
       "rolls": {
+        "type": "minecraft:uniform",
         "min": 1.0,
-        "max": 4.0,
-        "type": "minecraft:uniform"
+        "max": 4.0
       },
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -26,10 +27,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 5.0
+              },
+              "add": false
             }
           ],
           "name": "forcecraft:force_gem"
@@ -41,10 +43,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 8.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 8.0
+              },
+              "add": false
             }
           ],
           "name": "forcecraft:force_ingot"
@@ -56,10 +59,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 3.0,
-                "max": 8.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 8.0
+              },
+              "add": false
             }
           ],
           "name": "forcecraft:force_ingot"
@@ -106,6 +110,7 @@
     {
       "name": "Other Tables",
       "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:loot_table",

@@ -1,12 +1,10 @@
 package com.mrbysco.forcecraft.blocks.flammable;
 
 import com.mrbysco.forcecraft.blocks.BaseBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class FlammableBlock extends BaseBlock {
     public final int fireSpreadSpeed;

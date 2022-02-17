@@ -1,14 +1,14 @@
 {
   "name": "info.forcecraft.book.upgrade_core.entry.name",
-  "category": "infuser",
+  "category": "forcecraft:infuser",
   "icon": "forcecraft:upgrade_core",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.upgrade_core_info.text"
     },
     {
-      "type": "crafting",
+      "type": "patchouli:crafting",
       "recipe": "forcecraft:transmutation/upgrade_core",
       "text": "info.forcecraft.book.upgrade_core_recipe.text"
     }

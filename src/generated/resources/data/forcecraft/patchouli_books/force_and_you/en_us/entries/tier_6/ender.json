@@ -1,19 +1,19 @@
 {
   "name": "info.forcecraft.book.ender.entry.name",
-  "category": "tier_6",
+  "category": "forcecraft:tier_6",
   "icon": "minecraft:ender_pearl",
   "pages": [
     {
-      "type": "text",
+      "type": "patchouli:text",
       "text": "info.forcecraft.book.ender_info.text"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:ender_pearl",
       "text": "info.forcecraft.book.ender_info.text2"
     },
     {
-      "type": "spotlight",
+      "type": "patchouli:spotlight",
       "item": "minecraft:ender_eye"
     }
   ],

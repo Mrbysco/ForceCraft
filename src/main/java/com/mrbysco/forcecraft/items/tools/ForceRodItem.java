@@ -1,8 +1,7 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.forcerod.ForceRodProvider;
-import com.mrbysco.forcecraft.capablilities.forcerod.ForceRodStorage;
+import com.mrbysco.forcecraft.capablilities.forcerod.ForceRodCapability;
 import com.mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
@@ -62,25 +61,25 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
-		Level worldIn = context.getLevel();
+		Level level = context.getLevel();
 		BlockPos pos = context.getClickedPos();
 		Direction facing = context.getClickedFace();
 		Player player = context.getPlayer();
 		InteractionHand handIn = context.getHand();
 		ItemStack stack = context.getItemInHand();
-		if (!worldIn.isClientSide && player != null) {
-			if (worldIn.getBlockState(pos).getBlock() instanceof FireBlock) {
-				worldIn.removeBlock(pos, false);
-				List<ItemEntity> list = worldIn.getEntitiesOfClass(ItemEntity.class,
+		if (!level.isClientSide && player != null) {
+			if (level.getBlockState(pos).getBlock() instanceof FireBlock) {
+				level.removeBlock(pos, false);
+				List<ItemEntity> list = level.getEntitiesOfClass(ItemEntity.class,
 						new AABB(new BlockPos(pos.getX(), pos.getY(), pos.getZ())).expandTowards(0.5, 1, 0.5));
 				boolean bw = false;
 				for (ItemEntity itemEntity : list) {
 					if (itemEntity != null) {
 						if (itemEntity.getItem().getItem() instanceof InertCoreItem) {
-							ItemEntity bottledWither = new NonBurnableItemEntity(worldIn, pos.getX(), pos.getY() + 1,
+							ItemEntity bottledWither = new NonBurnableItemEntity(level, pos.getX(), pos.getY() + 1,
 									pos.getZ(), new ItemStack(ForceRegistry.BOTTLED_WITHER.get(),
 											itemEntity.getItem().getCount()));
-							worldIn.addFreshEntity(bottledWither);
+							level.addFreshEntity(bottledWither);
 							stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 							bw = true;
 						}
@@ -96,7 +95,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 					}
 				}
 			} else {
-				List<ItemEntity> list = worldIn.getEntitiesOfClass(ItemEntity.class,
+				List<ItemEntity> list = level.getEntitiesOfClass(ItemEntity.class,
 						new AABB(new BlockPos(pos.getX(), pos.getY(), pos.getZ())).expandTowards(0.5, 1, 0.5));
 				// If it is a subset of items, it will drop swap an item
 				for (ItemEntity itemEntity : list) {
@@ -108,19 +107,19 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 								if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.IRON) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.IRON_INGOT, 6)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.GOLD) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.GOLD_INGOT, 6)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.LEATHER) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(ForceRegistry.FORCE_CHEST.get(), 1)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								}
@@ -130,19 +129,19 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 								if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.IRON) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.IRON_INGOT, 5)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.GOLD) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.GOLD_INGOT, 5)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.LEATHER) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(ForceRegistry.FORCE_LEGS.get(), 1)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								}
@@ -152,19 +151,19 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 								if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.IRON) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.IRON_INGOT, 3)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.GOLD) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.GOLD_INGOT, 3)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.LEATHER) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(ForceRegistry.FORCE_BOOTS.get(), 1)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								}
@@ -174,19 +173,19 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 								if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.IRON) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.IRON_INGOT, 4)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.GOLD) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(Items.GOLD_INGOT, 4)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								} else if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.LEATHER) {
 									itemEntity.discard();
-									worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY() + 1, pos.getZ(),
+									level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY() + 1, pos.getZ(),
 											new ItemStack(ForceRegistry.FORCE_HELMET.get(), 1)));
 									stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 								}
@@ -201,7 +200,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 			if (cap.hasEnderModifier()) {
 				if(player.isShiftKeyDown()) {
 					cap.setHomeLocation(GlobalPos.of(player.level.dimension(), player.blockPosition()));
-					if(!worldIn.isClientSide) {
+					if(!level.isClientSide) {
 						player.displayClientMessage(new TranslatableComponent("forcecraft.ender_rod.location.set").withStyle(ChatFormatting.DARK_PURPLE), true);
 					}
 				} else {
@@ -209,7 +208,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 						cap.teleportPlayerToLocation(player, cap.getHomeLocation());
 						stack.hurtAndBreak(1, player, (playerIn) -> player.broadcastBreakEvent(handIn));
 						player.getCooldowns().addCooldown(this, 10);
-						worldIn.playSound((Player)null, player.xo, player.yo, player.zo, SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
+						level.playSound((Player)null, player.xo, player.yo, player.zo, SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
 						player.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 					}
 				}
@@ -220,7 +219,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if(playerIn != null) {
@@ -246,7 +245,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 							cap.teleportPlayerToLocation(playerIn, cap.getHomeLocation());
 							stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
 							playerIn.getCooldowns().addCooldown(this, 10);
-							worldIn.playSound((Player)null, playerIn.xo, playerIn.yo, playerIn.zo, SoundEvents.ENDERMAN_TELEPORT, playerIn.getSoundSource(), 1.0F, 1.0F);
+							level.playSound((Player)null, playerIn.xo, playerIn.yo, playerIn.zo, SoundEvents.ENDERMAN_TELEPORT, playerIn.getSoundSource(), 1.0F, 1.0F);
 							playerIn.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 						}
 					}
@@ -271,7 +270,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 			});
 		}
 
-		return super.use(worldIn, playerIn, handIn);
+		return super.use(level, playerIn, handIn);
 	}
 
 	@Override
@@ -294,7 +293,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		if (CAPABILITY_FORCEROD == null) {
 			return null;
 		}
-		return new ForceRodProvider();
+		return new ForceRodCapability();
 	}
 
 	public void setApplicableModifiers() {
@@ -314,7 +313,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 		IForceRodModifier cap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
 		if(cap != null) {
-			CompoundTag shareTag = ForceRodStorage.serializeNBT(cap);
+			CompoundTag shareTag = ForceRodCapability.writeNBT(cap);
 			nbt.put(Reference.MOD_ID, shareTag);
 		}
 		return nbt;
@@ -328,18 +327,18 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 		IForceRodModifier cap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
 		if(cap != null) {
-			Tag shareTag = nbt.get(Reference.MOD_ID);
-			ForceRodStorage.deserializeNBT(cap, shareTag);
+			CompoundTag shareTag = nbt.getCompound(Reference.MOD_ID);
+			ForceRodCapability.readNBT(cap, shareTag);
 		}
 		super.readShareTag(stack, nbt);
 	}
 	
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> lores, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lores, TooltipFlag flagIn) {
 		ForceToolData fd = new ForceToolData(stack);
 		fd.attachInformation(lores);
-		ForceRodStorage.attachInformation(stack, lores);
-		super.appendHoverText(stack, worldIn, lores, flagIn);
+		ForceRodCapability.attachInformation(stack, lores);
+		super.appendHoverText(stack, level, lores, flagIn);
 	}
 }

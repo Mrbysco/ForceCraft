@@ -6,7 +6,7 @@ public enum UpgradeBookTier {
 
 	private final int tier;
 
-	private UpgradeBookTier(int tier) {
+	UpgradeBookTier(int tier) {
 		this.tier = tier;
 	}
 	

@@ -1,18 +1,18 @@
 package com.mrbysco.forcecraft.client.gui.card;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.container.ItemCardContainer;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemCardScreen extends AbstractContainerScreen<ItemCardContainer> {
 	private static final ResourceLocation ITEM_CARD_GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/crafting3x3.png");
@@ -28,13 +28,13 @@ public class ItemCardScreen extends AbstractContainerScreen<ItemCardContainer> {
 		super.init();
 		this.titleLabelX = 29;
 
-		this.buttonSave = this.addButton(new Button(this.width / 2 + 62, this.height / 2 - 76, 20, 20, saveText, (button) -> {
+		this.buttonSave = this.addRenderableWidget(new Button(this.width / 2 + 62, this.height / 2 - 76, 20, 20, saveText, (button) -> {
 			PacketHandler.CHANNEL.sendToServer(new SaveCardRecipeMessage());
 		}));
 	}
 
-	public void tick() {
-		super.tick();
+	public void containerTick() {
+		super.containerTick();
 
 		ItemStack resultStack = getMenu().getCraftResult().getItem(0);
 		if(resultStack.isEmpty()) {
@@ -54,17 +54,17 @@ public class ItemCardScreen extends AbstractContainerScreen<ItemCardContainer> {
 		}
 	}
 
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(matrixStack);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(matrixStack, mouseX, mouseY);
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(poseStack);
+		super.render(poseStack, mouseX, mouseY, partialTicks);
+		this.renderTooltip(poseStack, mouseX, mouseY);
 	}
 
-	protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bind(ITEM_CARD_GUI);
+	protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, ITEM_CARD_GUI);
 		int i = this.leftPos;
 		int j = (this.height - this.imageHeight) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+		this.blit(poseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 	}
 }

@@ -66,7 +66,12 @@ public class TransmutationRecipe implements CraftingRecipe {
 	}
 
 	@Override
-	public boolean matches(CraftingContainer inv, Level worldIn) {
+	public boolean isSpecial() {
+		return true;
+	}
+
+	@Override
+	public boolean matches(CraftingContainer inv, Level level) {
 		StackedContents recipeitemhelper = new StackedContents();
 		java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
 		int i = 0;

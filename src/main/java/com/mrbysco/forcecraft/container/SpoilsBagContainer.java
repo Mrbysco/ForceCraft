@@ -97,7 +97,7 @@ public class SpoilsBagContainer extends AbstractContainerMenu {
                 if(itemstack.getItem() instanceof SpoilsBagItem)
                     return ItemStack.EMPTY;
 
-                int containerSlots = slots.size() - player.inventory.items.size();
+                int containerSlots = slots.size() - player.getInventory().items.size();
                 
                 if (index < containerSlots) {
                     if (!this.moveItemStackTo(itemstack1, containerSlots, slots.size(), true)) {

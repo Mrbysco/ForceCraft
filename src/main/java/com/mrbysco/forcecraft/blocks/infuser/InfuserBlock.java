@@ -1,39 +1,41 @@
 package com.mrbysco.forcecraft.blocks.infuser;
 
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.entity.player.Player;
+import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.stream.Stream;
 
-public class InfuserBlock extends Block {
+public class InfuserBlock extends Block implements EntityBlock {
 
     private static final VoxelShape SHAPE = Stream.of(
             Block.box(3, 10, 3, 13, 11, 13),
@@ -49,32 +51,27 @@ public class InfuserBlock extends Block {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
     }
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-        return new InfuserBlockEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new InfuserBlockEntity(pos, state);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand handIn, BlockHitResult hit) {
-        BlockEntity tileentity = worldIn.getBlockEntity(pos);
-        if (tileentity instanceof InfuserBlockEntity) {
-            LazyOptional<IFluidHandler> fluidHandler = tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, hit.getDirection());
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player playerIn, InteractionHand handIn, BlockHitResult hit) {
+        BlockEntity blockentity = level.getBlockEntity(pos);
+        if (blockentity instanceof InfuserBlockEntity) {
+            LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, hit.getDirection());
             fluidHandler.ifPresent((handler) -> {
                 if(playerIn.getItemInHand(handIn).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
-                    FluidUtil.interactWithFluidHandler(playerIn, handIn, worldIn, pos, hit.getDirection());
+                    FluidUtil.interactWithFluidHandler(playerIn, handIn, level, pos, hit.getDirection());
                 } else {
-                    if (!worldIn.isClientSide) {
-                        NetworkHooks.openGui((ServerPlayer) playerIn, (InfuserBlockEntity) tileentity, pos);
+                    if (!level.isClientSide) {
+                        NetworkHooks.openGui((ServerPlayer) playerIn, (InfuserBlockEntity) blockentity, pos);
                     }
                 }
             });
@@ -86,18 +83,18 @@ public class InfuserBlock extends Block {
 
     @SuppressWarnings("deprecation")
 	@Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
-            BlockEntity tileentity = worldIn.getBlockEntity(pos);
-            if (tileentity instanceof InfuserBlockEntity) {
-                tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
+            BlockEntity blockentity = level.getBlockEntity(pos);
+            if (blockentity instanceof InfuserBlockEntity) {
+                blockentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
                     for(int i = 0; i < handler.getSlots(); ++i) {
-                        Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));
+                        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));
                     }
                 });
             }
 
-            super.onRemove(state, worldIn, pos, newState, isMoving);
+            super.onRemove(state, level, pos, newState, isMoving);
         }
     }
 
@@ -107,9 +104,9 @@ public class InfuserBlock extends Block {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
-        BlockEntity tileentity = worldIn.getBlockEntity(pos);
-        if (tileentity instanceof InfuserBlockEntity infuserTile) {
+    public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand) {
+        BlockEntity blockentity = level.getBlockEntity(pos);
+        if (blockentity instanceof InfuserBlockEntity infuserTile) {
             if(infuserTile.processTime > 0) {
                 double d0 = (double)pos.getX() + 0.5D;
                 double d1 = (double)pos.getY() + 0.5;
@@ -123,7 +120,7 @@ public class InfuserBlock extends Block {
                     double d5 = direction$axis == Direction.Axis.X ? (double)direction.getStepX() * d3 : d4;
                     double d6 = rand.nextDouble() * 6.0D / 16.0D;
                     double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * d3 : d4;
-                    worldIn.addParticle(ParticleTypes.REVERSE_PORTAL, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+                    level.addParticle(ParticleTypes.REVERSE_PORTAL, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
                 }
             }
         }
