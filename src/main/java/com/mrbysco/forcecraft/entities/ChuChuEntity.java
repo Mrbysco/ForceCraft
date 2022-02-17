@@ -40,7 +40,7 @@ public class ChuChuEntity extends Slime {
 		this.reapplyPosition();
 		this.refreshDimensions();
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue((double)(size));
-		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue((double)(0.2F + 0.1F * (float)1));
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue((double)(0.2F + 0.1F));
 		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(((double)1 + random.nextInt(2)));
 		if (resetHealth) {
 			this.setHealth(this.getMaxHealth());

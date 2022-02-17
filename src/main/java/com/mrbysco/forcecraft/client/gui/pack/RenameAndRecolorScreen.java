@@ -99,6 +99,6 @@ public class RenameAndRecolorScreen extends Screen {
 
 		this.textfield.render(poseStack, mouseX, mouseY, partialTicks);
 		super.render(poseStack, mouseX, mouseY, partialTicks);
-		font.draw(poseStack, new TextComponent("Color"), this.width / 2 - 68, this.height / 2 + 9, 5592405);
+		font.draw(poseStack, new TextComponent("Color"), (int)(this.width / 2d - 68), (int)(this.height / 2d + 9), 5592405);
 	}
 }
