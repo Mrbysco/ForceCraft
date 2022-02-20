@@ -20,7 +20,8 @@ version = "${version}"
 group = "com.mrbysco.forcecraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "forcecraft-${mc_version}"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17) // Mojang ships Java 8 to end users, so your mod should target Java 8.
+// Mojang ships Java 16 to end users in 1.17+ instead of Java 8 in 1.16 or lower, so your mod should target Java 16.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -33,7 +34,7 @@ minecraft {
 	runs {
         client {
             workingDirectory project.file('run')
-            arg "-mixin.config=forcecraft.mixins.json"
+            arg '--mixin.config=forcecraft.mixins.json'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             
@@ -52,7 +53,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-            arg "-mixin.config=forcecraft.mixins.json"
+            arg '--mixin.config=forcecraft.mixins.json'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
@@ -71,7 +72,7 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-            arg "-mixin.config=forcecraft.mixins.json"
+            arg '--mixin.config=forcecraft.mixins.json'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
@@ -126,16 +127,14 @@ mixin {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
     compileOnly fg.deobf("xyz.brassgoggledcoders:PatchouliProvider:${mc_version}-${patchouli_provider_version}")
-    runtimeOnly fg.deobf("xyz.brassgoggledcoders:PatchouliProvider:${mc_version}-${patchouli_provider_version}")
 
     runtimeOnly fg.deobf("curse.maven:titanium-287342:3570210")
     runtimeOnly fg.deobf("curse.maven:pipez-443900:3569514")
@@ -143,20 +142,20 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:3546593")
 
-    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3556894")
+    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3644670")
 }
 
 jar {
     manifest {
         attributes([
-            "Specification-Title": "forcecraft",
-            "Specification-Vendor": "Mrbysco",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"Mrbysco",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "forcecraft.mixins.json"
+                "Specification-Title"     : "forcecraft",
+                "Specification-Vendor"    : "Mrbysco",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "Mrbysco",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : "forcecraft.mixins.json"
         ])
     }
 }
