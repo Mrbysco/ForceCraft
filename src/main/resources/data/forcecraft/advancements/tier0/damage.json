@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "forcecraft:infuser"
+            "items": [
+              "forcecraft:infuser"
+            ]
           }
         ]
       }
