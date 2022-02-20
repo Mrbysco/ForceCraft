@@ -47,6 +47,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -76,6 +77,17 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 				return false;
 			} else {
 				return true;
+			}
+		}
+
+		@Override
+		public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+			super.setStackInSlot(slot, stack);
+
+			if (slot == 0) {
+				cookingTotalTime = getCookingProgress();
+				cookingProgress = 0;
+				setChanged();
 			}
 		}
 	};
