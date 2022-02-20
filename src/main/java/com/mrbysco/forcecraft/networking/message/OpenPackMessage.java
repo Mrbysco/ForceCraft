@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.networking.message;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.container.ForcePackContainer;
+import com.mrbysco.forcecraft.menu.ForcePackMenu;
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.util.FindingUtil;
 import net.minecraft.ChatFormatting;
@@ -53,7 +53,7 @@ public class OpenPackMessage {
 							@Nullable
 							@Override
 							public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-								return new ForcePackContainer(id, inventory);
+								return new ForcePackMenu(id, inventory);
 							}
 						});
 					}

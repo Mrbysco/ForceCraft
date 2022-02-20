@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.container;
+package com.mrbysco.forcecraft.menu;
 
 import com.mrbysco.forcecraft.items.ItemCardItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
@@ -26,18 +26,18 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
-public class ItemCardContainer extends AbstractContainerMenu {
+public class ItemCardMenu extends AbstractContainerMenu {
 	private final CraftingContainer craftMatrix = new CraftingContainer(this, 3, 3);
 	private final ResultContainer craftResult = new ResultContainer();
 	private final ContainerLevelAccess worldPosCallable;
 	private final Player player;
 	private ItemStack heldStack;
 
-	public ItemCardContainer(int id, Inventory playerInventory) {
+	public ItemCardMenu(int id, Inventory playerInventory) {
 		this(id, playerInventory, ContainerLevelAccess.NULL);
 	}
 
-	public ItemCardContainer(int id, Inventory playerInventory, ContainerLevelAccess worldPosCallable) {
+	public ItemCardMenu(int id, Inventory playerInventory, ContainerLevelAccess worldPosCallable) {
 		super(ForceContainers.ITEM_CARD.get(), id);
 		this.worldPosCallable = worldPosCallable;
 		this.player = playerInventory.player;

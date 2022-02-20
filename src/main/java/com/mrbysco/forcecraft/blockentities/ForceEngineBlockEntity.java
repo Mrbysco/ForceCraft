@@ -4,7 +4,7 @@ import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blocks.engine.ForceEngineBlock;
 import com.mrbysco.forcecraft.capablilities.FluidHandlerWrapper;
 import com.mrbysco.forcecraft.capablilities.ItemStackHandlerWrapper;
-import com.mrbysco.forcecraft.container.engine.ForceEngineContainer;
+import com.mrbysco.forcecraft.menu.engine.ForceEngineMenu;
 import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
@@ -235,7 +235,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	@Nullable
 	@Override
 	public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
-		return new ForceEngineContainer(id, playerInv, this);
+		return new ForceEngineMenu(id, playerInv, this);
 	}
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, ForceEngineBlockEntity forceEngine) {

@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.items;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.container.ForceBeltContainer;
+import com.mrbysco.forcecraft.menu.ForceBeltMenu;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
@@ -71,7 +71,7 @@ public class ForceBeltItem extends BaseItem {
     @Nullable
     public MenuProvider getContainer(ItemStack stack) {
         return new SimpleMenuProvider((id, inventory, player) -> {
-            return new ForceBeltContainer(id, inventory);
+            return new ForceBeltMenu(id, inventory);
         }, stack.hasCustomHoverName() ? ((BaseComponent)stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.belt"));
     }
 

@@ -1,8 +1,8 @@
-package com.mrbysco.forcecraft.container.furnace;
+package com.mrbysco.forcecraft.menu.furnace;
 
-import com.mrbysco.forcecraft.container.furnace.slot.ForceFurnaceFuelSlot;
-import com.mrbysco.forcecraft.container.furnace.slot.ForceFurnaceResultSlot;
-import com.mrbysco.forcecraft.container.furnace.slot.UpgradeSlot;
+import com.mrbysco.forcecraft.menu.furnace.slot.ForceFurnaceFuelSlot;
+import com.mrbysco.forcecraft.menu.furnace.slot.ForceFurnaceResultSlot;
+import com.mrbysco.forcecraft.menu.furnace.slot.UpgradeSlot;
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceContainers;
@@ -30,7 +30,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.Objects;
 
-public abstract class AbstractForceFurnaceContainer extends AbstractContainerMenu {
+public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 	private AbstractForceFurnaceBlockEntity tile;
 	private Player player;
 	private IItemHandler furnaceInventory;
@@ -38,7 +38,7 @@ public abstract class AbstractForceFurnaceContainer extends AbstractContainerMen
 	private ContainerData furnaceData;
 	private Level world;
 
-	public AbstractForceFurnaceContainer(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
+	public AbstractForceFurnaceMenu(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
 		this(windowId, playerInventory, getTileEntity(playerInventory, data));
 	}
 
@@ -54,7 +54,7 @@ public abstract class AbstractForceFurnaceContainer extends AbstractContainerMen
 		throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
 	}
 
-	public AbstractForceFurnaceContainer(int id, Inventory playerInventoryIn, AbstractForceFurnaceBlockEntity te) {
+	public AbstractForceFurnaceMenu(int id, Inventory playerInventoryIn, AbstractForceFurnaceBlockEntity te) {
 		super(ForceContainers.FORCE_FURNACE.get(), id);
 		this.tile = te;
 		this.player = playerInventoryIn.player;

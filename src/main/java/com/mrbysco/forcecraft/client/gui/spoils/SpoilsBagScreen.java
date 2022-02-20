@@ -3,16 +3,16 @@ package com.mrbysco.forcecraft.client.gui.spoils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.container.SpoilsBagContainer;
+import com.mrbysco.forcecraft.menu.SpoilsBagMenu;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class SpoilsBagScreen extends AbstractContainerScreen<SpoilsBagContainer> {
+public class SpoilsBagScreen extends AbstractContainerScreen<SpoilsBagMenu> {
     private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/spoilsbag.png");
 
-    public SpoilsBagScreen(SpoilsBagContainer screenContainer, Inventory inv, Component titleIn) {
+    public SpoilsBagScreen(SpoilsBagMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
 
         this.imageHeight = 134;

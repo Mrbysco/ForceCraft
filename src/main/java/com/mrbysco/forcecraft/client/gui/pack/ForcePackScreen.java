@@ -3,13 +3,13 @@ package com.mrbysco.forcecraft.client.gui.pack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.container.ForcePackContainer;
+import com.mrbysco.forcecraft.menu.ForcePackMenu;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class ForcePackScreen extends AbstractContainerScreen<ForcePackContainer> {
+public class ForcePackScreen extends AbstractContainerScreen<ForcePackMenu> {
 
     private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcepack.png");
     private ResourceLocation TEXTURE_UPGRADE_1 = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcepack_upgrade_1.png");
@@ -17,7 +17,7 @@ public class ForcePackScreen extends AbstractContainerScreen<ForcePackContainer>
     private ResourceLocation TEXTURE_UPGRADE_3 = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcepack_upgrade_3.png");
     private ResourceLocation TEXTURE_UPGRADE_4 = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcepack_upgrade_4.png");
 
-    public ForcePackScreen(ForcePackContainer screenContainer, Inventory inv, Component titleIn) {
+    public ForcePackScreen(ForcePackMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
 
         this.imageHeight = 136 + (this.menu.getUpgrades() * 18);

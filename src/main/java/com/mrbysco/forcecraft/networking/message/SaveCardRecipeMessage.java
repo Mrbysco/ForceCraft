@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.networking.message;
 
-import com.mrbysco.forcecraft.container.ItemCardContainer;
+import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.items.ItemCardItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -42,7 +42,7 @@ public class SaveCardRecipeMessage {
 				Level world = player.level;
 				ItemStack stack = getCardStack(player);
 				if (!stack.isEmpty()) {
-					if (player.containerMenu instanceof ItemCardContainer itemCardContainer) {
+					if (player.containerMenu instanceof ItemCardMenu itemCardContainer) {
 						CraftingContainer craftMatrix = itemCardContainer.getCraftMatrix();
 						ResultContainer craftResult = itemCardContainer.getCraftResult();
 						Optional<CraftingRecipe> iRecipe = player.server.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftMatrix, world);

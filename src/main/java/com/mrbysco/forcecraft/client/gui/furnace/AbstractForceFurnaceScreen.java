@@ -2,7 +2,7 @@ package com.mrbysco.forcecraft.client.gui.furnace;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mrbysco.forcecraft.container.furnace.AbstractForceFurnaceContainer;
+import com.mrbysco.forcecraft.menu.furnace.AbstractForceFurnaceMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class AbstractForceFurnaceScreen<T extends AbstractForceFurnaceContainer> extends AbstractContainerScreen<T> {
+public abstract class AbstractForceFurnaceScreen<T extends AbstractForceFurnaceMenu> extends AbstractContainerScreen<T> {
 	private final ResourceLocation GUI_TEXTURE;
 
 	public AbstractForceFurnaceScreen(T screenContainer, Inventory inv, Component titleIn, ResourceLocation guiTextureIn) {

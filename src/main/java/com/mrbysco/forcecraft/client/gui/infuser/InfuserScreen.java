@@ -8,7 +8,7 @@ import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.client.gui.widgets.ProgressBar;
 import com.mrbysco.forcecraft.client.util.RenderHelper;
-import com.mrbysco.forcecraft.container.infuser.InfuserContainer;
+import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.InfuserMessage;
 import net.minecraft.ChatFormatting;
@@ -29,7 +29,7 @@ import net.minecraftforge.network.PacketDistributor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfuserScreen extends AbstractContainerScreen<InfuserContainer> {
+public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 
 	private Inventory inventory;
 	private ProgressBar infuserProgress;
@@ -39,7 +39,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserContainer> {
 	private final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forceinfuser.png");
 	private Button buttonInfuse;
 
-	public InfuserScreen(InfuserContainer screenContainer, Inventory inv, Component titleIn) {
+	public InfuserScreen(InfuserMenu screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
 
 		this.inventory = inv;

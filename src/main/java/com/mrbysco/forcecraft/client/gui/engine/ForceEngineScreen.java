@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
 import com.mrbysco.forcecraft.client.util.RenderHelper;
-import com.mrbysco.forcecraft.container.engine.ForceEngineContainer;
+import com.mrbysco.forcecraft.menu.engine.ForceEngineMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -18,10 +18,10 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineContainer> {
+public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineMenu> {
 	private final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/force_engine.png");
 
-	public ForceEngineScreen(ForceEngineContainer screenContainer, Inventory inv, Component titleIn) {
+	public ForceEngineScreen(ForceEngineMenu screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
 	}
 

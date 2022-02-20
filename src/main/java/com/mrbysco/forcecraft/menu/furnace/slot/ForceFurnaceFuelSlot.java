@@ -1,15 +1,15 @@
-package com.mrbysco.forcecraft.container.furnace.slot;
+package com.mrbysco.forcecraft.menu.furnace.slot;
 
-import com.mrbysco.forcecraft.container.furnace.AbstractForceFurnaceContainer;
+import com.mrbysco.forcecraft.menu.furnace.AbstractForceFurnaceMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ForceFurnaceFuelSlot extends SlotItemHandler {
-	private final AbstractForceFurnaceContainer furnaceContainer;
+	private final AbstractForceFurnaceMenu furnaceContainer;
 
-	public ForceFurnaceFuelSlot(AbstractForceFurnaceContainer furnaceContainer, IItemHandler furnaceInventory, int slotIndex, int xPosition, int yPosition) {
+	public ForceFurnaceFuelSlot(AbstractForceFurnaceMenu furnaceContainer, IItemHandler furnaceInventory, int slotIndex, int xPosition, int yPosition) {
 		super(furnaceInventory, slotIndex, xPosition, yPosition);
 		this.furnaceContainer = furnaceContainer;
 	}

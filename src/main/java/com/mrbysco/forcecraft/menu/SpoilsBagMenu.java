@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.container;
+package com.mrbysco.forcecraft.menu;
 
 import com.mrbysco.forcecraft.items.SpoilsBagItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
@@ -13,7 +13,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class SpoilsBagContainer extends AbstractContainerMenu {
+public class SpoilsBagMenu extends AbstractContainerMenu {
 
     private ItemStack heldStack;
 
@@ -22,7 +22,7 @@ public class SpoilsBagContainer extends AbstractContainerMenu {
         return !playerIn.isSpectator() && !heldStack.isEmpty();
     }
 
-    public SpoilsBagContainer(int id, Inventory playerInventory) {
+    public SpoilsBagMenu(int id, Inventory playerInventory) {
         this(id, playerInventory, getSpoilsBag(playerInventory));
     }
 
@@ -36,7 +36,7 @@ public class SpoilsBagContainer extends AbstractContainerMenu {
         return ItemStack.EMPTY;
     }
 
-    public SpoilsBagContainer(int id, Inventory playerInventory, ItemStack forceBelt) {
+    public SpoilsBagMenu(int id, Inventory playerInventory, ItemStack forceBelt) {
         super(ForceContainers.SPOILS_BAG.get(), id);
         if (forceBelt == null || forceBelt.isEmpty()) {
             playerInventory.player.closeContainer();

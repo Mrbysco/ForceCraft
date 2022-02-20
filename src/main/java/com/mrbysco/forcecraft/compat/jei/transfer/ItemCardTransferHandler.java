@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.compat.jei.transfer;
 
-import com.mrbysco.forcecraft.container.ItemCardContainer;
+import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.RecipeToCardMessage;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -10,23 +10,22 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Recipe;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardContainer, CraftingRecipe> {
+public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardMenu, CraftingRecipe> {
 	public ItemCardTransferHandler() {
 
 	}
 
 	@Nullable
 	@Override
-	public Class<ItemCardContainer> getContainerClass()
+	public Class<ItemCardMenu> getContainerClass()
 	{
-		return ItemCardContainer.class;
+		return ItemCardMenu.class;
 	}
 
 	@Override
@@ -36,7 +35,7 @@ public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardC
 
 	@Nullable
 	@Override
-	public IRecipeTransferError transferRecipe(ItemCardContainer container, CraftingRecipe recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
+	public IRecipeTransferError transferRecipe(ItemCardMenu container, CraftingRecipe recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
 		Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
 		List<ItemStack> items = new ArrayList<>(10);
 		for (int i = 0; i < 10; i++) {

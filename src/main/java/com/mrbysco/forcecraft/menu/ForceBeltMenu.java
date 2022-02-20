@@ -1,6 +1,6 @@
-package com.mrbysco.forcecraft.container;
+package com.mrbysco.forcecraft.menu;
 
-import com.mrbysco.forcecraft.container.slot.BeltSlot;
+import com.mrbysco.forcecraft.menu.slot.BeltSlot;
 import com.mrbysco.forcecraft.items.ForceBeltItem;
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
@@ -16,7 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class ForceBeltContainer extends AbstractContainerMenu {
+public class ForceBeltMenu extends AbstractContainerMenu {
 
     private ItemStack heldStack;
 
@@ -25,7 +25,7 @@ public class ForceBeltContainer extends AbstractContainerMenu {
         return !playerIn.isSpectator() && !heldStack.isEmpty();
     }
 
-    public ForceBeltContainer(int id, Inventory playerInventory) {
+    public ForceBeltMenu(int id, Inventory playerInventory) {
         super(ForceContainers.FORCE_BELT.get(), id);
         this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForceBeltItem);
         if (heldStack == null || heldStack.isEmpty()) {

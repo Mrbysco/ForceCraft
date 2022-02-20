@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.networking.message;
 
-import com.mrbysco.forcecraft.container.ItemCardContainer;
+import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.items.ItemCardItem;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -49,7 +49,7 @@ public class RecipeToCardMessage {
 				mainhand = player.getOffhandItem();
 			}
 			if (!mainhand.isEmpty() && mainhand.getItem() == ForceRegistry.ITEM_CARD.get()) {
-				if (player.containerMenu instanceof ItemCardContainer itemCardContainer) {
+				if (player.containerMenu instanceof ItemCardMenu itemCardContainer) {
 					itemCardContainer.setMatrixContents(player, stacks);
 				}
 			}

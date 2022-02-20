@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.container;
+package com.mrbysco.forcecraft.menu;
 
 import com.mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.items.ForceBeltItem;
@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForcePackContainer extends AbstractContainerMenu {
+public class ForcePackMenu extends AbstractContainerMenu {
 
     private ItemStack heldStack;
     private int upgrades;
@@ -34,7 +34,7 @@ public class ForcePackContainer extends AbstractContainerMenu {
         return !playerIn.isSpectator();
     }
 
-    public ForcePackContainer(int id, Inventory playerInventory) {
+    public ForcePackMenu(int id, Inventory playerInventory) {
         super(ForceContainers.FORCE_PACK.get(), id);
         this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForcePackItem);
         if (heldStack == null || heldStack.isEmpty()) {

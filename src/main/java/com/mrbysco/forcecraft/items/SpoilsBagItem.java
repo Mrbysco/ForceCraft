@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.items;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.container.SpoilsBagContainer;
+import com.mrbysco.forcecraft.menu.SpoilsBagMenu;
 import com.mrbysco.forcecraft.registry.ForceTables;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.ChatFormatting;
@@ -146,7 +146,7 @@ public class SpoilsBagItem extends BaseItem {
 	@Nullable
 	public MenuProvider getContainer(ItemStack stack) {
 		return new SimpleMenuProvider((id, inventory, player) -> {
-			return new SpoilsBagContainer(id, inventory, stack);
+			return new SpoilsBagMenu(id, inventory, stack);
 		}, stack.hasCustomHoverName() ? ((BaseComponent)stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.spoils_bag"));
 	}
 

@@ -6,7 +6,7 @@ import com.mrbysco.forcecraft.compat.jei.infuser.InfuserCategory;
 import com.mrbysco.forcecraft.compat.jei.multipleoutput.FreezingCategory;
 import com.mrbysco.forcecraft.compat.jei.multipleoutput.GrindingCategory;
 import com.mrbysco.forcecraft.compat.jei.transfer.ItemCardTransferHandler;
-import com.mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
+import com.mrbysco.forcecraft.menu.furnace.ForceFurnaceMenu;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.recipe.FreezingRecipe;
 import com.mrbysco.forcecraft.recipe.GrindingRecipe;
@@ -113,9 +113,9 @@ public class JeiCompat implements IModPlugin {
 	@Override
 	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
 		registration.addRecipeTransferHandler(new ItemCardTransferHandler(), VanillaRecipeCategoryUid.CRAFTING);
-		registration.addRecipeTransferHandler(ForceFurnaceContainer.class, VanillaRecipeCategoryUid.FURNACE, 0, 1, 3, 36);
-		registration.addRecipeTransferHandler(ForceFurnaceContainer.class, FREEZING, 0, 1, 3, 36);
-		registration.addRecipeTransferHandler(ForceFurnaceContainer.class, GRINDING, 0, 1, 3, 36);
+		registration.addRecipeTransferHandler(ForceFurnaceMenu.class, VanillaRecipeCategoryUid.FURNACE, 0, 1, 3, 36);
+		registration.addRecipeTransferHandler(ForceFurnaceMenu.class, FREEZING, 0, 1, 3, 36);
+		registration.addRecipeTransferHandler(ForceFurnaceMenu.class, GRINDING, 0, 1, 3, 36);
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.networking.message;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.container.ForceBeltContainer;
+import com.mrbysco.forcecraft.menu.ForceBeltMenu;
 import com.mrbysco.forcecraft.items.ForceBeltItem;
 import com.mrbysco.forcecraft.util.FindingUtil;
 import net.minecraft.ChatFormatting;
@@ -53,7 +53,7 @@ public class OpenBeltMessage {
 							@Nullable
 							@Override
 							public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-								return new ForceBeltContainer(id, inventory);
+								return new ForceBeltMenu(id, inventory);
 							}
 						});
 					}

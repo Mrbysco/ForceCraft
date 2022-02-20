@@ -1,8 +1,8 @@
-package com.mrbysco.forcecraft.container.engine;
+package com.mrbysco.forcecraft.menu.engine;
 
-import com.mrbysco.forcecraft.container.engine.slot.FuelSlot;
-import com.mrbysco.forcecraft.container.engine.slot.OutputSlot;
-import com.mrbysco.forcecraft.container.engine.slot.ThrottleSlot;
+import com.mrbysco.forcecraft.menu.engine.slot.FuelSlot;
+import com.mrbysco.forcecraft.menu.engine.slot.OutputSlot;
+import com.mrbysco.forcecraft.menu.engine.slot.ThrottleSlot;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
 import net.minecraft.world.entity.player.Player;
@@ -17,11 +17,11 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import java.util.Objects;
 
-public class ForceEngineContainer extends AbstractContainerMenu {
+public class ForceEngineMenu extends AbstractContainerMenu {
 	private ForceEngineBlockEntity tile;
 	private Player player;
 
-	public ForceEngineContainer(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
+	public ForceEngineMenu(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
 		this(windowId, playerInventory, getTileEntity(playerInventory, data));
 	}
 
@@ -37,7 +37,7 @@ public class ForceEngineContainer extends AbstractContainerMenu {
 		throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
 	}
 
-	public ForceEngineContainer(int id, Inventory playerInventoryIn, ForceEngineBlockEntity te) {
+	public ForceEngineMenu(int id, Inventory playerInventoryIn, ForceEngineBlockEntity te) {
 		super(ForceContainers.FORCE_ENGINE.get(), id);
 		this.tile = te;
 		this.player = playerInventoryIn.player;

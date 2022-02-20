@@ -199,7 +199,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 	}
 
-	private boolean isBurning() {
+	private boolean isLit() {
 		return this.litTime > 0;
 	}
 
@@ -255,7 +255,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		this.burnSpeed = nbt.getInt("BurnSpeed");
 		this.cookingProgress = nbt.getInt("CookTime");
 		this.cookingTotalTime = nbt.getInt("CookTimeTotal");
-		this.litDuration = nbt.contains("BurnTimeTotal") ? nbt.getInt("BurnTimeTotal") : this.getBurnTime(this.handler.getStackInSlot(FUEL_SLOT));
+		this.litDuration = nbt.contains("BurnTimeTotal") ? nbt.getInt("BurnTimeTotal") : this.getBurnDuration(this.handler.getStackInSlot(FUEL_SLOT));
 		this.cookingSpeed = nbt.getInt("CookSpeed");
 		CompoundTag compoundnbt = nbt.getCompound("RecipesUsed");
 
@@ -282,9 +282,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	}
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, AbstractForceFurnaceBlockEntity furnace) {
-		boolean wasBurning = furnace.isBurning();
+		boolean wasBurning = furnace.isLit();
 		boolean dirty = false;
-		if (furnace.isBurning() && furnace.canSmelt(furnace.currentRecipe)) {
+		if (furnace.isLit() && furnace.canBurn(furnace.currentRecipe)) {
 			int speed = furnace.getSpeed();
 			if(furnace.burnSpeed != speed) {
 				furnace.burnSpeed = speed;
@@ -294,13 +294,12 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 		if (furnace.level != null && !furnace.level.isClientSide) {
 			ItemStack fuel = furnace.handler.getStackInSlot(FUEL_SLOT);
-			if (furnace.isBurning() || !fuel.isEmpty() && !furnace.handler.getStackInSlot(INPUT_SLOT).isEmpty()) {
-				AbstractCookingRecipe irecipe = furnace.getRecipe();
-				boolean valid = furnace.canSmelt(irecipe);
-				if (!furnace.isBurning() && valid) {
-					furnace.litTime = furnace.getBurnTime(fuel);
+			if (furnace.isLit() || !fuel.isEmpty() && !furnace.handler.getStackInSlot(INPUT_SLOT).isEmpty()) {
+				AbstractCookingRecipe cookingRecipe = furnace.getRecipe();
+				if (!furnace.isLit() && furnace.canBurn(cookingRecipe)) {
+					furnace.litTime = furnace.getBurnDuration(fuel);
 					furnace.litDuration = furnace.litTime;
-					if (furnace.isBurning()) {
+					if (furnace.isLit()) {
 						dirty = true;
 						if (fuel.hasContainerItem())
 							furnace.handler.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
@@ -314,30 +313,31 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					}
 				}
 
-				if (furnace.isBurning() && valid) {
+				if (furnace.isLit() && furnace.canBurn(cookingRecipe)) {
 					int speed = furnace.isEfficient() ? 4 : furnace.getSpeed();
 					if(furnace.cookingSpeed != speed) {
 						furnace.cookingSpeed = speed;
 					}
 
 					furnace.cookingProgress += furnace.cookingSpeed;
-
 					if (furnace.cookingProgress >= furnace.cookingTotalTime) {
 						furnace.cookingProgress = 0;
 						furnace.cookingTotalTime = furnace.getCookingProgress();
-						furnace.smelt(irecipe);
+						if(furnace.burn(cookingRecipe)) {
+							furnace.setRecipeUsed(cookingRecipe);
+						}
 						dirty = true;
 					}
 				} else {
 					furnace.cookingProgress = 0;
 				}
-			} else if (!furnace.isBurning() && furnace.cookingProgress > 0) {
+			} else if (!furnace.isLit() && furnace.cookingProgress > 0) {
 				furnace.cookingProgress = Mth.clamp(furnace.cookingProgress - 2, 0, furnace.cookingTotalTime);
 			}
 
-			if (wasBurning != furnace.isBurning()) {
+			if (wasBurning != furnace.isLit()) {
 				dirty = true;
-				furnace.level.setBlock(furnace.worldPosition, furnace.level.getBlockState(furnace.worldPosition).setValue(AbstractFurnaceBlock.LIT, Boolean.valueOf(furnace.isBurning())), 3);
+				furnace.level.setBlock(furnace.worldPosition, furnace.level.getBlockState(furnace.worldPosition).setValue(AbstractFurnaceBlock.LIT, Boolean.valueOf(furnace.isLit())), 3);
 			}
 		}
 
@@ -346,7 +346,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 	}
 
-	protected boolean canSmelt(@Nullable Recipe<?> recipeIn) {
+	protected boolean canBurn(@Nullable Recipe<?> recipeIn) {
 		if (!this.handler.getStackInSlot(INPUT_SLOT).isEmpty() && recipeIn != null) {
 			ItemStack recipeOutput = recipeIn.getResultItem();
 			if (recipeOutput.isEmpty()) {
@@ -368,8 +368,8 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 	}
 
-	private void smelt(@Nullable Recipe<?> recipe) {
-		if (recipe != null && this.canSmelt(recipe)) {
+	private boolean burn(@Nullable Recipe<?> recipe) {
+		if (recipe != null && this.canBurn(recipe)) {
 			ItemStack itemstack = this.handler.getStackInSlot(INPUT_SLOT);
 			List<? extends String> additionalBlacklist = new ArrayList<>();
 			if(ConfigHandler.COMMON.furnaceOutputBlacklist.get() != null) {
@@ -423,11 +423,11 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 						ItemEntity itemEntity = new ItemEntity(level, getBlockPos().getX(), getBlockPos().getY() + 1, getBlockPos().getZ(), outputStack);
 						level.addFreshEntity(itemEntity);
 					} else {
-						ItemStack itemstack2 = this.handler.getStackInSlot(OUTPUT_SLOT);
-						if (itemstack2.isEmpty() && !outputStack.isEmpty()) {
+						ItemStack currentOutputStack = this.handler.getStackInSlot(OUTPUT_SLOT);
+						if (currentOutputStack.isEmpty() && !outputStack.isEmpty()) {
 							this.handler.setStackInSlot(OUTPUT_SLOT, outputStack);
-						} else if (itemstack2.getItem() == outputStacks.get(i).getItem()) {
-							itemstack2.grow(outputStack.getCount());
+						} else if (currentOutputStack.getItem() == outputStacks.get(i).getItem()) {
+							currentOutputStack.grow(outputStack.getCount());
 						}
 					}
 				}
@@ -480,10 +480,12 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			}
 
 			itemstack.shrink(1);
+			return true;
 		}
+		return false;
 	}
 
-	protected int getBurnTime(ItemStack fuel) {
+	protected int getBurnDuration(ItemStack fuel) {
 		if (fuel.isEmpty()) {
 			return 0;
 		} else {

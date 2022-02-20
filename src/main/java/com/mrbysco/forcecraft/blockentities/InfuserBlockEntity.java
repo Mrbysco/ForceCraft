@@ -6,7 +6,7 @@ import com.mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
 import com.mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.config.ConfigHandler;
-import com.mrbysco.forcecraft.container.infuser.InfuserContainer;
+import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import com.mrbysco.forcecraft.items.ForceArmorItem;
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
@@ -1183,7 +1183,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
-        return new InfuserContainer(id, playerInv, this);
+        return new InfuserMenu(id, playerInv, this);
     }
 
     /******** Fakeout stuff for IRecipe *********************/

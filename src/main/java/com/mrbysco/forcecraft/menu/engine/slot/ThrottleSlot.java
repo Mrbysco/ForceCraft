@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.container.engine.slot;
+package com.mrbysco.forcecraft.menu.engine.slot;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -7,15 +7,15 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class FuelSlot extends SlotItemHandler {
+public class ThrottleSlot extends SlotItemHandler {
 
-	public FuelSlot(IItemHandler handler, int index, int posX, int posY){
+	public ThrottleSlot(IItemHandler handler, int index, int posX, int posY){
 		super(handler, index, posX, posY);
 	}
 
 	@Override
 	public boolean mayPlace(ItemStack stack) {
-		return getItemHandler().isItemValid(0, stack);
+		return getItemHandler().isItemValid(getSlotIndex(), stack);
 	}
 
 	@Override

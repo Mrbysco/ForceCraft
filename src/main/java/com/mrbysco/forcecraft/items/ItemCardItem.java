@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.items;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.container.ItemCardContainer;
+import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -50,7 +50,7 @@ public class ItemCardItem extends BaseItem {
 	@Nullable
 	public MenuProvider getContainer(Level level, BlockPos pos) {
 		return new SimpleMenuProvider((id, inventory, player) -> {
-			return new ItemCardContainer(id, inventory, ContainerLevelAccess.create(level, pos));
+			return new ItemCardMenu(id, inventory, ContainerLevelAccess.create(level, pos));
 		}, new TranslatableComponent(Reference.MOD_ID + ".container.card"));
 	}
 

@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.container.slot;
+package com.mrbysco.forcecraft.menu.slot;
 
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.item.ItemStack;

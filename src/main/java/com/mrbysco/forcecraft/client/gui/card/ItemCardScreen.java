@@ -3,7 +3,7 @@ package com.mrbysco.forcecraft.client.gui.card;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.container.ItemCardContainer;
+import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
 import net.minecraft.client.gui.components.Button;
@@ -14,13 +14,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
-public class ItemCardScreen extends AbstractContainerScreen<ItemCardContainer> {
+public class ItemCardScreen extends AbstractContainerScreen<ItemCardMenu> {
 	private static final ResourceLocation ITEM_CARD_GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/crafting3x3.png");
 	private static final TextComponent saveText = new TextComponent("\u2714");
 	private static final TextComponent invalidText = new TextComponent("\u2718");
 	private Button buttonSave;
 
-	public ItemCardScreen(ItemCardContainer screenContainer, Inventory inv, Component titleIn) {
+	public ItemCardScreen(ItemCardMenu screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
 	}
 

@@ -3,7 +3,7 @@ package com.mrbysco.forcecraft.items;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capablilities.pack.PackInventoryProvider;
 import com.mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
-import com.mrbysco.forcecraft.container.ForcePackContainer;
+import com.mrbysco.forcecraft.menu.ForcePackMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.BaseComponent;
@@ -57,7 +57,7 @@ public class ForcePackItem extends BaseItem {
 	@Nullable
 	public MenuProvider getContainer(ItemStack stack) {
 		return new SimpleMenuProvider((id, inventory, player) -> {
-			return new ForcePackContainer(id, inventory);
+			return new ForcePackMenu(id, inventory);
 		}, stack.hasCustomHoverName() ? ((BaseComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.pack"));
 	}
 

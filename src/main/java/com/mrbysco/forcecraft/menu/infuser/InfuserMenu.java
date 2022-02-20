@@ -1,7 +1,7 @@
-package com.mrbysco.forcecraft.container.infuser;
+package com.mrbysco.forcecraft.menu.infuser;
 
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
-import com.mrbysco.forcecraft.container.slot.SlotForceGems;
+import com.mrbysco.forcecraft.menu.slot.SlotForceGems;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.util.AdvancementUtil;
 import net.minecraft.world.entity.player.Player;
@@ -19,14 +19,14 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class InfuserContainer extends AbstractContainerMenu {
+public class InfuserMenu extends AbstractContainerMenu {
 
     private InfuserBlockEntity tile;
     private Player player;
 
     public final int[] validRecipe = new int[1];
 
-    public InfuserContainer(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
+    public InfuserMenu(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
         this(windowId, playerInventory, getTileEntity(playerInventory, data));
     }
 
@@ -42,7 +42,7 @@ public class InfuserContainer extends AbstractContainerMenu {
         throw new IllegalStateException("Tile entity is not correct! " + tileAtPos);
     }
 
-    public InfuserContainer(int id, Inventory playerInventoryIn, InfuserBlockEntity te) {
+    public InfuserMenu(int id, Inventory playerInventoryIn, InfuserBlockEntity te) {
         super(ForceContainers.INFUSER.get(), id);
         this.tile = te;
         this.player = playerInventoryIn.player;

@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.blocks.infuser;
 
-import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
@@ -84,14 +83,14 @@ public class InfuserBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player playerIn, InteractionHand handIn, BlockHitResult hit) {
         BlockEntity blockentity = level.getBlockEntity(pos);
-        if (blockentity instanceof AbstractForceFurnaceBlockEntity) {
+        if (blockentity instanceof InfuserBlockEntity) {
             LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, hit.getDirection());
             fluidHandler.ifPresent((handler) -> {
                 if(playerIn.getItemInHand(handIn).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
                     FluidUtil.interactWithFluidHandler(playerIn, handIn, level, pos, hit.getDirection());
                 } else {
                     if (!level.isClientSide) {
-                        NetworkHooks.openGui((ServerPlayer) playerIn, (AbstractForceFurnaceBlockEntity) blockentity, pos);
+                        NetworkHooks.openGui((ServerPlayer) playerIn, (InfuserBlockEntity) blockentity, pos);
                     }
                 }
             });
@@ -106,7 +105,7 @@ public class InfuserBlock extends BaseEntityBlock {
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
             BlockEntity blockentity = level.getBlockEntity(pos);
-            if (blockentity instanceof AbstractForceFurnaceBlockEntity) {
+            if (blockentity instanceof InfuserBlockEntity) {
                 blockentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
                     for(int i = 0; i < handler.getSlots(); ++i) {
                         Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));

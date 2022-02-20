@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.networking.message;
 
-import com.mrbysco.forcecraft.container.infuser.InfuserContainer;
+import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.network.NetworkEvent;
@@ -29,7 +29,7 @@ public class InfuserMessage {
         ctx.enqueueWork(() -> {
         if (ctx.getDirection().getReceptionSide().isServer() && ctx.getSender() != null) {
             AbstractContainerMenu container = ctx.getSender().containerMenu;
-            if(container instanceof InfuserContainer ctr) {
+            if(container instanceof InfuserMenu ctr) {
                 if(isButtonPressed) {
                     ctr.getTile().startWork();
                 }

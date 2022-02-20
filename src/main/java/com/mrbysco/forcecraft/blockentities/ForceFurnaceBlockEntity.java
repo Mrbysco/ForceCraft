@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.blockentities;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.container.furnace.ForceFurnaceContainer;
+import com.mrbysco.forcecraft.menu.furnace.ForceFurnaceMenu;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -20,6 +20,6 @@ public class ForceFurnaceBlockEntity extends AbstractForceFurnaceBlockEntity {
 	}
 
 	protected AbstractContainerMenu createMenu(int id, Inventory player) {
-		return new ForceFurnaceContainer(id, player, this);
+		return new ForceFurnaceMenu(id, player, this);
 	}
 }

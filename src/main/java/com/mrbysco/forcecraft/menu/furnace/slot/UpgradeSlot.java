@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.container.furnace.slot;
+package com.mrbysco.forcecraft.menu.furnace.slot;
 
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import net.minecraft.world.entity.player.Player;
