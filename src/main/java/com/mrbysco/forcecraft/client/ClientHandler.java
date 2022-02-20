@@ -74,6 +74,8 @@ public class ClientHandler {
 		MenuScreens.register(ForceContainers.FORCE_ENGINE.get(), ForceEngineScreen::new);
 
 		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.POWER_ORE.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.DEEPSLATE_POWER_ORE.get(), RenderType.cutout());
+
 		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_SAPLING.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_TORCH.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_RED_TORCH.get(), RenderType.cutout());

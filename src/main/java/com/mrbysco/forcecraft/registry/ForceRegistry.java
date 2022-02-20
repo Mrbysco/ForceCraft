@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
 import com.mrbysco.forcecraft.blockentities.ForceFurnaceBlockEntity;
+import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.blockentities.TimeTorchBlockEntity;
 import com.mrbysco.forcecraft.blocks.ForceFluidBlock;
@@ -86,6 +87,8 @@ public class ForceRegistry {
      * Blocks
      */
     public static final RegistryObject<Block> POWER_ORE = BLOCKS.register("power_ore", () ->
+            new OreBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
+    public static final RegistryObject<Block> DEEPSLATE_POWER_ORE = BLOCKS.register("deepslate_power_ore", () ->
             new OreBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
     public static final RegistryObject<Block> FORCE_SAPLING = BLOCKS.register("force_sapling", () ->
         new SaplingBlock(new ForceTree(), BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
@@ -231,7 +234,6 @@ public class ForceRegistry {
             new WallTimeTorchBlock(BlockBehaviour.Properties.of(Material.DECORATION).noCollission().instabreak().lightLevel((state) -> 15)
                     .sound(SoundType.WOOD), ParticleTypes.FLAME));
 
-
     /**
      * Items
      */
@@ -369,22 +371,22 @@ public class ForceRegistry {
 
 
     /**
-     * Tile Entities
+     * Block Entities
      */
-    public static final RegistryObject<BlockEntityType<InfuserBlockEntity>> INFUSER_TILE = BLOCK_ENTITIES.register("infuser", () -> BlockEntityType.Builder.of(
+    public static final RegistryObject<BlockEntityType<InfuserBlockEntity>> INFUSER_BLOCK_ENTITY = BLOCK_ENTITIES.register("infuser", () -> BlockEntityType.Builder.of(
             InfuserBlockEntity::new, ForceRegistry.INFUSER.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<ForceFurnaceBlockEntity>> FURNACE_TILE = BLOCK_ENTITIES.register("furnace", () -> BlockEntityType.Builder.of(
+    public static final RegistryObject<BlockEntityType<ForceFurnaceBlockEntity>> FURNACE_BLOCK_ENTITY = BLOCK_ENTITIES.register("furnace", () -> BlockEntityType.Builder.of(
             ForceFurnaceBlockEntity::new, ForceRegistry.FORCE_FURNACE.get(), ForceRegistry.BLACK_FORCE_FURNACE.get(),  ForceRegistry.BLUE_FORCE_FURNACE.get(),
                 ForceRegistry.BROWN_FORCE_FURNACE.get(),  ForceRegistry.CYAN_FORCE_FURNACE.get(),  ForceRegistry.GRAY_FORCE_FURNACE.get(),  ForceRegistry.GREEN_FORCE_FURNACE.get(),
                 ForceRegistry.LIGHT_BLUE_FORCE_FURNACE.get(),  ForceRegistry.LIGHT_GRAY_FORCE_FURNACE.get(),  ForceRegistry.LIME_FORCE_FURNACE.get(),  ForceRegistry.MAGENTA_FORCE_FURNACE.get(),
                 ForceRegistry.ORANGE_FORCE_FURNACE.get(),  ForceRegistry.PINK_FORCE_FURNACE.get(),  ForceRegistry.PURPLE_FORCE_FURNACE.get(),  ForceRegistry.RED_FORCE_FURNACE.get(),
                 ForceRegistry.WHITE_FORCE_FURNACE.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<TimeTorchBlockEntity>> TIME_TORCH_TILE = BLOCK_ENTITIES.register("time_torch", () -> BlockEntityType.Builder.of(
+    public static final RegistryObject<BlockEntityType<TimeTorchBlockEntity>> TIME_TORCH_BLOCK_ENTITY = BLOCK_ENTITIES.register("time_torch", () -> BlockEntityType.Builder.of(
             TimeTorchBlockEntity::new, ForceRegistry.TIME_TORCH.get(), ForceRegistry.WALL_TIME_TORCH.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<ForceEngineBlockEntity>> FORCE_ENGINE_TILE = BLOCK_ENTITIES.register("force_engine", () -> BlockEntityType.Builder.of(
+    public static final RegistryObject<BlockEntityType<ForceEngineBlockEntity>> FORCE_ENGINE_BLOCK_ENTITY = BLOCK_ENTITIES.register("force_engine", () -> BlockEntityType.Builder.of(
             ForceEngineBlockEntity::new, ForceRegistry.FORCE_ENGINE.get()).build(null));
 
 
@@ -392,6 +394,7 @@ public class ForceRegistry {
      * Block items
      */
     public static final RegistryObject<Item> POWER_ORE_ITEM = ITEMS.register("power_ore", () -> new BlockItem(ForceRegistry.POWER_ORE.get(), itemBuilder().tab(ForceCraft.creativeTab)));
+    public static final RegistryObject<Item> DEEPSLATE_POWER_ORE_ITEM = ITEMS.register("deepslate_power_ore", () -> new BlockItem(ForceRegistry.DEEPSLATE_POWER_ORE.get(), itemBuilder().tab(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_SAPLING_ITEM = ITEMS.register("force_sapling", () -> new BlockItem(ForceRegistry.FORCE_SAPLING.get(), itemBuilder().tab(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_LOG_ITEM = ITEMS.register("force_log", () -> new BlockItem(ForceRegistry.FORCE_LOG.get(), itemBuilder().tab(ForceCraft.creativeTab)));
     public static final RegistryObject<Item> FORCE_WOOD_ITEM = ITEMS.register("force_wood", () -> new BlockItem(ForceRegistry.FORCE_WOOD.get(), itemBuilder().tab(ForceCraft.creativeTab)));

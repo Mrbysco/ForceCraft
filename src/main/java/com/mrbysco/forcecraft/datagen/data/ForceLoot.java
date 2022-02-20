@@ -45,6 +45,8 @@ public class ForceLoot extends LootTableProvider {
 		protected void addTables() {
 			add(POWER_ORE.get(), (ore) -> createSilkTouchDispatchTable(ore, applyExplosionDecay(POWER_ORE_ITEM.get(), LootItem.lootTableItem(FORCE_GEM.get())
 					.apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)))));
+			add(DEEPSLATE_POWER_ORE.get(), (ore) -> createSilkTouchDispatchTable(ore, applyExplosionDecay(POWER_ORE_ITEM.get(), LootItem.lootTableItem(FORCE_GEM.get())
+					.apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)))));
 
 			dropSelf(INFUSER.get());
 			add(FORCE_FURNACE.get(), BlockLoot::createNameableBlockEntityTable);

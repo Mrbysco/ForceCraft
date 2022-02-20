@@ -29,19 +29,19 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import java.util.List;
 
 public class ForceFeatureConfigs {
-	private static final BeehiveDecorator MANY_BEEHIVES = new BeehiveDecorator(0.05F);
 	private static final BlockState FORCE_LOG = ForceRegistry.FORCE_LOG.get().defaultBlockState();
 	private static final BlockState FORCE_LEAVES = ForceRegistry.FORCE_LEAVES.get().defaultBlockState();
 	private static final BlockState FORCE_ORE = ForceRegistry.POWER_ORE.get().defaultBlockState();
+	private static final BlockState DEEPSLATE_FORCE_ORE = ForceRegistry.DEEPSLATE_POWER_ORE.get().defaultBlockState();
 	private static final List<TargetBlockState> ORE_FORCE_TARGET_LIST =
-			List.of(OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, FORCE_ORE)/*,
-					OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, Blocks.DEEPSLATE_DIAMOND_ORE.defaultBlockState())*/);
+			List.of(OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, FORCE_ORE),
+					OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, DEEPSLATE_FORCE_ORE));
 
 	public static final ConfiguredFeature<?, ?> ORE_FORCE = FeatureUtils.register("forcecraft:ore_force", Feature.ORE.configured(new OreConfiguration(ORE_FORCE_TARGET_LIST, 6)));
 	public static final ConfiguredFeature<?, ?> ORE_FORCE_BURIED = FeatureUtils.register("forcecraft:ore_force_buried", Feature.ORE.configured(new OreConfiguration(ORE_FORCE_TARGET_LIST, 6, 1.0F)));
 
-	public static final PlacedFeature PLACED_ORE_FORCE = PlacementUtils.register("forcecraft:ore_force", OreFeatures.ORE_LAPIS.placed(commonOrePlacement(5, HeightRangePlacement.triangle(VerticalAnchor.absolute(-24), VerticalAnchor.absolute(48)))));
-	public static final PlacedFeature PLACED_ORE_FORCE_BURIED = PlacementUtils.register("forcecraft:ore_force_buried", OreFeatures.ORE_LAPIS_BURIED.placed(commonOrePlacement(3, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)))));
+	public static final PlacedFeature PLACED_ORE_FORCE = PlacementUtils.register("forcecraft:ore_force", ORE_FORCE.placed(commonOrePlacement(5, HeightRangePlacement.triangle(VerticalAnchor.absolute(-24), VerticalAnchor.absolute(48)))));
+	public static final PlacedFeature PLACED_ORE_FORCE_BURIED = PlacementUtils.register("forcecraft:ore_force_buried", ORE_FORCE_BURIED.placed(commonOrePlacement(3, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)))));
 
 	private static List<PlacementModifier> orePlacement(PlacementModifier modifier1, PlacementModifier modifier2) {
 		return List.of(modifier1, InSquarePlacement.spread(), modifier2, BiomeFilter.biome());
@@ -67,8 +67,9 @@ public class ForceFeatureConfigs {
 			Feature.RANDOM_SELECTOR.configured(new RandomFeatureConfiguration(
 					List.of(new WeightedPlacedFeature(PLACED_FORCE_TREE_BEES_002, 0.2F)), PLACED_FORCE_TREE)));
 
-	private static TreeConfiguration.TreeConfigurationBuilder createStraightBlobTree(BlockState state, BlockState p_195148_, int p_195149_, int p_195150_, int p_195151_, int p_195152_) {
-		return new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(state), new StraightTrunkPlacer(p_195149_, p_195150_, p_195151_), BlockStateProvider.simple(p_195148_), new BlobFoliagePlacer(ConstantInt.of(p_195152_), ConstantInt.of(0), 3), new TwoLayersFeatureSize(1, 0, 1));
+	private static TreeConfiguration.TreeConfigurationBuilder createStraightBlobTree(BlockState trunkState, BlockState foliageState, int baseHeight, int heightRandA, int heightRandB, int p_195152_) {
+		return new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(trunkState), new StraightTrunkPlacer(baseHeight, heightRandA, heightRandB),
+				BlockStateProvider.simple(foliageState), new BlobFoliagePlacer(ConstantInt.of(p_195152_), ConstantInt.of(0), 3), new TwoLayersFeatureSize(1, 0, 1));
 	}
 
 	private static TreeConfiguration.TreeConfigurationBuilder createForceTree() {

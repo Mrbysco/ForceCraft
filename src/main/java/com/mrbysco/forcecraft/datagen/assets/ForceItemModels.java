@@ -13,6 +13,7 @@ public class ForceItemModels extends ItemModelProvider {
 	@Override
 	protected void registerModels() {
 		withExistingParent("power_ore", modLoc("block/power_ore"));
+		withExistingParent("deepslate_power_ore", modLoc("block/deepslate_power_ore"));
 
 		withExistingParent("infuser", modLoc("block/infuser"));
 		withExistingParent("force_furnace", modLoc("block/force_furnace"));

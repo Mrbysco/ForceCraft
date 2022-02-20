@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class ForceFurnaceBlockEntity extends AbstractForceFurnaceBlockEntity {
 	public ForceFurnaceBlockEntity(BlockPos pos, BlockState state) {
-		super(ForceRegistry.FURNACE_TILE.get(), pos, state);
+		super(ForceRegistry.FURNACE_BLOCK_ENTITY.get(), pos, state);
 	}
 
 	protected Component getDefaultName() {

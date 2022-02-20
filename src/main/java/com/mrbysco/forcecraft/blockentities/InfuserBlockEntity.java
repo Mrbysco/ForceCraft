@@ -179,7 +179,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
     }
 
     public InfuserBlockEntity(BlockPos pos, BlockState state) {
-        this(ForceRegistry.INFUSER_TILE.get(), pos, state);
+        this(ForceRegistry.INFUSER_BLOCK_ENTITY.get(), pos, state);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.datagen;
 
+import com.mrbysco.forcecraft.datagen.assets.ForceBlockModels;
 import com.mrbysco.forcecraft.datagen.assets.ForceBlockStates;
 import com.mrbysco.forcecraft.datagen.assets.ForceItemModels;
 import com.mrbysco.forcecraft.datagen.assets.ForceLanguage;
@@ -32,6 +33,7 @@ public class ForceDataGen {
 		}
 		if (event.includeClient()) {
 			generator.addProvider(new ForceLanguage(generator));
+			generator.addProvider(new ForceBlockModels(generator, helper));
 			generator.addProvider(new ForceBlockStates(generator, helper));
 			generator.addProvider(new ForceItemModels(generator, helper));
 		}

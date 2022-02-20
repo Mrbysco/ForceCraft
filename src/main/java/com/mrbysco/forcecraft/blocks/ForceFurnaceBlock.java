@@ -3,6 +3,7 @@ package com.mrbysco.forcecraft.blocks;
 import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
 import com.mrbysco.forcecraft.blockentities.ForceFurnaceBlockEntity;
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
+import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -19,6 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -82,6 +85,16 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new ForceFurnaceBlockEntity(pos, state);
+	}
+
+	@Nullable
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+		return createForceFurnaceTicker(level, blockEntityType, ForceRegistry.FURNACE_BLOCK_ENTITY.get());
+	}
+
+	@Nullable
+	protected static <T extends BlockEntity> BlockEntityTicker<T> createForceFurnaceTicker(Level level, BlockEntityType<T> p_151989_, BlockEntityType<? extends AbstractForceFurnaceBlockEntity> abstractForceFurnaceType) {
+		return level.isClientSide ? null : createTickerHelper(p_151989_, abstractForceFurnaceType, AbstractForceFurnaceBlockEntity::serverTick);
 	}
 
     @Override

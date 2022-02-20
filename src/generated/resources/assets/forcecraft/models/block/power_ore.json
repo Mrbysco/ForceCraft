@@ -1,0 +1,7 @@
+{
+  "parent": "forcecraft:block/ore",
+  "textures": {
+    "ore": "forcecraft:block/power_ore",
+    "stone": "minecraft:block/stone"
+  }
+}

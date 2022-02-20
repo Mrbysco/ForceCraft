@@ -195,7 +195,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	}
 
 	public ForceEngineBlockEntity(BlockPos pos, BlockState state) {
-		this(ForceRegistry.FORCE_ENGINE_TILE.get(), pos, state);
+		this(ForceRegistry.FORCE_ENGINE_BLOCK_ENTITY.get(), pos, state);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.blocks.engine;
 
 import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
+import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -185,9 +186,18 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 	}
 
 	@Nullable
-	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-		return EntityBlock.super.getTicker(level, state, blockEntityType);
+		return createEngineTicker(level, blockEntityType, ForceRegistry.FORCE_ENGINE_BLOCK_ENTITY.get());
+	}
+
+	@Nullable
+	protected static <T extends BlockEntity> BlockEntityTicker<T> createEngineTicker(Level level, BlockEntityType<T> p_151989_, BlockEntityType<? extends ForceEngineBlockEntity> forceEngineBlockEntity) {
+		return level.isClientSide ? null : createTickerHelper(p_151989_, forceEngineBlockEntity, ForceEngineBlockEntity::serverTick);
+	}
+
+	@Nullable
+	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> p_152133_, BlockEntityType<E> p_152134_, BlockEntityTicker<? super E> p_152135_) {
+		return p_152134_ == p_152133_ ? (BlockEntityTicker<A>)p_152135_ : null;
 	}
 
 	public static ToIntFunction<BlockState> getLightValueActive(int lightValue) {

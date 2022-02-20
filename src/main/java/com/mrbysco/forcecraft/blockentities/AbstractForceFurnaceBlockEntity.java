@@ -105,31 +105,30 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			new ResourceLocation("uppers", "upper"), new ResourceLocation("goldenhopper", "golden_hopper"),
 			new ResourceLocation("woodenhopper", "wooden_hopper"));
 
-	private int burnTime;
+	private int litTime;
+	private int litDuration;
+	private int cookingProgress;
+	private int cookingTotalTime;
 	private int burnSpeed;
-	private int burnTimeTotal;
-	private int cookTime;
-	private int cookTimeTotal;
-	private int cookSpeed;
+	private int cookingSpeed;
 	protected final ContainerData furnaceData = new ContainerData() {
 		public int get(int index) {
 			return switch (index) {
-				case 0 -> AbstractForceFurnaceBlockEntity.this.burnTime;
-				case 1 -> AbstractForceFurnaceBlockEntity.this.burnTimeTotal;
-				case 2 -> AbstractForceFurnaceBlockEntity.this.cookTime;
-				case 3 -> AbstractForceFurnaceBlockEntity.this.cookTimeTotal;
+				case 0 -> AbstractForceFurnaceBlockEntity.this.litTime;
+				case 1 -> AbstractForceFurnaceBlockEntity.this.litDuration;
+				case 2 -> AbstractForceFurnaceBlockEntity.this.cookingProgress;
+				case 3 -> AbstractForceFurnaceBlockEntity.this.cookingTotalTime;
 				default -> 0;
 			};
 		}
 
 		public void set(int index, int value) {
 			switch (index) {
-				case 0 -> AbstractForceFurnaceBlockEntity.this.burnTime = value;
-				case 1 -> AbstractForceFurnaceBlockEntity.this.burnTimeTotal = value;
-				case 2 -> AbstractForceFurnaceBlockEntity.this.cookTime = value;
-				case 3 -> AbstractForceFurnaceBlockEntity.this.cookTimeTotal = value;
+				case 0 -> AbstractForceFurnaceBlockEntity.this.litTime = value;
+				case 1 -> AbstractForceFurnaceBlockEntity.this.litDuration = value;
+				case 2 -> AbstractForceFurnaceBlockEntity.this.cookingProgress = value;
+				case 3 -> AbstractForceFurnaceBlockEntity.this.cookingTotalTime = value;
 			}
-
 		}
 
 		public int getCount() {
@@ -201,7 +200,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	}
 
 	private boolean isBurning() {
-		return this.burnTime > 0;
+		return this.litTime > 0;
 	}
 
 	public void load(CompoundTag nbt) {
@@ -252,12 +251,12 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			}
 		}
 
-		this.burnTime = nbt.getInt("BurnTime");
+		this.litTime = nbt.getInt("BurnTime");
 		this.burnSpeed = nbt.getInt("BurnSpeed");
-		this.cookTime = nbt.getInt("CookTime");
-		this.cookTimeTotal = nbt.getInt("CookTimeTotal");
-		this.burnTimeTotal = nbt.contains("BurnTimeTotal") ? nbt.getInt("BurnTimeTotal") : this.getBurnTime(this.handler.getStackInSlot(FUEL_SLOT));
-		this.cookSpeed = nbt.getInt("CookSpeed");
+		this.cookingProgress = nbt.getInt("CookTime");
+		this.cookingTotalTime = nbt.getInt("CookTimeTotal");
+		this.litDuration = nbt.contains("BurnTimeTotal") ? nbt.getInt("BurnTimeTotal") : this.getBurnTime(this.handler.getStackInSlot(FUEL_SLOT));
+		this.cookingSpeed = nbt.getInt("CookSpeed");
 		CompoundTag compoundnbt = nbt.getCompound("RecipesUsed");
 
 		for(String s : compoundnbt.getAllKeys()) {
@@ -268,12 +267,12 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	@Override
 	protected void saveAdditional(CompoundTag compound) {
 		super.saveAdditional(compound);
-		compound.putInt("BurnTime", this.burnTime);
+		compound.putInt("BurnTime", this.litTime);
 		compound.putInt("BurnSpeed", this.burnSpeed);
-		compound.putInt("CookTime", this.cookTime);
-		compound.putInt("CookTimeTotal", this.cookTimeTotal);
-		compound.putInt("BurnTimeTotal", this.burnTimeTotal);
-		compound.putInt("CookSpeed", this.cookSpeed);
+		compound.putInt("CookTime", this.cookingProgress);
+		compound.putInt("CookTimeTotal", this.cookingTotalTime);
+		compound.putInt("BurnTimeTotal", this.litDuration);
+		compound.putInt("CookSpeed", this.cookingSpeed);
 
 		compound.put("UpgradeHandler", upgradeHandler.serializeNBT());
 		compound.put("ItemStackHandler", handler.serializeNBT());
@@ -290,7 +289,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			if(furnace.burnSpeed != speed) {
 				furnace.burnSpeed = speed;
 			}
-			furnace.burnTime -= furnace.burnSpeed;
+			furnace.litTime -= furnace.burnSpeed;
 		}
 
 		if (furnace.level != null && !furnace.level.isClientSide) {
@@ -299,8 +298,8 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 				AbstractCookingRecipe irecipe = furnace.getRecipe();
 				boolean valid = furnace.canSmelt(irecipe);
 				if (!furnace.isBurning() && valid) {
-					furnace.burnTime = furnace.getBurnTime(fuel);
-					furnace.burnTimeTotal = furnace.burnTime;
+					furnace.litTime = furnace.getBurnTime(fuel);
+					furnace.litDuration = furnace.litTime;
 					if (furnace.isBurning()) {
 						dirty = true;
 						if (fuel.hasContainerItem())
@@ -317,23 +316,23 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 				if (furnace.isBurning() && valid) {
 					int speed = furnace.isEfficient() ? 4 : furnace.getSpeed();
-					if(furnace.cookSpeed != speed) {
-						furnace.cookSpeed = speed;
+					if(furnace.cookingSpeed != speed) {
+						furnace.cookingSpeed = speed;
 					}
 
-					furnace.cookTime += furnace.cookSpeed;
+					furnace.cookingProgress += furnace.cookingSpeed;
 
-					if (furnace.cookTime >= furnace.cookTimeTotal) {
-						furnace.cookTime = 0;
-						furnace.cookTimeTotal = furnace.getCookTime();
+					if (furnace.cookingProgress >= furnace.cookingTotalTime) {
+						furnace.cookingProgress = 0;
+						furnace.cookingTotalTime = furnace.getCookingProgress();
 						furnace.smelt(irecipe);
 						dirty = true;
 					}
 				} else {
-					furnace.cookTime = 0;
+					furnace.cookingProgress = 0;
 				}
-			} else if (!furnace.isBurning() && furnace.cookTime > 0) {
-				furnace.cookTime = Mth.clamp(furnace.cookTime - 2, 0, furnace.cookTimeTotal);
+			} else if (!furnace.isBurning() && furnace.cookingProgress > 0) {
+				furnace.cookingProgress = Mth.clamp(furnace.cookingProgress - 2, 0, furnace.cookingTotalTime);
 			}
 
 			if (wasBurning != furnace.isBurning()) {
@@ -492,7 +491,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 	}
 
-	protected int getCookTime() {
+	protected int getCookingProgress() {
 		AbstractCookingRecipe rec = getRecipe();
 		if (rec == null) return 200;
 		return this.level.getRecipeManager().getRecipeFor((RecipeType<AbstractCookingRecipe>)this.getRecipeType(), this, this.level).map(AbstractCookingRecipe::getCookingTime).orElse(100);
@@ -582,8 +581,8 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 
 		if (index == 0 && !flag) {
-			this.cookTimeTotal = this.getCookTime();
-			this.cookTime = 0;
+			this.cookingTotalTime = this.getCookingProgress();
+			this.cookingProgress = 0;
 			this.setChanged();
 		}
 	}

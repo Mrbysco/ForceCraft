@@ -36,7 +36,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
     }
 
     public TimeTorchBlockEntity(BlockPos pos, BlockState state) {
-        this(ForceRegistry.TIME_TORCH_TILE.get(), pos, state);
+        this(ForceRegistry.TIME_TORCH_BLOCK_ENTITY.get(), pos, state);
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TimeTorchBlockEntity timeTorch) {

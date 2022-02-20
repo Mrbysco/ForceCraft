@@ -2,9 +2,11 @@ package com.mrbysco.forcecraft.datagen.assets;
 
 import com.mrbysco.forcecraft.Reference;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import static com.mrbysco.forcecraft.registry.ForceRegistry.*;
@@ -54,5 +56,9 @@ public class ForceBlockStates extends BlockStateProvider {
 		slabBlock((SlabBlock) FORCE_BRICK_PURPLE_SLAB.get(), modLoc("block/force_brick_purple"), modLoc("block/force_brick_purple"));
 		slabBlock((SlabBlock) FORCE_BRICK_GRAY_SLAB.get(), modLoc("block/force_brick_gray"), modLoc("block/force_brick_gray"));
 		slabBlock((SlabBlock) FORCE_BRICK_SLAB.get(), modLoc("block/force_brick"), modLoc("block/force_brick"));
+
+		//Ores
+		simpleBlock(POWER_ORE.get(), models().getExistingFile(modLoc("block/power_ore")));
+		simpleBlock(DEEPSLATE_POWER_ORE.get(), models().getExistingFile(modLoc("block/deepslate_power_ore")));
 	}
 }
