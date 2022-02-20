@@ -217,51 +217,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 	public void load(CompoundTag nbt) {
 		super.load(nbt);
-		if(nbt.contains("UpgradeHandler") && nbt.contains("ItemStackHandler")) {
-			upgradeHandler.deserializeNBT(nbt.getCompound("UpgradeHandler"));
-			handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
-		} else {
-			if(nbt.contains("ItemStackHandler")) {
-				CompoundTag handlerTag = nbt.getCompound("ItemStackHandler");
-				ListTag tagList = handlerTag.getList("Items", CompoundTag.TAG_COMPOUND);
-				upgradeHandler.setSize(1);
-				int size = handlerTag.getInt("Size");
-				if(size == 4) {
-					handler.setSize(3);
-					for (int i = 0; i < tagList.size(); i++) {
-						CompoundTag itemTags = tagList.getCompound(i);
-						int slot = itemTags.getInt("Slot");
 
-						if (slot >= 0 && slot < 4) {
-							if(slot == 3) {
-								upgradeHandler.setStackInSlot(0, ItemStack.of(itemTags));
-							} else {
-								handler.setStackInSlot(slot, ItemStack.of(itemTags));
-							}
-						}
-					}
-				} else {
-					handler.deserializeNBT(handlerTag);
-					upgradeHandler.setStackInSlot(0, ItemStack.EMPTY);
-				}
-			} else {
-				ListTag listnbt = nbt.getList("Items", CompoundTag.TAG_COMPOUND);
-
-				handler.setSize(3);
-				upgradeHandler.setSize(1);
-				for(int i = 0; i < listnbt.size(); ++i) {
-					CompoundTag compoundnbt = listnbt.getCompound(i);
-					int j = compoundnbt.getByte("Slot") & 255;
-					if (j >= 0 && j < this.getContainerSize()) {
-						if(j == 3) {
-							upgradeHandler.setStackInSlot(0, ItemStack.of(compoundnbt));
-						} else {
-							handler.setStackInSlot(j, ItemStack.of(compoundnbt));
-						}
-					}
-				}
-			}
-		}
+		this.upgradeHandler.deserializeNBT(nbt.getCompound("UpgradeHandler"));
+		this.handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
 
 		this.litTime = nbt.getInt("BurnTime");
 		this.burnSpeed = nbt.getInt("BurnSpeed");
@@ -269,10 +227,10 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		this.cookingTotalTime = nbt.getInt("CookTimeTotal");
 		this.litDuration = nbt.contains("BurnTimeTotal") ? nbt.getInt("BurnTimeTotal") : this.getBurnDuration(this.handler.getStackInSlot(FUEL_SLOT));
 		this.cookingSpeed = nbt.getInt("CookSpeed");
-		CompoundTag compoundnbt = nbt.getCompound("RecipesUsed");
+		CompoundTag recipesUsed = nbt.getCompound("RecipesUsed");
 
-		for(String s : compoundnbt.getAllKeys()) {
-			this.recipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
+		for(String s : recipesUsed.getAllKeys()) {
+			this.recipes.put(new ResourceLocation(s), recipesUsed.getInt(s));
 		}
 	}
 
@@ -288,9 +246,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 		compound.put("UpgradeHandler", upgradeHandler.serializeNBT());
 		compound.put("ItemStackHandler", handler.serializeNBT());
-		CompoundTag compoundnbt = new CompoundTag();
-		this.recipes.forEach((recipeId, craftedAmount) -> compoundnbt.putInt(recipeId.toString(), craftedAmount));
-		compound.put("RecipesUsed", compoundnbt);
+		CompoundTag recipesUsed = new CompoundTag();
+		this.recipes.forEach((recipeId, craftedAmount) -> recipesUsed.putInt(recipeId.toString(), craftedAmount));
+		compound.put("RecipesUsed", recipesUsed);
 	}
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, AbstractForceFurnaceBlockEntity furnace) {
