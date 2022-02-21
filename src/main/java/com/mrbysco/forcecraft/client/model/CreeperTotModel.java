@@ -35,10 +35,10 @@ public class CreeperTotModel<T extends Entity> extends HierarchicalModel<T> impl
 		PartDefinition partdefinition = meshdefinition.getRoot();
 		partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
 				.texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
-				PartPose.offset(0.0F, 6.0F, 0.0F));
+				PartPose.offset(0.0F, 14.0F, 0.0F));
 		partdefinition.addOrReplaceChild("body", CubeListBuilder.create()
 				.texOffs(16, 16).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, cubeDeformation),
-				PartPose.offset(0.0F, 6.0F, 0.0F));
+				PartPose.offset(0.0F, 20.0F, 0.0F));
 
 		CubeListBuilder cubelistbuilder = CubeListBuilder.create()
 				.texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, cubeDeformation);
