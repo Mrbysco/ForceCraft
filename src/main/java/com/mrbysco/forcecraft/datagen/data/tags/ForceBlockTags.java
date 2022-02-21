@@ -32,7 +32,7 @@ public class ForceBlockTags extends BlockTagsProvider {
 
 	@Override
 	protected void addTags() {
-		this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(FORCE_BRICK_RED.get(), FORCE_BRICK_YELLOW.get(),
+		this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(INFUSER.get(), POWER_ORE.get(), DEEPSLATE_POWER_ORE.get(), FORCE_BRICK_RED.get(), FORCE_BRICK_YELLOW.get(),
 				FORCE_BRICK_GREEN.get(), FORCE_BRICK_BLUE.get(), FORCE_BRICK_WHITE.get(), FORCE_BRICK_BLACK.get(),
 				FORCE_BRICK_BROWN.get(), FORCE_BRICK_ORANGE.get(), FORCE_BRICK_LIGHT_BLUE.get(), FORCE_BRICK_MAGENTA.get(),
 				FORCE_BRICK_PINK.get(), FORCE_BRICK_LIGHT_GRAY.get(), FORCE_BRICK_LIME.get(), FORCE_BRICK_CYAN.get(),
@@ -47,7 +47,7 @@ public class ForceBlockTags extends BlockTagsProvider {
 				FORCE_BRICK_LIGHT_GRAY_SLAB.get(), FORCE_BRICK_LIME_SLAB.get(), FORCE_BRICK_CYAN_SLAB.get(), FORCE_BRICK_PURPLE_SLAB.get(),
 				FORCE_BRICK_GRAY_SLAB.get(), FORCE_BRICK_SLAB.get()
 		);
-		this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(FORCE_BRICK_RED.get(), FORCE_BRICK_YELLOW.get(),
+		this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(INFUSER.get(), FORCE_BRICK_RED.get(), FORCE_BRICK_YELLOW.get(),
 				FORCE_BRICK_GREEN.get(), FORCE_BRICK_BLUE.get(), FORCE_BRICK_WHITE.get(), FORCE_BRICK_BLACK.get(),
 				FORCE_BRICK_BROWN.get(), FORCE_BRICK_ORANGE.get(), FORCE_BRICK_LIGHT_BLUE.get(), FORCE_BRICK_MAGENTA.get(),
 				FORCE_BRICK_PINK.get(), FORCE_BRICK_LIGHT_GRAY.get(), FORCE_BRICK_LIME.get(), FORCE_BRICK_CYAN.get(),
@@ -62,5 +62,7 @@ public class ForceBlockTags extends BlockTagsProvider {
 				FORCE_BRICK_LIGHT_GRAY_SLAB.get(), FORCE_BRICK_LIME_SLAB.get(), FORCE_BRICK_CYAN_SLAB.get(), FORCE_BRICK_PURPLE_SLAB.get(),
 				FORCE_BRICK_GRAY_SLAB.get(), FORCE_BRICK_SLAB.get()
 		);
+
+		this.tag(BlockTags.NEEDS_IRON_TOOL).add(POWER_ORE.get(), DEEPSLATE_POWER_ORE.get());
 	}
 }
