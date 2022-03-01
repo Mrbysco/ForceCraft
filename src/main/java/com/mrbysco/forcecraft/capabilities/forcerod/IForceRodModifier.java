@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.forcerod;
+package com.mrbysco.forcecraft.capabilities.forcerod;
 
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;

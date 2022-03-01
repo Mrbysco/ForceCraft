@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.forcewrench;
+package com.mrbysco.forcecraft.capabilities.forcewrench;
 
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import net.minecraft.ChatFormatting;
@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEWRENCH;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_FORCEWRENCH;
 
 public class ForceWrenchCapability implements IForceWrench, ICapabilitySerializable<CompoundTag>, ICapabilityProvider {
     CompoundTag storedBlockNBT = null;

@@ -1,13 +1,12 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModCapability;
+import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
+import com.mrbysco.forcecraft.capabilities.toolmodifier.ToolModCapability;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import com.mrbysco.forcecraft.registry.material.ModToolTiers;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -21,7 +20,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class ForcePickaxeItem extends PickaxeItem implements IForceChargingTool {
 

@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.magnet;
+package com.mrbysco.forcecraft.capabilities.magnet;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_MAGNET;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_MAGNET;
 
 public class MagnetCapability implements IMagnet, ICapabilitySerializable<CompoundTag>, ICapabilityProvider {
     boolean active;

@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft;
 
-import com.mrbysco.forcecraft.capablilities.CapabilityAttachHandler;
-import com.mrbysco.forcecraft.capablilities.CapabilityHandler;
+import com.mrbysco.forcecraft.capabilities.CapabilityAttachHandler;
+import com.mrbysco.forcecraft.capabilities.CapabilityHandler;
 import com.mrbysco.forcecraft.client.ClientHandler;
 import com.mrbysco.forcecraft.client.KeybindHandler;
 import com.mrbysco.forcecraft.command.ForceCommands;

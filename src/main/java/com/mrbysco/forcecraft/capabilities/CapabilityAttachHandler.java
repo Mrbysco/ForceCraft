@@ -1,8 +1,8 @@
-package com.mrbysco.forcecraft.capablilities;
+package com.mrbysco.forcecraft.capabilities;
 
-import com.mrbysco.forcecraft.capablilities.banemodifier.BaneModifierCapability;
-import com.mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
-import com.mrbysco.forcecraft.capablilities.playermodifier.PlayerModifierCapability;
+import com.mrbysco.forcecraft.capabilities.banemodifier.BaneModifierCapability;
+import com.mrbysco.forcecraft.capabilities.playermodifier.IPlayerModifier;
+import com.mrbysco.forcecraft.capabilities.playermodifier.PlayerModifierCapability;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Creeper;
@@ -13,9 +13,9 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.BANE_CAP;
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.PLAYER_CAP;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.BANE_CAP;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.PLAYER_CAP;
 
 public class CapabilityAttachHandler {
 

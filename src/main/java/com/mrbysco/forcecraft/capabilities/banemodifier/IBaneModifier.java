@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.banemodifier;
+package com.mrbysco.forcecraft.capabilities.banemodifier;
 
 public interface IBaneModifier {
     boolean canTeleport();

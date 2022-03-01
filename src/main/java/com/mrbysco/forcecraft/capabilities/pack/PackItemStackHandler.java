@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.pack;
+package com.mrbysco.forcecraft.capabilities.pack;
 
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;

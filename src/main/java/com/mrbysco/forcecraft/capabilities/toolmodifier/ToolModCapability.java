@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.toolmodifier;
+package com.mrbysco.forcecraft.capabilities.toolmodifier;
 
 import com.mrbysco.forcecraft.items.ForceArmorItem;
 import com.mrbysco.forcecraft.items.tools.ForceBowItem;
@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 import java.util.List;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class ToolModCapability implements IToolModifier, ICapabilitySerializable<CompoundTag>, ICapabilityProvider {
     /**

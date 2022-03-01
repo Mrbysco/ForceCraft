@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.playermodifier;
+package com.mrbysco.forcecraft.capabilities.playermodifier;
 
 public interface IPlayerModifier {
 

@@ -1,13 +1,13 @@
-package com.mrbysco.forcecraft.capablilities;
+package com.mrbysco.forcecraft.capabilities;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.banemodifier.IBaneModifier;
-import com.mrbysco.forcecraft.capablilities.experiencetome.IExperienceTome;
-import com.mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
-import com.mrbysco.forcecraft.capablilities.forcewrench.IForceWrench;
-import com.mrbysco.forcecraft.capablilities.magnet.IMagnet;
-import com.mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
+import com.mrbysco.forcecraft.capabilities.banemodifier.IBaneModifier;
+import com.mrbysco.forcecraft.capabilities.experiencetome.IExperienceTome;
+import com.mrbysco.forcecraft.capabilities.forcerod.IForceRodModifier;
+import com.mrbysco.forcecraft.capabilities.forcewrench.IForceWrench;
+import com.mrbysco.forcecraft.capabilities.magnet.IMagnet;
+import com.mrbysco.forcecraft.capabilities.playermodifier.IPlayerModifier;
+import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;

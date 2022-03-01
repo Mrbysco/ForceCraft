@@ -26,7 +26,7 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_BANE;
 
 public class ForceArrowEntity extends Arrow {
 	private static final EntityDataAccessor<Boolean> ENDER = SynchedEntityData.defineId(ForceArrowEntity.class, EntityDataSerializers.BOOLEAN);

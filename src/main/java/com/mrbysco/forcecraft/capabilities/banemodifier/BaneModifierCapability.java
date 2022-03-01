@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.banemodifier;
+package com.mrbysco.forcecraft.capabilities.banemodifier;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -10,7 +10,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_BANE;
 
 public class BaneModifierCapability implements IBaneModifier, ICapabilitySerializable<CompoundTag>, ICapabilityProvider {
     boolean canTeleport = true;

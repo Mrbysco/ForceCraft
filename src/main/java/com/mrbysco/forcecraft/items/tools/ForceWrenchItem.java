@@ -1,8 +1,8 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.forcewrench.ForceWrenchCapability;
-import com.mrbysco.forcecraft.capablilities.forcewrench.IForceWrench;
+import com.mrbysco.forcecraft.capabilities.forcewrench.ForceWrenchCapability;
+import com.mrbysco.forcecraft.capabilities.forcewrench.IForceWrench;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
@@ -10,7 +10,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
@@ -34,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEWRENCH;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_FORCEWRENCH;
 
 public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 

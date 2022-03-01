@@ -1,8 +1,8 @@
 package com.mrbysco.forcecraft.blockentities;
 
 import com.mrbysco.forcecraft.ForceCraft;
-import com.mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
+import com.mrbysco.forcecraft.capabilities.forcerod.IForceRodModifier;
+import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.items.ForceArmorItem;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
@@ -15,8 +15,8 @@ import com.mrbysco.forcecraft.items.tools.ForceSwordItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_FORCEROD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public enum InfuserModifierType {
 	SPEED, HEAT, FORCE, SILK, DAMAGE, FORTUNE, LIGHT, STURDY, LUMBERJACK, HEALING, ENDER, BLEEDING, BANE, WING, CAMO, RAINBOW, TIME, 

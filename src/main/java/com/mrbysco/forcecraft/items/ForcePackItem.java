@@ -1,8 +1,8 @@
 package com.mrbysco.forcecraft.items;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.pack.PackInventoryProvider;
-import com.mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
+import com.mrbysco.forcecraft.capabilities.pack.PackInventoryProvider;
+import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.menu.ForcePackMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;

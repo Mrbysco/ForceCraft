@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.experiencetome;
+package com.mrbysco.forcecraft.capabilities.experiencetome;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -10,7 +10,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_EXPTOME;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_EXPTOME;
 
 public class ExperienceTomeCapability implements IExperienceTome, ICapabilitySerializable<CompoundTag>, ICapabilityProvider {
     private float experienceStored = 0.0F;

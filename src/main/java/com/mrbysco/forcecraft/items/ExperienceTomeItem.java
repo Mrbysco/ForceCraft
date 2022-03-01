@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.items;
 
-import com.mrbysco.forcecraft.capablilities.experiencetome.ExperienceTomeCapability;
+import com.mrbysco.forcecraft.capabilities.experiencetome.ExperienceTomeCapability;
 import com.mrbysco.forcecraft.util.ForceUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +20,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_EXPTOME;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_EXPTOME;
 
 public class ExperienceTomeItem extends Item {
 

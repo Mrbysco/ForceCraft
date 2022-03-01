@@ -8,7 +8,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_BANE;
 
 public class BaneHandler {
     @SubscribeEvent

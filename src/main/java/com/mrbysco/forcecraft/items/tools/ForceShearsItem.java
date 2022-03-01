@@ -1,8 +1,8 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModCapability;
+import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
+import com.mrbysco.forcecraft.capabilities.toolmodifier.ToolModCapability;
 import com.mrbysco.forcecraft.entities.ColdChickenEntity;
 import com.mrbysco.forcecraft.entities.ColdCowEntity;
 import com.mrbysco.forcecraft.entities.ColdPigEntity;
@@ -12,7 +12,6 @@ import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -47,7 +46,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 

@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.forcewrench;
+package com.mrbysco.forcecraft.capabilities.forcewrench;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;

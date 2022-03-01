@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.magnet;
+package com.mrbysco.forcecraft.capabilities.magnet;
 
 public interface IMagnet {
 

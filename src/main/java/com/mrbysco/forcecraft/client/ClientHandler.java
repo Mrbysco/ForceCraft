@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.client;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.magnet.IMagnet;
+import com.mrbysco.forcecraft.capabilities.magnet.IMagnet;
 import com.mrbysco.forcecraft.client.gui.belt.ForceBeltScreen;
 import com.mrbysco.forcecraft.client.gui.card.ItemCardScreen;
 import com.mrbysco.forcecraft.client.gui.engine.ForceEngineScreen;
@@ -46,7 +46,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_MAGNET;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_MAGNET;
 
 public class ClientHandler {
 	public static final ModelLayerLocation CREEPER_TOT = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "creeper_tot"), "main");

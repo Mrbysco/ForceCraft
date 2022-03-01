@@ -2,8 +2,8 @@ package com.mrbysco.forcecraft.blockentities;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blocks.engine.ForceEngineBlock;
-import com.mrbysco.forcecraft.capablilities.FluidHandlerWrapper;
-import com.mrbysco.forcecraft.capablilities.ItemStackHandlerWrapper;
+import com.mrbysco.forcecraft.capabilities.FluidHandlerWrapper;
+import com.mrbysco.forcecraft.capabilities.ItemStackHandlerWrapper;
 import com.mrbysco.forcecraft.menu.engine.ForceEngineMenu;
 import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceRegistry;

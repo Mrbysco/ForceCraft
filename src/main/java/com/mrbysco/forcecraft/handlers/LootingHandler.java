@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.handlers;
 
-import com.mrbysco.forcecraft.capablilities.CapabilityHandler;
-import com.mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
+import com.mrbysco.forcecraft.capabilities.CapabilityHandler;
+import com.mrbysco.forcecraft.capabilities.playermodifier.IPlayerModifier;
 import com.mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.world.entity.Entity;
@@ -18,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Random;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
 
 public class LootingHandler {
 

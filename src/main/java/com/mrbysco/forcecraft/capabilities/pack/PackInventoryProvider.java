@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.pack;
+package com.mrbysco.forcecraft.capabilities.pack;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

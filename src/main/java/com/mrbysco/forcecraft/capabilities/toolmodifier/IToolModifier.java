@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.toolmodifier;
+package com.mrbysco.forcecraft.capabilities.toolmodifier;
 
 public interface IToolModifier {
     /**

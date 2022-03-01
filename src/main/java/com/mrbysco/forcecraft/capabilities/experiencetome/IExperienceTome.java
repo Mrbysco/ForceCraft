@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.experiencetome;
+package com.mrbysco.forcecraft.capabilities.experiencetome;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;

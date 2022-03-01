@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.lootmodifiers;
 
 import com.google.gson.JsonObject;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
+import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class SmeltingModifier extends LootModifier {
 	public SmeltingModifier(LootItemCondition[] conditionsIn) {

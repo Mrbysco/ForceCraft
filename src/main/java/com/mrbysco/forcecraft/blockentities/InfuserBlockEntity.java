@@ -2,9 +2,9 @@ package com.mrbysco.forcecraft.blockentities;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blockentities.energy.ForceEnergyStorage;
-import com.mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
-import com.mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
+import com.mrbysco.forcecraft.capabilities.forcerod.IForceRodModifier;
+import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
+import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import com.mrbysco.forcecraft.items.ForceArmorItem;
@@ -75,8 +75,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_FORCEROD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Container {

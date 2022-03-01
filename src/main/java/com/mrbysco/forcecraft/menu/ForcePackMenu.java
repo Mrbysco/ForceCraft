@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.menu;
 
-import com.mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
+import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.items.ForceBeltItem;
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.items.ItemCardItem;

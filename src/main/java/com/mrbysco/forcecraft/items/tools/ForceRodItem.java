@@ -1,8 +1,8 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.forcerod.ForceRodCapability;
-import com.mrbysco.forcecraft.capablilities.forcerod.IForceRodModifier;
+import com.mrbysco.forcecraft.capabilities.forcerod.ForceRodCapability;
+import com.mrbysco.forcecraft.capabilities.forcerod.IForceRodModifier;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
@@ -14,7 +14,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
@@ -48,7 +47,7 @@ import java.util.function.Consumer;
 
 import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_ENDER;
 import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_HEALING;
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_FORCEROD;
 
 public class ForceRodItem extends BaseItem implements IForceChargingTool {
 

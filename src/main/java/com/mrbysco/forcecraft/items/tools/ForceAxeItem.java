@@ -2,8 +2,8 @@ package com.mrbysco.forcecraft.items.tools;
 
 import com.google.common.collect.Lists;
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
-import com.mrbysco.forcecraft.capablilities.toolmodifier.ToolModCapability;
+import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
+import com.mrbysco.forcecraft.capabilities.toolmodifier.ToolModCapability;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import com.mrbysco.forcecraft.registry.material.ModToolTiers;
@@ -11,7 +11,6 @@ import com.mrbysco.forcecraft.util.ForceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +31,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 import static com.mrbysco.forcecraft.util.ForceUtils.isLog;
 
 public class ForceAxeItem extends AxeItem implements IForceChargingTool {

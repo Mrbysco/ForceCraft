@@ -1,8 +1,8 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capablilities.magnet.IMagnet;
-import com.mrbysco.forcecraft.capablilities.magnet.MagnetCapability;
+import com.mrbysco.forcecraft.capabilities.magnet.IMagnet;
+import com.mrbysco.forcecraft.capabilities.magnet.MagnetCapability;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.registry.ForceEffects;
 import net.minecraft.nbt.CompoundTag;
@@ -25,7 +25,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_MAGNET;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_MAGNET;
 
 public class MagnetGloveItem extends BaseItem {
 

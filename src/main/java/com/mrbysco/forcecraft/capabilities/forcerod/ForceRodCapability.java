@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.forcerod;
+package com.mrbysco.forcecraft.capabilities.forcerod;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_FORCEROD;
 
 public class ForceRodCapability implements IForceRodModifier, ICapabilitySerializable<CompoundTag>, ICapabilityProvider {
     boolean camo = false;

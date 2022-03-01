@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.capablilities.playermodifier;
+package com.mrbysco.forcecraft.capabilities.playermodifier;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
 
 public class PlayerModifierCapability implements IPlayerModifier, ICapabilitySerializable<CompoundTag>, ICapabilityProvider {
     private float attackDamage = ((float) Attributes.ATTACK_DAMAGE.getDefaultValue());

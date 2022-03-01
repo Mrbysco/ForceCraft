@@ -5,7 +5,7 @@ import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blockentities.InfuserModifierType;
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
-import com.mrbysco.forcecraft.capablilities.pack.PackItemStackHandler;
+import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
