@@ -63,7 +63,7 @@ public class ForcePackItem extends BaseItem {
 	@Nullable
 	public MenuProvider getContainer(ItemStack stack, PackItemStackHandler handler) {
 		return new SimpleMenuProvider((id, playerInv, player) -> new ForcePackMenu(id, playerInv, handler),
-			stack.hasCustomHoverName() ? ((BaseComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.pack"));
+				stack.hasCustomHoverName() ? ((BaseComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.pack"));
 	}
 
 	@Override
@@ -74,16 +74,17 @@ public class ForcePackItem extends BaseItem {
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		CompoundTag tag = stack.getOrCreateTag();
-		if(tag.contains(ForcePackItem.SLOTS_USED) &&  tag.contains(ForcePackItem.SLOTS_TOTAL)) {
+		if (tag.contains(ForcePackItem.SLOTS_USED) && tag.contains(ForcePackItem.SLOTS_TOTAL)) {
 			tooltip.add(new TextComponent(String.format("%s/%s Slots", tag.getInt(ForcePackItem.SLOTS_USED), tag.getInt(ForcePackItem.SLOTS_TOTAL))));
 		} else {
 			tooltip.add(new TextComponent("0/8 Slots"));
-		};
+		}
+		;
 
 
 		if (flagIn.isAdvanced() && stack.getTag() != null && stack.getTag().contains("uuid")) {
 			UUID uuid = stack.getTag().getUUID("uuid");
-			tooltip.add(new TextComponent("ID: " + uuid.toString().substring(0,8)).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+			tooltip.add(new TextComponent("ID: " + uuid.toString().substring(0, 8)).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
 		}
 
 		super.appendHoverText(stack, level, tooltip, flagIn);

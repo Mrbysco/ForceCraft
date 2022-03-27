@@ -26,7 +26,7 @@ public class PackItemStackHandler extends ItemStackHandler {
 		//Make sure there's no ForcePack-ception
 		return !(stack.getItem() instanceof ForcePackItem) && !stack.is(ForceTags.HOLDS_ITEMS) && super.isItemValid(slot, stack);
 	}
-	
+
 	public int getSlotsInUse() {
 		return (upgrades + 1) * SLOTS_PER_UPGRADE;
 	}
@@ -60,10 +60,10 @@ public class PackItemStackHandler extends ItemStackHandler {
 	}
 
 	public void forceUpdate() {
-		if(this.upgrades > MAX_UPGRADES) {
+		if (this.upgrades > MAX_UPGRADES) {
 			this.upgrades = MAX_UPGRADES;
 		}
-		if(this.upgrades < 0) {
+		if (this.upgrades < 0) {
 			this.upgrades = 0;
 		}
 
@@ -78,27 +78,27 @@ public class PackItemStackHandler extends ItemStackHandler {
 	}
 
 	public boolean canUpgrade(UpgradeBookData bd) {
-		if(upgrades >= MAX_UPGRADES) {
+		if (upgrades >= MAX_UPGRADES) {
 			return false;
 		}
-		if(bd.getTier().asInt() >= UpgradeBookTier.TWO.asInt() && this.upgrades == 0) {
+		if (bd.getTier().asInt() >= UpgradeBookTier.TWO.asInt() && this.upgrades == 0) {
 			//0->1 so 8 into 16 slots
 			return true;
 		}
 
-		if(bd.getTier().asInt() >= UpgradeBookTier.THREE.asInt() && this.upgrades == 1) {
+		if (bd.getTier().asInt() >= UpgradeBookTier.THREE.asInt() && this.upgrades == 1) {
 			//bout to become 24 slots
 			return true;
 		}
 
-		if(bd.getTier().asInt() >= UpgradeBookTier.FOUR.asInt() && this.upgrades == 2) {
+		if (bd.getTier().asInt() >= UpgradeBookTier.FOUR.asInt() && this.upgrades == 2) {
 			return true; // 32 slots next
 		}
 
-		if(bd.getTier().asInt() >= UpgradeBookTier.FIVE.asInt() && this.upgrades == 3) {
+		if (bd.getTier().asInt() >= UpgradeBookTier.FIVE.asInt() && this.upgrades == 3) {
 			return true; // will be upgrade 4, 40 slots
 		}
-		
+
 		return false;
 	}
 
@@ -125,13 +125,11 @@ public class PackItemStackHandler extends ItemStackHandler {
 //		setSize((getUpgrades() + 1) * 8);
 
 		ListTag tagList = nbt.getList("Items", CompoundTag.TAG_COMPOUND);
-		for (int i = 0; i < tagList.size(); i++)
-		{
+		for (int i = 0; i < tagList.size(); i++) {
 			CompoundTag itemTags = tagList.getCompound(i);
 			int slot = itemTags.getInt("Slot");
 
-			if (slot >= 0 && slot < stacks.size())
-			{
+			if (slot >= 0 && slot < stacks.size()) {
 				stacks.set(slot, ItemStack.of(itemTags));
 			}
 		}

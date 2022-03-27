@@ -62,16 +62,16 @@ public class SpoilsBagItem extends BaseItem {
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		if (handler != null && tile != null && tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent()) {
 			IItemHandler tileInventory = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).orElse(null);
-			if(tileInventory != null && handler instanceof ItemStackHandler itemHandler) {
-				for(int i = 0; i < itemHandler.getSlots(); i++) {
+			if (tileInventory != null && handler instanceof ItemStackHandler itemHandler) {
+				for (int i = 0; i < itemHandler.getSlots(); i++) {
 					ItemStack bagStack = itemHandler.getStackInSlot(i);
 					ItemStack remaining = ItemHandlerHelper.copyStackWithSize(bagStack, bagStack.getCount());
-					if(!bagStack.isEmpty()) {
+					if (!bagStack.isEmpty()) {
 						remaining = ItemHandlerHelper.insertItem(tileInventory, bagStack, false);
 						itemHandler.setStackInSlot(i, remaining);
 					}
 				}
-				if(ItemHandlerUtils.isEmpty(itemHandler)) {
+				if (ItemHandlerUtils.isEmpty(itemHandler)) {
 					stack.shrink(1);
 				}
 				return InteractionResult.SUCCESS;
@@ -85,7 +85,7 @@ public class SpoilsBagItem extends BaseItem {
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-		if(handler != null) {
+		if (handler != null) {
 			this.populateBag(level, stack);
 			playerIn.openMenu(this.getContainer(stack));
 			return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, stack);
@@ -102,10 +102,10 @@ public class SpoilsBagItem extends BaseItem {
 	}
 
 	public void populateBag(Level level, ItemStack stack) {
-		if(!level.isClientSide && !stack.getOrCreateTag().getBoolean("Filled")) {
+		if (!level.isClientSide && !stack.getOrCreateTag().getBoolean("Filled")) {
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-			if(handler instanceof ItemStackHandler) {
-				if(ItemHandlerUtils.isEmpty(handler)) {
+			if (handler instanceof ItemStackHandler) {
+				if (ItemHandlerUtils.isEmpty(handler)) {
 					CompoundTag tag = stack.getOrCreateTag();
 					List<ItemStack> stacks = new ArrayList<>();
 					do {
@@ -118,22 +118,22 @@ public class SpoilsBagItem extends BaseItem {
 							Collections.shuffle(lootStacks);
 							stacks = lootStacks;
 						}
-					} while (stacks.isEmpty() );
+					} while (stacks.isEmpty());
 
-					if(stacks.size() > 7) {
+					if (stacks.size() > 7) {
 						int newSize = Math.min(8, Math.max(5, level.random.nextInt(stacks.size())));
-						if(stacks.size() < newSize) {
+						if (stacks.size() < newSize) {
 							newSize = stacks.size();
 						}
 						List<ItemStack> newStacks = new ArrayList<>();
-						for(int i = 0; i < newSize; i++) {
+						for (int i = 0; i < newSize; i++) {
 							newStacks.add(stacks.get(i));
 						}
 						stacks = newStacks;
 					}
 
-					ItemStackHandler stackhandler = (ItemStackHandler)handler;
-					for(int i = 0; i < stacks.size(); i++) {
+					ItemStackHandler stackhandler = (ItemStackHandler) handler;
+					for (int i = 0; i < stacks.size(); i++) {
 						stackhandler.setStackInSlot(i, stacks.get(i));
 					}
 					tag.putBoolean("Filled", true);
@@ -147,14 +147,14 @@ public class SpoilsBagItem extends BaseItem {
 	public MenuProvider getContainer(ItemStack stack) {
 		return new SimpleMenuProvider((id, inventory, player) -> {
 			return new SpoilsBagMenu(id, inventory, stack);
-		}, stack.hasCustomHoverName() ? ((BaseComponent)stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.spoils_bag"));
+		}, stack.hasCustomHoverName() ? ((BaseComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.spoils_bag"));
 	}
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) {
-		if(!level.isClientSide && stack.hasTag() && stack.getTag().getBoolean("Filled")) {
+		if (!level.isClientSide && stack.hasTag() && stack.getTag().getBoolean("Filled")) {
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-			if(ItemHandlerUtils.isEmpty(handler)) {
+			if (ItemHandlerUtils.isEmpty(handler)) {
 				stack.shrink(1);
 			}
 		}

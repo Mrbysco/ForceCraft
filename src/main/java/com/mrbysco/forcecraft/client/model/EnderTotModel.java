@@ -40,7 +40,7 @@ public class EnderTotModel<T extends EnderTotEntity> extends HumanoidModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		super.setupAnim(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 		this.head.visible = true;
 		float f = 8.0F;
@@ -49,10 +49,10 @@ public class EnderTotModel<T extends EnderTotEntity> extends HumanoidModel<T> {
 		this.body.z = -0.0F;
 		this.rightLeg.xRot -= 0.0F;
 		this.leftLeg.xRot -= 0.0F;
-		this.rightArm.xRot = (float)((double)this.rightArm.xRot * 0.5D);
-		this.leftArm.xRot = (float)((double)this.leftArm.xRot * 0.5D);
-		this.rightLeg.xRot = (float)((double)this.rightLeg.xRot * 0.5D);
-		this.leftLeg.xRot = (float)((double)this.leftLeg.xRot * 0.5D);
+		this.rightArm.xRot = (float) ((double) this.rightArm.xRot * 0.5D);
+		this.leftArm.xRot = (float) ((double) this.leftArm.xRot * 0.5D);
+		this.rightLeg.xRot = (float) ((double) this.rightLeg.xRot * 0.5D);
+		this.leftLeg.xRot = (float) ((double) this.leftLeg.xRot * 0.5D);
 		float f1 = 0.4F;
 		if (this.rightArm.xRot > f1) {
 			this.rightArm.xRot = f1;

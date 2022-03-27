@@ -10,41 +10,43 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class PackStorage {
-    private final UUID uuid;
-    private final PackItemStackHandler inventory;
-    private final LazyOptional<IItemHandler> optional;
+	private final UUID uuid;
+	private final PackItemStackHandler inventory;
+	private final LazyOptional<IItemHandler> optional;
 
-    public PackStorage(UUID uuid) {
-        this.uuid = uuid;
-        this.inventory = new PackItemStackHandler();
-        this.optional = LazyOptional.of(() -> this.inventory);
-    }
+	public PackStorage(UUID uuid) {
+		this.uuid = uuid;
+		this.inventory = new PackItemStackHandler();
+		this.optional = LazyOptional.of(() -> this.inventory);
+	}
 
-    public PackStorage(CompoundTag nbt) {
-        this.uuid = nbt.getUUID("uuid");
-        this.inventory = new PackItemStackHandler();
-        this.inventory.deserializeNBT(nbt.getCompound("inventory"));
-        this.optional = LazyOptional.of(() -> this.inventory);
-    }
+	public PackStorage(CompoundTag nbt) {
+		this.uuid = nbt.getUUID("uuid");
+		this.inventory = new PackItemStackHandler();
+		this.inventory.deserializeNBT(nbt.getCompound("inventory"));
+		this.optional = LazyOptional.of(() -> this.inventory);
+	}
 
-    public UUID getUUID() {
-        return this.uuid;
-    }
-    public LazyOptional<IItemHandler> getOptional() {
-        return this.optional;
-    }
-    public PackItemStackHandler getInventory() {
-        return this.inventory;
-    }
+	public UUID getUUID() {
+		return this.uuid;
+	}
 
-    public CompoundTag toNBT() {
-        CompoundTag nbt = new CompoundTag();
+	public LazyOptional<IItemHandler> getOptional() {
+		return this.optional;
+	}
 
-        nbt.putUUID("uuid", this.uuid);
-        nbt.putString("sUUID", this.uuid.toString());
+	public PackItemStackHandler getInventory() {
+		return this.inventory;
+	}
 
-        nbt.put("inventory", this.inventory.serializeNBT());
+	public CompoundTag toNBT() {
+		CompoundTag nbt = new CompoundTag();
 
-        return nbt;
-    }
+		nbt.putUUID("uuid", this.uuid);
+		nbt.putString("sUUID", this.uuid.toString());
+
+		nbt.put("inventory", this.inventory.serializeNBT());
+
+		return nbt;
+	}
 }

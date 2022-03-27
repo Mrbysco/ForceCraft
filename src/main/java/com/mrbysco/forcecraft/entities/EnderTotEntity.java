@@ -79,7 +79,7 @@ public class EnderTotEntity extends EnderMan {
 	public boolean teleport() {
 		if (!this.level.isClientSide() && this.isAlive() && !this.isInWaterOrBubble()) {
 			double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 32.0D;
-			double d1 = this.getY() + (double)(this.random.nextInt(32) - 16);
+			double d1 = this.getY() + (double) (this.random.nextInt(32) - 16);
 			double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 32;
 			return this.teleport(d0, d1, d2);
 		} else {
@@ -90,9 +90,9 @@ public class EnderTotEntity extends EnderMan {
 	@Override
 	public void die(DamageSource cause) {
 		Entity entitySource = cause.getDirectEntity();
-		if(entitySource instanceof LivingEntity livingEntity && !this.level.isClientSide) {
+		if (entitySource instanceof LivingEntity livingEntity && !this.level.isClientSide) {
 			int total = getRandom().nextInt(2) + 1;
-			for(int i = 0; i < total; i++) {
+			for (int i = 0; i < total; i++) {
 				AngryEndermanEntity endermanEntity = ForceEntities.ANGRY_ENDERMAN.get().create(level);
 				endermanEntity.moveTo(getX(), getY() + 0.5D, getZ(), 0.0F, 0.0F);
 				endermanEntity.setTarget(livingEntity);
@@ -105,7 +105,7 @@ public class EnderTotEntity extends EnderMan {
 	public static AttributeSupplier.Builder generateAttributes() {
 		return Monster.createMonsterAttributes()
 				.add(Attributes.MAX_HEALTH, 10.0D)
-				.add(Attributes.MOVEMENT_SPEED, (double)0.35F)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.35F)
 				.add(Attributes.ATTACK_DAMAGE, 3.0D)
 				.add(Attributes.FOLLOW_RANGE, 64.0D);
 	}
@@ -150,7 +150,9 @@ public class EnderTotEntity extends EnderMan {
 
 	static class FindPlayerGoal extends NearestAttackableTargetGoal<Player> {
 		private final EnderTotEntity endertot;
-		/** The player */
+		/**
+		 * The player
+		 */
 		private Player player;
 		private int aggroTime;
 		private int teleportTime;
@@ -160,7 +162,7 @@ public class EnderTotEntity extends EnderMan {
 		public FindPlayerGoal(EnderTotEntity enderTotIn, @Nullable Predicate<LivingEntity> p_i241912_2_) {
 			super(enderTotIn, Player.class, 10, false, false, p_i241912_2_);
 			this.endertot = enderTotIn;
-			this.startAggroTargetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector((livingEntity) -> enderTotIn.isLookingAtMe((Player)livingEntity));
+			this.startAggroTargetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector((livingEntity) -> enderTotIn.isLookingAtMe((Player) livingEntity));
 		}
 
 		/**
@@ -210,7 +212,7 @@ public class EnderTotEntity extends EnderMan {
 		 */
 		public void tick() {
 			if (this.endertot.getTarget() == null) {
-				super.setTarget((LivingEntity)null);
+				super.setTarget((LivingEntity) null);
 			}
 
 			if (this.player != null) {
@@ -221,7 +223,7 @@ public class EnderTotEntity extends EnderMan {
 				}
 			} else {
 				if (this.target != null && !this.endertot.isPassenger()) {
-					if (this.endertot.isLookingAtMe((Player)this.target)) {
+					if (this.endertot.isLookingAtMe((Player) this.target)) {
 						if (this.target.distanceToSqr(this.endertot) < 16.0D) {
 							this.endertot.teleport();
 						}
@@ -269,8 +271,8 @@ public class EnderTotEntity extends EnderMan {
 			int k = Mth.floor(this.endertot.getZ() - 2.0D + random.nextDouble() * 4.0D);
 			BlockPos blockpos = new BlockPos(i, j, k);
 			BlockState blockstate = world.getBlockState(blockpos);
-			Vec3 vector3d = new Vec3((double)Mth.floor(this.endertot.getX()) + 0.5D, (double)j + 0.5D, (double)Mth.floor(this.endertot.getZ()) + 0.5D);
-			Vec3 vector3d1 = new Vec3((double)i + 0.5D, (double)j + 0.5D, (double)k + 0.5D);
+			Vec3 vector3d = new Vec3((double) Mth.floor(this.endertot.getX()) + 0.5D, (double) j + 0.5D, (double) Mth.floor(this.endertot.getZ()) + 0.5D);
+			Vec3 vector3d1 = new Vec3((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D);
 			BlockHitResult blockHitResult = world.clip(new ClipContext(vector3d, vector3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.endertot));
 			boolean flag = blockHitResult.getBlockPos().equals(blockpos);
 			if (blockstate.is(ForceTags.ENDERTOT_HOLDABLE) && flag) {
@@ -320,7 +322,7 @@ public class EnderTotEntity extends EnderMan {
 				carriedState = Block.updateFromNeighbourShapes(carriedState, this.endertot.level, blockpos);
 				if (this.canPlaceBlock(world, blockpos, carriedState, blockstate, belowState, belowPos) && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace(endertot, net.minecraftforge.common.util.BlockSnapshot.create(world.dimension(), world, belowPos), net.minecraft.core.Direction.UP)) {
 					world.setBlock(blockpos, carriedState, 3);
-					this.endertot.setCarriedBlock((BlockState)null);
+					this.endertot.setCarriedBlock((BlockState) null);
 				}
 
 			}

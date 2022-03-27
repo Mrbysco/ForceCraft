@@ -36,8 +36,8 @@ public class CreeperTotEntity extends Creeper {
 
 	@Override
 	public void explodeCreeper() {
-		if(this.level.isClientSide) {
-			for(int i = 0; i < 4; i++) {
+		if (this.level.isClientSide) {
+			for (int i = 0; i < 4; i++) {
 				summonFireworkParticles(getFirework(), 0.5D);
 			}
 
@@ -48,7 +48,7 @@ public class CreeperTotEntity extends Creeper {
 			this.dead = true;
 			this.playSound(SoundEvents.GENERIC_EXPLODE, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
 
-			if(this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT) && this.getRandom().nextInt(4) == 0) {
+			if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT) && this.getRandom().nextInt(4) == 0) {
 				spawnAtLocation(new ItemStack(ForceRegistry.PILE_OF_GUNPOWDER.get(), this.getRandom().nextInt(2) + 1));
 			}
 

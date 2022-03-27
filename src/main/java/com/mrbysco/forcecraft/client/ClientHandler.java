@@ -132,13 +132,13 @@ public class ClientHandler {
 				stack.hasTag() && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
 
 		ItemProperties.register(ForceRegistry.FORCE_BELT.get(), new ResourceLocation("color"), (stack, world, livingEntity, i) ->
-				 stack.hasTag() && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
+				stack.hasTag() && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
 
 		ItemProperties.register(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pull"), (stack, world, livingEntity, i) -> {
 			if (livingEntity == null) {
 				return 0.0F;
 			} else {
-				return livingEntity.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration() - livingEntity.getUseItemRemainingTicks()) / 20.0F;
+				return livingEntity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - livingEntity.getUseItemRemainingTicks()) / 20.0F;
 			}
 		});
 		ItemProperties.register(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pulling"), (stack, world, livingEntity, i) ->
@@ -174,12 +174,12 @@ public class ClientHandler {
 
 		colors.register((stack, tintIndex) -> {
 			if (tintIndex == 0 || tintIndex == 1) {
-				if(stack.hasTag() && stack.getTag().contains("StoredEntity", CompoundTag.TAG_STRING)) {
+				if (stack.hasTag() && stack.getTag().contains("StoredEntity", CompoundTag.TAG_STRING)) {
 					SpawnEggItem info = null;
 					ResourceLocation id = new ResourceLocation(stack.getTag().getString("StoredEntity"));
 					info = SpawnEggItem.byId(ForgeRegistries.ENTITIES.getValue(id));
 
-					if(info != null) {
+					if (info != null) {
 						return tintIndex == 0 ? info.getColor(0) : info.getColor(1);
 					} else {
 						return tintIndex == 0 ? 10489616 : tintIndex == 1 ? 951412 : 0xFFFFFF;

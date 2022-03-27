@@ -38,6 +38,7 @@ import java.util.List;
 
 public class BaconatorItem extends BaseItem {
 	public static final String HAS_FOOD_TAG = Reference.MOD_ID + ":hasItems";
+
 	public BaconatorItem(Properties properties) {
 		super(properties);
 	}
@@ -46,17 +47,17 @@ public class BaconatorItem extends BaseItem {
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack itemstack = playerIn.getItemInHand(handIn);
 		IItemHandler handler = itemstack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-		if(playerIn.isShiftKeyDown()) {
+		if (playerIn.isShiftKeyDown()) {
 			boolean isFull = ItemHandlerUtils.isFull(handler);
-			if(!isFull) {
+			if (!isFull) {
 				//Fill with food
 				boolean extracted = ItemHandlerUtils.extractStackFromPlayer(playerIn.getInventory(), handler, (stack) -> {
 					return !stack.isEmpty() && stack.isEdible() && stack.is(ForceTags.BACONATOR_FOOD);
 				});
 				boolean hasItems = ItemHandlerUtils.hasItems(handler);
-				if(!extracted) {
+				if (!extracted) {
 					//set to auto-feed mode
-					if(hasItems) {
+					if (hasItems) {
 						itemstack.setDamageValue(itemstack.getDamageValue() == 1 ? 0 : 1);
 					}
 				} else {
@@ -66,9 +67,9 @@ public class BaconatorItem extends BaseItem {
 				tag.putBoolean(HAS_FOOD_TAG, hasItems);
 			}
 		} else {
-			if(ItemHandlerUtils.hasItems(handler)) {
+			if (ItemHandlerUtils.hasItems(handler)) {
 				ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
-				if(!firstStack.isEmpty()) {
+				if (!firstStack.isEmpty()) {
 					if (playerIn.canEat(firstStack.getItem().getFoodProperties().canAlwaysEat())) {
 						playerIn.startUsingItem(handIn);
 					}
@@ -82,7 +83,7 @@ public class BaconatorItem extends BaseItem {
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
-		if(firstStack != null && !firstStack.isEmpty()) {
+		if (firstStack != null && !firstStack.isEmpty()) {
 			entityLiving.eat(level, firstStack);
 			level.playSound((Player) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.PIG_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 		}
@@ -98,11 +99,11 @@ public class BaconatorItem extends BaseItem {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) {
-		if(stack.getDamageValue() == 1 && entityIn instanceof Player playerIn && level.getGameTime() % 20 == 0) {
-			if(!playerIn.getAbilities().instabuild && playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
+		if (stack.getDamageValue() == 1 && entityIn instanceof Player playerIn && level.getGameTime() % 20 == 0) {
+			if (!playerIn.getAbilities().instabuild && playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
 				IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 				ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
-				if(!firstStack.isEmpty()) {
+				if (!firstStack.isEmpty()) {
 					playerIn.eat(level, firstStack);
 					level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.PIG_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
@@ -129,19 +130,19 @@ public class BaconatorItem extends BaseItem {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-		if(Screen.hasShiftDown()) {
+		if (Screen.hasShiftDown()) {
 			tooltip.add(new TranslatableComponent("forcecraft.baconator.shift.carrying").withStyle(ChatFormatting.DARK_RED));
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-			if(handler != null) {
+			if (handler != null) {
 				int stacks = 0;
-				for(int i = 0; i < handler.getSlots(); i++) {
+				for (int i = 0; i < handler.getSlots(); i++) {
 					ItemStack foodStack = handler.getStackInSlot(i);
-					if(!foodStack.isEmpty()) {
+					if (!foodStack.isEmpty()) {
 						tooltip.add(new TextComponent(foodStack.getCount() + "x ").append(foodStack.getHoverName()).withStyle(ChatFormatting.GOLD));
 						stacks++;
 					}
 				}
-				if(stacks == 0) {
+				if (stacks == 0) {
 					tooltip.add(new TranslatableComponent("forcecraft.baconator.shift.nothing").withStyle(ChatFormatting.GRAY));
 				}
 			}

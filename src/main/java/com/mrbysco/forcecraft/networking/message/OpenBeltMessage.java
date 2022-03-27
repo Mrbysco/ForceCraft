@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class OpenBeltMessage {
-	public OpenBeltMessage(){
+	public OpenBeltMessage() {
 
 	}
 
@@ -49,11 +49,11 @@ public class OpenBeltMessage {
 				Predicate<ItemStack> stackPredicate = (stack) -> stack.getItem() instanceof ForceBeltItem;
 				if (FindingUtil.hasSingleStackInHotbar(player, stackPredicate)) {
 					ItemStack beltStack = FindingUtil.findInstanceStack(player, stackPredicate);
-					if(!beltStack.isEmpty()) {
+					if (!beltStack.isEmpty()) {
 						Optional<BeltStorage> data = StorageManager.getBelt(beltStack);
 						data.ifPresent(belt ->
-							NetworkHooks.openGui(player, new SimpleMenuProvider((id, pInv, pEntity) -> new ForceBeltMenu(id, pInv, belt.getInventory()),
-								beltStack.hasCustomHoverName() ? ((BaseComponent) beltStack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.belt"))));
+								NetworkHooks.openGui(player, new SimpleMenuProvider((id, pInv, pEntity) -> new ForceBeltMenu(id, pInv, belt.getInventory()),
+										beltStack.hasCustomHoverName() ? ((BaseComponent) beltStack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.belt"))));
 					}
 				}
 			}

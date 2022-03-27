@@ -12,27 +12,27 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 
 public class InertCoreItem extends BaseItem {
-    public InertCoreItem(Item.Properties properties) {
-        super(properties);
-    }
+	public InertCoreItem(Item.Properties properties) {
+		super(properties);
+	}
 
-    /* Non Flamable */
-    @Override
-    public boolean hasCustomEntity(ItemStack stack) {
-        return true;
-    }
+	/* Non Flamable */
+	@Override
+	public boolean hasCustomEntity(ItemStack stack) {
+		return true;
+	}
 
-    @Nullable
-    @Override
-    public Entity createEntity(Level world, Entity location, ItemStack itemstack) {
-        ItemEntity entity = new NonBurnableItemEntity(world, location.getX(), location.getY(), location.getZ(), itemstack);
-        if (location instanceof ItemEntity) {
-            CompoundTag tag = new CompoundTag();
-            location.saveWithoutId(tag);
-            entity.setPickUpDelay(tag.getShort("PickupDelay"));
-        }
-        Vec3 locMotion = location.getDeltaMovement();
-        entity.setDeltaMovement(locMotion.x, locMotion.y, locMotion.z);
-        return entity;
-    }
+	@Nullable
+	@Override
+	public Entity createEntity(Level world, Entity location, ItemStack itemstack) {
+		ItemEntity entity = new NonBurnableItemEntity(world, location.getX(), location.getY(), location.getZ(), itemstack);
+		if (location instanceof ItemEntity) {
+			CompoundTag tag = new CompoundTag();
+			location.saveWithoutId(tag);
+			entity.setPickUpDelay(tag.getShort("PickupDelay"));
+		}
+		Vec3 locMotion = location.getDeltaMovement();
+		entity.setDeltaMovement(locMotion.x, locMotion.y, locMotion.z);
+		return entity;
+	}
 }

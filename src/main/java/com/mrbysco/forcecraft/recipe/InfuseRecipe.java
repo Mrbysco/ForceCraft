@@ -8,6 +8,7 @@ import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookTier;
+import com.mrbysco.forcecraft.registry.ForceRecipeSerializers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -38,7 +39,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 	private final ResourceLocation id;
 	public Ingredient input = Ingredient.EMPTY;
 	public InfuserModifierType resultModifier;
-	ItemStack output = ItemStack.EMPTY;  
+	ItemStack output = ItemStack.EMPTY;
 	private UpgradeBookTier tier;
 	private Ingredient center;
 	private int time;
@@ -49,7 +50,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 		this.input = input;
 		this.center = center;
 		output = outputStack;
-		resultModifier = result; 
+		resultModifier = result;
 		this.setTier(tier);
 	}
 
@@ -57,7 +58,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 	public boolean isSpecial() {
 		return true;
 	}
-	
+
 	public int getTime() {
 		return time;
 	}
@@ -68,7 +69,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 
 	@Override
 	public boolean matches(InfuserBlockEntity inv, Level level) {
-		for(int i = 0; i < inv.handler.getSlots(); i++) {
+		for (int i = 0; i < inv.handler.getSlots(); i++) {
 			ItemStack stack = inv.handler.getStackInSlot(i);
 			if (i < InfuserBlockEntity.SLOT_TOOL) {
 				return matchesModifier(inv, stack, false);
@@ -102,29 +103,29 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 	}
 
 	public boolean matchesModifier(ItemStack centerStack, ItemStack modifierStack) {
-		if(modifierStack.getItem() == ForceRegistry.FORCE_PACK_UPGRADE.get()) {
+		if (modifierStack.getItem() == ForceRegistry.FORCE_PACK_UPGRADE.get()) {
 			IItemHandler handler = centerStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-			if(handler instanceof PackItemStackHandler) {
-				if(((PackItemStackHandler) handler).getUpgrades() != getTier().ordinal() - 2) {
+			if (handler instanceof PackItemStackHandler) {
+				if (((PackItemStackHandler) handler).getUpgrades() != getTier().ordinal() - 2) {
 					return false;
 				}
 			}
 		}
 
-		if(!this.input.test(modifierStack)) {
+		if (!this.input.test(modifierStack)) {
 			return false;
 		}
 		return true;
 	}
 
 	public boolean matchesTool(ItemStack toolStack, boolean ignoreInfused) {
-		if(!this.center.test(toolStack)) {
+		if (!this.center.test(toolStack)) {
 			// center doesn't match this recipe. move over
 			return false;
 		}
-		if(!ignoreInfused) {
+		if (!ignoreInfused) {
 			//Ignore if the tool is infused in case of infusing for the first time
-			if((toolStack.hasTag() && toolStack.getTag().getBoolean("ForceInfused"))) {
+			if ((toolStack.hasTag() && toolStack.getTag().getBoolean("ForceInfused"))) {
 				return false;
 			}
 		}
@@ -137,10 +138,10 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 	}
 
 	@Override
-	public ItemStack getResultItem() { 
-		return output;  
+	public ItemStack getResultItem() {
+		return output;
 	}
-	
+
 	public boolean hasOutput() {
 		return !output.isEmpty(); //should also be for modifier == ITEM
 	}
@@ -194,7 +195,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return ForceRecipes.INFUSER_SERIALIZER.get();
+		return ForceRecipeSerializers.INFUSER_SERIALIZER.get();
 	}
 
 	public static class SerializeInfuserRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<InfuseRecipe> {
@@ -205,18 +206,18 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 			try {
 				Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
 				Ingredient center = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "center"));
-				
+
 				String result = GsonHelper.getAsString(json, "result");
 
 				// hardcoded mod id: no api support rip
-				InfuserModifierType modifier = InfuserModifierType.valueOf(result.replace(Reference.MOD_ID + ":","").toUpperCase());
-				
-		        ItemStack output = ItemStack.EMPTY;
-		        if(modifier == InfuserModifierType.ITEM && GsonHelper.isValidNode(json, "output") ) {
-		        	output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
-		        }
+				InfuserModifierType modifier = InfuserModifierType.valueOf(result.replace(Reference.MOD_ID + ":", "").toUpperCase());
+
+				ItemStack output = ItemStack.EMPTY;
+				if (modifier == InfuserModifierType.ITEM && GsonHelper.isValidNode(json, "output")) {
+					output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
+				}
 				int tier = GsonHelper.getAsInt(json, "tier");
-				
+
 				recipe = new InfuseRecipe(recipeId, center, ingredient, modifier, UpgradeBookTier.values()[tier], output);
 				recipe.setTime(GsonHelper.getAsInt(json, "time"));
 				addRecipe(recipe);
@@ -233,7 +234,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 			Ingredient ing = Ingredient.fromNetwork(buffer);
 			int enumlon = buffer.readVarInt();
 			int tier = buffer.readInt();
-			
+
 			InfuseRecipe r = new InfuseRecipe(recipeId, center, ing, InfuserModifierType.values()[enumlon], UpgradeBookTier.values()[tier], buffer.readItem());
 
 			r.setTime(buffer.readInt());
@@ -260,12 +261,12 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 		}
 		int thisTier = recipe.getTier().ordinal();
 		//by level is for the GUI 
-		if(!RECIPESBYLEVEL.containsKey(thisTier)) {
+		if (!RECIPESBYLEVEL.containsKey(thisTier)) {
 			RECIPESBYLEVEL.put(thisTier, new ArrayList<>());
 		}
 		RECIPESBYLEVEL.get(thisTier).add(recipe);
 		HASHES.add(id.toString());
-		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}" , id.toString(), recipe.resultModifier, recipe.input.toJson());
+		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}", id.toString(), recipe.resultModifier, recipe.input.toJson());
 		return true;
 	}
 }

@@ -42,9 +42,9 @@ public class RenameAndRecolorScreen extends Screen {
 		selectedColor = itemstack.getOrCreateTag().getInt("Color");
 		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		this.addRenderableWidget(new ItemButton(this.width / 2 - 89, this.height / 2 + 5, 18, 18, CommonComponents.GUI_DONE, this.itemstack, (button) -> {
-			ItemButton itemButton = (ItemButton)button;
+			ItemButton itemButton = (ItemButton) button;
 			this.selectedColor++;
-			if(selectedColor > 15) {
+			if (selectedColor > 15) {
 				this.selectedColor = 0;
 			}
 
@@ -56,12 +56,12 @@ public class RenameAndRecolorScreen extends Screen {
 		}));
 
 		this.addRenderableWidget(new Button(this.width / 2 - 34, this.height / 2 + 3, 60, 20, CommonComponents.GUI_CANCEL, (p_238847_1_) -> {
-			this.minecraft.setScreen((Screen)null);
+			this.minecraft.setScreen((Screen) null);
 		}));
 
 		this.addRenderableWidget(new Button(this.width / 2 + 31, this.height / 2 + 3, 60, 20, CommonComponents.GUI_DONE, (p_238847_1_) -> {
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new PackChangeMessage(usedHand, textfield.getValue(), this.selectedColor));
-			this.minecraft.setScreen((Screen)null);
+			this.minecraft.setScreen((Screen) null);
 		}));
 
 		this.textfield = new EditBox(this.minecraft.font, this.width / 2 - 90, this.height / 2 - 24, 180, 20, new TextComponent("Name"));
@@ -95,10 +95,10 @@ public class RenameAndRecolorScreen extends Screen {
 		int guiLeft = (this.width - xSize) / 2;
 		int guiTop = (this.height - ySize) / 2;
 
-		this.blit(poseStack, guiLeft, guiTop, 0,0, xSize, ySize);
+		this.blit(poseStack, guiLeft, guiTop, 0, 0, xSize, ySize);
 
 		this.textfield.render(poseStack, mouseX, mouseY, partialTicks);
 		super.render(poseStack, mouseX, mouseY, partialTicks);
-		font.draw(poseStack, new TextComponent("Color"), (int)(this.width / 2d - 68), (int)(this.height / 2d + 9), 5592405);
+		font.draw(poseStack, new TextComponent("Color"), (int) (this.width / 2d - 68), (int) (this.height / 2d + 9), 5592405);
 	}
 }

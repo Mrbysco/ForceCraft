@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class OpenPackMessage {
-	public OpenPackMessage(){
+	public OpenPackMessage() {
 
 	}
 
@@ -50,11 +50,11 @@ public class OpenPackMessage {
 				Predicate<ItemStack> stackPredicate = (stack) -> stack.getItem() instanceof ForcePackItem;
 				if (FindingUtil.hasSingleStackInHotbar(player, stackPredicate)) {
 					ItemStack packStack = FindingUtil.findInstanceStack(player, stackPredicate);
-					if(!packStack.isEmpty()) {
+					if (!packStack.isEmpty()) {
 						Optional<PackStorage> data = StorageManager.getPack(packStack);
 						data.ifPresent(pack ->
-							NetworkHooks.openGui(player, new SimpleMenuProvider((id, pInv, pEntity) -> new ForcePackMenu(id, pInv, pack.getInventory()),
-								packStack.hasCustomHoverName() ? ((BaseComponent) packStack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.pack")), buf -> buf.writeInt(pack.getInventory().getUpgrades())));
+								NetworkHooks.openGui(player, new SimpleMenuProvider((id, pInv, pEntity) -> new ForcePackMenu(id, pInv, pack.getInventory()),
+										packStack.hasCustomHoverName() ? ((BaseComponent) packStack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.pack")), buf -> buf.writeInt(pack.getInventory().getUpgrades())));
 					}
 				}
 			}

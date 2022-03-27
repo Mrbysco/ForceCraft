@@ -9,9 +9,9 @@ import java.util.function.Predicate;
 public class FindingUtil {
 	public static ItemStack findInstanceStack(Player player, Predicate<ItemStack> itemPredicate) {
 		Inventory playerInventory = player.getInventory();
-		if(itemPredicate.test(player.getMainHandItem())) {
+		if (itemPredicate.test(player.getMainHandItem())) {
 			return player.getMainHandItem();
-		} else if(itemPredicate.test(player.getOffhandItem())) {
+		} else if (itemPredicate.test(player.getOffhandItem())) {
 			return player.getOffhandItem();
 		}
 
@@ -26,7 +26,7 @@ public class FindingUtil {
 	public static boolean hasSingleStackInHotbar(Player player, Predicate<ItemStack> itemPredicate) {
 		Inventory playerInventory = player.getInventory();
 		int amountFound = 0;
-		if(itemPredicate.test(player.getOffhandItem())) {
+		if (itemPredicate.test(player.getOffhandItem())) {
 			amountFound++;
 		}
 

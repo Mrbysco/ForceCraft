@@ -45,7 +45,7 @@ public class EntityFlaskItem extends BaseItem {
 		Player playerIn = context.getPlayer();
 		if (level.isClientSide) return InteractionResult.FAIL;
 
-		if(hasEntityStored(stack)) {
+		if (hasEntityStored(stack)) {
 			Entity storedEntity = getStoredEntity(stack, level);
 			BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
 			storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
@@ -61,7 +61,7 @@ public class EntityFlaskItem extends BaseItem {
 
 		stack.shrink(1);
 		ItemStack emptyFlask = new ItemStack(ForceRegistry.FORCE_FLASK.get());
-		if(!playerIn.getInventory().add(emptyFlask)) {
+		if (!playerIn.getInventory().add(emptyFlask)) {
 			playerIn.spawnAtLocation(emptyFlask, 0F);
 		}
 		return super.useOn(context);
@@ -70,9 +70,9 @@ public class EntityFlaskItem extends BaseItem {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack itemstack = playerIn.getItemInHand(handIn);
-		if(playerIn.isShiftKeyDown()) {
-			if(!hasEntityStored(itemstack)) {
-				level.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(),
+		if (playerIn.isShiftKeyDown()) {
+			if (!hasEntityStored(itemstack)) {
+				level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(),
 						SoundEvents.SPLASH_POTION_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.random.nextFloat() * 0.4F + 0.8F));
 				if (!level.isClientSide) {
 					FlaskEntity flaskEntity = new FlaskEntity(level, playerIn);
@@ -119,7 +119,7 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	public boolean isBlacklisted(LivingEntity livingEntity) {
-		return ForceTags.FLASK_BLACKLIST.contains(livingEntity.getType());
+		return ForceTags.FLASK_BLACKLIST_LOOKUP.contains(livingEntity.getType());
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class EntityFlaskItem extends BaseItem {
 			CompoundTag tag = stack.getOrCreateTag();
 			tooltip.add(new TranslatableComponent("item.entity_flask.tooltip").withStyle(ChatFormatting.GOLD).append(
 					new TextComponent(String.format("[%s]", tag.getString("StoredEntity"))).withStyle(ChatFormatting.GRAY)));
-			if(tag.contains("EntityData")) {
+			if (tag.contains("EntityData")) {
 				tooltip.add(new TranslatableComponent("item.entity_flask.tooltip2").withStyle(ChatFormatting.GOLD).append(
 						new TextComponent(String.format("[%s]", tag.getCompound("EntityData").getDouble("Health"))).withStyle(ChatFormatting.GRAY)));
 			}

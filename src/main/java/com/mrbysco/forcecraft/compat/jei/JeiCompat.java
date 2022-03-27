@@ -99,9 +99,9 @@ public class JeiCompat implements IModPlugin {
 		IJeiHelpers jeiHelpers = registration.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 		registration.addRecipeCategories(
-			freezingCategory = new FreezingCategory(guiHelper),
-			grindingCategory = new GrindingCategory(guiHelper),
-			infuserCategory = new InfuserCategory<InfuseRecipe>(guiHelper)
+				freezingCategory = new FreezingCategory(guiHelper),
+				grindingCategory = new GrindingCategory(guiHelper),
+				infuserCategory = new InfuserCategory<InfuseRecipe>(guiHelper)
 		);
 	}
 

@@ -10,30 +10,30 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class ForceBeltScreen extends AbstractContainerScreen<ForceBeltMenu> {
-    private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcebelt.png");
+	private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcebelt.png");
 
-    public ForceBeltScreen(ForceBeltMenu screenContainer, Inventory inv, Component titleIn) {
-        super(screenContainer, inv, titleIn);
+	public ForceBeltScreen(ForceBeltMenu screenContainer, Inventory inv, Component titleIn) {
+		super(screenContainer, inv, titleIn);
 
-        this.imageHeight = 134;
-    }
+		this.imageHeight = 134;
+	}
 
-    @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(poseStack);
-        super.render(poseStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(poseStack, mouseX, mouseY);
-    }
+	@Override
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(poseStack);
+		super.render(poseStack, mouseX, mouseY, partialTicks);
+		this.renderTooltip(poseStack, mouseX, mouseY);
+	}
 
-    @Override
-    protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
-        RenderSystem.setShaderTexture(0, this.TEXTURE);
-        this.blit(poseStack, this.leftPos, this.topPos, 0,0,this.imageWidth, this.imageHeight);
-    }
+	@Override
+	protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
+		RenderSystem.setShaderTexture(0, this.TEXTURE);
+		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+	}
 
-    @Override
-    protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
-        this.inventoryLabelY = 42;
-        super.renderLabels(poseStack, mouseX, mouseY);
-    }
+	@Override
+	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
+		this.inventoryLabelY = 42;
+		super.renderLabels(poseStack, mouseX, mouseY);
+	}
 }

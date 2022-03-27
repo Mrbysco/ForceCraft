@@ -61,8 +61,8 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 	public static AttributeSupplier.Builder generateAttributes() {
 		return Mob.createMobAttributes()
 				.add(Attributes.MAX_HEALTH, 1.0D)
-				.add(Attributes.FLYING_SPEED, (double)0.6F)
-				.add(Attributes.MOVEMENT_SPEED, (double)0.3F);
+				.add(Attributes.FLYING_SPEED, (double) 0.6F)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.3F);
 	}
 
 	@Override
@@ -85,12 +85,12 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 
 	public SoundEvent collideSound(Player playerEntity) {
 		int randomInt = level.random.nextInt(100);
-		if(UUID.fromString("7135da42-d327-47bb-bb04-5ba4e212fb32").equals(playerEntity.getUUID())) {
+		if (UUID.fromString("7135da42-d327-47bb-bb04-5ba4e212fb32").equals(playerEntity.getUUID())) {
 			return ForceSounds.FAIRY_PICKUP.get();
 		}
-		if(randomInt <= 1 && UUID.fromString("10755ea6-9721-467a-8b5c-92adf689072c").equals(playerEntity.getUUID())) {
+		if (randomInt <= 1 && UUID.fromString("10755ea6-9721-467a-8b5c-92adf689072c").equals(playerEntity.getUUID())) {
 			return ForceSounds.FAIRY_LISTEN_SPECIAL.get();
-		} else if(randomInt <= 10) {
+		} else if (randomInt <= 10) {
 			return ForceSounds.FAIRY_LISTEN.get();
 		} else {
 			return ForceSounds.FAIRY_PICKUP.get();
@@ -100,9 +100,9 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 	public void tick() {
 		super.tick();
 		if (this.random.nextFloat() < 0.05F && getDeltaMovement() != Vec3.ZERO) {
-			for(int i = 0; i < this.random.nextInt(2) + 1; ++i) {
-				this.addParticle(this.level, this.getX() - (double)0.3F, this.getX() + (double)0.3F,
-						this.getZ() - (double)0.3F, this.getZ() + (double)0.3F, this.getY(0.5D),
+			for (int i = 0; i < this.random.nextInt(2) + 1; ++i) {
+				this.addParticle(this.level, this.getX() - (double) 0.3F, this.getX() + (double) 0.3F,
+						this.getZ() - (double) 0.3F, this.getZ() + (double) 0.3F, this.getY(0.5D),
 						ParticleTypes.POOF);
 			}
 		}
@@ -163,8 +163,8 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 		private Vec3 getRandomLocation() {
 			Vec3 vector3d = FairyEntity.this.getViewVector(0.0F);
 
-			Vec3 vector3d2 = HoverRandomPos.getPos(FairyEntity.this, 8, 7, vector3d.x, vector3d.z, ((float)Math.PI / 2F), 3, 1);
-			return vector3d2 != null ? vector3d2 : AirAndWaterRandomPos.getPos(FairyEntity.this, 8, 4, -2, vector3d.x, vector3d.z, (double)((float)Math.PI / 2F));
+			Vec3 vector3d2 = HoverRandomPos.getPos(FairyEntity.this, 8, 7, vector3d.x, vector3d.z, ((float) Math.PI / 2F), 3, 1);
+			return vector3d2 != null ? vector3d2 : AirAndWaterRandomPos.getPos(FairyEntity.this, 8, 4, -2, vector3d.x, vector3d.z, (double) ((float) Math.PI / 2F));
 		}
 	}
 }

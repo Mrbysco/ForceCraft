@@ -80,7 +80,7 @@ public class UpgradeBookData {
 		//Update tooltip
 		Set<ResourceLocation> thisTier = this.recipesUsed.get(this.tier.ordinal());
 		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
-		if(!InfuseRecipe.RECIPESBYLEVEL.isEmpty()) {
+		if (!InfuseRecipe.RECIPESBYLEVEL.isEmpty()) {
 			int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
 			this.progressCache = recipesThisTier + "/" + totalThisTier;
 		}

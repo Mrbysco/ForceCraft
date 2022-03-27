@@ -47,7 +47,7 @@ public class AngryEndermanEntity extends EnderMan {
 	public static AttributeSupplier.Builder generateAttributes() {
 		return Monster.createMonsterAttributes()
 				.add(Attributes.MAX_HEALTH, 40.0D)
-				.add(Attributes.MOVEMENT_SPEED, (double)0.3F)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.3F)
 				.add(Attributes.ATTACK_DAMAGE, 7.0D)
 				.add(Attributes.FOLLOW_RANGE, 64.0D);
 	}
@@ -56,7 +56,7 @@ public class AngryEndermanEntity extends EnderMan {
 	public boolean teleport() {
 		if (!this.level.isClientSide() && this.isAlive() && !this.isInWaterOrBubble()) {
 			double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
-			double d1 = this.getY() + (double)(this.random.nextInt(64) - 32);
+			double d1 = this.getY() + (double) (this.random.nextInt(64) - 32);
 			double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
 			return this.teleport(d0, d1, d2);
 		} else {
@@ -83,7 +83,7 @@ public class AngryEndermanEntity extends EnderMan {
 				return false;
 			} else {
 				double d0 = this.targetPlayer.distanceToSqr(this.enderman);
-				return d0 > 256.0D ? false : this.enderman.isLookingAtMe((Player)this.targetPlayer);
+				return d0 > 256.0D ? false : this.enderman.isLookingAtMe((Player) this.targetPlayer);
 			}
 		}
 
@@ -104,7 +104,9 @@ public class AngryEndermanEntity extends EnderMan {
 
 	static class FindPlayerGoal extends NearestAttackableTargetGoal<Player> {
 		private final AngryEndermanEntity enderman;
-		/** The player */
+		/**
+		 * The player
+		 */
 		private Player player;
 		private int aggroTime;
 		private int teleportTime;
@@ -115,7 +117,7 @@ public class AngryEndermanEntity extends EnderMan {
 			super(endermantIn, Player.class, 10, false, false, p_i241912_2_);
 			this.enderman = endermantIn;
 			this.startAggroTargetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector((livingEntity) -> {
-				return endermantIn.isLookingAtMe((Player)livingEntity);
+				return endermantIn.isLookingAtMe((Player) livingEntity);
 			});
 		}
 
@@ -166,7 +168,7 @@ public class AngryEndermanEntity extends EnderMan {
 		 */
 		public void tick() {
 			if (this.enderman.getTarget() == null) {
-				super.setTarget((LivingEntity)null);
+				super.setTarget((LivingEntity) null);
 			}
 
 			if (this.player != null) {
@@ -177,7 +179,7 @@ public class AngryEndermanEntity extends EnderMan {
 				}
 			} else {
 				if (this.target != null && !this.enderman.isPassenger()) {
-					if (this.enderman.isLookingAtMe((Player)this.target)) {
+					if (this.enderman.isLookingAtMe((Player) this.target)) {
 						if (this.target.distanceToSqr(this.enderman) < 16.0D) {
 							this.enderman.teleport();
 						}

@@ -23,48 +23,48 @@ import java.util.List;
 
 public class RedPotionItem extends BaseItem {
 
-    public RedPotionItem(Properties properties) {
-        super(properties);
-    }
+	public RedPotionItem(Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
-        if (!level.isClientSide) entityLiving.heal(Float.MAX_VALUE);
+	@Override
+	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
+		if (!level.isClientSide) entityLiving.heal(Float.MAX_VALUE);
 
-        if (entityLiving instanceof ServerPlayer serverplayerentity) {
-            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
-            serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
-        }
+		if (entityLiving instanceof ServerPlayer serverplayerentity) {
+			CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
+			serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
+		}
 
-        ItemStack flaskStack = ForceRegistry.FORCE_FLASK.get().getDefaultInstance();
-        if (entityLiving instanceof Player playerIn) {
-            if(!playerIn.getAbilities().instabuild) {
-                stack.shrink(1);
-            }
+		ItemStack flaskStack = ForceRegistry.FORCE_FLASK.get().getDefaultInstance();
+		if (entityLiving instanceof Player playerIn) {
+			if (!playerIn.getAbilities().instabuild) {
+				stack.shrink(1);
+			}
 
-            if(!playerIn.getInventory().add(flaskStack)) {
-                playerIn.spawnAtLocation(flaskStack, 0F);
-            }
-        }
+			if (!playerIn.getInventory().add(flaskStack)) {
+				playerIn.spawnAtLocation(flaskStack, 0F);
+			}
+		}
 
-        return stack.isEmpty() ? flaskStack : stack;
-    }
+		return stack.isEmpty() ? flaskStack : stack;
+	}
 
-    public int getUseDuration(ItemStack stack) {
-        return 32;
-    }
+	public int getUseDuration(ItemStack stack) {
+		return 32;
+	}
 
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
-    }
+	public UseAnim getUseAnimation(ItemStack stack) {
+		return UseAnim.DRINK;
+	}
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
-        return ItemUtils.startUsingInstantly(level, playerIn, handIn);
-    }
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+		return ItemUtils.startUsingInstantly(level, playerIn, handIn);
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("item.red_potion.tooltip").withStyle(ChatFormatting.GRAY));
-        super.appendHoverText(stack, level, tooltip, flagIn);
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		tooltip.add(new TranslatableComponent("item.red_potion.tooltip").withStyle(ChatFormatting.GRAY));
+		super.appendHoverText(stack, level, tooltip, flagIn);
+	}
 }

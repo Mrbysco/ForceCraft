@@ -11,22 +11,22 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WSDCapability implements ICapabilityProvider {
-    private final ItemStack stack;
-    private LazyOptional<IItemHandler> optional = LazyOptional.empty();
+	private final ItemStack stack;
+	private LazyOptional<IItemHandler> optional = LazyOptional.empty();
 
-    public WSDCapability(ItemStack stack) {
-        this.stack = stack;
-    }
+	public WSDCapability(ItemStack stack) {
+		this.stack = stack;
+	}
 
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (!optional.isPresent())
-                optional = StorageManager.getCapability(stack);
+	@NotNull
+	@Override
+	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+		if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			if (!optional.isPresent())
+				optional = StorageManager.getCapability(stack);
 
-            return optional.cast();
-        } else
-            return LazyOptional.empty();
-    }
+			return optional.cast();
+		} else
+			return LazyOptional.empty();
+	}
 }

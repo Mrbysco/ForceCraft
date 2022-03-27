@@ -36,7 +36,7 @@ public class SmeltingModifier extends LootModifier {
 	private static ItemStack smelt(ItemStack stack, LootContext context) {
 		ItemStack ctxTool = context.getParamOrNull(LootContextParams.TOOL);
 		IToolModifier toolModifierCap = ctxTool.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-		if(toolModifierCap != null && toolModifierCap.hasHeat()) {
+		if (toolModifierCap != null && toolModifierCap.hasHeat()) {
 			return context.getLevel().getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(stack), context.getLevel())
 					.map(SmeltingRecipe::getResultItem)
 					.filter(itemStack -> !itemStack.isEmpty())

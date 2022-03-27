@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class ItemButton extends Button {
 	protected final ItemStack buttonStack;
+
 	public ItemButton(int x, int y, int width, int height, Component title, ItemStack stack, OnPress pressedAction) {
 		super(x, y, width, height, title, pressedAction);
 		this.buttonStack = stack;

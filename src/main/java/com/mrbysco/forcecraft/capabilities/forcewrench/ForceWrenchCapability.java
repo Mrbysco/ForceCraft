@@ -22,113 +22,113 @@ import java.util.List;
 import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_FORCEWRENCH;
 
 public class ForceWrenchCapability implements IForceWrench, ICapabilitySerializable<CompoundTag>, ICapabilityProvider {
-    CompoundTag storedBlockNBT = null;
-    BlockState storedBlockState = null;
-    String name = "";
+	CompoundTag storedBlockNBT = null;
+	BlockState storedBlockState = null;
+	String name = "";
 
-    @Override
-    public boolean hasBlockStored() {
-        return storedBlockState != null;
-    }
+	@Override
+	public boolean hasBlockStored() {
+		return storedBlockState != null;
+	}
 
-    @Override
-    public boolean canStoreBlock() {
-        return hasBlockStored();
-    }
+	@Override
+	public boolean canStoreBlock() {
+		return hasBlockStored();
+	}
 
-    @Override
-    public net.minecraft.nbt.CompoundTag getStoredBlockNBT() {
-        return storedBlockNBT;
-    }
+	@Override
+	public net.minecraft.nbt.CompoundTag getStoredBlockNBT() {
+		return storedBlockNBT;
+	}
 
-    @Override
-    public BlockState getStoredBlockState() {
-        return storedBlockState;
-    }
+	@Override
+	public BlockState getStoredBlockState() {
+		return storedBlockState;
+	}
 
-    @Override
-    public String getStoredName() {
-        return name;
-    }
+	@Override
+	public String getStoredName() {
+		return name;
+	}
 
-    @Override
-    public void storeBlockNBT(net.minecraft.nbt.CompoundTag nbt) {
-        storedBlockNBT = nbt;
-    }
+	@Override
+	public void storeBlockNBT(net.minecraft.nbt.CompoundTag nbt) {
+		storedBlockNBT = nbt;
+	}
 
-    @Override
-    public void storeBlockState(BlockState base) {
-        storedBlockState = base;
-    }
+	@Override
+	public void storeBlockState(BlockState base) {
+		storedBlockState = base;
+	}
 
-    @Override
-    public void setBlockName(String name) {
-        this.name = name;
-    }
+	@Override
+	public void setBlockName(String name) {
+		this.name = name;
+	}
 
-    @Override
-    public void clearBlockStorage() {
-        storedBlockState = null;
-        storedBlockNBT = null;
-        name = "";
-    }
+	@Override
+	public void clearBlockStorage() {
+		storedBlockState = null;
+		storedBlockNBT = null;
+		name = "";
+	}
 
-    public static void attachInformation(ItemStack stack, List<Component> tooltip) {
-        ForceToolData fd = new ForceToolData(stack);
-        fd.attachInformation(tooltip);
-        stack.getCapability(CAPABILITY_FORCEWRENCH).ifPresent((cap) -> {
-            if(cap.getStoredName() != null && !cap.getStoredName().isEmpty()){ // idk what this is
-                tooltip.add(new TextComponent("Stored: ").withStyle(ChatFormatting.GOLD)
-                        .append(new TranslatableComponent(cap.getStoredName()).withStyle(ChatFormatting.GRAY)));
-            }
-        });
-    }
+	public static void attachInformation(ItemStack stack, List<Component> tooltip) {
+		ForceToolData fd = new ForceToolData(stack);
+		fd.attachInformation(tooltip);
+		stack.getCapability(CAPABILITY_FORCEWRENCH).ifPresent((cap) -> {
+			if (cap.getStoredName() != null && !cap.getStoredName().isEmpty()) { // idk what this is
+				tooltip.add(new TextComponent("Stored: ").withStyle(ChatFormatting.GOLD)
+						.append(new TranslatableComponent(cap.getStoredName()).withStyle(ChatFormatting.GRAY)));
+			}
+		});
+	}
 
-    @Override
-    public CompoundTag serializeNBT() {
-        return writeNBT(this);
-    }
+	@Override
+	public CompoundTag serializeNBT() {
+		return writeNBT(this);
+	}
 
-    @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        readNBT(this, nbt);
-    }
+	@Override
+	public void deserializeNBT(CompoundTag nbt) {
+		readNBT(this, nbt);
+	}
 
 
-    public static CompoundTag writeNBT(IForceWrench instance) {
-        if (instance == null) {
-            return null;
-        }
-        CompoundTag tag  = new CompoundTag();
-        if(instance.getStoredBlockNBT() != null) {
-            tag.put("storedNBT", instance.getStoredBlockNBT());
-        }
+	public static CompoundTag writeNBT(IForceWrench instance) {
+		if (instance == null) {
+			return null;
+		}
+		CompoundTag tag = new CompoundTag();
+		if (instance.getStoredBlockNBT() != null) {
+			tag.put("storedNBT", instance.getStoredBlockNBT());
+		}
 
-        if(instance.getStoredBlockState() != null) {
-            tag.put("storedBlockState", NbtUtils.writeBlockState(instance.getStoredBlockState()));
-        }
-        if(!instance.getStoredName().isEmpty()) {
-            tag.putString("name", instance.getStoredName());
-        }
+		if (instance.getStoredBlockState() != null) {
+			tag.put("storedBlockState", NbtUtils.writeBlockState(instance.getStoredBlockState()));
+		}
+		if (!instance.getStoredName().isEmpty()) {
+			tag.putString("name", instance.getStoredName());
+		}
 
-        return tag;
-    }
+		return tag;
+	}
 
-    public static void readNBT(IForceWrench instance, CompoundTag tag) {
-        instance.storeBlockNBT(tag.getCompound("storedNBT"));
-        if(tag.contains("storedBlockState")) {
-            instance.storeBlockState(NbtUtils.readBlockState(tag.getCompound("storedBlockState")));
-        }
-        instance.setBlockName(tag.getString("name"));
-    }
+	public static void readNBT(IForceWrench instance, CompoundTag tag) {
+		instance.storeBlockNBT(tag.getCompound("storedNBT"));
+		if (tag.contains("storedBlockState")) {
+			instance.storeBlockState(NbtUtils.readBlockState(tag.getCompound("storedBlockState")));
+		}
+		instance.setBlockName(tag.getString("name"));
+	}
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return CAPABILITY_FORCEWRENCH.orEmpty(cap, LazyOptional.of(() -> this));
-    }
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		return CAPABILITY_FORCEWRENCH.orEmpty(cap, LazyOptional.of(() -> this));
+	}
 
-    public final Capability<IForceWrench> getCapability(){
-        return CAPABILITY_FORCEWRENCH;
-    }
+	public final Capability<IForceWrench> getCapability() {
+		return CAPABILITY_FORCEWRENCH;
+	}
 }

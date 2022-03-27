@@ -10,12 +10,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(targets = { "net/minecraft/world/inventory/GrindstoneMenu$3" })
+@Mixin(targets = {"net/minecraft/world/inventory/GrindstoneMenu$3"})
 public class GrindstoneSecondSlotMixin {
 
 	@Inject(at = @At("HEAD"), method = "mayPlace(Lnet/minecraft/world/item/ItemStack;)Z", locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
 	private void forcecraftMayPlace2(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-		if(stack.getItem().getRegistryName().getNamespace().equals(Reference.MOD_ID))
+		if (stack.getItem().getRegistryName().getNamespace().equals(Reference.MOD_ID))
 			cir.setReturnValue(false);
 	}
 }

@@ -393,11 +393,11 @@ public class ForceLanguage extends LanguageProvider {
 		add("item.entity_flask.empty", "Invalid flask. Missing valid captured mob");
 		add("item.entity_flask.empty2", "Couldn't find valid captured mob. Converting to empty flask");
 		add("item.red_potion.tooltip", "Restores all Hearts");
-		
+
 		//Commands
 		add("commands.forcecraft.null", "Second argument must be a valid command: ");
 		add("commands.forcecraft.failed", "Command failed, ensure you have permission");
-		
+
 		//Infuser UI
 		add("gui.forcecraft.infuser.nobook", "Upgrade Tome required");
 		add("gui.forcecraft.infuser.patchouli", "The info screen requires Patchouli");

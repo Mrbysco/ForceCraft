@@ -2,11 +2,9 @@ package com.mrbysco.forcecraft.items.flask;
 
 import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.FluidTags;
+import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -46,19 +44,7 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 
 	@Override
 	public boolean canFillFluidType(FluidStack stack) {
-		for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation("forge","force")).getValues()){
-			if (fluid == stack.getFluid()){
-				return true;
-			}
-		}
-		if(ForgeMod.MILK.isPresent()) {
-			for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation("forge","milk")).getValues()){
-				if (fluid == stack.getFluid()){
-					return true;
-				}
-			}
-		}
-		return false;
+		return ForceTags.FORCE_LOOKUP.contains(stack.getFluid()) || (ForgeMod.MILK.isPresent() && ForceTags.MILK_LOOKUP.contains(stack.getFluid()));
 	}
 
 	@Override
@@ -76,19 +62,13 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 		if (stack.isEmpty()) {
 			setContainerToEmpty();
 		} else {
-			for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation("forge", "force")).getValues()) {
-				if (fluid == stack.getFluid()) {
-					container = new ItemStack(ForceRegistry.FORCE_FILLED_FORCE_FLASK.get());
-					return;
-				}
+			if (ForceTags.FORCE_LOOKUP.contains(stack.getFluid())) {
+				container = new ItemStack(ForceRegistry.FORCE_FILLED_FORCE_FLASK.get());
+				return;
 			}
-			if (ForgeMod.MILK.isPresent()) {
-				for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation("forge", "milk")).getValues()) {
-					if (fluid == stack.getFluid()) {
-						container = new ItemStack(ForceRegistry.MILK_FORCE_FLASK.get());
-						return;
-					}
-				}
+			if (ForgeMod.MILK.isPresent() && ForceTags.MILK_LOOKUP.contains(stack.getFluid())) {
+				container = new ItemStack(ForceRegistry.MILK_FORCE_FLASK.get());
+				return;
 			}
 		}
 	}

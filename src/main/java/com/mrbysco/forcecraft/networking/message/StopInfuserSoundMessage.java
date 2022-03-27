@@ -9,7 +9,7 @@ import net.minecraftforge.network.NetworkEvent.Context;
 import java.util.function.Supplier;
 
 public class StopInfuserSoundMessage {
-	public StopInfuserSoundMessage(){
+	public StopInfuserSoundMessage() {
 
 	}
 

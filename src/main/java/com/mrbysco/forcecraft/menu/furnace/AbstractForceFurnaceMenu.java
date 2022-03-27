@@ -72,13 +72,13 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 		this.addSlot(new ForceFurnaceResultSlot(player, furnaceInventory, 2, 116, 35));
 		this.addSlot(new UpgradeSlot(upgradeInventory, 0, 12, 12));
 
-		for(int i = 0; i < 3; ++i) {
-			for(int j = 0; j < 9; ++j) {
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 9; ++j) {
 				this.addSlot(new Slot(playerInventoryIn, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 
-		for(int k = 0; k < 9; ++k) {
+		for (int k = 0; k < 9; ++k) {
 			this.addSlot(new Slot(playerInventoryIn, k, 8 + k * 18, 142));
 		}
 
@@ -164,16 +164,16 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 	}
 
 	protected boolean hasRecipe(ItemStack stack) {
-		return this.world.getRecipeManager().getRecipeFor((RecipeType)this.getRecipeType(), new SimpleContainer(stack), this.world).isPresent();
+		return this.world.getRecipeManager().getRecipeFor((RecipeType) this.getRecipeType(), new SimpleContainer(stack), this.world).isPresent();
 	}
 
 	protected RecipeType<? extends AbstractCookingRecipe> getRecipeType() {
 		RecipeType<? extends AbstractCookingRecipe> recipeType = RecipeType.SMELTING;
 		ItemStack upgrade = upgradeInventory.getStackInSlot(0);
-		if(!upgrade.isEmpty()) {
-			if(upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
+		if (!upgrade.isEmpty()) {
+			if (upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
 				return ForceRecipes.FREEZING;
-			} else if(upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
+			} else if (upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
 				return ForceRecipes.GRINDING;
 			}
 		}
@@ -190,7 +190,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 
 	@Override
 	public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-		if(clickTypeIn == ClickType.PICKUP_ALL && this.getCarried().getItem() instanceof UpgradeCoreItem) {
+		if (clickTypeIn == ClickType.PICKUP_ALL && this.getCarried().getItem() instanceof UpgradeCoreItem) {
 			return;
 		}
 		if (slotId == 3) {

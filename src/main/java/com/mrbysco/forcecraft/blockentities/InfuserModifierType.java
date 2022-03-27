@@ -19,68 +19,68 @@ import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_F
 import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public enum InfuserModifierType {
-	SPEED, HEAT, FORCE, SILK, DAMAGE, FORTUNE, LIGHT, STURDY, LUMBERJACK, HEALING, ENDER, BLEEDING, BANE, WING, CAMO, RAINBOW, TIME, 
+	SPEED, HEAT, FORCE, SILK, DAMAGE, FORTUNE, LIGHT, STURDY, LUMBERJACK, HEALING, ENDER, BLEEDING, BANE, WING, CAMO, RAINBOW, TIME,
 	// pack is for upgrades, item gives crafting results
 	PACK1, PACK2, PACK3, PACK4, GRINDING, FREEZING, EXP, STORAGE, SIGHT, TREASURE, ITEM;
 
 	public boolean apply(ItemStack tool, ItemStack mod, UpgradeBookData bd) {
 		switch (this) {
-		case DAMAGE: // claw item
-			return InfuserBlockEntity.addDamageModifier(tool);
-		case ENDER:
-			return InfuserBlockEntity.addEnderModifier(tool);
-		case FORCE:
-			return InfuserBlockEntity.addForceModifier(tool);
-		case HEALING:
-			return InfuserBlockEntity.addHealingModifier(tool);
-		case HEAT:
-			return InfuserBlockEntity.addHeatModifier(tool);
-		case LIGHT:
-			return InfuserBlockEntity.addLightModifier(tool);
-		case FORTUNE:
-			return InfuserBlockEntity.addLuckModifier(tool);
-		case LUMBERJACK:
-			return InfuserBlockEntity.addLumberjackModifier(tool);
-		case SILK:
-			return InfuserBlockEntity.addSilkTouchModifier(tool);
-		case SPEED:
-			return InfuserBlockEntity.addSpeedModifier(tool);
-		case STURDY:
-			return InfuserBlockEntity.addSturdyModifier(tool);
-		case CAMO:
-			return InfuserBlockEntity.applyCamo(tool, mod);
-		case BANE:
-			return InfuserBlockEntity.addBaneModifier(tool);
-		case BLEEDING:
-			return InfuserBlockEntity.addBleedingModifier(tool);
-		case WING:
-			return InfuserBlockEntity.addWingModifier(tool);
-		case RAINBOW:
-			return InfuserBlockEntity.addRainbowModifier(tool);
-		case TIME:
-			break;
-		case TREASURE:
-			return InfuserBlockEntity.addTreasureModifier(tool);
-		case PACK1:
-		case PACK2:
-		case PACK3:
-		case PACK4:
-			// logic of which pack upgrade to use is inside
-			return InfuserBlockEntity.upgradeBag(tool, bd);
-		case ITEM:
+			case DAMAGE: // claw item
+				return InfuserBlockEntity.addDamageModifier(tool);
+			case ENDER:
+				return InfuserBlockEntity.addEnderModifier(tool);
+			case FORCE:
+				return InfuserBlockEntity.addForceModifier(tool);
+			case HEALING:
+				return InfuserBlockEntity.addHealingModifier(tool);
+			case HEAT:
+				return InfuserBlockEntity.addHeatModifier(tool);
+			case LIGHT:
+				return InfuserBlockEntity.addLightModifier(tool);
+			case FORTUNE:
+				return InfuserBlockEntity.addLuckModifier(tool);
+			case LUMBERJACK:
+				return InfuserBlockEntity.addLumberjackModifier(tool);
+			case SILK:
+				return InfuserBlockEntity.addSilkTouchModifier(tool);
+			case SPEED:
+				return InfuserBlockEntity.addSpeedModifier(tool);
+			case STURDY:
+				return InfuserBlockEntity.addSturdyModifier(tool);
+			case CAMO:
+				return InfuserBlockEntity.applyCamo(tool, mod);
+			case BANE:
+				return InfuserBlockEntity.addBaneModifier(tool);
+			case BLEEDING:
+				return InfuserBlockEntity.addBleedingModifier(tool);
+			case WING:
+				return InfuserBlockEntity.addWingModifier(tool);
+			case RAINBOW:
+				return InfuserBlockEntity.addRainbowModifier(tool);
+			case TIME:
+				break;
+			case TREASURE:
+				return InfuserBlockEntity.addTreasureModifier(tool);
+			case PACK1:
+			case PACK2:
+			case PACK3:
+			case PACK4:
+				// logic of which pack upgrade to use is inside
+				return InfuserBlockEntity.upgradeBag(tool, bd);
+			case ITEM:
 //			ForceCraft.LOGGER.info("i need to give you item {}", this);
 
-			return true;
-		case EXP:
-			break;
-		case FREEZING:
-			return InfuserBlockEntity.addFreezingModifier(tool);
-		case GRINDING:
-			break;
-		case SIGHT:
-			break;
-		case STORAGE:
-			break;
+				return true;
+			case EXP:
+				break;
+			case FREEZING:
+				return InfuserBlockEntity.addFreezingModifier(tool);
+			case GRINDING:
+				break;
+			case SIGHT:
+				break;
+			case STORAGE:
+				break;
 		}
 		ForceCraft.LOGGER.error("Error: No action for modifier {}", this);
 		return false;
@@ -90,14 +90,14 @@ public enum InfuserModifierType {
 		Item item = centerStack.getItem();
 		switch (this) {
 			case DAMAGE:
-				if(item instanceof ForceSwordItem || item instanceof ForceBowItem) {
+				if (item instanceof ForceSwordItem || item instanceof ForceBowItem) {
 					IToolModifier modifierCap = centerStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-					if(modifierCap != null ) {
+					if (modifierCap != null) {
 						return ConfigHandler.COMMON.damageCap.get();
 					}
 				} else if (item instanceof ForceArmorItem) {
 					IToolModifier modifierCap = centerStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-					if(modifierCap != null ) {
+					if (modifierCap != null) {
 						return 1;
 					}
 				}
@@ -124,9 +124,9 @@ public enum InfuserModifierType {
 			case PACK4:
 				return 1;
 			case FORCE:
-				if(item instanceof ForceSwordItem || item instanceof ForceAxeItem) {
+				if (item instanceof ForceSwordItem || item instanceof ForceAxeItem) {
 					IToolModifier modifierCap = centerStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-					if(modifierCap != null ) {
+					if (modifierCap != null) {
 						return ConfigHandler.COMMON.forceCap.get();
 					}
 				}
@@ -134,7 +134,7 @@ public enum InfuserModifierType {
 			case HEALING:
 				if (item instanceof ForceRodItem) {
 					IForceRodModifier rodCap = centerStack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-					if(rodCap != null) {
+					if (rodCap != null) {
 						return ConfigHandler.COMMON.healingCap.get();
 					}
 				}
@@ -142,54 +142,51 @@ public enum InfuserModifierType {
 			case FORTUNE:
 				return ConfigHandler.COMMON.luckCap.get();
 			case SPEED:
-				if(item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceAxeItem) {
+				if (item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceAxeItem) {
 					IToolModifier modifierCap = centerStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-					if(modifierCap != null ) {
+					if (modifierCap != null) {
 						return ConfigHandler.COMMON.speedCap.get();
 					}
 				} else if (item instanceof ForceBowItem) {
 					IToolModifier modifierCap = centerStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-					if(modifierCap != null ) {
+					if (modifierCap != null) {
 						return 1;
 					}
-				}
-				else if (item instanceof ForceArmorItem) {
+				} else if (item instanceof ForceArmorItem) {
 					IToolModifier modifierCap = centerStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-					if(modifierCap != null ) {
+					if (modifierCap != null) {
 						return 1;
 					}
-				}
-				else if (item instanceof ForceRodItem) {
+				} else if (item instanceof ForceRodItem) {
 					IForceRodModifier rodCap = centerStack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-					if(rodCap != null) {
+					if (rodCap != null) {
 						return ConfigHandler.COMMON.rodSpeedCap.get();
 					}
 				}
 				break;
 			case STURDY:
-				if(item instanceof ForceSwordItem || item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceRodItem) {
+				if (item instanceof ForceSwordItem || item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceRodItem) {
 					IToolModifier modifierCap = centerStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-					if(modifierCap != null ) {
+					if (modifierCap != null) {
 						return ConfigHandler.COMMON.sturdyToolCap.get();
 					}
-				}
-				else if (item instanceof ForceArmorItem) {
+				} else if (item instanceof ForceArmorItem) {
 					IToolModifier modifierCap = centerStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-					if(modifierCap != null ) {
+					if (modifierCap != null) {
 						return 1;
 					}
 				}
 				break;
 			case BLEEDING:
-				if(item instanceof ForceSwordItem || item instanceof ForceBowItem || item instanceof ForceArmorItem) {
+				if (item instanceof ForceSwordItem || item instanceof ForceBowItem || item instanceof ForceArmorItem) {
 					IToolModifier modifierCap = centerStack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-					if(modifierCap != null) {
+					if (modifierCap != null) {
 						return ConfigHandler.COMMON.bleedCap.get();
 					}
 				}
 				break;
 			case TIME:
-				if(ConfigHandler.COMMON.timeTorchEnabled.get()) {
+				if (ConfigHandler.COMMON.timeTorchEnabled.get()) {
 					return 1;
 				}
 				break;

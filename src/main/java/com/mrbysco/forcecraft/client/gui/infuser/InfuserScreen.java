@@ -50,16 +50,16 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	protected void init() {
 		super.init();
 
-		this.infuserProgress = new ProgressBar(TEXTURE, ProgressBar.ProgressBarDirection.DOWN_TO_UP, 2, 20, 
-			leftPos + 134, topPos + 93,
-			176, 0);
-		
+		this.infuserProgress = new ProgressBar(TEXTURE, ProgressBar.ProgressBarDirection.DOWN_TO_UP, 2, 20,
+				leftPos + 134, topPos + 93,
+				176, 0);
+
 		int btnSize = 13;
 
 		int x = 123;
 		int y = 16;
 		this.addRenderableWidget(new Button(leftPos + x, topPos + y, 13, 13, new TranslatableComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
-			if(ModList.get().isLoaded("patchouli")) {
+			if (ModList.get().isLoaded("patchouli")) {
 				com.mrbysco.forcecraft.compat.patchouli.PatchouliCompat.openBook();
 			} else {
 				this.inventory.player.displayClientMessage(new TranslatableComponent("gui.forcecraft.infuser.patchouli"), false);
@@ -79,7 +79,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 					this.blit(ms, x, y, 201, 0, btnSize, btnSize);
 
 					this.renderBg(ms, minecraft, mouseX, mouseY);
-				} 
+				}
 			}
 		});
 		x = 39;
@@ -97,7 +97,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 			public void renderButton(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 				// skip drawing me
 				boolean flag = getMenu().validRecipe[0] == 1;
-				if(flag) {
+				if (flag) {
 					// render special
 //				    super.renderWidget(ms, mouseX, mouseY, partialTicks);
 					Minecraft minecraft = Minecraft.getInstance();
@@ -118,7 +118,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		super.containerTick();
 
 		boolean flag = getMenu().validRecipe[0] == 1;
-		if(buttonInfuse.active != flag) {
+		if (buttonInfuse.active != flag) {
 			buttonInfuse.active = flag;
 		}
 	}
@@ -135,13 +135,13 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-		
+
 
 		this.drawFluidBar(poseStack);
 		this.drawEnergyBar(poseStack);
 		this.drawProgressBar(poseStack);
 	}
-	
+
 	@Override
 	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
 		int actualMouseX = mouseX - ((this.width - this.imageWidth) / 2);
@@ -159,12 +159,12 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 
 		if (isHovering(39, 101, 12, 12, mouseX, mouseY)) {
 			List<Component> text = new ArrayList<>();
-			if(getMenu().isWorkAllowed()) {
+			if (getMenu().isWorkAllowed()) {
 				text.add(new TranslatableComponent("gui.forcecraft.infuser.start.tooltip")
 						.withStyle(ChatFormatting.GRAY));
 			} else {
 				boolean modifiersEmpty = tile.areAllModifiersEmpty();
-				if(!modifiersEmpty && tile.getEnergyStored() < tile.getEnergyCostPer()) {
+				if (!modifiersEmpty && tile.getEnergyStored() < tile.getEnergyCostPer()) {
 					text.add(new TranslatableComponent("gui.forcecraft.infuser.missing.rf.tooltip")
 							.withStyle(ChatFormatting.RED));
 				} else {
@@ -221,15 +221,15 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		float pct = Math.min(energy / capacity, 1.0F);
 
 		final float height = 107;
-		int width = 12; 
-		blit(ms, leftPos + 156, topPos + 13, 0, 0, 
-				width, (int) (height * pct), 
+		int width = 12;
+		blit(ms, leftPos + 156, topPos + 13, 0, 0,
+				width, (int) (height * pct),
 				width, (int) height);
 	}
 
 	private void drawProgressBar(PoseStack poseStack) {
 		InfuserBlockEntity tile = menu.getTile();
-		if(tile.canWork) {
+		if (tile.canWork) {
 			this.infuserProgress.setMin(tile.processTime).setMax(tile.maxProcessTime);
 			this.infuserProgress.draw(poseStack, this.minecraft);
 		}

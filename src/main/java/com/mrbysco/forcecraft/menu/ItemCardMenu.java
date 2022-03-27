@@ -50,7 +50,7 @@ public class ItemCardMenu extends AbstractContainerMenu {
 
 		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 3; ++j) {
-				this.addSlot(new Slot(this.craftMatrix, j + i * 3, 30 + j * 18, 17 + i * 18){
+				this.addSlot(new Slot(this.craftMatrix, j + i * 3, 30 + j * 18, 17 + i * 18) {
 					@Override
 					public int getMaxStackSize() {
 						return 1;
@@ -92,12 +92,12 @@ public class ItemCardMenu extends AbstractContainerMenu {
 		}
 
 		heldStack = getCardStack(playerInventory);
-		if(heldStack.getItem() == ForceRegistry.ITEM_CARD.get()) {
+		if (heldStack.getItem() == ForceRegistry.ITEM_CARD.get()) {
 			CompoundTag tag = heldStack.getOrCreateTag();
-			if(tag.contains("RecipeContents")) {
+			if (tag.contains("RecipeContents")) {
 				CompoundTag recipeContents = tag.getCompound("RecipeContents");
 				if (!player.level.isClientSide) {
-					for(int i = 0; i < craftMatrix.getContainerSize(); i++) {
+					for (int i = 0; i < craftMatrix.getContainerSize(); i++) {
 						craftMatrix.setItem(i, ItemStack.of(recipeContents.getCompound("slot_" + i)));
 					}
 					craftResult.setItem(0, ItemStack.of(recipeContents.getCompound("result")));
@@ -108,9 +108,9 @@ public class ItemCardMenu extends AbstractContainerMenu {
 
 	public static ItemStack getCardStack(Inventory playerInventory) {
 		Player player = playerInventory.player;
-		if(player.getMainHandItem().getItem() instanceof ItemCardItem) {
+		if (player.getMainHandItem().getItem() instanceof ItemCardItem) {
 			return player.getMainHandItem();
-		} else if(player.getOffhandItem().getItem() instanceof ItemCardItem) {
+		} else if (player.getOffhandItem().getItem() instanceof ItemCardItem) {
 			return player.getOffhandItem();
 		}
 		return ItemStack.EMPTY;
@@ -124,14 +124,11 @@ public class ItemCardMenu extends AbstractContainerMenu {
 			if (iRecipe.isPresent() && (iRecipe.get().isSpecial()
 					|| !world.getGameRules().getBoolean(GameRules.RULE_LIMITED_CRAFTING)
 					|| serverplayerentity.getRecipeBook().contains(iRecipe.get())
-					|| player.isCreative()))
-			{
+					|| player.isCreative())) {
 				stack = iRecipe.get().assemble(this.craftMatrix);
 				inventoryResult.setItem(0, stack);
 				serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, 0, stack));
-			}
-			else
-			{
+			} else {
 				inventoryResult.setItem(0, ItemStack.EMPTY);
 				serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, 0, ItemStack.EMPTY));
 			}
@@ -189,8 +186,7 @@ public class ItemCardMenu extends AbstractContainerMenu {
 				}
 			} else if ((index < total_slots
 					&& !this.moveItemStackTo(itemstack1, total_crafting_slots, 32, false))
-					|| !this.moveItemStackTo(itemstack1, total_crafting_slots, total_slots, false))
-			{
+					|| !this.moveItemStackTo(itemstack1, total_crafting_slots, total_slots, false)) {
 				return ItemStack.EMPTY;
 			}
 			if (itemstack1.getCount() == 0) {
@@ -211,8 +207,7 @@ public class ItemCardMenu extends AbstractContainerMenu {
 			// 1 is shift-click
 			if (clickTypeIn == ClickType.PICKUP
 					|| clickTypeIn == ClickType.PICKUP_ALL
-					|| clickTypeIn == ClickType.SWAP)
-			{
+					|| clickTypeIn == ClickType.SWAP) {
 				final Slot slot = this.slots.get(slotId);
 				final ItemStack dropping = this.getCarried();
 				handleSlotClick(slot, dropping);
@@ -262,7 +257,7 @@ public class ItemCardMenu extends AbstractContainerMenu {
 	}
 
 	public void setMatrixContents(Player player, List<ItemStack> stacks) {
-		for(int i = 0; i < stacks.size(); i++) {
+		for (int i = 0; i < stacks.size(); i++) {
 			handleSlotClick(getSlot(i), stacks.get(i));
 		}
 	}

@@ -40,7 +40,7 @@ public abstract class AbstractForceFurnaceScreen<T extends AbstractForceFurnaceM
 			List<Component> text = new ArrayList<>();
 			text.add(new TextComponent(String.valueOf(menu.getBurn()))
 					.withStyle(ChatFormatting.GRAY));
-			renderComponentTooltip(poseStack, text,  mouseX, mouseY + 10);
+			renderComponentTooltip(poseStack, text, mouseX, mouseY + 10);
 		}
 
 		super.render(poseStack, mouseX, mouseY, partialTicks);

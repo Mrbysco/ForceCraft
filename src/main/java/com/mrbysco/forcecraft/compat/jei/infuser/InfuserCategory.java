@@ -59,17 +59,17 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 		ItemStack[] matchingStacks = recipe.getCenter().getItems();
 
 		ingredients.setInputIngredients(recipe.getIngredients());
-		if(recipe.getResultItem().isEmpty()) {
+		if (recipe.getResultItem().isEmpty()) {
 			List<ItemStack> stacks = new ArrayList<>();
 			ItemStack[] modifierStack = recipe.getInput().getItems();
-			if(modifierStack.length > 0) {
+			if (modifierStack.length > 0) {
 				InfuserModifierType type = recipe.getModifier();
 				UpgradeBookData fakeUpgradeBook = new UpgradeBookData(new ItemStack(ForceRegistry.UPGRADE_TOME.get()));
 				fakeUpgradeBook.setTier(recipe.getTier());
 
-				for(ItemStack center : matchingStacks) {
+				for (ItemStack center : matchingStacks) {
 					ItemStack centerStack = center.copy();
-					if(centerStack.getItem() == ForceRegistry.FORCE_PACK.get()) {
+					if (centerStack.getItem() == ForceRegistry.FORCE_PACK.get()) {
 						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
 						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
 						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
@@ -111,7 +111,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 		guiItemStacks.init(2, false, 119, 46);
 
 		List<ItemStack> outputFull = new ArrayList<>();
-		for(List<ItemStack> stackList : ingredients.getOutputs(VanillaTypes.ITEM)) {
+		for (List<ItemStack> stackList : ingredients.getOutputs(VanillaTypes.ITEM)) {
 			outputFull.add(stackList.get(0));
 		}
 

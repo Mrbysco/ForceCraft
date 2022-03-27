@@ -19,31 +19,31 @@ import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.PLAYER_CAP;
 
 public class CapabilityAttachHandler {
 
-    @SubscribeEvent
-    public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof EnderMan || event.getObject() instanceof Creeper){
-            event.addCapability(BANE_CAP, new BaneModifierCapability());
-        }
+	@SubscribeEvent
+	public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
+		if (event.getObject() instanceof EnderMan || event.getObject() instanceof Creeper) {
+			event.addCapability(BANE_CAP, new BaneModifierCapability());
+		}
 
-        if(event.getObject() instanceof Player){
-            event.addCapability(PLAYER_CAP, new PlayerModifierCapability());
-        }
-    }
+		if (event.getObject() instanceof Player) {
+			event.addCapability(PLAYER_CAP, new PlayerModifierCapability());
+		}
+	}
 
-    @SubscribeEvent
-    public void onDeath(PlayerEvent.Clone event) {
-        // If not dead, player is returning from the End
-        if (!event.isWasDeath()) return;
+	@SubscribeEvent
+	public void onDeath(PlayerEvent.Clone event) {
+		// If not dead, player is returning from the End
+		if (!event.isWasDeath()) return;
 
-        Player original = event.getOriginal();
-        Player clone = event.getPlayer();
+		Player original = event.getOriginal();
+		Player clone = event.getPlayer();
 
-        final Capability<IPlayerModifier> capability = CAPABILITY_PLAYERMOD;
-        original.getCapability(capability).ifPresent(dataOriginal ->
-                clone.getCapability(capability).ifPresent(dataClone -> {
-                    CompoundTag tag = PlayerModifierCapability.writeNBT(dataOriginal);
-                    PlayerModifierCapability.readNBT(dataClone, tag);
-                })
-        );
-    }
+		final Capability<IPlayerModifier> capability = CAPABILITY_PLAYERMOD;
+		original.getCapability(capability).ifPresent(dataOriginal ->
+				clone.getCapability(capability).ifPresent(dataClone -> {
+					CompoundTag tag = PlayerModifierCapability.writeNBT(dataOriginal);
+					PlayerModifierCapability.readNBT(dataClone, tag);
+				})
+		);
+	}
 }

@@ -6,6 +6,7 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -19,15 +20,15 @@ public class ForceBlockTags extends BlockTagsProvider {
 		super(generator, Reference.MOD_ID, existingFileHelper);
 	}
 
-	public static final Tag.Named<Block> RELOCATION_NOT_SUPPORTED = forgeTag("relocation_not_supported");
-	public static final Tags.IOptionalNamedTag<Block> NON_MOVABLE = optionalTag("create", "non_movable");
+	public static final TagKey<Block> RELOCATION_NOT_SUPPORTED = forgeTag("relocation_not_supported");
+	public static final TagKey<Block> NON_MOVABLE = optionalTag("create", "non_movable");
 
-	private static Tag.Named<Block> forgeTag(String name) {
-		return BlockTags.bind(new ResourceLocation("forge", name).toString());
+	private static TagKey<Block> forgeTag(String name) {
+		return BlockTags.create(new ResourceLocation("forge", name));
 	}
 
-	private static Tags.IOptionalNamedTag<Block> optionalTag(String modid, String name) {
-		return BlockTags.createOptional(new ResourceLocation(modid, name));
+	private static TagKey<Block> optionalTag(String modid, String name) {
+		return BlockTags.create(new ResourceLocation(modid, name));
 	}
 
 	@Override

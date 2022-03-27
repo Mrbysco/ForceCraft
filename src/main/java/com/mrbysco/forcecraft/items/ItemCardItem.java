@@ -39,7 +39,7 @@ public class ItemCardItem extends BaseItem {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
-		if(playerIn.isShiftKeyDown()) {
+		if (playerIn.isShiftKeyDown()) {
 			if (!level.isClientSide) {
 				NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(level, playerIn.blockPosition()), playerIn.blockPosition());
 			}
@@ -57,9 +57,9 @@ public class ItemCardItem extends BaseItem {
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
 		Level level = playerIn.level;
-		level.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.NOTE_BLOCK_DIDGERIDOO, SoundSource.NEUTRAL, 1.0F, 1.0F);
+		level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.NOTE_BLOCK_DIDGERIDOO, SoundSource.NEUTRAL, 1.0F, 1.0F);
 
-		if(level.isClientSide) {
+		if (level.isClientSide) {
 			int rand = playerIn.getRandom().nextInt(3);
 			Component message = switch (rand) {
 				default -> BAD_READ;
@@ -75,7 +75,7 @@ public class ItemCardItem extends BaseItem {
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		CompoundTag tag = stack.getOrCreateTag();
-		if(tag.contains("RecipeContents")) {
+		if (tag.contains("RecipeContents")) {
 			CompoundTag recipeContents = tag.getCompound("RecipeContents");
 			ItemStack resultStack = ItemStack.of(recipeContents.getCompound("result"));
 			tooltip.add(new TranslatableComponent("forcecraft.item_card.recipe_output",

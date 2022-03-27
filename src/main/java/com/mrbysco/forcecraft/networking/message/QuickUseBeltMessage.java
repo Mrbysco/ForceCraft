@@ -20,7 +20,8 @@ import java.util.function.Supplier;
 
 public class QuickUseBeltMessage {
 	public int slot;
-	public QuickUseBeltMessage(int slot){
+
+	public QuickUseBeltMessage(int slot) {
 		this.slot = slot;
 	}
 
@@ -41,13 +42,13 @@ public class QuickUseBeltMessage {
 				if (FindingUtil.hasSingleStackInHotbar(player, stackPredicate)) {
 					ItemStack beltStack = FindingUtil.findInstanceStack(player, stackPredicate);
 
-					if(!beltStack.isEmpty()) {
+					if (!beltStack.isEmpty()) {
 						Optional<BeltStorage> data = StorageManager.getBelt(beltStack);
 						data.ifPresent(belt -> {
 							IItemHandler handler = belt.getInventory();
 							ItemStack stack = handler.getStackInSlot(slot);
 							Level world = player.level;
-							if(!stack.isEmpty()) {
+							if (!stack.isEmpty()) {
 								stack.finishUsingItem(world, player);
 								world.playSound((Player) null, player.getX(), player.getY(), player.getZ(), stack.getDrinkingSound(), player.getSoundSource(), 0.5F, player.level.random.nextFloat() * 0.1F + 0.9F);
 							}

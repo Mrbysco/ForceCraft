@@ -111,7 +111,7 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 		if (blockentity instanceof ForceEngineBlockEntity) {
 			LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, hit.getDirection());
 			fluidHandler.ifPresent((handler) -> {
-				if(player.getItemInHand(handIn).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+				if (player.getItemInHand(handIn).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
 					FluidUtil.interactWithFluidHandler(player, handIn, level, pos, hit.getDirection());
 				} else {
 					if (!level.isClientSide) {
@@ -197,7 +197,7 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 
 	@Nullable
 	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> p_152133_, BlockEntityType<E> p_152134_, BlockEntityTicker<? super E> p_152135_) {
-		return p_152134_ == p_152133_ ? (BlockEntityTicker<A>)p_152135_ : null;
+		return p_152134_ == p_152133_ ? (BlockEntityTicker<A>) p_152135_ : null;
 	}
 
 	public static ToIntFunction<BlockState> getLightValueActive(int lightValue) {
@@ -208,12 +208,12 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand) {
 		if (stateIn.getValue(ACTIVE)) {
 			Direction direction = stateIn.getValue(FACING);
-			double d0 = (double)pos.getX() + 0.55D - (double)(rand.nextFloat() * 0.1F);
-			double d1 = (double)pos.getY() + 0.55D - (double)(rand.nextFloat() * 0.1F);
-			double d2 = (double)pos.getZ() + 0.55D - (double)(rand.nextFloat() * 0.1F);
-			double d3 = (double)(0.4F - (rand.nextFloat() + rand.nextFloat()) * 0.4F);
+			double d0 = (double) pos.getX() + 0.55D - (double) (rand.nextFloat() * 0.1F);
+			double d1 = (double) pos.getY() + 0.55D - (double) (rand.nextFloat() * 0.1F);
+			double d2 = (double) pos.getZ() + 0.55D - (double) (rand.nextFloat() * 0.1F);
+			double d3 = (double) (0.4F - (rand.nextFloat() + rand.nextFloat()) * 0.4F);
 			if (rand.nextInt(5) == 0) {
-				level.addParticle(ParticleTypes.SMOKE, d0 + (double)direction.getStepX() * d3, d1 + (double)direction.getStepY() * d3, d2 + (double)direction.getStepZ() * d3, rand.nextGaussian() * 0.005D, rand.nextGaussian() * 0.005D, rand.nextGaussian() * 0.005D);
+				level.addParticle(ParticleTypes.SMOKE, d0 + (double) direction.getStepX() * d3, d1 + (double) direction.getStepY() * d3, d2 + (double) direction.getStepZ() * d3, rand.nextGaussian() * 0.005D, rand.nextGaussian() * 0.005D, rand.nextGaussian() * 0.005D);
 			}
 		}
 	}

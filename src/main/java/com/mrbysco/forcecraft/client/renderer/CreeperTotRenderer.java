@@ -32,8 +32,9 @@ public class CreeperTotRenderer extends MobRenderer<CreeperTotEntity, CreeperTot
 
 	protected float getWhiteOverlayProgress(CreeperTotEntity livingEntityIn, float partialTicks) {
 		float f = livingEntityIn.getSwelling(partialTicks);
-		return (int)(f * 10.0F) % 2 == 0 ? 0.0F : Mth.clamp(f, 0.5F, 1.0F);
+		return (int) (f * 10.0F) % 2 == 0 ? 0.0F : Mth.clamp(f, 0.5F, 1.0F);
 	}
+
 	@Override
 	public ResourceLocation getTextureLocation(CreeperTotEntity entity) {
 		return CREEPER_TEXTURES;

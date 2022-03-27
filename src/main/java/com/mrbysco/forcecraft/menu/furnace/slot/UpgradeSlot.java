@@ -8,6 +8,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class UpgradeSlot extends SlotItemHandler {
 	private final int slotIndex;
+
 	public UpgradeSlot(IItemHandler inventoryIn, int index, int xPosition, int yPosition) {
 		super(inventoryIn, index, xPosition, yPosition);
 		this.slotIndex = index;

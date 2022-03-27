@@ -6,29 +6,29 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 
 public class BleedingEffect extends MobEffect {
-    public BleedingEffect(){
-        super(MobEffectCategory.HARMFUL, 0);
-    }
+	public BleedingEffect() {
+		super(MobEffectCategory.HARMFUL, 0);
+	}
 
-    @Override
-    public boolean isInstantenous() {
-        return false;
-    }
+	@Override
+	public boolean isInstantenous() {
+		return false;
+	}
 
-    @Override
-    public boolean isBeneficial() {
-        return false;
-    }
+	@Override
+	public boolean isBeneficial() {
+		return false;
+	}
 
-    @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
-        return true;
-    }
+	@Override
+	public boolean isDurationEffectTick(int duration, int amplifier) {
+		return true;
+	}
 
 	@Override
 	public void applyEffectTick(LivingEntity target, int amplifier) {
 		//once per tick
-		if(target.level.getGameTime() % 20 == 0) {
+		if (target.level.getGameTime() % 20 == 0) {
 			target.hurt(ForceCraft.BLEEDING_DAMAGE, 2.0F);
 		}
 	}

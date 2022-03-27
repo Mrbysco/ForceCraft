@@ -17,7 +17,7 @@ public class PackChangeMessage {
 	public String customName;
 	public int color;
 
-	public PackChangeMessage(InteractionHand hand, String customName, int color){
+	public PackChangeMessage(InteractionHand hand, String customName, int color) {
 		this.hand = hand;
 		this.customName = customName;
 		this.color = color;
@@ -39,15 +39,15 @@ public class PackChangeMessage {
 			if (ctx.getDirection().getReceptionSide().isServer() && ctx.getSender() != null) {
 				ItemStack stack = ctx.getSender().getItemInHand(hand);
 
-				if(stack.getItem() == ForceRegistry.FORCE_PACK.get() || stack.getItem() == ForceRegistry.FORCE_BELT.get()) {
+				if (stack.getItem() == ForceRegistry.FORCE_PACK.get() || stack.getItem() == ForceRegistry.FORCE_BELT.get()) {
 					CompoundTag tag = stack.getOrCreateTag();
 					tag.putInt("Color", color);
 					stack.setTag(tag);
 
-					if(customName.isEmpty()) {
+					if (customName.isEmpty()) {
 						stack.resetHoverName();
 					} else {
-						if(!stack.getHoverName().getContents().equals(customName)) {
+						if (!stack.getHoverName().getContents().equals(customName)) {
 							stack.setHoverName(new TextComponent(customName).withStyle(ChatFormatting.YELLOW));
 						}
 					}

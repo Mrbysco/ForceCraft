@@ -17,7 +17,7 @@ import java.awt.Color;
 
 public class RenderHelper {
 	public static void drawFluidTankInGUI(FluidStack fluid, double x, double y, double percent, int height) {
-		if(fluid == null || fluid.isEmpty())
+		if (fluid == null || fluid.isEmpty())
 			return;
 
 		ResourceLocation flowing = fluid.getFluid().getAttributes().getStillTexture(fluid);
@@ -45,7 +45,7 @@ public class RenderHelper {
 						(float) color.getAlpha() / 255.0F);
 				RenderSystem.enableBlend();
 				int count = 1 + ((int) Math.ceil(tankLevel)) / 16;
-				for(int i = 0; i < count; i++) {
+				for (int i = 0; i < count; i++) {
 					double subHeight = Math.min(16.0, tankLevel - (16.0 * i));
 					double offsetY = height - 16.0 * i - subHeight;
 					drawQuad(x, y + offsetY, 16, subHeight, minU, (float) (maxV - deltaV * (subHeight / 16.0)), maxU, maxV);

@@ -6,7 +6,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class OutputSlot extends SlotItemHandler {
 
-	public OutputSlot(IItemHandler handler, int index, int posX, int posY){
+	public OutputSlot(IItemHandler handler, int index, int posX, int posY) {
 		super(handler, index, posX, posY);
 	}
 

@@ -158,10 +158,10 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 	protected RecipeType<? extends AbstractCookingRecipe> getRecipeType() {
 		ItemStack upgrade = getUpgrade();
-		if(!upgrade.isEmpty()) {
-			if(upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
+		if (!upgrade.isEmpty()) {
+			if (upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
 				return ForceRecipes.FREEZING;
-			} else if(upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
+			} else if (upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
 				return ForceRecipes.GRINDING;
 			}
 		}
@@ -202,9 +202,10 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	protected AbstractCookingRecipe getRecipe() {
 		ItemStack input = this.getItem(INPUT_SLOT);
 		if (input.isEmpty() || input == failedMatch) return null;
-		if (currentRecipe != null && currentRecipe.matches(this, level) && currentRecipe.getType() == getRecipeType()) return currentRecipe;
+		if (currentRecipe != null && currentRecipe.matches(this, level) && currentRecipe.getType() == getRecipeType())
+			return currentRecipe;
 		else {
-			AbstractCookingRecipe rec = level.getRecipeManager().getRecipeFor((RecipeType<AbstractCookingRecipe>)this.getRecipeType(), this, this.level).orElse(null);
+			AbstractCookingRecipe rec = level.getRecipeManager().getRecipeFor((RecipeType<AbstractCookingRecipe>) this.getRecipeType(), this, this.level).orElse(null);
 			if (rec == null) failedMatch = input;
 			else failedMatch = ItemStack.EMPTY;
 			return currentRecipe = rec;
@@ -229,7 +230,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		this.cookingSpeed = nbt.getInt("CookSpeed");
 		CompoundTag recipesUsed = nbt.getCompound("RecipesUsed");
 
-		for(String s : recipesUsed.getAllKeys()) {
+		for (String s : recipesUsed.getAllKeys()) {
 			this.recipes.put(new ResourceLocation(s), recipesUsed.getInt(s));
 		}
 	}
@@ -256,7 +257,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		boolean dirty = false;
 		if (furnace.isLit() && furnace.canBurn(furnace.currentRecipe)) {
 			int speed = furnace.getSpeed();
-			if(furnace.burnSpeed != speed) {
+			if (furnace.burnSpeed != speed) {
 				furnace.burnSpeed = speed;
 			}
 			furnace.litTime -= furnace.burnSpeed;
@@ -273,8 +274,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 						dirty = true;
 						if (fuel.hasContainerItem())
 							furnace.handler.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
-						else
-						if (!fuel.isEmpty()) {
+						else if (!fuel.isEmpty()) {
 							fuel.shrink(1);
 							if (fuel.isEmpty()) {
 								furnace.handler.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
@@ -285,7 +285,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 				if (furnace.isLit() && furnace.canBurn(cookingRecipe)) {
 					int speed = furnace.isEfficient() ? 4 : furnace.getSpeed();
-					if(furnace.cookingSpeed != speed) {
+					if (furnace.cookingSpeed != speed) {
 						furnace.cookingSpeed = speed;
 					}
 
@@ -293,7 +293,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					if (furnace.cookingProgress >= furnace.cookingTotalTime) {
 						furnace.cookingProgress = 0;
 						furnace.cookingTotalTime = furnace.getCookingProgress();
-						if(furnace.burn(cookingRecipe)) {
+						if (furnace.burn(cookingRecipe)) {
 							furnace.setRecipeUsed(cookingRecipe);
 						}
 						dirty = true;
@@ -342,36 +342,36 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		if (recipe != null && this.canBurn(recipe)) {
 			ItemStack itemstack = this.handler.getStackInSlot(INPUT_SLOT);
 			List<? extends String> additionalBlacklist = new ArrayList<>();
-			if(ConfigHandler.COMMON.furnaceOutputBlacklist.get() != null) {
-				if(!ConfigHandler.COMMON.furnaceOutputBlacklist.get().isEmpty() && !ConfigHandler.COMMON.furnaceOutputBlacklist.get().get(0).isEmpty()) {
+			if (ConfigHandler.COMMON.furnaceOutputBlacklist.get() != null) {
+				if (!ConfigHandler.COMMON.furnaceOutputBlacklist.get().isEmpty() && !ConfigHandler.COMMON.furnaceOutputBlacklist.get().get(0).isEmpty()) {
 					additionalBlacklist = ConfigHandler.COMMON.furnaceOutputBlacklist.get();
 				}
 			}
 
-			if(recipe instanceof MultipleOutputFurnaceRecipe multipleRecipe) {
+			if (recipe instanceof MultipleOutputFurnaceRecipe multipleRecipe) {
 				NonNullList<ItemStack> outputStacks = multipleRecipe.getRecipeOutputs();
-				for(int i = 0; i < outputStacks.size(); i++) {
+				for (int i = 0; i < outputStacks.size(); i++) {
 					ItemStack outputStack = outputStacks.get(i).copy();
 
-					if(i > 0) {
-						if(multipleRecipe.getSecondaryChance() != 1.0F || level.random.nextFloat() > multipleRecipe.getSecondaryChance()) {
+					if (i > 0) {
+						if (multipleRecipe.getSecondaryChance() != 1.0F || level.random.nextFloat() > multipleRecipe.getSecondaryChance()) {
 							//Early break if change didn't work out on second output
 							break;
 						}
 					}
 
 					List<BiggestInventory> inventoryList = new ArrayList<>();
-					for(Direction dir : Direction.values()) {
+					for (Direction dir : Direction.values()) {
 						BlockPos offPos = worldPosition.relative(dir);
-						if(this.level.isAreaLoaded(worldPosition, 1)) {
+						if (this.level.isAreaLoaded(worldPosition, 1)) {
 							BlockEntity foundTile = this.level.getBlockEntity(offPos);
-							if(foundTile != null) {
+							if (foundTile != null) {
 								ResourceLocation typeLocation = foundTile.getType().getRegistryName();
 								boolean flag = foundTile instanceof Hopper || foundTile instanceof AbstractFurnaceBlockEntity || foundTile instanceof AbstractForceFurnaceBlockEntity;
 								boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
-								if(!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+								if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
 									IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).orElse(null);
-									if(itemHandler != null) {
+									if (itemHandler != null) {
 										inventoryList.add(new BiggestInventory(offPos, itemHandler.getSlots(), dir.getOpposite()));
 									}
 								}
@@ -379,17 +379,17 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 						}
 					}
 					inventoryList.sort(Collections.reverseOrder());
-					for(BiggestInventory inventory : inventoryList) {
+					for (BiggestInventory inventory : inventoryList) {
 						IItemHandler itemHandler = inventory.getIItemHandler(this.level);
 						ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
 						outputStack = rest;
-						if(outputStack.isEmpty()) {
+						if (outputStack.isEmpty()) {
 							break;
 						}
 					}
 
-					if(i > 0 && !outputStack.isEmpty()) {
-						((ServerLevel)level).sendParticles(ParticleTypes.POOF, (double)worldPosition.getX(), (double)worldPosition.getY() + 1, (double)worldPosition.getZ(), 1, 0, 0, 0, 0.0D);
+					if (i > 0 && !outputStack.isEmpty()) {
+						((ServerLevel) level).sendParticles(ParticleTypes.POOF, (double) worldPosition.getX(), (double) worldPosition.getY() + 1, (double) worldPosition.getZ(), 1, 0, 0, 0, 0.0D);
 						ItemEntity itemEntity = new ItemEntity(level, getBlockPos().getX(), getBlockPos().getY() + 1, getBlockPos().getZ(), outputStack);
 						level.addFreshEntity(itemEntity);
 					} else {
@@ -406,17 +406,17 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 				ItemStack outputStack = itemstack1.copy();
 
 				List<BiggestInventory> inventoryList = new ArrayList<>();
-				for(Direction dir : Direction.values()) {
+				for (Direction dir : Direction.values()) {
 					BlockPos offPos = worldPosition.relative(dir);
-					if(this.level.isAreaLoaded(worldPosition, 1)) {
+					if (this.level.isAreaLoaded(worldPosition, 1)) {
 						BlockEntity foundTile = this.level.getBlockEntity(offPos);
-						if(foundTile != null) {
+						if (foundTile != null) {
 							ResourceLocation typeLocation = foundTile.getType().getRegistryName();
 							boolean flag = foundTile instanceof Hopper || foundTile instanceof AbstractFurnaceBlockEntity || foundTile instanceof AbstractForceFurnaceBlockEntity;
 							boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
-							if(!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+							if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
 								IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).orElse(null);
-								if(itemHandler != null) {
+								if (itemHandler != null) {
 									inventoryList.add(new BiggestInventory(offPos, itemHandler.getSlots(), dir.getOpposite()));
 								}
 							}
@@ -424,11 +424,11 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					}
 				}
 				inventoryList.sort(Collections.reverseOrder());
-				for(BiggestInventory inventory : inventoryList) {
+				for (BiggestInventory inventory : inventoryList) {
 					IItemHandler itemHandler = inventory.getIItemHandler(this.level);
 					ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
 					outputStack = rest;
-					if(outputStack.isEmpty()) {
+					if (outputStack.isEmpty()) {
 						break;
 					}
 				}
@@ -466,7 +466,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	protected int getCookingProgress() {
 		AbstractCookingRecipe rec = getRecipe();
 		if (rec == null) return 200;
-		return this.level.getRecipeManager().getRecipeFor((RecipeType<AbstractCookingRecipe>)this.getRecipeType(), this, this.level).map(AbstractCookingRecipe::getCookingTime).orElse(100);
+		return this.level.getRecipeManager().getRecipeFor((RecipeType<AbstractCookingRecipe>) this.getRecipeType(), this, this.level).map(AbstractCookingRecipe::getCookingTime).orElse(100);
 	}
 
 	public static boolean isFuel(ItemStack stack) {
@@ -511,7 +511,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	}
 
 	public boolean isEmpty() {
-		for(int i = 0; i < handler.getSlots(); i++) {
+		for (int i = 0; i < handler.getSlots(); i++) {
 			if (!handler.getStackInSlot(i).isEmpty()) {
 				return false;
 			}
@@ -566,7 +566,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		if (this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		} else {
-			return player.distanceToSqr((double)this.worldPosition.getX() + 0.5D, (double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D) <= 64.0D;
+			return player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) <= 64.0D;
 		}
 	}
 
@@ -580,7 +580,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	}
 
 	public void clearContent() {
-		for(int i = 0; i < handler.getSlots(); i++) {
+		for (int i = 0; i < handler.getSlots(); i++) {
 			handler.setStackInSlot(i, ItemStack.EMPTY);
 		}
 	}
@@ -609,10 +609,10 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	public List<Recipe<?>> grantStoredRecipeExperience(Level world, Vec3 pos) {
 		List<Recipe<?>> list = Lists.newArrayList();
 
-		for(Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
+		for (Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
 			world.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
 				list.add(recipe);
-				splitAndSpawnExperience(world, pos, entry.getIntValue(), (((AbstractCookingRecipe)recipe).getExperience() * getXPMultiplier()));
+				splitAndSpawnExperience(world, pos, entry.getIntValue(), (((AbstractCookingRecipe) recipe).getExperience() * getXPMultiplier()));
 			});
 		}
 
@@ -620,13 +620,13 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	}
 
 	private static void splitAndSpawnExperience(Level world, Vec3 pos, int craftedAmount, float experience) {
-		int i = Mth.floor((float)craftedAmount * experience);
-		float f = Mth.frac((float)craftedAmount * experience);
-		if (f != 0.0F && Math.random() < (double)f) {
+		int i = Mth.floor((float) craftedAmount * experience);
+		float f = Mth.frac((float) craftedAmount * experience);
+		if (f != 0.0F && Math.random() < (double) f) {
 			++i;
 		}
 
-		while(i > 0) {
+		while (i > 0) {
 			int j = ExperienceOrb.getExperienceValue(i);
 			i -= j;
 			world.addFreshEntity(new ExperienceOrb(world, pos.x, pos.y, pos.z, j));
@@ -635,7 +635,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	}
 
 	public void fillStackedContents(StackedContents helper) {
-		for(int i = 0; i < handler.getSlots(); i++) {
+		for (int i = 0; i < handler.getSlots(); i++) {
 			helper.accountStack(handler.getStackInSlot(i));
 		}
 	}
@@ -678,9 +678,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 
 		protected IItemHandler getIItemHandler(Level world) {
-			if(world.isAreaLoaded(worldPosition, 1)) {
+			if (world.isAreaLoaded(worldPosition, 1)) {
 				BlockEntity tileEntity = world.getBlockEntity(tilePos);
-				if(!tileEntity.isRemoved() && tileEntity.hasLevel() && tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+				if (!tileEntity.isRemoved() && tileEntity.hasLevel() && tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
 					return tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction).orElse(null);
 				}
 			}

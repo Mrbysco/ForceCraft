@@ -77,7 +77,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 						if (itemEntity.getItem().getItem() instanceof InertCoreItem) {
 							ItemEntity bottledWither = new NonBurnableItemEntity(level, pos.getX(), pos.getY() + 1,
 									pos.getZ(), new ItemStack(ForceRegistry.BOTTLED_WITHER.get(),
-											itemEntity.getItem().getCount()));
+									itemEntity.getItem().getCount()));
 							level.addFreshEntity(bottledWither);
 							stack.hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
 							bw = true;
@@ -197,17 +197,17 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
 			if (cap.hasEnderModifier()) {
-				if(player.isShiftKeyDown()) {
+				if (player.isShiftKeyDown()) {
 					cap.setHomeLocation(GlobalPos.of(player.level.dimension(), player.blockPosition()));
-					if(!level.isClientSide) {
+					if (!level.isClientSide) {
 						player.displayClientMessage(new TranslatableComponent("forcecraft.ender_rod.location.set").withStyle(ChatFormatting.DARK_PURPLE), true);
 					}
 				} else {
-					if(cap.getHomeLocation() != null) {
+					if (cap.getHomeLocation() != null) {
 						cap.teleportPlayerToLocation(player, cap.getHomeLocation());
 						stack.hurtAndBreak(1, player, (playerIn) -> player.broadcastBreakEvent(handIn));
 						player.getCooldowns().addCooldown(this, 10);
-						level.playSound((Player)null, player.xo, player.yo, player.zo, SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
+						level.playSound((Player) null, player.xo, player.yo, player.zo, SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
 						player.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 					}
 				}
@@ -221,9 +221,9 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
-		if(playerIn != null) {
+		if (playerIn != null) {
 			stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
-				if(cap.getHealingLevel() > 0) {
+				if (cap.getHealingLevel() > 0) {
 					int healingLevel = cap.getHealingLevel();
 					playerIn.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, healingLevel - 1, false, false));
 					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
@@ -237,14 +237,14 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 				}
 
 				if (cap.hasEnderModifier()) {
-					if(playerIn.isShiftKeyDown()) {
+					if (playerIn.isShiftKeyDown()) {
 						cap.setHomeLocation(GlobalPos.of(playerIn.level.dimension(), playerIn.blockPosition()));
 					} else {
-						if(cap.getHomeLocation() != null) {
+						if (cap.getHomeLocation() != null) {
 							cap.teleportPlayerToLocation(playerIn, cap.getHomeLocation());
 							stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
 							playerIn.getCooldowns().addCooldown(this, 10);
-							level.playSound((Player)null, playerIn.xo, playerIn.yo, playerIn.zo, SoundEvents.ENDERMAN_TELEPORT, playerIn.getSoundSource(), 1.0F, 1.0F);
+							level.playSound((Player) null, playerIn.xo, playerIn.yo, playerIn.zo, SoundEvents.ENDERMAN_TELEPORT, playerIn.getSoundSource(), 1.0F, 1.0F);
 							playerIn.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 						}
 					}
@@ -274,9 +274,9 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand handIn) {
-		if(playerIn != null) {
+		if (playerIn != null) {
 			stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
-				if(cap.hasLight()) {
+				if (cap.hasLight()) {
 					target.addEffect(new MobEffectInstance(MobEffects.GLOWING, 2400, 0, false, false));
 					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
 					playerIn.getCooldowns().addCooldown(this, 10);
@@ -311,7 +311,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		CompoundTag nbt = super.getShareTag(stack);
 
 		IForceRodModifier cap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-		if(cap != null) {
+		if (cap != null) {
 			CompoundTag shareTag = ForceRodCapability.writeNBT(cap);
 			nbt.put(Reference.MOD_ID, shareTag);
 		}
@@ -320,18 +320,18 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 	@Override
 	public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
-		if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
+		if (nbt == null || !nbt.contains(Reference.MOD_ID)) {
 			return;
 		}
 
 		IForceRodModifier cap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-		if(cap != null) {
+		if (cap != null) {
 			CompoundTag shareTag = nbt.getCompound(Reference.MOD_ID);
 			ForceRodCapability.readNBT(cap, shareTag);
 		}
 		super.readShareTag(stack, nbt);
 	}
-	
+
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lores, TooltipFlag flagIn) {

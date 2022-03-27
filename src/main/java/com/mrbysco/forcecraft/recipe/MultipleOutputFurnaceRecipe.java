@@ -37,7 +37,7 @@ public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe 
 
 	public NonNullList<ItemStack> getCraftingResults(Container inv) {
 		NonNullList<ItemStack> results = NonNullList.create();
-		for(ItemStack stack : this.resultItems) {
+		for (ItemStack stack : this.resultItems) {
 			results.add(stack.copy());
 		}
 		return results;

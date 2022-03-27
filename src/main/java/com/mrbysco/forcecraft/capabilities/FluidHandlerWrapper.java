@@ -65,7 +65,7 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 
 	@Override
 	public int fill(FluidStack resource, FluidAction action) {
-		if(this.fuelTank.isFluidValid(resource)) {
+		if (this.fuelTank.isFluidValid(resource)) {
 			return this.fuelTank.fill(resource, action);
 		}
 		return this.throttleTank.fill(resource, action);
@@ -73,7 +73,7 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 
 	@Override
 	public FluidStack drain(FluidStack resource, FluidAction action) {
-		if(this.fuelTank.getFluid().isFluidEqual(resource)) {
+		if (this.fuelTank.getFluid().isFluidEqual(resource)) {
 			return this.fuelTank.drain(resource, action);
 		}
 		return this.throttleTank.drain(resource, action);
@@ -81,7 +81,7 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 
 	@Override
 	public FluidStack drain(int maxDrain, FluidAction action) {
-		if(this.fuelTank.getFluidAmount() > 0) {
+		if (this.fuelTank.getFluidAmount() > 0) {
 			return this.fuelTank.drain(maxDrain, action);
 		}
 		return this.throttleTank.drain(maxDrain, action);

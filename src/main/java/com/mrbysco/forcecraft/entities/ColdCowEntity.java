@@ -25,7 +25,7 @@ public class ColdCowEntity extends Cow implements IColdMob {
 
 	public ColdCowEntity(Level level, ResourceLocation typeLocation) {
 		super(ForceEntities.COLD_COW.get(), level);
-		if(typeLocation != null) {
+		if (typeLocation != null) {
 			this.originalTypeLocation = typeLocation;
 		}
 	}
@@ -39,7 +39,7 @@ public class ColdCowEntity extends Cow implements IColdMob {
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 
-		if(compound.getString("OriginalMob").isEmpty()) {
+		if (compound.getString("OriginalMob").isEmpty()) {
 			this.originalTypeLocation = new ResourceLocation("minecraft", "cow");
 		} else {
 			this.originalTypeLocation = new ResourceLocation(compound.getString("OriginalMob"));
@@ -58,7 +58,7 @@ public class ColdCowEntity extends Cow implements IColdMob {
 		super.registerGoals();
 		this.goalSelector.addGoal(5, this.eatGrassGoal);
 	}
-	
+
 	public static AttributeSupplier.Builder generateAttributes() {
 		return Cow.createAttributes();
 	}
@@ -94,17 +94,17 @@ public class ColdCowEntity extends Cow implements IColdMob {
 		} else if (this.grassTimer >= 4 && this.grassTimer <= 36) {
 			return 1.0F;
 		} else {
-			return this.grassTimer < 4 ? ((float)this.grassTimer - p_70894_1_) / 4.0F : -((float)(this.grassTimer - 40) - p_70894_1_) / 4.0F;
+			return this.grassTimer < 4 ? ((float) this.grassTimer - p_70894_1_) / 4.0F : -((float) (this.grassTimer - 40) - p_70894_1_) / 4.0F;
 		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public float getHeadRotationAngleX(float p_70890_1_) {
 		if (this.grassTimer > 4 && this.grassTimer <= 36) {
-			float f = ((float)(this.grassTimer - 4) - p_70890_1_) / 32.0F;
-			return ((float)Math.PI / 5F) + 0.21991149F * Mth.sin(f * 28.7F);
+			float f = ((float) (this.grassTimer - 4) - p_70890_1_) / 32.0F;
+			return ((float) Math.PI / 5F) + 0.21991149F * Mth.sin(f * 28.7F);
 		} else {
-			return this.grassTimer > 0 ? ((float)Math.PI / 5F) : this.getXRot() * ((float)Math.PI / 180F);
+			return this.grassTimer > 0 ? ((float) Math.PI / 5F) : this.getXRot() * ((float) Math.PI / 180F);
 		}
 	}
 

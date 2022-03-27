@@ -43,43 +43,43 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 		super(builder);
 	}
 
-    public static ToIntFunction<BlockState> getLightValueLit(int lightValue) {
-        return (state) -> {
-            return state.getValue(BlockStateProperties.LIT) ? lightValue : 0;
-        };
-    }
+	public static ToIntFunction<BlockState> getLightValueLit(int lightValue) {
+		return (state) -> {
+			return state.getValue(BlockStateProperties.LIT) ? lightValue : 0;
+		};
+	}
 
-    protected void openContainer(Level level, BlockPos pos, Player player) {
-        BlockEntity blockentity = level.getBlockEntity(pos);
-        if (blockentity instanceof ForceFurnaceBlockEntity) {
+	protected void openContainer(Level level, BlockPos pos, Player player) {
+		BlockEntity blockentity = level.getBlockEntity(pos);
+		if (blockentity instanceof ForceFurnaceBlockEntity) {
 			if (!level.isClientSide) {
 				NetworkHooks.openGui((ServerPlayer) player, (ForceFurnaceBlockEntity) blockentity, pos);
 			}
-            player.awardStat(Stats.INTERACT_WITH_FURNACE);
-        }
-    }
+			player.awardStat(Stats.INTERACT_WITH_FURNACE);
+		}
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand) {
-        if (stateIn.getValue(LIT)) {
-            double d0 = (double)pos.getX() + 0.5D;
-            double d1 = (double)pos.getY();
-            double d2 = (double)pos.getZ() + 0.5D;
-            if (rand.nextDouble() < 0.1D) {
-                level.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
-            }
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand) {
+		if (stateIn.getValue(LIT)) {
+			double d0 = (double) pos.getX() + 0.5D;
+			double d1 = (double) pos.getY();
+			double d2 = (double) pos.getZ() + 0.5D;
+			if (rand.nextDouble() < 0.1D) {
+				level.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
+			}
 
-            Direction direction = stateIn.getValue(FACING);
-            Direction.Axis direction$axis = direction.getAxis();
-            double d3 = 0.52D;
-            double d4 = rand.nextDouble() * 0.6D - 0.3D;
-            double d5 = direction$axis == Direction.Axis.X ? (double)direction.getStepX() * d3 : d4;
-            double d6 = rand.nextDouble() * 6.0D / 16.0D;
-            double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * d3 : d4;
-            level.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
-            level.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
-        }
-    }
+			Direction direction = stateIn.getValue(FACING);
+			Direction.Axis direction$axis = direction.getAxis();
+			double d3 = 0.52D;
+			double d4 = rand.nextDouble() * 0.6D - 0.3D;
+			double d5 = direction$axis == Direction.Axis.X ? (double) direction.getStepX() * d3 : d4;
+			double d6 = rand.nextDouble() * 6.0D / 16.0D;
+			double d7 = direction$axis == Direction.Axis.Z ? (double) direction.getStepZ() * d3 : d4;
+			level.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+			level.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+		}
+	}
 
 	@Nullable
 	@Override
@@ -97,39 +97,39 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 		return level.isClientSide ? null : createTickerHelper(p_151989_, abstractForceFurnaceType, AbstractForceFurnaceBlockEntity::serverTick);
 	}
 
-    @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock())) {
-            BlockEntity blockentity = level.getBlockEntity(pos);
-            if (blockentity instanceof AbstractForceFurnaceBlockEntity furnaceTile) {
-				for(int i = 0; i < furnaceTile.getContainerSize(); ++i) {
-                    if(!(furnaceTile.getItem(i).getItem() instanceof UpgradeCoreItem)) {
-                        spawnItemStack(level, pos.getX(), pos.getY(), pos.getZ(), furnaceTile.getItem(i));
-                    }
-                }
-                ((AbstractForceFurnaceBlockEntity)blockentity).grantStoredRecipeExperience(level, Vec3.atCenterOf(pos));
-                level.updateNeighbourForOutputSignal(pos, this);
-            }
+	@Override
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (!state.is(newState.getBlock())) {
+			BlockEntity blockentity = level.getBlockEntity(pos);
+			if (blockentity instanceof AbstractForceFurnaceBlockEntity furnaceTile) {
+				for (int i = 0; i < furnaceTile.getContainerSize(); ++i) {
+					if (!(furnaceTile.getItem(i).getItem() instanceof UpgradeCoreItem)) {
+						spawnItemStack(level, pos.getX(), pos.getY(), pos.getZ(), furnaceTile.getItem(i));
+					}
+				}
+				((AbstractForceFurnaceBlockEntity) blockentity).grantStoredRecipeExperience(level, Vec3.atCenterOf(pos));
+				level.updateNeighbourForOutputSignal(pos, this);
+			}
 
-            super.onRemove(state, level, pos, newState, isMoving);
-        }
-    }
+			super.onRemove(state, level, pos, newState, isMoving);
+		}
+	}
 
-    public static void spawnItemStack(Level level, double x, double y, double z, ItemStack stack) {
-        double d0 = (double) EntityType.ITEM.getWidth();
-        double d1 = 1.0D - d0;
-        double d2 = d0 / 2.0D;
-        double d3 = Math.floor(x) + level.random.nextDouble() * d1 + d2;
-        double d4 = Math.floor(y) + level.random.nextDouble() * d1;
-        double d5 = Math.floor(z) + level.random.nextDouble() * d1 + d2;
+	public static void spawnItemStack(Level level, double x, double y, double z, ItemStack stack) {
+		double d0 = (double) EntityType.ITEM.getWidth();
+		double d1 = 1.0D - d0;
+		double d2 = d0 / 2.0D;
+		double d3 = Math.floor(x) + level.random.nextDouble() * d1 + d2;
+		double d4 = Math.floor(y) + level.random.nextDouble() * d1;
+		double d5 = Math.floor(z) + level.random.nextDouble() * d1 + d2;
 
-        while(!stack.isEmpty()) {
-            ItemEntity itementity = new ItemEntity(level, d3, d4, d5, stack.split(level.random.nextInt(21) + 10));
-            float f = 0.05F;
-            itementity.setDeltaMovement(level.random.nextGaussian() * (double)0.05F, level.random.nextGaussian() * (double)f + (double)0.2F, level.random.nextGaussian() * (double)f);
-            level.addFreshEntity(itementity);
-        }
-    }
+		while (!stack.isEmpty()) {
+			ItemEntity itementity = new ItemEntity(level, d3, d4, d5, stack.split(level.random.nextInt(21) + 10));
+			float f = 0.05F;
+			itementity.setDeltaMovement(level.random.nextGaussian() * (double) 0.05F, level.random.nextGaussian() * (double) f + (double) 0.2F, level.random.nextGaussian() * (double) f);
+			level.addFreshEntity(itementity);
+		}
+	}
 
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
@@ -151,8 +151,8 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 	@Override
 	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
 		super.playerDestroy(level, player, pos, state, te, stack);
-		if(te instanceof ForceFurnaceBlockEntity tile) {
-			if(!tile.getUpgrade().isEmpty()) {
+		if (te instanceof ForceFurnaceBlockEntity tile) {
+			if (!tile.getUpgrade().isEmpty()) {
 				level.playSound((Player) null, pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5F, 1.0F);
 			}
 		}

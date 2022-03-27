@@ -20,36 +20,35 @@ public class UpgradeTomeItem extends BaseItem {
 	}
 
 	@Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		super.appendHoverText(stack, level, tooltip, flagIn);
 		UpgradeBookData bd = new UpgradeBookData(stack);
-	
-        TranslatableComponent tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.tier");
-        tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
-        tt.append(" " + bd.getTier());
-        if(!bd.getProgressCache().isEmpty()) {
-        	tt.append(" : " + bd.getProgressCache());
-        }
-        tooltip.add(tt);  
 
-        if(bd.getTier() == UpgradeBookTier.FINAL) {
-            tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.max");
-            tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
+		TranslatableComponent tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.tier");
+		tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
+		tt.append(" " + bd.getTier());
+		if (!bd.getProgressCache().isEmpty()) {
+			tt.append(" : " + bd.getProgressCache());
 		}
-        else {
-	        tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.points");
-	        tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
-	        tt.append(" " + bd.getPoints());
-	        tooltip.add(tt); 
-        
-	        tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.nexttier");
-	        tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
-	        tt.append(" " + bd.nextTier());
+		tooltip.add(tt);
+
+		if (bd.getTier() == UpgradeBookTier.FINAL) {
+			tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.max");
+			tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
+		} else {
+			tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.points");
+			tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
+			tt.append(" " + bd.getPoints());
+			tooltip.add(tt);
+
+			tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.nexttier");
+			tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
+			tt.append(" " + bd.nextTier());
 		}
 		tooltip.add(tt);
 
 
-		if(!Screen.hasShiftDown()) {
+		if (!Screen.hasShiftDown()) {
 			tooltip.add(new TranslatableComponent("forcecraft.tooltip.press_shift"));
 			return;
 		}

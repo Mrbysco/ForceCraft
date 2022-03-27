@@ -10,11 +10,11 @@ import java.util.function.Predicate;
 
 public class ItemHandlerUtils {
 	public static ItemStack getFirstItem(IItemHandler itemHandler) {
-		if(itemHandler == null) return ItemStack.EMPTY;
+		if (itemHandler == null) return ItemStack.EMPTY;
 
-		for(int i = 0; i < itemHandler.getSlots(); i++) {
+		for (int i = 0; i < itemHandler.getSlots(); i++) {
 			ItemStack stack = itemHandler.getStackInSlot(i);
-			if(!stack.isEmpty()) {
+			if (!stack.isEmpty()) {
 				return stack;
 			}
 		}
@@ -22,11 +22,11 @@ public class ItemHandlerUtils {
 	}
 
 	public static boolean hasItems(IItemHandler itemHandler) {
-		if(itemHandler == null) return false;
+		if (itemHandler == null) return false;
 
-		for(int i = 0; i < itemHandler.getSlots(); i++) {
+		for (int i = 0; i < itemHandler.getSlots(); i++) {
 			ItemStack stack = itemHandler.getStackInSlot(i);
-			if(!stack.isEmpty()) {
+			if (!stack.isEmpty()) {
 				return true;
 			}
 		}
@@ -34,11 +34,11 @@ public class ItemHandlerUtils {
 	}
 
 	public static boolean isFull(IItemHandler itemHandler) {
-		if(itemHandler == null) return true;
+		if (itemHandler == null) return true;
 
-		for(int i = 0; i < itemHandler.getSlots(); i++) {
+		for (int i = 0; i < itemHandler.getSlots(); i++) {
 			ItemStack stack = itemHandler.getStackInSlot(i);
-			if(stack.isEmpty() || (stack.getCount() < stack.getMaxStackSize())) {
+			if (stack.isEmpty() || (stack.getCount() < stack.getMaxStackSize())) {
 				return false;
 			}
 		}
@@ -46,11 +46,11 @@ public class ItemHandlerUtils {
 	}
 
 	public static boolean isEmpty(IItemHandler itemHandler) {
-		if(itemHandler == null) return true;
+		if (itemHandler == null) return true;
 
-		for(int i = 0; i < itemHandler.getSlots(); i++) {
+		for (int i = 0; i < itemHandler.getSlots(); i++) {
 			ItemStack stack = itemHandler.getStackInSlot(i);
-			if(!stack.isEmpty()) {
+			if (!stack.isEmpty()) {
 				return false;
 			}
 		}
@@ -58,12 +58,12 @@ public class ItemHandlerUtils {
 	}
 
 	public static int getUsedSlots(IItemHandler itemHandler) {
-		if(itemHandler == null) return 0;
+		if (itemHandler == null) return 0;
 
 		int usedSlots = 0;
-		for(int i = 0; i < itemHandler.getSlots(); i++) {
+		for (int i = 0; i < itemHandler.getSlots(); i++) {
 			ItemStack stack = itemHandler.getStackInSlot(i);
-			if(!stack.isEmpty()) {
+			if (!stack.isEmpty()) {
 				usedSlots++;
 			}
 		}
@@ -71,10 +71,10 @@ public class ItemHandlerUtils {
 	}
 
 	public static boolean extractStackFromPlayer(Inventory inventory, IItemHandler targetHandler, Predicate<ItemStack> stackPredicate) {
-		if(targetHandler != null) {
-			for(int i = 0; i < inventory.getContainerSize(); i++) {
+		if (targetHandler != null) {
+			for (int i = 0; i < inventory.getContainerSize(); i++) {
 				ItemStack stack = inventory.getItem(i);
-				if(stackPredicate.test(stack)) {
+				if (stackPredicate.test(stack)) {
 					ItemStack restStack = ItemHandlerHelper.insertItem(targetHandler, stack, false);
 					inventory.setItem(i, restStack);
 					return true;
@@ -85,13 +85,12 @@ public class ItemHandlerUtils {
 	}
 
 
-
 	public static ItemStack getAndSplit(IItemHandler itemhandler, int index, int amount) {
 		return index >= 0 && index < itemhandler.getSlots() && !itemhandler.getStackInSlot(index).isEmpty() && amount > 0 ? itemhandler.getStackInSlot(index).split(amount) : ItemStack.EMPTY;
 	}
 
 	public static ItemStack getAndRemove(IItemHandler itemhandler, int index) {
-		if(index >= 0 && index < itemhandler.getSlots() && itemhandler instanceof IItemHandlerModifiable modifiable) {
+		if (index >= 0 && index < itemhandler.getSlots() && itemhandler instanceof IItemHandlerModifiable modifiable) {
 			modifiable.setStackInSlot(index, ItemStack.EMPTY);
 			return modifiable.getStackInSlot(index);
 		} else {

@@ -102,9 +102,9 @@ public class ForceEntities {
 
 	public static void addSpawns(BiomeLoadingEvent event) {
 		ResourceKey<Biome> biomeKey = ResourceKey.create(Registry.BIOME_REGISTRY, event.getName());
-		if(BiomeDictionary.hasType(biomeKey, Type.OVERWORLD)) {
-			if(ConfigHandler.COMMON.ChuChuSpawning.get()) {
-				if(BiomeDictionary.hasType(biomeKey, Type.SWAMP)) {
+		if (BiomeDictionary.hasType(biomeKey, Type.OVERWORLD)) {
+			if (ConfigHandler.COMMON.ChuChuSpawning.get()) {
+				if (BiomeDictionary.hasType(biomeKey, Type.SWAMP)) {
 					event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(RED_CHU_CHU.get(), 1, 1, 1));
 					event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(GREEN_CHU_CHU.get(), 1, 1, 1));
 					event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(BLUE_CHU_CHU.get(), 1, 1, 1));
@@ -115,13 +115,13 @@ public class ForceEntities {
 				event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(BLUE_CHU_CHU.get(), ConfigHandler.COMMON.ChuChuWeight.get(), ConfigHandler.COMMON.ChuChuMinGroup.get(), ConfigHandler.COMMON.ChuChuMaxGroup.get()));
 				event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(GOLD_CHU_CHU.get(), ConfigHandler.COMMON.ChuChuWeight.get(), ConfigHandler.COMMON.ChuChuMinGroup.get(), ConfigHandler.COMMON.ChuChuMaxGroup.get()));
 			}
-			if(ConfigHandler.COMMON.FairySpawning.get()) {
+			if (ConfigHandler.COMMON.FairySpawning.get()) {
 				event.getSpawns().getSpawner(MobCategory.CREATURE).add(new MobSpawnSettings.SpawnerData(FAIRY.get(), ConfigHandler.COMMON.FairyWeight.get(), ConfigHandler.COMMON.FairyMinGroup.get(), ConfigHandler.COMMON.FairyMaxGroup.get()));
 			}
-			if(ConfigHandler.COMMON.CreeperTotSpawning.get()) {
+			if (ConfigHandler.COMMON.CreeperTotSpawning.get()) {
 				event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(CREEPER_TOT.get(), ConfigHandler.COMMON.CreeperTotWeight.get(), ConfigHandler.COMMON.CreeperTotMinGroup.get(), ConfigHandler.COMMON.CreeperTotMaxGroup.get()));
 			}
-			if(ConfigHandler.COMMON.EnderTotSpawning.get()) {
+			if (ConfigHandler.COMMON.EnderTotSpawning.get()) {
 				event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(ENDER_TOT.get(), ConfigHandler.COMMON.EnderTotWeight.get(), ConfigHandler.COMMON.EnderTotMinGroup.get(), ConfigHandler.COMMON.EnderTotMaxGroup.get()));
 			}
 		}

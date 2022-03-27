@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class SaveCardRecipeMessage {
-	public SaveCardRecipeMessage(){
+	public SaveCardRecipeMessage() {
 
 	}
 
@@ -49,7 +49,7 @@ public class SaveCardRecipeMessage {
 						iRecipe.ifPresent((recipe) -> {
 							CompoundTag nbt = stack.getOrCreateTag();
 							CompoundTag recipeContents = new CompoundTag();
-							for(int i = 0; i < craftMatrix.getContainerSize(); i++) {
+							for (int i = 0; i < craftMatrix.getContainerSize(); i++) {
 								recipeContents.put("slot_" + i, craftMatrix.getItem(i).save(new CompoundTag()));
 							}
 							recipeContents.put("result", craftResult.getItem(0).save(new CompoundTag()));
@@ -65,9 +65,9 @@ public class SaveCardRecipeMessage {
 	}
 
 	private static ItemStack getCardStack(Player player) {
-		if(player.getMainHandItem().getItem() instanceof ItemCardItem) {
+		if (player.getMainHandItem().getItem() instanceof ItemCardItem) {
 			return player.getMainHandItem();
-		} else if(player.getOffhandItem().getItem() instanceof ItemCardItem) {
+		} else if (player.getOffhandItem().getItem() instanceof ItemCardItem) {
 			return player.getOffhandItem();
 		}
 		return ItemStack.EMPTY;

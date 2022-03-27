@@ -25,53 +25,54 @@ import java.util.List;
 
 public class ForceFilledForceFlask extends BaseItem {
 
-    public ForceFilledForceFlask(Properties properties) {
-        super(properties);
-    }
+	public ForceFilledForceFlask(Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
-        if (!level.isClientSide) entityLiving.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 600, 2, false, false));
+	@Override
+	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
+		if (!level.isClientSide)
+			entityLiving.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 600, 2, false, false));
 
-        if (entityLiving instanceof ServerPlayer serverplayerentity) {
-            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
-            serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
-        }
+		if (entityLiving instanceof ServerPlayer serverplayerentity) {
+			CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
+			serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
+		}
 
-        ItemStack flaskStack = ForceRegistry.FORCE_FLASK.get().getDefaultInstance();
-        if (entityLiving instanceof Player playerIn) {
-            if(!playerIn.getAbilities().instabuild) {
-                stack.shrink(1);
-            }
+		ItemStack flaskStack = ForceRegistry.FORCE_FLASK.get().getDefaultInstance();
+		if (entityLiving instanceof Player playerIn) {
+			if (!playerIn.getAbilities().instabuild) {
+				stack.shrink(1);
+			}
 
-            if(!playerIn.getInventory().add(flaskStack)) {
-                playerIn.spawnAtLocation(flaskStack, 0F);
-            }
-        }
+			if (!playerIn.getInventory().add(flaskStack)) {
+				playerIn.spawnAtLocation(flaskStack, 0F);
+			}
+		}
 
-        return stack.isEmpty() ? flaskStack : stack;
-    }
+		return stack.isEmpty() ? flaskStack : stack;
+	}
 
-    public int getUseDuration(ItemStack stack) {
-        return 32;
-    }
+	public int getUseDuration(ItemStack stack) {
+		return 32;
+	}
 
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
-    }
+	public UseAnim getUseAnimation(ItemStack stack) {
+		return UseAnim.DRINK;
+	}
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
-        return ItemUtils.startUsingInstantly(level, playerIn, handIn);
-    }
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+		return ItemUtils.startUsingInstantly(level, playerIn, handIn);
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("item.force_filled_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
-        super.appendHoverText(stack, level, tooltip, flagIn);
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		tooltip.add(new TranslatableComponent("item.force_filled_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
+		super.appendHoverText(stack, level, tooltip, flagIn);
+	}
 
-    @Override
-    public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @javax.annotation.Nullable net.minecraft.nbt.CompoundTag nbt) {
-        return new FlaskFluidHandler(stack);
-    }
+	@Override
+	public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @javax.annotation.Nullable net.minecraft.nbt.CompoundTag nbt) {
+		return new FlaskFluidHandler(stack);
+	}
 }

@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 public class RecipeToCardMessage {
 	private List<ItemStack> stacks;
 
-	public RecipeToCardMessage(List<ItemStack> stacks){
+	public RecipeToCardMessage(List<ItemStack> stacks) {
 		this.stacks = stacks;
 	}
 
@@ -30,7 +30,7 @@ public class RecipeToCardMessage {
 	public static RecipeToCardMessage decode(final FriendlyByteBuf packetBuffer) {
 		int size = packetBuffer.readInt();
 		List<ItemStack> outputs = new ArrayList<>(size);
-		for (int i = 0 ; i < size ; i++) {
+		for (int i = 0; i < size; i++) {
 			outputs.add(packetBuffer.readItem());
 		}
 
@@ -43,9 +43,9 @@ public class RecipeToCardMessage {
 			Player player = ctx.getSender();
 			// Handle tablet version
 			ItemStack mainhand = ItemStack.EMPTY;
-			if(player.getMainHandItem().getItem() instanceof ItemCardItem) {
+			if (player.getMainHandItem().getItem() instanceof ItemCardItem) {
 				mainhand = player.getMainHandItem();
-			} else if(player.getOffhandItem().getItem() instanceof ItemCardItem) {
+			} else if (player.getOffhandItem().getItem() instanceof ItemCardItem) {
 				mainhand = player.getOffhandItem();
 			}
 			if (!mainhand.isEmpty() && mainhand.getItem() == ForceRegistry.ITEM_CARD.get()) {

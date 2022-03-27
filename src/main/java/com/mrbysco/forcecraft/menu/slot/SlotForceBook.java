@@ -9,17 +9,17 @@ import javax.annotation.Nonnull;
 
 public class SlotForceBook extends SlotItemHandler {
 
-    public SlotForceBook(IItemHandler handler, int index, int posX, int posY){
-        super(handler, index, posX, posY);
-    }
+	public SlotForceBook(IItemHandler handler, int index, int posX, int posY) {
+		super(handler, index, posX, posY);
+	}
 
-    @Override
-    public boolean mayPlace(ItemStack stack) {
-        return stack.getItem() == Items.BOOK;
-    }
+	@Override
+	public boolean mayPlace(ItemStack stack) {
+		return stack.getItem() == Items.BOOK;
+	}
 
-    @Override
-    public int getMaxStackSize(@Nonnull ItemStack stack) {
-        return 1;
-    }
+	@Override
+	public int getMaxStackSize(@Nonnull ItemStack stack) {
+		return 1;
+	}
 }

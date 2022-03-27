@@ -23,7 +23,7 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void onPlayerUpdate(TickEvent.PlayerTickEvent event) {
-		if(event.phase == TickEvent.Phase.END && !event.player.level.isClientSide) {
+		if (event.phase == TickEvent.Phase.END && !event.player.level.isClientSide) {
 			Player player = event.player;
 
 			Iterable<ItemStack> armor = player.getArmorSlots();
@@ -40,7 +40,7 @@ public class PlayerCapHandler {
 
 			if (speed > 0) {
 				MobEffectInstance speedEffect = new MobEffectInstance(MobEffects.MOVEMENT_SPEED, SPEED_DURATION, speed - 1, false, false);
-				if(!player.hasEffect(MobEffects.MOVEMENT_SPEED) || (player.hasEffect(MobEffects.MOVEMENT_SPEED) && player.getEffect(MobEffects.MOVEMENT_SPEED).getDuration() <= 100)) {
+				if (!player.hasEffect(MobEffects.MOVEMENT_SPEED) || (player.hasEffect(MobEffects.MOVEMENT_SPEED) && player.getEffect(MobEffects.MOVEMENT_SPEED).getDuration() <= 100)) {
 					player.addEffect(speedEffect);
 				}
 			}
@@ -57,7 +57,7 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void equipmentChangeEvent(LivingEquipmentChangeEvent event) {
-		if(event.getEntityLiving() instanceof Player player) {
+		if (event.getEntityLiving() instanceof Player player) {
 			updateArmorProperties(player);
 		}
 	}
@@ -79,7 +79,7 @@ public class PlayerCapHandler {
 					armorPieces++;
 
 					// Damage
-					damage += (int)(modifierCap.getSharpLevel() * ConfigHandler.COMMON.forcePunchDamage.get());
+					damage += (int) (modifierCap.getSharpLevel() * ConfigHandler.COMMON.forcePunchDamage.get());
 					// Heat
 					if (modifierCap.hasHeat()) {
 						heat++;
@@ -126,8 +126,8 @@ public class PlayerCapHandler {
 	public void harvestCheckEvent(HarvestCheck event) {
 		Player player = event.getPlayer();
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-			if(cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
-				if(event.getTargetBlock().getBlock().getExplosionResistance() <= 2) {
+			if (cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
+				if (event.getTargetBlock().getBlock().getExplosionResistance() <= 2) {
 					event.setCanHarvest(true);
 				}
 			}
@@ -138,8 +138,8 @@ public class PlayerCapHandler {
 	public void breakSpeedEvent(BreakSpeed event) {
 		Player player = event.getPlayer();
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-			if(cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
-				if(event.getOriginalSpeed() < 6) {
+			if (cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
+				if (event.getOriginalSpeed() < 6) {
 					event.setNewSpeed(6);
 				}
 			}

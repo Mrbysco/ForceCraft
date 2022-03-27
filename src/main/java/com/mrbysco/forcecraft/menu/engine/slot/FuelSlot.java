@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 
 public class FuelSlot extends SlotItemHandler {
 
-	public FuelSlot(IItemHandler handler, int index, int posX, int posY){
+	public FuelSlot(IItemHandler handler, int index, int posX, int posY) {
 		super(handler, index, posX, posY);
 	}
 
@@ -20,8 +20,8 @@ public class FuelSlot extends SlotItemHandler {
 
 	@Override
 	public int getMaxStackSize(@Nonnull ItemStack stack) {
-		if(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
-			if(stack.getMaxStackSize() > 1) {
+		if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+			if (stack.getMaxStackSize() > 1) {
 				return 1;
 			}
 		}

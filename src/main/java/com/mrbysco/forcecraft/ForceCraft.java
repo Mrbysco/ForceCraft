@@ -22,6 +22,7 @@ import com.mrbysco.forcecraft.registry.ForceEffects;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceLootModifiers;
+import com.mrbysco.forcecraft.registry.ForceRecipeSerializers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.registry.ForceTags;
@@ -48,73 +49,74 @@ import org.apache.logging.log4j.Logger;
 @Mod(Reference.MOD_ID)
 public class ForceCraft {
 
-    public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
+	public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
 
-    public static final DamageSource BLEEDING_DAMAGE = new DamageSource(Reference.MOD_ID + ".bleeding").setMagic().bypassArmor();
-    public static final DamageSource LIQUID_FORCE_DAMAGE = new DamageSource(Reference.MOD_ID + ".liquid_force").setMagic().bypassArmor();
+	public static final DamageSource BLEEDING_DAMAGE = new DamageSource(Reference.MOD_ID + ".bleeding").setMagic().bypassArmor();
+	public static final DamageSource LIQUID_FORCE_DAMAGE = new DamageSource(Reference.MOD_ID + ".liquid_force").setMagic().bypassArmor();
 
-    public static final CreativeModeTab creativeTab = (new CreativeModeTab(Reference.MOD_ID) {
-        @OnlyIn(Dist.CLIENT)
-        public ItemStack makeIcon() {
-            return new ItemStack(ForceRegistry.FORCE_GEM.get());
-        }
-    });
+	public static final CreativeModeTab creativeTab = (new CreativeModeTab(Reference.MOD_ID) {
+		@OnlyIn(Dist.CLIENT)
+		public ItemStack makeIcon() {
+			return new ItemStack(ForceRegistry.FORCE_GEM.get());
+		}
+	});
 
-    public ForceCraft() {
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.commonSpec);
-        eventBus.register(ConfigHandler.class);
+	public ForceCraft() {
+		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.commonSpec);
+		eventBus.register(ConfigHandler.class);
 
-        eventBus.register(new ForceConditions());
-        eventBus.addListener(this::setup);
+		eventBus.register(new ForceConditions());
+		eventBus.addListener(this::setup);
 
-        ForceFluids.registerFluids();
+		ForceFluids.registerFluids();
 
-        ForceRegistry.BLOCKS.register(eventBus);
-        ForceRegistry.BLOCK_ENTITIES.register(eventBus);
-        ForceRegistry.ITEMS.register(eventBus);
-        ForceSounds.SOUND_EVENTS.register(eventBus);
-        ForceFluids.FLUIDS.register(eventBus);
-        ForceEntities.ENTITIES.register(eventBus);
-        ForceEffects.EFFECTS.register(eventBus);
-        ForceFeatures.FEATURES.register(eventBus);
-        ForceContainers.CONTAINERS.register(eventBus);
-        ForceLootModifiers.GLM.register(eventBus);
-        ForceRecipes.RECIPE_SERIALIZERS.register(eventBus);
+		ForceRegistry.BLOCKS.register(eventBus);
+		ForceRegistry.BLOCK_ENTITIES.register(eventBus);
+		ForceRegistry.ITEMS.register(eventBus);
+		ForceSounds.SOUND_EVENTS.register(eventBus);
+		ForceFluids.FLUIDS.register(eventBus);
+		ForceEntities.ENTITIES.register(eventBus);
+		ForceEffects.EFFECTS.register(eventBus);
+		ForceFeatures.FEATURES.register(eventBus);
+		ForceContainers.CONTAINERS.register(eventBus);
+		ForceLootModifiers.GLM.register(eventBus);
+		ForceRecipeSerializers.RECIPE_SERIALIZERS.register(eventBus);
 
-        MinecraftForge.EVENT_BUS.register(new HeartHandler());
-        MinecraftForge.EVENT_BUS.register(new ForceDeathHandler());
-        MinecraftForge.EVENT_BUS.register(new ForceCommands());
-        MinecraftForge.EVENT_BUS.register(new CapabilityAttachHandler());
-        MinecraftForge.EVENT_BUS.register(new BaneHandler());
-        MinecraftForge.EVENT_BUS.register(new PlayerCapHandler());
-        MinecraftForge.EVENT_BUS.register(new LootingHandler());
-        MinecraftForge.EVENT_BUS.register(new LootTableHandler());
-        MinecraftForge.EVENT_BUS.register(new ToolModifierHandler());
-        MinecraftForge.EVENT_BUS.register(new WorldGenHandler());
-        MinecraftForge.EVENT_BUS.addListener(NonBurnableItemEntity.EventHandler::onExpire); //Expire event of NonBurnableItemEntity
+		MinecraftForge.EVENT_BUS.register(new HeartHandler());
+		MinecraftForge.EVENT_BUS.register(new ForceDeathHandler());
+		MinecraftForge.EVENT_BUS.register(new ForceCommands());
+		MinecraftForge.EVENT_BUS.register(new CapabilityAttachHandler());
+		MinecraftForge.EVENT_BUS.register(new BaneHandler());
+		MinecraftForge.EVENT_BUS.register(new PlayerCapHandler());
+		MinecraftForge.EVENT_BUS.register(new LootingHandler());
+		MinecraftForge.EVENT_BUS.register(new LootTableHandler());
+		MinecraftForge.EVENT_BUS.register(new ToolModifierHandler());
+		MinecraftForge.EVENT_BUS.register(new WorldGenHandler());
+		MinecraftForge.EVENT_BUS.addListener(NonBurnableItemEntity.EventHandler::onExpire); //Expire event of NonBurnableItemEntity
 
-        MinecraftForge.EVENT_BUS.addListener(CapabilityHandler::register);
+		MinecraftForge.EVENT_BUS.addListener(CapabilityHandler::register);
 
-        MinecraftForge.EVENT_BUS.addListener(ForceEntities::addSpawns);
-        eventBus.addListener(ForceEntities::registerEntityAttributes);
+		MinecraftForge.EVENT_BUS.addListener(ForceEntities::addSpawns);
+		eventBus.addListener(ForceEntities::registerEntityAttributes);
 
-        ForgeMod.enableMilkFluid(); //Enable milk from forge
+		ForgeMod.enableMilkFluid(); //Enable milk from forge
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            eventBus.addListener(ClientHandler::onClientSetup);
-            eventBus.addListener(ClientHandler::registerEntityRenders);
-            eventBus.addListener(ClientHandler::registerLayerDefinitions);
-            eventBus.addListener(ClientHandler::registerItemColors);
-            MinecraftForge.EVENT_BUS.addListener(KeybindHandler::onClientTick);
-        });
-    }
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+			eventBus.addListener(ClientHandler::onClientSetup);
+			eventBus.addListener(ClientHandler::registerEntityRenders);
+			eventBus.addListener(ClientHandler::registerLayerDefinitions);
+			eventBus.addListener(ClientHandler::registerItemColors);
+			MinecraftForge.EVENT_BUS.addListener(KeybindHandler::onClientTick);
+		});
+	}
 
-    private void setup(final FMLCommonSetupEvent event) {
-        ForceTags.initialize();
-        PacketHandler.init();
-        ForceEntities.registerSpawnPlacement();
-        ForceFeatureConfigs.initialize();
-    }
+	private void setup(final FMLCommonSetupEvent event) {
+		ForceRecipes.init();
+		ForceTags.initialize();
+		PacketHandler.init();
+		ForceEntities.registerSpawnPlacement();
+		ForceFeatureConfigs.initialize();
+	}
 }
 

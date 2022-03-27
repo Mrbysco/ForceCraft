@@ -113,16 +113,16 @@ public class ForceArrowEntity extends Arrow {
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 
-		if(compound.getBoolean("Bane")) {
+		if (compound.getBoolean("Bane")) {
 			setBane();
 		}
-		if(compound.getBoolean("Ender")) {
+		if (compound.getBoolean("Ender")) {
 			setEnder();
 		}
-		if(compound.getBoolean("AppliesGlowing")) {
+		if (compound.getBoolean("AppliesGlowing")) {
 			setAppliesGlowing();
 		}
-		if(compound.getBoolean("Speedy")) {
+		if (compound.getBoolean("Speedy")) {
 			setSpeedy();
 		}
 		this.setLuck(compound.getInt("Luck"));
@@ -133,16 +133,16 @@ public class ForceArrowEntity extends Arrow {
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 
-		if(isBane()) {
+		if (isBane()) {
 			compound.putBoolean("Bane", true);
 		}
-		if(isEnder()) {
+		if (isEnder()) {
 			compound.putBoolean("Ender", true);
 		}
-		if(appliesGlowing()) {
+		if (appliesGlowing()) {
 			compound.putBoolean("AppliesGlowing", true);
 		}
-		if(isSpeedy()) {
+		if (isSpeedy()) {
 			compound.putBoolean("Speedy", true);
 		}
 		compound.putInt("Luck", getLuck());
@@ -162,22 +162,22 @@ public class ForceArrowEntity extends Arrow {
 	protected void doPostHurtEffects(LivingEntity living) {
 		super.doPostHurtEffects(living);
 
-		if(isEnder()) {
+		if (isEnder()) {
 			ForceUtils.teleportRandomly(living);
 		}
 
-		if(appliesGlowing()) {
+		if (appliesGlowing()) {
 			living.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0));
 		}
 
-		if(getBleeding() > 0) {
+		if (getBleeding() > 0) {
 			MobUtil.addBleedingEffect(getBleeding(), living, getOwner());
 		}
 
-		if(isBane()) {
-			if(living instanceof Creeper creeper){
+		if (isBane()) {
+			if (living instanceof Creeper creeper) {
 				creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
-					if(entityCap.canExplode()){
+					if (entityCap.canExplode()) {
 						creeper.setSwellDir(-1);
 						creeper.getEntityData().set(Creeper.DATA_IS_IGNITED, false);
 						entityCap.setExplodeAbility(false);

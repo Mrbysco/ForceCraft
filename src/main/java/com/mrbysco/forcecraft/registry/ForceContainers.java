@@ -22,23 +22,23 @@ public class ForceContainers {
 	public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Reference.MOD_ID);
 
 	public static final RegistryObject<MenuType<ForceFurnaceMenu>> FORCE_FURNACE = CONTAINERS.register("force_furnace", () ->
-		IForgeMenuType.create(ForceFurnaceMenu::new));
+			IForgeMenuType.create(ForceFurnaceMenu::new));
 
 	public static final RegistryObject<MenuType<InfuserMenu>> INFUSER = CONTAINERS.register("infuser", () ->
-		IForgeMenuType.create(InfuserMenu::new));
+			IForgeMenuType.create(InfuserMenu::new));
 
 	public static final RegistryObject<MenuType<ForcePackMenu>> FORCE_PACK = CONTAINERS.register("force_pack", () ->
-		IForgeMenuType.create(ForcePackMenu::fromNetwork));
+			IForgeMenuType.create(ForcePackMenu::fromNetwork));
 
 	public static final RegistryObject<MenuType<ForceBeltMenu>> FORCE_BELT = CONTAINERS.register("force_belt", () ->
-		IForgeMenuType.create(ForceBeltMenu::fromNetwork));
+			IForgeMenuType.create(ForceBeltMenu::fromNetwork));
 
 	public static final RegistryObject<MenuType<SpoilsBagMenu>> SPOILS_BAG = CONTAINERS.register("spoils_bag", () ->
-		IForgeMenuType.create((windowId, inv, data) -> new SpoilsBagMenu(windowId, inv)));
+			IForgeMenuType.create((windowId, inv, data) -> new SpoilsBagMenu(windowId, inv)));
 
 	public static final RegistryObject<MenuType<ItemCardMenu>> ITEM_CARD = CONTAINERS.register("item_card", () ->
-		IForgeMenuType.create((windowId, inv, data) -> new ItemCardMenu(windowId, inv)));
+			IForgeMenuType.create((windowId, inv, data) -> new ItemCardMenu(windowId, inv)));
 
 	public static final RegistryObject<MenuType<ForceEngineMenu>> FORCE_ENGINE = CONTAINERS.register("force_engine", () ->
-		IForgeMenuType.create(ForceEngineMenu::new));
+			IForgeMenuType.create(ForceEngineMenu::new));
 }

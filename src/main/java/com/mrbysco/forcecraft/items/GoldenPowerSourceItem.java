@@ -4,7 +4,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.Nullable;
 
-public class GoldenPowerSourceItem extends BaseItem{
+public class GoldenPowerSourceItem extends BaseItem {
 	public GoldenPowerSourceItem(Properties properties) {
 		super(properties);
 	}

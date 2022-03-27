@@ -52,12 +52,13 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 	private static final int SET_FIRE_TIME = 10;
 	private static final int SHEARS_DMG = 238; // vanilla shears have this max damage
+
 	public ForceShearsItem(Item.Properties properties) {
 		super(properties.stacksTo(1).durability(SHEARS_DMG * 4));
 	}
 
-	private static final Item[] WOOL = { Items.RED_WOOL, Items.BLUE_WOOL, Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.WHITE_WOOL, Items.ORANGE_WOOL, Items.MAGENTA_WOOL, Items.LIGHT_BLUE_WOOL, Items.YELLOW_WOOL, Items.LIME_WOOL, Items.PINK_WOOL, Items.GRAY_WOOL, Items.LIGHT_GRAY_WOOL,
-			Items.CYAN_WOOL, Items.PURPLE_WOOL, Items.BROWN_WOOL, Items.GREEN_WOOL };
+	private static final Item[] WOOL = {Items.RED_WOOL, Items.BLUE_WOOL, Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.WHITE_WOOL, Items.ORANGE_WOOL, Items.MAGENTA_WOOL, Items.LIGHT_BLUE_WOOL, Items.YELLOW_WOOL, Items.LIME_WOOL, Items.PINK_WOOL, Items.GRAY_WOOL, Items.LIGHT_GRAY_WOOL,
+			Items.CYAN_WOOL, Items.PURPLE_WOOL, Items.BROWN_WOOL, Items.GREEN_WOOL};
 
 	private ItemStack getRandomWool(Level world) {
 		return new ItemStack(WOOL[Mth.nextInt(world.random, 0, WOOL.length)]);
@@ -208,9 +209,9 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lores, TooltipFlag flagIn) {
-    	ForceToolData fd = new ForceToolData(stack);
-    	fd.attachInformation(lores);
-    	ToolModCapability.attachInformation(stack, lores);
+		ForceToolData fd = new ForceToolData(stack);
+		fd.attachInformation(lores);
+		ToolModCapability.attachInformation(stack, lores);
 		super.appendHoverText(stack, level, lores, flagIn);
 	}
 
@@ -227,27 +228,27 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 	@Override
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
 		return false;
-	}    
-	
+	}
+
 	@Override
-    public CompoundTag getShareTag(ItemStack stack) {
-    	CompoundTag nbt = super.getShareTag(stack);
-    	
+	public CompoundTag getShareTag(ItemStack stack) {
+		CompoundTag nbt = super.getShareTag(stack);
+
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-		if(cap != null) {
+		if (cap != null) {
 			CompoundTag shareTag = ToolModCapability.writeNBT(cap);
 			nbt.put(Reference.MOD_ID, shareTag);
 		}
-        return nbt;
-    }
+		return nbt;
+	}
 
-    @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
-    	if(nbt == null || !nbt.contains(Reference.MOD_ID)) { 
-    		return;
-    	}
+	@Override
+	public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
+		if (nbt == null || !nbt.contains(Reference.MOD_ID)) {
+			return;
+		}
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-		if(cap != null) {
+		if (cap != null) {
 			CompoundTag shareTag = nbt.getCompound(Reference.MOD_ID);
 			ToolModCapability.readNBT(cap, shareTag);
 		}

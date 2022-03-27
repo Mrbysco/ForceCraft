@@ -26,7 +26,7 @@ public class RecoveryHeartItem extends BaseItem {
 		BlockPos pos = new BlockPos(player.getX(), player.getY() + player.getMyRidingOffset(), player.getZ());
 
 		int HEAL_AMT = 2;
-		for(int i = 0; i < stack.getCount(); i++) {
+		for (int i = 0; i < stack.getCount(); i++) {
 			// 2 health == 1 heart
 			player.heal(HEAL_AMT);
 			stack.shrink(1);

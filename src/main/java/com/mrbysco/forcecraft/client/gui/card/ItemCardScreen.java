@@ -37,18 +37,18 @@ public class ItemCardScreen extends AbstractContainerScreen<ItemCardMenu> {
 		super.containerTick();
 
 		ItemStack resultStack = getMenu().getCraftResult().getItem(0);
-		if(resultStack.isEmpty()) {
-			if(this.buttonSave.getMessage().getString() != invalidText.getString()) {
+		if (resultStack.isEmpty()) {
+			if (this.buttonSave.getMessage().getString() != invalidText.getString()) {
 				this.buttonSave.setMessage(invalidText);
 			}
-			if(buttonSave.active) {
+			if (buttonSave.active) {
 				buttonSave.active = false;
 			}
 		} else {
-			if(this.buttonSave.getMessage().getString() != saveText.getString()) {
+			if (this.buttonSave.getMessage().getString() != saveText.getString()) {
 				this.buttonSave.setMessage(saveText);
 			}
-			if(!buttonSave.active) {
+			if (!buttonSave.active) {
 				buttonSave.active = true;
 			}
 		}

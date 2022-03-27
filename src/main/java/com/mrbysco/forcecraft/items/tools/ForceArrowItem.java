@@ -20,30 +20,30 @@ public class ForceArrowItem extends ArrowItem {
 	@Override
 	public AbstractArrow createArrow(Level level, ItemStack stack, LivingEntity shooter) {
 		ForceArrowEntity forceArrow = new ForceArrowEntity(level, shooter);
-		if(shooter instanceof Player player) {
+		if (shooter instanceof Player player) {
 			ItemStack heldItem = player.getUseItem();
-			if(heldItem.getItem() instanceof ForceBowItem) {
+			if (heldItem.getItem() instanceof ForceBowItem) {
 				heldItem.getCapability(CAPABILITY_TOOLMOD).ifPresent(cap -> {
-					if(cap.hasFreezing()) {
+					if (cap.hasFreezing()) {
 						forceArrow.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2, false, false));
 					}
-					if(cap.hasEnder()) {
+					if (cap.hasEnder()) {
 						forceArrow.setEnder();
 					}
-					if(cap.hasBane()) {
+					if (cap.hasBane()) {
 						forceArrow.setBane();
 					}
-					if(cap.hasLight()) {
+					if (cap.hasLight()) {
 						forceArrow.setAppliesGlowing();
 					}
-					if(cap.hasBleed()) {
+					if (cap.hasBleed()) {
 						forceArrow.setBleeding(cap.getBleedLevel());
 					}
-					if(cap.hasLuck()) {
+					if (cap.hasLuck()) {
 						int luckValue = cap.getLuckLevel();
 						forceArrow.setLuck(luckValue);
 					}
-					if(cap.getSpeedLevel() > 0) {
+					if (cap.getSpeedLevel() > 0) {
 						forceArrow.setSpeedy();
 					}
 				});

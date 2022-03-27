@@ -13,59 +13,59 @@ import javax.annotation.Nullable;
 import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_BANE;
 
 public class BaneModifierCapability implements IBaneModifier, ICapabilitySerializable<CompoundTag>, ICapabilityProvider {
-    boolean canTeleport = true;
+	boolean canTeleport = true;
 
-    @Override
-    public boolean canTeleport() {
-        return canTeleport;
-    }
+	@Override
+	public boolean canTeleport() {
+		return canTeleport;
+	}
 
-    @Override
-    public void setTeleportAbility(boolean canTeleport) {
-        this.canTeleport = canTeleport;
-    }
+	@Override
+	public void setTeleportAbility(boolean canTeleport) {
+		this.canTeleport = canTeleport;
+	}
 
-    boolean canExplode = true;
+	boolean canExplode = true;
 
-    @Override
-    public boolean canExplode() {
-        return canExplode;
-    }
+	@Override
+	public boolean canExplode() {
+		return canExplode;
+	}
 
-    @Override
-    public void setExplodeAbility(boolean canExplode) {
-        this.canExplode = canExplode;
-    }
+	@Override
+	public void setExplodeAbility(boolean canExplode) {
+		this.canExplode = canExplode;
+	}
 
-    @Override
-    public CompoundTag serializeNBT() {
-        return writeNBT(this);
-    }
+	@Override
+	public CompoundTag serializeNBT() {
+		return writeNBT(this);
+	}
 
-    @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        readNBT(this, nbt);
-    }
+	@Override
+	public void deserializeNBT(CompoundTag nbt) {
+		readNBT(this, nbt);
+	}
 
-    public CompoundTag writeNBT(IBaneModifier instance) {
-        CompoundTag tag = new CompoundTag();
-        tag.putBoolean("canTeleport", instance.canTeleport());
-        tag.putBoolean("canExplode", instance.canExplode());
-        return tag;
-    }
+	public CompoundTag writeNBT(IBaneModifier instance) {
+		CompoundTag tag = new CompoundTag();
+		tag.putBoolean("canTeleport", instance.canTeleport());
+		tag.putBoolean("canExplode", instance.canExplode());
+		return tag;
+	}
 
-    public void readNBT(IBaneModifier instance, CompoundTag tag) {
-        instance.setTeleportAbility(tag.getBoolean("canTeleport"));
-        instance.setExplodeAbility(tag.getBoolean("canExplode"));
-    }
+	public void readNBT(IBaneModifier instance, CompoundTag tag) {
+		instance.setTeleportAbility(tag.getBoolean("canTeleport"));
+		instance.setExplodeAbility(tag.getBoolean("canExplode"));
+	}
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return CAPABILITY_BANE.orEmpty(cap, LazyOptional.of(() -> this));
-    }
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		return CAPABILITY_BANE.orEmpty(cap, LazyOptional.of(() -> this));
+	}
 
-    public Capability<IBaneModifier> getCapability(){
-        return CAPABILITY_BANE;
-    }
+	public Capability<IBaneModifier> getCapability() {
+		return CAPABILITY_BANE;
+	}
 }

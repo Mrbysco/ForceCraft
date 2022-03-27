@@ -29,19 +29,19 @@ public class FairyModel<T extends FairyEntity> extends HierarchicalModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 		PartDefinition inner = partdefinition.addOrReplaceChild("inner", CubeListBuilder.create()
-				.texOffs(0, 8).addBox(-1.0F, -3.0F, -1.0F, 2.0F, 2.0F, 2.0F),
+						.texOffs(0, 8).addBox(-1.0F, -3.0F, -1.0F, 2.0F, 2.0F, 2.0F),
 				PartPose.offset(0.0F, 24.0F, 0.0F));
 
 		PartDefinition leftWings = inner.addOrReplaceChild("left_wings", CubeListBuilder.create()
-				.texOffs(16, 5).addBox(2.0F, -0.5F, 0.0F, 3.0F, 3.0F, 0.0F),
+						.texOffs(16, 5).addBox(2.0F, -0.5F, 0.0F, 3.0F, 3.0F, 0.0F),
 				PartPose.ZERO);
 
 		leftWings.addOrReplaceChild("left_wings_top", CubeListBuilder.create()
-				.texOffs(16, 0).addBox(0.0F, -4.0F, 0.0F, 3.0F, 5.0F, 0.0F),
+						.texOffs(16, 0).addBox(0.0F, -4.0F, 0.0F, 3.0F, 5.0F, 0.0F),
 				PartPose.offsetAndRotation(2.0F, -3.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
 
 		PartDefinition rightWings = inner.addOrReplaceChild("right_wings", CubeListBuilder.create()
-				.texOffs(22, 5).addBox(-5.0F, -0.5F, 0.0F, 3.0F, 3.0F, 0.0F),
+						.texOffs(22, 5).addBox(-5.0F, -0.5F, 0.0F, 3.0F, 3.0F, 0.0F),
 				PartPose.ZERO);
 
 		rightWings.addOrReplaceChild("right_wings_top", CubeListBuilder.create()
@@ -70,7 +70,7 @@ public class FairyModel<T extends FairyEntity> extends HierarchicalModel<T> {
 			this.rightWings.yRot = 0.2618F;
 		} else {
 			float f = ageInTicks * 2.1F;
-			this.rightWings.yRot = Mth.cos(f) * (float)Math.PI * 0.15F;
+			this.rightWings.yRot = Mth.cos(f) * (float) Math.PI * 0.15F;
 			this.leftWings.yRot = -this.rightWings.yRot;
 		}
 	}

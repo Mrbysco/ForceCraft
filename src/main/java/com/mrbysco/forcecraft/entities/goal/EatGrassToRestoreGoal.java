@@ -15,11 +15,17 @@ import java.util.function.Predicate;
 
 public class EatGrassToRestoreGoal extends Goal {
 	private static final Predicate<BlockState> IS_GRASS = BlockStatePredicate.forBlock(Blocks.GRASS);
-	/** The entity owner of this AITask */
+	/**
+	 * The entity owner of this AITask
+	 */
 	private final Mob grassEaterEntity;
-	/** The world the grass eater entity is eating from */
+	/**
+	 * The world the grass eater entity is eating from
+	 */
 	private final Level entityWorld;
-	/** Number of ticks since the entity started to eat grass */
+	/**
+	 * Number of ticks since the entity started to eat grass
+	 */
 	private int eatingGrassTimer;
 
 	public EatGrassToRestoreGoal(Mob grassEaterEntityIn) {
@@ -50,7 +56,7 @@ public class EatGrassToRestoreGoal extends Goal {
 	 */
 	public void start() {
 		this.eatingGrassTimer = 40;
-		this.entityWorld.broadcastEntityEvent(this.grassEaterEntity, (byte)10);
+		this.entityWorld.broadcastEntityEvent(this.grassEaterEntity, (byte) 10);
 		this.grassEaterEntity.getNavigation().stop();
 	}
 
@@ -103,7 +109,7 @@ public class EatGrassToRestoreGoal extends Goal {
 	}
 
 	public void transformMob() {
-		if(this.grassEaterEntity instanceof IColdMob coldMob) {
+		if (this.grassEaterEntity instanceof IColdMob coldMob) {
 			coldMob.transformMob(this.grassEaterEntity, this.entityWorld);
 		}
 	}

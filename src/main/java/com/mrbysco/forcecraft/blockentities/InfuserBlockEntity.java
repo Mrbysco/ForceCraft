@@ -6,7 +6,6 @@ import com.mrbysco.forcecraft.capabilities.forcerod.IForceRodModifier;
 import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.config.ConfigHandler;
-import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import com.mrbysco.forcecraft.items.ForceArmorItem;
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
@@ -19,6 +18,7 @@ import com.mrbysco.forcecraft.items.tools.ForceRodItem;
 import com.mrbysco.forcecraft.items.tools.ForceShearsItem;
 import com.mrbysco.forcecraft.items.tools.ForceShovelItem;
 import com.mrbysco.forcecraft.items.tools.ForceSwordItem;
+import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
@@ -37,11 +37,9 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -82,120 +80,112 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Container {
 
-    private static final int FLUID_CHARGE = 1000;
+	private static final int FLUID_CHARGE = 1000;
 
 	public boolean canWork = false;
 	public boolean makesSpecialSound = false;
 
-    public int processTime = 0;
-    public int maxProcessTime = 20;
+	public int processTime = 0;
+	public int maxProcessTime = 20;
 
 	// Slots [0,7] are the surround
 	public static final int SLOT_TOOL = 8;
-    public static final int SLOT_GEM = 9;
+	public static final int SLOT_GEM = 9;
 	public static final int SLOT_BOOK = 10;
 	// Currently, these costs are fixed PER infusing a thing once
 	public static final int ENERGY_COST_PER = 20;
-    public static final int FLUID_COST_PER = 1000;
-    // Ratio o f gem slot to fluid tank
+	public static final int FLUID_COST_PER = 1000;
+	// Ratio o f gem slot to fluid tank
 	private static final int FLUID_PER_GEM = 500;
 
 	protected Map<Integer, InfuseRecipe> currentRecipes = new HashMap<>();
 
 	protected FluidTank tank = new FluidTank(50000) {
-        @Override
-        public FluidStack drain(FluidStack resource, FluidAction action) {
-            if (!isFluidEqual(resource)) {
-                return FluidStack.EMPTY;
-            }
-            if (action.simulate()) {
-                int amount = tank.getFluidAmount() - resource.getAmount() < 0 ? tank.getFluidAmount() : resource.getAmount();
-                return new FluidStack(tank.getFluid(), amount);
-            }
-            return super.drain(resource.getAmount(), action);
-        }
+		@Override
+		public FluidStack drain(FluidStack resource, FluidAction action) {
+			if (!isFluidEqual(resource)) {
+				return FluidStack.EMPTY;
+			}
+			if (action.simulate()) {
+				int amount = tank.getFluidAmount() - resource.getAmount() < 0 ? tank.getFluidAmount() : resource.getAmount();
+				return new FluidStack(tank.getFluid(), amount);
+			}
+			return super.drain(resource.getAmount(), action);
+		}
 
 		@Override
 		protected void onContentsChanged() {
 			refreshClient();
 		}
 
-        @Override
-        public FluidStack drain(int maxDrain, FluidAction action) {
-            return super.drain(maxDrain, action);
-        }
+		@Override
+		public FluidStack drain(int maxDrain, FluidAction action) {
+			return super.drain(maxDrain, action);
+		}
 
 		@Override
 		public boolean isFluidValid(FluidStack stack) {
-			for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation("forge","force")).getValues()){
-				if (fluid == stack.getFluid()) {
-					return true;
-				}
-			}
-			return false;
+			return ForceTags.FORCE_LOOKUP.contains(stack.getFluid());
 		}
 	};
-    private LazyOptional<IFluidHandler> tankHolder = LazyOptional.of(() -> tank);
+	private LazyOptional<IFluidHandler> tankHolder = LazyOptional.of(() -> tank);
 
-    public final ItemStackHandler handler = new ItemStackHandler(11) {
-        @Override
-        protected int getStackLimit(int slot, ItemStack stack) {
-        	if(slot == SLOT_GEM) {
-        		return 64;
+	public final ItemStackHandler handler = new ItemStackHandler(11) {
+		@Override
+		protected int getStackLimit(int slot, ItemStack stack) {
+			if (slot == SLOT_GEM) {
+				return 64;
 			}
-            return 1;
-        }
+			return 1;
+		}
 
-        @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-        	if(slot < SLOT_TOOL) {
-        		return matchesModifier(stack);
-        		// is valid modifier TODO : fixing this check will fix placing and shift-clicking
-        		// non ingredients into the circle
-        	}
-        	else if(slot == SLOT_TOOL) {
-        		// don't hardcode validation here, check recipe "center" tag or item
-                return matchesTool(stack);// stack.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
-        	}
-        	else if(slot == SLOT_BOOK) {
-        		return stack.getItem() == ForceRegistry.UPGRADE_TOME.get();
-        	}
-        	else if(slot == SLOT_GEM) {
-        		return stack.getItem() == ForceRegistry.FORCE_GEM.get();
-        	}
-        	// else tool or something for the around
-        	return true;
-        }
+		@Override
+		public boolean isItemValid(int slot, ItemStack stack) {
+			if (slot < SLOT_TOOL) {
+				return matchesModifier(stack);
+				// is valid modifier TODO : fixing this check will fix placing and shift-clicking
+				// non ingredients into the circle
+			} else if (slot == SLOT_TOOL) {
+				// don't hardcode validation here, check recipe "center" tag or item
+				return matchesTool(stack);// stack.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
+			} else if (slot == SLOT_BOOK) {
+				return stack.getItem() == ForceRegistry.UPGRADE_TOME.get();
+			} else if (slot == SLOT_GEM) {
+				return stack.getItem() == ForceRegistry.FORCE_GEM.get();
+			}
+			// else tool or something for the around
+			return true;
+		}
 	};
-    private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
+	private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
 
-    public ForceEnergyStorage energyStorage = new ForceEnergyStorage(64000, 1000);
-    private LazyOptional<ForceEnergyStorage> energyHolder = LazyOptional.of(() -> energyStorage);
+	public ForceEnergyStorage energyStorage = new ForceEnergyStorage(64000, 1000);
+	private LazyOptional<ForceEnergyStorage> energyHolder = LazyOptional.of(() -> energyStorage);
 
-    private NonNullList<ItemStack> infuserContents = NonNullList.create();
+	private NonNullList<ItemStack> infuserContents = NonNullList.create();
 
 
-    public InfuserBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
-        super(blockEntityType, pos, state);
-    }
+	public InfuserBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+		super(blockEntityType, pos, state);
+	}
 
-    public InfuserBlockEntity(BlockPos pos, BlockState state) {
-        this(ForceRegistry.INFUSER_BLOCK_ENTITY.get(), pos, state);
-    }
+	public InfuserBlockEntity(BlockPos pos, BlockState state) {
+		this(ForceRegistry.INFUSER_BLOCK_ENTITY.get(), pos, state);
+	}
 
-    @Override
-    public void load(CompoundTag compound) {
-    	this.processTime = compound.getInt("processTime");
-    	this.maxProcessTime = compound.getInt("maxProcessTime");
-        //Items
-    	canWork = compound.getBoolean("canWork");
-        handler.deserializeNBT(compound.getCompound("ItemStackHandler"));
-        ContainerHelper.loadAllItems(compound, this.infuserContents);
-        energyStorage.setEnergy(compound.getInt("EnergyHandler"));
-        tank.readFromNBT(compound);
+	@Override
+	public void load(CompoundTag compound) {
+		this.processTime = compound.getInt("processTime");
+		this.maxProcessTime = compound.getInt("maxProcessTime");
+		//Items
+		canWork = compound.getBoolean("canWork");
+		handler.deserializeNBT(compound.getCompound("ItemStackHandler"));
+		ContainerHelper.loadAllItems(compound, this.infuserContents);
+		energyStorage.setEnergy(compound.getInt("EnergyHandler"));
+		tank.readFromNBT(compound);
 
-        super.load(compound);
-    }
+		super.load(compound);
+	}
 
 	@Override
 	protected void saveAdditional(CompoundTag compound) {
@@ -210,99 +200,97 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, InfuserBlockEntity infuser) {
-        if (infuser.handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
+		if (infuser.handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
 			infuser.processForceGems();
-        }
+		}
 
-        if (infuser.canWork) {
+		if (infuser.canWork) {
 			infuser.processTime++;
 
-			if(level.getGameTime() % 60 == 0) {
+			if (level.getGameTime() % 60 == 0) {
 				infuser.makeWorkSound();
 			}
 
-			if(infuser.energyStorage.getEnergyStored() > ENERGY_COST_PER) {
+			if (infuser.energyStorage.getEnergyStored() > ENERGY_COST_PER) {
 				infuser.energyStorage.consumePower(ENERGY_COST_PER);
 			}
 
-        	if(infuser.processTime < infuser.maxProcessTime) {
-        		return;
-        	}
+			if (infuser.processTime < infuser.maxProcessTime) {
+				return;
+			}
 			infuser.processTime = 0;
-        	//working with No progress for now, just is valid and did i turn it on
+			//working with No progress for now, just is valid and did i turn it on
 
-        	//once we have a valid tool and have waited. go do the thing
-        	if(infuser.isWorkAllowed()) {
-        		if(infuser.areAllModifiersEmpty() && infuser.canCharge()) {
+			//once we have a valid tool and have waited. go do the thing
+			if (infuser.isWorkAllowed()) {
+				if (infuser.areAllModifiersEmpty() && infuser.canCharge()) {
 					infuser.processForceCharging();
-        		}
-        		else if(infuser.recipesStillMatch()) {
+				} else if (infuser.recipesStillMatch()) {
 					infuser.processTool();
-        		}
+				}
 
 				infuser.stopWorkSound();
 
-        		if(infuser.makesSpecialSound) {
-					infuser.playSound(ForceSounds.INFUSER_SPECIAL_DONE.get(),1.0F, 1.0F);
+				if (infuser.makesSpecialSound) {
+					infuser.playSound(ForceSounds.INFUSER_SPECIAL_DONE.get(), 1.0F, 1.0F);
 				} else {
-					infuser.playSound(ForceSounds.INFUSER_DONE.get(),1.0F, 1.0F);
+					infuser.playSound(ForceSounds.INFUSER_DONE.get(), 1.0F, 1.0F);
 				}
 				infuser.makesSpecialSound = false;
-        	}
-        	// auto turn off when done
-        	//even if tool or book slot become empty, dont auto run next insert
+			}
+			// auto turn off when done
+			//even if tool or book slot become empty, dont auto run next insert
 			infuser.canWork = false;
 			infuser.processTime = 0;
 
 			infuser.refreshClient();
-        }
-        else {
+		} else {
 			infuser.processTime = 0;
-        }
-    }
+		}
+	}
 
-    public void startWork() {
-    	canWork = true;
-    	processTime = 0;
-    	setMaxTimeFromRecipes();
-    	if(areAllModifiersEmpty() && canCharge()) {
+	public void startWork() {
+		canWork = true;
+		processTime = 0;
+		setMaxTimeFromRecipes();
+		if (areAllModifiersEmpty() && canCharge()) {
 			maxProcessTime = ConfigHandler.COMMON.forceInfusingTime.get();
 		}
-    	if(maxProcessTime <= 0) {
-    		//no valid recipes
-        	canWork = false;
-        	maxProcessTime = 0;
-    	}
-    	if(canWork) {
+		if (maxProcessTime <= 0) {
+			//no valid recipes
+			canWork = false;
+			maxProcessTime = 0;
+		}
+		if (canWork) {
 			stopWorkSound();
 			makesSpecialSound = false;
-    		if(level.random.nextInt(10) == 0) {
-    			makesSpecialSound = true;
-				playSound(ForceSounds.INFUSER_SPECIAL_BEEP.get(),1.0F, 1.0F);
+			if (level.random.nextInt(10) == 0) {
+				makesSpecialSound = true;
+				playSound(ForceSounds.INFUSER_SPECIAL_BEEP.get(), 1.0F, 1.0F);
 			}
 			makeWorkSound();
 		}
-        refreshClient();
-    }
+		refreshClient();
+	}
 
-    public void makeWorkSound() {
-		if(makesSpecialSound) {
-			playSound(ForceSounds.INFUSER_SPECIAL.get(),1.0F, 1.0F);
+	public void makeWorkSound() {
+		if (makesSpecialSound) {
+			playSound(ForceSounds.INFUSER_SPECIAL.get(), 1.0F, 1.0F);
 		} else {
-			playSound(ForceSounds.INFUSER_WORKING.get(),1.0F, 1.0F);
+			playSound(ForceSounds.INFUSER_WORKING.get(), 1.0F, 1.0F);
 		}
 	}
 
 	public void playSound(SoundEvent event, float volume, float pitch) {
-    	BlockPos pos = getBlockPos();
+		BlockPos pos = getBlockPos();
 		level.playSound((Player) null, pos.getX(), pos.getY(), pos.getZ(), event, SoundSource.BLOCKS, volume, pitch);
 	}
 
 	public void stopWorkSound() {
-		if(!level.isClientSide) {
+		if (!level.isClientSide) {
 			BlockPos pos = getBlockPos();
-			for(Player playerentity : level.players()) {
-				if(playerentity.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 200) {
+			for (Player playerentity : level.players()) {
+				if (playerentity.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 200) {
 					PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) playerentity), new com.mrbysco.forcecraft.networking.message.StopInfuserSoundMessage());
 				}
 			}
@@ -311,9 +299,9 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	private void setMaxTimeFromRecipes() {
 		maxProcessTime = 0;
-		if(!this.getBookInSlot().isEmpty()) { //Make sure it doesn't run if the book is missing
+		if (!this.getBookInSlot().isEmpty()) { //Make sure it doesn't run if the book is missing
 			List<InfuseRecipe> recipes = new ArrayList<>(getMatchingRecipes().values());
-			if(!recipes.isEmpty()) {
+			if (!recipes.isEmpty()) {
 				for (InfuseRecipe recipeCurrent : recipes) {
 //					ForceCraft.LOGGER.info(recipeCurrent.getId() + " increase  "+ recipeCurrent.getTime());
 					maxProcessTime += recipeCurrent.getTime();
@@ -323,17 +311,17 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	protected Map<Integer, InfuseRecipe> getMatchingRecipes() {
-		if(getBookInSlot().isEmpty()) return new HashMap<>();
+		if (getBookInSlot().isEmpty()) return new HashMap<>();
 		if (!currentRecipes.isEmpty() && recipesStillMatch()) return currentRecipes;
 		else {
 			Map<Integer, InfuseRecipe> matchingRecipes = new HashMap<>();
 			for (int i = 0; i < SLOT_TOOL; i++) {
 				ItemStack modifier = getModifier(i);
-				if(modifier.isEmpty()) continue;
+				if (modifier.isEmpty()) continue;
 
 				List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE);
-				for(InfuseRecipe recipe : recipes) {
-					if(recipe.matchesModifier(this, modifier, false)) {
+				for (InfuseRecipe recipe : recipes) {
+					if (recipe.matchesModifier(this, modifier, false)) {
 						matchingRecipes.put(i, recipe);
 						break;
 					}
@@ -344,10 +332,10 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	protected boolean matchesModifier(ItemStack stack) {
-		if(level != null) {
+		if (level != null) {
 			List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE);
-			for(InfuseRecipe recipe : recipes) {
-				if(recipe.matchesModifier(this, stack)) {
+			for (InfuseRecipe recipe : recipes) {
+				if (recipe.matchesModifier(this, stack)) {
 					return true;
 				}
 			}
@@ -356,10 +344,10 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	protected boolean matchesTool(ItemStack toolStack) {
-		if(level != null) {
+		if (level != null) {
 			List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE);
-			for(InfuseRecipe recipe : recipes) {
-				if(recipe.matchesTool(toolStack, true)) {
+			for (InfuseRecipe recipe : recipes) {
+				if (recipe.matchesTool(toolStack, true)) {
 					return true;
 				}
 			}
@@ -370,11 +358,11 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	protected boolean recipesStillMatch() {
 		for (HashMap.Entry<Integer, InfuseRecipe> entry : currentRecipes.entrySet()) {
 			ItemStack modifier = getModifier(entry.getKey());
-			if(!entry.getValue().matchesModifier(this, modifier, false)) {
+			if (!entry.getValue().matchesModifier(this, modifier, false)) {
 				return false;
 			}
 		}
-    	return true;
+		return true;
 	}
 
 	private void refreshClient() {
@@ -383,42 +371,42 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		level.sendBlockUpdated(worldPosition, state, state, 2);
 	}
 
-    //Processes force Gems in the force infuser slot
-    private void processForceGems() {
-        FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
-		if(tank.getFluidAmount() + force.getAmount() <= tank.getCapacity()) {
-            fill(force, FluidAction.EXECUTE);
-            handler.getStackInSlot(SLOT_GEM).shrink(1);
+	//Processes force Gems in the force infuser slot
+	private void processForceGems() {
+		FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
+		if (tank.getFluidAmount() + force.getAmount() <= tank.getCapacity()) {
+			fill(force, FluidAction.EXECUTE);
+			handler.getStackInSlot(SLOT_GEM).shrink(1);
 
-            refreshClient();
-        }
-    }
+			refreshClient();
+		}
+	}
 
-    public boolean areAllModifiersEmpty() {
-    	int emptySlots = 0;
-        for (int i = 0; i < SLOT_TOOL; i++) {
-        	if(handler.getStackInSlot(i).isEmpty()) {
-        		emptySlots++;
-        	}
-        }
+	public boolean areAllModifiersEmpty() {
+		int emptySlots = 0;
+		for (int i = 0; i < SLOT_TOOL; i++) {
+			if (handler.getStackInSlot(i).isEmpty()) {
+				emptySlots++;
+			}
+		}
 
-    	return emptySlots == 8;
-    }
+		return emptySlots == 8;
+	}
 
-    private void processForceCharging() {
-        ItemStack tool = getFromToolSlot();
+	private void processForceCharging() {
+		ItemStack tool = getFromToolSlot();
 
-        ForceToolData force = new ForceToolData(tool);
-        force.charge(FLUID_CHARGE);
-        tank.drain(FLUID_CHARGE, FluidAction.EXECUTE);
-        force.write(tool);
-    }
+		ForceToolData force = new ForceToolData(tool);
+		force.charge(FLUID_CHARGE);
+		tank.drain(FLUID_CHARGE, FluidAction.EXECUTE);
+		force.write(tool);
+	}
 
-    private void processTool() {
+	private void processTool() {
 		for (HashMap.Entry<Integer, InfuseRecipe> entry : currentRecipes.entrySet()) {
 			ItemStack modifier = getModifier(entry.getKey());
 			InfuseRecipe recipe = entry.getValue();
-			if(recipe.matchesModifier(this, modifier, true)) {
+			if (recipe.matchesModifier(this, modifier, true)) {
 				ItemStack tool = getFromToolSlot();
 				boolean success = applyModifier(tool, modifier, recipe);
 				if (success) {
@@ -434,68 +422,68 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 			}
 		}
 
-        // TODO: is this notfiy needed?
-        level.sendBlockUpdated(worldPosition, level.getBlockState(worldPosition), level.getBlockState(worldPosition), 2);
-    }
+		// TODO: is this notfiy needed?
+		level.sendBlockUpdated(worldPosition, level.getBlockState(worldPosition), level.getBlockState(worldPosition), 2);
+	}
 
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
+	@Override
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
 
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
+	@Override
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
 		load(packet.getTag());
-    }
+	}
 
-    @Override
-    public CompoundTag getUpdateTag() {
+	@Override
+	public CompoundTag getUpdateTag() {
 		CompoundTag tag = new CompoundTag();
 		saveAdditional(tag);
 		return tag;
-    }
+	}
 
 	@Override
 	public void handleUpdateTag(CompoundTag tag) {
 		super.handleUpdateTag(tag);
 	}
 
-    @Override
-    public CompoundTag getTileData() {
-        CompoundTag nbt = new CompoundTag();
-        this.saveAdditional(nbt);
-        return nbt;
-    }
+	@Override
+	public CompoundTag getTileData() {
+		CompoundTag nbt = new CompoundTag();
+		this.saveAdditional(nbt);
+		return nbt;
+	}
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return handlerHolder.cast();
-        }
-        if (capability == FLUID_HANDLER_CAPABILITY) {
-            return tankHolder.cast();
-        }
-        if (capability == CapabilityEnergy.ENERGY) {
-            return energyHolder.cast();
-        }
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return handlerHolder.cast();
+		}
+		if (capability == FLUID_HANDLER_CAPABILITY) {
+			return tankHolder.cast();
+		}
+		if (capability == CapabilityEnergy.ENERGY) {
+			return energyHolder.cast();
+		}
 
-        return super.getCapability(capability, facing);
-    }
+		return super.getCapability(capability, facing);
+	}
 
 	public boolean hasTool() {
-        ItemStack tool = getFromToolSlot();
+		ItemStack tool = getFromToolSlot();
 		return !tool.isEmpty();
-    }
+	}
 
 	public boolean hasValidBook() {
-        ItemStack tool = getBookInSlot();
+		ItemStack tool = getBookInSlot();
 		if (!tool.isEmpty()) {
-            return tool.getItem() == ForceRegistry.UPGRADE_TOME.get();
-        }
-        return false;
-    }
+			return tool.getItem() == ForceRegistry.UPGRADE_TOME.get();
+		}
+		return false;
+	}
 
-    public ItemStack getFromToolSlot() {
+	public ItemStack getFromToolSlot() {
 		return handler.getStackInSlot(SLOT_TOOL);
 	}
 
@@ -504,33 +492,34 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	public ItemStack getModifier(int slot) {
-    	if(slot >= 0 && slot <= SLOT_TOOL - 1) {
+		if (slot >= 0 && slot <= SLOT_TOOL - 1) {
 			return handler.getStackInSlot(slot);
-    	}
-        return ItemStack.EMPTY;
-    }
+		}
+		return ItemStack.EMPTY;
+	}
 
 	public boolean hasValidModifer(int slot) {
-        return !getModifier(slot).isEmpty();
-    }
+		return !getModifier(slot).isEmpty();
+	}
 
-    public boolean canCharge() {
+	public boolean canCharge() {
 		ItemStack tool = getFromToolSlot();
-    	return isValidChargeableStack(tool) && tank.getFluidAmount() > FLUID_CHARGE;
+		return isValidChargeableStack(tool) && tank.getFluidAmount() > FLUID_CHARGE;
 	}
 
-    public boolean isValidChargeableStack(ItemStack stack) {
+	public boolean isValidChargeableStack(ItemStack stack) {
 		CompoundTag tag = stack.getTag();
-    	return stack.is(ForceTags.VALID_INFUSER_CHARGE) && tag != null && tag.contains("ForceInfused") && stack.getCount() == 1;
+		return stack.is(ForceTags.VALID_INFUSER_CHARGE) && tag != null && tag.contains("ForceInfused") && stack.getCount() == 1;
 	}
 
-    /**
-     * Loop on all modifiers and apply first one that matches the input test.
-     * @param tool
-     * @param modifier
-     * @return
-     */
-    private boolean applyModifier(ItemStack tool, ItemStack modifier, InfuseRecipe recipe) {
+	/**
+	 * Loop on all modifiers and apply first one that matches the input test.
+	 *
+	 * @param tool
+	 * @param modifier
+	 * @return
+	 */
+	private boolean applyModifier(ItemStack tool, ItemStack modifier, InfuseRecipe recipe) {
 		UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
 		//if the recipe level does not exceed what the book has
 		//test the ingredient of this recipe, if it matches me
@@ -551,180 +540,175 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		//	ForceCraft.LOGGER.info(" apply returned false on {} to the tool {}", recipe.resultModifier, tool);
 		//}
 
-        return false;
-    }
+		return false;
+	}
 
-    // TODO: refactor these static below into another place, possibly InfuserModifier class
+	// TODO: refactor these static below into another place, possibly InfuserModifier class
 
 	static boolean applyCamo(ItemStack tool, ItemStack mod) {
 		List<MobEffectInstance> effects = PotionUtils.getMobEffects(mod);
 		for (MobEffectInstance e : effects) {
-		    if (e.getEffect() == MobEffects.NIGHT_VISION) {
-		        return addSightModifier(tool);
-		    }
-		    if (e.getEffect() == MobEffects.INVISIBILITY) {
-		        return addCamoModifier(tool);
-		    }
+			if (e.getEffect() == MobEffects.NIGHT_VISION) {
+				return addSightModifier(tool);
+			}
+			if (e.getEffect() == MobEffects.INVISIBILITY) {
+				return addCamoModifier(tool);
+			}
 		}
 		return false;
 	}
 
-    static boolean addLightModifier(ItemStack stack) {
+	static boolean addLightModifier(ItemStack stack) {
 		Item item = stack.getItem();
-        if (item instanceof ForceRodItem) {
-            IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-            if(rodCap != null && !rodCap.hasLight()) {
-                rodCap.setLight(true);
+		if (item instanceof ForceRodItem) {
+			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
+			if (rodCap != null && !rodCap.hasLight()) {
+				rodCap.setLight(true);
 				addInfusedTag(stack);
-                return true;
-            }
-        } else if(item instanceof ForceBowItem) {
+				return true;
+			}
+		} else if (item instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null && !modifierCap.hasLight()) {
+			if (modifierCap != null && !modifierCap.hasLight()) {
 				modifierCap.setLight(true);
 				addInfusedTag(stack);
 				return true;
 			}
 		}
-        return false;
-    }
+		return false;
+	}
 
-    private static boolean addCamoModifier(ItemStack stack) {
+	private static boolean addCamoModifier(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ForceRodItem) {
 			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-			if(rodCap != null && !rodCap.hasCamoModifier()) {
+			if (rodCap != null && !rodCap.hasCamoModifier()) {
 				rodCap.setCamoModifier(true);
 				addInfusedTag(stack);
 				return true;
 			}
 		} else if (item instanceof ForceArmorItem) {
 			IToolModifier toolCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(toolCap != null && !toolCap.hasCamo()) {
+			if (toolCap != null && !toolCap.hasCamo()) {
 				toolCap.setCamo(true);
 				addInfusedTag(stack);
 				return true;
 			}
 		}
-        return false;
-    }
+		return false;
+	}
 
-    private static boolean addSightModifier(ItemStack stack) {
-        if (stack.getItem() instanceof ForceRodItem) {
-            IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-            if(rodCap != null && !rodCap.hasSightModifier()) {
-                rodCap.setSightModifier(true);
+	private static boolean addSightModifier(ItemStack stack) {
+		if (stack.getItem() instanceof ForceRodItem) {
+			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
+			if (rodCap != null && !rodCap.hasSightModifier()) {
+				rodCap.setSightModifier(true);
 				addInfusedTag(stack);
-                return true;
-            }
-        }
-        return false;
-    }
+				return true;
+			}
+		}
+		return false;
+	}
 
-    static boolean addWingModifier(ItemStack stack) {
+	static boolean addWingModifier(ItemStack stack) {
 		Item item = stack.getItem();
-        if (item instanceof ForceSwordItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null && !modifierCap.hasWing()) {
-                modifierCap.setWing(true);
-				addInfusedTag(stack);
-                return true;
-            }
-        }
-        else if (item instanceof ForceArmorItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null && !modifierCap.hasWing()) {
-                modifierCap.setWing(true);
-				addInfusedTag(stack);
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    static boolean addBaneModifier(ItemStack stack) {
-        Item item = stack.getItem();
-		if(item instanceof ForceSwordItem) {
+		if (item instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null && !modifierCap.hasBane()) {
-				modifierCap.setBane(1);
+			if (modifierCap != null && !modifierCap.hasWing()) {
+				modifierCap.setWing(true);
+				addInfusedTag(stack);
+				return true;
+			}
+		} else if (item instanceof ForceArmorItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null && !modifierCap.hasWing()) {
+				modifierCap.setWing(true);
 				addInfusedTag(stack);
 				return true;
 			}
 		}
-		else if(item instanceof ForceBowItem) {
+
+		return false;
+	}
+
+	static boolean addBaneModifier(ItemStack stack) {
+		Item item = stack.getItem();
+		if (item instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null && !modifierCap.hasBane()) {
+			if (modifierCap != null && !modifierCap.hasBane()) {
 				modifierCap.setBane(1);
 				addInfusedTag(stack);
 				return true;
 			}
-		}
-		else if (item instanceof ForceArmorItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null) {
-				if(modifierCap != null && !modifierCap.hasBane()) {
+		} else if (item instanceof ForceBowItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null && !modifierCap.hasBane()) {
+				modifierCap.setBane(1);
+				addInfusedTag(stack);
+				return true;
+			}
+		} else if (item instanceof ForceArmorItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap != null && !modifierCap.hasBane()) {
 					modifierCap.setBane(1);
 					addInfusedTag(stack);
 					return true;
-                }
-            }
-        }
-        return false;
-    }
+				}
+			}
+		}
+		return false;
+	}
 
-    static boolean addBleedingModifier(ItemStack stack) {
-        Item item = stack.getItem();
-        int MAX_CAP = ConfigHandler.COMMON.bleedCap.get();
-		if(item instanceof ForceSwordItem) {
+	static boolean addBleedingModifier(ItemStack stack) {
+		Item item = stack.getItem();
+		int MAX_CAP = ConfigHandler.COMMON.bleedCap.get();
+		if (item instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null && modifierCap.getBleedLevel() < MAX_CAP) {
+			if (modifierCap != null && modifierCap.getBleedLevel() < MAX_CAP) {
 				modifierCap.incrementBleed();
 				addInfusedTag(stack);
 				return true;
 			}
-		}
-		else if(item instanceof ForceBowItem) {
+		} else if (item instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null && modifierCap.getBleedLevel() < MAX_CAP) {
+			if (modifierCap != null && modifierCap.getBleedLevel() < MAX_CAP) {
 				modifierCap.incrementBleed();
 				addInfusedTag(stack);
 				return true;
 			}
-		}
-		else if (item instanceof ForceArmorItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null) {
-				if(modifierCap.getBleedLevel() < MAX_CAP) {
+		} else if (item instanceof ForceArmorItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap.getBleedLevel() < MAX_CAP) {
 					modifierCap.incrementBleed();
 					addInfusedTag(stack);
 					return true;
 				}
-            }
-        }
-        return false;
-    }
+			}
+		}
+		return false;
+	}
 
 	static boolean addEnderModifier(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ForceRodItem) {
 			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-			if(rodCap != null && !rodCap.isRodofEnder()) {
+			if (rodCap != null && !rodCap.isRodofEnder()) {
 				rodCap.setEnderModifier(true);
 				addInfusedTag(stack);
 				return true;
 			}
 		} else if (item instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null && !modifierCap.hasEnder()) {
+			if (modifierCap != null && !modifierCap.hasEnder()) {
 				modifierCap.setEnder(true);
 				addInfusedTag(stack);
 				return true;
 			}
 		} else if (item instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null && !modifierCap.hasEnder()) {
+			if (modifierCap != null && !modifierCap.hasEnder()) {
 				modifierCap.setEnder(true);
 				addInfusedTag(stack);
 				return true;
@@ -736,7 +720,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	static boolean addFreezingModifier(ItemStack stack) {
 		if (stack.getItem() instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null && !modifierCap.hasFreezing()) {
+			if (modifierCap != null && !modifierCap.hasFreezing()) {
 				modifierCap.setFreezing(true);
 				addInfusedTag(stack);
 				return true;
@@ -745,347 +729,337 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		return false;
 	}
 
-    static boolean addHealingModifier(ItemStack stack) {
-        if (stack.getItem() instanceof ForceRodItem) {
-            IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-            if(rodCap != null) {
+	static boolean addHealingModifier(ItemStack stack) {
+		if (stack.getItem() instanceof ForceRodItem) {
+			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
+			if (rodCap != null) {
 				int MAX_CAP = ConfigHandler.COMMON.healingCap.get();
-				if(rodCap.getHealingLevel() < MAX_CAP) {
+				if (rodCap.getHealingLevel() < MAX_CAP) {
 					rodCap.incrementHealing();
 					addInfusedTag(stack);
 					return true;
 				}
-            }
-        }
-        return false;
-    }
+			}
+		}
+		return false;
+	}
 
-    static boolean addLumberjackModifier(ItemStack stack) {
-        if (stack.getItem() instanceof ForceAxeItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null && !modifierCap.hasLumberjack()) {
-                modifierCap.setLumberjack(true);
+	static boolean addLumberjackModifier(ItemStack stack) {
+		if (stack.getItem() instanceof ForceAxeItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null && !modifierCap.hasLumberjack()) {
+				modifierCap.setLumberjack(true);
 				addInfusedTag(stack);
-                return true;
-            }
-        }
-        return false;
-    }
+				return true;
+			}
+		}
+		return false;
+	}
 
-    static boolean addRainbowModifier(ItemStack stack) {
-        if (stack.getItem() instanceof ForceShearsItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-                modifierCap.setRainbow(true);
+	static boolean addRainbowModifier(ItemStack stack) {
+		if (stack.getItem() instanceof ForceShearsItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				modifierCap.setRainbow(true);
 				addInfusedTag(stack);
-                return true;
-            }
-        }
-        return false;
-    }
+				return true;
+			}
+		}
+		return false;
+	}
 
-    static boolean addTreasureModifier(ItemStack stack) {
-        if (stack.getItem() instanceof ForceSwordItem || stack.getItem() instanceof ForceAxeItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null && !modifierCap.hasTreasure()) {
-                modifierCap.setTreasure(true);
+	static boolean addTreasureModifier(ItemStack stack) {
+		if (stack.getItem() instanceof ForceSwordItem || stack.getItem() instanceof ForceAxeItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null && !modifierCap.hasTreasure()) {
+				modifierCap.setTreasure(true);
 				addInfusedTag(stack);
-                return true;
-            }
-        }
-        return false;
-    }
+				return true;
+			}
+		}
+		return false;
+	}
 
-    static boolean upgradeBag(ItemStack stack, UpgradeBookData bd) {
-        if (stack.getItem() instanceof ForcePackItem) {
+	static boolean upgradeBag(ItemStack stack, UpgradeBookData bd) {
+		if (stack.getItem() instanceof ForcePackItem) {
 			PackItemStackHandler handler = StorageManager.getOrCreatePack(stack).getInventory();
 
-				if(handler.canUpgrade(bd)) {
-					handler.applyUpgrade();
+			if (handler.canUpgrade(bd)) {
+				handler.applyUpgrade();
 
-                    CompoundTag tag = stack.getOrCreateTag();
-                    tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(handler));
-					tag.putInt(ForcePackItem.SLOTS_TOTAL, handler.getSlotsInUse());
-                    tag.putInt("BookTier", handler.getUpgrades());
+				CompoundTag tag = stack.getOrCreateTag();
+				tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(handler));
+				tag.putInt(ForcePackItem.SLOTS_TOTAL, handler.getSlotsInUse());
+				tag.putInt("BookTier", handler.getUpgrades());
 
-                    stack.setTag(tag);
-                    return true;
-                }
-                return false;
-        }
-        return false;
-    }
+				stack.setTag(tag);
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
 
-    static boolean addSturdyModifier(ItemStack stack) {
-        Item item = stack.getItem();
-        if(item instanceof ForceSwordItem || item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceRodItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-				if(modifierCap.getSturdyLevel() < ConfigHandler.COMMON.sturdyToolCap.get()) {
+	static boolean addSturdyModifier(ItemStack stack) {
+		Item item = stack.getItem();
+		if (item instanceof ForceSwordItem || item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceRodItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap.getSturdyLevel() < ConfigHandler.COMMON.sturdyToolCap.get()) {
 					modifierCap.incrementSturdy();
 					EnchantUtils.incrementLevel(stack, Enchantments.UNBREAKING);
 					addInfusedTag(stack);
 					return true;
 				}
-            }
-        }
-        else if (item instanceof ForceArmorItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-                if(modifierCap.getSturdyLevel() == 0) {
-                    modifierCap.incrementSturdy();
+			}
+		} else if (item instanceof ForceArmorItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap.getSturdyLevel() == 0) {
+					modifierCap.incrementSturdy();
 					addInfusedTag(stack);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-    static boolean addLuckModifier(ItemStack stack) {
-        Item item = stack.getItem();
-        int MAX_CAP = ConfigHandler.COMMON.luckCap.get();
-        if(item instanceof ForcePickaxeItem || item instanceof ForceShovelItem || item instanceof ForceAxeItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-				if(modifierCap.getLuckLevel() < MAX_CAP) {
+	static boolean addLuckModifier(ItemStack stack) {
+		Item item = stack.getItem();
+		int MAX_CAP = ConfigHandler.COMMON.luckCap.get();
+		if (item instanceof ForcePickaxeItem || item instanceof ForceShovelItem || item instanceof ForceAxeItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap.getLuckLevel() < MAX_CAP) {
 					modifierCap.incrementLuck();
 					EnchantUtils.incrementLevel(stack, Enchantments.BLOCK_FORTUNE);
 					addInfusedTag(stack);
 					return true;
 				}
-            }
-        }
-		else if(item instanceof ForceSwordItem) {
+			}
+		} else if (item instanceof ForceSwordItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null ) {
-				if(modifierCap.getLuckLevel() < MAX_CAP) {
+			if (modifierCap != null) {
+				if (modifierCap.getLuckLevel() < MAX_CAP) {
 					modifierCap.incrementLuck();
 					EnchantUtils.incrementLevel(stack, Enchantments.MOB_LOOTING);
 					addInfusedTag(stack);
 					return true;
 				}
 			}
-		}
-		else if(item instanceof ForceBowItem) {
+		} else if (item instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null ) {
-				if(modifierCap.getLuckLevel() < MAX_CAP) {
+			if (modifierCap != null) {
+				if (modifierCap.getLuckLevel() < MAX_CAP) {
+					modifierCap.incrementLuck();
+					addInfusedTag(stack);
+					return true;
+				}
+			}
+		} else if (item instanceof ForceArmorItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap.getLuckLevel() < MAX_CAP) {
 					modifierCap.incrementLuck();
 					addInfusedTag(stack);
 					return true;
 				}
 			}
 		}
-        else if (item instanceof ForceArmorItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-				if(modifierCap.getLuckLevel() < MAX_CAP) {
-					modifierCap.incrementLuck();
-					addInfusedTag(stack);
-					return true;
-				}
-            }
-        }
-        return false;
-    }
+		return false;
+	}
 
-    static boolean addDamageModifier(ItemStack stack) {
-        Item item = stack.getItem();
+	static boolean addDamageModifier(ItemStack stack) {
+		Item item = stack.getItem();
 		int MAX_CAP = ConfigHandler.COMMON.damageCap.get();
-        if(item instanceof ForceSwordItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-				if(modifierCap.getSharpLevel() < MAX_CAP) {
+		if (item instanceof ForceSwordItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap.getSharpLevel() < MAX_CAP) {
 					modifierCap.incrementSharp();
 					EnchantUtils.incrementLevel(stack, Enchantments.SHARPNESS);
 					addInfusedTag(stack);
 					return true;
 				}
-            }
-        }
-        else if(item instanceof ForceBowItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-                if(modifierCap.getSharpLevel() < MAX_CAP) {
-                    modifierCap.incrementSharp();
-                    EnchantUtils.incrementLevel(stack, Enchantments.POWER_ARROWS);
-					addInfusedTag(stack);
-                    return true;
-                }
-            }
-        }
-        else if (item instanceof ForceArmorItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null) {
-				if(modifierCap.getSharpLevel() < 1) {
+			}
+		} else if (item instanceof ForceBowItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap.getSharpLevel() < MAX_CAP) {
 					modifierCap.incrementSharp();
+					EnchantUtils.incrementLevel(stack, Enchantments.POWER_ARROWS);
 					addInfusedTag(stack);
 					return true;
 				}
-            }
-        }
-        return false;
-    }
-
-    static boolean addSilkTouchModifier(ItemStack stack) {
-        Item item = stack.getItem();
-        if(item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-                if(!modifierCap.hasSilk()) {
-                    modifierCap.setSilk(true);
-                    stack.enchant(Enchantments.SILK_TOUCH, 1);
-					addInfusedTag(stack);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    static boolean addForceModifier(ItemStack stack) {
-        Item item = stack.getItem();
-		int MAX_CAP = ConfigHandler.COMMON.forceCap.get();
-        if(item instanceof ForceSwordItem || item instanceof ForceAxeItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null) {
-               if(modifierCap.getForceLevel() < MAX_CAP) {
-                    modifierCap.incrementForce();
-                    EnchantUtils.incrementLevel(stack, Enchantments.KNOCKBACK);
-					addInfusedTag(stack);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    static boolean addHeatModifier(ItemStack stack) {
-        Item item = stack.getItem();
-		if(item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceShearsItem) {
+			}
+		} else if (item instanceof ForceArmorItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null ) {
-				if(!modifierCap.hasHeat()) {
-					modifierCap.setHeat(true);
+			if (modifierCap != null) {
+				if (modifierCap.getSharpLevel() < 1) {
+					modifierCap.incrementSharp();
 					addInfusedTag(stack);
 					return true;
 				}
 			}
 		}
-		else if (item instanceof ForceSwordItem || item instanceof ForceAxeItem) {
+		return false;
+	}
+
+	static boolean addSilkTouchModifier(ItemStack stack) {
+		Item item = stack.getItem();
+		if (item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null ) {
-				if(!modifierCap.hasHeat()) {
+			if (modifierCap != null) {
+				if (!modifierCap.hasSilk()) {
+					modifierCap.setSilk(true);
+					stack.enchant(Enchantments.SILK_TOUCH, 1);
+					addInfusedTag(stack);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	static boolean addForceModifier(ItemStack stack) {
+		Item item = stack.getItem();
+		int MAX_CAP = ConfigHandler.COMMON.forceCap.get();
+		if (item instanceof ForceSwordItem || item instanceof ForceAxeItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap.getForceLevel() < MAX_CAP) {
+					modifierCap.incrementForce();
+					EnchantUtils.incrementLevel(stack, Enchantments.KNOCKBACK);
+					addInfusedTag(stack);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	static boolean addHeatModifier(ItemStack stack) {
+		Item item = stack.getItem();
+		if (item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceShearsItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (!modifierCap.hasHeat()) {
+					modifierCap.setHeat(true);
+					addInfusedTag(stack);
+					return true;
+				}
+			}
+		} else if (item instanceof ForceSwordItem || item instanceof ForceAxeItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (!modifierCap.hasHeat()) {
 					stack.enchant(Enchantments.FIRE_ASPECT, 1);
 					modifierCap.setHeat(true);
 					addInfusedTag(stack);
 					return true;
 				}
 			}
-		}
-        else if (item instanceof ForceArmorItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-                if(!modifierCap.hasHeat()) {
-                    modifierCap.setHeat(true);
+		} else if (item instanceof ForceArmorItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (!modifierCap.hasHeat()) {
+					modifierCap.setHeat(true);
 					addInfusedTag(stack);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-    static boolean addSpeedModifier(ItemStack stack) {
+	static boolean addSpeedModifier(ItemStack stack) {
 		Item item = stack.getItem();
-    	int MAX_CAP = ConfigHandler.COMMON.speedCap.get();
-        if(item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceAxeItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-				if(modifierCap.getSpeedLevel() < MAX_CAP) {
+		int MAX_CAP = ConfigHandler.COMMON.speedCap.get();
+		if (item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceAxeItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap.getSpeedLevel() < MAX_CAP) {
 					modifierCap.incrementSpeed();
 					EnchantUtils.incrementLevel(stack, Enchantments.BLOCK_EFFICIENCY);
 					addInfusedTag(stack);
 					return true;
 				}
-            }
-        } else if (item instanceof ForceBowItem) {
+			}
+		} else if (item instanceof ForceBowItem) {
 			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if(modifierCap != null ) {
-				if(modifierCap.getSpeedLevel() < 1) {
+			if (modifierCap != null) {
+				if (modifierCap.getSpeedLevel() < 1) {
 					modifierCap.incrementSpeed();
 					addInfusedTag(stack);
 					return true;
 				}
 			}
-		}
-        else if (item instanceof ForceArmorItem) {
-            IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-            if(modifierCap != null ) {
-                if(modifierCap.getSpeedLevel() < 1) {
-                    modifierCap.incrementSpeed();
+		} else if (item instanceof ForceArmorItem) {
+			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			if (modifierCap != null) {
+				if (modifierCap.getSpeedLevel() < 1) {
+					modifierCap.incrementSpeed();
 					addInfusedTag(stack);
-                    return true;
-                }
-            }
-        }
-		else if (item instanceof ForceRodItem) {
+					return true;
+				}
+			}
+		} else if (item instanceof ForceRodItem) {
 			IForceRodModifier modifierCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-			if(modifierCap != null ) {
-				if(modifierCap.getSpeedLevel() < ConfigHandler.COMMON.rodSpeedCap.get()) {
+			if (modifierCap != null) {
+				if (modifierCap.getSpeedLevel() < ConfigHandler.COMMON.rodSpeedCap.get()) {
 					modifierCap.incrementSpeed();
 					addInfusedTag(stack);
 					return true;
 				}
 			}
 		}
-        return false;
-    }
+		return false;
+	}
 
 	static void addInfusedTag(ItemStack stack) {
-    	CompoundTag tag = stack.getOrCreateTag();
-    	if(!tag.contains("ForceInfused")) {
+		CompoundTag tag = stack.getOrCreateTag();
+		if (!tag.contains("ForceInfused")) {
 			tag.putBoolean("ForceInfused", true);
 			stack.setTag(tag);
 		}
 	}
 
-    public int fill(FluidStack resource, FluidAction action) {
-        FluidStack resourceCopy = resource.copy();
+	public int fill(FluidStack resource, FluidAction action) {
+		FluidStack resourceCopy = resource.copy();
 
-		if(action.execute()) {
-			if(tank.getFluid().isEmpty() || tank.getFluid().isFluidEqual(resource)) {
+		if (action.execute()) {
+			if (tank.getFluid().isEmpty() || tank.getFluid().isFluidEqual(resource)) {
 				tank.fill(resourceCopy, action);
 			}
 		}
-        return resource.getAmount();
-    }
+		return resource.getAmount();
+	}
 
-    public Fluid getFluid() {
-        if (!tank.isEmpty()) {
-            return tank.getFluid().getFluid();
-        }
-        return null;
-    }
+	public Fluid getFluid() {
+		if (!tank.isEmpty()) {
+			return tank.getFluid().getFluid();
+		}
+		return null;
+	}
 
-    public FluidStack getFluidStack() {
-        if (!tank.isEmpty()) {
-            return tank.getFluid();
-        }
-        return null;
-    }
+	public FluidStack getFluidStack() {
+		if (!tank.isEmpty()) {
+			return tank.getFluid();
+		}
+		return null;
+	}
 
-    public boolean isWorkAllowed() {
-    	return hasTool() && hasValidBook();
+	public boolean isWorkAllowed() {
+		return hasTool() && hasValidBook();
 	}
 
 	public boolean hasValidRecipe() {
-    	return isWorkAllowed() && ((areAllModifiersEmpty() && canCharge()) || allSlotsMatchRecipe());
+		return isWorkAllowed() && ((areAllModifiersEmpty() && canCharge()) || allSlotsMatchRecipe());
 	}
 
 	public boolean updateValidRecipe() {
-		if(canWork) {
+		if (canWork) {
 			canWork = false;
 			processTime = 0;
 
@@ -1095,32 +1069,32 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	public boolean allSlotsMatchRecipe() {
-    	int requiredForce = 0;
-    	int requiredPower = 0;
+		int requiredForce = 0;
+		int requiredPower = 0;
 
 		List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE);
 		boolean foundMatch = false;
 
-		for(InfuseRecipe recipe : recipes) {
+		for (InfuseRecipe recipe : recipes) {
 			ItemStack centerStack = getFromToolSlot();
 			int amountFound = 0;
 			for (int i = 0; i < SLOT_TOOL; i++) {
 				ItemStack modifier = getModifier(i);
-				if(modifier.isEmpty()) continue;
+				if (modifier.isEmpty()) continue;
 
-				if(recipe.matchesModifier(this, modifier, false)) {
+				if (recipe.matchesModifier(this, modifier, false)) {
 					foundMatch = true;
 					amountFound++;
 					requiredForce += FLUID_COST_PER;
 					requiredPower += recipe.getTime() * ENERGY_COST_PER;
 				}
 			}
-			if(amountFound > 0 && amountFound > recipe.getModifier().getLevelCap(centerStack)) {
+			if (amountFound > 0 && amountFound > recipe.getModifier().getLevelCap(centerStack)) {
 				return false;
 			}
 		}
 
-		if(!foundMatch) {
+		if (!foundMatch) {
 			return false;
 		}
 
@@ -1128,14 +1102,14 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	public int getBookTier() {
-    	if(!getBookInSlot().isEmpty()) {
+		if (!getBookInSlot().isEmpty()) {
 			return new UpgradeBookData(this.getBookInSlot()).getTier().ordinal();
 		}
 		return 0;
 	}
 
 	public int getEnergyCostPer() {
-    	return ENERGY_COST_PER;
+		return ENERGY_COST_PER;
 	}
 
 	public int getEnergy() {
@@ -1147,87 +1121,88 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	public void setFluidAmount(int amount) {
-    	if(amount > 0) {
-    		if(!tank.getFluid().isEmpty()) {
+		if (amount > 0) {
+			if (!tank.getFluid().isEmpty()) {
 				tank.getFluid().setAmount(amount);
 			}
 		} else {
-    		tank.setFluid(FluidStack.EMPTY);
+			tank.setFluid(FluidStack.EMPTY);
 		}
 	}
 
-    public int getEnergyStored() {
-        return energyStorage.getEnergyStored();
-    }
+	public int getEnergyStored() {
+		return energyStorage.getEnergyStored();
+	}
 
-    public void setEnergyStored(int energy) {
-        energyStorage.setEnergy(energy);
-    }
+	public void setEnergyStored(int energy) {
+		energyStorage.setEnergy(energy);
+	}
 
-    public float getFluidPercentage() {
-        return (float) tank.getFluidAmount() / (float) tank.getCapacity();
-    }
+	public float getFluidPercentage() {
+		return (float) tank.getFluidAmount() / (float) tank.getCapacity();
+	}
 
-    protected boolean isFluidEqual(FluidStack fluid) {
-        return isFluidEqual(fluid.getFluid());
-    }
+	protected boolean isFluidEqual(FluidStack fluid) {
+		return isFluidEqual(fluid.getFluid());
+	}
 
-    protected boolean isFluidEqual(Fluid fluid) {
-        return tank.getFluid().getFluid().equals(fluid);
-    }
+	protected boolean isFluidEqual(Fluid fluid) {
+		return tank.getFluid().getFluid().equals(fluid);
+	}
 
-    @Override
-    public Component getDisplayName() {
-        return new TranslatableComponent(Reference.MOD_ID + ".container.infuser");
-    }
+	@Override
+	public Component getDisplayName() {
+		return new TranslatableComponent(Reference.MOD_ID + ".container.infuser");
+	}
 
-    @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
-        return new InfuserMenu(id, playerInv, this);
-    }
+	@Override
+	public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
+		return new InfuserMenu(id, playerInv, this);
+	}
 
-    /******** Fakeout stuff for IRecipe *********************/
-    @Override
-    public void clearContent() {
-    }
+	/******** Fakeout stuff for IRecipe *********************/
+	@Override
+	public void clearContent() {
+	}
 
-    @Override
-    public ItemStack removeItem(int arg0, int arg1) {
-      return ItemStack.EMPTY;
-    }
+	@Override
+	public ItemStack removeItem(int arg0, int arg1) {
+		return ItemStack.EMPTY;
+	}
 
-    @Override
-    public int getContainerSize() {
-      return 0;
-    }
+	@Override
+	public int getContainerSize() {
+		return 0;
+	}
 
-    @Override
-    public ItemStack getItem(int arg0) {
-      return ItemStack.EMPTY;
-    }
+	@Override
+	public ItemStack getItem(int arg0) {
+		return ItemStack.EMPTY;
+	}
 
-    @Override
-    public boolean isEmpty() {
-      return false;
-    }
+	@Override
+	public boolean isEmpty() {
+		return false;
+	}
 
-    @Override
-    public boolean stillValid(Player player) {
+	@Override
+	public boolean stillValid(Player player) {
 		if (this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		} else {
-			return !(player.distanceToSqr((double)this.worldPosition.getX() + 0.5D,
-					(double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D) > 64.0D);
+			return !(player.distanceToSqr((double) this.worldPosition.getX() + 0.5D,
+					(double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) > 64.0D);
 		}
-    }
+	}
 
-    @Override
-    public ItemStack removeItemNoUpdate(int arg0) {
-      return ItemStack.EMPTY;
-    }
+	@Override
+	public ItemStack removeItemNoUpdate(int arg0) {
+		return ItemStack.EMPTY;
+	}
 
-    @Override
-    public void setItem(int arg0, ItemStack arg1) {}
+	@Override
+	public void setItem(int arg0, ItemStack arg1) {
+	}
 
 	@Override
 	public void invalidateCaps() {

@@ -42,27 +42,27 @@ import java.util.UUID;
 
 public class ForceBeltItem extends BaseItem {
 
-    public ForceBeltItem(Item.Properties properties) {
-        super(properties.stacksTo(1));
-    }
+	public ForceBeltItem(Item.Properties properties) {
+		super(properties.stacksTo(1));
+	}
 
-    @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player playerIn, @NotNull InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
-        if(playerIn.isShiftKeyDown()) {
-            if(level.isClientSide) {
-                com.mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen.openScreen(stack, handIn);
-            }
-        } else {
-            if (!level.isClientSide) {
-                BeltStorage data = StorageManager.getOrCreateBelt(stack);
+	@Override
+	public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player playerIn, @NotNull InteractionHand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
+		if (playerIn.isShiftKeyDown()) {
+			if (level.isClientSide) {
+				com.mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen.openScreen(stack, handIn);
+			}
+		} else {
+			if (!level.isClientSide) {
+				BeltStorage data = StorageManager.getOrCreateBelt(stack);
 
-                NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(stack, data.getInventory()));
-            }
-        }
-        //If it doesn't nothing bad happens
-        return super.use(level, playerIn, handIn);
-    }
+				NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(stack, data.getInventory()));
+			}
+		}
+		//If it doesn't nothing bad happens
+		return super.use(level, playerIn, handIn);
+	}
 
 /*    @Override
     public InteractionResult useOn(UseOnContext context) {
@@ -76,46 +76,46 @@ public class ForceBeltItem extends BaseItem {
         return super.useOn(context);
     }*/
 
-    @Nullable
-    public MenuProvider getContainer(ItemStack stack, IItemHandler handler) {
-        return new SimpleMenuProvider((id, inventory, player) -> new ForceBeltMenu(id, inventory, handler)
-            , stack.hasCustomHoverName() ? ((BaseComponent)stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.belt"));
-    }
+	@Nullable
+	public MenuProvider getContainer(ItemStack stack, IItemHandler handler) {
+		return new SimpleMenuProvider((id, inventory, player) -> new ForceBeltMenu(id, inventory, handler)
+				, stack.hasCustomHoverName() ? ((BaseComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.belt"));
+	}
 
-    @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return false;
-    }
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return false;
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        CompoundTag tag = stack.getOrCreateTag();
-        if(tag.contains(ForcePackItem.SLOTS_USED) &&  tag.contains(ForcePackItem.SLOTS_TOTAL)) {
-            tooltip.add(new TextComponent(String.format("%s/%s Slots", tag.getInt(ForcePackItem.SLOTS_USED), tag.getInt(ForcePackItem.SLOTS_TOTAL))));
-        } else {
-            tooltip.add(new TextComponent("0/8 Slots"));
-        }
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		CompoundTag tag = stack.getOrCreateTag();
+		if (tag.contains(ForcePackItem.SLOTS_USED) && tag.contains(ForcePackItem.SLOTS_TOTAL)) {
+			tooltip.add(new TextComponent(String.format("%s/%s Slots", tag.getInt(ForcePackItem.SLOTS_USED), tag.getInt(ForcePackItem.SLOTS_TOTAL))));
+		} else {
+			tooltip.add(new TextComponent("0/8 Slots"));
+		}
 
-        if (flagIn.isAdvanced() && stack.getTag() != null && stack.getTag().contains("uuid")) {
-            UUID uuid = stack.getTag().getUUID("uuid");
-            tooltip.add(new TextComponent("ID: " + uuid.toString().substring(0,8)).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-        }
+		if (flagIn.isAdvanced() && stack.getTag() != null && stack.getTag().contains("uuid")) {
+			UUID uuid = stack.getTag().getUUID("uuid");
+			tooltip.add(new TextComponent("ID: " + uuid.toString().substring(0, 8)).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+		}
 
-        super.appendHoverText(stack, level, tooltip, flagIn);
-    }
+		super.appendHoverText(stack, level, tooltip, flagIn);
+	}
 
-    @Override
-    public Component getName(ItemStack stack) {
-        return ((BaseComponent)super.getName(stack)).withStyle(ChatFormatting.YELLOW);
-    }
+	@Override
+	public Component getName(ItemStack stack) {
+		return ((BaseComponent) super.getName(stack)).withStyle(ChatFormatting.YELLOW);
+	}
 
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new WSDCapability(stack);
-    }
+	@Nullable
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+		return new WSDCapability(stack);
+	}
 
-    public static boolean filter(ItemStack stack) {
-        return !(stack.getItem() instanceof ForceBeltItem) && stack.is(ForceTags.VALID_FORCE_BELT);
-    }
+	public static boolean filter(ItemStack stack) {
+		return !(stack.getItem() instanceof ForceBeltItem) && stack.is(ForceTags.VALID_FORCE_BELT);
+	}
 }
