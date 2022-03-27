@@ -109,9 +109,9 @@ public class JeiCompat implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
-		ErrorUtil.checkNotNull(freezingCategory, "freezingCategory");
-		ErrorUtil.checkNotNull(grindingCategory, "grindingCategory");
-		ErrorUtil.checkNotNull(infuserCategory, "grindingCategory");
+		ErrorUtil.checkNotNull(FREEZING_TYPE, "freezingType");
+		ErrorUtil.checkNotNull(GRINDING_TYPE, "grindingType");
+		ErrorUtil.checkNotNull(INFUSER_TYPE, "grindingType");
 
 		ClientLevel world = Objects.requireNonNull(Minecraft.getInstance().level);
 		registration.addRecipes(FREEZING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.FREEZING));
