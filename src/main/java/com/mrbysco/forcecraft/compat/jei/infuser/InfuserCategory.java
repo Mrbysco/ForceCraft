@@ -6,12 +6,14 @@ import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -35,6 +37,11 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 	}
 
 	@Override
+	public RecipeType<InfuseRecipe> getRecipeType() {
+		return JeiCompat.INFUSER_TYPE;
+	}
+
+	@Override
 	public ResourceLocation getUid() {
 		return JeiCompat.INFUSER;
 	}
@@ -55,10 +62,11 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 	}
 
 	@Override
-	public void setIngredients(InfuseRecipe recipe, IIngredients ingredients) {
+	public void setRecipe(IRecipeLayoutBuilder builder, InfuseRecipe recipe, IFocusGroup focuses) {
 		ItemStack[] matchingStacks = recipe.getCenter().getItems();
 
-		ingredients.setInputIngredients(recipe.getIngredients());
+		builder.addSlot(RecipeIngredientRole.INPUT, 46, 47).addIngredients(recipe.getIngredients().get(0));
+
 		if (recipe.getResultItem().isEmpty()) {
 			List<ItemStack> stacks = new ArrayList<>();
 			ItemStack[] modifierStack = recipe.getInput().getItems();
@@ -80,42 +88,31 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 
 					stacks.add(centerStack);
 				}
-				ingredients.setOutputs(VanillaTypes.ITEM, stacks);
+				builder.addSlot(RecipeIngredientRole.OUTPUT, 46, 10).addItemStacks(stacks);
 			} else {
-				ingredients.setOutput(VanillaTypes.ITEM, matchingStacks[0]);
+				builder.addSlot(RecipeIngredientRole.OUTPUT, 46, 10).addItemStack(matchingStacks[0]);
 			}
 		} else {
-			ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
+			builder.addSlot(RecipeIngredientRole.OUTPUT, 120, 47).addItemStack(recipe.getResultItem());
 		}
 	}
 
 	@Override
-	public void draw(InfuseRecipe recipe, PoseStack poseStack, double mouseX, double mouseY) {
+	public void setIngredients(InfuseRecipe recipe, IIngredients ingredients) {
+		IRecipeCategory.super.setIngredients(recipe, ingredients);
+	}
+
+	@Override
+	public void draw(InfuseRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+		IRecipeCategory.super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
+
 		Minecraft minecraft = Minecraft.getInstance();
 		Font font = minecraft.font;
-		font.draw(poseStack, new TranslatableComponent("forcecraft.gui.jei.category.infuser.tier", recipe.getTier().asInt()), 4, 4, 0xFFFFFFFF);
-
+		font.draw(stack, new TranslatableComponent("forcecraft.gui.jei.category.infuser.tier", recipe.getTier().asInt()), 4, 4, 0xFFFFFFFF);
 	}
 
 	@Override
 	public Component getTitle() {
 		return localizedName;
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, InfuseRecipe recipe, IIngredients ingredients) {
-		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-
-		guiItemStacks.init(0, true, 45, 46);
-		guiItemStacks.init(1, true, 45, 9);
-		guiItemStacks.init(2, false, 119, 46);
-
-		List<ItemStack> outputFull = new ArrayList<>();
-		for (List<ItemStack> stackList : ingredients.getOutputs(VanillaTypes.ITEM)) {
-			outputFull.add(stackList.get(0));
-		}
-
-		guiItemStacks.set(ingredients);
-		guiItemStacks.set(2, outputFull);
 	}
 }

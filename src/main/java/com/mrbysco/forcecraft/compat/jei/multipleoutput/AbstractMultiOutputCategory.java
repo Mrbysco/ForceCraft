@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.compat.jei.multipleoutput;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.recipe.MultipleOutputFurnaceRecipe;
 import mezz.jei.api.constants.VanillaTypes;

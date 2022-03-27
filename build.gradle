@@ -138,7 +138,7 @@ dependencies {
 
     //runtimeOnly fg.deobf("curse.maven:titanium-287342:3570210")
     runtimeOnly fg.deobf("curse.maven:pipez-443900:3694227")
-    runtimeOnly fg.deobf("curse.maven:CTM-267602:3586556")
+//    runtimeOnly fg.deobf("curse.maven:CTM-267602:3586556")
 
     runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:3641681")
 
