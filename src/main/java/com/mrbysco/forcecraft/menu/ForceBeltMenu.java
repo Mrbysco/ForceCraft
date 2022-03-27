@@ -6,6 +6,7 @@ import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.util.FindingUtil;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
@@ -13,19 +14,29 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class ForceBeltMenu extends AbstractContainerMenu {
 
     private ItemStack heldStack;
+    private IItemHandler itemHandler;
 
     @Override
     public boolean stillValid(Player playerIn) {
         return !playerIn.isSpectator() && !heldStack.isEmpty();
     }
 
-    public ForceBeltMenu(int id, Inventory playerInventory) {
+    public static ForceBeltMenu fromNetwork(int windowId, Inventory playerInventory, FriendlyByteBuf data) {
+        return new ForceBeltMenu(windowId, playerInventory, new ItemStackHandler(8) {
+            @Override
+            public boolean isItemValid(int slot, ItemStack stack) {
+                return ForceBeltItem.filter(stack);
+            }
+        });
+    }
+
+    public ForceBeltMenu(int id, Inventory playerInventory, IItemHandler handler) {
         super(ForceContainers.FORCE_BELT.get(), id);
         this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForceBeltItem);
         if (heldStack == null || heldStack.isEmpty()) {
@@ -37,7 +48,7 @@ public class ForceBeltMenu extends AbstractContainerMenu {
         int yPosC = 20;
         //Maxes at 40
 
-        IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+        itemHandler = handler;
         if(itemHandler != null) {
             for (int k = 0; k < 8; ++k) {
                 this.addSlot(new BeltSlot(itemHandler, k, xPosC + k * 18, yPosC));
@@ -63,7 +74,6 @@ public class ForceBeltMenu extends AbstractContainerMenu {
 
     @Override
     public void removed(Player playerIn) {
-        IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
         if(itemHandler != null) {
             CompoundTag tag = heldStack.getOrCreateTag();
             tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(itemHandler));

@@ -1,9 +1,12 @@
 package com.mrbysco.forcecraft.items;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capabilities.pack.PackInventoryProvider;
 import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.menu.ForcePackMenu;
+import com.mrbysco.forcecraft.storage.BeltStorage;
+import com.mrbysco.forcecraft.storage.PackStorage;
+import com.mrbysco.forcecraft.storage.StorageManager;
+import com.mrbysco.forcecraft.storage.WSDCapability;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.BaseComponent;
@@ -27,6 +30,7 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 public class ForcePackItem extends BaseItem {
 
@@ -47,7 +51,9 @@ public class ForcePackItem extends BaseItem {
 			}
 		} else {
 			if (!level.isClientSide) {
-				NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(stack), playerIn.blockPosition());
+				PackStorage data = StorageManager.getOrCreatePack(stack);
+
+				NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(stack, data.getInventory()), buf -> buf.writeInt(data.getInventory().getUpgrades()));
 			}
 		}
 		// If it doesn't nothing bad happens
@@ -55,10 +61,9 @@ public class ForcePackItem extends BaseItem {
 	}
 
 	@Nullable
-	public MenuProvider getContainer(ItemStack stack) {
-		return new SimpleMenuProvider((id, inventory, player) -> {
-			return new ForcePackMenu(id, inventory);
-		}, stack.hasCustomHoverName() ? ((BaseComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.pack"));
+	public MenuProvider getContainer(ItemStack stack, PackItemStackHandler handler) {
+		return new SimpleMenuProvider((id, playerInv, player) -> new ForcePackMenu(id, playerInv, handler),
+			stack.hasCustomHoverName() ? ((BaseComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.pack"));
 	}
 
 	@Override
@@ -68,13 +73,18 @@ public class ForcePackItem extends BaseItem {
 
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-		int defaultAmount = 8;
 		CompoundTag tag = stack.getOrCreateTag();
-		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-		if (handler instanceof PackItemStackHandler) {
-			defaultAmount = ((PackItemStackHandler) handler).getSlotsInUse();
+		if(tag.contains(ForcePackItem.SLOTS_USED) &&  tag.contains(ForcePackItem.SLOTS_TOTAL)) {
+			tooltip.add(new TextComponent(String.format("%s/%s Slots", tag.getInt(ForcePackItem.SLOTS_USED), tag.getInt(ForcePackItem.SLOTS_TOTAL))));
+		} else {
+			tooltip.add(new TextComponent("0/8 Slots"));
+		};
+
+
+		if (flagIn.isAdvanced() && stack.getTag() != null && stack.getTag().contains("uuid")) {
+			UUID uuid = stack.getTag().getUUID("uuid");
+			tooltip.add(new TextComponent("ID: " + uuid.toString().substring(0,8)).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
 		}
-		tooltip.add(new TextComponent(String.format("%s/%s Slots", tag.getInt(SLOTS_USED), defaultAmount)));
 
 		super.appendHoverText(stack, level, tooltip, flagIn);
 	}
@@ -87,10 +97,10 @@ public class ForcePackItem extends BaseItem {
 	@Nullable
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new PackInventoryProvider();
+		return new WSDCapability(stack);
 	}
 
-	// ShareTag for server->client capability data sync
+/*	// ShareTag for server->client capability data sync
 	@Override
 	public CompoundTag getShareTag(ItemStack stack) {
 		CompoundTag shareTag = stack.getOrCreateTag();
@@ -116,5 +126,5 @@ public class ForcePackItem extends BaseItem {
 			}
 		}
 		super.readShareTag(stack, nbt);
-	}
+	}*/
 }

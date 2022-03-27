@@ -9,6 +9,7 @@ import com.mrbysco.forcecraft.util.FindingUtil;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,169 +29,167 @@ public class ForcePackMenu extends AbstractContainerMenu {
 
     private ItemStack heldStack;
     private int upgrades;
+    private PackItemStackHandler inventory;
 
     @Override
     public boolean stillValid(Player playerIn) {
         return !playerIn.isSpectator();
     }
 
-    public ForcePackMenu(int id, Inventory playerInventory) {
+    public static ForcePackMenu fromNetwork(int windowId, Inventory playerInventory, FriendlyByteBuf data) {
+        PackItemStackHandler handler = new PackItemStackHandler();
+        handler.setUpgrades(data.readInt());
+        return new ForcePackMenu(windowId, playerInventory, handler);
+    }
+
+    public ForcePackMenu(int id, Inventory playerInventory, PackItemStackHandler inv) {
         super(ForceContainers.FORCE_PACK.get(), id);
         this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForcePackItem);
         if (heldStack == null || heldStack.isEmpty()) {
             playerInventory.player.closeContainer();
             return;
         }
-		
+        inventory = inv;
+
         upgrades = 0;
 
-        IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-        if(itemHandler instanceof PackItemStackHandler) {
-            upgrades = ((PackItemStackHandler)itemHandler).getUpgrades();
-            int numRows = upgrades + 1;
-//            ForceCraft.LOGGER.info("Pack upgrades {}",  upgrades);
-    		
+        upgrades = inventory.getUpgrades();
+        int numRows = upgrades + 1;
 
-            int xPosC = 17;
-            int yPosC = 20;
-            //Maxes at 40
-            for (int j = 0; j < numRows; ++j) {
-                for (int k = 0; k < 8; ++k) {
-                    this.addSlot(new SlotItemHandler(itemHandler, k + j * 8, xPosC + k * 18, yPosC + j * 18) {
-                        @Override
-                        public boolean mayPlace(@Nonnull ItemStack stack) {
-                            return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem);
-                        }
-                    });
-                }
+        int xPosC = 17;
+        int yPosC = 20;
+        //Maxes at 40
+        for (int j = 0; j < numRows; ++j) {
+            for (int k = 0; k < 8; ++k) {
+                this.addSlot(new SlotItemHandler(inventory, k + j * 8, xPosC + k * 18, yPosC + j * 18) {
+                    @Override
+                    public boolean mayPlace(@Nonnull ItemStack stack) {
+                        return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem);
+                    }
+                });
             }
+        }
 
-            //Player Inventory
-            int xPos = 8;
-            int yPos = 36 + (numRows * 18);
+        //Player Inventory
+        int xPos = 8;
+        int yPos = 36 + (numRows * 18);
 
-            //Slots 9-99
-            for (int y = 0; y < 3; ++y) {
-                for (int x = 0; x < 9; ++x) {
-                    this.addSlot(new Slot(playerInventory, x + y * 9 + 9, xPos + x * 18, yPos + y * 18));
-                }
-            }
-
-            //Slots 0-8
+        //Slots 9-99
+        for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 9; ++x) {
-                this.addSlot(new Slot(playerInventory, x, xPos + x * 18, yPos + 58));
+                this.addSlot(new Slot(playerInventory, x + y * 9 + 9, xPos + x * 18, yPos + y * 18));
             }
-        } else {
-            playerInventory.player.closeContainer();
+        }
+
+        //Slots 0-8
+        for (int x = 0; x < 9; ++x) {
+            this.addSlot(new Slot(playerInventory, x, xPos + x * 18, yPos + 58));
         }
     }
 
     @Override
     public void removed(Player playerIn) {
-        IItemHandler itemHandler = heldStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-        if(itemHandler instanceof PackItemStackHandler) {
-            for(int i = 0; i < itemHandler.getSlots(); i++) {
-                ItemStack stack = itemHandler.getStackInSlot(i);
-                CompoundTag tag = stack.getTag();
-                if(stack.getItem() instanceof ItemCardItem && tag != null && tag.contains("RecipeContents")) {
-                    CompoundTag recipeContents = tag.getCompound("RecipeContents");
-                    NonNullList<ItemStack> ingredientList = NonNullList.create();
-                    List<ItemStack> mergeList = new ArrayList<>();
-                    for(int j = 0; j < 9; j++) {
-                        ItemStack recipeStack = ItemStack.of(recipeContents.getCompound("slot_" + j));
-                        if(!recipeStack.isEmpty()) {
-                            if(ingredientList.isEmpty()) {
-                                ingredientList.add(recipeStack);
-                            } else {
-                                mergeList.add(recipeStack);
-                            }
+        for(int i = 0; i < inventory.getSlots(); i++) {
+            ItemStack stack = inventory.getStackInSlot(i);
+            CompoundTag tag = stack.getTag();
+            if(stack.getItem() instanceof ItemCardItem && tag != null && tag.contains("RecipeContents")) {
+                CompoundTag recipeContents = tag.getCompound("RecipeContents");
+                NonNullList<ItemStack> ingredientList = NonNullList.create();
+                List<ItemStack> mergeList = new ArrayList<>();
+                for(int j = 0; j < 9; j++) {
+                    ItemStack recipeStack = ItemStack.of(recipeContents.getCompound("slot_" + j));
+                    if(!recipeStack.isEmpty()) {
+                        if(ingredientList.isEmpty()) {
+                            ingredientList.add(recipeStack);
+                        } else {
+                            mergeList.add(recipeStack);
                         }
                     }
+                }
 
-                    for (ItemStack recipeStack : mergeList) {
-                        if(!ingredientList.isEmpty()) {
-                            List<ItemStack> buffer = new ArrayList<>();
-                            for (ItemStack ingredient : ingredientList) {
-                                if (ingredient != null && !ingredient.isEmpty()) {
-                                    if (ItemStack.isSameItemSameTags(ingredient, recipeStack)) {
-                                        int addedCount = ingredient.getCount() + recipeStack.getCount();
-                                        int maxCount = ingredient.getMaxStackSize();
-                                        if (addedCount <= maxCount) {
-                                            recipeStack.setCount(0);
-                                            ingredient.setCount(addedCount);
-                                        } else if (recipeStack.getCount() < maxCount) {
-                                            recipeStack.shrink(maxCount - ingredient.getCount());
-                                            ingredient.setCount(maxCount);
-                                        }
-                                    }
-                                }
-
-                                if (!recipeStack.isEmpty()) {
-                                    buffer.add(recipeStack);
-                                }
-                            }
-                            if(!buffer.isEmpty()) {
-                                ingredientList.addAll(buffer);
-                            }
-                        }
-                    }
-                    mergeList.clear();
-
-                    List<ItemStack> restList = new ArrayList<>();
-                    for(int k = 0; k < itemHandler.getSlots(); k++) {
-                        if(k != i) {
-                            ItemStack restStack = itemHandler.getStackInSlot(k);
-                            if(!restStack.isEmpty()) {
-                                restList.add(restStack);
-                            }
-                        }
-                    }
-                    boolean canCraft = true;
-                    int craftCount = 64;
-                    for(ItemStack ingredient : ingredientList) {
-                        int countPossible = 0;
-                        for(ItemStack rest : restList) {
-                            if(ingredient.getItem() == rest.getItem() && ItemStack.tagMatches(ingredient, rest)) {
-                                countPossible += (double)rest.getCount() / ingredient.getCount();
-                            }
-                        }
-                        if(countPossible == 0) {
-                            canCraft = false;
-                            craftCount = 0;
-                            break;
-                        }
-                        if(countPossible < craftCount) {
-                            craftCount = countPossible;
-                        }
-                    }
-
-                    ItemStack craftStack = ItemStack.of(recipeContents.getCompound("result"));
-                    if(canCraft && craftCount > 0) {
-                        for(int l = 0; l < craftCount; l++) {
-                            for(ItemStack ingredient : ingredientList) {
-                                for(ItemStack rest : restList) {
-                                    if(ingredient.getItem() == rest.getItem() && ItemStack.tagMatches(ingredient, rest)) {
-                                        if(rest.getCount() >= ingredient.getCount()) {
-                                            rest.shrink(ingredient.getCount());
-                                        }
+                for (ItemStack recipeStack : mergeList) {
+                    if(!ingredientList.isEmpty()) {
+                        List<ItemStack> buffer = new ArrayList<>();
+                        for (ItemStack ingredient : ingredientList) {
+                            if (ingredient != null && !ingredient.isEmpty()) {
+                                if (ItemStack.isSameItemSameTags(ingredient, recipeStack)) {
+                                    int addedCount = ingredient.getCount() + recipeStack.getCount();
+                                    int maxCount = ingredient.getMaxStackSize();
+                                    if (addedCount <= maxCount) {
+                                        recipeStack.setCount(0);
+                                        ingredient.setCount(addedCount);
+                                    } else if (recipeStack.getCount() < maxCount) {
+                                        recipeStack.shrink(maxCount - ingredient.getCount());
+                                        ingredient.setCount(maxCount);
                                     }
                                 }
                             }
 
-                            ItemStack stackCopy = craftStack.copy();
-                            ItemStack craftedStack = ItemHandlerHelper.insertItem(itemHandler, stackCopy, false);
-                            if(!craftedStack.isEmpty()) {
-                                playerIn.drop(craftedStack, true);
+                            if (!recipeStack.isEmpty()) {
+                                buffer.add(recipeStack);
                             }
+                        }
+                        if(!buffer.isEmpty()) {
+                            ingredientList.addAll(buffer);
+                        }
+                    }
+                }
+                mergeList.clear();
+
+                List<ItemStack> restList = new ArrayList<>();
+                for(int k = 0; k < inventory.getSlots(); k++) {
+                    if(k != i) {
+                        ItemStack restStack = inventory.getStackInSlot(k);
+                        if(!restStack.isEmpty()) {
+                            restList.add(restStack);
+                        }
+                    }
+                }
+                boolean canCraft = true;
+                int craftCount = 64;
+                for(ItemStack ingredient : ingredientList) {
+                    int countPossible = 0;
+                    for(ItemStack rest : restList) {
+                        if(ingredient.getItem() == rest.getItem() && ItemStack.tagMatches(ingredient, rest)) {
+                            countPossible += (double)rest.getCount() / ingredient.getCount();
+                        }
+                    }
+                    if(countPossible == 0) {
+                        canCraft = false;
+                        craftCount = 0;
+                        break;
+                    }
+                    if(countPossible < craftCount) {
+                        craftCount = countPossible;
+                    }
+                }
+
+                ItemStack craftStack = ItemStack.of(recipeContents.getCompound("result"));
+                if(canCraft && craftCount > 0) {
+                    for(int l = 0; l < craftCount; l++) {
+                        for(ItemStack ingredient : ingredientList) {
+                            for(ItemStack rest : restList) {
+                                if(ingredient.getItem() == rest.getItem() && ItemStack.tagMatches(ingredient, rest)) {
+                                    if(rest.getCount() >= ingredient.getCount()) {
+                                        rest.shrink(ingredient.getCount());
+                                    }
+                                }
+                            }
+                        }
+
+                        ItemStack stackCopy = craftStack.copy();
+                        ItemStack craftedStack = ItemHandlerHelper.insertItem(inventory, stackCopy, false);
+                        if(!craftedStack.isEmpty()) {
+                            playerIn.drop(craftedStack, true);
                         }
                     }
                 }
             }
-
-            CompoundTag tag = heldStack.getOrCreateTag();
-            tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(itemHandler));
-            heldStack.setTag(tag);
         }
+
+        CompoundTag tag = heldStack.getOrCreateTag();
+        tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(inventory));
+        heldStack.setTag(tag);
 
         super.removed(playerIn);
     }

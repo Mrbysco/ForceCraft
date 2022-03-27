@@ -3,6 +3,9 @@ package com.mrbysco.forcecraft.items;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.menu.ForceBeltMenu;
 import com.mrbysco.forcecraft.registry.ForceTags;
+import com.mrbysco.forcecraft.storage.BeltStorage;
+import com.mrbysco.forcecraft.storage.StorageManager;
+import com.mrbysco.forcecraft.storage.WSDCapability;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,12 +30,15 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 public class ForceBeltItem extends BaseItem {
 
@@ -41,7 +47,7 @@ public class ForceBeltItem extends BaseItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player playerIn, @NotNull InteractionHand handIn) {
         ItemStack stack = playerIn.getItemInHand(handIn);
         if(playerIn.isShiftKeyDown()) {
             if(level.isClientSide) {
@@ -49,14 +55,16 @@ public class ForceBeltItem extends BaseItem {
             }
         } else {
             if (!level.isClientSide) {
-                NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(stack), playerIn.blockPosition());
+                BeltStorage data = StorageManager.getOrCreateBelt(stack);
+
+                NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(stack, data.getInventory()));
             }
         }
         //If it doesn't nothing bad happens
         return super.use(level, playerIn, handIn);
     }
 
-    @Override
+/*    @Override
     public InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
@@ -66,13 +74,12 @@ public class ForceBeltItem extends BaseItem {
         }
         //If it doesn't nothing bad happens
         return super.useOn(context);
-    }
+    }*/
 
     @Nullable
-    public MenuProvider getContainer(ItemStack stack) {
-        return new SimpleMenuProvider((id, inventory, player) -> {
-            return new ForceBeltMenu(id, inventory);
-        }, stack.hasCustomHoverName() ? ((BaseComponent)stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.belt"));
+    public MenuProvider getContainer(ItemStack stack, IItemHandler handler) {
+        return new SimpleMenuProvider((id, inventory, player) -> new ForceBeltMenu(id, inventory, handler)
+            , stack.hasCustomHoverName() ? ((BaseComponent)stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.belt"));
     }
 
     @Override
@@ -88,6 +95,12 @@ public class ForceBeltItem extends BaseItem {
         } else {
             tooltip.add(new TextComponent("0/8 Slots"));
         }
+
+        if (flagIn.isAdvanced() && stack.getTag() != null && stack.getTag().contains("uuid")) {
+            UUID uuid = stack.getTag().getUUID("uuid");
+            tooltip.add(new TextComponent("ID: " + uuid.toString().substring(0,8)).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        }
+
         super.appendHoverText(stack, level, tooltip, flagIn);
     }
 
@@ -99,37 +112,10 @@ public class ForceBeltItem extends BaseItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new ForceBeltItem.InventoryProvider();
+        return new WSDCapability(stack);
     }
 
-    private static class InventoryProvider implements ICapabilitySerializable<CompoundTag> {
-        private final LazyOptional<ItemStackHandler> inventory = LazyOptional.of(() -> new ItemStackHandler(8) {
-            @Override
-            public boolean isItemValid(int slot, ItemStack stack) {
-                //Make sure there's no ForceBelt-ception
-                return !(stack.getItem() instanceof ForceBeltItem) && stack.is(ForceTags.VALID_FORCE_BELT) && super.isItemValid(slot, stack);
-            }
-        });
-
-        @Nonnull
-        @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-            if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-                return inventory.cast();
-            else return LazyOptional.empty();
-        }
-
-        @Override
-        public CompoundTag serializeNBT() {
-            if (inventory.isPresent()) {
-                return inventory.resolve().get().serializeNBT();
-            }
-            return new CompoundTag();
-        }
-
-        @Override
-        public void deserializeNBT(CompoundTag nbt) {
-            inventory.ifPresent(h -> h.deserializeNBT(nbt));
-        }
+    public static boolean filter(ItemStack stack) {
+        return !(stack.getItem() instanceof ForceBeltItem) && stack.is(ForceTags.VALID_FORCE_BELT);
     }
 }

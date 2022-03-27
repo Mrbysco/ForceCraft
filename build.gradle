@@ -136,7 +136,7 @@ dependencies {
 
     implementation fg.deobf("xyz.brassgoggledcoders:PatchouliProvider:${mc_version}-${patchouli_provider_version}")
 
-    runtimeOnly fg.deobf("curse.maven:titanium-287342:3570210")
+    //runtimeOnly fg.deobf("curse.maven:titanium-287342:3570210")
     runtimeOnly fg.deobf("curse.maven:pipez-443900:3569514")
     runtimeOnly fg.deobf("curse.maven:CTM-267602:3586556")
 

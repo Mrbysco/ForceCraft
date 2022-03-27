@@ -51,8 +51,8 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		super.init();
 
 		this.infuserProgress = new ProgressBar(TEXTURE, ProgressBar.ProgressBarDirection.DOWN_TO_UP, 2, 20, 
-				leftPos + 134, topPos + 93,
-				176, 0);
+			leftPos + 134, topPos + 93,
+			176, 0);
 		
 		int btnSize = 13;
 

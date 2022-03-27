@@ -26,6 +26,7 @@ import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.registry.ForceTags;
+import com.mrbysco.forcecraft.storage.StorageManager;
 import com.mrbysco.forcecraft.util.EnchantUtils;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.core.BlockPos;
@@ -797,21 +798,20 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
     static boolean upgradeBag(ItemStack stack, UpgradeBookData bd) {
         if (stack.getItem() instanceof ForcePackItem) {
-            IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-            if(handler instanceof PackItemStackHandler packHandler) {
+			PackItemStackHandler handler = StorageManager.getOrCreatePack(stack).getInventory();
 
-				if(packHandler.canUpgrade(bd)) {
-                    packHandler.applyUpgrade();
+				if(handler.canUpgrade(bd)) {
+					handler.applyUpgrade();
 
                     CompoundTag tag = stack.getOrCreateTag();
-                    tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(packHandler));
-                    tag.putInt("BookTier", packHandler.getUpgrades());
+                    tag.putInt(ForcePackItem.SLOTS_USED, ItemHandlerUtils.getUsedSlots(handler));
+					tag.putInt(ForcePackItem.SLOTS_TOTAL, handler.getSlotsInUse());
+                    tag.putInt("BookTier", handler.getUpgrades());
 
                     stack.setTag(tag);
                     return true;
                 }
                 return false;
-            }
         }
         return false;
     }

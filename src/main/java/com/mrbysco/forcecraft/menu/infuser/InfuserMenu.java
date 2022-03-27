@@ -225,7 +225,7 @@ public class InfuserMenu extends AbstractContainerMenu {
         if(inventoryIn != null) {
             super.slotsChanged(inventoryIn);
         }
-
+        getTile().setChanged();
         if(!player.level.isClientSide) {
             this.validRecipe[0] = tile.updateValidRecipe() ? 1 : 0;
         }

@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import com.mrbysco.forcecraft.registry.ForceTags;
+import com.mrbysco.forcecraft.storage.StorageManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
@@ -65,8 +66,15 @@ public class PackItemStackHandler extends ItemStackHandler {
 		if(this.upgrades < 0) {
 			this.upgrades = 0;
 		}
-		CompoundTag tag = serializeNBT();
-		deserializeNBT(tag);
+
+		onContentsChanged(0);
+		//CompoundTag tag = serializeNBT(); //TODO what in the world...
+		//deserializeNBT(tag);
+	}
+
+	@Override
+	protected void onContentsChanged(int slot) {
+		StorageManager.getPacks().setDirty();
 	}
 
 	public boolean canUpgrade(UpgradeBookData bd) {
