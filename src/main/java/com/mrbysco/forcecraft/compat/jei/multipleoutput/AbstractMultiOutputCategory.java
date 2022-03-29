@@ -49,11 +49,11 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 		builder.addSlot(RecipeIngredientRole.INPUT, 10, 10).addIngredients(recipe.getIngredients().get(0));
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 83, 10)
 				.addItemStack(recipe.getRecipeOutputs().get(0));
-		if(recipe.getRecipeOutputs().size() > 1) {
+		if (recipe.getRecipeOutputs().size() > 1) {
 			IRecipeSlotBuilder secondOutputBuilder = builder.addSlot(RecipeIngredientRole.OUTPUT, 113, 10)
 					.addItemStack(recipe.getRecipeOutputs().get(1));
 
-			if(showChance) {
+			if (showChance) {
 				secondOutputBuilder.addTooltipCallback(new ChanceTooltip(recipe));
 			}
 		}

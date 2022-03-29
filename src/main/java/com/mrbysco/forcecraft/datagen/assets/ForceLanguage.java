@@ -431,8 +431,8 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.force_engine_recipe.text", "The $(item)Force Engine$() Crafting Recipe");
 
 		add("info.forcecraft.book.inert_core.entry.name", "Inert Core");
-		add("info.forcecraft.book.inert_core_info.text", "The $(item)Inert Core$() is the inactive version of the $(l)Nether Star$() and is used to craft the $(l,forcecraft,infuser/inert_core)$(item)Bottled Wither$().$(br)$(br)To obtain the $(item)Inert Core$() one has to drain the $(l)Nether Star$() of its power.$(br)The $(l,forcecraft,infuser/force_engine)$(item)Force Engine$() is able to drain the star of its power.$(br)$(br)Once Inert it can be turned into a $(l,forcecraft,infuser/inert_core)$(item)Bottled Wither$()");
-		add("info.forcecraft.book.inert_core_info2.text", "Set the $(item)Inert Core$() on fire and Right-click with a $(l,forcecraft,infuser/force_rod)$(item)Force Rod$() to craft a $(l,forcecraft,infuser/inert_core)$(item)Bottled Wither$()");
+		add("info.forcecraft.book.inert_core_info.text", "The $(item)Inert Core$() is the inactive version of the $(l)Nether Star$() and is used to craft the $(l:forcecraft:infuser/inert_core)$(item)Bottled Wither$().$(br)$(br)To obtain the $(item)Inert Core$() one has to drain the $(l)Nether Star$() of its power.$(br)The $(l:forcecraft:infuser/force_engine)$(item)Force Engine$() is able to drain the star of its power.$(br)$(br)Once Inert it can be turned into a $(l:forcecraft:infuser/inert_core)$(item)Bottled Wither$()");
+		add("info.forcecraft.book.inert_core_info2.text", "Set the $(item)Inert Core$() on fire and Right-click with a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$() to craft a $(l:forcecraft:infuser/inert_core)$(item)Bottled Wither$()");
 
 		add("info.forcecraft.book.force_flask.entry.name", "Force Flask");
 		add("info.forcecraft.book.force_flask_info.text", "$(item)Force Flasks$() are force infused flasks that allow the user to capture mobs. $(br)$(br)To capture a mob you sneak right-click with the flask in hand to throw it at the mob. $(br)$(br)The flask can also be right-clicked on a cow to get a $(item)Milk Force Flask$()");
@@ -440,10 +440,10 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.force_flask_recipe2.text", "A Crafting Recipe to convert entity flasks back into a $(item)Force Flask$()");
 
 		add("info.forcecraft.book.claw.entry.name", "Claw");
-		add("info.forcecraft.book.claw_info.text", "The $(item)Claw$() is an item that can be used to upgrade tools, weapons and armor with $(l,forcecraft,tier_0/damage)Damage$() $(br)$(br)It can be dropped by $(l)Bats$().");
+		add("info.forcecraft.book.claw_info.text", "The $(item)Claw$() is an item that can be used to upgrade tools, weapons and armor with $(l:forcecraft:tier_0/damage)Damage$() $(br)$(br)It can be dropped by $(l)Bats$().");
 
 		add("info.forcecraft.book.bottled_wither.entry.name", "Bottled Wither");
-		add("info.forcecraft.book.bottled_wither_info.text", "The $(item)Bottled Wither$() is a portable $(l)Wither$() that can be spawned in by right-clicking the ground with the bottle. Be careful though, as it has no charge time and will immediately start destroying the area.$(br)$(br)It can be created by setting an $(l,forcecraft,infuser/inert_core)$(item)Inert Core$() on fire and right-clicking the fire with a $(l,forcecraft,infuser/force_rod)$(item)Force Rod$()");
+		add("info.forcecraft.book.bottled_wither_info.text", "The $(item)Bottled Wither$() is a portable $(l)Wither$() that can be spawned in by right-clicking the ground with the bottle. Be careful though, as it has no charge time and will immediately start destroying the area.$(br)$(br)It can be created by setting an $(l:forcecraft:infuser/inert_core)$(item)Inert Core$() on fire and right-clicking the fire with a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$()");
 
 		add("info.forcecraft.book.force_ingot.entry.name", "Force Ingot");
 		add("info.forcecraft.book.force_ingot_info.text", "$(item)Force Ingots$() can be created by combining $(item)Force Gems$() and two of the same Iron or Gold Ingots.$(br)$(br)Doing so produces two or more $(item)Force Ingots$(), which are useable by a wide variety of tools and equipment.$(br)$(br)Just like any other ingot the $(item)Force Ingot$() can be crafted into 9 nuggets and back.");
@@ -456,16 +456,16 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.force_rod_recipe.text", "The $(item)Force Rod$() Crafting Recipe");
 
 		add("info.forcecraft.book.baconator.entry.name", "Baconator");
-		add("info.forcecraft.book.baconator_info.text", "The $(item)Baconator$() is a tool that can automatically feed the user as long as there is $(l,forcecraft,infuser/bacon)Bacon$() in the $(item)Baconator$()'s magazine.$(br)$(br)To insert $(l,forcecraft,infuser/bacon)Bacon$() into the $(item)Baconator$() you shift right-click the baconator while there's $(l,forcecraft,infuser/bacon)Cooked Bacon$() in your inventory.");
-		add("info.forcecraft.book.baconator_recipe.text", "The $(item)Baconator$() Crafting Recipe$(br)$(br)Once $(l,forcecraft,infuser/bacon)Bacon$() has been inserted you can either hold right-click to manually eat or shift right-click again to activate automatic eating.");
+		add("info.forcecraft.book.baconator_info.text", "The $(item)Baconator$() is a tool that can automatically feed the user as long as there is $(l:forcecraft:infuser/bacon)Bacon$() in the $(item)Baconator$()'s magazine.$(br)$(br)To insert $(l:forcecraft:infuser/bacon)Bacon$() into the $(item)Baconator$() you shift right-click the baconator while there's $(l:forcecraft:infuser/bacon)Cooked Bacon$() in your inventory.");
+		add("info.forcecraft.book.baconator_recipe.text", "The $(item)Baconator$() Crafting Recipe$(br)$(br)Once $(l:forcecraft:infuser/bacon)Bacon$() has been inserted you can either hold right-click to manually eat or shift right-click again to activate automatic eating.");
 
 		add("info.forcecraft.book.bacon.entry.name", "Bacon");
-		add("info.forcecraft.book.bacon_info.text", "$(item)Bacon$() is a food item added by ForceCraft.$(br)$(br)It can be obtained by using $(l,forcecraft,infuser/force_shears)Force Shears$() on a $(l)Pig$(), which will drop $(item)Raw Bacon$() or $(item)Cooked Bacon$() when infused with $(l,forcecraft,tier_4/heat_upgrade)Heat$()$(br)$(br)The $(item)Bacon$() can be eaten or inserted into a $(l,forcecraft,infuser/baconator)Baconator$() to allow for automated eating.");
+		add("info.forcecraft.book.bacon_info.text", "$(item)Bacon$() is a food item added by ForceCraft.$(br)$(br)It can be obtained by using $(l:forcecraft:infuser/force_shears)Force Shears$() on a $(l)Pig$(), which will drop $(item)Raw Bacon$() or $(item)Cooked Bacon$() when infused with $(l:forcecraft:tier_4/heat_upgrade)Heat$()$(br)$(br)The $(item)Bacon$() can be eaten or inserted into a $(l:forcecraft:infuser/baconator)Baconator$() to allow for automated eating.");
 		add("info.forcecraft.book.bacon_recipe.text", "The $(item)Bacon$() Smelting Recipe");
 
 		add("info.forcecraft.book.force_shears.entry.name", "Force Shears");
 		add("info.forcecraft.book.force_shears_info.text", "The $(item)Force Shears$() can do the same things a regular Shear can do but in addition to that they can be used to gather materials from certain mobs without hurting them.");
-		add("info.forcecraft.book.force_shears_info2.text", "The list of mobs that can be sheared with $(item)Force Shears$() is as follows,$(br)$(li)On a $(l)Cow$(), Drops leather$(li)On a $(l)Pig$(), $(l,forcecraft,infuser/bacon)Raw Bacon$()$(li)On a $(l)Chicken$(), Drops feathers");
+		add("info.forcecraft.book.force_shears_info2.text", "The list of mobs that can be sheared with $(item)Force Shears$() is as follows,$(br)$(li)On a $(l)Cow$(), Drops leather$(li)On a $(l)Pig$(), $(l:forcecraft:infuser/bacon)Raw Bacon$()$(li)On a $(l)Chicken$(), Drops feathers");
 		add("info.forcecraft.book.force_shears_recipe.text", "The $(item)Force Shears$() Crafting Recipe");
 
 		add("info.forcecraft.book.force_furnace.entry.name", "Force Furnace");
@@ -483,10 +483,10 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.requirements_tome.text", "The third requirement is an $(item)Upgrade Tome$() which is required for infusions. Without it the $(item)Infuser$() will not function.$(br)$(br)To upgrade the Tome, you need to acquire Force Points and complete all infusions in the current tier");
 
 		add("info.forcecraft.book.upgrade_core.entry.name", "Upgrade Core");
-		add("info.forcecraft.book.upgrade_core_info.text", "The $(item)Upgrade Core$() can be used to craft $(l,forcecraft,infuser/furnace)$(item)Force Furnace$() upgrade cores. With these you can enhance aspects of the Furnace to suit your needs.");
+		add("info.forcecraft.book.upgrade_core_info.text", "The $(item)Upgrade Core$() can be used to craft $(l:forcecraft:infuser/furnace)$(item)Force Furnace$() upgrade cores. With these you can enhance aspects of the Furnace to suit your needs.");
 		add("info.forcecraft.book.upgrade_core_recipe.text", "$(l)Note,$() The recipe requires an $(item)Experience Tome$() with at least 100 xp.");
 
-		add("info.forcecraft.book.upgrade_core_link.text", "You can check the page on the $(l,forcecraft,infuser/upgrade_core)$(item)Upgrade Core$() to learn how to craft it");
+		add("info.forcecraft.book.upgrade_core_link.text", "You can check the page on the $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$() to learn how to craft it");
 
 		add("info.forcecraft.book.tier_0.name", "Tier 0 Infusions");
 		add("info.forcecraft.book.tier_0.desc", "Infusions that can be executed by default$(br)$(br)Complete all tier zero infusions to upgrade your Tome to the next tier (2 total)");
@@ -499,7 +499,7 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.tier_1.desc", "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 1$(br)$(br)Complete all tier one infusions to upgrade your Tome to the next tier (3 total)");
 		add("info.forcecraft.book.speed.entry.name", "Speed");
 		add("info.forcecraft.book.speed_info.text", "This infusion does the following,$(br)$(li)On $(item)Force Tools$(), Increases the tool efficiency$(br)$(li)On a $(item)Force Bow$() (Max lvl, 1), Makes arrows fly faster and farther$(br)$(li)On $(item)Force Armor$() (Max lvl, 1), Increase player movement speed");
-		add("info.forcecraft.book.speed_info.text2", "$(li)On an $(l,forcecraft,infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to an $(item)Speed Core$() to use as an upgrade for the $(l,forcecraft,infuser/furnace)$(item)Force Furnace$()");
+		add("info.forcecraft.book.speed_info.text2", "$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to an $(item)Speed Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()");
 		add("info.forcecraft.book.lumberjack.entry.name", "Lumberjack");
 		add("info.forcecraft.book.lumberjack_info.text", "This infusion does the following,$(br)$(li)On a $(item)Force Axe$(), Breaks every wooden block in a vertical pillar instantly, using twice the durability");
 		add("info.forcecraft.book.heat.entry.name", "Heat");
@@ -513,19 +513,19 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.rainbow.entry.name", "Rainbow");
 		add("info.forcecraft.book.rainbow_info.text", "This infusion does the following,$(br)$(li)On $(item)Force Shears$(), Randomly colors Wool dropped from shearing Sheep");
 		add("info.forcecraft.book.experience.entry.name", "Experience Tome");
-		add("info.forcecraft.book.experience_info.text", "This infusion does the following,$(br)$(li)On a $(item)Book$(), Creates an $(item)Experience Tome$()$(br)$(li)On an $(l,forcecraft,infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to an $(item)Experience Core$() to use as an upgrade for the $(l,forcecraft,infuser/furnace)$(item)Force Furnace$()");
+		add("info.forcecraft.book.experience_info.text", "This infusion does the following,$(br)$(li)On a $(item)Book$(), Creates an $(item)Experience Tome$()$(br)$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to an $(item)Experience Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()");
 		add("info.forcecraft.book.experience_core.entry.name", "Experience Core");
-		add("info.forcecraft.book.experience_core_info.text", "This infusion does the following,$(br)$(li)On an $(l,forcecraft,infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to an $(item)Experience Core$() to use as an upgrade for the $(l,forcecraft,infuser/furnace)$(item)Force Furnace$()");
+		add("info.forcecraft.book.experience_core_info.text", "This infusion does the following,$(br)$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to an $(item)Experience Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()");
 		add("info.forcecraft.book.holding.entry.name", "Holding");
 		add("info.forcecraft.book.holding_info.text", "This infusion does the following,$(br)$(li)On a $(item)Force Pack$(), Adds an additional 8 storage slots. Allowing you to upgrade the base $(item)Force Pack$() to 16 slots.");
 		add("info.forcecraft.book.freezing.entry.name", "Freezing");
 		add("info.forcecraft.book.freezing_info.text", "This infusion does the following,$(br)$(li)On a $(item)Force Bow$(), Adds a freezing effect to the arrows");
 		add("info.forcecraft.book.freezing_core.entry.name", "Freezing Core");
-		add("info.forcecraft.book.freezing_core_info.text", "This infusion does the following,$(br)$(li)On an $(l,forcecraft,infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to an $(item)Freezing Core$() to use as an upgrade for the $(l,forcecraft,infuser/furnace)$(item)Force Furnace$()");
+		add("info.forcecraft.book.freezing_core_info.text", "This infusion does the following,$(br)$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to an $(item)Freezing Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()");
 		add("info.forcecraft.book.grinding_core.entry.name", "Grinding Core");
-		add("info.forcecraft.book.grinding_core_info.text", "This infusion does the following,$(br)$(li)On an $(l,forcecraft,infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to a $(item)Grinding Core$() to use as an upgrade for the $(l,forcecraft,infuser/furnace)$(item)Force Furnace$()");
+		add("info.forcecraft.book.grinding_core_info.text", "This infusion does the following,$(br)$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to a $(item)Grinding Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()");
 		add("info.forcecraft.book.speed_core.entry.name", "Speed Core");
-		add("info.forcecraft.book.speed_core_info.text", "This infusion does the following,$(br)$(li)On an $(l,forcecraft,infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to a $(item)Speed Core$() to use as an upgrade for the $(l,forcecraft,infuser/furnace)$(item)Force Furnace$()");
+		add("info.forcecraft.book.speed_core_info.text", "This infusion does the following,$(br)$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to a $(item)Speed Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()");
 
 		add("info.forcecraft.book.tier_3.name", "Tier 3 Infusions");
 		add("info.forcecraft.book.tier_3.desc", "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 3$(br)$(br)Complete all tier three infusions to upgrade your Tome to the next tier (4 total)");
@@ -535,7 +535,7 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.bleeding_info.text", "This infusion does the following,$(br)$(li)On a $(item)Force Sword$(), Will imbue Force Punch with the Bleeding effect$(br)$(li)On a $(item)Force Bow$(), Will imbue the bow's projectiles with Bleeding$(br)$(li)On $(item)Force Armor$(), Will imbue the armor with Bleeding cursing any hit enemy");
 		add("info.forcecraft.book.bleeding_info.text2", "Bleeding inflicts a half of damage twice per second. It lasts one second per cumulated level of Bleeding$(br)Bleeding from different items $(l)will$() stack up to 15 seconds");
 		add("info.forcecraft.book.camo.entry.name", "Camo");
-		add("info.forcecraft.book.camo_info.text", "This infusion does the following,$(br)$(li)On a $(l,forcecraft,infuser/force_rod)$(item)Force Rod$(), Will imbue the rod with Invisibility$(br)$(li)On $(item)Force Armor$(), Makes the armor invisible, showing the player's skin instead of the armor");
+		add("info.forcecraft.book.camo_info.text", "This infusion does the following,$(br)$(li)On a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$(), Will imbue the rod with Invisibility$(br)$(li)On $(item)Force Armor$(), Makes the armor invisible, showing the player's skin instead of the armor");
 		add("info.forcecraft.book.silk.entry.name", "Silky");
 		add("info.forcecraft.book.silk_info.text", "This infusion does the following,$(br)$(li)On $(item)Force Tools$(), Will imbue the tools with Silk Touch");
 
@@ -547,14 +547,14 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.bane_info.text", "This infusion does the following,$(br)$(li)On a $(item)Force Sword$(), Will imbue the sword with Bane$(br)$(li)On a $(item)Force Bow$(), Will imbue the bow's projectiles with Bane$(br)$(li)On $(item)Force Armor$(), will imbue any projectile fired by a bow with Bane");
 		add("info.forcecraft.book.bane_info.text2", "Bane will permanently remove certain monster abilities, leaving them mostly harmless,$(br)$(li)$(l)Creepers$() hit with bane will lose the ability to blow up$(br)$(li)$(l)Enderman$() and $(l)Ender Tots$() hit with bane will lose the ability to teleport");
 		add("info.forcecraft.book.heat_upgrade.entry.name", "Heat Upgrade");
-		add("info.forcecraft.book.heat_upgrade_info.text", "This infusion does the following,$(br)$(li)On an $(l,forcecraft,infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to a $(item)Heat Core$() to use as an upgrade for the $(l,forcecraft,infuser/furnace)$(item)Force Furnace$()");
+		add("info.forcecraft.book.heat_upgrade_info.text", "This infusion does the following,$(br)$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to a $(item)Heat Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()");
 
 		add("info.forcecraft.book.tier_5.name", "Tier 5 Infusions");
 		add("info.forcecraft.book.tier_5.desc", "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 5$(br)$(br)Complete all tier five infusions to upgrade your Tome to the next tier (3 total)");
 		add("info.forcecraft.book.holding_4.entry.name", "Holding 4");
 		add("info.forcecraft.book.holding_4_info.text", "This infusion does the following,$(br)$(li)On a $(item)Force Pack$(), Adds an additional 8 storage slots. Allowing you to upgrade the $(item)Force Pack$() to 40 slots which is the maximum amount of slots the pack can handle.");
 		add("info.forcecraft.book.healing.entry.name", "Healing");
-		add("info.forcecraft.book.healing_info.text", "This infusion does the following,$(br)$(li)On a $(l,forcecraft,infuser/force_rod)$(item)Force Rod$() (Max lvl, 2), Will imbue the rod with Healing");
+		add("info.forcecraft.book.healing_info.text", "This infusion does the following,$(br)$(li)On a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$() (Max lvl, 2), Will imbue the rod with Healing");
 		add("info.forcecraft.book.wing.entry.name", "Wing");
 		add("info.forcecraft.book.wing_info.text", "This infusion does the following,$(br)$(li)On a $(item)Force Sword$(), will allow the user to propel themselves forward while using some durability");
 
@@ -563,7 +563,7 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.time.entry.name", "Time");
 		add("info.forcecraft.book.time_info.text", "This infusion does the following,$(br)$(li)On a $(item)Force Torch$(), Imbues the torch with time converting it to a $(item)Time Torch$()$(br)$(br)$(l)Note,$() If you're unable to execute the infusion it means the recipe has been disabled in the config");
 		add("info.forcecraft.book.ender.entry.name", "Ender");
-		add("info.forcecraft.book.ender_info.text", "This infusion does the following,$(br)$(li)On a $(l,forcecraft,infuser/force_rod)$(item)Force Rod$(), Will imbue the rod with Ender allowing it to be used as a teleportation device$(br)$(li)On a $(item)Force Sword$(), Will add Ender to the sword allowing you to teleport to a targeted spot");
+		add("info.forcecraft.book.ender_info.text", "This infusion does the following,$(br)$(li)On a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$(), Will imbue the rod with Ender allowing it to be used as a teleportation device$(br)$(li)On a $(item)Force Sword$(), Will add Ender to the sword allowing you to teleport to a targeted spot");
 		add("info.forcecraft.book.ender_info.text2", "$(li)On a $(item)Force Bow$(), will imbue any projectile fired by the bow, causing enemies to teleport to a random location");
 		add("info.forcecraft.book.sturdy.entry.name", "Sturdy");
 		add("info.forcecraft.book.sturdy_info.text", "This infusion does the following,$(br)$(li)On $(item)Force Tools$() (Max lvl, 3), will imbue with the vanilla Unbreaking enchantment$(br)$(li)On $(item)Force Armor$() (1 level per piece), Reduces damage from all sources for a total of 75%");
@@ -571,7 +571,7 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.tier_7.name", "Tier 7 Infusions");
 		add("info.forcecraft.book.tier_7.desc", "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 7");
 		add("info.forcecraft.book.light.entry.name", "Light");
-		add("info.forcecraft.book.light_info.text", "This infusion does the following,$(br)$(li)On a $(l,forcecraft,infuser/force_rod)$(item)Force Rod$() (Max lvl, 1), Will imbue the rod with Light, allowing you to make the enemy glow (The effect can be removed by drinking milk)$(br)$(li)On a $(item)Force Bow$(), will imbue any projectile fired by the bow, causing enemies to start glowing for 10 seconds");
+		add("info.forcecraft.book.light_info.text", "This infusion does the following,$(br)$(li)On a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$() (Max lvl, 1), Will imbue the rod with Light, allowing you to make the enemy glow (The effect can be removed by drinking milk)$(br)$(li)On a $(item)Force Bow$(), will imbue any projectile fired by the bow, causing enemies to start glowing for 10 seconds");
 		add("info.forcecraft.book.treasure.entry.name", "Treasure");
 		add("info.forcecraft.book.treasure_info.text", "This infusion does the following,$(br)$(li)On a $(item)Force Sword$(), will imbue the sword with the 'treasure' property causing slain mobs to drop $(item)Treasure Cards$() $(li)On a $(item)Force Axe$(), will imbue the axe with the 'treasure' property causing slain mobs to drop $(item)Treasure Cards() which can be crafted into a $(item)Spoils Bag$()");
 
