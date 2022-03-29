@@ -10,7 +10,6 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -95,11 +94,6 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 		} else {
 			builder.addSlot(RecipeIngredientRole.OUTPUT, 120, 47).addItemStack(recipe.getResultItem());
 		}
-	}
-
-	@Override
-	public void setIngredients(InfuseRecipe recipe, IIngredients ingredients) {
-		IRecipeCategory.super.setIngredients(recipe, ingredients);
 	}
 
 	@Override
