@@ -6,10 +6,12 @@ import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -31,7 +33,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 
 	public InfuserCategory(IGuiHelper guiHelper) {
 		this.background = guiHelper.createDrawable(JeiCompat.RECIPE_INFUSER_JEI, 0, 0, 137, 109);
-		this.icon = guiHelper.createDrawableIngredient(new ItemStack(ForceRegistry.INFUSER.get()));
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(ForceRegistry.INFUSER.get()));
 		this.localizedName = new TranslatableComponent("forcecraft.gui.jei.category.infuser");
 	}
 
@@ -40,11 +42,13 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 		return JeiCompat.INFUSER_TYPE;
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
 		return JeiCompat.INFUSER;
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends InfuseRecipe> getRecipeClass() {
 		return InfuseRecipe.class;

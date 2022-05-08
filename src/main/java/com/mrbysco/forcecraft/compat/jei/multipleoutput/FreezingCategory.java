@@ -18,11 +18,13 @@ public class FreezingCategory extends AbstractMultiOutputCategory<FreezingRecipe
 		return JeiCompat.FREEZING_TYPE;
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
 		return JeiCompat.FREEZING;
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends FreezingRecipe> getRecipeClass() {
 		return FreezingRecipe.class;

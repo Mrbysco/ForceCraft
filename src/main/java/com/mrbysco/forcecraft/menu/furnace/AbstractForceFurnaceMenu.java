@@ -32,7 +32,6 @@ import java.util.Objects;
 
 public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 	private AbstractForceFurnaceBlockEntity tile;
-	private Player player;
 	private IItemHandler furnaceInventory;
 	private IItemHandler upgradeInventory;
 	private ContainerData furnaceData;
@@ -57,7 +56,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 	public AbstractForceFurnaceMenu(int id, Inventory playerInventoryIn, AbstractForceFurnaceBlockEntity te) {
 		super(ForceContainers.FORCE_FURNACE.get(), id);
 		this.tile = te;
-		this.player = playerInventoryIn.player;
+		Player player = playerInventoryIn.player;
 		this.world = player.level;
 		this.furnaceInventory = tile.handler;
 		this.upgradeInventory = tile.upgradeHandler;
