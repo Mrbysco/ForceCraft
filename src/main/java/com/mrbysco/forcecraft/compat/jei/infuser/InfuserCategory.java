@@ -11,7 +11,6 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -24,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<InfuseRecipe> {
@@ -70,34 +70,31 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 
 		builder.addSlot(RecipeIngredientRole.INPUT, 46, 47).addIngredients(recipe.getIngredients().get(0));
 
-		if (recipe.getResultItem().isEmpty()) {
-			List<ItemStack> stacks = new ArrayList<>();
-			ItemStack[] modifierStack = recipe.getInput().getItems();
-			if (modifierStack.length > 0) {
-				InfuserModifierType type = recipe.getModifier();
-				UpgradeBookData fakeUpgradeBook = new UpgradeBookData(new ItemStack(ForceRegistry.UPGRADE_TOME.get()));
-				fakeUpgradeBook.setTier(recipe.getTier());
+		List<ItemStack> stacks = new ArrayList<>();
+		ItemStack[] modifierStack = recipe.getInput().getItems();
+		if (modifierStack.length > 0) {
+			InfuserModifierType type = recipe.getModifier();
+			UpgradeBookData fakeUpgradeBook = new UpgradeBookData(new ItemStack(ForceRegistry.UPGRADE_TOME.get()));
+			fakeUpgradeBook.setTier(recipe.getTier());
 
-				for (ItemStack center : matchingStacks) {
-					ItemStack centerStack = center.copy();
-					if (centerStack.getItem() == ForceRegistry.FORCE_PACK.get()) {
-						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
-						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
-						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
-						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
-					} else {
-						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
-					}
-
-					stacks.add(centerStack);
+			for (ItemStack center : matchingStacks) {
+				ItemStack centerStack = center.copy();
+				if (centerStack.getItem() == ForceRegistry.FORCE_PACK.get()) {
+					type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
+					type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
+					type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
+					type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
+				} else {
+					type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
 				}
-				builder.addSlot(RecipeIngredientRole.OUTPUT, 46, 10).addItemStacks(stacks);
-			} else {
-				builder.addSlot(RecipeIngredientRole.OUTPUT, 46, 10).addItemStack(matchingStacks[0]);
+
+				stacks.addAll(Arrays.stream(modifierStack).toList());
 			}
+			builder.addSlot(RecipeIngredientRole.OUTPUT, 46, 10).addItemStacks(stacks);
 		} else {
-			builder.addSlot(RecipeIngredientRole.OUTPUT, 120, 47).addItemStack(recipe.getResultItem());
+			builder.addSlot(RecipeIngredientRole.OUTPUT, 46, 10).addItemStack(matchingStacks[0]);
 		}
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 120, 47).addItemStack(recipe.getResultItem());
 	}
 
 	@Override

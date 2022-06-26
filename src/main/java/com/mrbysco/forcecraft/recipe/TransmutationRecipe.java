@@ -68,7 +68,7 @@ public class TransmutationRecipe implements CraftingRecipe {
 
 	@Override
 	public boolean isSpecial() {
-		return true;
+		return false;
 	}
 
 	@Override
