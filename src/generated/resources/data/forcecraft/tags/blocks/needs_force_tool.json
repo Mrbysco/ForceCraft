@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "forcecraft:infuser"
+    "forcecraft:infuser",
+    "forcecraft:force_engine"
   ]
 }

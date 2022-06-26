@@ -47,7 +47,7 @@ public class ForceBlockTags extends BlockTagsProvider {
 				FORCE_BRICK_LIGHT_GRAY_SLAB.get(), FORCE_BRICK_LIME_SLAB.get(), FORCE_BRICK_CYAN_SLAB.get(), FORCE_BRICK_PURPLE_SLAB.get(),
 				FORCE_BRICK_GRAY_SLAB.get(), FORCE_BRICK_SLAB.get(), FORCE_ENGINE.get()
 		);
-		this.tag(ForceTags.NEEDS_FORCE_TOOL).add(INFUSER.get());
+		this.tag(ForceTags.NEEDS_FORCE_TOOL).add(INFUSER.get(), FORCE_ENGINE.get());
 		this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(FORCE_BRICK_RED.get(), FORCE_BRICK_YELLOW.get(),
 				FORCE_BRICK_GREEN.get(), FORCE_BRICK_BLUE.get(), FORCE_BRICK_WHITE.get(), FORCE_BRICK_BLACK.get(),
 				FORCE_BRICK_BROWN.get(), FORCE_BRICK_ORANGE.get(), FORCE_BRICK_LIGHT_BLUE.get(), FORCE_BRICK_MAGENTA.get(),
