@@ -1,14 +1,13 @@
 package com.mrbysco.forcecraft.datagen.data.tags;
 
 import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
@@ -48,7 +47,8 @@ public class ForceBlockTags extends BlockTagsProvider {
 				FORCE_BRICK_LIGHT_GRAY_SLAB.get(), FORCE_BRICK_LIME_SLAB.get(), FORCE_BRICK_CYAN_SLAB.get(), FORCE_BRICK_PURPLE_SLAB.get(),
 				FORCE_BRICK_GRAY_SLAB.get(), FORCE_BRICK_SLAB.get(), FORCE_ENGINE.get()
 		);
-		this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(INFUSER.get(), FORCE_BRICK_RED.get(), FORCE_BRICK_YELLOW.get(),
+		this.tag(ForceTags.NEEDS_FORCE_TOOL).add(INFUSER.get());
+		this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(FORCE_BRICK_RED.get(), FORCE_BRICK_YELLOW.get(),
 				FORCE_BRICK_GREEN.get(), FORCE_BRICK_BLUE.get(), FORCE_BRICK_WHITE.get(), FORCE_BRICK_BLACK.get(),
 				FORCE_BRICK_BROWN.get(), FORCE_BRICK_ORANGE.get(), FORCE_BRICK_LIGHT_BLUE.get(), FORCE_BRICK_MAGENTA.get(),
 				FORCE_BRICK_PINK.get(), FORCE_BRICK_LIGHT_GRAY.get(), FORCE_BRICK_LIME.get(), FORCE_BRICK_CYAN.get(),
