@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.networking.message;
 
-import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.items.ItemCardItem;
+import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;

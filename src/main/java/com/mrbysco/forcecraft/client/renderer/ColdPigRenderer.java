@@ -3,7 +3,6 @@ package com.mrbysco.forcecraft.client.renderer;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.client.model.ColdPigModel;
 import com.mrbysco.forcecraft.entities.ColdPigEntity;
-import net.minecraft.client.model.PigModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;

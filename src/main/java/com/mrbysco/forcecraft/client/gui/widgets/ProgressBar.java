@@ -77,15 +77,18 @@ public class ProgressBar extends GuiComponent {
 				this.blit(poseStack, positionX, positionY, textureX, textureY, width, height);
 				this.blit(poseStack, positionX, positionY + getAdjustedHeight(), positionX, positionY + getAdjustedHeight(), width - getAdjustedWidth(), height - getAdjustedHeight());
 			}
-			case DIAGONAL_DOWN_RIGHT -> this.blit(poseStack, positionX, positionY, textureX, textureY, getAdjustedWidth(), getAdjustedHeight());
+			case DIAGONAL_DOWN_RIGHT ->
+					this.blit(poseStack, positionX, positionY, textureX, textureY, getAdjustedWidth(), getAdjustedHeight());
 			case DOWN_TO_UP -> //the only one that gets used
 					this.blit(poseStack, positionX, positionY, textureX, textureY, width, height - getAdjustedHeight());
-			case LEFT_TO_RIGHT -> this.blit(poseStack, positionX, positionY, textureX, textureY, getAdjustedWidth(), height);
+			case LEFT_TO_RIGHT ->
+					this.blit(poseStack, positionX, positionY, textureX, textureY, getAdjustedWidth(), height);
 			case RIGHT_TO_LEFT -> {
 				this.blit(poseStack, positionX, positionY, textureX, textureY, width, height);
 				this.blit(poseStack, positionX, positionY, positionX, positionY, width - getAdjustedWidth(), height);
 			}
-			case UP_TO_DOWN -> this.blit(poseStack, positionX, positionY, textureX, textureY, width, getAdjustedHeight());
+			case UP_TO_DOWN ->
+					this.blit(poseStack, positionX, positionY, textureX, textureY, width, getAdjustedHeight());
 			default -> this.blit(poseStack, positionX, positionY, textureX, textureY, width, height);
 		}
 	}

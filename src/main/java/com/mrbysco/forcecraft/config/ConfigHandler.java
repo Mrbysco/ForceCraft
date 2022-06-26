@@ -8,7 +8,6 @@ import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -22,6 +21,7 @@ public class ConfigHandler {
 		public final BooleanValue generateForceTree;
 		public final BooleanValue timeTorchEnabled;
 		public final BooleanValue timeTorchLogging;
+		public final BooleanValue disableRecoveryHearts;
 		public final IntValue baconatorMaxStacks;
 		public final DoubleValue sturdyDamageReduction;
 		public final DoubleValue forcePunchDamage;
@@ -65,20 +65,24 @@ public class ConfigHandler {
 					.push("general");
 
 			generateForceOre = builder
-					.comment("Enable Force Ore generation. [Default: true]")
+					.comment("Enable Force Ore generation [Default: true]")
 					.define("generateForceOre", true);
 
 			generateForceTree = builder
-					.comment("Enable Force Tree generation. [Default: true]")
+					.comment("Enable Force Tree generation [Default: true]")
 					.define("generateForceTree", true);
 
 			timeTorchEnabled = builder
-					.comment("Enable Time Torch. [Default: true]")
+					.comment("Enable Time Torch [Default: true]")
 					.define("timeTorchEnabled", true);
 
 			timeTorchLogging = builder
-					.comment("Print in Log when Time Torch is placed and by who. [Default: true]")
+					.comment("Print in Log when Time Torch is placed and by who [Default: true]")
 					.define("timeTorchLogging", true);
+
+			disableRecoveryHearts = builder
+					.comment("Disable recovery hearts from dropping [Default: false]")
+					.define("disableRecoveryHearts", false);
 
 			baconatorMaxStacks = builder
 					.comment("The max amount of food stacks stored in the baconator [Default: 4]")

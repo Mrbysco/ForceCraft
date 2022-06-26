@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.networking.message;
 
-import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.items.ItemCardItem;
+import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;

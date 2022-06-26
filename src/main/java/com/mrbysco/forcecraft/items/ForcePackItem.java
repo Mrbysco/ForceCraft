@@ -3,7 +3,6 @@ package com.mrbysco.forcecraft.items;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.menu.ForcePackMenu;
-import com.mrbysco.forcecraft.storage.BeltStorage;
 import com.mrbysco.forcecraft.storage.PackStorage;
 import com.mrbysco.forcecraft.storage.StorageManager;
 import com.mrbysco.forcecraft.storage.WSDCapability;
@@ -24,8 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;

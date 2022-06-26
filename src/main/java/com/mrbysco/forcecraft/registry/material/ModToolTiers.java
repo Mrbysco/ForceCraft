@@ -3,7 +3,6 @@ package com.mrbysco.forcecraft.registry.material;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;

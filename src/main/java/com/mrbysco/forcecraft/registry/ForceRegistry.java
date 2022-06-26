@@ -4,7 +4,6 @@ import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
 import com.mrbysco.forcecraft.blockentities.ForceFurnaceBlockEntity;
-import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.blockentities.TimeTorchBlockEntity;
 import com.mrbysco.forcecraft.blocks.ForceFluidBlock;

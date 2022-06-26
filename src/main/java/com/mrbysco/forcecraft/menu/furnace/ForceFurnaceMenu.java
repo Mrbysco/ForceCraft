@@ -1,10 +1,10 @@
 package com.mrbysco.forcecraft.menu.furnace;
 
-import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
+import com.mrbysco.forcecraft.registry.ForceContainers;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.network.FriendlyByteBuf;
 
 public class ForceFurnaceMenu extends AbstractForceFurnaceMenu {
 	public ForceFurnaceMenu(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {

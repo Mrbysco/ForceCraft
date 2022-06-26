@@ -2,11 +2,9 @@ package com.mrbysco.forcecraft.world;
 
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.world.feature.ForceFeatureConfigs;
-import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biome.BiomeCategory;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;

@@ -2,10 +2,10 @@ package com.mrbysco.forcecraft.util;
 
 import com.mrbysco.forcecraft.capabilities.playermodifier.IPlayerModifier;
 import com.mrbysco.forcecraft.registry.ForceEffects;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.effect.MobEffectInstance;
 
 import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
 

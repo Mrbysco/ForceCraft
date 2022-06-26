@@ -1,19 +1,15 @@
 package com.mrbysco.forcecraft.registry;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
-import com.mrbysco.forcecraft.items.ForceBeltItem;
-import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import com.mrbysco.forcecraft.menu.ForceBeltMenu;
 import com.mrbysco.forcecraft.menu.ForcePackMenu;
 import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.menu.SpoilsBagMenu;
 import com.mrbysco.forcecraft.menu.engine.ForceEngineMenu;
 import com.mrbysco.forcecraft.menu.furnace.ForceFurnaceMenu;
+import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;

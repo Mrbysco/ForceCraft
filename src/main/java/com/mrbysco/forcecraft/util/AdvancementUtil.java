@@ -3,9 +3,9 @@ package com.mrbysco.forcecraft.util;
 import com.mrbysco.forcecraft.Reference;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 public class AdvancementUtil {
 	public static void unlockTierAdvancements(Player player, int tier) {

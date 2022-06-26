@@ -4,9 +4,7 @@ import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class PackStorage {

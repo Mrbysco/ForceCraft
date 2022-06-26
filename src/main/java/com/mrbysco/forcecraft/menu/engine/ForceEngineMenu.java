@@ -1,18 +1,18 @@
 package com.mrbysco.forcecraft.menu.engine;
 
+import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
 import com.mrbysco.forcecraft.menu.engine.slot.FuelSlot;
 import com.mrbysco.forcecraft.menu.engine.slot.OutputSlot;
 import com.mrbysco.forcecraft.menu.engine.slot.ThrottleSlot;
 import com.mrbysco.forcecraft.registry.ForceContainers;
-import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.inventory.DataSlot;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import java.util.Objects;
