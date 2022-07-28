@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.damage.entry.name",
+  "advancement": "forcecraft:tier0/tier",
   "category": "forcecraft:tier_0",
   "icon": "forcecraft:claw",
+  "name": "info.forcecraft.book.damage.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "forcecraft:claw"
     }
   ],
-  "advancement": "forcecraft:tier0/tier",
   "secret": true
 }

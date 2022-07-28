@@ -4,7 +4,7 @@ import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
 import com.mrbysco.forcecraft.menu.engine.slot.FuelSlot;
 import com.mrbysco.forcecraft.menu.engine.slot.OutputSlot;
 import com.mrbysco.forcecraft.menu.engine.slot.ThrottleSlot;
-import com.mrbysco.forcecraft.registry.ForceContainers;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -38,7 +38,7 @@ public class ForceEngineMenu extends AbstractContainerMenu {
 	}
 
 	public ForceEngineMenu(int id, Inventory playerInventoryIn, ForceEngineBlockEntity te) {
-		super(ForceContainers.FORCE_ENGINE.get(), id);
+		super(ForceMenus.FORCE_ENGINE.get(), id);
 		this.tile = te;
 		this.player = playerInventoryIn.player;
 

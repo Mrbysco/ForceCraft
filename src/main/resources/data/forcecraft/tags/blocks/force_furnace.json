@@ -1,7 +1,6 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:force_furnace",
+	"forcecraft:force_furnace",
 	"forcecraft:black_force_furnace",
 	"forcecraft:blue_force_furnace",
 	"forcecraft:brown_force_furnace",

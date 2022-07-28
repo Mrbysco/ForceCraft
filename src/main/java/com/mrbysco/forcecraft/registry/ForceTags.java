@@ -26,8 +26,8 @@ public class ForceTags {
 	public static final TagKey<Item> VALID_INFUSER_MODIFIERS = ItemTags.create(new ResourceLocation(Reference.MOD_ID, "valid_infuser_modifiers"));
 	public static final TagKey<Item> VALID_INFUSER_TOOLS = ItemTags.create(new ResourceLocation(Reference.MOD_ID, "valid_infuser_tools"));
 	public static final TagKey<Item> VALID_INFUSER_CHARGE = ItemTags.create(new ResourceLocation(Reference.MOD_ID, "valid_infuser_charge"));
+	public static final TagKey<Item> TOOLS = ItemTags.create(new ResourceLocation(Reference.MOD_ID, "tools"));
 	public static final TagKey<Item> FORCE_FUELS = ItemTags.create(new ResourceLocation(Reference.MOD_ID, "force_fuel"));
-	public static final TagLookup<Item> FORCE_FUELS_LOOKUP = new TagLookup<>(ForgeRegistries.ITEMS, FORCE_FUELS);
 	public static final TagKey<Item> BACONATOR_FOOD = ItemTags.create(new ResourceLocation(Reference.MOD_ID, "baconator_food"));
 	public static final TagKey<Item> VALID_FORCE_BELT = ItemTags.create(new ResourceLocation(Reference.MOD_ID, "valid_force_belt"));
 	public static final TagKey<Item> ENDER = ItemTags.create(new ResourceLocation(Reference.MOD_ID, "ender"));
@@ -39,9 +39,7 @@ public class ForceTags {
 
 	//Fuels
 	public static final TagKey<Fluid> FORCE = forgeFluidTag("force");
-	public static final TagLookup<Fluid> FORCE_LOOKUP = new TagLookup<>(ForgeRegistries.FLUIDS, FORCE);
 	public static final TagKey<Fluid> MILK = forgeFluidTag("milk");
-	public static final TagLookup<Fluid> MILK_LOOKUP = new TagLookup<>(ForgeRegistries.FLUIDS, MILK);
 	public static final TagKey<Fluid> FUEL = optionalForgeFluidTag("fuel");
 	public static final TagKey<Fluid> BIOFUEL = optionalForgeFluidTag("biofuel");
 
@@ -49,7 +47,7 @@ public class ForceTags {
 	public static final TagKey<Block> ENDERTOT_HOLDABLE = forceBlockTag("endertot_holdable");
 
 	public static final TagKey<EntityType<?>> FLASK_BLACKLIST = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(Reference.MOD_ID, "flask_blacklist"));
-	public static final TagLookup<EntityType<?>> FLASK_BLACKLIST_LOOKUP = new TagLookup<>(ForgeRegistries.ENTITIES, FLASK_BLACKLIST);
+	public static final TagLookup<EntityType<?>> FLASK_BLACKLIST_LOOKUP = new TagLookup<>(ForgeRegistries.ENTITY_TYPES, FLASK_BLACKLIST);
 
 	private static TagKey<Item> forgeItemTag(String name) {
 		return ItemTags.create(new ResourceLocation("forge", name));

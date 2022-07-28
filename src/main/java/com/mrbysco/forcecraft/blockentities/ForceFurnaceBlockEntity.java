@@ -5,7 +5,6 @@ import com.mrbysco.forcecraft.menu.furnace.ForceFurnaceMenu;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,7 +15,7 @@ public class ForceFurnaceBlockEntity extends AbstractForceFurnaceBlockEntity {
 	}
 
 	protected Component getDefaultName() {
-		return new TranslatableComponent(Reference.MOD_ID + ".container.force_furnace");
+		return Component.translatable(Reference.MOD_ID + ".container.force_furnace");
 	}
 
 	protected AbstractContainerMenu createMenu(int id, Inventory player) {

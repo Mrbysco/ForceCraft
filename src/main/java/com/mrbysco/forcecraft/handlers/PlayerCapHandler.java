@@ -49,15 +49,13 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void onLogin(PlayerLoggedInEvent event) {
-		if (event.getEntityLiving() instanceof Player player) {
-			//Sync on login
-			updateArmorProperties(player);
-		}
+		//Sync on login
+		updateArmorProperties(event.getEntity());
 	}
 
 	@SubscribeEvent
 	public void equipmentChangeEvent(LivingEquipmentChangeEvent event) {
-		if (event.getEntityLiving() instanceof Player player) {
+		if (event.getEntity() instanceof Player player) {
 			updateArmorProperties(player);
 		}
 	}
@@ -124,7 +122,7 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void harvestCheckEvent(HarvestCheck event) {
-		Player player = event.getPlayer();
+		final Player player = event.getEntity();
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
 			if (cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
 				if (event.getTargetBlock().getBlock().getExplosionResistance() <= 2) {
@@ -136,7 +134,7 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void breakSpeedEvent(BreakSpeed event) {
-		Player player = event.getPlayer();
+		final Player player = event.getEntity();
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
 			if (cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
 				if (event.getOriginalSpeed() < 6) {

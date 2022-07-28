@@ -28,9 +28,9 @@ public class ToolModifierHandler {
 		if (event.getSource() == null) {
 			return;
 		}
-		DamageSource source = event.getSource();
+		final DamageSource source = event.getSource();
 
-		LivingEntity target = event.getEntityLiving();
+		final LivingEntity target = event.getEntity();
 		Entity trueSource = source.getEntity();
 		if (trueSource instanceof Player) {
 			Player player = (Player) source.getEntity();

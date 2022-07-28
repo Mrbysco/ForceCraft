@@ -1,0 +1,5 @@
+// 1.19	2022-07-28T03:05:24.0466769	Tags for minecraft:block
+6682e317fdf17b7ed16b01be6244689ba18716a1 data/forcecraft/tags/blocks/needs_force_tool.json
+d94fd271d026743c3bd819f1ffa735abd3333843 data/minecraft/tags/blocks/mineable/pickaxe.json
+bbb8aafb9fe8b2ac991b03b55e4a2bee3318a1da data/minecraft/tags/blocks/needs_diamond_tool.json
+f002772c304bb8350635523d7d3bb1c4fdb5796a data/minecraft/tags/blocks/needs_iron_tool.json

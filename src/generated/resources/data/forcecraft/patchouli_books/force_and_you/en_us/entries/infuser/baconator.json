@@ -1,7 +1,7 @@
 {
-  "name": "info.forcecraft.book.baconator.entry.name",
   "category": "forcecraft:infuser",
   "icon": "forcecraft:baconator",
+  "name": "info.forcecraft.book.baconator.entry.name",
   "pages": [
     {
       "type": "patchouli:text",

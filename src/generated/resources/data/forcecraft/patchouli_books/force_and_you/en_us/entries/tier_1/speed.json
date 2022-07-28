@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.speed.entry.name",
+  "advancement": "forcecraft:tier1/tier",
   "category": "forcecraft:tier_1",
   "icon": "minecraft:sugar",
+  "name": "info.forcecraft.book.speed.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -13,6 +14,5 @@
       "text": "info.forcecraft.book.speed_info.text2"
     }
   ],
-  "advancement": "forcecraft:tier1/tier",
   "secret": true
 }

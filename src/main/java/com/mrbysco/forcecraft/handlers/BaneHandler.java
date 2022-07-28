@@ -1,10 +1,9 @@
 package com.mrbysco.forcecraft.handlers;
 
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.EnderMan;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -23,10 +22,9 @@ public class BaneHandler {
 	}
 
 	@SubscribeEvent
-	public void onEntityCreation(EntityJoinWorldEvent event) {
-		if (!event.getWorld().isClientSide()) {
-			Entity entity = event.getEntity();
-			if (entity instanceof Creeper creeper) {
+	public void onEntityCreation(EntityJoinLevelEvent event) {
+		if (!event.getLevel().isClientSide()) {
+			if (event.getEntity() instanceof Creeper creeper) {
 				creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
 					if (!entityCap.canExplode()) {
 						creeper.setSwellDir(-1);

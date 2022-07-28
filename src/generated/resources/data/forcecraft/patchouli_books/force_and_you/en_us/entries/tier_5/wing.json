@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.wing.entry.name",
+  "advancement": "forcecraft:tier5/tier",
   "category": "forcecraft:tier_5",
   "icon": "minecraft:feather",
+  "name": "info.forcecraft.book.wing.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "minecraft:feather"
     }
   ],
-  "advancement": "forcecraft:tier5/tier",
   "secret": true
 }

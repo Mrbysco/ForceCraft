@@ -41,6 +41,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ToolActions;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -145,8 +146,6 @@ public class ForceMittItem extends DiggerItem {
 		ItemStack itemstack = context.getItemInHand();
 
 		Pair<Predicate<UseOnContext>, Consumer<UseOnContext>> pair = HoeItem.TILLABLES.get(level.getBlockState(blockpos).getBlock());
-		int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(context);
-		if (hook != 0) return hook > 0 ? InteractionResult.SUCCESS : InteractionResult.FAIL;
 		if (context.getClickedFace() != Direction.DOWN && level.isEmptyBlock(blockpos.above())) {
 			if (pair == null) {
 				return InteractionResult.PASS;
@@ -170,8 +169,8 @@ public class ForceMittItem extends DiggerItem {
 				}
 			}
 		}
-		Optional<BlockState> optional = Optional.ofNullable(blockstate.getToolModifiedState(level, blockpos, player, context.getItemInHand(),
-				net.minecraftforge.common.ToolActions.AXE_STRIP));
+
+		Optional<BlockState> optional = Optional.ofNullable(blockstate.getToolModifiedState(context, ToolActions.AXE_STRIP, false));
 		if (optional.isPresent()) {
 			level.playSound(player, blockpos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 			if (player instanceof ServerPlayer) {

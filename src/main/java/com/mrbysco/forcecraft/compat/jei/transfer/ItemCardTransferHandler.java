@@ -3,22 +3,36 @@ package com.mrbysco.forcecraft.compat.jei.transfer;
 import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.RecipeToCardMessage;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ingredient.IGuiIngredient;
+import com.mrbysco.forcecraft.registry.ForceMenus;
+import mezz.jei.api.gui.ingredient.IRecipeSlotView;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardMenu, CraftingRecipe> {
 	public ItemCardTransferHandler() {
 
+	}
+
+	@Override
+	public Optional<MenuType<ItemCardMenu>> getMenuType() {
+		return Optional.of(ForceMenus.ITEM_CARD.get());
+	}
+
+	@Override
+	public RecipeType<CraftingRecipe> getRecipeType() {
+		return null;
 	}
 
 	@Nullable
@@ -28,25 +42,19 @@ public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardM
 	}
 
 	@Override
-	public Class getRecipeClass() {
-		return CraftingRecipe.class;
-	}
-
-	@Nullable
-	@Override
-	public IRecipeTransferError transferRecipe(ItemCardMenu container, CraftingRecipe recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
-		Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
+	public @Nullable IRecipeTransferError transferRecipe(ItemCardMenu container, CraftingRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer) {
 		List<ItemStack> items = new ArrayList<>(10);
 		for (int i = 0; i < 10; i++) {
 			items.add(ItemStack.EMPTY);
 		}
-		for (Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> entry : guiIngredients.entrySet()) {
-			int recipeSlot = entry.getKey();
-			List<ItemStack> allIngredients = entry.getValue().getAllIngredients();
-			if (!allIngredients.isEmpty()) {
-				items.set(recipeSlot, allIngredients.get(0));
-			}
+
+		List<IRecipeSlotView> ingredients = recipeSlots.getSlotViews(RecipeIngredientRole.INPUT);
+		for (int i = 0; i < ingredients.size(); i++) {
+			items.set(i, ingredients.get(i).getDisplayedItemStack().get());
 		}
+		List<IRecipeSlotView> outputs = recipeSlots.getSlotViews(RecipeIngredientRole.OUTPUT);
+		items.set(9, outputs.get(0).getDisplayedItemStack().get());
+
 		PacketHandler.CHANNEL.sendToServer(new RecipeToCardMessage(items));
 
 		return null;

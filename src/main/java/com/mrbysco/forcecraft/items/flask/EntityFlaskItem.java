@@ -5,12 +5,9 @@ import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -56,7 +53,7 @@ public class EntityFlaskItem extends BaseItem {
 			tag.remove("EntityData");
 			stack.setTag(tag);
 		} else {
-			playerIn.sendMessage(new TranslatableComponent("item.entity_flask.empty2").withStyle(ChatFormatting.RED), Util.NIL_UUID);
+			playerIn.sendSystemMessage(Component.translatable("item.entity_flask.empty2").withStyle(ChatFormatting.RED));
 		}
 
 		stack.shrink(1);
@@ -85,7 +82,7 @@ public class EntityFlaskItem extends BaseItem {
 					itemstack.shrink(1);
 				}
 			} else {
-				playerIn.sendMessage(new TranslatableComponent("item.entity_flask.empty").withStyle(ChatFormatting.RED), Util.NIL_UUID);
+				playerIn.sendSystemMessage(Component.translatable("item.entity_flask.empty").withStyle(ChatFormatting.RED));
 			}
 		}
 
@@ -97,7 +94,7 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	public Entity getStoredEntity(ItemStack stack, Level level) {
-		EntityType<?> type = ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryParse(stack.getTag().getString("StoredEntity")));
+		EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(stack.getTag().getString("StoredEntity")));
 		if (type != null) {
 			Entity entity = type.create(level);
 			entity.load(stack.getTag().getCompound("EntityData"));
@@ -125,8 +122,8 @@ public class EntityFlaskItem extends BaseItem {
 	@Override
 	public Component getName(ItemStack stack) {
 		if (hasEntityStored(stack))
-			return new TranslatableComponent(super.getDescriptionId(stack), stack.getTag().getString("StoredEntity"));
-		return new TranslatableComponent(super.getDescriptionId(stack), "Empty");
+			return Component.translatable(super.getDescriptionId(stack), stack.getTag().getString("StoredEntity"));
+		return Component.translatable(super.getDescriptionId(stack), "Empty");
 	}
 
 	@Override
@@ -134,11 +131,11 @@ public class EntityFlaskItem extends BaseItem {
 		super.appendHoverText(stack, level, tooltip, flagIn);
 		if (hasEntityStored(stack)) {
 			CompoundTag tag = stack.getOrCreateTag();
-			tooltip.add(new TranslatableComponent("item.entity_flask.tooltip").withStyle(ChatFormatting.GOLD).append(
-					new TextComponent(String.format("[%s]", tag.getString("StoredEntity"))).withStyle(ChatFormatting.GRAY)));
+			tooltip.add(Component.translatable("item.entity_flask.tooltip").withStyle(ChatFormatting.GOLD).append(
+					Component.literal(String.format("[%s]", tag.getString("StoredEntity"))).withStyle(ChatFormatting.GRAY)));
 			if (tag.contains("EntityData")) {
-				tooltip.add(new TranslatableComponent("item.entity_flask.tooltip2").withStyle(ChatFormatting.GOLD).append(
-						new TextComponent(String.format("[%s]", tag.getCompound("EntityData").getDouble("Health"))).withStyle(ChatFormatting.GRAY)));
+				tooltip.add(Component.translatable("item.entity_flask.tooltip2").withStyle(ChatFormatting.GOLD).append(
+						Component.literal(String.format("[%s]", tag.getCompound("EntityData").getDouble("Health"))).withStyle(ChatFormatting.GRAY)));
 			}
 		}
 	}

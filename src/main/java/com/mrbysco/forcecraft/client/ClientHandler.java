@@ -24,11 +24,10 @@ import com.mrbysco.forcecraft.client.renderer.GoldChuChuRenderer;
 import com.mrbysco.forcecraft.client.renderer.GreenChuChuRenderer;
 import com.mrbysco.forcecraft.client.renderer.RedChuChuRenderer;
 import com.mrbysco.forcecraft.items.BaconatorItem;
-import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceFluids;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -40,9 +39,9 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -54,68 +53,16 @@ public class ClientHandler {
 	public static final ModelLayerLocation ENDERTOT = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "endertot"), "main");
 
 	public static void onClientSetup(final FMLClientSetupEvent event) {
-		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_OPEN_HOTBAR_PACK);
-		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_OPEN_HOTBAR_BELT);
-		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_1);
-		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_2);
-		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_3);
-		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_4);
-		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_5);
-		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_6);
-		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_7);
-		ClientRegistry.registerKeyBinding(KeybindHandler.KEY_QUICK_USE_8);
-
-		MenuScreens.register(ForceContainers.FORCE_FURNACE.get(), ForceFurnaceScreen::new);
-		MenuScreens.register(ForceContainers.INFUSER.get(), InfuserScreen::new);
-		MenuScreens.register(ForceContainers.FORCE_BELT.get(), ForceBeltScreen::new);
-		MenuScreens.register(ForceContainers.FORCE_PACK.get(), ForcePackScreen::new);
-		MenuScreens.register(ForceContainers.SPOILS_BAG.get(), SpoilsBagScreen::new);
-		MenuScreens.register(ForceContainers.ITEM_CARD.get(), ItemCardScreen::new);
-		MenuScreens.register(ForceContainers.FORCE_ENGINE.get(), ForceEngineScreen::new);
-
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.POWER_ORE.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.DEEPSLATE_POWER_ORE.get(), RenderType.cutout());
-
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_SAPLING.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_RED_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_ORANGE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_GREEN_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_BLUE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_WHITE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_BLACK_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_BROWN_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_LIGHT_BLUE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_MAGENTA_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_PINK_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_LIGHT_GRAY_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_LIME_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_CYAN_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_PURPLE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_GRAY_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_RED_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_ORANGE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_GREEN_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_BLUE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_WHITE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_BLACK_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_BROWN_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_LIGHT_BLUE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_MAGENTA_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_PINK_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_LIGHT_GRAY_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_LIME_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_CYAN_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_PURPLE_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_FORCE_GRAY_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.TIME_TORCH.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.WALL_TIME_TORCH.get(), RenderType.cutout());
+		MenuScreens.register(ForceMenus.FORCE_FURNACE.get(), ForceFurnaceScreen::new);
+		MenuScreens.register(ForceMenus.INFUSER.get(), InfuserScreen::new);
+		MenuScreens.register(ForceMenus.FORCE_BELT.get(), ForceBeltScreen::new);
+		MenuScreens.register(ForceMenus.FORCE_PACK.get(), ForcePackScreen::new);
+		MenuScreens.register(ForceMenus.SPOILS_BAG.get(), SpoilsBagScreen::new);
+		MenuScreens.register(ForceMenus.ITEM_CARD.get(), ItemCardScreen::new);
+		MenuScreens.register(ForceMenus.FORCE_ENGINE.get(), ForceEngineScreen::new);
 
 		ItemBlockRenderTypes.setRenderLayer(ForceFluids.FORCE_FLUID_FLOWING.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(ForceFluids.FORCE_FLUID_SOURCE.get(), RenderType.translucent());
-
-		ItemBlockRenderTypes.setRenderLayer(ForceRegistry.FORCE_LEAVES.get(), RenderType.cutoutMipped());
 
 		ItemProperties.register(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity, i) -> {
 			IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
@@ -146,6 +93,20 @@ public class ClientHandler {
 	}
 
 
+	public static void registerKeymapping(final RegisterKeyMappingsEvent event) {
+		event.register(KeybindHandler.KEY_OPEN_HOTBAR_PACK);
+		event.register(KeybindHandler.KEY_OPEN_HOTBAR_BELT);
+		event.register(KeybindHandler.KEY_QUICK_USE_1);
+		event.register(KeybindHandler.KEY_QUICK_USE_2);
+		event.register(KeybindHandler.KEY_QUICK_USE_3);
+		event.register(KeybindHandler.KEY_QUICK_USE_4);
+		event.register(KeybindHandler.KEY_QUICK_USE_5);
+		event.register(KeybindHandler.KEY_QUICK_USE_6);
+		event.register(KeybindHandler.KEY_QUICK_USE_7);
+		event.register(KeybindHandler.KEY_QUICK_USE_8);
+	}
+
+
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(CREEPER_TOT, CreeperTotModel::createBodyLayer);
 		event.registerLayerDefinition(ENDERTOT, EnderTotModel::createBodyLayer);
@@ -169,15 +130,12 @@ public class ClientHandler {
 		event.registerEntityRenderer(ForceEntities.FORCE_FLASK.get(), ThrownItemRenderer::new);
 	}
 
-	public static void registerItemColors(final ColorHandlerEvent.Item event) {
-		ItemColors colors = event.getItemColors();
-
-		colors.register((stack, tintIndex) -> {
+	public static void registerItemColors(final RegisterColorHandlersEvent.Item event) {
+		event.register((stack, tintIndex) -> {
 			if (tintIndex == 0 || tintIndex == 1) {
 				if (stack.hasTag() && stack.getTag().contains("StoredEntity", CompoundTag.TAG_STRING)) {
-					SpawnEggItem info = null;
 					ResourceLocation id = new ResourceLocation(stack.getTag().getString("StoredEntity"));
-					info = SpawnEggItem.byId(ForgeRegistries.ENTITIES.getValue(id));
+					SpawnEggItem info = SpawnEggItem.byId(ForgeRegistries.ENTITY_TYPES.getValue(id));
 
 					if (info != null) {
 						return tintIndex == 0 ? info.getColor(0) : info.getColor(1);

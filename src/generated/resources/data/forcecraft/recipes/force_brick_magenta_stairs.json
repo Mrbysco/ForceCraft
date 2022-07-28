@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#  ",
-    "## ",
-    "###"
-  ],
   "key": {
     "#": {
       "item": "forcecraft:force_brick_magenta"
     }
   },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
   "result": {
-    "item": "forcecraft:force_brick_magenta_stairs",
-    "count": 4
+    "count": 4,
+    "item": "forcecraft:force_brick_magenta_stairs"
   }
 }

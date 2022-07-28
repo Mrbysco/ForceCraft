@@ -6,7 +6,6 @@ import com.mrbysco.forcecraft.menu.furnace.AbstractForceFurnaceMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,7 +37,7 @@ public abstract class AbstractForceFurnaceScreen<T extends AbstractForceFurnaceM
 
 		if (isHovering(60, 36, 10, 12, mouseX, mouseY)) {
 			List<Component> text = new ArrayList<>();
-			text.add(new TextComponent(String.valueOf(menu.getBurn()))
+			text.add(Component.literal(String.valueOf(menu.getBurn()))
 					.withStyle(ChatFormatting.GRAY));
 			renderComponentTooltip(poseStack, text, mouseX, mouseY + 10);
 		}

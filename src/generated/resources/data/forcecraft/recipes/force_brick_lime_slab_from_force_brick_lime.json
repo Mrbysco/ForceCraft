@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
+  "count": 2,
   "ingredient": {
     "item": "forcecraft:force_brick_lime"
   },
-  "result": "forcecraft:force_brick_lime_slab",
-  "count": 2
+  "result": "forcecraft:force_brick_lime_slab"
 }

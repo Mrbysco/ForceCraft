@@ -23,7 +23,7 @@ public class HeartHandler {
 		}
 		if (event.getSource().getEntity() instanceof Player && !(event.getSource().getEntity() instanceof FakePlayer)) {
 			// killed by a real player
-			MobCategory classification = event.getEntityLiving().getType().getCategory();
+			MobCategory classification = event.getEntity().getType().getCategory();
 			if (classification == MobCategory.MONSTER) {
 				// and its a monster, not sheep or squid or something
 				BlockPos pos = event.getEntity().blockPosition();

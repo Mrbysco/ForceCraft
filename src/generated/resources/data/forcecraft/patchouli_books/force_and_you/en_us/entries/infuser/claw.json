@@ -1,7 +1,7 @@
 {
-  "name": "info.forcecraft.book.claw.entry.name",
   "category": "forcecraft:infuser",
   "icon": "forcecraft:claw",
+  "name": "info.forcecraft.book.claw.entry.name",
   "pages": [
     {
       "type": "patchouli:text",

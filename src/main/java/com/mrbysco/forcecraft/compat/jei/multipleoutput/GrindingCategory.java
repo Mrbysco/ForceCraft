@@ -17,16 +17,4 @@ public class GrindingCategory extends AbstractMultiOutputCategory<GrindingRecipe
 	public RecipeType<GrindingRecipe> getRecipeType() {
 		return JeiCompat.GRINDING_TYPE;
 	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return JeiCompat.GRINDING;
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends GrindingRecipe> getRecipeClass() {
-		return GrindingRecipe.class;
-	}
 }

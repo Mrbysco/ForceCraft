@@ -9,8 +9,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -131,23 +129,23 @@ public class BaconatorItem extends BaseItem {
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		if (Screen.hasShiftDown()) {
-			tooltip.add(new TranslatableComponent("forcecraft.baconator.shift.carrying").withStyle(ChatFormatting.DARK_RED));
+			tooltip.add(Component.translatable("forcecraft.baconator.shift.carrying").withStyle(ChatFormatting.DARK_RED));
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 			if (handler != null) {
 				int stacks = 0;
 				for (int i = 0; i < handler.getSlots(); i++) {
 					ItemStack foodStack = handler.getStackInSlot(i);
 					if (!foodStack.isEmpty()) {
-						tooltip.add(new TextComponent(foodStack.getCount() + "x ").append(foodStack.getHoverName()).withStyle(ChatFormatting.GOLD));
+						tooltip.add(Component.literal(foodStack.getCount() + "x ").append(foodStack.getHoverName()).withStyle(ChatFormatting.GOLD));
 						stacks++;
 					}
 				}
 				if (stacks == 0) {
-					tooltip.add(new TranslatableComponent("forcecraft.baconator.shift.nothing").withStyle(ChatFormatting.GRAY));
+					tooltip.add(Component.translatable("forcecraft.baconator.shift.nothing").withStyle(ChatFormatting.GRAY));
 				}
 			}
 		} else {
-			tooltip.add(new TranslatableComponent("forcecraft.baconator.shift.text").withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.translatable("forcecraft.baconator.shift.text").withStyle(ChatFormatting.GRAY));
 		}
 		super.appendHoverText(stack, level, tooltip, flagIn);
 	}

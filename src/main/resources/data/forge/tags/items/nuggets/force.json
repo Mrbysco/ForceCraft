@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:force_nugget"
+	"forcecraft:force_nugget"
   ]
 }

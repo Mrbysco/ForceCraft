@@ -2,8 +2,8 @@ package com.mrbysco.forcecraft.datagen.data;
 
 import com.google.gson.JsonObject;
 import com.mrbysco.forcecraft.Reference;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -98,7 +98,7 @@ public class ForceRecipes extends RecipeProvider {
 	}
 
 	@Override
-	protected void saveAdvancement(HashCache cache, JsonObject advancementJson, Path path) {
+	protected void saveAdvancement(CachedOutput cache, JsonObject advancementJson, Path path) {
 		// Nope
 	}
 }

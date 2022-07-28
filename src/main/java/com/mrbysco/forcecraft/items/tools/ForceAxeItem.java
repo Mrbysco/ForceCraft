@@ -92,13 +92,13 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 		}
 
 		@SubscribeEvent
-		public void chop(TickEvent.WorldTickEvent event) {
+		public void chop(TickEvent.LevelTickEvent event) {
 			if (event.side.isClient()) {
 				finish();
 				return;
 			}
 			// only if same dimension
-			if (event.world.dimension().location().equals(world.dimension().location())) {
+			if (event.level.dimension().location().equals(world.dimension().location())) {
 				return;
 			}
 

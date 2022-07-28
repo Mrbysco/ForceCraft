@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.healing.entry.name",
+  "advancement": "forcecraft:tier5/tier",
   "category": "forcecraft:tier_5",
   "icon": "minecraft:ghast_tear",
+  "name": "info.forcecraft.book.healing.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "minecraft:ghast_tear"
     }
   ],
-  "advancement": "forcecraft:tier5/tier",
   "secret": true
 }

@@ -53,7 +53,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof ForceFurnaceBlockEntity) {
 			if (!level.isClientSide) {
-				NetworkHooks.openGui((ServerPlayer) player, (ForceFurnaceBlockEntity) blockentity, pos);
+				NetworkHooks.openScreen((ServerPlayer) player, (ForceFurnaceBlockEntity) blockentity, pos);
 			}
 			player.awardStat(Stats.INTERACT_WITH_FURNACE);
 		}

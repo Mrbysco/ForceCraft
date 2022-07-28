@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.holding_3.entry.name",
+  "advancement": "forcecraft:tier4/tier",
   "category": "forcecraft:tier_4",
   "icon": "forcecraft:force_pack_upgrade",
+  "name": "info.forcecraft.book.holding_3.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "forcecraft:force_pack_upgrade"
     }
   ],
-  "advancement": "forcecraft:tier4/tier",
   "secret": true
 }

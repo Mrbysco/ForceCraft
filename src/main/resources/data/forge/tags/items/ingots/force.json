@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:force_ingot"
+	"forcecraft:force_ingot"
   ]
 }

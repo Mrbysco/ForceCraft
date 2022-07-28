@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.sturdy.entry.name",
+  "advancement": "forcecraft:tier6/tier",
   "category": "forcecraft:tier_6",
   "icon": "minecraft:obsidian",
+  "name": "info.forcecraft.book.sturdy.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "minecraft:obsidian"
     }
   ],
-  "advancement": "forcecraft:tier6/tier",
   "secret": true
 }

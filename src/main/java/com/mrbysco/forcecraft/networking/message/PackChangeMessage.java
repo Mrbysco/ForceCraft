@@ -4,7 +4,7 @@ import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
@@ -48,7 +48,7 @@ public class PackChangeMessage {
 						stack.resetHoverName();
 					} else {
 						if (!stack.getHoverName().getContents().equals(customName)) {
-							stack.setHoverName(new TextComponent(customName).withStyle(ChatFormatting.YELLOW));
+							stack.setHoverName(Component.literal(customName).withStyle(ChatFormatting.YELLOW));
 						}
 					}
 				}

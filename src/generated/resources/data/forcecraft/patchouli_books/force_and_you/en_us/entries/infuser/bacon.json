@@ -1,7 +1,7 @@
 {
-  "name": "info.forcecraft.book.bacon.entry.name",
   "category": "forcecraft:infuser",
   "icon": "forcecraft:raw_bacon",
+  "name": "info.forcecraft.book.bacon.entry.name",
   "pages": [
     {
       "type": "patchouli:text",

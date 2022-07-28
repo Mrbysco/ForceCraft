@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.light.entry.name",
+  "advancement": "forcecraft:tier7/tier",
   "category": "forcecraft:tier_7",
   "icon": "minecraft:glowstone",
+  "name": "info.forcecraft.book.light.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "minecraft:glowstone"
     }
   ],
-  "advancement": "forcecraft:tier7/tier",
   "secret": true
 }

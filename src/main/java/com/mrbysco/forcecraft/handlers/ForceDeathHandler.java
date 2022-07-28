@@ -10,14 +10,15 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ForceDeathHandler {
 	private static final String SPAWNED_TAG = "LiquidForceSpawned";
 
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
-		LivingEntity livingEntity = event.getEntityLiving();
-		Level world = event.getEntity().level;
+		final LivingEntity livingEntity = event.getEntity();
+		final Level world = event.getEntity().level;
 		if (world.isClientSide) return;
 
 		if (event.getSource() != null && event.getSource() == ForceCraft.LIQUID_FORCE_DAMAGE) {
@@ -25,7 +26,7 @@ public class ForceDeathHandler {
 			if (livingEntity instanceof Mob mob) {
 				CompoundTag mobData = mob.getPersistentData();
 				if (!mobData.contains(SPAWNED_TAG)) {
-					if (livingEntity.getType().getRegistryName().equals(EntityType.CREEPER.getRegistryName())) {
+					if (ForgeRegistries.ENTITY_TYPES.getKey(livingEntity.getType()).equals(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.CREEPER))) {
 						CreeperTotEntity totEntity = ForceEntities.CREEPER_TOT.get().create(world);
 						if (totEntity != null) {
 							totEntity.absMoveTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), mob.getXRot());

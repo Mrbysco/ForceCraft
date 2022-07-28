@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:force_gear"
+	"forcecraft:force_gear"
   ]
 }

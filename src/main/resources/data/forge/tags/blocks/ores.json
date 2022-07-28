@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "#forge:ores/power"
+	"#forge:ores/power"
   ]
 }

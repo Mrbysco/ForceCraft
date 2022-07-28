@@ -36,7 +36,7 @@ public class CapabilityAttachHandler {
 		if (!event.isWasDeath()) return;
 
 		Player original = event.getOriginal();
-		Player clone = event.getPlayer();
+		Player clone = event.getEntity();
 
 		final Capability<IPlayerModifier> capability = CAPABILITY_PLAYERMOD;
 		original.getCapability(capability).ifPresent(dataOriginal ->

@@ -13,7 +13,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.MenuProvider;
@@ -229,7 +228,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 
 	@Override
 	public Component getDisplayName() {
-		return new TranslatableComponent(Reference.MOD_ID + ".container.force_engine");
+		return Component.translatable(Reference.MOD_ID + ".container.force_engine");
 	}
 
 	@Nullable
@@ -537,7 +536,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	}
 
 	@Override
-	public CompoundTag getTileData() {
+	public CompoundTag getPersistentData() {
 		CompoundTag nbt = new CompoundTag();
 		this.saveAdditional(nbt);
 		return nbt;

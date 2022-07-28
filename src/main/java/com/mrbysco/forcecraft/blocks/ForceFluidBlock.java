@@ -45,7 +45,7 @@ public class ForceFluidBlock extends LiquidBlock {
 						livingEntity.heal(0.5F);
 					}
 					if (livingEntity instanceof IForgeShearable && secondPassed) {
-						if (RANDOM.nextInt(10) <= 3) {
+						if (level.getRandom().nextInt(10) <= 3) {
 							if (livingEntity instanceof Sheep) {
 								((Sheep) livingEntity).setSheared(false);
 							} else if (livingEntity instanceof IColdMob coldMob) {

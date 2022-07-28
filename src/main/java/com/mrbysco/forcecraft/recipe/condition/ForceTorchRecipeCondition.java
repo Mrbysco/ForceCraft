@@ -16,7 +16,7 @@ public class ForceTorchRecipeCondition implements ICondition {
 	}
 
 	@Override
-	public boolean test() {
+	public boolean test(IContext context) {
 		return ConfigHandler.COMMON.timeTorchEnabled.get();
 	}
 

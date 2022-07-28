@@ -92,7 +92,7 @@
   "block.forcecraft.power_ore": "Power Ore",
   "block.forcecraft.purple_force_furnace": "Purple Force Furnace",
   "block.forcecraft.red_force_furnace": "Red Force Furnace",
-  "block.forcecraft.time_torch": "\u00A7bTime Torch",
+  "block.forcecraft.time_torch": "§bTime Torch",
   "block.forcecraft.white_force_furnace": "White Force Furnace",
   "commands.forcecraft.failed": "Command failed, ensure you have permission",
   "commands.forcecraft.null": "Second argument must be a valid command: ",

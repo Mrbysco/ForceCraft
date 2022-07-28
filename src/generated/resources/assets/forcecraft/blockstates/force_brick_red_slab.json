@@ -1,13 +1,13 @@
 {
   "variants": {
-    "type=top": {
-      "model": "forcecraft:block/force_brick_red_slab_top"
-    },
     "type=bottom": {
       "model": "forcecraft:block/force_brick_red_slab"
     },
     "type=double": {
       "model": "forcecraft:block/force_brick_red"
+    },
+    "type=top": {
+      "model": "forcecraft:block/force_brick_red_slab_top"
     }
   }
 }

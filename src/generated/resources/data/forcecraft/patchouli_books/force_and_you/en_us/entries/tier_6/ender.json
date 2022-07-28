@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.ender.entry.name",
+  "advancement": "forcecraft:tier6/tier",
   "category": "forcecraft:tier_6",
   "icon": "minecraft:ender_pearl",
+  "name": "info.forcecraft.book.ender.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -17,6 +18,5 @@
       "item": "minecraft:ender_eye"
     }
   ],
-  "advancement": "forcecraft:tier6/tier",
   "secret": true
 }

@@ -9,8 +9,6 @@ import com.mrbysco.forcecraft.menu.engine.ForceEngineMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
@@ -56,11 +54,11 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineMenu> 
 		if (isHovering(66, 11, 16, 58, mouseX, mouseY)) {
 			List<Component> text = new ArrayList<>();
 			if (tile.getFuelFluid() == null) {
-				text.add(new TranslatableComponent("gui.forcecraft.force_engine.empty"));
+				text.add(Component.translatable("gui.forcecraft.force_engine.empty"));
 			} else {
 				if (tile.getFuelFluidStack() != null) {
 					text.add(tile.getFuelFluidStack().getDisplayName());
-					text.add(new TextComponent(tile.getFuelAmount() + " mb")
+					text.add(Component.literal(tile.getFuelAmount() + " mb")
 							.withStyle(ChatFormatting.GOLD));
 				}
 			}
@@ -71,11 +69,11 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineMenu> 
 		if (isHovering(94, 11, 16, 58, mouseX, mouseY)) {
 			List<Component> text = new ArrayList<>();
 			if (tile.getThrottleFluid() == null) {
-				text.add(new TranslatableComponent("gui.forcecraft.force_engine.empty"));
+				text.add(Component.translatable("gui.forcecraft.force_engine.empty"));
 			} else {
 				if (tile.getThrottleFluidStack() != null) {
 					text.add(tile.getThrottleFluidStack().getDisplayName());
-					text.add(new TextComponent(tile.getThrottleAmount() + " mb")
+					text.add(Component.literal(tile.getThrottleAmount() + " mb")
 							.withStyle(ChatFormatting.GOLD));
 				}
 			}

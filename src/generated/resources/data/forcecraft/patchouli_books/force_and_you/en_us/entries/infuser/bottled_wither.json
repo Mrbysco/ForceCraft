@@ -1,7 +1,7 @@
 {
-  "name": "info.forcecraft.book.bottled_wither.entry.name",
   "category": "forcecraft:infuser",
   "icon": "forcecraft:bottled_wither",
+  "name": "info.forcecraft.book.bottled_wither.entry.name",
   "pages": [
     {
       "type": "patchouli:text",

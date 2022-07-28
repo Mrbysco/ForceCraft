@@ -6,6 +6,7 @@ import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -40,7 +41,6 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Random;
 import java.util.function.Predicate;
 
 public class EnderTotEntity extends EnderMan {
@@ -264,7 +264,7 @@ public class EnderTotEntity extends EnderMan {
 		 * Keep ticking a continuous task that has already been started
 		 */
 		public void tick() {
-			Random random = this.endertot.getRandom();
+			RandomSource random = this.endertot.getRandom();
 			Level world = this.endertot.level;
 			int i = Mth.floor(this.endertot.getX() - 2.0D + random.nextDouble() * 4.0D);
 			int j = Mth.floor(this.endertot.getY() + random.nextDouble() * 3.0D);
@@ -308,7 +308,7 @@ public class EnderTotEntity extends EnderMan {
 		 * Keep ticking a continuous task that has already been started
 		 */
 		public void tick() {
-			Random random = this.endertot.getRandom();
+			RandomSource random = this.endertot.getRandom();
 			Level world = this.endertot.level;
 			int i = Mth.floor(this.endertot.getX() - 1.0D + random.nextDouble() * 2.0D);
 			int j = Mth.floor(this.endertot.getY() + random.nextDouble() * 2.0D);

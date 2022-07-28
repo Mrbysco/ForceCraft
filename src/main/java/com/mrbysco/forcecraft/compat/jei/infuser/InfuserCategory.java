@@ -18,7 +18,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -33,25 +32,13 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 
 	public InfuserCategory(IGuiHelper guiHelper) {
 		this.background = guiHelper.createDrawable(JeiCompat.RECIPE_INFUSER_JEI, 0, 0, 137, 109);
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(ForceRegistry.INFUSER.get()));
-		this.localizedName = new TranslatableComponent("forcecraft.gui.jei.category.infuser");
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ForceRegistry.INFUSER.get()));
+		this.localizedName = Component.translatable("forcecraft.gui.jei.category.infuser");
 	}
 
 	@Override
 	public RecipeType<InfuseRecipe> getRecipeType() {
 		return JeiCompat.INFUSER_TYPE;
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return JeiCompat.INFUSER;
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends InfuseRecipe> getRecipeClass() {
-		return InfuseRecipe.class;
 	}
 
 	@Override
@@ -103,7 +90,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 
 		Minecraft minecraft = Minecraft.getInstance();
 		Font font = minecraft.font;
-		font.draw(stack, new TranslatableComponent("forcecraft.gui.jei.category.infuser.tier", recipe.getTier().asInt()), 4, 4, 0xFFFFFFFF);
+		font.draw(stack, Component.translatable("forcecraft.gui.jei.category.infuser.tier", recipe.getTier().asInt()), 4, 4, 0xFFFFFFFF);
 	}
 
 	@Override

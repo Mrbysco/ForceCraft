@@ -5,6 +5,7 @@ import com.mrbysco.forcecraft.capabilities.playermodifier.IPlayerModifier;
 import com.mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -59,9 +60,9 @@ public class LootingHandler {
 		if (source instanceof Player player) {
 			player.getMainHandItem().getCapability(CapabilityHandler.CAPABILITY_TOOLMOD).ifPresent(cap -> {
 				if (cap.hasTreasure()) {
-					Random rand = player.getRandom();
+					RandomSource rand = player.getRandom();
 					int looting = event.getLootingLevel();
-					LivingEntity entity = event.getEntityLiving();
+					LivingEntity entity = event.getEntity();
 					BlockPos entityPos = entity.blockPosition();
 
 					int chanceMax = 20;

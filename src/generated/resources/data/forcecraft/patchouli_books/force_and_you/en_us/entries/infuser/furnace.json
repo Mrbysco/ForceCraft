@@ -1,7 +1,7 @@
 {
-  "name": "info.forcecraft.book.force_furnace.entry.name",
   "category": "forcecraft:infuser",
   "icon": "forcecraft:force_furnace",
+  "name": "info.forcecraft.book.force_furnace.entry.name",
   "pages": [
     {
       "type": "patchouli:text",

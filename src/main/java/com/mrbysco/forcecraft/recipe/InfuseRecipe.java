@@ -23,7 +23,6 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -158,7 +157,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 
 	@Override
 	public RecipeType<?> getType() {
-		return ForceRecipes.INFUSER_TYPE;
+		return ForceRecipes.INFUSER_TYPE.get();
 	}
 
 	public Ingredient getInput() {
@@ -198,7 +197,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 		return ForceRecipeSerializers.INFUSER_SERIALIZER.get();
 	}
 
-	public static class SerializeInfuserRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<InfuseRecipe> {
+	public static class SerializeInfuserRecipe implements RecipeSerializer<InfuseRecipe> {
 
 		@Override
 		public InfuseRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

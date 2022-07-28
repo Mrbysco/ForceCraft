@@ -1,7 +1,7 @@
 {
-  "name": "info.forcecraft.book.inert_core.entry.name",
   "category": "forcecraft:infuser",
   "icon": "forcecraft:inert_core",
+  "name": "info.forcecraft.book.inert_core.entry.name",
   "pages": [
     {
       "type": "patchouli:text",

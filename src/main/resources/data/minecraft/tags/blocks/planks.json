@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:force_planks"
+	"forcecraft:force_planks"
   ]
 }

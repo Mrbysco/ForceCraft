@@ -4,7 +4,7 @@ import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
 import com.mrbysco.forcecraft.items.ForceBeltItem;
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.items.ItemCardItem;
-import com.mrbysco.forcecraft.registry.ForceContainers;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.util.FindingUtil;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.core.NonNullList;
@@ -41,7 +41,7 @@ public class ForcePackMenu extends AbstractContainerMenu {
 	}
 
 	public ForcePackMenu(int id, Inventory playerInventory, PackItemStackHandler inv) {
-		super(ForceContainers.FORCE_PACK.get(), id);
+		super(ForceMenus.FORCE_PACK.get(), id);
 		this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForcePackItem);
 		if (heldStack == null || heldStack.isEmpty()) {
 			playerInventory.player.closeContainer();

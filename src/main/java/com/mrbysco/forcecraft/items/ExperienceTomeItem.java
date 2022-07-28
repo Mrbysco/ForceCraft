@@ -5,8 +5,6 @@ import com.mrbysco.forcecraft.util.ForceUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -33,10 +31,10 @@ public class ExperienceTomeItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		if (!Screen.hasShiftDown()) {
-			tooltip.add(new TranslatableComponent("forcecraft.tooltip.press_shift"));
+			tooltip.add(Component.translatable("forcecraft.tooltip.press_shift"));
 			return;
 		}
-		tooltip.add(new TextComponent(Float.toString(getExperience(stack)) + " / " + Float.toString(getMaxExperience(stack))));
+		tooltip.add(Component.literal(Float.toString(getExperience(stack)) + " / " + Float.toString(getMaxExperience(stack))));
 	}
 
 	@Nullable

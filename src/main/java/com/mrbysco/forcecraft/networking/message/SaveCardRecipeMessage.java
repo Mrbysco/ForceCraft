@@ -3,10 +3,9 @@ package com.mrbysco.forcecraft.networking.message;
 import com.mrbysco.forcecraft.items.ItemCardItem;
 import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -58,7 +57,7 @@ public class SaveCardRecipeMessage {
 						});
 					}
 				}
-				player.sendMessage(new TextComponent("Recipe saved").withStyle(ChatFormatting.YELLOW), Util.NIL_UUID);
+				player.sendSystemMessage(Component.literal("Recipe saved").withStyle(ChatFormatting.YELLOW));
 			}
 		});
 		ctx.setPacketHandled(true);

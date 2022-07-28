@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "#forge:ingots/force"
+	"#forge:ingots/force"
   ]
 }

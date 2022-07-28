@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.menu;
 
 import com.mrbysco.forcecraft.items.SpoilsBagItem;
-import com.mrbysco.forcecraft.registry.ForceContainers;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -37,7 +37,7 @@ public class SpoilsBagMenu extends AbstractContainerMenu {
 	}
 
 	public SpoilsBagMenu(int id, Inventory playerInventory, ItemStack forceBelt) {
-		super(ForceContainers.SPOILS_BAG.get(), id);
+		super(ForceMenus.SPOILS_BAG.get(), id);
 		if (forceBelt == null || forceBelt.isEmpty()) {
 			playerInventory.player.closeContainer();
 			return;

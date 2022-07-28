@@ -2,7 +2,7 @@ package com.mrbysco.forcecraft.menu.infuser;
 
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.menu.slot.SlotForceGems;
-import com.mrbysco.forcecraft.registry.ForceContainers;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.util.AdvancementUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -43,7 +43,7 @@ public class InfuserMenu extends AbstractContainerMenu {
 	}
 
 	public InfuserMenu(int id, Inventory playerInventoryIn, InfuserBlockEntity te) {
-		super(ForceContainers.INFUSER.get(), id);
+		super(ForceMenus.INFUSER.get(), id);
 		this.tile = te;
 		this.player = playerInventoryIn.player;
 

@@ -1,7 +1,6 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:fortune_cookie",
-    "forcecraft:fortune"
+	"forcecraft:fortune_cookie",
+	"forcecraft:fortune"
   ]
 }

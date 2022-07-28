@@ -3,7 +3,7 @@ package com.mrbysco.forcecraft.menu;
 import com.mrbysco.forcecraft.items.ForceBeltItem;
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.menu.slot.BeltSlot;
-import com.mrbysco.forcecraft.registry.ForceContainers;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.util.FindingUtil;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +37,7 @@ public class ForceBeltMenu extends AbstractContainerMenu {
 	}
 
 	public ForceBeltMenu(int id, Inventory playerInventory, IItemHandler handler) {
-		super(ForceContainers.FORCE_BELT.get(), id);
+		super(ForceMenus.FORCE_BELT.get(), id);
 		this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForceBeltItem);
 		if (heldStack == null || heldStack.isEmpty()) {
 			playerInventory.player.closeContainer();

@@ -8,8 +8,8 @@ import com.mrbysco.forcecraft.storage.StorageManager;
 import com.mrbysco.forcecraft.util.FindingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.item.ItemStack;
@@ -45,8 +45,8 @@ public class OpenBeltMessage {
 					if (!beltStack.isEmpty()) {
 						Optional<BeltStorage> data = StorageManager.getBelt(beltStack);
 						data.ifPresent(belt ->
-								NetworkHooks.openGui(player, new SimpleMenuProvider((id, pInv, pEntity) -> new ForceBeltMenu(id, pInv, belt.getInventory()),
-										beltStack.hasCustomHoverName() ? ((BaseComponent) beltStack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.belt"))));
+								NetworkHooks.openScreen(player, new SimpleMenuProvider((id, pInv, pEntity) -> new ForceBeltMenu(id, pInv, belt.getInventory()),
+										beltStack.hasCustomHoverName() ? ((MutableComponent) beltStack.getHoverName()).withStyle(ChatFormatting.BLACK) : Component.translatable(Reference.MOD_ID + ".container.belt"))));
 					}
 				}
 			}

@@ -6,8 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -78,8 +76,8 @@ public class ForceWrenchCapability implements IForceWrench, ICapabilitySerializa
 		fd.attachInformation(tooltip);
 		stack.getCapability(CAPABILITY_FORCEWRENCH).ifPresent((cap) -> {
 			if (cap.getStoredName() != null && !cap.getStoredName().isEmpty()) { // idk what this is
-				tooltip.add(new TextComponent("Stored: ").withStyle(ChatFormatting.GOLD)
-						.append(new TranslatableComponent(cap.getStoredName()).withStyle(ChatFormatting.GRAY)));
+				tooltip.add(Component.literal("Stored: ").withStyle(ChatFormatting.GOLD)
+						.append(Component.translatable(cap.getStoredName()).withStyle(ChatFormatting.GRAY)));
 			}
 		});
 	}

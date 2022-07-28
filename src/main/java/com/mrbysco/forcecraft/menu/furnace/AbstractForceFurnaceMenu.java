@@ -6,7 +6,7 @@ import com.mrbysco.forcecraft.menu.furnace.slot.ForceFurnaceFuelSlot;
 import com.mrbysco.forcecraft.menu.furnace.slot.ForceFurnaceResultSlot;
 import com.mrbysco.forcecraft.menu.furnace.slot.UpgradeSlot;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
-import com.mrbysco.forcecraft.registry.ForceContainers;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
@@ -54,7 +54,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 	}
 
 	public AbstractForceFurnaceMenu(int id, Inventory playerInventoryIn, AbstractForceFurnaceBlockEntity te) {
-		super(ForceContainers.FORCE_FURNACE.get(), id);
+		super(ForceMenus.FORCE_FURNACE.get(), id);
 		this.tile = te;
 		Player player = playerInventoryIn.player;
 		this.world = player.level;
@@ -171,9 +171,9 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 		ItemStack upgrade = upgradeInventory.getStackInSlot(0);
 		if (!upgrade.isEmpty()) {
 			if (upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
-				return ForceRecipes.FREEZING;
+				return ForceRecipes.FREEZING.get();
 			} else if (upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
-				return ForceRecipes.GRINDING;
+				return ForceRecipes.GRINDING.get();
 			}
 		}
 		return recipeType;

@@ -45,7 +45,7 @@ public class NonBurnableItemEntity extends ItemEntity {
 
 	public static class EventHandler {
 		public static void onExpire(ItemExpireEvent event) {
-			if (event.getEntityItem() instanceof NonBurnableItemEntity) {
+			if (event.getEntity() instanceof NonBurnableItemEntity) {
 				event.setCanceled(true);
 			}
 		}

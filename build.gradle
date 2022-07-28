@@ -1,20 +1,8 @@
-buildscript {
-    repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-    }
+plugins {
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.+'
+    id 'org.spongepowered.mixin'
 }
-apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
 
 version = "${version}"
 group = "com.mrbysco.forcecraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -123,7 +111,10 @@ dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
@@ -131,12 +122,12 @@ dependencies {
     implementation fg.deobf("xyz.brassgoggledcoders:PatchouliProvider:${patchouli_provider_version}")
 
     //runtimeOnly fg.deobf("curse.maven:titanium-287342:3570210")
-    runtimeOnly fg.deobf("curse.maven:pipez-443900:3694227")
+//    runtimeOnly fg.deobf("curse.maven:pipez-443900:3877192")
     //runtimeOnly fg.deobf("curse.maven:CTM-267602:3586556")
 
-    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:3641681")
+//    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:3843050")
 
-    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3708026")
+//    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3708026")
 }
 
 jar {

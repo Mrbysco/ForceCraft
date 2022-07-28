@@ -1,7 +1,7 @@
 {
-  "name": "info.forcecraft.book.force_shears.entry.name",
   "category": "forcecraft:infuser",
   "icon": "forcecraft:force_shears",
+  "name": "info.forcecraft.book.force_shears.entry.name",
   "pages": [
     {
       "type": "patchouli:text",

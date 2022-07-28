@@ -14,7 +14,7 @@ public interface IColdMob {
 	default void transformMob(LivingEntity livingEntity, Level entityWorld) {
 		if (livingEntity instanceof IColdMob) {
 			ResourceLocation originalLocation = ((IColdMob) livingEntity).getOriginal();
-			Entity replacementMob = ForgeRegistries.ENTITIES.getValue(originalLocation).create(entityWorld);
+			Entity replacementMob = ForgeRegistries.ENTITY_TYPES.getValue(originalLocation).create(entityWorld);
 			if (replacementMob != null) {
 				replacementMob.copyPosition(livingEntity);
 				UUID mobUUID = replacementMob.getUUID();

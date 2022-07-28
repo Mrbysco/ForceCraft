@@ -12,8 +12,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +25,7 @@ public class RenameAndRecolorScreen extends Screen {
 	private int selectedColor;
 
 	protected RenameAndRecolorScreen(ItemStack stack, InteractionHand hand) {
-		super(new TranslatableComponent("forcecraft.pack.rename"));
+		super(Component.translatable("forcecraft.pack.rename"));
 
 		this.itemstack = stack.copy();
 		this.usedHand = hand;
@@ -64,7 +63,7 @@ public class RenameAndRecolorScreen extends Screen {
 			this.minecraft.setScreen((Screen) null);
 		}));
 
-		this.textfield = new EditBox(this.minecraft.font, this.width / 2 - 90, this.height / 2 - 24, 180, 20, new TextComponent("Name"));
+		this.textfield = new EditBox(this.minecraft.font, this.width / 2 - 90, this.height / 2 - 24, 180, 20, Component.literal("Name"));
 		this.textfield.setMaxLength(31);
 		this.textfield.setValue(itemstack.getHoverName().getString());
 		this.textfield.setTextColor(-1);
@@ -99,6 +98,6 @@ public class RenameAndRecolorScreen extends Screen {
 
 		this.textfield.render(poseStack, mouseX, mouseY, partialTicks);
 		super.render(poseStack, mouseX, mouseY, partialTicks);
-		font.draw(poseStack, new TextComponent("Color"), (int) (this.width / 2d - 68), (int) (this.height / 2d + 9), 5592405);
+		font.draw(poseStack, Component.literal("Color"), (int) (this.width / 2d - 68), (int) (this.height / 2d + 9), 5592405);
 	}
 }

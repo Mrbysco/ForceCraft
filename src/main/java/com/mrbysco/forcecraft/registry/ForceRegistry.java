@@ -61,7 +61,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -80,15 +80,15 @@ import net.minecraftforge.registries.RegistryObject;
 public class ForceRegistry {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Reference.MOD_ID);
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Reference.MOD_ID);
-	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Reference.MOD_ID);
+	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Reference.MOD_ID);
 
 	/**
 	 * Blocks
 	 */
 	public static final RegistryObject<Block> POWER_ORE = BLOCKS.register("power_ore", () ->
-			new OreBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
+			new DropExperienceBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
 	public static final RegistryObject<Block> DEEPSLATE_POWER_ORE = BLOCKS.register("deepslate_power_ore", () ->
-			new OreBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
+			new DropExperienceBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
 	public static final RegistryObject<Block> FORCE_SAPLING = BLOCKS.register("force_sapling", () ->
 			new SaplingBlock(new ForceTree(), BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
 	public static final RegistryObject<Block> FORCE_LOG = BLOCKS.register("force_log", () ->
@@ -113,7 +113,7 @@ public class ForceRegistry {
 			new InfuserBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(2.0F)));
 
 	public static final RegistryObject<Block> FORCE_FLUID_BLOCK = BLOCKS.register("force_fluid", () ->
-			new ForceFluidBlock(ForceFluids.FORCE_FLUID_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().lightLevel(state -> 15).noDrops()));
+			new ForceFluidBlock(ForceFluids.FORCE_FLUID_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().lightLevel(state -> 15).noLootTable()));
 
 	public static final RegistryObject<Block> FORCE_FURNACE = BLOCKS.register("force_furnace", () -> new ForceFurnaceBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(4.0F, 18.0F).lightLevel(ForceFurnaceBlock.getLightValueLit(13))));
 	public static final RegistryObject<Block> BLACK_FORCE_FURNACE = BLOCKS.register("black_force_furnace", () -> new ForceFurnaceBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(4.0F, 18.0F).lightLevel(ForceFurnaceBlock.getLightValueLit(13))));
@@ -372,20 +372,20 @@ public class ForceRegistry {
 	/**
 	 * Block Entities
 	 */
-	public static final RegistryObject<BlockEntityType<InfuserBlockEntity>> INFUSER_BLOCK_ENTITY = BLOCK_ENTITIES.register("infuser", () -> BlockEntityType.Builder.of(
+	public static final RegistryObject<BlockEntityType<InfuserBlockEntity>> INFUSER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("infuser", () -> BlockEntityType.Builder.of(
 			InfuserBlockEntity::new, ForceRegistry.INFUSER.get()).build(null));
 
-	public static final RegistryObject<BlockEntityType<ForceFurnaceBlockEntity>> FURNACE_BLOCK_ENTITY = BLOCK_ENTITIES.register("furnace", () -> BlockEntityType.Builder.of(
+	public static final RegistryObject<BlockEntityType<ForceFurnaceBlockEntity>> FURNACE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("furnace", () -> BlockEntityType.Builder.of(
 			ForceFurnaceBlockEntity::new, ForceRegistry.FORCE_FURNACE.get(), ForceRegistry.BLACK_FORCE_FURNACE.get(), ForceRegistry.BLUE_FORCE_FURNACE.get(),
 			ForceRegistry.BROWN_FORCE_FURNACE.get(), ForceRegistry.CYAN_FORCE_FURNACE.get(), ForceRegistry.GRAY_FORCE_FURNACE.get(), ForceRegistry.GREEN_FORCE_FURNACE.get(),
 			ForceRegistry.LIGHT_BLUE_FORCE_FURNACE.get(), ForceRegistry.LIGHT_GRAY_FORCE_FURNACE.get(), ForceRegistry.LIME_FORCE_FURNACE.get(), ForceRegistry.MAGENTA_FORCE_FURNACE.get(),
 			ForceRegistry.ORANGE_FORCE_FURNACE.get(), ForceRegistry.PINK_FORCE_FURNACE.get(), ForceRegistry.PURPLE_FORCE_FURNACE.get(), ForceRegistry.RED_FORCE_FURNACE.get(),
 			ForceRegistry.WHITE_FORCE_FURNACE.get()).build(null));
 
-	public static final RegistryObject<BlockEntityType<TimeTorchBlockEntity>> TIME_TORCH_BLOCK_ENTITY = BLOCK_ENTITIES.register("time_torch", () -> BlockEntityType.Builder.of(
+	public static final RegistryObject<BlockEntityType<TimeTorchBlockEntity>> TIME_TORCH_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("time_torch", () -> BlockEntityType.Builder.of(
 			TimeTorchBlockEntity::new, ForceRegistry.TIME_TORCH.get(), ForceRegistry.WALL_TIME_TORCH.get()).build(null));
 
-	public static final RegistryObject<BlockEntityType<ForceEngineBlockEntity>> FORCE_ENGINE_BLOCK_ENTITY = BLOCK_ENTITIES.register("force_engine", () -> BlockEntityType.Builder.of(
+	public static final RegistryObject<BlockEntityType<ForceEngineBlockEntity>> FORCE_ENGINE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("force_engine", () -> BlockEntityType.Builder.of(
 			ForceEngineBlockEntity::new, ForceRegistry.FORCE_ENGINE.get()).build(null));
 
 

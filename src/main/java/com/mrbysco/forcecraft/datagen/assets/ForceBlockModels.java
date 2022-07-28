@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ForceBlockModels extends BlockModelProvider {
 	public ForceBlockModels(DataGenerator gen, ExistingFileHelper helper) {
@@ -21,9 +22,9 @@ public class ForceBlockModels extends BlockModelProvider {
 
 
 	protected void generateOre(Block block, ResourceLocation oreTexture, ResourceLocation stoneVariant) {
-		String path = block.getRegistryName().getPath();
+		String path = ForgeRegistries.BLOCKS.getKey(block).getPath();
 		withExistingParent(path, modLoc("block/ore"))
 				.texture("ore", oreTexture)
-				.texture("stone", stoneVariant);
+				.texture("stone", stoneVariant).renderType("cutout");
 	}
 }

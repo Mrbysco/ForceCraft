@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.experience.entry.name",
+  "advancement": "forcecraft:tier2/tier",
   "category": "forcecraft:tier_2",
   "icon": "minecraft:experience_bottle",
+  "name": "info.forcecraft.book.experience.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "minecraft:experience_bottle"
     }
   ],
-  "advancement": "forcecraft:tier2/tier",
   "secret": true
 }

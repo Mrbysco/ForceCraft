@@ -8,8 +8,8 @@ import com.mrbysco.forcecraft.storage.StorageManager;
 import com.mrbysco.forcecraft.util.FindingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.item.ItemStack;
@@ -45,8 +45,9 @@ public class OpenPackMessage {
 					if (!packStack.isEmpty()) {
 						Optional<PackStorage> data = StorageManager.getPack(packStack);
 						data.ifPresent(pack ->
-								NetworkHooks.openGui(player, new SimpleMenuProvider((id, pInv, pEntity) -> new ForcePackMenu(id, pInv, pack.getInventory()),
-										packStack.hasCustomHoverName() ? ((BaseComponent) packStack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.pack")), buf -> buf.writeInt(pack.getInventory().getUpgrades())));
+								NetworkHooks.openScreen(player, new SimpleMenuProvider((id, pInv, pEntity) -> new ForcePackMenu(id, pInv, pack.getInventory()),
+										packStack.hasCustomHoverName() ? ((MutableComponent) packStack.getHoverName()).withStyle(ChatFormatting.BLACK) :
+												Component.translatable(Reference.MOD_ID + ".container.pack")), buf -> buf.writeInt(pack.getInventory().getUpgrades())));
 					}
 				}
 			}

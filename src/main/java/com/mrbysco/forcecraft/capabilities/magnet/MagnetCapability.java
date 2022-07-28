@@ -4,8 +4,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -44,12 +42,12 @@ public class MagnetCapability implements IMagnet, ICapabilitySerializable<Compou
 	public static void attachInformation(ItemStack stack, List<Component> tooltip) {
 		stack.getCapability(CAPABILITY_MAGNET).ifPresent(cap -> {
 			if (cap.isActivated()) {
-				tooltip.add(new TranslatableComponent("forcecraft.magnet_glove.active").withStyle(ChatFormatting.GREEN));
+				tooltip.add(Component.translatable("forcecraft.magnet_glove.active").withStyle(ChatFormatting.GREEN));
 			} else {
-				tooltip.add(new TranslatableComponent("forcecraft.magnet_glove.deactivated").withStyle(ChatFormatting.RED));
+				tooltip.add(Component.translatable("forcecraft.magnet_glove.deactivated").withStyle(ChatFormatting.RED));
 			}
-			tooltip.add(TextComponent.EMPTY);
-			tooltip.add(new TranslatableComponent("forcecraft.magnet_glove.change").withStyle(ChatFormatting.BOLD));
+			tooltip.add(Component.empty());
+			tooltip.add(Component.translatable("forcecraft.magnet_glove.change").withStyle(ChatFormatting.BOLD));
 		});
 	}
 

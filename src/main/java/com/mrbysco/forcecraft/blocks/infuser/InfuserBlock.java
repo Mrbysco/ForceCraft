@@ -90,7 +90,7 @@ public class InfuserBlock extends BaseEntityBlock {
 					FluidUtil.interactWithFluidHandler(playerIn, handIn, level, pos, hit.getDirection());
 				} else {
 					if (!level.isClientSide) {
-						NetworkHooks.openGui((ServerPlayer) playerIn, (InfuserBlockEntity) blockentity, pos);
+						NetworkHooks.openScreen((ServerPlayer) playerIn, (InfuserBlockEntity) blockentity, pos);
 					}
 				}
 			});

@@ -35,7 +35,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -125,7 +124,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 		@Override
 		public boolean isFluidValid(FluidStack stack) {
-			return ForceTags.FORCE_LOOKUP.contains(stack.getFluid());
+			return stack.getFluid().is(ForceTags.FORCE);
 		}
 	};
 	private LazyOptional<IFluidHandler> tankHolder = LazyOptional.of(() -> tank);
@@ -319,7 +318,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 				ItemStack modifier = getModifier(i);
 				if (modifier.isEmpty()) continue;
 
-				List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE);
+				List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
 				for (InfuseRecipe recipe : recipes) {
 					if (recipe.matchesModifier(this, modifier, false)) {
 						matchingRecipes.put(i, recipe);
@@ -333,7 +332,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	protected boolean matchesModifier(ItemStack stack) {
 		if (level != null) {
-			List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE);
+			List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
 			for (InfuseRecipe recipe : recipes) {
 				if (recipe.matchesModifier(this, stack)) {
 					return true;
@@ -345,7 +344,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	protected boolean matchesTool(ItemStack toolStack) {
 		if (level != null) {
-			List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE);
+			List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
 			for (InfuseRecipe recipe : recipes) {
 				if (recipe.matchesTool(toolStack, true)) {
 					return true;
@@ -449,7 +448,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	@Override
-	public CompoundTag getTileData() {
+	public CompoundTag getPersistentData() {
 		CompoundTag nbt = new CompoundTag();
 		this.saveAdditional(nbt);
 		return nbt;
@@ -1072,7 +1071,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		int requiredForce = 0;
 		int requiredPower = 0;
 
-		List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE);
+		List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
 		boolean foundMatch = false;
 
 		for (InfuseRecipe recipe : recipes) {
@@ -1152,7 +1151,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	@Override
 	public Component getDisplayName() {
-		return new TranslatableComponent(Reference.MOD_ID + ".container.infuser");
+		return Component.translatable(Reference.MOD_ID + ".container.infuser");
 	}
 
 	@Override

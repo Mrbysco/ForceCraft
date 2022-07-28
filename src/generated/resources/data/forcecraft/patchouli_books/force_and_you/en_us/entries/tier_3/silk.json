@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.silk.entry.name",
+  "advancement": "forcecraft:tier3/tier",
   "category": "forcecraft:tier_3",
   "icon": "minecraft:cobweb",
+  "name": "info.forcecraft.book.silk.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "minecraft:cobweb"
     }
   ],
-  "advancement": "forcecraft:tier3/tier",
   "secret": true
 }

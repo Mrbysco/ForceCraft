@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.menu;
 
 import com.mrbysco.forcecraft.items.ItemCardItem;
-import com.mrbysco.forcecraft.registry.ForceContainers;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
@@ -38,7 +38,7 @@ public class ItemCardMenu extends AbstractContainerMenu {
 	}
 
 	public ItemCardMenu(int id, Inventory playerInventory, ContainerLevelAccess worldPosCallable) {
-		super(ForceContainers.ITEM_CARD.get(), id);
+		super(ForceMenus.ITEM_CARD.get(), id);
 		this.worldPosCallable = worldPosCallable;
 		this.player = playerInventory.player;
 		this.addSlot(new ResultSlot(playerInventory.player, this.craftMatrix, this.craftResult, 0, 124, 35) {

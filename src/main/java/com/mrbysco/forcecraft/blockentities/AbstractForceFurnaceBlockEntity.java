@@ -46,6 +46,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -159,9 +160,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		ItemStack upgrade = getUpgrade();
 		if (!upgrade.isEmpty()) {
 			if (upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
-				return ForceRecipes.FREEZING;
+				return ForceRecipes.FREEZING.get();
 			} else if (upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
-				return ForceRecipes.GRINDING;
+				return ForceRecipes.GRINDING.get();
 			}
 		}
 		return RecipeType.SMELTING;
@@ -271,12 +272,12 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					furnace.litDuration = furnace.litTime;
 					if (furnace.isLit()) {
 						dirty = true;
-						if (fuel.hasContainerItem())
-							furnace.handler.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
+						if (fuel.hasCraftingRemainingItem())
+							furnace.handler.setStackInSlot(FUEL_SLOT, fuel.getCraftingRemainingItem());
 						else if (!fuel.isEmpty()) {
 							fuel.shrink(1);
 							if (fuel.isEmpty()) {
-								furnace.handler.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
+								furnace.handler.setStackInSlot(FUEL_SLOT, fuel.getCraftingRemainingItem());
 							}
 						}
 					}
@@ -365,7 +366,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 						if (this.level.isAreaLoaded(worldPosition, 1)) {
 							BlockEntity foundTile = this.level.getBlockEntity(offPos);
 							if (foundTile != null) {
-								ResourceLocation typeLocation = foundTile.getType().getRegistryName();
+								ResourceLocation typeLocation = ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(foundTile.getType());
 								boolean flag = foundTile instanceof Hopper || foundTile instanceof AbstractFurnaceBlockEntity || foundTile instanceof AbstractForceFurnaceBlockEntity;
 								boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
 								if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
@@ -410,7 +411,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					if (this.level.isAreaLoaded(worldPosition, 1)) {
 						BlockEntity foundTile = this.level.getBlockEntity(offPos);
 						if (foundTile != null) {
-							ResourceLocation typeLocation = foundTile.getType().getRegistryName();
+							ResourceLocation typeLocation = ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(foundTile.getType());
 							boolean flag = foundTile instanceof Hopper || foundTile instanceof AbstractFurnaceBlockEntity || foundTile instanceof AbstractForceFurnaceBlockEntity;
 							boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
 							if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {

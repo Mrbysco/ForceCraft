@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:force_shears"
+	"forcecraft:force_shears"
   ]
 }

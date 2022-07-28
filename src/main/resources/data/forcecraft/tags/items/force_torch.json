@@ -1,21 +1,20 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:force_torch",
-    "forcecraft:force_red_torch",
-    "forcecraft:force_orange_torch",
-    "forcecraft:force_green_torch",
-    "forcecraft:force_blue_torch",
-    "forcecraft:force_white_torch",
-    "forcecraft:force_black_torch",
-    "forcecraft:force_brown_torch",
-    "forcecraft:force_light_blue_torch",
-    "forcecraft:force_magenta_torch",
-    "forcecraft:force_pink_torch",
-    "forcecraft:force_light_gray_torch",
-    "forcecraft:force_lime_torch",
-    "forcecraft:force_cyan_torch",
-    "forcecraft:force_purple_torch",
-    "forcecraft:force_gray_torch"
+	"forcecraft:force_torch",
+	"forcecraft:force_red_torch",
+	"forcecraft:force_orange_torch",
+	"forcecraft:force_green_torch",
+	"forcecraft:force_blue_torch",
+	"forcecraft:force_white_torch",
+	"forcecraft:force_black_torch",
+	"forcecraft:force_brown_torch",
+	"forcecraft:force_light_blue_torch",
+	"forcecraft:force_magenta_torch",
+	"forcecraft:force_pink_torch",
+	"forcecraft:force_light_gray_torch",
+	"forcecraft:force_lime_torch",
+	"forcecraft:force_cyan_torch",
+	"forcecraft:force_purple_torch",
+	"forcecraft:force_gray_torch"
   ]
 }

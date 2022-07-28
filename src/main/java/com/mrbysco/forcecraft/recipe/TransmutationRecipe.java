@@ -26,7 +26,6 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -146,8 +145,8 @@ public class TransmutationRecipe implements CraftingRecipe {
 		NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 		for (int i = 0; i < nonnulllist.size(); ++i) {
 			ItemStack itemstack = inv.getItem(i);
-			if (itemstack.hasContainerItem()) {
-				nonnulllist.set(i, itemstack.getContainerItem());
+			if (itemstack.hasCraftingRemainingItem()) {
+				nonnulllist.set(i, itemstack.getCraftingRemainingItem());
 			} else if (itemstack.getItem() instanceof ForceRodItem) {
 				ItemStack itemstack1 = itemstack.copy();
 				ForceRodItem rod = (ForceRodItem) itemstack1.getItem();
@@ -180,7 +179,7 @@ public class TransmutationRecipe implements CraftingRecipe {
 		return nonnulllist;
 	}
 
-	public static class SerializerTransmutationRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<TransmutationRecipe> {
+	public static class SerializerTransmutationRecipe implements RecipeSerializer<TransmutationRecipe> {
 		@Override
 		public TransmutationRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			String s = GsonHelper.getAsString(json, "group", "");

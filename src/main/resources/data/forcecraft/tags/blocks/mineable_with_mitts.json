@@ -1,9 +1,8 @@
 {
-  "replace": false,
   "values": [
-    "#minecraft:mineable/axe",
-    "#minecraft:mineable/shovel",
-    "#minecraft:mineable/pickaxe",
-    "minecraft:cobweb"
+	"#minecraft:mineable/axe",
+	"#minecraft:mineable/shovel",
+	"#minecraft:mineable/pickaxe",
+	"minecraft:cobweb"
   ]
 }

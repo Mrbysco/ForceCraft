@@ -198,7 +198,7 @@ public class ShapedNoRemainderRecipe extends ShapedRecipe {
 		}
 	}
 
-	public static class SerializerShapedNoRemainderRecipe extends net.minecraftforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapedNoRemainderRecipe> {
+	public static class SerializerShapedNoRemainderRecipe implements RecipeSerializer<ShapedNoRemainderRecipe> {
 		public ShapedNoRemainderRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			String s = GsonHelper.getAsString(json, "group", "");
 			Map<String, Ingredient> map = ShapedNoRemainderRecipe.deserializeKey(GsonHelper.getAsJsonObject(json, "key"));

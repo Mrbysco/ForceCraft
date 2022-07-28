@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#  ",
-    "## ",
-    "###"
-  ],
   "key": {
     "#": {
       "item": "forcecraft:force_brick_yellow"
     }
   },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
   "result": {
-    "item": "forcecraft:force_brick_yellow_stairs",
-    "count": 4
+    "count": 4,
+    "item": "forcecraft:force_brick_yellow_stairs"
   }
 }

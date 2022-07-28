@@ -9,15 +9,14 @@ import com.mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemCardScreen extends AbstractContainerScreen<ItemCardMenu> {
 	private static final ResourceLocation ITEM_CARD_GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/crafting3x3.png");
-	private static final TextComponent saveText = new TextComponent("\u2714");
-	private static final TextComponent invalidText = new TextComponent("\u2718");
+	private static final Component saveText = Component.literal("\u2714");
+	private static final Component invalidText = Component.literal("\u2718");
 	private Button buttonSave;
 
 	public ItemCardScreen(ItemCardMenu screenContainer, Inventory inv, Component titleIn) {

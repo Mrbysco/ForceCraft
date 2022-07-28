@@ -14,14 +14,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
 public class FreezingRecipe extends MultipleOutputFurnaceRecipe {
 
 	public FreezingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results, float experienceIn, int cookTimeIn) {
-		super(ForceRecipes.FREEZING, idIn, groupIn, ingredientIn, results, 1.0F, experienceIn, cookTimeIn);
+		super(ForceRecipes.FREEZING.get(), idIn, groupIn, ingredientIn, results, 1.0F, experienceIn, cookTimeIn);
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public class FreezingRecipe extends MultipleOutputFurnaceRecipe {
 		return ForceRecipeSerializers.FREEZING_SERIALIZER.get();
 	}
 
-	public static class SerializerFreezingRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FreezingRecipe> {
+	public static class SerializerFreezingRecipe implements RecipeSerializer<FreezingRecipe> {
 		@Override
 		public FreezingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			String s = GsonHelper.getAsString(json, "group", "");

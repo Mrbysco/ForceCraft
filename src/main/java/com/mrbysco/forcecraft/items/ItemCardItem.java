@@ -6,8 +6,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -33,15 +31,15 @@ public class ItemCardItem extends BaseItem {
 	}
 
 
-	private static final Component BAD_READ = new TextComponent("BAD READ. TRY AGAIN.").withStyle(ChatFormatting.RED);
-	private static final Component TOO_SLOW = new TextComponent("TOO SLOW. TRY AGAIN.").withStyle(ChatFormatting.RED);
-	private static final Component TOO_FAST = new TextComponent("TOO FAST. TRY AGAIN.").withStyle(ChatFormatting.RED);
+	private static final Component BAD_READ = Component.literal("BAD READ. TRY AGAIN.").withStyle(ChatFormatting.RED);
+	private static final Component TOO_SLOW = Component.literal("TOO SLOW. TRY AGAIN.").withStyle(ChatFormatting.RED);
+	private static final Component TOO_FAST = Component.literal("TOO FAST. TRY AGAIN.").withStyle(ChatFormatting.RED);
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		if (playerIn.isShiftKeyDown()) {
 			if (!level.isClientSide) {
-				NetworkHooks.openGui((ServerPlayer) playerIn, getContainer(level, playerIn.blockPosition()), playerIn.blockPosition());
+				NetworkHooks.openScreen((ServerPlayer) playerIn, getContainer(level, playerIn.blockPosition()), playerIn.blockPosition());
 			}
 		}
 		return super.use(level, playerIn, handIn);
@@ -51,7 +49,7 @@ public class ItemCardItem extends BaseItem {
 	public MenuProvider getContainer(Level level, BlockPos pos) {
 		return new SimpleMenuProvider((id, inventory, player) -> {
 			return new ItemCardMenu(id, inventory, ContainerLevelAccess.create(level, pos));
-		}, new TranslatableComponent(Reference.MOD_ID + ".container.card"));
+		}, Component.translatable(Reference.MOD_ID + ".container.card"));
 	}
 
 	@Override
@@ -78,13 +76,13 @@ public class ItemCardItem extends BaseItem {
 		if (tag.contains("RecipeContents")) {
 			CompoundTag recipeContents = tag.getCompound("RecipeContents");
 			ItemStack resultStack = ItemStack.of(recipeContents.getCompound("result"));
-			tooltip.add(new TranslatableComponent("forcecraft.item_card.recipe_output",
-					new TextComponent(resultStack.getCount() + " " + resultStack.getHoverName().getString()).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.YELLOW));
+			tooltip.add(Component.translatable("forcecraft.item_card.recipe_output",
+					Component.literal(resultStack.getCount() + " " + resultStack.getHoverName().getString()).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.YELLOW));
 		} else {
-			tooltip.add(new TranslatableComponent("forcecraft.item_card.unset").withStyle(ChatFormatting.RED));
+			tooltip.add(Component.translatable("forcecraft.item_card.unset").withStyle(ChatFormatting.RED));
 		}
-		tooltip.add(new TextComponent(" "));
-		tooltip.add(new TranslatableComponent("forcecraft.item_card.recipe_set").withStyle(ChatFormatting.BOLD));
+		tooltip.add(Component.literal(" "));
+		tooltip.add(Component.translatable("forcecraft.item_card.recipe_set").withStyle(ChatFormatting.BOLD));
 
 		super.appendHoverText(stack, level, tooltip, flagIn);
 	}

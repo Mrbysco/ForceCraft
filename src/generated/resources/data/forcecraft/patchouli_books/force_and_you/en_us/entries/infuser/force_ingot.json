@@ -1,7 +1,7 @@
 {
-  "name": "info.forcecraft.book.force_ingot.entry.name",
   "category": "forcecraft:infuser",
   "icon": "forcecraft:force_ingot",
+  "name": "info.forcecraft.book.force_ingot.entry.name",
   "pages": [
     {
       "type": "patchouli:text",

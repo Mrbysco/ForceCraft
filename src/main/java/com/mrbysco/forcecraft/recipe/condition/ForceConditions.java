@@ -1,13 +1,15 @@
 package com.mrbysco.forcecraft.recipe.condition;
 
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 
 public class ForceConditions {
 	@SubscribeEvent
-	public void onRegisterSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
-		CraftingHelper.register(ForceTorchRecipeCondition.Serializer.INSTANCE);
+	public void onRegisterSerializers(RegisterEvent event) {
+		if (event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) {
+			CraftingHelper.register(ForceTorchRecipeCondition.Serializer.INSTANCE);
+		}
 	}
 }

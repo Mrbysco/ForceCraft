@@ -17,8 +17,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -58,11 +56,11 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 
 		int x = 123;
 		int y = 16;
-		this.addRenderableWidget(new Button(leftPos + x, topPos + y, 13, 13, new TranslatableComponent("gui.forcecraft.infuser.button.guide"), (button) -> {
+		this.addRenderableWidget(new Button(leftPos + x, topPos + y, 13, 13, Component.translatable("gui.forcecraft.infuser.button.guide"), (button) -> {
 			if (ModList.get().isLoaded("patchouli")) {
 				com.mrbysco.forcecraft.compat.patchouli.PatchouliCompat.openBook();
 			} else {
-				this.inventory.player.displayClientMessage(new TranslatableComponent("gui.forcecraft.infuser.patchouli"), false);
+				this.inventory.player.displayClientMessage(Component.translatable("gui.forcecraft.infuser.patchouli"), false);
 			}
 		}) {
 			@Override
@@ -84,10 +82,10 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		});
 		x = 39;
 		y = 101;
-		buttonInfuse = this.addRenderableWidget(new Button(leftPos + x, topPos + y, btnSize, btnSize, new TranslatableComponent(""), (button) -> {
+		buttonInfuse = this.addRenderableWidget(new Button(leftPos + x, topPos + y, btnSize, btnSize, Component.translatable(""), (button) -> {
 			ItemStack bookStack = menu.getTile().getBookInSlot();
 			if (bookStack.isEmpty()) {
-				this.inventory.player.displayClientMessage(new TranslatableComponent("gui.forcecraft.infuser.nobook"), false);
+				this.inventory.player.displayClientMessage(Component.translatable("gui.forcecraft.infuser.nobook"), false);
 			} else {
 				PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
 			}
@@ -152,7 +150,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		if (isHovering(123, 16, 12, 12, mouseX, mouseY)
 				&& tile.handler.getStackInSlot(InfuserBlockEntity.SLOT_GEM).isEmpty()) {
 			List<Component> text = new ArrayList<>();
-			text.add(new TranslatableComponent("gui.forcecraft.infuser.help.tooltip")
+			text.add(Component.translatable("gui.forcecraft.infuser.help.tooltip")
 					.withStyle(ChatFormatting.GRAY));
 			renderComponentTooltip(poseStack, text, actualMouseX, actualMouseY);
 		}
@@ -160,15 +158,15 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		if (isHovering(39, 101, 12, 12, mouseX, mouseY)) {
 			List<Component> text = new ArrayList<>();
 			if (getMenu().isWorkAllowed()) {
-				text.add(new TranslatableComponent("gui.forcecraft.infuser.start.tooltip")
+				text.add(Component.translatable("gui.forcecraft.infuser.start.tooltip")
 						.withStyle(ChatFormatting.GRAY));
 			} else {
 				boolean modifiersEmpty = tile.areAllModifiersEmpty();
 				if (!modifiersEmpty && tile.getEnergyStored() < tile.getEnergyCostPer()) {
-					text.add(new TranslatableComponent("gui.forcecraft.infuser.missing.rf.tooltip")
+					text.add(Component.translatable("gui.forcecraft.infuser.missing.rf.tooltip")
 							.withStyle(ChatFormatting.RED));
 				} else {
-					text.add(new TranslatableComponent("gui.forcecraft.infuser.missing.tooltip")
+					text.add(Component.translatable("gui.forcecraft.infuser.missing.tooltip")
 							.withStyle(ChatFormatting.RED));
 				}
 			}
@@ -177,7 +175,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 
 		if (isHovering(156, 8, 12, 112, mouseX, mouseY)) {
 			List<Component> text = new ArrayList<>();
-			MutableComponent tt = new TextComponent(tile.getEnergyStored() + " RF")
+			MutableComponent tt = Component.literal(tile.getEnergyStored() + " RF")
 					.withStyle(ChatFormatting.GOLD);
 			text.add(tt);
 			renderComponentTooltip(poseStack, text, actualMouseX, actualMouseY);
@@ -186,11 +184,11 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		if (isHovering(10, 41, 15, 82, mouseX, mouseY)) {
 			List<Component> text = new ArrayList<>();
 			if (tile.getFluid() == null) {
-				text.add(new TranslatableComponent("gui.forcecraft.infuser.empty.tooltip"));
+				text.add(Component.translatable("gui.forcecraft.infuser.empty.tooltip"));
 			} else {
-				text.add(new TranslatableComponent("fluid.forcecraft.fluid_force_source"));
+				text.add(Component.translatable("fluid.forcecraft.fluid_force_source"));
 
-				text.add(new TextComponent(tile.getFluidAmount() + " mb")
+				text.add(Component.literal(tile.getFluidAmount() + " mb")
 						.withStyle(ChatFormatting.YELLOW));
 			}
 

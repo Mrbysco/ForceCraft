@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:cooked_bacon"
+	"forcecraft:cooked_bacon"
   ]
 }

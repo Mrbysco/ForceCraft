@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -115,7 +116,7 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 					FluidUtil.interactWithFluidHandler(player, handIn, level, pos, hit.getDirection());
 				} else {
 					if (!level.isClientSide) {
-						NetworkHooks.openGui((ServerPlayer) player, (ForceEngineBlockEntity) blockentity, pos);
+						NetworkHooks.openScreen((ServerPlayer) player, (ForceEngineBlockEntity) blockentity, pos);
 					}
 				}
 			});
@@ -205,7 +206,8 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 	}
 
 	@Override
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand) {
+
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand) {
 		if (stateIn.getValue(ACTIVE)) {
 			Direction direction = stateIn.getValue(FACING);
 			double d0 = (double) pos.getX() + 0.55D - (double) (rand.nextFloat() * 0.1F);

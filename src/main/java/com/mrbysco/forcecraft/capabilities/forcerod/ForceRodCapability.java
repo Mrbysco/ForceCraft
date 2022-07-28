@@ -1,14 +1,12 @@
 package com.mrbysco.forcecraft.capabilities.forcerod;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -85,7 +83,7 @@ public class ForceRodCapability implements IForceRodModifier, ICapabilitySeriali
 			player.randomTeleport(x, y, z, true);
 		} else {
 			if (!player.level.isClientSide) {
-				player.sendMessage(new TranslatableComponent("forcecraft.ender_rod.dimension.text").withStyle(ChatFormatting.YELLOW), Util.NIL_UUID);
+				player.sendSystemMessage(Component.translatable("forcecraft.ender_rod.dimension.text").withStyle(ChatFormatting.YELLOW));
 			}
 		}
 	}
@@ -152,31 +150,31 @@ public class ForceRodCapability implements IForceRodModifier, ICapabilitySeriali
 	public static void attachInformation(ItemStack stack, List<Component> tooltip) {
 		stack.getCapability(CAPABILITY_FORCEROD).ifPresent(cap -> {
 			if (cap.hasHealing()) {
-				tooltip.add(new TranslatableComponent("item.infuser.tooltip.healing" + cap.getHealingLevel()).withStyle(ChatFormatting.RED));
+				tooltip.add(Component.translatable("item.infuser.tooltip.healing" + cap.getHealingLevel()).withStyle(ChatFormatting.RED));
 			}
 			if (cap.getSpeedLevel() > 0) {
-				tooltip.add(new TranslatableComponent("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
+				tooltip.add(Component.translatable("item.infuser.tooltip.speed" + cap.getSpeedLevel()));
 			}
 			if (cap.hasCamoModifier()) {
-				tooltip.add(new TranslatableComponent("item.infuser.tooltip.camo").withStyle(ChatFormatting.DARK_GREEN));
+				tooltip.add(Component.translatable("item.infuser.tooltip.camo").withStyle(ChatFormatting.DARK_GREEN));
 			}
 			if (cap.hasEnderModifier()) {
-				tooltip.add(new TranslatableComponent("item.infuser.tooltip.ender").withStyle(ChatFormatting.DARK_PURPLE));
+				tooltip.add(Component.translatable("item.infuser.tooltip.ender").withStyle(ChatFormatting.DARK_PURPLE));
 
 				if (cap.getHomeLocation() != null) {
 					GlobalPos globalPos = cap.getHomeLocation();
 					BlockPos pos = globalPos.pos();
-					tooltip.add(new TranslatableComponent("forcecraft.ender_rod.location", pos.getX(), pos.getY(), pos.getZ(), globalPos.dimension().location()).withStyle(ChatFormatting.YELLOW));
+					tooltip.add(Component.translatable("forcecraft.ender_rod.location", pos.getX(), pos.getY(), pos.getZ(), globalPos.dimension().location()).withStyle(ChatFormatting.YELLOW));
 				} else {
-					tooltip.add(new TranslatableComponent("forcecraft.ender_rod.unset").withStyle(ChatFormatting.RED));
+					tooltip.add(Component.translatable("forcecraft.ender_rod.unset").withStyle(ChatFormatting.RED));
 				}
-				tooltip.add(new TranslatableComponent("forcecraft.ender_rod.text").withStyle(ChatFormatting.GRAY));
+				tooltip.add(Component.translatable("forcecraft.ender_rod.text").withStyle(ChatFormatting.GRAY));
 			}
 			if (cap.hasSightModifier()) {
-				tooltip.add(new TranslatableComponent("item.infuser.tooltip.sight").withStyle(ChatFormatting.LIGHT_PURPLE));
+				tooltip.add(Component.translatable("item.infuser.tooltip.sight").withStyle(ChatFormatting.LIGHT_PURPLE));
 			}
 			if (cap.hasLight()) {
-				tooltip.add(new TranslatableComponent("item.infuser.tooltip.light").withStyle(ChatFormatting.YELLOW));
+				tooltip.add(Component.translatable("item.infuser.tooltip.light").withStyle(ChatFormatting.YELLOW));
 			}
 		});
 	}

@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.treasure.entry.name",
+  "advancement": "forcecraft:tier7/tier",
   "category": "forcecraft:tier_7",
   "icon": "forcecraft:treasure_core",
+  "name": "info.forcecraft.book.treasure.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "forcecraft:treasure_core"
     }
   ],
-  "advancement": "forcecraft:tier7/tier",
   "secret": true
 }

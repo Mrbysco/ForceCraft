@@ -14,14 +14,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
 public class GrindingRecipe extends MultipleOutputFurnaceRecipe {
 
 	public GrindingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results, float chance, float experienceIn, int cookTimeIn) {
-		super(ForceRecipes.GRINDING, idIn, groupIn, ingredientIn, results, chance, experienceIn, cookTimeIn);
+		super(ForceRecipes.GRINDING.get(), idIn, groupIn, ingredientIn, results, chance, experienceIn, cookTimeIn);
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public class GrindingRecipe extends MultipleOutputFurnaceRecipe {
 		return ForceRecipeSerializers.GRINDING_SERIALIZER.get();
 	}
 
-	public static class SerializerGrindingRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<GrindingRecipe> {
+	public static class SerializerGrindingRecipe implements RecipeSerializer<GrindingRecipe> {
 		@Override
 		public GrindingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			String s = GsonHelper.getAsString(json, "group", "");

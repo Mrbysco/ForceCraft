@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.menu.furnace;
 
 import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
-import com.mrbysco.forcecraft.registry.ForceContainers;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
@@ -17,6 +17,6 @@ public class ForceFurnaceMenu extends AbstractForceFurnaceMenu {
 
 	@Override
 	public MenuType<?> getType() {
-		return ForceContainers.FORCE_FURNACE.get();
+		return ForceMenus.FORCE_FURNACE.get();
 	}
 }

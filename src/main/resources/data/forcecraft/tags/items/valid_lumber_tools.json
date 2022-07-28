@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:force_axe"
+	"forcecraft:force_axe"
   ]
 }

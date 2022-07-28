@@ -17,11 +17,11 @@ import com.mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.recipe.condition.ForceConditions;
-import com.mrbysco.forcecraft.registry.ForceContainers;
 import com.mrbysco.forcecraft.registry.ForceEffects;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceLootModifiers;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceRecipeSerializers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
@@ -72,15 +72,17 @@ public class ForceCraft {
 		ForceFluids.registerFluids();
 
 		ForceRegistry.BLOCKS.register(eventBus);
-		ForceRegistry.BLOCK_ENTITIES.register(eventBus);
+		ForceRegistry.BLOCK_ENTITY_TYPES.register(eventBus);
 		ForceRegistry.ITEMS.register(eventBus);
 		ForceSounds.SOUND_EVENTS.register(eventBus);
+		ForceFluids.FLUID_TYPES.register(eventBus);
 		ForceFluids.FLUIDS.register(eventBus);
-		ForceEntities.ENTITIES.register(eventBus);
+		ForceEntities.ENTITY_TYPES.register(eventBus);
 		ForceEffects.EFFECTS.register(eventBus);
 		ForceFeatures.FEATURES.register(eventBus);
-		ForceContainers.CONTAINERS.register(eventBus);
+		ForceMenus.MENU_TYPES.register(eventBus);
 		ForceLootModifiers.GLM.register(eventBus);
+		ForceRecipes.RECIPE_TYPES.register(eventBus);
 		ForceRecipeSerializers.RECIPE_SERIALIZERS.register(eventBus);
 
 		MinecraftForge.EVENT_BUS.register(new HeartHandler());
@@ -97,13 +99,13 @@ public class ForceCraft {
 
 		MinecraftForge.EVENT_BUS.addListener(CapabilityHandler::register);
 
-		MinecraftForge.EVENT_BUS.addListener(ForceEntities::addSpawns);
 		eventBus.addListener(ForceEntities::registerEntityAttributes);
 
 		ForgeMod.enableMilkFluid(); //Enable milk from forge
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			eventBus.addListener(ClientHandler::onClientSetup);
+			eventBus.addListener(ClientHandler::registerKeymapping);
 			eventBus.addListener(ClientHandler::registerEntityRenders);
 			eventBus.addListener(ClientHandler::registerLayerDefinitions);
 			eventBus.addListener(ClientHandler::registerItemColors);
@@ -112,8 +114,6 @@ public class ForceCraft {
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
-		ForceRecipes.init();
-		ForceTags.initialize();
 		PacketHandler.init();
 		ForceEntities.registerSpawnPlacement();
 		ForceFeatureConfigs.initialize();

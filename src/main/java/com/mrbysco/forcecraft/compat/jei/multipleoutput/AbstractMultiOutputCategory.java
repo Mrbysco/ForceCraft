@@ -14,8 +14,6 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
@@ -29,8 +27,8 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 
 	public AbstractMultiOutputCategory(IGuiHelper guiHelper, Block icon, String translationKey, int yOffset, boolean showChance) {
 		this.background = guiHelper.createDrawable(JeiCompat.RECIPE_MULTIPLES_JEI, 0, yOffset, 140, 37);
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(icon));
-		this.localizedName = new TranslatableComponent(translationKey);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(icon));
+		this.localizedName = Component.translatable(translationKey);
 		this.showChance = showChance;
 	}
 
@@ -73,7 +71,7 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 
 		@Override
 		public void onTooltip(IRecipeSlotView recipeSlotView, List<Component> tooltip) {
-			tooltip.add(new TextComponent(recipe.getSecondaryChance() * 100 + " ").append(new TranslatableComponent("forcecraft.gui.jei.category.grinding.tooltip")).withStyle(ChatFormatting.YELLOW));
+			tooltip.add(Component.literal(recipe.getSecondaryChance() * 100 + " ").append(Component.translatable("forcecraft.gui.jei.category.grinding.tooltip")).withStyle(ChatFormatting.YELLOW));
 		}
 	}
 }

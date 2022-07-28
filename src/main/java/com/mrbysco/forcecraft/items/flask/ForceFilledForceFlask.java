@@ -5,7 +5,6 @@ import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -67,7 +66,7 @@ public class ForceFilledForceFlask extends BaseItem {
 
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-		tooltip.add(new TranslatableComponent("item.force_filled_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
+		tooltip.add(Component.translatable("item.force_filled_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
 		super.appendHoverText(stack, level, tooltip, flagIn);
 	}
 

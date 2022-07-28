@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.bane.entry.name",
+  "advancement": "forcecraft:tier4/tier",
   "category": "forcecraft:tier_4",
   "icon": "minecraft:spider_eye",
+  "name": "info.forcecraft.book.bane.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -13,6 +14,5 @@
       "text": "info.forcecraft.book.bane_info.text2"
     }
   ],
-  "advancement": "forcecraft:tier4/tier",
   "secret": true
 }

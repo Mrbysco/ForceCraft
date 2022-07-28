@@ -2,6 +2,7 @@ package com.mrbysco.forcecraft.entities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
@@ -13,8 +14,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
-
-import java.util.Random;
 
 public class ChuChuEntity extends Slime {
 
@@ -33,7 +32,7 @@ public class ChuChuEntity extends Slime {
 	}
 
 	@Override
-	protected void setSize(int size, boolean resetHealth) {
+	public void setSize(int size, boolean resetHealth) {
 		this.entityData.set(ID_SIZE, 1);
 		this.reapplyPosition();
 		this.refreshDimensions();
@@ -47,7 +46,7 @@ public class ChuChuEntity extends Slime {
 		this.xpReward = 1;
 	}
 
-	public static boolean canSpawnHere(EntityType<ChuChuEntity> chuEntityEntityType, LevelAccessor level, MobSpawnType reason, BlockPos pos, Random randomIn) {
+	public static boolean canSpawnHere(EntityType<ChuChuEntity> chuEntityEntityType, LevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
 		if (level.getDifficulty() != Difficulty.PEACEFUL) {
 			if (level.getBiome(pos).is(Biomes.SWAMP) && pos.getY() > 50 && pos.getY() < 70 && randomIn.nextFloat() < 0.5F && randomIn.nextFloat() < level.getMoonBrightness() && level.getMaxLocalRawBrightness(pos) <= randomIn.nextInt(8)) {
 				return checkMobSpawnRules(chuEntityEntityType, level, reason, pos, randomIn);

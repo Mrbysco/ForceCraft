@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "#forge:nuggets/force"
+	"#forge:nuggets/force"
   ]
 }

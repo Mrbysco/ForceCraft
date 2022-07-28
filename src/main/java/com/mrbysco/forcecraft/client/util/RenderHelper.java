@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.Color;
@@ -20,7 +21,7 @@ public class RenderHelper {
 		if (fluid == null || fluid.isEmpty())
 			return;
 
-		ResourceLocation flowing = fluid.getFluid().getAttributes().getStillTexture(fluid);
+		ResourceLocation flowing = IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture(fluid);
 
 		AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS);
 		if (texture instanceof TextureAtlas) {
@@ -35,9 +36,7 @@ public class RenderHelper {
 
 				RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
 
-				Color color = new Color(fluid.getFluid()
-						.getAttributes()
-						.getColor());
+				Color color = new Color(IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor(fluid));
 
 				RenderSystem.setShaderColor((float) color.getRed() / 255.0F,
 						(float) color.getGreen() / 255.0F,

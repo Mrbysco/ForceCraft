@@ -4,8 +4,8 @@ import com.mrbysco.forcecraft.items.BaseItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -24,7 +24,7 @@ public class UpgradeTomeItem extends BaseItem {
 		super.appendHoverText(stack, level, tooltip, flagIn);
 		UpgradeBookData bd = new UpgradeBookData(stack);
 
-		TranslatableComponent tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.tier");
+		MutableComponent tt = Component.translatable("item.forcecraft.upgrade_tome.tt.tier");
 		tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
 		tt.append(" " + bd.getTier());
 		if (!bd.getProgressCache().isEmpty()) {
@@ -33,15 +33,15 @@ public class UpgradeTomeItem extends BaseItem {
 		tooltip.add(tt);
 
 		if (bd.getTier() == UpgradeBookTier.FINAL) {
-			tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.max");
+			tt = Component.translatable("item.forcecraft.upgrade_tome.tt.max");
 			tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
 		} else {
-			tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.points");
+			tt = Component.translatable("item.forcecraft.upgrade_tome.tt.points");
 			tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
 			tt.append(" " + bd.getPoints());
 			tooltip.add(tt);
 
-			tt = new TranslatableComponent("item.forcecraft.upgrade_tome.tt.nexttier");
+			tt = Component.translatable("item.forcecraft.upgrade_tome.tt.nexttier");
 			tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
 			tt.append(" " + bd.nextTier());
 		}
@@ -49,11 +49,11 @@ public class UpgradeTomeItem extends BaseItem {
 
 
 		if (!Screen.hasShiftDown()) {
-			tooltip.add(new TranslatableComponent("forcecraft.tooltip.press_shift"));
+			tooltip.add(Component.translatable("forcecraft.tooltip.press_shift"));
 			return;
 		}
 
-		tooltip.add(new TranslatableComponent("item.forcecraft.upgrade_tome.tt.point_info"));
+		tooltip.add(Component.translatable("item.forcecraft.upgrade_tome.tt.point_info"));
 		tt.withStyle(Style.EMPTY.applyFormat(ChatFormatting.AQUA));
 	}
 

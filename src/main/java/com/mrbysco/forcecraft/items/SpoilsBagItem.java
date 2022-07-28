@@ -8,10 +8,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -147,7 +145,7 @@ public class SpoilsBagItem extends BaseItem {
 	public MenuProvider getContainer(ItemStack stack) {
 		return new SimpleMenuProvider((id, inventory, player) -> {
 			return new SpoilsBagMenu(id, inventory, stack);
-		}, stack.hasCustomHoverName() ? ((BaseComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : new TranslatableComponent(Reference.MOD_ID + ".container.spoils_bag"));
+		}, stack.hasCustomHoverName() ? ((MutableComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : Component.translatable(Reference.MOD_ID + ".container.spoils_bag"));
 	}
 
 	@Override
@@ -163,7 +161,7 @@ public class SpoilsBagItem extends BaseItem {
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		super.appendHoverText(stack, level, tooltip, flagIn);
-		tooltip.add(new TextComponent("Tier: " + tier).withStyle(ChatFormatting.GRAY));
+		tooltip.add(Component.literal("Tier: " + tier).withStyle(ChatFormatting.GRAY));
 	}
 
 	@Nullable

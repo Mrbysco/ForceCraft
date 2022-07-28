@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:power_ore"
+	"forcecraft:power_ore"
   ]
 }

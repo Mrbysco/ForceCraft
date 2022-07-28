@@ -2,113 +2,111 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "name": "Force Loot",
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 1.0,
-        "max": 4.0
-      },
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 15,
-          "name": "forcecraft:force_mitt"
+          "name": "forcecraft:force_mitt",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 12,
-          "name": "forcecraft:force_bucket"
+          "name": "forcecraft:force_bucket",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "forcecraft:force_gem"
+          "name": "forcecraft:force_gem",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 8.0
+                "max": 8.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "forcecraft:force_ingot"
+          "name": "forcecraft:force_ingot",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 8.0
+                "max": 8.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "forcecraft:force_ingot"
+          "name": "forcecraft:force_ingot",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 11.0
+                "max": 11.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "forcecraft:force_arrow"
+          "name": "forcecraft:force_arrow",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "forcecraft:fortune_cookie"
+          "name": "forcecraft:fortune_cookie",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 12,
-          "name": "forcecraft:force_sapling"
+          "name": "forcecraft:force_sapling",
+          "weight": 12
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "forcecraft:baconator"
+          "name": "forcecraft:baconator",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 6,
-          "name": "minecraft:cake"
+          "name": "minecraft:cake",
+          "weight": 6
         }
-      ]
+      ],
+      "name": "Force Loot",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 4.0,
+        "min": 1.0
+      }
     },
     {
-      "name": "Other tables",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -123,7 +121,9 @@
           "type": "minecraft:loot_table",
           "name": "minecraft:chests/spawn_bonus_chest"
         }
-      ]
+      ],
+      "name": "Other tables",
+      "rolls": 1.0
     }
   ]
 }

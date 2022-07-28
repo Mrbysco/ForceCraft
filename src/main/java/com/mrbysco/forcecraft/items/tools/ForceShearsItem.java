@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity.RemovalReason;
@@ -38,11 +39,11 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -71,7 +72,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 			return InteractionResult.PASS;
 		}
 
-		Random rand = world.random;
+		RandomSource rand = world.random;
 
 		IToolModifier toolModifier = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 
@@ -114,7 +115,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
-				Mob replacementMob = new ColdCowEntity(world, originalCow.getType().getRegistryName());
+				Mob replacementMob = new ColdCowEntity(world, ForgeRegistries.ENTITY_TYPES.getKey(originalCow.getType()));
 				replacementMob.copyPosition(originalCow);
 				UUID mobUUID = replacementMob.getUUID();
 				replacementMob.restoreFrom(originalCow);
@@ -146,7 +147,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
-				Mob replacementMob = new ColdChickenEntity(level, originalChicken.getType().getRegistryName());
+				Mob replacementMob = new ColdChickenEntity(level, ForgeRegistries.ENTITY_TYPES.getKey(originalChicken.getType()));
 				replacementMob.copyPosition(originalChicken);
 				UUID mobUUID = replacementMob.getUUID();
 				replacementMob.restoreFrom(originalChicken);
@@ -177,7 +178,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
-				Mob replacementMob = new ColdPigEntity(level, originalPig.getType().getRegistryName());
+				Mob replacementMob = new ColdPigEntity(level, ForgeRegistries.ENTITY_TYPES.getKey(originalPig.getType()));
 				replacementMob.copyPosition(originalPig);
 				UUID mobUUID = replacementMob.getUUID();
 				replacementMob.restoreFrom(originalPig);

@@ -11,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -66,7 +65,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 						fd.write(stack);
 					}
 				} else {
-					player.displayClientMessage(new TranslatableComponent("forcecraft.wrench_rotate.insufficient", 10).withStyle(ChatFormatting.RED), true);
+					player.displayClientMessage(Component.translatable("forcecraft.wrench_rotate.insufficient", 10).withStyle(ChatFormatting.RED), true);
 				}
 			}
 		}
@@ -111,7 +110,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 				return InteractionResult.SUCCESS;
 			}
 		} else {
-			player.displayClientMessage(new TranslatableComponent("forcecraft.wrench_transport.insufficient", 250).withStyle(ChatFormatting.RED), true);
+			player.displayClientMessage(Component.translatable("forcecraft.wrench_transport.insufficient", 250).withStyle(ChatFormatting.RED), true);
 		}
 		return InteractionResult.FAIL;
 	}

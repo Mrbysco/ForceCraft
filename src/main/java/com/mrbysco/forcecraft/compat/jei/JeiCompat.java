@@ -11,6 +11,7 @@ import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.recipe.FreezingRecipe;
 import com.mrbysco.forcecraft.recipe.GrindingRecipe;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
+import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -24,7 +25,6 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
-import mezz.jei.util.ErrorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
@@ -101,21 +101,21 @@ public class JeiCompat implements IModPlugin {
 
 	@Override
 	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-		registration.addRecipeTransferHandler(new ItemCardTransferHandler(), RecipeTypes.CRAFTING);
-		registration.addRecipeTransferHandler(ForceFurnaceMenu.class, RecipeTypes.SMELTING, 0, 1, 3, 36);
-		registration.addRecipeTransferHandler(ForceFurnaceMenu.class, FREEZING_TYPE, 0, 1, 3, 36);
-		registration.addRecipeTransferHandler(ForceFurnaceMenu.class, GRINDING_TYPE, 0, 1, 3, 36);
+//		registration.addRecipeTransferHandler(new ItemCardTransferHandler(), RecipeTypes.CRAFTING);
+		registration.addRecipeTransferHandler(ForceFurnaceMenu.class, ForceMenus.FORCE_FURNACE.get(), RecipeTypes.SMELTING, 0, 1, 3, 36);
+		registration.addRecipeTransferHandler(ForceFurnaceMenu.class, ForceMenus.FORCE_FURNACE.get(), FREEZING_TYPE, 0, 1, 3, 36);
+		registration.addRecipeTransferHandler(ForceFurnaceMenu.class, ForceMenus.FORCE_FURNACE.get(), GRINDING_TYPE, 0, 1, 3, 36);
 	}
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
-		ErrorUtil.checkNotNull(FREEZING_TYPE, "freezingType");
-		ErrorUtil.checkNotNull(GRINDING_TYPE, "grindingType");
-		ErrorUtil.checkNotNull(INFUSER_TYPE, "grindingType");
+		assert FREEZING_TYPE != null;
+		assert GRINDING_TYPE != null;
+		assert INFUSER_TYPE != null;
 
 		ClientLevel world = Objects.requireNonNull(Minecraft.getInstance().level);
-		registration.addRecipes(FREEZING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.FREEZING));
-		registration.addRecipes(GRINDING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.GRINDING));
-		registration.addRecipes(INFUSER_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE));
+		registration.addRecipes(FREEZING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.FREEZING.get()));
+		registration.addRecipes(GRINDING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.GRINDING.get()));
+		registration.addRecipes(INFUSER_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get()));
 	}
 }

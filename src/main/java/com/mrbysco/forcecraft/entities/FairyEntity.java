@@ -6,6 +6,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
@@ -30,7 +31,6 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Random;
 import java.util.UUID;
 
 public class FairyEntity extends PathfinderMob implements FlyingAnimal {
@@ -78,7 +78,7 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 		this.discard();
 	}
 
-	public static boolean canSpawnOn(EntityType<? extends Mob> typeIn, LevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
+	public static boolean canSpawnOn(EntityType<? extends Mob> typeIn, LevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource random) {
 		BlockPos blockpos = pos.below();
 		return reason == MobSpawnType.SPAWNER || (level.getBlockState(blockpos).isValidSpawn(level, blockpos, typeIn) && level.getRawBrightness(pos, 0) > 8);
 	}

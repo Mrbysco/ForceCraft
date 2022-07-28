@@ -1,10 +1,9 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:red_potion",
-    "forcecraft:force_filled_force_flask",
-    "forcecraft:milk_force_flask",
-    "minecraft:potion",
-    "minecraft:milk_bucket"
+	"forcecraft:red_potion",
+	"forcecraft:force_filled_force_flask",
+	"forcecraft:milk_force_flask",
+	"minecraft:potion",
+	"minecraft:milk_bucket"
   ]
 }

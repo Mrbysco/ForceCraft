@@ -3,7 +3,7 @@ package com.mrbysco.forcecraft.items.infuser;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class ForceToolData {
 
 	public void attachInformation(List<Component> tooltip) {
 		if (this.force > 0) {
-			TranslatableComponent t = new TranslatableComponent("item.infuser.tooltip.forcelevel");
+			MutableComponent t = Component.translatable("item.infuser.tooltip.forcelevel");
 			t.append("" + this.force);
 			t.withStyle(ChatFormatting.GOLD);
 			tooltip.add(t);

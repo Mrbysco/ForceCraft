@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.force.entry.name",
+  "advancement": "forcecraft:tier0/tier",
   "category": "forcecraft:tier_0",
   "icon": "forcecraft:force_nugget",
+  "name": "info.forcecraft.book.force.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "forcecraft:force_nugget"
     }
   ],
-  "advancement": "forcecraft:tier0/tier",
   "secret": true
 }

@@ -15,7 +15,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -200,7 +199,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 				if (player.isShiftKeyDown()) {
 					cap.setHomeLocation(GlobalPos.of(player.level.dimension(), player.blockPosition()));
 					if (!level.isClientSide) {
-						player.displayClientMessage(new TranslatableComponent("forcecraft.ender_rod.location.set").withStyle(ChatFormatting.DARK_PURPLE), true);
+						player.displayClientMessage(Component.translatable("forcecraft.ender_rod.location.set").withStyle(ChatFormatting.DARK_PURPLE), true);
 					}
 				} else {
 					if (cap.getHomeLocation() != null) {

@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.bleeding.entry.name",
+  "advancement": "forcecraft:tier3/tier",
   "category": "forcecraft:tier_3",
   "icon": "minecraft:arrow",
+  "name": "info.forcecraft.book.bleeding.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -13,6 +14,5 @@
       "text": "info.forcecraft.book.bleeding_info.text2"
     }
   ],
-  "advancement": "forcecraft:tier3/tier",
   "secret": true
 }

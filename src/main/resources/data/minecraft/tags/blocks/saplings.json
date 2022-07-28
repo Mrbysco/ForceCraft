@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "forcecraft:force_sapling"
+	"forcecraft:force_sapling"
   ]
 }

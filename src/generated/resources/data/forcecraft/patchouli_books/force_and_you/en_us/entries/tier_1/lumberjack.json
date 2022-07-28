@@ -1,7 +1,8 @@
 {
-  "name": "info.forcecraft.book.lumberjack.entry.name",
+  "advancement": "forcecraft:tier1/tier",
   "category": "forcecraft:tier_1",
   "icon": "forcecraft:force_log",
+  "name": "info.forcecraft.book.lumberjack.entry.name",
   "pages": [
     {
       "type": "patchouli:text",
@@ -12,6 +13,5 @@
       "item": "forcecraft:force_log"
     }
   ],
-  "advancement": "forcecraft:tier1/tier",
   "secret": true
 }
