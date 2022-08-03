@@ -566,7 +566,7 @@ public class ForceLanguage extends LanguageProvider {
 		add("info.forcecraft.book.ender_info.text", "This infusion does the following,$(br)$(li)On a $(l:forcecraft:infuser/force_rod)$(item)Force Rod$(), Will imbue the rod with Ender allowing it to be used as a teleportation device$(br)$(li)On a $(item)Force Sword$(), Will add Ender to the sword allowing you to teleport to a targeted spot");
 		add("info.forcecraft.book.ender_info.text2", "$(li)On a $(item)Force Bow$(), will imbue any projectile fired by the bow, causing enemies to teleport to a random location");
 		add("info.forcecraft.book.sturdy.entry.name", "Sturdy");
-		add("info.forcecraft.book.sturdy_info.text", "This infusion does the following,$(br)$(li)On $(item)Force Tools$() (Max lvl, 3), will imbue with the vanilla Unbreaking enchantment$(br)$(li)On $(item)Force Armor$() (1 level per piece), Reduces damage from all sources for a total of 75%");
+		add("info.forcecraft.book.sturdy_info.text", "This infusion does the following,$(br)$(li)On $(item)Force Tools$() (Max lvl, 3), will imbue with the vanilla Unbreaking enchantment$(br)$(li)On $(item)Force Armor$() (1 level per piece), Reduces damage from all sources for a total of 75%%");
 
 		add("info.forcecraft.book.tier_7.name", "Tier 7 Infusions");
 		add("info.forcecraft.book.tier_7.desc", "Infusions that can be executed by having an $(item)Upgrade Tome$() of at least Tier 7");
