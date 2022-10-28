@@ -248,8 +248,11 @@ public class InfuserContainer extends Container {
 	}
 
 	public class UnlockableSlot extends MatrixUpdatingSlot {
+		private final int index;
+
 		public UnlockableSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
 			super(itemHandler, index, xPosition, yPosition);
+			this.index = index;
 		}
 
 		@Override

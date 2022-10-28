@@ -32,7 +32,7 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-            arg "-mixin.config=forcecraft.mixins.json"
+            arg '--mixin.config=forcecraft.mixins.json'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
@@ -54,7 +54,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-            arg "-mixin.config=forcecraft.mixins.json"
+            arg '--mixin.config=forcecraft.mixins.json'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
@@ -73,7 +73,7 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-            arg "-mixin.config=forcecraft.mixins.json"
+            arg '--mixin.config=forcecraft.mixins.json'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
@@ -105,13 +105,8 @@ repositories {
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev/"
-    }
-    maven {
-        name "brassgoggledcoders"
-        url "https://maven.teamacronymcoders.com/"
+        name = 'Patchouli maven'
+        url = 'https://maven.blamejared.com'
     }
     maven {
         url "https://cursemaven.com"
@@ -127,7 +122,7 @@ mixin {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")

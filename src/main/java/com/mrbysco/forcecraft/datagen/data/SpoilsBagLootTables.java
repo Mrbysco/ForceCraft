@@ -1,4 +1,4 @@
-package com.mrbysco.forcecraft.datagen;
+package com.mrbysco.forcecraft.datagen.data;
 
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTables;
@@ -7,7 +7,6 @@ import net.minecraft.item.Items;
 import net.minecraft.loot.ItemLootEntry;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTable.Builder;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.RandomValueRange;
 import net.minecraft.loot.TableLootEntry;
@@ -19,7 +18,7 @@ import java.util.function.BiConsumer;
 public class SpoilsBagLootTables extends GiftLootTables {
 
 	@Override
-	public void accept(BiConsumer<ResourceLocation, Builder> consumer) {
+	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
 		consumer.accept(ForceTables.TIER_1, LootTable.lootTable()
 				.withPool(LootPool.lootPool().setRolls(RandomValueRange.between(1.0F, 4.0F))
 						.name("Force Loot")
