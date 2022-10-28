@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
@@ -23,20 +23,22 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings  channel: "${mcp_channel}", version: "${mcp_mappings}"
+    mappings channel: "${mcp_channel}", version: "${mcp_mappings}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-	
+
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
-	runs {
+    runs {
         client {
             workingDirectory project.file('run')
             arg "-mixin.config=forcecraft.mixins.json"
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
-			// required for patchouli
+            // required for patchouli
             property 'mixin.env.disableRefMap', 'true'
-            
+
             // Recommended logging data for a userdev environment
             // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
@@ -53,6 +55,8 @@ minecraft {
         server {
             workingDirectory project.file('run')
             arg "-mixin.config=forcecraft.mixins.json"
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             // Recommended logging data for a userdev environment
             // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -69,6 +73,9 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
+            arg "-mixin.config=forcecraft.mixins.json"
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             // Recommended logging data for a userdev environment
             // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -100,13 +107,18 @@ repositories {
     maven {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
+        url = "https://modmaven.dev/"
     }
     maven {
         name "brassgoggledcoders"
         url "https://maven.teamacronymcoders.com/"
     }
-    maven { url = 'https://www.cursemaven.com'  }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 mixin {
@@ -126,20 +138,20 @@ dependencies {
     compileOnly fg.deobf("xyz.brassgoggledcoders:PatchouliProvider:${mc_version}-${patchouli_provider_version}")
     runtimeOnly fg.deobf("xyz.brassgoggledcoders:PatchouliProvider:${mc_version}-${patchouli_provider_version}")
 
-    compile fg.deobf("curse.maven:industrial-foregoing-266515:3425275")
-    compile fg.deobf("curse.maven:titanium-287342:3346366")
-    compile fg.deobf("curse.maven:pipez-443900:3508084")
-    compile fg.deobf("curse.maven:CTM-267602:3137659")
-    compile fg.deobf("curse.maven:StorageDrawers-223852:3402515")
+    runtimeOnly fg.deobf("curse.maven:industrial-foregoing-266515:3446262")
+    runtimeOnly fg.deobf("curse.maven:titanium-287342:3525770")
+    runtimeOnly fg.deobf("curse.maven:pipez-443900:3569511")
+    runtimeOnly fg.deobf("curse.maven:CTM-267602:3137659")
+    runtimeOnly fg.deobf("curse.maven:StorageDrawers-223852:3402515")
 
-    compile fg.deobf("curse.maven:Mantle-74924:3482897")
-    compile fg.deobf("curse.maven:TConstruct-74072:3482903")
+    runtimeOnly fg.deobf("curse.maven:Mantle-74924:3482897")
+    runtimeOnly fg.deobf("curse.maven:TConstruct-74072:3482903")
 
-    compile fg.deobf("curse.maven:invtweaks-383070:3102237")
+    runtimeOnly fg.deobf("curse.maven:invtweaks-383070:3102237")
 
-    compile fg.deobf("curse.maven:mmmmmmmmmmmm-225738:3279930")
+    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:3279930")
 
-    implementation fg.deobf("curse.maven:cyclic-239286:3525767")
+    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3853310")
 //    implementation fg.deobf("curse.maven:simple-storage-network-268495:3230736")
 //    implementation fg.deobf("curse.maven:simple-tomb-399669:3229015")
 }
@@ -147,14 +159,14 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "forcecraft",
-            "Specification-Vendor": "Mrbysco",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"Mrbysco",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "forcecraft.mixins.json"
+                "Specification-Title"     : "forcecraft",
+                "Specification-Vendor"    : "Mrbysco",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "Mrbysco",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : "forcecraft.mixins.json"
         ])
     }
 }

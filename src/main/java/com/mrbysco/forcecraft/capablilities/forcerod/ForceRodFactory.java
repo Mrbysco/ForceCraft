@@ -11,117 +11,117 @@ import net.minecraft.util.text.TranslationTextComponent;
 import java.util.concurrent.Callable;
 
 public class ForceRodFactory implements Callable<IForceRodModifier> {
-    @Override
-    public IForceRodModifier call() throws Exception {
-        return new IForceRodModifier() {
-            boolean camo = false;
-            boolean ender = false;
-            boolean sight = false;
-            int speed = 0;
-            int healing = 0;
+	@Override
+	public IForceRodModifier call() throws Exception {
+		return new IForceRodModifier() {
+			boolean camo = false;
+			boolean ender = false;
+			boolean sight = false;
+			int speed = 0;
+			int healing = 0;
 
-            GlobalPos homeLocation = null;
+			GlobalPos homeLocation = null;
 
 
-            @Override
-            public int getHealingLevel() {
-                return healing;
-            }
+			@Override
+			public int getHealingLevel() {
+				return healing;
+			}
 
-            @Override
-            public boolean hasHealing() {
-                return healing > 0;
-            }
+			@Override
+			public boolean hasHealing() {
+				return healing > 0;
+			}
 
-            @Override
-            public void incrementHealing() {
-                healing++;
-            }
+			@Override
+			public void incrementHealing() {
+				healing++;
+			}
 
-            @Override
-            public void setHealing(int newHealing) {
-                healing = newHealing;
-            }
+			@Override
+			public void setHealing(int newHealing) {
+				healing = newHealing;
+			}
 
-            @Override
-            public boolean hasCamoModifier() {
-                return camo;
-            }
+			@Override
+			public boolean hasCamoModifier() {
+				return camo;
+			}
 
-            @Override
-            public void setCamoModifier(boolean newVal) {
-                camo = newVal;
-            }
+			@Override
+			public void setCamoModifier(boolean newVal) {
+				camo = newVal;
+			}
 
-            @Override
-            public GlobalPos getHomeLocation() {
-                return homeLocation;
-            }
+			@Override
+			public GlobalPos getHomeLocation() {
+				return homeLocation;
+			}
 
-            @Override
-            public void setHomeLocation(GlobalPos globalPos) {
-                homeLocation = globalPos;
-            }
+			@Override
+			public void setHomeLocation(GlobalPos globalPos) {
+				homeLocation = globalPos;
+			}
 
-            @Override
-            public void teleportPlayerToLocation(PlayerEntity player, GlobalPos globalPos) {
-                if(player.world.getDimensionKey().getLocation().equals(globalPos.getDimension().getLocation())) {
-                    BlockPos pos = globalPos.getPos();
-                    int x = pos.getX();
-                    int y = pos.getY() + 1;
-                    int z = pos.getZ();
+			@Override
+			public void teleportPlayerToLocation(PlayerEntity player, GlobalPos globalPos) {
+				if (player.level.dimension().location().equals(globalPos.dimension().location())) {
+					BlockPos pos = globalPos.pos();
+					int x = pos.getX();
+					int y = pos.getY() + 1;
+					int z = pos.getZ();
 
-                    player.attemptTeleport(x, y, z, true);
-                } else {
-                    if(!player.world.isRemote) {
-                        player.sendMessage(new TranslationTextComponent("forcecraft.ender_rod.dimension.text").mergeStyle(TextFormatting.YELLOW), Util.DUMMY_UUID);
-                    }
-                }
-            }
+					player.randomTeleport(x, y, z, true);
+				} else {
+					if (!player.level.isClientSide) {
+						player.sendMessage(new TranslationTextComponent("forcecraft.ender_rod.dimension.text").withStyle(TextFormatting.YELLOW), Util.NIL_UUID);
+					}
+				}
+			}
 
-            @Override
-            public boolean hasEnderModifier() {
-                return ender;
-            }
+			@Override
+			public boolean hasEnderModifier() {
+				return ender;
+			}
 
-            @Override
-            public void setEnderModifier(boolean newVal) {
-                ender = newVal;
-            }
+			@Override
+			public void setEnderModifier(boolean newVal) {
+				ender = newVal;
+			}
 
-            @Override
-            public boolean isRodofEnder() {
-                return ender;
-            }
+			@Override
+			public boolean isRodofEnder() {
+				return ender;
+			}
 
-            @Override
-            public boolean hasSightModifier() {
-                return sight;
-            }
+			@Override
+			public boolean hasSightModifier() {
+				return sight;
+			}
 
-            @Override
-            public void setSightModifier(boolean newVal) {
-                sight = newVal;
-            }
+			@Override
+			public void setSightModifier(boolean newVal) {
+				sight = newVal;
+			}
 
-            /**
-             * Modifier: Light
-             * Items: Glowstone Dust
-             * Levels: 1
-             * Effect: Shows mobs through walls
-             */
+			/**
+			 * Modifier: Light
+			 * Items: Glowstone Dust
+			 * Levels: 1
+			 * Effect: Shows mobs through walls
+			 */
 
-            boolean light;
+			boolean light;
 
-            @Override
-            public boolean hasLight() {
-                return light;
-            }
+			@Override
+			public boolean hasLight() {
+				return light;
+			}
 
-            @Override
-            public void setLight(boolean val) {
-                light = val;
-            }
+			@Override
+			public void setLight(boolean val) {
+				light = val;
+			}
 
 			@Override
 			public int getSpeedLevel() {
@@ -138,15 +138,15 @@ public class ForceRodFactory implements Callable<IForceRodModifier> {
 				speed = Math.min(3, newSpeed);
 			}
 
-            @Override
-            public CompoundNBT serializeNBT() {
-                return null;
-            }
+			@Override
+			public CompoundNBT serializeNBT() {
+				return null;
+			}
 
-            @Override
-            public void deserializeNBT(CompoundNBT nbt) {
+			@Override
+			public void deserializeNBT(CompoundNBT nbt) {
 
-            }
-        };
-    }
+			}
+		};
+	}
 }

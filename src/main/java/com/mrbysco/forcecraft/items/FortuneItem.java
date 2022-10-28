@@ -17,49 +17,49 @@ import java.util.List;
 
 public class FortuneItem extends BaseItem {
 
-    public FortuneItem(Item.Properties properties) {
-        super(properties);
-    }
+	public FortuneItem(Item.Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        CompoundNBT nbt;
-        if(stack.hasTag()) {
-            nbt = stack.getTag();
-        } else {
-            nbt = new CompoundNBT();
-        }
+	@Override
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
+		CompoundNBT nbt;
+		if (stack.hasTag()) {
+			nbt = stack.getTag();
+		} else {
+			nbt = new CompoundNBT();
+		}
 
-        if(!nbt.contains("message")) {
-            addMessage(stack, nbt);
-        }
+		if (!nbt.contains("message")) {
+			addMessage(stack, nbt);
+		}
 
-        if(!worldIn.isRemote) {
-            if(playerIn != null && playerIn.isSneaking()) {
-                if(!playerIn.abilities.isCreativeMode) {
-                    stack.shrink(1);
-                }
-                ItemStack paperStack = new ItemStack(Items.PAPER);
-                if(!playerIn.addItemStackToInventory(paperStack)) {
-                    playerIn.entityDropItem(paperStack);
-                }
-            } else {
-                playerIn.sendMessage(new StringTextComponent(nbt.getString("message")), Util.DUMMY_UUID);
-            }
-        }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
-    }
+		if (!worldIn.isClientSide) {
+			if (playerIn != null && playerIn.isShiftKeyDown()) {
+				if (!playerIn.abilities.instabuild) {
+					stack.shrink(1);
+				}
+				ItemStack paperStack = new ItemStack(Items.PAPER);
+				if (!playerIn.addItem(paperStack)) {
+					playerIn.spawnAtLocation(paperStack);
+				}
+			} else {
+				playerIn.sendMessage(new StringTextComponent(nbt.getString("message")), Util.NIL_UUID);
+			}
+		}
+		return super.use(worldIn, playerIn, handIn);
+	}
 
-    public static void addMessage(ItemStack stack, CompoundNBT nbt) {
-        List<String> messages = new ArrayList<>(ConfigHandler.COMMON.fortuneMessages.get());
-        String message = "No fortune for you";
-        if(!messages.isEmpty()) {
-            int idx = random.nextInt(messages.size());
-            message = messages.get(idx);
-        }
+	public static void addMessage(ItemStack stack, CompoundNBT nbt) {
+		List<String> messages = new ArrayList<>(ConfigHandler.COMMON.fortuneMessages.get());
+		String message = "No fortune for you";
+		if (!messages.isEmpty()) {
+			int idx = random.nextInt(messages.size());
+			message = messages.get(idx);
+		}
 
-        nbt.putString("message", message);
-        stack.setTag(nbt);
-    }
+		nbt.putString("message", message);
+		stack.setTag(nbt);
+	}
 }

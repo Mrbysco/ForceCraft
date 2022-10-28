@@ -79,7 +79,7 @@ public class UpgradeBookData {
 		//Update tooltip
 		Set<ResourceLocation> thisTier = this.recipesUsed.get(this.tier.ordinal());
 		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
-		if(!InfuseRecipe.RECIPESBYLEVEL.isEmpty()) {
+		if (!InfuseRecipe.RECIPESBYLEVEL.isEmpty()) {
 			int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
 			this.progressCache = recipesThisTier + "/" + totalThisTier;
 		}
@@ -121,7 +121,7 @@ public class UpgradeBookData {
 
 					// i dont know where this bug comes from
 					if (!id.isEmpty() && !"minecraft:".equalsIgnoreCase(id))
-						tierSet.add(ResourceLocation.tryCreate(id));
+						tierSet.add(ResourceLocation.tryParse(id));
 				}
 			}
 			recipesUsed.put(tier.ordinal(), tierSet);

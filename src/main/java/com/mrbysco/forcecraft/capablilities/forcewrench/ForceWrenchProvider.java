@@ -13,31 +13,31 @@ import javax.annotation.Nullable;
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEWRENCH;
 
 public class ForceWrenchProvider implements ICapabilitySerializable<INBT>, ICapabilityProvider {
-    private LazyOptional<IForceWrench> instance;
-    private IForceWrench forceWrench;
+	private LazyOptional<IForceWrench> instance;
+	private IForceWrench forceWrench;
 
-    public ForceWrenchProvider(){
-        this.forceWrench = CAPABILITY_FORCEWRENCH.getDefaultInstance();
-        this.instance = LazyOptional.of(() -> forceWrench);
-    }
+	public ForceWrenchProvider() {
+		this.forceWrench = CAPABILITY_FORCEWRENCH.getDefaultInstance();
+		this.instance = LazyOptional.of(() -> forceWrench);
+	}
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return CAPABILITY_FORCEWRENCH.orEmpty(cap, instance);
-    }
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		return CAPABILITY_FORCEWRENCH.orEmpty(cap, instance);
+	}
 
-    @Override
-    public INBT serializeNBT() {
-        return CAPABILITY_FORCEWRENCH.writeNBT(forceWrench, null);
-    }
+	@Override
+	public INBT serializeNBT() {
+		return CAPABILITY_FORCEWRENCH.writeNBT(forceWrench, null);
+	}
 
-    @Override
-    public void deserializeNBT(INBT nbt) {
-        CAPABILITY_FORCEWRENCH.readNBT(forceWrench, null, nbt);
-    }
+	@Override
+	public void deserializeNBT(INBT nbt) {
+		CAPABILITY_FORCEWRENCH.readNBT(forceWrench, null, nbt);
+	}
 
-    public final Capability<IForceWrench> getCapability(){
-        return CAPABILITY_FORCEWRENCH;
-    }
+	public final Capability<IForceWrench> getCapability() {
+		return CAPABILITY_FORCEWRENCH;
+	}
 }

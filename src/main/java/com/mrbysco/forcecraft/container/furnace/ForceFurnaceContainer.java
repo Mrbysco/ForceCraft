@@ -7,16 +7,16 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.network.PacketBuffer;
 
 public class ForceFurnaceContainer extends AbstractForceFurnaceContainer {
-    public ForceFurnaceContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
-        super(windowId, playerInventory, data);
-    }
+	public ForceFurnaceContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer data) {
+		super(windowId, playerInventory, data);
+	}
 
-    public ForceFurnaceContainer(int id, PlayerInventory playerInventoryIn, AbstractForceFurnaceTile te) {
-        super(id, playerInventoryIn, te);
-    }
+	public ForceFurnaceContainer(int id, PlayerInventory playerInventoryIn, AbstractForceFurnaceTile te) {
+		super(id, playerInventoryIn, te);
+	}
 
-    @Override
-    public ContainerType<?> getType() {
-        return ForceContainers.FORCE_FURNACE.get();
-    }
+	@Override
+	public ContainerType<?> getType() {
+		return ForceContainers.FORCE_FURNACE.get();
+	}
 }

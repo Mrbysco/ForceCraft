@@ -17,13 +17,13 @@ import net.minecraftforge.common.Tags.IOptionalNamedTag;
 public class ForceTags {
 	public static final ITag.INamedTag<Block> FORCE_BRICK = forceBlockTag("force_brick");
 
-	public static final ITag.INamedTag<Item> VALID_INFUSER_MODIFIERS = ItemTags.makeWrapperTag(Reference.MOD_ID + ":valid_infuser_modifiers");
-	public static final ITag.INamedTag<Item> VALID_INFUSER_TOOLS = ItemTags.makeWrapperTag(Reference.MOD_ID + ":valid_infuser_tools");
-	public static final ITag.INamedTag<Item> VALID_INFUSER_CHARGE = ItemTags.makeWrapperTag(Reference.MOD_ID + ":valid_infuser_charge");
-	public static final ITag.INamedTag<Item> FORCE_FUELS = ItemTags.makeWrapperTag(Reference.MOD_ID + ":force_fuel");
-	public static final ITag.INamedTag<Item> BACONATOR_FOOD = ItemTags.makeWrapperTag(Reference.MOD_ID + ":baconator_food");
-	public static final ITag.INamedTag<Item> VALID_FORCE_BELT = ItemTags.makeWrapperTag(Reference.MOD_ID + ":valid_force_belt");
-	public static final ITag.INamedTag<Item> ENDER = ItemTags.makeWrapperTag(Reference.MOD_ID + ":ender");
+	public static final ITag.INamedTag<Item> VALID_INFUSER_MODIFIERS = ItemTags.bind(Reference.MOD_ID + ":valid_infuser_modifiers");
+	public static final ITag.INamedTag<Item> VALID_INFUSER_TOOLS = ItemTags.bind(Reference.MOD_ID + ":valid_infuser_tools");
+	public static final ITag.INamedTag<Item> VALID_INFUSER_CHARGE = ItemTags.bind(Reference.MOD_ID + ":valid_infuser_charge");
+	public static final ITag.INamedTag<Item> FORCE_FUELS = ItemTags.bind(Reference.MOD_ID + ":force_fuel");
+	public static final ITag.INamedTag<Item> BACONATOR_FOOD = ItemTags.bind(Reference.MOD_ID + ":baconator_food");
+	public static final ITag.INamedTag<Item> VALID_FORCE_BELT = ItemTags.bind(Reference.MOD_ID + ":valid_force_belt");
+	public static final ITag.INamedTag<Item> ENDER = ItemTags.bind(Reference.MOD_ID + ":ender");
 
 	public static final ITag.INamedTag<Item> FORCE_INGOT = forgeItemTag("ingots/force");
 	public static final ITag.INamedTag<Item> FORCE_NUGGET = forgeItemTag("nuggets/force");
@@ -44,14 +44,17 @@ public class ForceTags {
 	public static final ITag<EntityType<?>> FLASK_BLACKLIST = EntityTypeTags.createOptional(new ResourceLocation(Reference.MOD_ID, "flask_blacklist"));
 
 	private static INamedTag<Item> forgeItemTag(String name) {
-		return ItemTags.makeWrapperTag("forge:" + name);
+		return ItemTags.bind("forge:" + name);
 	}
+
 	private static INamedTag<Block> forceBlockTag(String name) {
-		return BlockTags.makeWrapperTag("forcecraft:" + name);
+		return BlockTags.bind("forcecraft:" + name);
 	}
+
 	private static INamedTag<Fluid> forgeFluidTag(String name) {
-		return FluidTags.makeWrapperTag("forge:" + name);
+		return FluidTags.bind("forge:" + name);
 	}
+
 	private static IOptionalNamedTag<Fluid> optionalForgeFluidTag(String name) {
 		return FluidTags.createOptional(new ResourceLocation("forge", name));
 	}

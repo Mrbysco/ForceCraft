@@ -30,80 +30,80 @@ import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_
 
 public class ForceArmorItem extends ArmorItem implements IForceChargingTool {
 
-    public ForceArmorItem(IArmorMaterial materialIn, EquipmentSlotType slot, Item.Properties builderIn) {
-        super(materialIn, slot, builderIn);
-    }
+	public ForceArmorItem(IArmorMaterial materialIn, EquipmentSlotType slot, Item.Properties builderIn) {
+		super(materialIn, slot, builderIn);
+	}
 
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-    	if(CAPABILITY_TOOLMOD == null) {
-            return null;
-        }
-        return new ToolModProvider();
-    }
+	@Nullable
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+		if (CAPABILITY_TOOLMOD == null) {
+			return null;
+		}
+		return new ToolModProvider();
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
 		ForceToolData fd = new ForceToolData(stack);
 		fd.attachInformation(lores);
-    	ToolModStorage.attachInformation(stack, lores);
-        super.addInformation(stack, worldIn, lores, flagIn);
-    }
+		ToolModStorage.attachInformation(stack, lores);
+		super.appendHoverText(stack, worldIn, lores, flagIn);
+	}
 
 	@Override
 	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-		return this.damageItem(stack,amount);
+		return this.damageItem(stack, amount);
 	}
 
-    @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        return false;
-    }
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+		return false;
+	}
 
-    // ShareTag for server->client capability data sync
-    @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-    	CompoundNBT nbt = stack.getOrCreateTag();
-    	
+	// ShareTag for server->client capability data sync
+	@Override
+	public CompoundNBT getShareTag(ItemStack stack) {
+		CompoundNBT nbt = stack.getOrCreateTag();
+
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-	  
+
 		//on server  this runs . also has correct values.
 		//set data for sync to client
-		if(cap != null) {
+		if (cap != null) {
 			CompoundNBT shareTag = ToolModStorage.serializeNBT(cap);
-			
+
 			nbt.put(Reference.MOD_ID, shareTag);
 //	        ForceCraft.LOGGER.info("(SERVER) getShareTag : ARMOR{}  ", shareTag);
 		}
 
-        return nbt;
-    }
+		return nbt;
+	}
 
-    @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-    	if(nbt != null && nbt.contains(Reference.MOD_ID)) {
+	@Override
+	public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+		if (nbt != null && nbt.contains(Reference.MOD_ID)) {
 
-    		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-    		//these logs run on client. and yes, on client speed:1 its going up as expected
-    		if(cap != null) {
-        		INBT shareTag = nbt.get(Reference.MOD_ID);
-	        	ToolModStorage.deserializeNBT(cap, shareTag);
+			IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
+			//these logs run on client. and yes, on client speed:1 its going up as expected
+			if (cap != null) {
+				INBT shareTag = nbt.get(Reference.MOD_ID);
+				ToolModStorage.deserializeNBT(cap, shareTag);
 
 //            	ForceCraft.LOGGER.info("(CLIENT) readShareTag : ARMOR{}  ", shareTag);
-	        	//if we used plain nbt and not capabilities, call super instead
+				//if we used plain nbt and not capabilities, call super instead
 //	        	super.readShareTag(stack, nbt);
-    		}
-    	}
+			}
+		}
 		super.readShareTag(stack, nbt);
-    }
+	}
 
 	@Nullable
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
 		IToolModifier cap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-		if(cap != null && cap.hasCamo()) {
+		if (cap != null && cap.hasCamo()) {
 			return "forcecraft:textures/models/armor/force_invisible.png";
 		}
 		return super.getArmorTexture(stack, entity, slot, type);

@@ -14,7 +14,7 @@ public class BlueChuChuRenderer extends SlimeRenderer {
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(SlimeEntity entity) {
+	public ResourceLocation getTextureLocation(SlimeEntity entity) {
 		return CHU_CHU_TEXTURE;
 	}
 }

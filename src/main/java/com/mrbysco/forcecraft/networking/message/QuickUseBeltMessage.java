@@ -15,7 +15,8 @@ import java.util.function.Supplier;
 
 public class QuickUseBeltMessage {
 	public int slot;
-	public QuickUseBeltMessage(int slot){
+
+	public QuickUseBeltMessage(int slot) {
 		this.slot = slot;
 	}
 
@@ -35,13 +36,13 @@ public class QuickUseBeltMessage {
 				Predicate<ItemStack> stackPredicate = (stack) -> stack.getItem() instanceof ForceBeltItem;
 				if (FindingUtil.hasSingleStackInHotbar(player, stackPredicate)) {
 					ItemStack beltStack = FindingUtil.findInstanceStack(player, stackPredicate);
-					if(!beltStack.isEmpty()) {
+					if (!beltStack.isEmpty()) {
 						beltStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent((handler) -> {
 							ItemStack stack = handler.getStackInSlot(slot);
-							World world = player.world;
-							if(!stack.isEmpty()) {
-								stack.onItemUseFinish(world, player);
-								world.playSound((PlayerEntity) null, player.getPosX(), player.getPosY(), player.getPosZ(), stack.getDrinkSound(), player.getSoundCategory(), 0.5F, player.world.rand.nextFloat() * 0.1F + 0.9F);
+							World world = player.level;
+							if (!stack.isEmpty()) {
+								stack.finishUsingItem(world, player);
+								world.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), stack.getDrinkingSound(), player.getSoundSource(), 0.5F, player.level.random.nextFloat() * 0.1F + 0.9F);
 							}
 						});
 					}

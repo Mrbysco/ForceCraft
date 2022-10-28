@@ -40,79 +40,82 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class BaconatorItem extends BaseItem {
 	public static final String HAS_FOOD_TAG = Reference.MOD_ID + ":hasItems";
+
 	public BaconatorItem(Properties properties) {
 		super(properties);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack itemstack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack itemstack = playerIn.getItemInHand(handIn);
 		IItemHandler handler = itemstack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-		if(playerIn.isSneaking()) {
+		if (playerIn.isShiftKeyDown()) {
 			boolean isFull = ItemHandlerUtils.isFull(handler);
-			if(!isFull) {
+			if (!isFull) {
 				//Fill with food
 				boolean extracted = ItemHandlerUtils.extractStackFromPlayer(playerIn.inventory, handler, (stack) -> {
-					ITagCollectionSupplier tagCollection = TagCollectionManager.getManager();
+					ITagCollectionSupplier tagCollection = TagCollectionManager.getInstance();
 					final ResourceLocation baconatorFood = new ResourceLocation(Reference.MOD_ID, "baconator_food");
-					Tag<Item> tag = (Tag<Item>) tagCollection.getItemTags().get(baconatorFood);
-					return !stack.isEmpty() && stack.isFood() && tag != null && stack.getItem().isIn(tag);
+					Tag<Item> tag = (Tag<Item>) tagCollection.getItems().getTag(baconatorFood);
+					return !stack.isEmpty() && stack.isEdible() && tag != null && stack.getItem().is(tag);
 				});
 				boolean hasItems = ItemHandlerUtils.hasItems(handler);
-				if(!extracted) {
+				if (!extracted) {
 					//set to auto-feed mode
-					if(hasItems) {
-						itemstack.setDamage(itemstack.getDamage() == 1 ? 0 : 1);
+					if (hasItems) {
+						itemstack.setDamageValue(itemstack.getDamageValue() == 1 ? 0 : 1);
 					}
 				} else {
-					worldIn.playSound((PlayerEntity) null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					worldIn.playSound((PlayerEntity) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.ITEM_PICKUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 				}
 				CompoundNBT tag = itemstack.getOrCreateTag();
 				tag.putBoolean(HAS_FOOD_TAG, hasItems);
 			}
 		} else {
-			if(ItemHandlerUtils.hasItems(handler)) {
+			if (ItemHandlerUtils.hasItems(handler)) {
 				ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
-				if(!firstStack.isEmpty()) {
-					if (playerIn.canEat(firstStack.getItem().getFood().canEatWhenFull())) {
-						playerIn.setActiveHand(handIn);
+				if (!firstStack.isEmpty()) {
+					if (playerIn.canEat(firstStack.getItem().getFoodProperties().canAlwaysEat())) {
+						playerIn.startUsingItem(handIn);
 					}
 				}
 			}
 		}
-		return ActionResult.resultPass(itemstack);
+		return ActionResult.pass(itemstack);
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
-		if(firstStack != null && !firstStack.isEmpty()) {
-			entityLiving.onFoodEaten(worldIn, firstStack);
-			worldIn.playSound((PlayerEntity) null, entityLiving.getPosX(), entityLiving.getPosY(), entityLiving.getPosZ(), SoundEvents.ENTITY_PIG_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+		if (firstStack != null && !firstStack.isEmpty()) {
+			entityLiving.eat(worldIn, firstStack);
+			worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.PIG_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		}
 		return stack;
 	}
 
 	@Override
-	public UseAction getUseAction(ItemStack stack) {
+	public UseAction getUseAnimation(ItemStack stack) {
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
-		return firstStack != null && firstStack.getItem().isFood() ? UseAction.EAT : UseAction.NONE;
+		return firstStack != null && firstStack.getItem().isEdible() ? UseAction.EAT : UseAction.NONE;
 	}
 
 	@Override
 	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if(stack.getDamage() == 1 && entityIn instanceof PlayerEntity && worldIn.getGameTime() % 20 == 0) {
-			PlayerEntity playerIn = (PlayerEntity)entityIn;
-			if(!playerIn.abilities.isCreativeMode && playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
+		if (stack.getDamageValue() == 1 && entityIn instanceof PlayerEntity && worldIn.getGameTime() % 20 == 0) {
+			PlayerEntity playerIn = (PlayerEntity) entityIn;
+			if (!playerIn.abilities.instabuild && playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
 				IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 				ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
-				if(!firstStack.isEmpty()) {
-					playerIn.onFoodEaten(worldIn, firstStack);
-					worldIn.playSound((PlayerEntity) null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ENTITY_PIG_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				if (!firstStack.isEmpty()) {
+					playerIn.eat(worldIn, firstStack);
+					worldIn.playSound((PlayerEntity) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.PIG_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 				}
 			}
 		}
@@ -122,41 +125,41 @@ public class BaconatorItem extends BaseItem {
 	public int getUseDuration(ItemStack stack) {
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
 		ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
-		if (!firstStack.isEmpty() && firstStack.getItem().isFood()) {
-			return firstStack.getItem().getFood().isFastEating() ? 16 : 32;
+		if (!firstStack.isEmpty() && firstStack.getItem().isEdible()) {
+			return firstStack.getItem().getFoodProperties().isFastFood() ? 16 : 32;
 		} else {
 			return 0;
 		}
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
-		return stack.getDamage() == 1;
+	public boolean isFoil(ItemStack stack) {
+		return stack.getDamageValue() == 1;
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		if(Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.carrying").mergeStyle(TextFormatting.DARK_RED));
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		if (Screen.hasShiftDown()) {
+			tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.carrying").withStyle(TextFormatting.DARK_RED));
 			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-			if(handler != null) {
+			if (handler != null) {
 				int stacks = 0;
-				for(int i = 0; i < handler.getSlots(); i++) {
+				for (int i = 0; i < handler.getSlots(); i++) {
 					ItemStack foodStack = handler.getStackInSlot(i);
-					if(!foodStack.isEmpty()) {
-						tooltip.add(new StringTextComponent(foodStack.getCount() + "x ").appendSibling(foodStack.getDisplayName()).mergeStyle(TextFormatting.GOLD));
+					if (!foodStack.isEmpty()) {
+						tooltip.add(new StringTextComponent(foodStack.getCount() + "x ").append(foodStack.getHoverName()).withStyle(TextFormatting.GOLD));
 						stacks++;
 					}
 				}
-				if(stacks == 0) {
-					tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.nothing").mergeStyle(TextFormatting.GRAY));
+				if (stacks == 0) {
+					tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.nothing").withStyle(TextFormatting.GRAY));
 				}
 			}
 		} else {
-			tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.text").mergeStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslationTextComponent("forcecraft.baconator.shift.text").withStyle(TextFormatting.GRAY));
 		}
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 
 	@Nullable
@@ -169,10 +172,10 @@ public class BaconatorItem extends BaseItem {
 		private final LazyOptional<ItemStackHandler> inventory = LazyOptional.of(() -> new ItemStackHandler(ConfigHandler.COMMON.baconatorMaxStacks.get()) {
 			@Override
 			public boolean isItemValid(int slot, ItemStack stack) {
-				ITagCollectionSupplier tagCollection = TagCollectionManager.getManager();
+				ITagCollectionSupplier tagCollection = TagCollectionManager.getInstance();
 				final ResourceLocation baconatorFood = new ResourceLocation(Reference.MOD_ID, "baconator_food");
-				Tag<Item> tag = (Tag<Item>) tagCollection.getItemTags().get(baconatorFood);
-				return stack.isFood() && tag != null && stack.getItem().isIn(tag);
+				Tag<Item> tag = (Tag<Item>) tagCollection.getItems().getTag(baconatorFood);
+				return stack.isEdible() && tag != null && stack.getItem().is(tag);
 			}
 		});
 

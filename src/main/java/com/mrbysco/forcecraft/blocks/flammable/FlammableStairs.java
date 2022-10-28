@@ -8,6 +8,8 @@ import net.minecraft.world.IBlockReader;
 
 import java.util.function.Supplier;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class FlammableStairs extends StairsBlock {
 	public final int fireSpreadSpeed;
 	public final int flammability;

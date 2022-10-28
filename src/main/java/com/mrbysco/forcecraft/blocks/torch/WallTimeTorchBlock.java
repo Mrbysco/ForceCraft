@@ -15,32 +15,34 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class WallTimeTorchBlock extends WallTorchBlock {
 
-    public WallTimeTorchBlock(Properties properties, IParticleData particleData) {
-        super(properties, particleData);
-    }
+	public WallTimeTorchBlock(Properties properties, IParticleData particleData) {
+		super(properties, particleData);
+	}
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return ConfigHandler.COMMON.timeTorchEnabled.get();
-    }
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return ConfigHandler.COMMON.timeTorchEnabled.get();
+	}
 
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TimeTorchTileEntity();
-    }
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+		return new TimeTorchTileEntity();
+	}
 
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        if(ConfigHandler.COMMON.timeTorchLogging.get()) {
-            if(placer != null) {
-                ForceCraft.LOGGER.info("A Time Torch has been placed at {} by {}", pos, placer.getDisplayName().getString());
-            } else {
-                ForceCraft.LOGGER.info("A Time Torch has been placed at {} by a non entity", pos);
-            }
-        }
-    }
+	@Override
+	public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+		super.setPlacedBy(worldIn, pos, state, placer, stack);
+		if (ConfigHandler.COMMON.timeTorchLogging.get()) {
+			if (placer != null) {
+				ForceCraft.LOGGER.info("A Time Torch has been placed at {} by {}", pos, placer.getDisplayName().getString());
+			} else {
+				ForceCraft.LOGGER.info("A Time Torch has been placed at {} by a non entity", pos);
+			}
+		}
+	}
 }

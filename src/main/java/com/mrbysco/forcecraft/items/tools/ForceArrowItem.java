@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
+import net.minecraft.item.Item.Properties;
+
 public class ForceArrowItem extends ArrowItem {
 	public ForceArrowItem(Properties builder) {
 		super(builder);
@@ -20,37 +22,37 @@ public class ForceArrowItem extends ArrowItem {
 	@Override
 	public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
 		ForceArrowEntity forceArrow = new ForceArrowEntity(worldIn, shooter);
-		if(shooter instanceof PlayerEntity) {
+		if (shooter instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) shooter;
-			ItemStack heldItem = player.getActiveItemStack();
-			if(heldItem.getItem() instanceof ForceBowItem) {
+			ItemStack heldItem = player.getUseItem();
+			if (heldItem.getItem() instanceof ForceBowItem) {
 				heldItem.getCapability(CAPABILITY_TOOLMOD).ifPresent(cap -> {
-					if(cap.hasFreezing()) {
-						forceArrow.addEffect(new EffectInstance(Effects.SLOWNESS, 60, 2, false, false));
+					if (cap.hasFreezing()) {
+						forceArrow.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60, 2, false, false));
 					}
-					if(cap.hasEnder()) {
+					if (cap.hasEnder()) {
 						forceArrow.setEnder();
 					}
-					if(cap.hasBane()) {
+					if (cap.hasBane()) {
 						forceArrow.setBane();
 					}
-					if(cap.hasLight()) {
+					if (cap.hasLight()) {
 						forceArrow.setAppliesGlowing();
 					}
-					if(cap.hasBleed()) {
+					if (cap.hasBleed()) {
 						forceArrow.setBleeding(cap.getBleedLevel());
 					}
-					if(cap.hasLuck()) {
+					if (cap.hasLuck()) {
 						int luckValue = cap.getLuckLevel();
 						forceArrow.setLuck(luckValue);
 					}
-					if(cap.getSpeedLevel() > 0) {
+					if (cap.getSpeedLevel() > 0) {
 						forceArrow.setSpeedy();
 					}
 				});
 			}
 		}
-		forceArrow.setPotionEffect(stack);
+		forceArrow.setEffectsFromItem(stack);
 		return forceArrow;
 	}
 }

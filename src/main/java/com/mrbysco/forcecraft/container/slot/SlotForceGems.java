@@ -12,19 +12,19 @@ import javax.annotation.Nonnull;
 
 public class SlotForceGems extends SlotItemHandler {
 
-    public SlotForceGems(IItemHandler handler, int index, int posX, int posY){
-        super(handler, index, posX, posY);
-    }
+	public SlotForceGems(IItemHandler handler, int index, int posX, int posY) {
+		super(handler, index, posX, posY);
+	}
 
-    @Override
-    public boolean isItemValid(ItemStack stack) {
-        final ResourceLocation gemTag = new ResourceLocation("forge", "gems/force");
-        ITag<Item> tag = ItemTags.getCollection().getTagByID(gemTag);
-        return stack.getItem().isIn(tag);
-    }
+	@Override
+	public boolean mayPlace(ItemStack stack) {
+		final ResourceLocation gemTag = new ResourceLocation("forge", "gems/force");
+		ITag<Item> tag = ItemTags.getAllTags().getTagOrEmpty(gemTag);
+		return stack.getItem().is(tag);
+	}
 
-    @Override
-    public int getItemStackLimit(@Nonnull ItemStack stack) {
-        return 64;
-    }
+	@Override
+	public int getMaxStackSize(@Nonnull ItemStack stack) {
+		return 64;
+	}
 }

@@ -2,7 +2,9 @@ package com.mrbysco.forcecraft.items;
 
 import net.minecraft.item.ItemStack;
 
-public class GoldenPowerSourceItem extends BaseItem{
+import net.minecraft.item.Item.Properties;
+
+public class GoldenPowerSourceItem extends BaseItem {
 	public GoldenPowerSourceItem(Properties properties) {
 		super(properties);
 	}

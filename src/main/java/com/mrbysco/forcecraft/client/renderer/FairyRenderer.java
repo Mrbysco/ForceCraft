@@ -15,7 +15,7 @@ public class FairyRenderer extends MobRenderer<FairyEntity, FairyModel<FairyEnti
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(FairyEntity entity) {
+	public ResourceLocation getTextureLocation(FairyEntity entity) {
 		return FAIRY_TEXTURES;
 	}
 }

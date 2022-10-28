@@ -17,7 +17,7 @@ public class ColdCowRenderer extends MobRenderer<ColdCowEntity, ColdCowModel<Col
 	/**
 	 * Returns the location of an entity's texture.
 	 */
-	public ResourceLocation getEntityTexture(ColdCowEntity entity) {
+	public ResourceLocation getTextureLocation(ColdCowEntity entity) {
 		return COW_TEXTURES;
 	}
 }

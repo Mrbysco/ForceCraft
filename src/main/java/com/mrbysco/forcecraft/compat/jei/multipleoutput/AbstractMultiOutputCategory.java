@@ -71,13 +71,13 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 		guiItemStacks.init(2, false, 112, 9);
 
 		guiItemStacks.set(ingredients);
-		if(showChance) {
+		if (showChance) {
 			recipeLayout.getItemStacks().addTooltipCallback(new ITooltipCallback<ItemStack>() {
 				@OnlyIn(Dist.CLIENT)
 				@Override
 				public void onTooltip(int slot, boolean input, ItemStack stack, List<ITextComponent> list) {
-					if(!input && slot == 2) {
-						list.add(new StringTextComponent(recipe.getSecondaryChance() * 100 + " ").appendSibling(new TranslationTextComponent("forcecraft.gui.jei.category.grinding.tooltip")).mergeStyle(TextFormatting.YELLOW));
+					if (!input && slot == 2) {
+						list.add(new StringTextComponent(recipe.getSecondaryChance() * 100 + " ").append(new TranslationTextComponent("forcecraft.gui.jei.category.grinding.tooltip")).withStyle(TextFormatting.YELLOW));
 					}
 				}
 			});

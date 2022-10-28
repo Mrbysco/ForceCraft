@@ -32,18 +32,18 @@ public class RenameAndRecolorScreen extends Screen {
 	}
 
 	public static void openScreen(ItemStack packName, Hand hand) {
-		Minecraft.getInstance().displayGuiScreen(new RenameAndRecolorScreen(packName, hand));
+		Minecraft.getInstance().setScreen(new RenameAndRecolorScreen(packName, hand));
 	}
 
 	@Override
 	protected void init() {
 		super.init();
 		selectedColor = itemstack.getOrCreateTag().getInt("Color");
-		this.minecraft.keyboardListener.enableRepeatEvents(true);
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		this.addButton(new ItemButton(this.width / 2 - 89, this.height / 2 + 5, 18, 18, DialogTexts.GUI_DONE, this.itemstack, (button) -> {
-			ItemButton itemButton = (ItemButton)button;
+			ItemButton itemButton = (ItemButton) button;
 			this.selectedColor++;
-			if(selectedColor > 15) {
+			if (selectedColor > 15) {
 				this.selectedColor = 0;
 			}
 
@@ -55,26 +55,26 @@ public class RenameAndRecolorScreen extends Screen {
 		}));
 
 		this.addButton(new Button(this.width / 2 - 34, this.height / 2 + 3, 60, 20, DialogTexts.GUI_CANCEL, (p_238847_1_) -> {
-			this.minecraft.displayGuiScreen((Screen)null);
+			this.minecraft.setScreen((Screen) null);
 		}));
 
 		this.addButton(new Button(this.width / 2 + 31, this.height / 2 + 3, 60, 20, DialogTexts.GUI_DONE, (p_238847_1_) -> {
-			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new PackChangeMessage(usedHand, textfield.getText(), this.selectedColor));
-			this.minecraft.displayGuiScreen((Screen)null);
+			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new PackChangeMessage(usedHand, textfield.getValue(), this.selectedColor));
+			this.minecraft.setScreen((Screen) null);
 		}));
 
-		this.textfield = new TextFieldWidget(this.minecraft.fontRenderer, this.width / 2 - 90, this.height / 2 - 24, 180, 20, new StringTextComponent("Name"));
-		this.textfield.setMaxStringLength(31);
-		this.textfield.setText(itemstack.getDisplayName().getString());
+		this.textfield = new TextFieldWidget(this.minecraft.font, this.width / 2 - 90, this.height / 2 - 24, 180, 20, new StringTextComponent("Name"));
+		this.textfield.setMaxLength(31);
+		this.textfield.setValue(itemstack.getHoverName().getString());
 		this.textfield.setTextColor(-1);
 		this.children.add(this.textfield);
-		setFocusedDefault(textfield);
+		setInitialFocus(textfield);
 	}
 
 	@Override
-	public void onClose() {
-		super.onClose();
-		this.minecraft.keyboardListener.enableRepeatEvents(false);
+	public void removed() {
+		super.removed();
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
 	}
 
 	@Override
@@ -87,17 +87,17 @@ public class RenameAndRecolorScreen extends Screen {
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/rename_screen.png");
-		this.minecraft.getTextureManager().bindTexture(TEXTURE);
+		this.minecraft.getTextureManager().bind(TEXTURE);
 
 		int xSize = 197;
 		int ySize = 66;
 		int guiLeft = (this.width - xSize) / 2;
 		int guiTop = (this.height - ySize) / 2;
 
-		this.blit(matrixStack, guiLeft, guiTop, 0,0, xSize, ySize);
+		this.blit(matrixStack, guiLeft, guiTop, 0, 0, xSize, ySize);
 
 		this.textfield.render(matrixStack, mouseX, mouseY, partialTicks);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		font.drawText(matrixStack, new StringTextComponent("Color"), this.width / 2 - 68, this.height / 2 + 9, 5592405);
+		font.draw(matrixStack, new StringTextComponent("Color"), this.width / 2 - 68, this.height / 2 + 9, 5592405);
 	}
 }

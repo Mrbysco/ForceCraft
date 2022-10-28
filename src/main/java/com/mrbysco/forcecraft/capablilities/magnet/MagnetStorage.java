@@ -17,47 +17,47 @@ import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_
 
 public class MagnetStorage implements Capability.IStorage<IMagnet> {
 
-    public MagnetStorage() {
-    }
+	public MagnetStorage() {
+	}
 
-    public static void attachInformation(ItemStack stack, List<ITextComponent> tooltip) {
-        stack.getCapability(CAPABILITY_MAGNET).ifPresent(cap -> {
-            if(cap.isActivated()) {
-                tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.active").mergeStyle(TextFormatting.GREEN));
-            } else {
-                tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.deactivated").mergeStyle(TextFormatting.RED));
-            }
-            tooltip.add(StringTextComponent.EMPTY);
-            tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.change").mergeStyle(TextFormatting.BOLD));
-        });
-    }
+	public static void attachInformation(ItemStack stack, List<ITextComponent> tooltip) {
+		stack.getCapability(CAPABILITY_MAGNET).ifPresent(cap -> {
+			if (cap.isActivated()) {
+				tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.active").withStyle(TextFormatting.GREEN));
+			} else {
+				tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.deactivated").withStyle(TextFormatting.RED));
+			}
+			tooltip.add(StringTextComponent.EMPTY);
+			tooltip.add(new TranslationTextComponent("forcecraft.magnet_glove.change").withStyle(TextFormatting.BOLD));
+		});
+	}
 
-    @Nullable
-    @Override
-    public INBT writeNBT(Capability<IMagnet> capability, IMagnet instance, Direction side) {
-        CompoundNBT nbt = serializeNBT(instance);
-        return nbt;
-    }
+	@Nullable
+	@Override
+	public INBT writeNBT(Capability<IMagnet> capability, IMagnet instance, Direction side) {
+		CompoundNBT nbt = serializeNBT(instance);
+		return nbt;
+	}
 
-    @Override
-    public void readNBT(Capability<IMagnet> capability, IMagnet instance, Direction side, INBT nbtIn) {
-        deserializeNBT(instance, nbtIn);
-    }
+	@Override
+	public void readNBT(Capability<IMagnet> capability, IMagnet instance, Direction side, INBT nbtIn) {
+		deserializeNBT(instance, nbtIn);
+	}
 
-    public static CompoundNBT serializeNBT(IMagnet instance) {
-        if (instance == null) {
-            return null;
-        }
-        CompoundNBT nbt  = new CompoundNBT();
-        nbt.putBoolean("activated", instance.isActivated());
+	public static CompoundNBT serializeNBT(IMagnet instance) {
+		if (instance == null) {
+			return null;
+		}
+		CompoundNBT nbt = new CompoundNBT();
+		nbt.putBoolean("activated", instance.isActivated());
 
-        return nbt;
-    }
+		return nbt;
+	}
 
-    public static void deserializeNBT(IMagnet instance, INBT nbtIn) {
-        if (nbtIn instanceof CompoundNBT) {
-            CompoundNBT nbt = (CompoundNBT) nbtIn;
-            instance.setActivation(nbt.getBoolean("activated"));
-        }
-    }
+	public static void deserializeNBT(IMagnet instance, INBT nbtIn) {
+		if (nbtIn instanceof CompoundNBT) {
+			CompoundNBT nbt = (CompoundNBT) nbtIn;
+			instance.setActivation(nbt.getBoolean("activated"));
+		}
+	}
 }

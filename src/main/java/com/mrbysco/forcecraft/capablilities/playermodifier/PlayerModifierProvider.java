@@ -13,31 +13,31 @@ import javax.annotation.Nullable;
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
 
 public class PlayerModifierProvider implements ICapabilitySerializable<INBT>, ICapabilityProvider {
-    private LazyOptional<IPlayerModifier> instance;
-    private IPlayerModifier playerModifier;
+	private LazyOptional<IPlayerModifier> instance;
+	private IPlayerModifier playerModifier;
 
-    public PlayerModifierProvider(){
-        this.playerModifier = CAPABILITY_PLAYERMOD.getDefaultInstance();
-        this.instance = LazyOptional.of(() -> playerModifier);
-    }
+	public PlayerModifierProvider() {
+		this.playerModifier = CAPABILITY_PLAYERMOD.getDefaultInstance();
+		this.instance = LazyOptional.of(() -> playerModifier);
+	}
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return CAPABILITY_PLAYERMOD.orEmpty(cap, instance);
-    }
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		return CAPABILITY_PLAYERMOD.orEmpty(cap, instance);
+	}
 
-    @Override
-    public INBT serializeNBT() {
-        return CAPABILITY_PLAYERMOD.writeNBT(playerModifier, null);
-    }
+	@Override
+	public INBT serializeNBT() {
+		return CAPABILITY_PLAYERMOD.writeNBT(playerModifier, null);
+	}
 
-    @Override
-    public void deserializeNBT(INBT nbt) {
-        CAPABILITY_PLAYERMOD.readNBT(playerModifier, null, nbt);
-    }
+	@Override
+	public void deserializeNBT(INBT nbt) {
+		CAPABILITY_PLAYERMOD.readNBT(playerModifier, null, nbt);
+	}
 
-    public final Capability<IPlayerModifier> getCapability(){
-        return CAPABILITY_PLAYERMOD;
-    }
+	public final Capability<IPlayerModifier> getCapability() {
+		return CAPABILITY_PLAYERMOD;
+	}
 }

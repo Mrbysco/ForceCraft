@@ -17,13 +17,13 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class FreezingRecipe extends MultipleOutputFurnaceRecipe{
+public class FreezingRecipe extends MultipleOutputFurnaceRecipe {
 
 	public FreezingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results, float experienceIn, int cookTimeIn) {
 		super(ForceRecipes.FREEZING, idIn, groupIn, ingredientIn, results, 1.0F, experienceIn, cookTimeIn);
 	}
 
-	public ItemStack getIcon() {
+	public ItemStack getToastSymbol() {
 		return new ItemStack(ForceRegistry.FREEZING_CORE.get());
 	}
 
@@ -33,30 +33,31 @@ public class FreezingRecipe extends MultipleOutputFurnaceRecipe{
 
 	public static class SerializerFreezingRecipe extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FreezingRecipe> {
 		@Override
-		public FreezingRecipe read(ResourceLocation recipeId, JsonObject json) {
-			String s = JSONUtils.getString(json, "group", "");
-			JsonElement jsonelement = (JsonElement)(JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
-			Ingredient ingredient = Ingredient.deserialize(jsonelement);
+		public FreezingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+			String s = JSONUtils.getAsString(json, "group", "");
+			JsonElement jsonelement = (JsonElement) (JSONUtils.isArrayNode(json, "ingredient") ? JSONUtils.getAsJsonArray(json, "ingredient") : JSONUtils.getAsJsonObject(json, "ingredient"));
+			Ingredient ingredient = Ingredient.fromJson(jsonelement);
 			//Forge: Check if primitive string to keep vanilla or a object which can contain a count field.
-			if (!json.has("results")) throw new com.google.gson.JsonSyntaxException("Missing results, expected to find a string or object");
-			NonNullList<ItemStack> nonnulllist = readItemStacks(JSONUtils.getJsonArray(json, "results"));
+			if (!json.has("results"))
+				throw new com.google.gson.JsonSyntaxException("Missing results, expected to find a string or object");
+			NonNullList<ItemStack> nonnulllist = readItemStacks(JSONUtils.getAsJsonArray(json, "results"));
 			if (nonnulllist.isEmpty()) {
 				throw new JsonParseException("No results for freezing recipe");
 			} else if (nonnulllist.size() > MAX_OUTPUT) {
 				throw new JsonParseException("Too many results for freezing recipe the max is " + MAX_OUTPUT);
 			}
 
-			float f = JSONUtils.getFloat(json, "experience", 0.0F);
-			int i = JSONUtils.getInt(json, "processtime", 200);
+			float f = JSONUtils.getAsFloat(json, "experience", 0.0F);
+			int i = JSONUtils.getAsInt(json, "processtime", 200);
 			return new FreezingRecipe(recipeId, s, ingredient, nonnulllist, f, i);
 		}
 
 		private static NonNullList<ItemStack> readItemStacks(JsonArray resultArray) {
 			NonNullList<ItemStack> nonnulllist = NonNullList.create();
 
-			for(int i = 0; i < resultArray.size(); ++i) {
-				if(resultArray.get(i).isJsonObject()) {
-					ItemStack stack = ShapedRecipe.deserializeItem(resultArray.get(i).getAsJsonObject());
+			for (int i = 0; i < resultArray.size(); ++i) {
+				if (resultArray.get(i).isJsonObject()) {
+					ItemStack stack = ShapedRecipe.itemFromJson(resultArray.get(i).getAsJsonObject());
 					nonnulllist.add(stack);
 				}
 			}
@@ -66,14 +67,14 @@ public class FreezingRecipe extends MultipleOutputFurnaceRecipe{
 
 		@Nullable
 		@Override
-		public FreezingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-			String s = buffer.readString(32767);
-			Ingredient ingredient = Ingredient.read(buffer);
+		public FreezingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+			String s = buffer.readUtf(32767);
+			Ingredient ingredient = Ingredient.fromNetwork(buffer);
 
 			int size = buffer.readVarInt();
 			NonNullList<ItemStack> resultList = NonNullList.withSize(size, ItemStack.EMPTY);
-			for(int j = 0; j < resultList.size(); ++j) {
-				resultList.set(j, buffer.readItemStack());
+			for (int j = 0; j < resultList.size(); ++j) {
+				resultList.set(j, buffer.readItem());
 			}
 
 			float f = buffer.readFloat();
@@ -82,17 +83,17 @@ public class FreezingRecipe extends MultipleOutputFurnaceRecipe{
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, FreezingRecipe recipe) {
-			buffer.writeString(recipe.group);
-			recipe.ingredient.write(buffer);
+		public void toNetwork(PacketBuffer buffer, FreezingRecipe recipe) {
+			buffer.writeUtf(recipe.group);
+			recipe.ingredient.toNetwork(buffer);
 
 			buffer.writeVarInt(recipe.resultItems.size());
-			for(ItemStack stack : recipe.resultItems) {
-				buffer.writeItemStack(stack);
+			for (ItemStack stack : recipe.resultItems) {
+				buffer.writeItem(stack);
 			}
 
 			buffer.writeFloat(recipe.experience);
-			buffer.writeVarInt(recipe.cookTime);
+			buffer.writeVarInt(recipe.cookingTime);
 		}
 	}
 }

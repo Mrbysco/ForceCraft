@@ -25,34 +25,34 @@ public class ChuChuEntity extends SlimeEntity {
 	}
 
 	@Override
-	protected ResourceLocation getLootTable() {
-		return this.getType().getLootTable();
+	protected ResourceLocation getDefaultLootTable() {
+		return this.getType().getDefaultLootTable();
 	}
 
 	@Override
-	protected boolean canDamagePlayer() {
+	protected boolean isDealsDamage() {
 		return true;
 	}
 
 	@Override
-	protected void setSlimeSize(int size, boolean resetHealth) {
-		this.dataManager.set(SLIME_SIZE, 1);
-		this.recenterBoundingBox();
-		this.recalculateSize();
-		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue((double)(size));
-		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue((double)(0.2F + 0.1F * (float)1));
-		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(((double)1 + rand.nextInt(2)));
+	protected void setSize(int size, boolean resetHealth) {
+		this.entityData.set(ID_SIZE, 1);
+		this.reapplyPosition();
+		this.refreshDimensions();
+		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue((double) (size));
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue((double) (0.2F + 0.1F * (float) 1));
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(((double) 1 + random.nextInt(2)));
 		if (resetHealth) {
 			this.setHealth(this.getMaxHealth());
 		}
 
-		this.experienceValue = 1;
+		this.xpReward = 1;
 	}
 
 	public static boolean canSpawnHere(EntityType<ChuChuEntity> p_223366_0_, IWorld p_223366_1_, SpawnReason reason, BlockPos p_223366_3_, Random randomIn) {
 		if (p_223366_1_.getDifficulty() != Difficulty.PEACEFUL) {
-			if (Objects.equals(p_223366_1_.func_242406_i(p_223366_3_), Optional.of(Biomes.SWAMP)) && p_223366_3_.getY() > 50 && p_223366_3_.getY() < 70 && randomIn.nextFloat() < 0.5F && randomIn.nextFloat() < p_223366_1_.getMoonFactor() && p_223366_1_.getLight(p_223366_3_) <= randomIn.nextInt(8)) {
-				return canSpawnOn(p_223366_0_, p_223366_1_, reason, p_223366_3_, randomIn);
+			if (Objects.equals(p_223366_1_.getBiomeName(p_223366_3_), Optional.of(Biomes.SWAMP)) && p_223366_3_.getY() > 50 && p_223366_3_.getY() < 70 && randomIn.nextFloat() < 0.5F && randomIn.nextFloat() < p_223366_1_.getMoonBrightness() && p_223366_1_.getMaxLocalRawBrightness(p_223366_3_) <= randomIn.nextInt(8)) {
+				return checkMobSpawnRules(p_223366_0_, p_223366_1_, reason, p_223366_3_, randomIn);
 			}
 
 			if (!(p_223366_1_ instanceof ISeedReader)) {
@@ -60,9 +60,9 @@ public class ChuChuEntity extends SlimeEntity {
 			}
 
 			ChunkPos chunkpos = new ChunkPos(p_223366_3_);
-			boolean flag = SharedSeedRandom.createSlimeChunkSpawningSeed(chunkpos.x, chunkpos.z, ((ISeedReader)p_223366_1_).getSeed(), 987234911L).nextInt(10) == 0;
+			boolean flag = SharedSeedRandom.seedSlimeChunk(chunkpos.x, chunkpos.z, ((ISeedReader) p_223366_1_).getSeed(), 987234911L).nextInt(10) == 0;
 			if (randomIn.nextInt(10) == 0 && flag && p_223366_3_.getY() < 40) {
-				return canSpawnOn(p_223366_0_, p_223366_1_, reason, p_223366_3_, randomIn);
+				return checkMobSpawnRules(p_223366_0_, p_223366_1_, reason, p_223366_3_, randomIn);
 			}
 		}
 

@@ -16,22 +16,22 @@ import java.util.function.Supplier;
 public class RecipeToCardMessage {
 	private List<ItemStack> stacks;
 
-	public RecipeToCardMessage(List<ItemStack> stacks){
+	public RecipeToCardMessage(List<ItemStack> stacks) {
 		this.stacks = stacks;
 	}
 
 	public void encode(PacketBuffer buf) {
 		buf.writeInt(stacks.size());
 		for (ItemStack output : stacks) {
-			buf.writeItemStack(output);
+			buf.writeItem(output);
 		}
 	}
 
 	public static RecipeToCardMessage decode(final PacketBuffer packetBuffer) {
 		int size = packetBuffer.readInt();
 		List<ItemStack> outputs = new ArrayList<>(size);
-		for (int i = 0 ; i < size ; i++) {
-			outputs.add(packetBuffer.readItemStack());
+		for (int i = 0; i < size; i++) {
+			outputs.add(packetBuffer.readItem());
 		}
 
 		return new RecipeToCardMessage(outputs);
@@ -43,14 +43,14 @@ public class RecipeToCardMessage {
 			PlayerEntity player = ctx.getSender();
 			// Handle tablet version
 			ItemStack mainhand = ItemStack.EMPTY;
-			if(player.getHeldItemMainhand().getItem() instanceof ItemCardItem) {
-				mainhand = player.getHeldItemMainhand();
-			} else if(player.getHeldItemOffhand().getItem() instanceof ItemCardItem) {
-				mainhand = player.getHeldItemOffhand();
+			if (player.getMainHandItem().getItem() instanceof ItemCardItem) {
+				mainhand = player.getMainHandItem();
+			} else if (player.getOffhandItem().getItem() instanceof ItemCardItem) {
+				mainhand = player.getOffhandItem();
 			}
 			if (!mainhand.isEmpty() && mainhand.getItem() == ForceRegistry.ITEM_CARD.get()) {
-				if (player.openContainer instanceof ItemCardContainer) {
-					ItemCardContainer itemCardContainer = (ItemCardContainer) player.openContainer;
+				if (player.containerMenu instanceof ItemCardContainer) {
+					ItemCardContainer itemCardContainer = (ItemCardContainer) player.containerMenu;
 					itemCardContainer.setMatrixContents(player, stacks);
 				}
 			}

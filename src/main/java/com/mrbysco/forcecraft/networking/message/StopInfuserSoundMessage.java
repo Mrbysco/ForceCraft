@@ -8,7 +8,7 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 import java.util.function.Supplier;
 
 public class StopInfuserSoundMessage {
-	public StopInfuserSoundMessage(){
+	public StopInfuserSoundMessage() {
 
 	}
 
@@ -25,8 +25,8 @@ public class StopInfuserSoundMessage {
 		ctx.enqueueWork(() -> {
 			if (ctx.getDirection().getReceptionSide().isClient()) {
 				net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
-				mc.getSoundHandler().stop(ForceSounds.INFUSER_WORKING.getId(), SoundCategory.BLOCKS);
-				mc.getSoundHandler().stop(ForceSounds.INFUSER_SPECIAL.getId(), SoundCategory.BLOCKS);
+				mc.getSoundManager().stop(ForceSounds.INFUSER_WORKING.getId(), SoundCategory.BLOCKS);
+				mc.getSoundManager().stop(ForceSounds.INFUSER_SPECIAL.getId(), SoundCategory.BLOCKS);
 			}
 		});
 		ctx.setPacketHandled(true);

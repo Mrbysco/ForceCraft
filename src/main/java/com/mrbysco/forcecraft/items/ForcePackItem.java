@@ -34,31 +34,31 @@ public class ForcePackItem extends BaseItem {
 	public static final String SLOTS_USED = "SlotsUsed";
 
 	public ForcePackItem(Item.Properties properties) {
-		super(properties.maxStackSize(1));
+		super(properties.stacksTo(1));
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
 
-		if (playerIn.isSneaking()) {
-			if (worldIn.isRemote) {
+		if (playerIn.isShiftKeyDown()) {
+			if (worldIn.isClientSide) {
 				com.mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen.openScreen(stack, handIn);
 			}
 		} else {
-			if (!worldIn.isRemote) {
-				NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.getPosition());
+			if (!worldIn.isClientSide) {
+				NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.blockPosition());
 			}
 		}
 		// If it doesn't nothing bad happens
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		return super.use(worldIn, playerIn, handIn);
 	}
 
 	@Nullable
 	public INamedContainerProvider getContainer(ItemStack stack) {
 		return new SimpleNamedContainerProvider((id, inventory, player) -> {
 			return new ForcePackContainer(id, inventory);
-		}, stack.hasDisplayName() ? ((TextComponent) stack.getDisplayName()).mergeStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.pack"));
+		}, stack.hasCustomHoverName() ? ((TextComponent) stack.getHoverName()).withStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.pack"));
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class ForcePackItem extends BaseItem {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		int defaultAmount = 8;
 		CompoundNBT tag = stack.getOrCreateTag();
 		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
@@ -76,12 +76,12 @@ public class ForcePackItem extends BaseItem {
 		}
 		tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt(SLOTS_USED), defaultAmount)));
 
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack stack) {
-		return ((TextComponent) super.getDisplayName(stack)).mergeStyle(TextFormatting.YELLOW);
+	public ITextComponent getName(ItemStack stack) {
+		return ((TextComponent) super.getName(stack)).withStyle(TextFormatting.YELLOW);
 	}
 
 	@Nullable

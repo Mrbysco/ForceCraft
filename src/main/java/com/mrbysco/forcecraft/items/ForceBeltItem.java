@@ -36,100 +36,100 @@ import java.util.List;
 
 public class ForceBeltItem extends BaseItem {
 
-    public ForceBeltItem(Item.Properties properties) {
-        super(properties.maxStackSize(1));
-    }
+	public ForceBeltItem(Item.Properties properties) {
+		super(properties.stacksTo(1));
+	}
 
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        if(playerIn.isSneaking()) {
-            if(worldIn.isRemote) {
-                com.mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen.openScreen(stack, handIn);
-            }
-        } else {
-            if (!worldIn.isRemote) {
-                NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.getPosition());
-            }
-        }
-        //If it doesn't nothing bad happens
-        return super.onItemRightClick(worldIn, playerIn, handIn);
-    }
+	@Override
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
+		if (playerIn.isShiftKeyDown()) {
+			if (worldIn.isClientSide) {
+				com.mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen.openScreen(stack, handIn);
+			}
+		} else {
+			if (!worldIn.isClientSide) {
+				NetworkHooks.openGui((ServerPlayerEntity) playerIn, getContainer(stack), playerIn.blockPosition());
+			}
+		}
+		//If it doesn't nothing bad happens
+		return super.use(worldIn, playerIn, handIn);
+	}
 
-    @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
-        ItemStack stack = context.getItem();
-        if(player != null && !context.getWorld().isRemote && stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-            player.openContainer(getContainer(stack));
-            return ActionResultType.PASS;
-        }
-        //If it doesn't nothing bad happens
-        return super.onItemUse(context);
-    }
+	@Override
+	public ActionResultType useOn(ItemUseContext context) {
+		PlayerEntity player = context.getPlayer();
+		ItemStack stack = context.getItemInHand();
+		if (player != null && !context.getLevel().isClientSide && stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+			player.openMenu(getContainer(stack));
+			return ActionResultType.PASS;
+		}
+		//If it doesn't nothing bad happens
+		return super.useOn(context);
+	}
 
-    @Nullable
-    public INamedContainerProvider getContainer(ItemStack stack) {
-        return new SimpleNamedContainerProvider((id, inventory, player) -> {
-            return new ForceBeltContainer(id, inventory);
-        }, stack.hasDisplayName() ? ((TextComponent)stack.getDisplayName()).mergeStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.belt"));
-    }
+	@Nullable
+	public INamedContainerProvider getContainer(ItemStack stack) {
+		return new SimpleNamedContainerProvider((id, inventory, player) -> {
+			return new ForceBeltContainer(id, inventory);
+		}, stack.hasCustomHoverName() ? ((TextComponent) stack.getHoverName()).withStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.belt"));
+	}
 
-    @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return false;
-    }
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return false;
+	}
 
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        CompoundNBT tag = stack.getOrCreateTag();
-        if(tag.contains(ForcePackItem.SLOTS_USED) &&  tag.contains(ForcePackItem.SLOTS_TOTAL)) {
-            tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt(ForcePackItem.SLOTS_USED), tag.getInt(ForcePackItem.SLOTS_TOTAL))));
-        } else {
-            tooltip.add(new StringTextComponent("0/8 Slots"));
-        }
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		CompoundNBT tag = stack.getOrCreateTag();
+		if (tag.contains(ForcePackItem.SLOTS_USED) && tag.contains(ForcePackItem.SLOTS_TOTAL)) {
+			tooltip.add(new StringTextComponent(String.format("%s/%s Slots", tag.getInt(ForcePackItem.SLOTS_USED), tag.getInt(ForcePackItem.SLOTS_TOTAL))));
+		} else {
+			tooltip.add(new StringTextComponent("0/8 Slots"));
+		}
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+	}
 
-    @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
-        return ((TextComponent)super.getDisplayName(stack)).mergeStyle(TextFormatting.YELLOW);
-    }
+	@Override
+	public ITextComponent getName(ItemStack stack) {
+		return ((TextComponent) super.getName(stack)).withStyle(TextFormatting.YELLOW);
+	}
 
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new ForceBeltItem.InventoryProvider();
-    }
+	@Nullable
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+		return new ForceBeltItem.InventoryProvider();
+	}
 
-    private static class InventoryProvider implements ICapabilitySerializable<CompoundNBT> {
-        private final LazyOptional<ItemStackHandler> inventory = LazyOptional.of(() -> new ItemStackHandler(8) {
-            @Override
-            public boolean isItemValid(int slot, ItemStack stack) {
-                //Make sure there's no ForceBelt-ception
-                return !(stack.getItem() instanceof ForceBeltItem) && stack.getItem().isIn(ForceTags.VALID_FORCE_BELT) && super.isItemValid(slot, stack);
-            }
-        });
+	private static class InventoryProvider implements ICapabilitySerializable<CompoundNBT> {
+		private final LazyOptional<ItemStackHandler> inventory = LazyOptional.of(() -> new ItemStackHandler(8) {
+			@Override
+			public boolean isItemValid(int slot, ItemStack stack) {
+				//Make sure there's no ForceBelt-ception
+				return !(stack.getItem() instanceof ForceBeltItem) && stack.getItem().is(ForceTags.VALID_FORCE_BELT) && super.isItemValid(slot, stack);
+			}
+		});
 
-        @Nonnull
-        @Override
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-            if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-                return inventory.cast();
-            else return LazyOptional.empty();
-        }
+		@Nonnull
+		@Override
+		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+			if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+				return inventory.cast();
+			else return LazyOptional.empty();
+		}
 
-        @Override
-        public CompoundNBT serializeNBT() {
-            if (inventory.isPresent()) {
-                return inventory.resolve().get().serializeNBT();
-            }
-            return new CompoundNBT();
-        }
+		@Override
+		public CompoundNBT serializeNBT() {
+			if (inventory.isPresent()) {
+				return inventory.resolve().get().serializeNBT();
+			}
+			return new CompoundNBT();
+		}
 
-        @Override
-        public void deserializeNBT(CompoundNBT nbt) {
-            inventory.ifPresent(h -> h.deserializeNBT(nbt));
-        }
-    }
+		@Override
+		public void deserializeNBT(CompoundNBT nbt) {
+			inventory.ifPresent(h -> h.deserializeNBT(nbt));
+		}
+	}
 }

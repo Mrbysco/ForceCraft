@@ -19,44 +19,46 @@ import net.minecraftforge.common.IForgeShearable;
 
 import java.util.function.Supplier;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class ForceFluidBlock extends FlowingFluidBlock {
 
-    public ForceFluidBlock(Supplier<? extends FlowingFluid> supplier, Properties properties) {
-        super(supplier, properties);
-    }
+	public ForceFluidBlock(Supplier<? extends FlowingFluid> supplier, Properties properties) {
+		super(supplier, properties);
+	}
 
-    @Override
-    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-        if (entityIn instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity)entityIn;
+	@Override
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+		if (entityIn instanceof LivingEntity) {
+			LivingEntity livingEntity = (LivingEntity) entityIn;
 
-            if(livingEntity instanceof PlayerEntity) {
-                ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.REGENERATION, 10, 0, false, false));
-            } else {
-                CreatureAttribute creatureAttribute = livingEntity.getCreatureAttribute();
-                EntityClassification classification = livingEntity.getClassification(false);
-                boolean secondPassed = worldIn.getGameTime() % 20 == 0;
-                boolean damageEntity = creatureAttribute == CreatureAttribute.UNDEAD || creatureAttribute == CreatureAttribute.UNDEFINED || creatureAttribute == CreatureAttribute.ARTHROPOD;
-                if(classification == EntityClassification.MONSTER && damageEntity) {
-                    if(worldIn.getGameTime() % 10 == 0) {
-                        livingEntity.attackEntityFrom(ForceCraft.LIQUID_FORCE_DAMAGE, 1.0F);
-                    }
-                } else {
-                    if(worldIn.getGameTime() % 10 == 0) {
-                        livingEntity.heal(0.5F);
-                    }
-                    if(livingEntity instanceof IForgeShearable && secondPassed) {
-                        if(RANDOM.nextInt(10) <= 3) {
-                            if(livingEntity instanceof SheepEntity) {
-                                ((SheepEntity)livingEntity).setSheared(false);
-                            } else if(livingEntity instanceof IColdMob) {
-                                IColdMob coldMob = (IColdMob) livingEntity;
-                                coldMob.transformMob(livingEntity, worldIn);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+			if (livingEntity instanceof PlayerEntity) {
+				((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.REGENERATION, 10, 0, false, false));
+			} else {
+				CreatureAttribute creatureAttribute = livingEntity.getMobType();
+				EntityClassification classification = livingEntity.getClassification(false);
+				boolean secondPassed = worldIn.getGameTime() % 20 == 0;
+				boolean damageEntity = creatureAttribute == CreatureAttribute.UNDEAD || creatureAttribute == CreatureAttribute.UNDEFINED || creatureAttribute == CreatureAttribute.ARTHROPOD;
+				if (classification == EntityClassification.MONSTER && damageEntity) {
+					if (worldIn.getGameTime() % 10 == 0) {
+						livingEntity.hurt(ForceCraft.LIQUID_FORCE_DAMAGE, 1.0F);
+					}
+				} else {
+					if (worldIn.getGameTime() % 10 == 0) {
+						livingEntity.heal(0.5F);
+					}
+					if (livingEntity instanceof IForgeShearable && secondPassed) {
+						if (RANDOM.nextInt(10) <= 3) {
+							if (livingEntity instanceof SheepEntity) {
+								((SheepEntity) livingEntity).setSheared(false);
+							} else if (livingEntity instanceof IColdMob) {
+								IColdMob coldMob = (IColdMob) livingEntity;
+								coldMob.transformMob(livingEntity, worldIn);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

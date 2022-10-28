@@ -73,15 +73,15 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		@Override
 		public boolean isFluidValid(FluidStack stack) {
 			Fluid fluid = stack.getFluid();
-			return fluid.isIn(ForceTags.FORCE) || fluid.isIn(FluidTags.LAVA) ||
-					fluid.isIn(ForceTags.FUEL) || fluid.isIn(ForceTags.BIOFUEL);
+			return fluid.is(ForceTags.FORCE) || fluid.is(FluidTags.LAVA) ||
+					fluid.is(ForceTags.FUEL) || fluid.is(ForceTags.BIOFUEL);
 		}
 
 		@Override
 		public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
 			Fluid fluid = stack.getFluid();
-			return fluid.isIn(ForceTags.FORCE) || fluid.isIn(FluidTags.LAVA) ||
-					fluid.isIn(ForceTags.FUEL) || fluid.isIn(ForceTags.BIOFUEL);
+			return fluid.is(ForceTags.FORCE) || fluid.is(FluidTags.LAVA) ||
+					fluid.is(ForceTags.FUEL) || fluid.is(ForceTags.BIOFUEL);
 		}
 	};
 
@@ -106,24 +106,24 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		@Override
 		public boolean isFluidValid(FluidStack stack) {
 			Fluid fluid = stack.getFluid();
-			return fluid.isEquivalentTo(Fluids.WATER) || fluid.isIn(ForceTags.MILK);
+			return fluid.isSame(Fluids.WATER) || fluid.is(ForceTags.MILK);
 		}
 
 		@Override
 		public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
 			Fluid fluid = stack.getFluid();
-			return fluid.isEquivalentTo(Fluids.WATER) || fluid.isIn(ForceTags.MILK);
+			return fluid.isSame(Fluids.WATER) || fluid.is(ForceTags.MILK);
 		}
 	};
 
-    private FluidHandlerWrapper tankWrapper = new FluidHandlerWrapper(tankThrottle, tankFuel);
-    private LazyOptional<IFluidHandler> tankWrapperCap = LazyOptional.of(() -> tankWrapper);
+	private FluidHandlerWrapper tankWrapper = new FluidHandlerWrapper(tankThrottle, tankFuel);
+	private LazyOptional<IFluidHandler> tankWrapperCap = LazyOptional.of(() -> tankWrapper);
 
 	public final ItemStackHandler inputHandler = new ItemStackHandler(2) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
-			if(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
-				if(stack.getMaxStackSize() > 1) {
+			if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+				if (stack.getMaxStackSize() > 1) {
 					return 1;
 				}
 			}
@@ -133,23 +133,23 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
 			IFluidHandler fluidCap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
-			if(slot == 0) {
-				if(fluidCap != null) {
+			if (slot == 0) {
+				if (fluidCap != null) {
 					FluidStack fluidStack = fluidCap.getFluidInTank(0);
-					if(!fluidStack.isEmpty()) {
+					if (!fluidStack.isEmpty()) {
 						Fluid fluid = fluidStack.getFluid();
-						return fluid.isIn(ForceTags.FORCE) || fluid.isIn(FluidTags.LAVA) ||
-								fluid.isIn(ForceTags.FUEL) || fluid.isIn(ForceTags.BIOFUEL);
+						return fluid.is(ForceTags.FORCE) || fluid.is(FluidTags.LAVA) ||
+								fluid.is(ForceTags.FUEL) || fluid.is(ForceTags.BIOFUEL);
 					}
 				}
-				return stack.getItem().isIn(ForceTags.FORGE_GEM) || stack.getItem().isIn(Tags.Items.NETHER_STARS)||
-						(fluidCap != null && fluidCap.getFluidInTank(0).getFluid().isIn(ForceTags.FORCE));
-			} else if(slot == 1) {
-				if(fluidCap != null) {
+				return stack.getItem().is(ForceTags.FORGE_GEM) || stack.getItem().is(Tags.Items.NETHER_STARS) ||
+						(fluidCap != null && fluidCap.getFluidInTank(0).getFluid().is(ForceTags.FORCE));
+			} else if (slot == 1) {
+				if (fluidCap != null) {
 					FluidStack fluidStack = fluidCap.getFluidInTank(0);
-					if(!fluidStack.isEmpty()) {
+					if (!fluidStack.isEmpty()) {
 						Fluid fluid = fluidStack.getFluid();
-						return fluid.isEquivalentTo(Fluids.WATER) || fluid.isIn(ForceTags.MILK);
+						return fluid.isSame(Fluids.WATER) || fluid.is(ForceTags.MILK);
 					}
 				}
 				return false;
@@ -161,8 +161,8 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	public final ItemStackHandler outputHandler = new ItemStackHandler(2) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
-			if(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
-				if(stack.getMaxStackSize() > 1) {
+			if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+				if (stack.getMaxStackSize() > 1) {
 					return 1;
 				}
 			}
@@ -199,7 +199,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
+	public void load(BlockState state, CompoundNBT nbt) {
 		this.processTime = nbt.getInt("processTime");
 		this.maxProcessTime = nbt.getInt("maxProcessTime");
 		this.throttleTime = nbt.getInt("throttleTime");
@@ -209,13 +209,13 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 
 		//Caps
 		this.stackWrapper.deserializeNBT(nbt.getCompound("stackHandler"));
-	    this.tankWrapper.deserializeNBT(nbt.getCompound("fluid"));
-		super.read(state, nbt);
+		this.tankWrapper.deserializeNBT(nbt.getCompound("fluid"));
+		super.load(state, nbt);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		compound = super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		compound = super.save(compound);
 
 		compound.putInt("processTime", this.processTime);
 		compound.putInt("maxProcessTime", this.maxProcessTime);
@@ -224,7 +224,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 		compound.putFloat("generating", this.generating);
 		//Caps
 		compound.put("stackHandler", stackWrapper.serializeNBT());
-	    compound.put("fluid", tankWrapper.serializeNBT());
+		compound.put("fluid", tankWrapper.serializeNBT());
 
 		return compound;
 	}
@@ -242,7 +242,7 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 
 	@Override
 	public void tick() {
-		if(world.isRemote) return;
+		if (level.isClientSide) return;
 
 		if (!inputHandler.getStackInSlot(0).isEmpty()) {
 			processFuelSlot();
@@ -253,21 +253,21 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 			refreshClient();
 		}
 
-		if(isActive() && canWork()){
+		if (isActive() && canWork()) {
 			checkFluids();
-			if(getFuelAmount() > 0) {
+			if (getFuelAmount() > 0) {
 				processTime++;
 				insertPower();
 
-				if(processTime >= this.maxProcessTime) {
+				if (processTime >= this.maxProcessTime) {
 					tankFuel.drain(1, FluidAction.EXECUTE);
 					processTime = 0;
 				}
 			}
-			if(getThrottleAmount() > 0) {
+			if (getThrottleAmount() > 0) {
 				throttleTime++;
 
-				if(throttleTime >= this.maxThrottleTime) {
+				if (throttleTime >= this.maxThrottleTime) {
 					tankThrottle.drain(1, FluidAction.EXECUTE);
 					throttleTime = 0;
 				}
@@ -275,23 +275,23 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 
 			refreshClient();
 		} else {
-			if(processTime != 0) processTime = 0;
+			if (processTime != 0) processTime = 0;
 		}
 	}
 
 	public void checkFluids() {
-		if(cachedFuel == null || !getFuelFluid().isEquivalentTo(cachedFuel)) {
+		if (cachedFuel == null || !getFuelFluid().isSame(cachedFuel)) {
 			this.cachedFuel = getFuelFluid();
 			reevaluateValues();
 		}
-		if(cachedThrottle == null || !getThrottleFluid().isEquivalentTo(cachedThrottle)) {
+		if (cachedThrottle == null || !getThrottleFluid().isSame(cachedThrottle)) {
 			this.cachedThrottle = getThrottleFluid();
 			reevaluateValues();
 		}
 	}
 
 	public void reevaluateValues() {
-		if(cachedFuel != null) {
+		if (cachedFuel != null) {
 			FluidStack fuelStack = getFuelFluidStack();
 
 			processTime = 0;
@@ -307,11 +307,11 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 
 	private float getThrottleValue() {
 		FluidStack throttleStack = getThrottleFluidStack();
-		if(!throttleStack.isEmpty()) {
+		if (!throttleStack.isEmpty()) {
 			Fluid fluid = throttleStack.getFluid();
-			if(fluid.isIn(ForceTags.MILK)) {
+			if (fluid.is(ForceTags.MILK)) {
 				return 2.5F;
-			} else if(fluid.isEquivalentTo(Fluids.WATER)) {
+			} else if (fluid.isSame(Fluids.WATER)) {
 				return 2.0F;
 			}
 		}
@@ -319,32 +319,32 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	}
 
 	public int getPowerForFluid(FluidStack fluidStack) {
-		if(!fluidStack.isEmpty()) {
+		if (!fluidStack.isEmpty()) {
 			float throttleValue = getThrottleValue();
 			Fluid fluid = fluidStack.getFluid();
-			if(fluid.isIn(ForceTags.FORCE)) {
-				return (int)(20F * throttleValue);
-			} else if(fluid.isIn(FluidTags.LAVA)) {
-				return (int)(5F * throttleValue);
-			} else if(fluid.isIn(ForceTags.FUEL)) {
-				return (int)(10F * throttleValue);
-			} else if(fluid.isIn(ForceTags.BIOFUEL)) {
-				return (int)(15F * throttleValue);
+			if (fluid.is(ForceTags.FORCE)) {
+				return (int) (20F * throttleValue);
+			} else if (fluid.is(FluidTags.LAVA)) {
+				return (int) (5F * throttleValue);
+			} else if (fluid.is(ForceTags.FUEL)) {
+				return (int) (10F * throttleValue);
+			} else if (fluid.is(ForceTags.BIOFUEL)) {
+				return (int) (15F * throttleValue);
 			}
 		}
 		return 0;
 	}
 
 	public int getTimePerFuelMB(FluidStack fluidStack) {
-		if(!fluidStack.isEmpty()) {
+		if (!fluidStack.isEmpty()) {
 			Fluid fluid = fluidStack.getFluid();
-			if(fluid.isIn(ForceTags.FORCE)) {
+			if (fluid.is(ForceTags.FORCE)) {
 				return 20;
-			} else if(fluid.isIn(FluidTags.LAVA)) {
+			} else if (fluid.is(FluidTags.LAVA)) {
 				return 20;
-			} else if(fluid.isIn(ForceTags.FUEL)) {
+			} else if (fluid.is(ForceTags.FUEL)) {
 				return 20;
-			} else if(fluid.isIn(ForceTags.BIOFUEL)) {
+			} else if (fluid.is(ForceTags.BIOFUEL)) {
 				return 20;
 			}
 		}
@@ -352,11 +352,11 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	}
 
 	public int getTimePerThrottleMB(FluidStack fluidStack) {
-		if(!fluidStack.isEmpty()) {
+		if (!fluidStack.isEmpty()) {
 			Fluid fluid = fluidStack.getFluid();
-			if(fluid.isIn(ForceTags.MILK)) {
+			if (fluid.is(ForceTags.MILK)) {
 				return 5;
-			} else if(fluid.isEquivalentTo(Fluids.WATER)) {
+			} else if (fluid.isSame(Fluids.WATER)) {
 				return 5;
 			}
 		}
@@ -364,22 +364,22 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	}
 
 	public boolean isActive() {
-		return getBlockState().getBlock() instanceof ForceEngineBlock && getBlockState().get(ForceEngineBlock.ACTIVE);
+		return getBlockState().getBlock() instanceof ForceEngineBlock && getBlockState().getValue(ForceEngineBlock.ACTIVE);
 	}
 
 	public Direction getFacing() {
-		if(getBlockState().getBlock() instanceof ForceEngineBlock) {
-			return getBlockState().get(ForceEngineBlock.FACING);
+		if (getBlockState().getBlock() instanceof ForceEngineBlock) {
+			return getBlockState().getValue(ForceEngineBlock.FACING);
 		}
 		return Direction.NORTH;
 	}
 
 	public boolean canWork() {
-		BlockPos offsetPos = pos.offset(getFacing());
-		TileEntity tile = world.getTileEntity(offsetPos);
-		if(tile != null) {
+		BlockPos offsetPos = worldPosition.relative(getFacing());
+		TileEntity tile = level.getBlockEntity(offsetPos);
+		if (tile != null) {
 			IEnergyStorage cap = tile.getCapability(CapabilityEnergy.ENERGY, getFacing().getOpposite()).orElse(null);
-			if(cap != null) {
+			if (cap != null) {
 				return cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored() && !tankFuel.getFluid().isEmpty();
 			}
 		}
@@ -387,13 +387,13 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	}
 
 	public void insertPower() {
-		BlockPos offsetPos = pos.offset(getFacing());
-		TileEntity tile = world.getTileEntity(offsetPos);
-		if(tile != null) {
+		BlockPos offsetPos = worldPosition.relative(getFacing());
+		TileEntity tile = level.getBlockEntity(offsetPos);
+		if (tile != null) {
 			IEnergyStorage cap = tile.getCapability(CapabilityEnergy.ENERGY, getFacing().getOpposite()).orElse(null);
 			if (cap != null) {
-				if(cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored()) {
-					cap.receiveEnergy((int)generating, false);
+				if (cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored()) {
+					cap.receiveEnergy((int) generating, false);
 				}
 			}
 		}
@@ -402,30 +402,30 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	private void processFuelSlot() {
 		ItemStack slotStack = stackWrapper.getStackInSlot(0);
 
-		if(slotStack.getItem().isIn(ForceTags.FORGE_GEM)) {
+		if (slotStack.getItem().is(ForceTags.FORGE_GEM)) {
 			FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
 
-			if(getFuelAmount() + force.getAmount() <= tankFuel.getCapacity()) {
+			if (getFuelAmount() + force.getAmount() <= tankFuel.getCapacity()) {
 				fillFuel(force, FluidAction.EXECUTE);
 				slotStack.shrink(1);
 			}
-		} else if(slotStack.getItem().isIn(Tags.Items.NETHER_STARS)) {
+		} else if (slotStack.getItem().is(Tags.Items.NETHER_STARS)) {
 			FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM * 10);
 
 			ItemStack extraSlot = outputHandler.getStackInSlot(0);
-			if(getFuelAmount() + force.getAmount() <= tankFuel.getCapacity() && extraSlot.getCount() < inputHandler.getSlotLimit(1)) {
+			if (getFuelAmount() + force.getAmount() <= tankFuel.getCapacity() && extraSlot.getCount() < inputHandler.getSlotLimit(1)) {
 				fillFuel(force, FluidAction.EXECUTE);
 				slotStack.shrink(1);
-				if(outputHandler.getStackInSlot(0).isEmpty()) {
+				if (outputHandler.getStackInSlot(0).isEmpty()) {
 					outputHandler.setStackInSlot(0, new ItemStack(ForceRegistry.INERT_CORE.get()));
 				} else {
 					extraSlot.setCount(extraSlot.getCount() + 1);
 				}
 			}
 		} else {
-			if(outputHandler.getStackInSlot(0).isEmpty()) {
+			if (outputHandler.getStackInSlot(0).isEmpty()) {
 				FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, tankFuel, Integer.MAX_VALUE, null, true);
-				if(result.isSuccess()) {
+				if (result.isSuccess()) {
 					slotStack.shrink(1);
 					outputHandler.setStackInSlot(0, result.getResult());
 				}
@@ -436,8 +436,8 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	public int fillFuel(FluidStack resource, FluidAction action) {
 		FluidStack resourceCopy = resource.copy();
 
-		if(action.execute()) {
-			if(tankFuel.getFluid().isEmpty() || tankFuel.getFluid().isFluidEqual(resource)) {
+		if (action.execute()) {
+			if (tankFuel.getFluid().isEmpty() || tankFuel.getFluid().isFluidEqual(resource)) {
 				tankFuel.fill(resourceCopy, action);
 			}
 		}
@@ -447,9 +447,9 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	private void processThrottleSlot() {
 		ItemStack slotStack = inputHandler.getStackInSlot(1);
 
-		if(outputHandler.getStackInSlot(1).isEmpty()) {
+		if (outputHandler.getStackInSlot(1).isEmpty()) {
 			FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, tankThrottle, Integer.MAX_VALUE, null, true);
-			if(result.isSuccess()) {
+			if (result.isSuccess()) {
 				slotStack.shrink(1);
 				outputHandler.setStackInSlot(1, result.getResult());
 			}
@@ -459,8 +459,8 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	public int fillThrottle(FluidStack resource, FluidAction action) {
 		FluidStack resourceCopy = resource.copy();
 
-		if(action.execute()) {
-			if(tankThrottle.getFluid().isEmpty() || tankThrottle.getFluid().isFluidEqual(resource)) {
+		if (action.execute()) {
+			if (tankThrottle.getFluid().isEmpty() || tankThrottle.getFluid().isFluidEqual(resource)) {
 				tankThrottle.fill(resourceCopy, action);
 			}
 		}
@@ -480,8 +480,8 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	}
 
 	public void setFuelAmount(int amount) {
-		if(amount > 0) {
-			if(!tankFuel.getFluid().isEmpty()) {
+		if (amount > 0) {
+			if (!tankFuel.getFluid().isEmpty()) {
 				tankFuel.getFluid().setAmount(amount);
 			}
 		} else {
@@ -502,8 +502,8 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 	}
 
 	public void setThrottleAmount(int amount) {
-		if(amount > 0) {
-			if(!tankThrottle.getFluid().isEmpty()) {
+		if (amount > 0) {
+			if (!tankThrottle.getFluid().isEmpty()) {
 				tankThrottle.getFluid().setAmount(amount);
 			}
 		} else {
@@ -521,44 +521,44 @@ public class ForceEngineTile extends TileEntity implements ITickableTileEntity, 
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.pos, 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, getUpdateTag());
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-		this.read(getBlockState(), packet.getNbtCompound());
+		this.load(getBlockState(), packet.getTag());
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT nbt = new CompoundNBT();
-		this.write(nbt);
+		this.save(nbt);
 		return nbt;
 	}
 
 	@Override
 	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-		this.read(state, tag);
+		this.load(state, tag);
 	}
 
 	@Override
 	public CompoundNBT getTileData() {
 		CompoundNBT nbt = new CompoundNBT();
-		this.write(nbt);
+		this.save(nbt);
 		return nbt;
 	}
 
 	private void refreshClient() {
-		markDirty();
-		BlockState state = world.getBlockState(pos);
-		world.notifyBlockUpdate(pos, state, state, 2);
+		setChanged();
+		BlockState state = level.getBlockState(worldPosition);
+		level.sendBlockUpdated(worldPosition, state, state, 2);
 	}
 
 	public boolean isUsableByPlayer(PlayerEntity player) {
-		if (this.world.getTileEntity(this.pos) != this) {
+		if (this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		} else {
-			return !(player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) > 64.0D);
+			return !(player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) > 64.0D);
 		}
 	}
 

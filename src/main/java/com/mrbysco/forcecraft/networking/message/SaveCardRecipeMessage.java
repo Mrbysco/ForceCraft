@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class SaveCardRecipeMessage {
-	public SaveCardRecipeMessage(){
+	public SaveCardRecipeMessage() {
 
 	}
 
@@ -38,37 +38,37 @@ public class SaveCardRecipeMessage {
 		ctx.enqueueWork(() -> {
 			if (ctx.getDirection().getReceptionSide().isServer() && ctx.getSender() != null) {
 				ServerPlayerEntity player = ctx.getSender();
-				World world = player.world;
+				World world = player.level;
 				ItemStack stack = getCardStack(player);
 				if (!stack.isEmpty()) {
-					if (player.openContainer instanceof ItemCardContainer) {
-						ItemCardContainer itemCardContainer = (ItemCardContainer) player.openContainer;
+					if (player.containerMenu instanceof ItemCardContainer) {
+						ItemCardContainer itemCardContainer = (ItemCardContainer) player.containerMenu;
 						CraftingInventory craftMatrix = itemCardContainer.getCraftMatrix();
 						CraftResultInventory craftResult = itemCardContainer.getCraftResult();
-						Optional<ICraftingRecipe> iRecipe = player.server.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftMatrix, world);
+						Optional<ICraftingRecipe> iRecipe = player.server.getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, craftMatrix, world);
 						iRecipe.ifPresent((recipe) -> {
 							CompoundNBT nbt = stack.getOrCreateTag();
 							CompoundNBT recipeContents = new CompoundNBT();
-							for(int i = 0; i < craftMatrix.getSizeInventory(); i++) {
-								recipeContents.put("slot_" + i, craftMatrix.getStackInSlot(i).write(new CompoundNBT()));
+							for (int i = 0; i < craftMatrix.getContainerSize(); i++) {
+								recipeContents.put("slot_" + i, craftMatrix.getItem(i).save(new CompoundNBT()));
 							}
-							recipeContents.put("result", craftResult.getStackInSlot(0).write(new CompoundNBT()));
+							recipeContents.put("result", craftResult.getItem(0).save(new CompoundNBT()));
 							nbt.put("RecipeContents", recipeContents);
 							stack.setTag(nbt);
 						});
 					}
 				}
-				player.sendMessage(new StringTextComponent("Recipe saved").mergeStyle(TextFormatting.YELLOW), Util.DUMMY_UUID);
+				player.sendMessage(new StringTextComponent("Recipe saved").withStyle(TextFormatting.YELLOW), Util.NIL_UUID);
 			}
 		});
 		ctx.setPacketHandled(true);
 	}
 
 	private static ItemStack getCardStack(PlayerEntity player) {
-		if(player.getHeldItemMainhand().getItem() instanceof ItemCardItem) {
-			return player.getHeldItemMainhand();
-		} else if(player.getHeldItemOffhand().getItem() instanceof ItemCardItem) {
-			return player.getHeldItemOffhand();
+		if (player.getMainHandItem().getItem() instanceof ItemCardItem) {
+			return player.getMainHandItem();
+		} else if (player.getOffhandItem().getItem() instanceof ItemCardItem) {
+			return player.getOffhandItem();
 		}
 		return ItemStack.EMPTY;
 	}

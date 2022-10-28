@@ -5,9 +5,12 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 public interface IExperienceTome extends INBTSerializable<CompoundNBT> {
 
-    float getExperienceValue();
-    void addToExperienceValue();
-    void subtractFromExperienceValue();
-    void setExperienceValue(float newExp);
+	float getExperienceValue();
+
+	void addToExperienceValue();
+
+	void subtractFromExperienceValue();
+
+	void setExperienceValue(float newExp);
 
 }

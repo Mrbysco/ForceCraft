@@ -23,57 +23,60 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class ForceFilledForceFlask extends BaseItem {
 
-    public ForceFilledForceFlask(Properties properties) {
-        super(properties);
-    }
+	public ForceFilledForceFlask(Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-        if (!worldIn.isRemote) entityLiving.addPotionEffect(new EffectInstance(Effects.SPEED, 600, 2, false, false));
+	@Override
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+		if (!worldIn.isClientSide)
+			entityLiving.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 600, 2, false, false));
 
-        if (entityLiving instanceof ServerPlayerEntity) {
-            ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)entityLiving;
-            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
-            serverplayerentity.addStat(Stats.ITEM_USED.get(this));
-        }
+		if (entityLiving instanceof ServerPlayerEntity) {
+			ServerPlayerEntity serverplayerentity = (ServerPlayerEntity) entityLiving;
+			CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
+			serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
+		}
 
-        ItemStack flaskStack = ForceRegistry.FORCE_FLASK.get().getDefaultInstance();
-        if (entityLiving instanceof PlayerEntity) {
-            PlayerEntity playerIn = (PlayerEntity)entityLiving;
-            if(!playerIn.abilities.isCreativeMode) {
-                stack.shrink(1);
-            }
+		ItemStack flaskStack = ForceRegistry.FORCE_FLASK.get().getDefaultInstance();
+		if (entityLiving instanceof PlayerEntity) {
+			PlayerEntity playerIn = (PlayerEntity) entityLiving;
+			if (!playerIn.abilities.instabuild) {
+				stack.shrink(1);
+			}
 
-            if(!playerIn.inventory.addItemStackToInventory(flaskStack)) {
-                playerIn.entityDropItem(flaskStack, 0F);
-            }
-        }
+			if (!playerIn.inventory.add(flaskStack)) {
+				playerIn.spawnAtLocation(flaskStack, 0F);
+			}
+		}
 
-        return stack.isEmpty() ? flaskStack : stack;
-    }
+		return stack.isEmpty() ? flaskStack : stack;
+	}
 
-    public int getUseDuration(ItemStack stack) {
-        return 32;
-    }
+	public int getUseDuration(ItemStack stack) {
+		return 32;
+	}
 
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.DRINK;
-    }
+	public UseAction getUseAnimation(ItemStack stack) {
+		return UseAction.DRINK;
+	}
 
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        return DrinkHelper.startDrinking(worldIn, playerIn, handIn);
-    }
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		return DrinkHelper.useDrink(worldIn, playerIn, handIn);
+	}
 
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("item.force_filled_force_flask.tooltip").mergeStyle(TextFormatting.GRAY));
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(new TranslationTextComponent("item.force_filled_force_flask.tooltip").withStyle(TextFormatting.GRAY));
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+	}
 
-    @Override
-    public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @javax.annotation.Nullable net.minecraft.nbt.CompoundNBT nbt) {
-        return new FlaskFluidHandler(stack);
-    }
+	@Override
+	public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @javax.annotation.Nullable net.minecraft.nbt.CompoundNBT nbt) {
+		return new FlaskFluidHandler(stack);
+	}
 }

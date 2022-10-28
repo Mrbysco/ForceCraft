@@ -8,23 +8,23 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nullable;
 
 public class BaneModifierStorage implements Capability.IStorage<IBaneModifier> {
-    @Nullable
-    @Override
-    public INBT writeNBT(Capability<IBaneModifier> capability, IBaneModifier instance, Direction side) {
-        CompoundNBT nbt = new CompoundNBT();
-        
-        nbt.putBoolean("canTeleport", instance.canTeleport());
-        nbt.putBoolean("canExplode", instance.canExplode());
-        return nbt;
-    }
+	@Nullable
+	@Override
+	public INBT writeNBT(Capability<IBaneModifier> capability, IBaneModifier instance, Direction side) {
+		CompoundNBT nbt = new CompoundNBT();
 
-    @Override
-    public void readNBT(Capability<IBaneModifier> capability, IBaneModifier instance, Direction side, INBT nbtIn) {
-        if(nbtIn instanceof CompoundNBT){
-            CompoundNBT nbt = ((CompoundNBT) nbtIn);
+		nbt.putBoolean("canTeleport", instance.canTeleport());
+		nbt.putBoolean("canExplode", instance.canExplode());
+		return nbt;
+	}
 
-            instance.setTeleportAbility(nbt.getBoolean("canTeleport"));
-            instance.setExplodeAbility(nbt.getBoolean("canExplode"));
-        }
-    }
+	@Override
+	public void readNBT(Capability<IBaneModifier> capability, IBaneModifier instance, Direction side, INBT nbtIn) {
+		if (nbtIn instanceof CompoundNBT) {
+			CompoundNBT nbt = ((CompoundNBT) nbtIn);
+
+			instance.setTeleportAbility(nbt.getBoolean("canTeleport"));
+			instance.setExplodeAbility(nbt.getBoolean("canExplode"));
+		}
+	}
 }

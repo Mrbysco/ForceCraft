@@ -7,6 +7,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+
 /**
  * Wraps two {@link ItemStackHandler}s: Input and Output. Input's slots come first then the Output's slots come after. Items can only be inserted into Input. Items can only be extracted from Output.
  * Note that the above only applies to operations on the wrapper, the backing handlers are not restricted. For persistence, either the backing {@link ItemStackHandler}s can be saved, or the wrapper
@@ -65,7 +67,7 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 
 	@Override
 	public int fill(FluidStack resource, FluidAction action) {
-		if(this.fuelTank.isFluidValid(resource)) {
+		if (this.fuelTank.isFluidValid(resource)) {
 			return this.fuelTank.fill(resource, action);
 		}
 		return this.throttleTank.fill(resource, action);
@@ -73,7 +75,7 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 
 	@Override
 	public FluidStack drain(FluidStack resource, FluidAction action) {
-		if(this.fuelTank.getFluid().isFluidEqual(resource)) {
+		if (this.fuelTank.getFluid().isFluidEqual(resource)) {
 			return this.fuelTank.drain(resource, action);
 		}
 		return this.throttleTank.drain(resource, action);
@@ -81,7 +83,7 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 
 	@Override
 	public FluidStack drain(int maxDrain, FluidAction action) {
-		if(this.fuelTank.getFluidAmount() > 0) {
+		if (this.fuelTank.getFluidAmount() > 0) {
 			return this.fuelTank.drain(maxDrain, action);
 		}
 		return this.throttleTank.drain(maxDrain, action);

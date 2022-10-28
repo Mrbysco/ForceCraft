@@ -12,18 +12,20 @@ public interface IColdMob {
 	ResourceLocation getOriginal();
 
 	default void transformMob(LivingEntity livingEntity, World entityWorld) {
-		if(livingEntity instanceof IColdMob) {
-			ResourceLocation originalLocation = ((IColdMob)livingEntity).getOriginal();
+		if (livingEntity instanceof IColdMob) {
+			ResourceLocation originalLocation = ((IColdMob) livingEntity).getOriginal();
 			Entity replacementMob = ForgeRegistries.ENTITIES.getValue(originalLocation).create(entityWorld);
-			if(replacementMob != null) {
-				replacementMob.copyLocationAndAnglesFrom(livingEntity);
-				UUID mobUUID = replacementMob.getUniqueID();
-				replacementMob.copyDataFromOld(livingEntity);
-				replacementMob.setUniqueId(mobUUID);
+			if (replacementMob != null) {
+				replacementMob.copyPosition(livingEntity);
+				UUID mobUUID = replacementMob.getUUID();
+				replacementMob.restoreFrom(livingEntity);
+				replacementMob.setUUID(mobUUID);
 
-				entityWorld.addEntity(replacementMob);
+				entityWorld.addFreshEntity(replacementMob);
 				livingEntity.remove(false);
 			}
 		}
-	};
+	}
+
+	;
 }

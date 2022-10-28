@@ -13,31 +13,31 @@ import javax.annotation.Nullable;
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_FORCEROD;
 
 public class ForceRodProvider implements ICapabilitySerializable<INBT>, ICapabilityProvider {
-    private LazyOptional<IForceRodModifier> instance;
-    private IForceRodModifier forceRod;
+	private LazyOptional<IForceRodModifier> instance;
+	private IForceRodModifier forceRod;
 
-    public ForceRodProvider(){
-        this.forceRod = CAPABILITY_FORCEROD.getDefaultInstance();
-        this.instance = LazyOptional.of(() -> forceRod);
-    }
+	public ForceRodProvider() {
+		this.forceRod = CAPABILITY_FORCEROD.getDefaultInstance();
+		this.instance = LazyOptional.of(() -> forceRod);
+	}
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        return CAPABILITY_FORCEROD.orEmpty(cap, instance);
-    }
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		return CAPABILITY_FORCEROD.orEmpty(cap, instance);
+	}
 
-    @Override
-    public INBT serializeNBT() {
-        return CAPABILITY_FORCEROD.writeNBT(forceRod, null);
-    }
+	@Override
+	public INBT serializeNBT() {
+		return CAPABILITY_FORCEROD.writeNBT(forceRod, null);
+	}
 
-    @Override
-    public void deserializeNBT(INBT nbt) {
-        CAPABILITY_FORCEROD.readNBT(forceRod, null, nbt);
-    }
+	@Override
+	public void deserializeNBT(INBT nbt) {
+		CAPABILITY_FORCEROD.readNBT(forceRod, null, nbt);
+	}
 
-    public final Capability<IForceRodModifier> getCapability(){
-        return CAPABILITY_FORCEROD;
-    }
+	public final Capability<IForceRodModifier> getCapability() {
+		return CAPABILITY_FORCEROD;
+	}
 }

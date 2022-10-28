@@ -22,8 +22,7 @@ public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardC
 
 	@Nullable
 	@Override
-	public Class<ItemCardContainer> getContainerClass()
-	{
+	public Class<ItemCardContainer> getContainerClass() {
 		return ItemCardContainer.class;
 	}
 

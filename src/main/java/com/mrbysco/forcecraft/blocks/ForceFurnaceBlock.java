@@ -41,116 +41,116 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
 		super(builder);
 	}
 
-    public static ToIntFunction<BlockState> getLightValueLit(int lightValue) {
-        return (state) -> {
-            return state.get(BlockStateProperties.LIT) ? lightValue : 0;
-        };
-    }
+	public static ToIntFunction<BlockState> getLightValueLit(int lightValue) {
+		return (state) -> {
+			return state.getValue(BlockStateProperties.LIT) ? lightValue : 0;
+		};
+	}
 
-    protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        if (tileentity instanceof ForceFurnaceTileEntity) {
-			if (!worldIn.isRemote) {
+	protected void openContainer(World worldIn, BlockPos pos, PlayerEntity player) {
+		TileEntity tileentity = worldIn.getBlockEntity(pos);
+		if (tileentity instanceof ForceFurnaceTileEntity) {
+			if (!worldIn.isClientSide) {
 				NetworkHooks.openGui((ServerPlayerEntity) player, (ForceFurnaceTileEntity) tileentity, pos);
 			}
-            player.addStat(Stats.INTERACT_WITH_FURNACE);
-        }
-    }
+			player.awardStat(Stats.INTERACT_WITH_FURNACE);
+		}
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (stateIn.get(LIT)) {
-            double d0 = (double)pos.getX() + 0.5D;
-            double d1 = (double)pos.getY();
-            double d2 = (double)pos.getZ() + 0.5D;
-            if (rand.nextDouble() < 0.1D) {
-                worldIn.playSound(d0, d1, d2, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
-            }
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		if (stateIn.getValue(LIT)) {
+			double d0 = (double) pos.getX() + 0.5D;
+			double d1 = (double) pos.getY();
+			double d2 = (double) pos.getZ() + 0.5D;
+			if (rand.nextDouble() < 0.1D) {
+				worldIn.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+			}
 
-            Direction direction = stateIn.get(FACING);
-            Direction.Axis direction$axis = direction.getAxis();
-            double d3 = 0.52D;
-            double d4 = rand.nextDouble() * 0.6D - 0.3D;
-            double d5 = direction$axis == Direction.Axis.X ? (double)direction.getXOffset() * d3 : d4;
-            double d6 = rand.nextDouble() * 6.0D / 16.0D;
-            double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getZOffset() * d3 : d4;
-            worldIn.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
-            worldIn.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
-        }
-    }
+			Direction direction = stateIn.getValue(FACING);
+			Direction.Axis direction$axis = direction.getAxis();
+			double d3 = 0.52D;
+			double d4 = rand.nextDouble() * 0.6D - 0.3D;
+			double d5 = direction$axis == Direction.Axis.X ? (double) direction.getStepX() * d3 : d4;
+			double d6 = rand.nextDouble() * 6.0D / 16.0D;
+			double d7 = direction$axis == Direction.Axis.Z ? (double) direction.getStepZ() * d3 : d4;
+			worldIn.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+			worldIn.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+		}
+	}
 
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return new ForceFurnaceTileEntity();
-    }
-
-    @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.matchesBlock(newState.getBlock())) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof AbstractForceFurnaceTile) {
-				AbstractForceFurnaceTile furnaceTile = ((AbstractForceFurnaceTile) tileentity);
-                for(int i = 0; i < furnaceTile.getSizeInventory(); ++i) {
-                    if(!(furnaceTile.getStackInSlot(i).getItem() instanceof UpgradeCoreItem)) {
-                        spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), furnaceTile.getStackInSlot(i));
-                    }
-                }
-                ((AbstractForceFurnaceTile)tileentity).grantStoredRecipeExperience(worldIn, Vector3d.copyCentered(pos));
-                worldIn.updateComparatorOutputLevel(pos, this);
-            }
-
-            super.onReplaced(state, worldIn, pos, newState, isMoving);
-        }
-    }
-
-    public static void spawnItemStack(World worldIn, double x, double y, double z, ItemStack stack) {
-        double d0 = (double) EntityType.ITEM.getWidth();
-        double d1 = 1.0D - d0;
-        double d2 = d0 / 2.0D;
-        double d3 = Math.floor(x) + worldIn.rand.nextDouble() * d1 + d2;
-        double d4 = Math.floor(y) + worldIn.rand.nextDouble() * d1;
-        double d5 = Math.floor(z) + worldIn.rand.nextDouble() * d1 + d2;
-
-        while(!stack.isEmpty()) {
-            ItemEntity itementity = new ItemEntity(worldIn, d3, d4, d5, stack.split(worldIn.rand.nextInt(21) + 10));
-            float f = 0.05F;
-            itementity.setMotion(worldIn.rand.nextGaussian() * (double)0.05F, worldIn.rand.nextGaussian() * (double)f + (double)0.2F, worldIn.rand.nextGaussian() * (double)f);
-            worldIn.addEntity(itementity);
-        }
-    }
+	@Nullable
+	@Override
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
+		return new ForceFurnaceTileEntity();
+	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		TileEntity tileentity = worldIn.getTileEntity(pos);
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (!state.is(newState.getBlock())) {
+			TileEntity tileentity = worldIn.getBlockEntity(pos);
+			if (tileentity instanceof AbstractForceFurnaceTile) {
+				AbstractForceFurnaceTile furnaceTile = ((AbstractForceFurnaceTile) tileentity);
+				for (int i = 0; i < furnaceTile.getContainerSize(); ++i) {
+					if (!(furnaceTile.getItem(i).getItem() instanceof UpgradeCoreItem)) {
+						spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), furnaceTile.getItem(i));
+					}
+				}
+				((AbstractForceFurnaceTile) tileentity).grantStoredRecipeExperience(worldIn, Vector3d.atCenterOf(pos));
+				worldIn.updateNeighbourForOutputSignal(pos, this);
+			}
+
+			super.onRemove(state, worldIn, pos, newState, isMoving);
+		}
+	}
+
+	public static void spawnItemStack(World worldIn, double x, double y, double z, ItemStack stack) {
+		double d0 = (double) EntityType.ITEM.getWidth();
+		double d1 = 1.0D - d0;
+		double d2 = d0 / 2.0D;
+		double d3 = Math.floor(x) + worldIn.random.nextDouble() * d1 + d2;
+		double d4 = Math.floor(y) + worldIn.random.nextDouble() * d1;
+		double d5 = Math.floor(z) + worldIn.random.nextDouble() * d1 + d2;
+
+		while (!stack.isEmpty()) {
+			ItemEntity itementity = new ItemEntity(worldIn, d3, d4, d5, stack.split(worldIn.random.nextInt(21) + 10));
+			float f = 0.05F;
+			itementity.setDeltaMovement(worldIn.random.nextGaussian() * (double) 0.05F, worldIn.random.nextGaussian() * (double) f + (double) 0.2F, worldIn.random.nextGaussian() * (double) f);
+			worldIn.addFreshEntity(itementity);
+		}
+	}
+
+	@Override
+	public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		TileEntity tileentity = worldIn.getBlockEntity(pos);
 		if (tileentity instanceof AbstractForceFurnaceTile) {
 
 			AbstractForceFurnaceTile furnaceTile = (AbstractForceFurnaceTile) tileentity;
-			if (stack.hasDisplayName()) {
-				furnaceTile.setCustomName(stack.getDisplayName());
+			if (stack.hasCustomHoverName()) {
+				furnaceTile.setCustomName(stack.getHoverName());
 			}
 			// inventory step
 
 			if (stack.getTag() != null && stack.getTag().contains(NBT_UPGRADE)) {
-				ItemStack upgrade = ItemStack.read(stack.getTag().getCompound(NBT_UPGRADE));
+				ItemStack upgrade = ItemStack.of(stack.getTag().getCompound(NBT_UPGRADE));
 				furnaceTile.setUpgrade(upgrade);
 			}
 		}
 	}
 
 	@Override
-	public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
-		super.harvestBlock(worldIn, player, pos, state, te, stack);
-		if(te instanceof ForceFurnaceTileEntity) {
+	public void playerDestroy(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
+		super.playerDestroy(worldIn, player, pos, state, te, stack);
+		if (te instanceof ForceFurnaceTileEntity) {
 			ForceFurnaceTileEntity tile = (ForceFurnaceTileEntity) te;
-			if(!tile.getUpgrade().isEmpty()) {
-				worldIn.playSound((PlayerEntity) null, pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5F, 1.0F);
+			if (!tile.getUpgrade().isEmpty()) {
+				worldIn.playSound((PlayerEntity) null, pos, SoundEvents.ITEM_BREAK, SoundCategory.BLOCKS, 0.5F, 1.0F);
 			}
 		}
 	}
 
 	@Override
-	public PushReaction getPushReaction(BlockState state) {
+	public PushReaction getPistonPushReaction(BlockState state) {
 		return PushReaction.BLOCK;
 	}
 }

@@ -10,21 +10,21 @@ public class ColdChickenModel<T extends ColdChickenEntity> extends ChickenModel<
 		super();
 	}
 
-	public void setLivingAnimations(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
-		super.setLivingAnimations(entityIn, limbSwing, limbSwingAmount, partialTick);
-		this.head.rotationPointY = 15.0F + entityIn.getHeadRotationPointY(partialTick) * 4.0F;
-		this.bill.rotationPointY = 15.0F + entityIn.getHeadRotationPointY(partialTick) * 4.0F;
-		this.chin.rotationPointY = 15.0F + entityIn.getHeadRotationPointY(partialTick) * 4.0F;
+	public void prepareMobModel(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
+		super.prepareMobModel(entityIn, limbSwing, limbSwingAmount, partialTick);
+		this.head.y = 15.0F + entityIn.getHeadRotationPointY(partialTick) * 4.0F;
+		this.beak.y = 15.0F + entityIn.getHeadRotationPointY(partialTick) * 4.0F;
+		this.redThing.y = 15.0F + entityIn.getHeadRotationPointY(partialTick) * 4.0F;
 		this.headRotationAngleX = entityIn.getHeadRotationAngleX(partialTick);
 	}
 
 	/**
 	 * Sets this entity's model rotation angles
 	 */
-	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-		this.head.rotateAngleX = this.headRotationAngleX;
-		this.bill.rotateAngleX = this.headRotationAngleX;
-		this.chin.rotateAngleX = this.headRotationAngleX;
+	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		super.setupAnim(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+		this.head.xRot = this.headRotationAngleX;
+		this.beak.xRot = this.headRotationAngleX;
+		this.redThing.xRot = this.headRotationAngleX;
 	}
 }

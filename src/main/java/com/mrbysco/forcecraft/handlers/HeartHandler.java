@@ -16,17 +16,17 @@ public class HeartHandler {
 
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
-		World world = event.getEntity().world;
-		if (world.isRemote || event.getSource() == null || world.rand.nextDouble() >= CHANCE) {
+		World world = event.getEntity().level;
+		if (world.isClientSide || event.getSource() == null || world.random.nextDouble() >= CHANCE) {
 			return;
 		}
-		if (event.getSource().getTrueSource() instanceof PlayerEntity && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
+		if (event.getSource().getEntity() instanceof PlayerEntity && !(event.getSource().getEntity() instanceof FakePlayer)) {
 			// killed by a real player
-			EntityClassification classification = event.getEntityLiving().getType().getClassification();
+			EntityClassification classification = event.getEntityLiving().getType().getCategory();
 			if (classification == EntityClassification.MONSTER) {
 				// and its a monster, not sheep or squid or something
-				BlockPos pos = event.getEntity().getPosition();
-				world.addEntity(new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(ForceRegistry.RECOVERY_HEART.get())));
+				BlockPos pos = event.getEntity().blockPosition();
+				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(ForceRegistry.RECOVERY_HEART.get())));
 			}
 		}
 	}

@@ -9,19 +9,19 @@ import javax.annotation.Nullable;
 
 public class ExperienceTomeStorage implements Capability.IStorage<IExperienceTome> {
 
-    @Nullable
-    @Override
-    public INBT writeNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side) {
-        CompoundNBT nbt = new CompoundNBT();
-        nbt.putFloat("experience", instance.getExperienceValue());
-        return nbt;
-    }
+	@Nullable
+	@Override
+	public INBT writeNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side) {
+		CompoundNBT nbt = new CompoundNBT();
+		nbt.putFloat("experience", instance.getExperienceValue());
+		return nbt;
+	}
 
-    @Override
-    public void readNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side, INBT nbtIn) {
-        if(nbtIn instanceof CompoundNBT) {
-            CompoundNBT nbt = (CompoundNBT) nbtIn;
-            instance.setExperienceValue(nbt.getFloat("experience"));
-        }
-    }
+	@Override
+	public void readNBT(Capability<IExperienceTome> capability, IExperienceTome instance, Direction side, INBT nbtIn) {
+		if (nbtIn instanceof CompoundNBT) {
+			CompoundNBT nbt = (CompoundNBT) nbtIn;
+			instance.setExperienceValue(nbt.getFloat("experience"));
+		}
+	}
 }

@@ -102,7 +102,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	};
 	private LazyOptional<IItemHandler> upgradeHandlerHolder = LazyOptional.of(() -> upgradeHandler);
 
-	private static final List<ResourceLocation> hopperBlacklist = Arrays.asList(ResourceLocation.tryCreate("hopper"), new ResourceLocation("cyclic", "hopper"),
+	private static final List<ResourceLocation> hopperBlacklist = Arrays.asList(ResourceLocation.tryParse("hopper"), new ResourceLocation("cyclic", "hopper"),
 			new ResourceLocation("cyclic", "hopper_gold"), new ResourceLocation("cyclic", "hopper_fluid"),
 			new ResourceLocation("uppers", "upper"), new ResourceLocation("goldenhopper", "golden_hopper"),
 			new ResourceLocation("woodenhopper", "wooden_hopper"));
@@ -115,7 +115,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	private int cookSpeed;
 	protected final IIntArray furnaceData = new IIntArray() {
 		public int get(int index) {
-			switch(index) {
+			switch (index) {
 				case 0:
 					return AbstractForceFurnaceTile.this.burnTime;
 				case 1:
@@ -130,7 +130,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		}
 
 		public void set(int index, int value) {
-			switch(index) {
+			switch (index) {
 				case 0:
 					AbstractForceFurnaceTile.this.burnTime = value;
 					break;
@@ -146,7 +146,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 
 		}
 
-		public int size() {
+		public int getCount() {
 			return 4;
 		}
 	};
@@ -161,10 +161,10 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 
 	protected IRecipeType<? extends AbstractCookingRecipe> getRecipeType() {
 		ItemStack upgrade = getUpgrade();
-		if(!upgrade.isEmpty()) {
-			if(upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
+		if (!upgrade.isEmpty()) {
+			if (upgrade.getItem() == ForceRegistry.FREEZING_CORE.get()) {
 				return ForceRecipes.FREEZING;
-			} else if(upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
+			} else if (upgrade.getItem() == ForceRegistry.GRINDING_CORE.get()) {
 				return ForceRecipes.GRINDING;
 			}
 		}
@@ -203,11 +203,12 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	}
 
 	protected AbstractCookingRecipe getRecipe() {
-		ItemStack input = this.getStackInSlot(INPUT_SLOT);
+		ItemStack input = this.getItem(INPUT_SLOT);
 		if (input.isEmpty() || input == failedMatch) return null;
-		if (currentRecipe != null && currentRecipe.matches(this, world) && currentRecipe.getType() == getRecipeType()) return currentRecipe;
+		if (currentRecipe != null && currentRecipe.matches(this, level) && currentRecipe.getType() == getRecipeType())
+			return currentRecipe;
 		else {
-			AbstractCookingRecipe rec = world.getRecipeManager().getRecipe((IRecipeType<AbstractCookingRecipe>)this.getRecipeType(), this, this.world).orElse(null);
+			AbstractCookingRecipe rec = level.getRecipeManager().getRecipeFor((IRecipeType<AbstractCookingRecipe>) this.getRecipeType(), this, this.level).orElse(null);
 			if (rec == null) failedMatch = input;
 			else failedMatch = ItemStack.EMPTY;
 			return currentRecipe = rec;
@@ -218,28 +219,28 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		return this.burnTime > 0;
 	}
 
-	public void read(BlockState state, CompoundNBT nbt) {
-		super.read(state, nbt);
-		if(nbt.contains("UpgradeHandler") && nbt.contains("ItemStackHandler")) {
+	public void load(BlockState state, CompoundNBT nbt) {
+		super.load(state, nbt);
+		if (nbt.contains("UpgradeHandler") && nbt.contains("ItemStackHandler")) {
 			upgradeHandler.deserializeNBT(nbt.getCompound("UpgradeHandler"));
 			handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
 		} else {
-			if(nbt.contains("ItemStackHandler")) {
+			if (nbt.contains("ItemStackHandler")) {
 				CompoundNBT handlerTag = nbt.getCompound("ItemStackHandler");
 				ListNBT tagList = handlerTag.getList("Items", Constants.NBT.TAG_COMPOUND);
 				upgradeHandler.setSize(1);
 				int size = handlerTag.getInt("Size");
-				if(size == 4) {
+				if (size == 4) {
 					handler.setSize(3);
 					for (int i = 0; i < tagList.size(); i++) {
 						CompoundNBT itemTags = tagList.getCompound(i);
 						int slot = itemTags.getInt("Slot");
 
 						if (slot >= 0 && slot < 4) {
-							if(slot == 3) {
-								upgradeHandler.setStackInSlot(0, ItemStack.read(itemTags));
+							if (slot == 3) {
+								upgradeHandler.setStackInSlot(0, ItemStack.of(itemTags));
 							} else {
-								handler.setStackInSlot(slot, ItemStack.read(itemTags));
+								handler.setStackInSlot(slot, ItemStack.of(itemTags));
 							}
 						}
 					}
@@ -252,14 +253,14 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 
 				handler.setSize(3);
 				upgradeHandler.setSize(1);
-				for(int i = 0; i < listnbt.size(); ++i) {
+				for (int i = 0; i < listnbt.size(); ++i) {
 					CompoundNBT compoundnbt = listnbt.getCompound(i);
 					int j = compoundnbt.getByte("Slot") & 255;
-					if (j >= 0 && j < this.getSizeInventory()) {
-						if(j == 3) {
-							upgradeHandler.setStackInSlot(0, ItemStack.read(compoundnbt));
+					if (j >= 0 && j < this.getContainerSize()) {
+						if (j == 3) {
+							upgradeHandler.setStackInSlot(0, ItemStack.of(compoundnbt));
 						} else {
-							handler.setStackInSlot(j, ItemStack.read(compoundnbt));
+							handler.setStackInSlot(j, ItemStack.of(compoundnbt));
 						}
 					}
 				}
@@ -274,13 +275,13 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		this.cookSpeed = nbt.getInt("CookSpeed");
 		CompoundNBT compoundnbt = nbt.getCompound("RecipesUsed");
 
-		for(String s : compoundnbt.keySet()) {
+		for (String s : compoundnbt.getAllKeys()) {
 			this.recipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
 		}
 	}
 
-	public CompoundNBT write(CompoundNBT compound) {
-		super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		super.save(compound);
 		compound.putInt("BurnTime", this.burnTime);
 		compound.putInt("BurnSpeed", this.burnSpeed);
 		compound.putInt("CookTime", this.cookTime);
@@ -303,13 +304,13 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		boolean dirty = false;
 		if (this.isBurning() && canSmelt(currentRecipe)) {
 			int speed = getSpeed();
-			if(this.burnSpeed != speed) {
+			if (this.burnSpeed != speed) {
 				this.burnSpeed = speed;
 			}
 			this.burnTime -= this.burnSpeed;
 		}
 
-		if (this.world != null && !this.world.isRemote) {
+		if (this.level != null && !this.level.isClientSide) {
 			ItemStack fuel = this.handler.getStackInSlot(FUEL_SLOT);
 			if (this.isBurning() || !fuel.isEmpty() && !this.handler.getStackInSlot(INPUT_SLOT).isEmpty()) {
 				AbstractCookingRecipe irecipe = getRecipe();
@@ -321,8 +322,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 						dirty = true;
 						if (fuel.hasContainerItem())
 							this.handler.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
-						else
-						if (!fuel.isEmpty()) {
+						else if (!fuel.isEmpty()) {
 							fuel.shrink(1);
 							if (fuel.isEmpty()) {
 								this.handler.setStackInSlot(FUEL_SLOT, fuel.getContainerItem());
@@ -333,7 +333,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 
 				if (this.isBurning() && valid) {
 					int speed = isEfficient() ? 4 : getSpeed();
-					if(this.cookSpeed != speed) {
+					if (this.cookSpeed != speed) {
 						this.cookSpeed = speed;
 					}
 
@@ -354,27 +354,27 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 
 			if (wasBurning != this.isBurning()) {
 				dirty = true;
-				this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(AbstractFurnaceBlock.LIT, Boolean.valueOf(this.isBurning())), 3);
+				this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(AbstractFurnaceBlock.LIT, Boolean.valueOf(this.isBurning())), 3);
 			}
 		}
 
 		if (dirty) {
-			this.markDirty();
+			this.setChanged();
 		}
 	}
 
 	protected boolean canSmelt(@Nullable IRecipe<?> recipeIn) {
 		if (!this.handler.getStackInSlot(INPUT_SLOT).isEmpty() && recipeIn != null) {
-			ItemStack recipeOutput = recipeIn.getRecipeOutput();
+			ItemStack recipeOutput = recipeIn.getResultItem();
 			if (recipeOutput.isEmpty()) {
 				return false;
 			} else {
 				ItemStack output = this.handler.getStackInSlot(OUTPUT_SLOT);
 				if (output.isEmpty()) {
 					return true;
-				} else if (!output.isItemEqual(recipeOutput)) {
+				} else if (!output.sameItem(recipeOutput)) {
 					return false;
-				} else if (output.getCount() + recipeOutput.getCount() <= this.getInventoryStackLimit() && output.getCount() + recipeOutput.getCount() <= output.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
+				} else if (output.getCount() + recipeOutput.getCount() <= this.getMaxStackSize() && output.getCount() + recipeOutput.getCount() <= output.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
 					return true;
 				} else {
 					return output.getCount() + recipeOutput.getCount() <= recipeOutput.getMaxStackSize(); // Forge fix: make furnace respect stack sizes in furnace recipes
@@ -389,37 +389,37 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		if (recipe != null && this.canSmelt(recipe)) {
 			ItemStack itemstack = this.handler.getStackInSlot(INPUT_SLOT);
 			List<? extends String> additionalBlacklist = new ArrayList<>();
-			if(ConfigHandler.COMMON.furnaceOutputBlacklist.get() != null) {
-				if(!ConfigHandler.COMMON.furnaceOutputBlacklist.get().isEmpty() && !ConfigHandler.COMMON.furnaceOutputBlacklist.get().get(0).isEmpty()) {
+			if (ConfigHandler.COMMON.furnaceOutputBlacklist.get() != null) {
+				if (!ConfigHandler.COMMON.furnaceOutputBlacklist.get().isEmpty() && !ConfigHandler.COMMON.furnaceOutputBlacklist.get().get(0).isEmpty()) {
 					additionalBlacklist = ConfigHandler.COMMON.furnaceOutputBlacklist.get();
 				}
 			}
 
-			if(recipe instanceof MultipleOutputFurnaceRecipe) {
+			if (recipe instanceof MultipleOutputFurnaceRecipe) {
 				MultipleOutputFurnaceRecipe multipleRecipe = (MultipleOutputFurnaceRecipe) recipe;
 				NonNullList<ItemStack> outputStacks = multipleRecipe.getRecipeOutputs();
-				for(int i = 0; i < outputStacks.size(); i++) {
+				for (int i = 0; i < outputStacks.size(); i++) {
 					ItemStack outputStack = outputStacks.get(i).copy();
 
-					if(i > 0) {
-						if(multipleRecipe.getSecondaryChance() != 1.0F || world.rand.nextFloat() > multipleRecipe.getSecondaryChance()) {
+					if (i > 0) {
+						if (multipleRecipe.getSecondaryChance() != 1.0F || level.random.nextFloat() > multipleRecipe.getSecondaryChance()) {
 							//Early break if change didn't work out on second output
 							break;
 						}
 					}
 
 					List<BiggestInventory> inventoryList = new ArrayList<>();
-					for(Direction dir : Direction.values()) {
-						BlockPos offPos = pos.offset(dir);
-						if(this.world.isAreaLoaded(pos, 1)) {
-							TileEntity foundTile = this.world.getTileEntity(offPos);
-							if(foundTile != null) {
+					for (Direction dir : Direction.values()) {
+						BlockPos offPos = worldPosition.relative(dir);
+						if (this.level.isAreaLoaded(worldPosition, 1)) {
+							TileEntity foundTile = this.level.getBlockEntity(offPos);
+							if (foundTile != null) {
 								ResourceLocation typeLocation = foundTile.getType().getRegistryName();
 								boolean flag = foundTile instanceof IHopper || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile;
 								boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
-								if(!flag && flag2 && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+								if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
 									IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).orElse(null);
-									if(itemHandler != null) {
+									if (itemHandler != null) {
 										inventoryList.add(new BiggestInventory(offPos, itemHandler.getSlots(), dir.getOpposite()));
 									}
 								}
@@ -427,19 +427,19 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 						}
 					}
 					inventoryList.sort(Collections.reverseOrder());
-					for(BiggestInventory inventory : inventoryList) {
-						IItemHandler itemHandler = inventory.getIItemHandler(this.world);
+					for (BiggestInventory inventory : inventoryList) {
+						IItemHandler itemHandler = inventory.getIItemHandler(this.level);
 						ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
 						outputStack = rest;
-						if(outputStack.isEmpty()) {
+						if (outputStack.isEmpty()) {
 							break;
 						}
 					}
 
-					if(i > 0 && !outputStack.isEmpty()) {
-						((ServerWorld)world).spawnParticle(ParticleTypes.POOF, (double)pos.getX(), (double)pos.getY() + 1, (double)pos.getZ(), 1, 0, 0, 0, 0.0D);
-						ItemEntity itemEntity = new ItemEntity(world, getPos().getX(), getPos().getY() + 1, getPos().getZ(), outputStack);
-						world.addEntity(itemEntity);
+					if (i > 0 && !outputStack.isEmpty()) {
+						((ServerWorld) level).sendParticles(ParticleTypes.POOF, (double) worldPosition.getX(), (double) worldPosition.getY() + 1, (double) worldPosition.getZ(), 1, 0, 0, 0, 0.0D);
+						ItemEntity itemEntity = new ItemEntity(level, getBlockPos().getX(), getBlockPos().getY() + 1, getBlockPos().getZ(), outputStack);
+						level.addFreshEntity(itemEntity);
 					} else {
 						ItemStack itemstack2 = this.handler.getStackInSlot(OUTPUT_SLOT);
 						if (itemstack2.isEmpty() && !outputStack.isEmpty()) {
@@ -450,21 +450,21 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 					}
 				}
 			} else {
-				ItemStack itemstack1 = recipe.getRecipeOutput();
+				ItemStack itemstack1 = recipe.getResultItem();
 				ItemStack outputStack = itemstack1.copy();
 
 				List<BiggestInventory> inventoryList = new ArrayList<>();
-				for(Direction dir : Direction.values()) {
-					BlockPos offPos = pos.offset(dir);
-					if(this.world.isAreaLoaded(pos, 1)) {
-						TileEntity foundTile = this.world.getTileEntity(offPos);
-						if(foundTile != null) {
+				for (Direction dir : Direction.values()) {
+					BlockPos offPos = worldPosition.relative(dir);
+					if (this.level.isAreaLoaded(worldPosition, 1)) {
+						TileEntity foundTile = this.level.getBlockEntity(offPos);
+						if (foundTile != null) {
 							ResourceLocation typeLocation = foundTile.getType().getRegistryName();
 							boolean flag = foundTile instanceof IHopper || foundTile instanceof AbstractFurnaceTileEntity || foundTile instanceof AbstractForceFurnaceTile;
 							boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
-							if(!flag && flag2 && !foundTile.isRemoved() && foundTile.hasWorld() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+							if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
 								IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).orElse(null);
-								if(itemHandler != null) {
+								if (itemHandler != null) {
 									inventoryList.add(new BiggestInventory(offPos, itemHandler.getSlots(), dir.getOpposite()));
 								}
 							}
@@ -472,11 +472,11 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 					}
 				}
 				inventoryList.sort(Collections.reverseOrder());
-				for(BiggestInventory inventory : inventoryList) {
-					IItemHandler itemHandler = inventory.getIItemHandler(this.world);
+				for (BiggestInventory inventory : inventoryList) {
+					IItemHandler itemHandler = inventory.getIItemHandler(this.level);
 					ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
 					outputStack = rest;
-					if(outputStack.isEmpty()) {
+					if (outputStack.isEmpty()) {
 						break;
 					}
 				}
@@ -489,7 +489,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 				}
 			}
 
-			if (!this.world.isRemote) {
+			if (!this.level.isClientSide) {
 				this.setRecipeUsed(recipe);
 			}
 
@@ -512,7 +512,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	protected int getCookTime() {
 		AbstractCookingRecipe rec = getRecipe();
 		if (rec == null) return 200;
-		return this.world.getRecipeManager().getRecipe((IRecipeType<AbstractCookingRecipe>)this.getRecipeType(), this, this.world).map(AbstractCookingRecipe::getCookTime).orElse(100);
+		return this.level.getRecipeManager().getRecipeFor((IRecipeType<AbstractCookingRecipe>) this.getRecipeType(), this, this.level).map(AbstractCookingRecipe::getCookingTime).orElse(100);
 	}
 
 	public static boolean isFuel(ItemStack stack) {
@@ -531,14 +531,14 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	/**
 	 * Returns true if automation can insert the given item in the given slot from the given side.
 	 */
-	public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-		return this.isItemValidForSlot(index, itemStackIn);
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+		return this.canPlaceItem(index, itemStackIn);
 	}
 
 	/**
 	 * Returns true if automation can extract the given item in the given slot from the given side.
 	 */
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		if (direction == Direction.DOWN && index == 1) {
 			Item item = stack.getItem();
 			if (item != Items.WATER_BUCKET && item != Items.BUCKET) {
@@ -552,12 +552,12 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	/**
 	 * Returns the number of slots in the inventory.
 	 */
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return this.handler.getSlots();
 	}
 
 	public boolean isEmpty() {
-		for(int i = 0; i < handler.getSlots(); i++) {
+		for (int i = 0; i < handler.getSlots(); i++) {
 			if (!handler.getStackInSlot(i).isEmpty()) {
 				return false;
 			}
@@ -569,30 +569,30 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	/**
 	 * Returns the stack in the given slot.
 	 */
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.handler.getStackInSlot(index);
 	}
 
 	/**
 	 * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
 	 */
-	public ItemStack decrStackSize(int index, int count) {
+	public ItemStack removeItem(int index, int count) {
 		return ItemHandlerUtils.getAndSplit(this.handler, index, count);
 	}
 
 	/**
 	 * Removes a stack from the given slot and returns it.
 	 */
-	public ItemStack removeStackFromSlot(int index) {
+	public ItemStack removeItemNoUpdate(int index) {
 		return ItemHandlerUtils.getAndRemove(this.handler, index);
 	}
 
 	/**
 	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
 	 */
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		ItemStack itemstack = this.handler.getStackInSlot(index);
-		boolean flag = handler.isItemValid(index, stack) && !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
+		boolean flag = handler.isItemValid(index, stack) && !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.tagMatches(stack, itemstack);
 		this.handler.setStackInSlot(index, stack);
 		if (stack.getCount() > handler.getSlotLimit(index)) {
 			stack.setCount(handler.getSlotLimit(index));
@@ -601,18 +601,18 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		if (index == 0 && !flag) {
 			this.cookTimeTotal = this.getCookTime();
 			this.cookTime = 0;
-			this.markDirty();
+			this.setChanged();
 		}
 	}
 
 	/**
 	 * Don't rename this method to canInteractWith due to conflicts with Container
 	 */
-	public boolean isUsableByPlayer(PlayerEntity player) {
-		if (this.world.getTileEntity(this.pos) != this) {
+	public boolean stillValid(PlayerEntity player) {
+		if (this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		} else {
-			return player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
+			return player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) <= 64.0D;
 		}
 	}
 
@@ -621,12 +621,12 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	 * guis use Slot.isItemValid
 	 */
 	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack) {
+	public boolean canPlaceItem(int index, ItemStack stack) {
 		return handler.isItemValid(index, stack);
 	}
 
-	public void clear() {
-		for(int i = 0; i < handler.getSlots(); i++) {
+	public void clearContent() {
+		for (int i = 0; i < handler.getSlots(); i++) {
 			handler.setStackInSlot(i, ItemStack.EMPTY);
 		}
 	}
@@ -643,22 +643,22 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		return null;
 	}
 
-	public void onCrafting(PlayerEntity player) {
+	public void awardUsedRecipes(PlayerEntity player) {
 	}
 
 	public void unlockRecipes(PlayerEntity player) {
-		List<IRecipe<?>> list = this.grantStoredRecipeExperience(player.world, player.getPositionVec());
-		player.unlockRecipes(list);
+		List<IRecipe<?>> list = this.grantStoredRecipeExperience(player.level, player.position());
+		player.awardRecipes(list);
 		this.recipes.clear();
 	}
 
 	public List<IRecipe<?>> grantStoredRecipeExperience(World world, Vector3d pos) {
 		List<IRecipe<?>> list = Lists.newArrayList();
 
-		for(Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
-			world.getRecipeManager().getRecipe(entry.getKey()).ifPresent((recipe) -> {
+		for (Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
+			world.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
 				list.add(recipe);
-				splitAndSpawnExperience(world, pos, entry.getIntValue(), (((AbstractCookingRecipe)recipe).getExperience() * getXPMultiplier()));
+				splitAndSpawnExperience(world, pos, entry.getIntValue(), (((AbstractCookingRecipe) recipe).getExperience() * getXPMultiplier()));
 			});
 		}
 
@@ -666,22 +666,22 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 	}
 
 	private static void splitAndSpawnExperience(World world, Vector3d pos, int craftedAmount, float experience) {
-		int i = MathHelper.floor((float)craftedAmount * experience);
-		float f = MathHelper.frac((float)craftedAmount * experience);
-		if (f != 0.0F && Math.random() < (double)f) {
+		int i = MathHelper.floor((float) craftedAmount * experience);
+		float f = MathHelper.frac((float) craftedAmount * experience);
+		if (f != 0.0F && Math.random() < (double) f) {
 			++i;
 		}
 
-		while(i > 0) {
-			int j = ExperienceOrbEntity.getXPSplit(i);
+		while (i > 0) {
+			int j = ExperienceOrbEntity.getExperienceValue(i);
 			i -= j;
-			world.addEntity(new ExperienceOrbEntity(world, pos.x, pos.y, pos.z, j));
+			world.addFreshEntity(new ExperienceOrbEntity(world, pos.x, pos.y, pos.z, j));
 		}
 
 	}
 
 	public void fillStackedContents(RecipeItemHelper helper) {
-		for(int i = 0; i < handler.getSlots(); i++) {
+		for (int i = 0; i < handler.getSlots(); i++) {
 			helper.accountStack(handler.getStackInSlot(i));
 		}
 	}
@@ -691,7 +691,7 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 
 	@Override
 	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-		if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (!this.remove && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing == Direction.UP)
 				return handlers[0].cast();
 			else if (facing == Direction.DOWN)
@@ -724,9 +724,9 @@ public abstract class AbstractForceFurnaceTile extends LockableTileEntity implem
 		}
 
 		protected IItemHandler getIItemHandler(World world) {
-			if(world.isAreaLoaded(pos, 1)) {
-				TileEntity tileEntity = world.getTileEntity(tilePos);
-				if(!tileEntity.isRemoved() && tileEntity.hasWorld() && tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+			if (world.isAreaLoaded(worldPosition, 1)) {
+				TileEntity tileEntity = world.getBlockEntity(tilePos);
+				if (!tileEntity.isRemoved() && tileEntity.hasLevel() && tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
 					return tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction).orElse(null);
 				}
 			}

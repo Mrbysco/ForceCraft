@@ -9,22 +9,22 @@ import net.minecraft.world.IBlockReader;
 
 public class ForceLogBlock extends RotatedPillarBlock {
 
-    public ForceLogBlock(AbstractBlock.Properties properties) {
-        super(properties);
-    }
+	public ForceLogBlock(AbstractBlock.Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
-        return 5;
-    }
+	@Override
+	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+		return 5;
+	}
 
-    @Override
-    public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
-        return 30;
-    }
+	@Override
+	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+		return 30;
+	}
 
-    @Override
-    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
-        return true;
-    }
+	@Override
+	public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+		return true;
+	}
 }

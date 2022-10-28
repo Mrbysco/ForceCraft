@@ -29,12 +29,12 @@ import javax.annotation.Nonnull;
 import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_BANE;
 
 public class ForceArrowEntity extends ArrowEntity {
-	private static final DataParameter<Boolean> ENDER = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> BANE = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> SPEED = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> GLOWING = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> LUCK = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> BLEEDING = EntityDataManager.createKey(ForceArrowEntity.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> ENDER = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> BANE = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> SPEED = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> GLOWING = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> LUCK = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.INT);
+	private static final DataParameter<Integer> BLEEDING = EntityDataManager.defineId(ForceArrowEntity.class, DataSerializers.INT);
 
 	public ForceArrowEntity(EntityType<? extends ArrowEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -42,87 +42,87 @@ public class ForceArrowEntity extends ArrowEntity {
 
 	public ForceArrowEntity(World worldIn, LivingEntity shooter) {
 		super(worldIn, shooter);
-		this.setShooter(shooter);
+		this.setOwner(shooter);
 	}
 
 	@Override
-	public void setDirectionAndMovement(Entity projectile, float x, float y, float z, float velocity, float inaccuracy) {
+	public void shootFromRotation(Entity projectile, float x, float y, float z, float velocity, float inaccuracy) {
 		float newVelocity = isSpeedy() ? velocity + 1.0F : velocity;
-		super.setDirectionAndMovement(projectile, x, y, z, newVelocity, inaccuracy);
+		super.shootFromRotation(projectile, x, y, z, newVelocity, inaccuracy);
 	}
 
-	protected void registerData() {
-		super.registerData();
-		this.dataManager.register(ENDER, false);
-		this.dataManager.register(BANE, false);
-		this.dataManager.register(LUCK, 0);
-		this.dataManager.register(BLEEDING, 0);
-		this.dataManager.register(SPEED, false);
-		this.dataManager.register(GLOWING, false);
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(ENDER, false);
+		this.entityData.define(BANE, false);
+		this.entityData.define(LUCK, 0);
+		this.entityData.define(BLEEDING, 0);
+		this.entityData.define(SPEED, false);
+		this.entityData.define(GLOWING, false);
 	}
 
 	public boolean isBane() {
-		return this.dataManager.get(BANE);
+		return this.entityData.get(BANE);
 	}
 
 	public void setBane() {
-		this.dataManager.set(BANE, true);
+		this.entityData.set(BANE, true);
 	}
 
 	public boolean isSpeedy() {
-		return this.dataManager.get(SPEED);
+		return this.entityData.get(SPEED);
 	}
 
 	public void setSpeedy() {
-		this.dataManager.set(SPEED, true);
+		this.entityData.set(SPEED, true);
 	}
 
 	public boolean isEnder() {
-		return this.dataManager.get(ENDER);
+		return this.entityData.get(ENDER);
 	}
 
 	public void setEnder() {
-		this.dataManager.set(ENDER, true);
+		this.entityData.set(ENDER, true);
 	}
 
 	public boolean appliesGlowing() {
-		return this.dataManager.get(GLOWING);
+		return this.entityData.get(GLOWING);
 	}
 
 	public void setAppliesGlowing() {
-		this.dataManager.set(GLOWING, true);
+		this.entityData.set(GLOWING, true);
 	}
 
 	public int getLuck() {
-		return this.dataManager.get(LUCK);
+		return this.entityData.get(LUCK);
 	}
 
 	public void setLuck(int luck) {
-		this.dataManager.set(LUCK, luck);
+		this.entityData.set(LUCK, luck);
 	}
 
 	public int getBleeding() {
-		return this.dataManager.get(BLEEDING);
+		return this.entityData.get(BLEEDING);
 	}
 
 	public void setBleeding(int bleeding) {
-		this.dataManager.set(BLEEDING, bleeding);
+		this.entityData.set(BLEEDING, bleeding);
 	}
 
 	@Override
-	public void readAdditional(CompoundNBT compound) {
-		super.readAdditional(compound);
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
 
-		if(compound.getBoolean("Bane")) {
+		if (compound.getBoolean("Bane")) {
 			setBane();
 		}
-		if(compound.getBoolean("Ender")) {
+		if (compound.getBoolean("Ender")) {
 			setEnder();
 		}
-		if(compound.getBoolean("AppliesGlowing")) {
+		if (compound.getBoolean("AppliesGlowing")) {
 			setAppliesGlowing();
 		}
-		if(compound.getBoolean("Speedy")) {
+		if (compound.getBoolean("Speedy")) {
 			setSpeedy();
 		}
 		this.setLuck(compound.getInt("Luck"));
@@ -130,19 +130,19 @@ public class ForceArrowEntity extends ArrowEntity {
 	}
 
 	@Override
-	public void writeAdditional(CompoundNBT compound) {
-		super.writeAdditional(compound);
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
 
-		if(isBane()) {
+		if (isBane()) {
 			compound.putBoolean("Bane", true);
 		}
-		if(isEnder()) {
+		if (isEnder()) {
 			compound.putBoolean("Ender", true);
 		}
-		if(appliesGlowing()) {
+		if (appliesGlowing()) {
 			compound.putBoolean("AppliesGlowing", true);
 		}
-		if(isSpeedy()) {
+		if (isSpeedy()) {
 			compound.putBoolean("Speedy", true);
 		}
 		compound.putInt("Luck", getLuck());
@@ -150,39 +150,39 @@ public class ForceArrowEntity extends ArrowEntity {
 	}
 
 	@Override
-	public void setPotionEffect(ItemStack stack) {
+	public void setEffectsFromItem(ItemStack stack) {
 		if (stack.getItem() == Items.ARROW) {
 			this.potion = Potions.EMPTY;
-			this.customPotionEffects.clear();
-			this.dataManager.set(COLOR, -1);
+			this.effects.clear();
+			this.entityData.set(ID_EFFECT_COLOR, -1);
 		}
 	}
 
 	@Override
-	protected void arrowHit(LivingEntity living) {
-		super.arrowHit(living);
+	protected void doPostHurtEffects(LivingEntity living) {
+		super.doPostHurtEffects(living);
 
-		if(isEnder()) {
+		if (isEnder()) {
 			ForceUtils.teleportRandomly(living);
 		}
 
-		if(appliesGlowing()) {
-			living.addPotionEffect(new EffectInstance(Effects.GLOWING, 200, 0));
+		if (appliesGlowing()) {
+			living.addEffect(new EffectInstance(Effects.GLOWING, 200, 0));
 		}
 
-		if(getBleeding() > 0) {
-			MobUtil.addBleedingEffect(getBleeding(), living, getShooter());
+		if (getBleeding() > 0) {
+			MobUtil.addBleedingEffect(getBleeding(), living, getOwner());
 		}
 
-		if(isBane()) {
-			if(living instanceof CreeperEntity){
+		if (isBane()) {
+			if (living instanceof CreeperEntity) {
 				CreeperEntity creeper = ((CreeperEntity) living);
 				creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
-					if(entityCap.canExplode()){
-						creeper.setCreeperState(-1);
-						creeper.getDataManager().set(CreeperEntity.IGNITED, false);
+					if (entityCap.canExplode()) {
+						creeper.setSwellDir(-1);
+						creeper.getEntityData().set(CreeperEntity.DATA_IS_IGNITED, false);
 						entityCap.setExplodeAbility(false);
-						creeper.goalSelector.goals.removeIf(goal -> goal.getGoal() instanceof CreeperSwellGoal);
+						creeper.goalSelector.availableGoals.removeIf(goal -> goal.getGoal() instanceof CreeperSwellGoal);
 						ForceCraft.LOGGER.debug("Added Bane to " + living.getName());
 					}
 				});
@@ -191,7 +191,7 @@ public class ForceArrowEntity extends ArrowEntity {
 	}
 
 	@Override
-	protected ItemStack getArrowStack() {
+	protected ItemStack getPickupItem() {
 		return new ItemStack(ForceRegistry.FORCE_ARROW.get());
 	}
 
@@ -202,7 +202,7 @@ public class ForceArrowEntity extends ArrowEntity {
 
 	@Nonnull
 	@Override
-	public IPacket<?> createSpawnPacket() {
+	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

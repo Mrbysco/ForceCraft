@@ -56,20 +56,20 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 
 	@Override
 	public void setIngredients(InfuseRecipe recipe, IIngredients ingredients) {
-		ItemStack[] matchingStacks = recipe.getCenter().getMatchingStacks();
+		ItemStack[] matchingStacks = recipe.getCenter().getItems();
 
 		ingredients.setInputIngredients(recipe.getIngredients());
-		if(recipe.getRecipeOutput().isEmpty()) {
+		if (recipe.getResultItem().isEmpty()) {
 			List<ItemStack> stacks = new ArrayList<>();
-			ItemStack[] modifierStack = recipe.getInput().getMatchingStacks();
-			if(modifierStack.length > 0) {
+			ItemStack[] modifierStack = recipe.getInput().getItems();
+			if (modifierStack.length > 0) {
 				InfuserModifierType type = recipe.getModifier();
 				UpgradeBookData fakeUpgradeBook = new UpgradeBookData(new ItemStack(ForceRegistry.UPGRADE_TOME.get()));
 				fakeUpgradeBook.setTier(recipe.getTier());
 
-				for(ItemStack center : matchingStacks) {
+				for (ItemStack center : matchingStacks) {
 					ItemStack centerStack = center.copy();
-					if(centerStack.getItem() == ForceRegistry.FORCE_PACK.get()) {
+					if (centerStack.getItem() == ForceRegistry.FORCE_PACK.get()) {
 						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
 						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
 						type.apply(centerStack, modifierStack[0], fakeUpgradeBook);
@@ -85,15 +85,15 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 				ingredients.setOutput(VanillaTypes.ITEM, matchingStacks[0]);
 			}
 		} else {
-			ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+			ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
 		}
 	}
 
 	@Override
 	public void draw(InfuseRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
 		Minecraft minecraft = Minecraft.getInstance();
-		FontRenderer font = minecraft.fontRenderer;
-		font.drawText(matrixStack, new TranslationTextComponent("forcecraft.gui.jei.category.infuser.tier", recipe.getTier().asInt()), 4, 4, 0xFFFFFFFF);
+		FontRenderer font = minecraft.font;
+		font.draw(matrixStack, new TranslationTextComponent("forcecraft.gui.jei.category.infuser.tier", recipe.getTier().asInt()), 4, 4, 0xFFFFFFFF);
 
 	}
 
@@ -111,7 +111,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 		guiItemStacks.init(2, false, 119, 46);
 
 		List<ItemStack> outputFull = new ArrayList<>();
-		for(List<ItemStack> stackList : ingredients.getOutputs(VanillaTypes.ITEM)) {
+		for (List<ItemStack> stackList : ingredients.getOutputs(VanillaTypes.ITEM)) {
 			outputFull.add(stackList.get(0));
 		}
 

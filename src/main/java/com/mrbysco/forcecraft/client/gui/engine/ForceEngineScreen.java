@@ -35,48 +35,48 @@ public class ForceEngineScreen extends ContainerScreen<ForceEngineContainer> {
 		this.renderBackground(matrixStack);
 
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		this.renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
-		this.minecraft.getTextureManager().bindTexture(TEXTURE);
-		this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+		this.minecraft.getTextureManager().bind(TEXTURE);
+		this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
 		this.drawFuelTank(matrixStack);
 		this.drawThrottleTank(matrixStack);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
-		int actualMouseX = mouseX - ((this.width - this.xSize) / 2);
-		int actualMouseY = mouseY - ((this.height - this.ySize) / 2);
+	protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+		int actualMouseX = mouseX - ((this.width - this.imageWidth) / 2);
+		int actualMouseY = mouseY - ((this.height - this.imageHeight) / 2);
 
-		ForceEngineTile tile = getContainer().getTile();
-		if (isPointInRegion(66, 11, 16, 58, mouseX, mouseY)) {
+		ForceEngineTile tile = getMenu().getTile();
+		if (isHovering(66, 11, 16, 58, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
 			if (tile.getFuelFluid() == null) {
 				text.add(new TranslationTextComponent("gui.forcecraft.force_engine.empty"));
 			} else {
-				if(tile.getFuelFluidStack() != null) {
+				if (tile.getFuelFluidStack() != null) {
 					text.add(tile.getFuelFluidStack().getDisplayName());
 					text.add(new StringTextComponent(tile.getFuelAmount() + " mb")
-							.mergeStyle(TextFormatting.GOLD));
+							.withStyle(TextFormatting.GOLD));
 				}
 			}
 
 			GuiUtils.drawHoveringText(matrixStack, text, actualMouseX, actualMouseY, width, height, -1, font);
 		}
 
-		if (isPointInRegion(94, 11, 16, 58, mouseX, mouseY)) {
+		if (isHovering(94, 11, 16, 58, mouseX, mouseY)) {
 			List<ITextComponent> text = new ArrayList<>();
 			if (tile.getThrottleFluid() == null) {
 				text.add(new TranslationTextComponent("gui.forcecraft.force_engine.empty"));
 			} else {
-				if(tile.getThrottleFluidStack() != null) {
+				if (tile.getThrottleFluidStack() != null) {
 					text.add(tile.getThrottleFluidStack().getDisplayName());
 					text.add(new StringTextComponent(tile.getThrottleAmount() + " mb")
-							.mergeStyle(TextFormatting.GOLD));
+							.withStyle(TextFormatting.GOLD));
 				}
 			}
 
@@ -85,27 +85,27 @@ public class ForceEngineScreen extends ContainerScreen<ForceEngineContainer> {
 	}
 
 	private void drawFuelTank(MatrixStack matrixStack) {
-		if (container.getTile() == null || container.getTile().getFuelFluid() == null) {
+		if (menu.getTile() == null || menu.getTile().getFuelFluid() == null) {
 			return;
 		}
-		FluidStack fluidStack = container.getTile().getFuelFluidStack();
-		float tankPercentage = RenderHelper.getTankPercentage(getContainer().getTile().getFuelAmount(), 10000);
-		RenderHelper.drawFluidTankInGUI(fluidStack, guiLeft + 66, guiTop + 11, tankPercentage, 58);
+		FluidStack fluidStack = menu.getTile().getFuelFluidStack();
+		float tankPercentage = RenderHelper.getTankPercentage(getMenu().getTile().getFuelAmount(), 10000);
+		RenderHelper.drawFluidTankInGUI(fluidStack, leftPos + 66, topPos + 11, tankPercentage, 58);
 
-		minecraft.textureManager.bindTexture(TEXTURE);
-		blit(matrixStack, guiLeft + 66, guiTop + 11, 176, 0, 16, 64);
+		minecraft.textureManager.bind(TEXTURE);
+		blit(matrixStack, leftPos + 66, topPos + 11, 176, 0, 16, 64);
 	}
 
 	private void drawThrottleTank(MatrixStack matrixStack) {
-		if (container.getTile() == null || container.getTile().getThrottleFluid() == null) {
+		if (menu.getTile() == null || menu.getTile().getThrottleFluid() == null) {
 			return;
 		}
-		FluidStack fluidStack = container.getTile().getThrottleFluidStack();
-		float tankPercentage = RenderHelper.getTankPercentage(getContainer().getTile().getThrottleAmount(), 10000);
-		RenderHelper.drawFluidTankInGUI(fluidStack, guiLeft + 94, guiTop + 11, tankPercentage, 58);
+		FluidStack fluidStack = menu.getTile().getThrottleFluidStack();
+		float tankPercentage = RenderHelper.getTankPercentage(getMenu().getTile().getThrottleAmount(), 10000);
+		RenderHelper.drawFluidTankInGUI(fluidStack, leftPos + 94, topPos + 11, tankPercentage, 58);
 
-		minecraft.textureManager.bindTexture(TEXTURE);
-		blit(matrixStack, guiLeft + 94, guiTop + 11, 176, 0, 16, 64);
+		minecraft.textureManager.bind(TEXTURE);
+		blit(matrixStack, leftPos + 94, topPos + 11, 176, 0, 16, 64);
 	}
 
 }

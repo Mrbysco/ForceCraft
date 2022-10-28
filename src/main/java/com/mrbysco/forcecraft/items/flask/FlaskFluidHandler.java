@@ -46,14 +46,14 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 
 	@Override
 	public boolean canFillFluidType(FluidStack stack) {
-		for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation("forge","force")).getAllElements()){
-			if (fluid == stack.getFluid()){
+		for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation("forge", "force")).getValues()) {
+			if (fluid == stack.getFluid()) {
 				return true;
 			}
 		}
-		if(ForgeMod.MILK.isPresent()) {
-			for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation("forge","milk")).getAllElements()){
-				if (fluid == stack.getFluid()){
+		if (ForgeMod.MILK.isPresent()) {
+			for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation("forge", "milk")).getValues()) {
+				if (fluid == stack.getFluid()) {
 					return true;
 				}
 			}
@@ -76,14 +76,14 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 		if (stack.isEmpty()) {
 			setContainerToEmpty();
 		} else {
-			for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation("forge", "force")).getAllElements()) {
+			for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation("forge", "force")).getValues()) {
 				if (fluid == stack.getFluid()) {
 					container = new ItemStack(ForceRegistry.FORCE_FILLED_FORCE_FLASK.get());
 					return;
 				}
 			}
 			if (ForgeMod.MILK.isPresent()) {
-				for (Fluid fluid : FluidTags.getCollection().get(new ResourceLocation("forge", "milk")).getAllElements()) {
+				for (Fluid fluid : FluidTags.getAllTags().getTag(new ResourceLocation("forge", "milk")).getValues()) {
 					if (fluid == stack.getFluid()) {
 						container = new ItemStack(ForceRegistry.MILK_FORCE_FLASK.get());
 						return;

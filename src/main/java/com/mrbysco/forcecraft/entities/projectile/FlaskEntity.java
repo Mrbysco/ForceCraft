@@ -83,104 +83,104 @@ public class FlaskEntity extends ProjectileItemEntity implements IRendersAsItem 
 		return ForceRegistry.ENTITY_FLASK.get();
 	}
 
-	protected float getGravityVelocity() {
+	protected float getGravity() {
 		return 0.05F;
 	}
 
 	@Override
-	protected void onEntityHit(EntityRayTraceResult result) {
-		super.onEntityHit(result);
-		if (!this.world.isRemote) {
+	protected void onHitEntity(EntityRayTraceResult result) {
+		super.onHitEntity(result);
+		if (!this.level.isClientSide) {
 			ItemStack stack = getItem();
-			if(stack.getItem() instanceof EntityFlaskItem) {
+			if (stack.getItem() instanceof EntityFlaskItem) {
 				Entity entity = result.getEntity();
 				EntityFlaskItem forceFlask = (EntityFlaskItem) stack.getItem();
-				if(forceFlask.hasEntityStored(stack)) {
-					Entity storedEntity = forceFlask.getStoredEntity(stack, this.world);
-					BlockPos pos = entity.getPosition();
-					storedEntity.setPositionAndRotation(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-					this.world.addEntity(storedEntity);
+				if (forceFlask.hasEntityStored(stack)) {
+					Entity storedEntity = forceFlask.getStoredEntity(stack, this.level);
+					BlockPos pos = entity.blockPosition();
+					storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+					this.level.addFreshEntity(storedEntity);
 
 					this.setItem(new ItemStack(ForceRegistry.FORCE_FLASK.get()));
 				} else {
-					if(entity.isAlive() && !entity.isInvulnerable() && !(entity instanceof PlayerEntity) && entity instanceof LivingEntity && entity.canChangeDimension() && !forceFlask.isBlacklisted((LivingEntity)entity)) {
-						LivingEntity livingEntity = (LivingEntity)entity;
+					if (entity.isAlive() && !entity.isInvulnerable() && !(entity instanceof PlayerEntity) && entity instanceof LivingEntity && entity.canChangeDimensions() && !forceFlask.isBlacklisted((LivingEntity) entity)) {
+						LivingEntity livingEntity = (LivingEntity) entity;
 						ItemStack entityFlask = null;
-						if(entity instanceof BatEntity) {
+						if (entity instanceof BatEntity) {
 							entityFlask = new ItemStack(ForceRegistry.BAT_FLASK.get());
-						} else if(entity instanceof BeeEntity) {
+						} else if (entity instanceof BeeEntity) {
 							entityFlask = new ItemStack(ForceRegistry.BEE_FLASK.get());
-						} else if(entity instanceof CatEntity) {
+						} else if (entity instanceof CatEntity) {
 							entityFlask = new ItemStack(ForceRegistry.CAT_FLASK.get());
-						} else if(entity instanceof ChickenEntity) {
+						} else if (entity instanceof ChickenEntity) {
 							entityFlask = new ItemStack(ForceRegistry.CHICKEN_FLASK.get());
-						} else if(entity instanceof CaveSpiderEntity) {
+						} else if (entity instanceof CaveSpiderEntity) {
 							entityFlask = new ItemStack(ForceRegistry.CAVE_SPIDER_FLASK.get());
-						} else if(entity instanceof CodEntity) {
+						} else if (entity instanceof CodEntity) {
 							entityFlask = new ItemStack(ForceRegistry.COD_FLASK.get());
-						} else if(entity instanceof CowEntity) {
+						} else if (entity instanceof CowEntity) {
 							entityFlask = new ItemStack(ForceRegistry.COW_FLASK.get());
-						} else if(entity instanceof DolphinEntity) {
+						} else if (entity instanceof DolphinEntity) {
 							entityFlask = new ItemStack(ForceRegistry.DOLPHIN_FLASK.get());
-						} else if(entity instanceof DonkeyEntity) {
+						} else if (entity instanceof DonkeyEntity) {
 							entityFlask = new ItemStack(ForceRegistry.DONKEY_FLASK.get());
-						} else if(entity instanceof EndermanEntity) {
+						} else if (entity instanceof EndermanEntity) {
 							entityFlask = new ItemStack(ForceRegistry.ENDERMAN_FLASK.get());
-						} else if(entity instanceof FoxEntity) {
+						} else if (entity instanceof FoxEntity) {
 							entityFlask = new ItemStack(ForceRegistry.FOX_FLASK.get());
-						} else if(entity instanceof HorseEntity) {
+						} else if (entity instanceof HorseEntity) {
 							entityFlask = new ItemStack(ForceRegistry.HORSE_FLASK.get());
-						} else if(entity instanceof IronGolemEntity) {
+						} else if (entity instanceof IronGolemEntity) {
 							entityFlask = new ItemStack(ForceRegistry.IRON_GOLEM_FLASK.get());
-						} else if(entity instanceof LlamaEntity) {
+						} else if (entity instanceof LlamaEntity) {
 							entityFlask = new ItemStack(ForceRegistry.LLAMA_FLASK.get());
-						} else if(entity instanceof MooshroomEntity) {
+						} else if (entity instanceof MooshroomEntity) {
 							entityFlask = new ItemStack(ForceRegistry.MOOSHROOM_FLASK.get());
-						} else if(entity instanceof MuleEntity) {
+						} else if (entity instanceof MuleEntity) {
 							entityFlask = new ItemStack(ForceRegistry.MULE_FLASK.get());
-						} else if(entity instanceof PandaEntity) {
+						} else if (entity instanceof PandaEntity) {
 							entityFlask = new ItemStack(ForceRegistry.PANDA_FLASK.get());
-						} else if(entity instanceof ParrotEntity) {
+						} else if (entity instanceof ParrotEntity) {
 							entityFlask = new ItemStack(ForceRegistry.PARROT_FLASK.get());
-						} else if(entity instanceof PigEntity) {
+						} else if (entity instanceof PigEntity) {
 							entityFlask = new ItemStack(ForceRegistry.PIG_FLASK.get());
-						} else if(entity instanceof AbstractPiglinEntity) {
+						} else if (entity instanceof AbstractPiglinEntity) {
 							entityFlask = new ItemStack(ForceRegistry.PIGLIN_FLASK.get());
-						} else if(entity instanceof PolarBearEntity) {
+						} else if (entity instanceof PolarBearEntity) {
 							entityFlask = new ItemStack(ForceRegistry.POLAR_BEAR_FLASK.get());
-						} else if(entity instanceof PufferfishEntity) {
+						} else if (entity instanceof PufferfishEntity) {
 							entityFlask = new ItemStack(ForceRegistry.PUFFERFISH_FLASK.get());
-						} else if(entity instanceof RabbitEntity) {
+						} else if (entity instanceof RabbitEntity) {
 							entityFlask = new ItemStack(ForceRegistry.RABBIT_FLASK.get());
-						} else if(entity instanceof SalmonEntity) {
+						} else if (entity instanceof SalmonEntity) {
 							entityFlask = new ItemStack(ForceRegistry.SALMON_FLASK.get());
-						} else if(entity instanceof SheepEntity) {
+						} else if (entity instanceof SheepEntity) {
 							entityFlask = new ItemStack(ForceRegistry.SHEEP_FLASK.get());
-						} else if(entity instanceof AbstractSkeletonEntity) {
+						} else if (entity instanceof AbstractSkeletonEntity) {
 							entityFlask = new ItemStack(ForceRegistry.SKELETON_FLASK.get());
-						} else if(entity instanceof SnowGolemEntity) {
+						} else if (entity instanceof SnowGolemEntity) {
 							entityFlask = new ItemStack(ForceRegistry.SNOW_GOLEM_FLASK.get());
-						} else if(entity instanceof SpiderEntity) {
+						} else if (entity instanceof SpiderEntity) {
 							entityFlask = new ItemStack(ForceRegistry.SPIDER_FLASK.get());
-						} else if(entity instanceof SquidEntity) {
+						} else if (entity instanceof SquidEntity) {
 							entityFlask = new ItemStack(ForceRegistry.SQUID_FLASK.get());
-						} else if(entity instanceof StriderEntity) {
+						} else if (entity instanceof StriderEntity) {
 							entityFlask = new ItemStack(ForceRegistry.STRIDER_FLASK.get());
-						} else if(entity instanceof TropicalFishEntity) {
+						} else if (entity instanceof TropicalFishEntity) {
 							entityFlask = new ItemStack(ForceRegistry.TROPICAL_FISH_FLASK.get());
-						} else if(entity instanceof TurtleEntity) {
+						} else if (entity instanceof TurtleEntity) {
 							entityFlask = new ItemStack(ForceRegistry.TURTLE_FLASK.get());
-						} else if(entity instanceof VillagerEntity) {
+						} else if (entity instanceof VillagerEntity) {
 							entityFlask = new ItemStack(ForceRegistry.VILLAGER_FLASK.get());
-						} else if(entity instanceof WanderingTraderEntity) {
+						} else if (entity instanceof WanderingTraderEntity) {
 							entityFlask = new ItemStack(ForceRegistry.WANDERING_TRADER_FLASK.get());
-						} else if(entity instanceof WolfEntity) {
+						} else if (entity instanceof WolfEntity) {
 							entityFlask = new ItemStack(ForceRegistry.WOLF_FLASK.get());
-						} else if(entity instanceof ZombifiedPiglinEntity) {
+						} else if (entity instanceof ZombifiedPiglinEntity) {
 							entityFlask = new ItemStack(ForceRegistry.ZOMBIFIED_PIGLIN_FLASK.get());
 						}
 
-						if(entityFlask != null) {
+						if (entityFlask != null) {
 							forceFlask.storeEntity(entityFlask, livingEntity);
 							this.setItem(entityFlask);
 						} else {
@@ -195,35 +195,35 @@ public class FlaskEntity extends ProjectileItemEntity implements IRendersAsItem 
 		}
 	}
 
-	protected void func_230299_a_(BlockRayTraceResult result) {
-		super.func_230299_a_(result);
-		if (!this.world.isRemote) {
+	protected void onHitBlock(BlockRayTraceResult result) {
+		super.onHitBlock(result);
+		if (!this.level.isClientSide) {
 			ItemStack stack = this.getItem();
-			if(stack.getItem() instanceof EntityFlaskItem) {
+			if (stack.getItem() instanceof EntityFlaskItem) {
 				EntityFlaskItem forceFlask = (EntityFlaskItem) stack.getItem();
-				if(forceFlask.hasEntityStored(stack)) {
-					Entity storedEntity = forceFlask.getStoredEntity(stack, this.world);
-					BlockPos pos = result.getPos().offset(result.getFace());
-					storedEntity.setPositionAndRotation(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-					this.world.addEntity(storedEntity);
+				if (forceFlask.hasEntityStored(stack)) {
+					Entity storedEntity = forceFlask.getStoredEntity(stack, this.level);
+					BlockPos pos = result.getBlockPos().relative(result.getDirection());
+					storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+					this.level.addFreshEntity(storedEntity);
 				}
 				this.setItem(new ItemStack(ForceRegistry.FORCE_FLASK.get()));
 			}
 		}
 	}
 
-	protected void onImpact(RayTraceResult result) {
-		super.onImpact(result);
-		if (!this.world.isRemote) {
-			this.entityDropItem(this.getItem(), 0.5F);
+	protected void onHit(RayTraceResult result) {
+		super.onHit(result);
+		if (!this.level.isClientSide) {
+			this.spawnAtLocation(this.getItem(), 0.5F);
 
-			this.world.setEntityState(this, (byte)3);
+			this.level.broadcastEntityEvent(this, (byte) 3);
 			this.remove();
 		}
 	}
 
 	@Override
-	public IPacket<?> createSpawnPacket() {
+	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

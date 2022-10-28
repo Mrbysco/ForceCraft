@@ -31,77 +31,77 @@ import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.CAPABILITY_
 
 public class MagnetGloveItem extends BaseItem {
 
-    public MagnetGloveItem(Item.Properties properties) {
-        super(properties.maxStackSize(1));
-    }
+	public MagnetGloveItem(Item.Properties properties) {
+		super(properties.stacksTo(1));
+	}
 
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if(CAPABILITY_MAGNET == null) {
-            return null;
-        }
-        return new MagnetProvider();
-    }
+	@Nullable
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+		if (CAPABILITY_MAGNET == null) {
+			return null;
+		}
+		return new MagnetProvider();
+	}
 
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        if(playerIn.isSneaking()) {
-            ItemStack stack = playerIn.getHeldItem(handIn);
-            stack.getCapability(CAPABILITY_MAGNET).ifPresent((cap) -> {
-                boolean state = cap.isActivated();
-                cap.setActivation(!state);
-                worldIn.playSound((PlayerEntity)null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            });
-        }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
-    }
+	@Override
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		if (playerIn.isShiftKeyDown()) {
+			ItemStack stack = playerIn.getItemInHand(handIn);
+			stack.getCapability(CAPABILITY_MAGNET).ifPresent((cap) -> {
+				boolean state = cap.isActivated();
+				cap.setActivation(!state);
+				worldIn.playSound((PlayerEntity) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+			});
+		}
+		return super.use(worldIn, playerIn, handIn);
+	}
 
-    @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(entityIn instanceof PlayerEntity && !(entityIn instanceof FakePlayer)) {
-            if(itemSlot >= 0 && itemSlot <= PlayerInventory.getHotbarSize()) {
-                IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
-                if (magnetCap != null && magnetCap.isActivated()) {
-                    ((PlayerEntity)entityIn).addPotionEffect(new EffectInstance(ForceEffects.MAGNET.get(), 20, 1, true, false));
-                }
-            }
-        }
-    }
+	@Override
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if (entityIn instanceof PlayerEntity && !(entityIn instanceof FakePlayer)) {
+			if (itemSlot >= 0 && itemSlot <= PlayerInventory.getSelectionSize()) {
+				IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
+				if (magnetCap != null && magnetCap.isActivated()) {
+					((PlayerEntity) entityIn).addEffect(new EffectInstance(ForceEffects.MAGNET.get(), 20, 1, true, false));
+				}
+			}
+		}
+	}
 
-    // ShareTag for server->client capability data sync
-    @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-        CompoundNBT nbt = super.getShareTag(stack);
+	// ShareTag for server->client capability data sync
+	@Override
+	public CompoundNBT getShareTag(ItemStack stack) {
+		CompoundNBT nbt = super.getShareTag(stack);
 
-        IMagnet cap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
-        if(cap != null) {
-            CompoundNBT shareTag = MagnetStorage.serializeNBT(cap);
-            if(nbt == null) {
-                nbt = new CompoundNBT();
-            }
-            nbt.put(Reference.MOD_ID, shareTag);
-        }
-        return nbt;
-    }
+		IMagnet cap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
+		if (cap != null) {
+			CompoundNBT shareTag = MagnetStorage.serializeNBT(cap);
+			if (nbt == null) {
+				nbt = new CompoundNBT();
+			}
+			nbt.put(Reference.MOD_ID, shareTag);
+		}
+		return nbt;
+	}
 
-    @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if(nbt == null || !nbt.contains(Reference.MOD_ID)) {
-            return;
-        }
+	@Override
+	public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+		if (nbt == null || !nbt.contains(Reference.MOD_ID)) {
+			return;
+		}
 
-        IMagnet cap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
-        if(cap != null) {
-            INBT shareTag = nbt.get(Reference.MOD_ID);
-            MagnetStorage.deserializeNBT(cap, shareTag);
-        }
-        super.readShareTag(stack, nbt);
-    }
+		IMagnet cap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
+		if (cap != null) {
+			INBT shareTag = nbt.get(Reference.MOD_ID);
+			MagnetStorage.deserializeNBT(cap, shareTag);
+		}
+		super.readShareTag(stack, nbt);
+	}
 
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
-        MagnetStorage.attachInformation(stack, lores);
-        super.addInformation(stack, worldIn, lores, flagIn);
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> lores, ITooltipFlag flagIn) {
+		MagnetStorage.attachInformation(stack, lores);
+		super.appendHoverText(stack, worldIn, lores, flagIn);
+	}
 }

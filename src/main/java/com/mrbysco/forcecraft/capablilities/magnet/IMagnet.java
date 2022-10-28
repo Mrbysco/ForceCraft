@@ -2,10 +2,11 @@ package com.mrbysco.forcecraft.capablilities.magnet;
 
 public interface IMagnet {
 
-    boolean isActivated();
+	boolean isActivated();
 
-    void activate();
-    void deactivate();
+	void activate();
 
-    void setActivation(boolean value);
+	void deactivate();
+
+	void setActivation(boolean value);
 }

@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 public enum ModToolMaterial implements IItemTier {
 	FORCE(3, 1561, 8.0F, 8.0F, 22, () -> {
-		return Ingredient.fromStacks(new ItemStack(Items.STICK));
+		return Ingredient.of(new ItemStack(Items.STICK));
 	});
 
 	private final int harvestLevel;
@@ -29,27 +29,27 @@ public enum ModToolMaterial implements IItemTier {
 		this.repairMaterial = new LazyValue<>(repairMaterialIn);
 	}
 
-	public int getMaxUses() {
+	public int getUses() {
 		return this.maxUses;
 	}
 
-	public float getEfficiency() {
+	public float getSpeed() {
 		return this.efficiency;
 	}
 
-	public float getAttackDamage() {
+	public float getAttackDamageBonus() {
 		return this.attackDamage;
 	}
 
-	public int getHarvestLevel() {
+	public int getLevel() {
 		return this.harvestLevel;
 	}
 
-	public int getEnchantability() {
+	public int getEnchantmentValue() {
 		return this.enchantability;
 	}
 
-	public Ingredient getRepairMaterial() {
-		return this.repairMaterial.getValue();
+	public Ingredient getRepairIngredient() {
+		return this.repairMaterial.get();
 	}
 }

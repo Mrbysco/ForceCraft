@@ -23,10 +23,10 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void onPlayerUpdate(TickEvent.PlayerTickEvent event) {
-		if(event.phase == TickEvent.Phase.END && !event.player.world.isRemote) {
+		if (event.phase == TickEvent.Phase.END && !event.player.level.isClientSide) {
 			PlayerEntity player = event.player;
 
-			Iterable<ItemStack> armor = player.getArmorInventoryList();
+			Iterable<ItemStack> armor = player.getArmorSlots();
 			int speed = 0;
 			for (ItemStack slotSelected : armor) {
 				if (slotSelected.getItem() instanceof ForceArmorItem) {
@@ -39,9 +39,9 @@ public class PlayerCapHandler {
 			}
 
 			if (speed > 0) {
-				EffectInstance speedEffect = new EffectInstance(Effects.SPEED, SPEED_DURATION, speed - 1, false, false);
-				if(!player.isPotionActive(Effects.SPEED) || (player.isPotionActive(Effects.SPEED) && player.getActivePotionEffect(Effects.SPEED).getDuration() <= 100)) {
-					player.addPotionEffect(speedEffect);
+				EffectInstance speedEffect = new EffectInstance(Effects.MOVEMENT_SPEED, SPEED_DURATION, speed - 1, false, false);
+				if (!player.hasEffect(Effects.MOVEMENT_SPEED) || (player.hasEffect(Effects.MOVEMENT_SPEED) && player.getEffect(Effects.MOVEMENT_SPEED).getDuration() <= 100)) {
+					player.addEffect(speedEffect);
 				}
 			}
 		}
@@ -58,14 +58,14 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void equipmentChangeEvent(LivingEquipmentChangeEvent event) {
-		if(event.getEntityLiving() instanceof PlayerEntity) {
+		if (event.getEntityLiving() instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 			updateArmorProperties(player);
 		}
 	}
 
 	public static void updateArmorProperties(PlayerEntity player) {
-		Iterable<ItemStack> armor = player.getArmorInventoryList();
+		Iterable<ItemStack> armor = player.getArmorSlots();
 		int armorPieces = 0;
 		int damage = 0;
 		int heat = 0;
@@ -81,7 +81,7 @@ public class PlayerCapHandler {
 					armorPieces++;
 
 					// Damage
-					damage += (int)(modifierCap.getSharpLevel() * ConfigHandler.COMMON.forcePunchDamage.get());
+					damage += (int) (modifierCap.getSharpLevel() * ConfigHandler.COMMON.forcePunchDamage.get());
 					// Heat
 					if (modifierCap.hasHeat()) {
 						heat++;
@@ -128,8 +128,8 @@ public class PlayerCapHandler {
 	public void harvestCheckEvent(HarvestCheck event) {
 		PlayerEntity player = event.getPlayer();
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-			if(cap.hasFullSet() && player.getHeldItemMainhand().isEmpty()) {
-				if(event.getTargetBlock().getBlock().getHarvestLevel(event.getTargetBlock()) <= 2) {
+			if (cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
+				if (event.getTargetBlock().getBlock().getHarvestLevel(event.getTargetBlock()) <= 2) {
 					event.setCanHarvest(true);
 				}
 			}
@@ -140,8 +140,8 @@ public class PlayerCapHandler {
 	public void breakSpeedEvent(BreakSpeed event) {
 		PlayerEntity player = event.getPlayer();
 		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-			if(cap.hasFullSet() && player.getHeldItemMainhand().isEmpty()) {
-				if(event.getOriginalSpeed() < 6) {
+			if (cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
+				if (event.getOriginalSpeed() < 6) {
 					event.setNewSpeed(6);
 				}
 			}

@@ -8,22 +8,23 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class UpgradeSlot extends SlotItemHandler {
 	private final int slotIndex;
+
 	public UpgradeSlot(IItemHandler inventoryIn, int index, int xPosition, int yPosition) {
 		super(inventoryIn, index, xPosition, yPosition);
 		this.slotIndex = index;
 	}
 
-	public boolean isItemValid(ItemStack stack) {
-		return isUpgrade(stack) && inventory.getStackInSlot(slotIndex).isEmpty();
+	public boolean mayPlace(ItemStack stack) {
+		return isUpgrade(stack) && container.getItem(slotIndex).isEmpty();
 	}
 
 	@Override
-	public int getItemStackLimit(ItemStack stack) {
+	public int getMaxStackSize(ItemStack stack) {
 		return 1;
 	}
 
 	@Override
-	public boolean canTakeStack(PlayerEntity playerIn) {
+	public boolean mayPickup(PlayerEntity playerIn) {
 		return true;
 	}
 

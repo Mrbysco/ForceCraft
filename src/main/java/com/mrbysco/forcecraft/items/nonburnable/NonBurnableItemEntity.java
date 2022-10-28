@@ -14,44 +14,44 @@ import javax.annotation.Nonnull;
 
 public class NonBurnableItemEntity extends ItemEntity {
 
-    public NonBurnableItemEntity(EntityType<? extends ItemEntity> entityType, World worldIn) {
-        super(entityType, worldIn);
-    }
+	public NonBurnableItemEntity(EntityType<? extends ItemEntity> entityType, World worldIn) {
+		super(entityType, worldIn);
+	}
 
-    public NonBurnableItemEntity(World worldIn, double x, double y, double z) {
-        super(worldIn, x, y, z);
-    }
+	public NonBurnableItemEntity(World worldIn, double x, double y, double z) {
+		super(worldIn, x, y, z);
+	}
 
-    public NonBurnableItemEntity(World worldIn, double x, double y, double z, ItemStack stack) {
-        super(worldIn, x, y, z, stack);
-    }
+	public NonBurnableItemEntity(World worldIn, double x, double y, double z, ItemStack stack) {
+		super(worldIn, x, y, z, stack);
+	}
 
-    @Override
-    public EntityType<?> getType() {
-        return ForceEntities.NON_BURNABLE_ITEM.get();
-    }
+	@Override
+	public EntityType<?> getType() {
+		return ForceEntities.NON_BURNABLE_ITEM.get();
+	}
 
-    @Override
-    public boolean isImmuneToFire() {
-        return true;
-    }
+	@Override
+	public boolean fireImmune() {
+		return true;
+	}
 
-    @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        return source.getDamageType().equals(DamageSource.OUT_OF_WORLD.damageType);
-    }
+	@Override
+	public boolean hurt(DamageSource source, float amount) {
+		return source.getMsgId().equals(DamageSource.OUT_OF_WORLD.msgId);
+	}
 
-    @Nonnull
-    @Override
-    public IPacket<?> createSpawnPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
+	@Nonnull
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
 
-    public static class EventHandler {
-        public static void onExpire(ItemExpireEvent event) {
-            if(event.getEntityItem() instanceof NonBurnableItemEntity) {
-                event.setCanceled(true);
-            }
-        }
-    }
+	public static class EventHandler {
+		public static void onExpire(ItemExpireEvent event) {
+			if (event.getEntityItem() instanceof NonBurnableItemEntity) {
+				event.setCanceled(true);
+			}
+		}
+	}
 }

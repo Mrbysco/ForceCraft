@@ -19,32 +19,38 @@ import java.util.function.Predicate;
 
 public class EatGrassToRestoreGoal extends Goal {
 	private static final Predicate<BlockState> IS_GRASS = BlockStateMatcher.forBlock(Blocks.GRASS);
-	/** The entity owner of this AITask */
+	/**
+	 * The entity owner of this AITask
+	 */
 	private final MobEntity grassEaterEntity;
-	/** The world the grass eater entity is eating from */
+	/**
+	 * The world the grass eater entity is eating from
+	 */
 	private final World entityWorld;
-	/** Number of ticks since the entity started to eat grass */
+	/**
+	 * Number of ticks since the entity started to eat grass
+	 */
 	private int eatingGrassTimer;
 
 	public EatGrassToRestoreGoal(MobEntity grassEaterEntityIn) {
 		this.grassEaterEntity = grassEaterEntityIn;
-		this.entityWorld = grassEaterEntityIn.world;
-		this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.JUMP));
+		this.entityWorld = grassEaterEntityIn.level;
+		this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.JUMP));
 	}
 
 	/**
 	 * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
 	 * method as well.
 	 */
-	public boolean shouldExecute() {
-		if (this.grassEaterEntity.getRNG().nextInt(this.grassEaterEntity.isChild() ? 50 : 1000) != 0) {
+	public boolean canUse() {
+		if (this.grassEaterEntity.getRandom().nextInt(this.grassEaterEntity.isBaby() ? 50 : 1000) != 0) {
 			return false;
 		} else {
-			BlockPos blockpos = this.grassEaterEntity.getPosition();
+			BlockPos blockpos = this.grassEaterEntity.blockPosition();
 			if (IS_GRASS.test(this.entityWorld.getBlockState(blockpos))) {
 				return true;
 			} else {
-				return this.entityWorld.getBlockState(blockpos.down()).matchesBlock(Blocks.GRASS_BLOCK);
+				return this.entityWorld.getBlockState(blockpos.below()).is(Blocks.GRASS_BLOCK);
 			}
 		}
 	}
@@ -52,23 +58,23 @@ public class EatGrassToRestoreGoal extends Goal {
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
-	public void startExecuting() {
+	public void start() {
 		this.eatingGrassTimer = 40;
-		this.entityWorld.setEntityState(this.grassEaterEntity, (byte)10);
-		this.grassEaterEntity.getNavigator().clearPath();
+		this.entityWorld.broadcastEntityEvent(this.grassEaterEntity, (byte) 10);
+		this.grassEaterEntity.getNavigation().stop();
 	}
 
 	/**
 	 * Reset the task's internal state. Called when this task is interrupted by another one
 	 */
-	public void resetTask() {
+	public void stop() {
 		this.eatingGrassTimer = 0;
 	}
 
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return this.eatingGrassTimer > 0;
 	}
 
@@ -85,7 +91,7 @@ public class EatGrassToRestoreGoal extends Goal {
 	public void tick() {
 		this.eatingGrassTimer = Math.max(0, this.eatingGrassTimer - 1);
 		if (this.getEatingGrassTimer() == 4) {
-			BlockPos blockpos = this.grassEaterEntity.getPosition();
+			BlockPos blockpos = this.grassEaterEntity.blockPosition();
 			if (IS_GRASS.test(this.entityWorld.getBlockState(blockpos))) {
 				if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.entityWorld, this.grassEaterEntity)) {
 					this.entityWorld.destroyBlock(blockpos, false);
@@ -93,11 +99,11 @@ public class EatGrassToRestoreGoal extends Goal {
 
 				transformMob();
 			} else {
-				BlockPos blockpos1 = blockpos.down();
-				if (this.entityWorld.getBlockState(blockpos1).matchesBlock(Blocks.GRASS_BLOCK)) {
+				BlockPos blockpos1 = blockpos.below();
+				if (this.entityWorld.getBlockState(blockpos1).is(Blocks.GRASS_BLOCK)) {
 					if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.entityWorld, this.grassEaterEntity)) {
-						this.entityWorld.playEvent(2001, blockpos1, Block.getStateId(Blocks.GRASS_BLOCK.getDefaultState()));
-						this.entityWorld.setBlockState(blockpos1, Blocks.DIRT.getDefaultState(), 2);
+						this.entityWorld.levelEvent(2001, blockpos1, Block.getId(Blocks.GRASS_BLOCK.defaultBlockState()));
+						this.entityWorld.setBlock(blockpos1, Blocks.DIRT.defaultBlockState(), 2);
 					}
 
 					transformMob();
@@ -107,8 +113,8 @@ public class EatGrassToRestoreGoal extends Goal {
 	}
 
 	public void transformMob() {
-		if(this.grassEaterEntity instanceof IColdMob) {
-			IColdMob coldMob = (IColdMob)this.grassEaterEntity;
+		if (this.grassEaterEntity instanceof IColdMob) {
+			IColdMob coldMob = (IColdMob) this.grassEaterEntity;
 			coldMob.transformMob(this.grassEaterEntity, this.entityWorld);
 		}
 	}

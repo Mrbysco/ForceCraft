@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface IForceCommand {
 
-	  public boolean needsOp();
+	public boolean needsOp();
 
-	  public String getName();
+	public String getName();
 
-	  public int execute(CommandContext<CommandSource> ctx, List<String> arguments, PlayerEntity player);
+	public int execute(CommandContext<CommandSource> ctx, List<String> arguments, PlayerEntity player);
 }

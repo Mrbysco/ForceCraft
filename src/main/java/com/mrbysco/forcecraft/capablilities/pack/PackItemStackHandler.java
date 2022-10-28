@@ -24,9 +24,9 @@ public class PackItemStackHandler extends ItemStackHandler {
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack) {
 		//Make sure there's no ForcePack-ception
-		return !(stack.getItem() instanceof ForcePackItem) && !stack.getItem().isIn(ForceTags.HOLDS_ITEMS) && super.isItemValid(slot, stack);
+		return !(stack.getItem() instanceof ForcePackItem) && !stack.getItem().is(ForceTags.HOLDS_ITEMS) && super.isItemValid(slot, stack);
 	}
-	
+
 	public int getSlotsInUse() {
 		return (upgrades + 1) * SLOTS_PER_UPGRADE;
 	}
@@ -60,10 +60,10 @@ public class PackItemStackHandler extends ItemStackHandler {
 	}
 
 	public void forceUpdate() {
-		if(this.upgrades > MAX_UPGRADES) {
+		if (this.upgrades > MAX_UPGRADES) {
 			this.upgrades = MAX_UPGRADES;
 		}
-		if(this.upgrades < 0) {
+		if (this.upgrades < 0) {
 			this.upgrades = 0;
 		}
 		CompoundNBT tag = serializeNBT();
@@ -71,27 +71,27 @@ public class PackItemStackHandler extends ItemStackHandler {
 	}
 
 	public boolean canUpgrade(UpgradeBookData bd) {
-		if(upgrades >= MAX_UPGRADES) {
+		if (upgrades >= MAX_UPGRADES) {
 			return false;
 		}
-		if(bd.getTier().asInt() >= UpgradeBookTier.TWO.asInt() && this.upgrades == 0) {
+		if (bd.getTier().asInt() >= UpgradeBookTier.TWO.asInt() && this.upgrades == 0) {
 			//0->1 so 8 into 16 slots
 			return true;
 		}
 
-		if(bd.getTier().asInt() >= UpgradeBookTier.THREE.asInt() && this.upgrades == 1) {
+		if (bd.getTier().asInt() >= UpgradeBookTier.THREE.asInt() && this.upgrades == 1) {
 			//bout to become 24 slots
 			return true;
 		}
 
-		if(bd.getTier().asInt() >= UpgradeBookTier.FOUR.asInt() && this.upgrades == 2) {
+		if (bd.getTier().asInt() >= UpgradeBookTier.FOUR.asInt() && this.upgrades == 2) {
 			return true; // 32 slots next
 		}
 
-		if(bd.getTier().asInt() >= UpgradeBookTier.FIVE.asInt() && this.upgrades == 3) {
+		if (bd.getTier().asInt() >= UpgradeBookTier.FIVE.asInt() && this.upgrades == 3) {
 			return true; // will be upgrade 4, 40 slots
 		}
-		
+
 		return false;
 	}
 
@@ -102,7 +102,7 @@ public class PackItemStackHandler extends ItemStackHandler {
 			if (!stacks.get(i).isEmpty()) {
 				CompoundNBT itemTag = new CompoundNBT();
 				itemTag.putInt("Slot", i);
-				stacks.get(i).write(itemTag);
+				stacks.get(i).save(itemTag);
 				nbtTagList.add(itemTag);
 			}
 		}
@@ -118,14 +118,12 @@ public class PackItemStackHandler extends ItemStackHandler {
 //		setSize((getUpgrades() + 1) * 8);
 
 		ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < tagList.size(); i++)
-		{
+		for (int i = 0; i < tagList.size(); i++) {
 			CompoundNBT itemTags = tagList.getCompound(i);
 			int slot = itemTags.getInt("Slot");
 
-			if (slot >= 0 && slot < stacks.size())
-			{
-				stacks.set(slot, ItemStack.read(itemTags));
+			if (slot >= 0 && slot < stacks.size()) {
+				stacks.set(slot, ItemStack.of(itemTags));
 			}
 		}
 		onLoad();

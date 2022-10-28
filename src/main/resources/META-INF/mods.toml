@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[36,)"
-issueTrackerURL="https://github.com/mrbysco/forcecraft"
+issueTrackerURL="https://github.com/mrbysco/forcecraft/issues"
 license="GNU GPL v3"
 
 [[mods]]
@@ -17,5 +17,11 @@ A mod inspired by DartCraft
 modId="minecraft"
 mandatory=true
 versionRange="[1.16.5,1.17)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.forcecraft]]
+modId="forge"
+mandatory=true
+versionRange="[36.2.17,)"
 ordering="NONE"
 side="BOTH"

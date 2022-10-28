@@ -19,31 +19,31 @@ import static com.mrbysco.forcecraft.capablilities.CapabilityHandler.PLAYER_CAP;
 
 public class CapabilityAttachHandler {
 
-    @SubscribeEvent
-    public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof EndermanEntity || event.getObject() instanceof CreeperEntity){
-            event.addCapability(BANE_CAP, new BaneProvider());
-        }
+	@SubscribeEvent
+	public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
+		if (event.getObject() instanceof EndermanEntity || event.getObject() instanceof CreeperEntity) {
+			event.addCapability(BANE_CAP, new BaneProvider());
+		}
 
-        if(event.getObject() instanceof PlayerEntity){
-            event.addCapability(PLAYER_CAP, new PlayerModifierProvider());
-        }
-    }
+		if (event.getObject() instanceof PlayerEntity) {
+			event.addCapability(PLAYER_CAP, new PlayerModifierProvider());
+		}
+	}
 
-    @SubscribeEvent
-    public void onDeath(PlayerEvent.Clone event) {
-        // If not dead, player is returning from the End
-        if (!event.isWasDeath()) return;
+	@SubscribeEvent
+	public void onDeath(PlayerEvent.Clone event) {
+		// If not dead, player is returning from the End
+		if (!event.isWasDeath()) return;
 
-        PlayerEntity original = event.getOriginal();
-        PlayerEntity clone = event.getPlayer();
+		PlayerEntity original = event.getOriginal();
+		PlayerEntity clone = event.getPlayer();
 
-        final Capability<IPlayerModifier> capability = CAPABILITY_PLAYERMOD;
-        original.getCapability(capability).ifPresent(dataOriginal ->
-                clone.getCapability(capability).ifPresent(dataClone -> {
-                    INBT nbt = capability.getStorage().writeNBT(capability, dataOriginal, null);
-                    capability.getStorage().readNBT(capability, dataClone, null, nbt);
-                })
-        );
-    }
+		final Capability<IPlayerModifier> capability = CAPABILITY_PLAYERMOD;
+		original.getCapability(capability).ifPresent(dataOriginal ->
+				clone.getCapability(capability).ifPresent(dataClone -> {
+					INBT nbt = capability.getStorage().writeNBT(capability, dataOriginal, null);
+					capability.getStorage().readNBT(capability, dataClone, null, nbt);
+				})
+		);
+	}
 }

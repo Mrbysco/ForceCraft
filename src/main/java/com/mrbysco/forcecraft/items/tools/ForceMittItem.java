@@ -47,197 +47,197 @@ import java.util.Set;
 
 public class ForceMittItem extends ToolItem {
 
-    private final float attackDamage;
-    private final IItemTier itemTier = ModToolMaterial.FORCE;
+	private final float attackDamage;
+	private final IItemTier itemTier = ModToolMaterial.FORCE;
 
-    public ForceMittItem(Item.Properties properties) {
-        super(8.0F, 8.0F, ModToolMaterial.FORCE, Collections.emptySet(), properties.maxDamage(1000));
-        this.attackDamage = 3.0F;
-    }
+	public ForceMittItem(Item.Properties properties) {
+		super(8.0F, 8.0F, ModToolMaterial.FORCE, Collections.emptySet(), properties.durability(1000));
+		this.attackDamage = 3.0F;
+	}
 
-    @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if(entityLiving instanceof PlayerEntity && state.getMaterial() == Material.LEAVES) {
-            PlayerEntity player = (PlayerEntity)entityLiving;
-            BlockRayTraceResult traceResult = rayTrace(worldIn, player, FluidMode.NONE);
-            switch (traceResult.getFace().getAxis()) {
-                case X:
-                    breakBlockAt(player, worldIn, stack, pos.up());
-                    breakBlockAt(player, worldIn, stack, pos.down());
-                    breakBlockAt(player, worldIn, stack, pos.north());
-                    breakBlockAt(player, worldIn, stack, pos.north().up());
-                    breakBlockAt(player, worldIn, stack, pos.north().down());
-                    breakBlockAt(player, worldIn, stack, pos.south());
-                    breakBlockAt(player, worldIn, stack, pos.south().up());
-                    breakBlockAt(player, worldIn, stack, pos.south().down());
-                    break;
-                case Z:
-                    breakBlockAt(player, worldIn, stack, pos.up());
-                    breakBlockAt(player, worldIn, stack, pos.down());
-                    breakBlockAt(player, worldIn, stack, pos.west());
-                    breakBlockAt(player, worldIn, stack, pos.west().up());
-                    breakBlockAt(player, worldIn, stack, pos.west().down());
-                    breakBlockAt(player, worldIn, stack, pos.east());
-                    breakBlockAt(player, worldIn, stack, pos.east().up());
-                    breakBlockAt(player, worldIn, stack, pos.east().down());
-                    break;
-                case Y:
-                    breakBlockAt(player, worldIn, stack, pos.north());
-                    breakBlockAt(player, worldIn, stack, pos.east());
-                    breakBlockAt(player, worldIn, stack, pos.west());
-                    breakBlockAt(player, worldIn, stack, pos.west().north());
-                    breakBlockAt(player, worldIn, stack, pos.west().east());
-                    breakBlockAt(player, worldIn, stack, pos.east());
-                    breakBlockAt(player, worldIn, stack, pos.east().north());
-                    breakBlockAt(player, worldIn, stack, pos.east().east());
-                    break;
-            }
-
-            worldIn.playSound((PlayerEntity) null, pos, ForceSounds.WHOOSH.get(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        }
-        return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
-    }
-
-    public void breakBlockAt(PlayerEntity player, World worldIn, ItemStack stack, BlockPos pos) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        if(worldIn.getBlockState(pos).getMaterial() == Material.LEAVES) {
-            BlockState state = worldIn.getBlockState(pos);
-            if(!ForgeHooks.canHarvestBlock(state, player, worldIn, pos)) return;
-
-            if(!worldIn.isRemote) {
-                int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayerEntity) player).interactionManager.getGameType(), (ServerPlayerEntity) player, pos);
-                if(xp == -1) {
-                    return;
-                }
-
-                FluidState fluidState = worldIn.getFluidState(pos);
-                Block block = state.getBlock();
-
-                if(block.removedByPlayer(state, worldIn, pos, player, true, fluidState)) {
-                    block.onBlockHarvested(worldIn, pos, state, player);
-                    block.harvestBlock(worldIn, player, pos, state, tileEntity, stack);
-                    block.dropXpOnBlockBreak((ServerWorld) worldIn, pos, xp);
-                }
-
-                ((ServerWorld)worldIn).spawnParticle(ParticleTypes.SWEEP_ATTACK, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 1, 0, 0, 0, 0.0D);
-                PacketHandler.sendPacket(player, new SChangeBlockPacket(worldIn, pos));
-            }
-        }
-    }
-
-    @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
-        if(tool == ToolType.PICKAXE) {
-            return itemTier.getHarvestLevel();
-        } else if(tool == ToolType.AXE) {
-            return itemTier.getHarvestLevel();
-        } else if(tool == ToolType.SHOVEL) {
-            return itemTier.getHarvestLevel();
-        } else if(tool == ToolType.get("sword")) {
-            return itemTier.getHarvestLevel();
-        }
-        return super.getHarvestLevel(stack, tool, player, blockState);
-    }
-
-    @Override
-    public int getItemEnchantability() {
-        return 0;
-    }
-
-    @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        return false;
-    }
-
-    @SuppressWarnings("deprecation")
 	@Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        World world = context.getWorld();
-        BlockPos blockpos = context.getPos();
-        int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(context);
-        if (hook != 0) return hook > 0 ? ActionResultType.SUCCESS : ActionResultType.FAIL;
-        if (context.getFace() != Direction.DOWN && world.isAirBlock(blockpos.up())) {
-            BlockState blockstate = world.getBlockState(blockpos).getToolModifiedState(world, blockpos, context.getPlayer(), context.getItem(), net.minecraftforge.common.ToolType.HOE);
-            if (blockstate != null) {
-                PlayerEntity playerentity = context.getPlayer();
-                world.playSound(playerentity, blockpos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                if (!world.isRemote) {
-                    world.setBlockState(blockpos, blockstate, 11);
-                    if (playerentity != null) {
-                        context.getItem().damageItem(1, playerentity, (player) -> player.sendBreakAnimation(context.getHand()));
-                    }
-                }
+	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+		if (entityLiving instanceof PlayerEntity && state.getMaterial() == Material.LEAVES) {
+			PlayerEntity player = (PlayerEntity) entityLiving;
+			BlockRayTraceResult traceResult = getPlayerPOVHitResult(worldIn, player, FluidMode.NONE);
+			switch (traceResult.getDirection().getAxis()) {
+				case X:
+					breakBlockAt(player, worldIn, stack, pos.above());
+					breakBlockAt(player, worldIn, stack, pos.below());
+					breakBlockAt(player, worldIn, stack, pos.north());
+					breakBlockAt(player, worldIn, stack, pos.north().above());
+					breakBlockAt(player, worldIn, stack, pos.north().below());
+					breakBlockAt(player, worldIn, stack, pos.south());
+					breakBlockAt(player, worldIn, stack, pos.south().above());
+					breakBlockAt(player, worldIn, stack, pos.south().below());
+					break;
+				case Z:
+					breakBlockAt(player, worldIn, stack, pos.above());
+					breakBlockAt(player, worldIn, stack, pos.below());
+					breakBlockAt(player, worldIn, stack, pos.west());
+					breakBlockAt(player, worldIn, stack, pos.west().above());
+					breakBlockAt(player, worldIn, stack, pos.west().below());
+					breakBlockAt(player, worldIn, stack, pos.east());
+					breakBlockAt(player, worldIn, stack, pos.east().above());
+					breakBlockAt(player, worldIn, stack, pos.east().below());
+					break;
+				case Y:
+					breakBlockAt(player, worldIn, stack, pos.north());
+					breakBlockAt(player, worldIn, stack, pos.east());
+					breakBlockAt(player, worldIn, stack, pos.west());
+					breakBlockAt(player, worldIn, stack, pos.west().north());
+					breakBlockAt(player, worldIn, stack, pos.west().east());
+					breakBlockAt(player, worldIn, stack, pos.east());
+					breakBlockAt(player, worldIn, stack, pos.east().north());
+					breakBlockAt(player, worldIn, stack, pos.east().east());
+					break;
+			}
 
-                return ActionResultType.func_233537_a_(world.isRemote);
-            }
-        }
+			worldIn.playSound((PlayerEntity) null, pos, ForceSounds.WHOOSH.get(), SoundCategory.PLAYERS, 1.0F, 1.0F);
+		}
+		return super.mineBlock(stack, worldIn, state, pos, entityLiving);
+	}
 
-        BlockState blockstate = world.getBlockState(blockpos);
-        BlockState block = blockstate.getToolModifiedState(world, blockpos, context.getPlayer(), context.getItem(), net.minecraftforge.common.ToolType.AXE);
-        if (block != null) {
-            PlayerEntity playerentity = context.getPlayer();
-            world.playSound(playerentity, blockpos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            if (!world.isRemote) {
-                world.setBlockState(blockpos, block, 11);
-                if (playerentity != null) {
-                    context.getItem().damageItem(1, playerentity, (p_220040_1_) -> {
-                        p_220040_1_.sendBreakAnimation(context.getHand());
-                    });
-                }
-            }
+	public void breakBlockAt(PlayerEntity player, World worldIn, ItemStack stack, BlockPos pos) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
+		if (worldIn.getBlockState(pos).getMaterial() == Material.LEAVES) {
+			BlockState state = worldIn.getBlockState(pos);
+			if (!ForgeHooks.canHarvestBlock(state, player, worldIn, pos)) return;
 
-            return ActionResultType.func_233537_a_(world.isRemote);
-        }
+			if (!worldIn.isClientSide) {
+				int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayerEntity) player).gameMode.getGameModeForPlayer(), (ServerPlayerEntity) player, pos);
+				if (xp == -1) {
+					return;
+				}
 
-        return ActionResultType.PASS;
-    }
+				FluidState fluidState = worldIn.getFluidState(pos);
+				Block block = state.getBlock();
 
-    private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
-            // Pickaxe
-            Material.ROCK, Material.IRON, Material.ICE, Material.GLASS, Material.PISTON, Material.ANVIL, Material.MISCELLANEOUS,
+				if (block.removedByPlayer(state, worldIn, pos, player, true, fluidState)) {
+					block.playerWillDestroy(worldIn, pos, state, player);
+					block.playerDestroy(worldIn, player, pos, state, tileEntity, stack);
+					block.popExperience((ServerWorld) worldIn, pos, xp);
+				}
 
-            // Axe
-            Material.WOOD, Material.NETHER_WOOD, Material.PLANTS, Material.TALL_PLANTS, Material.BAMBOO, Material.GOURD,
+				((ServerWorld) worldIn).sendParticles(ParticleTypes.SWEEP_ATTACK, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), 1, 0, 0, 0, 0.0D);
+				PacketHandler.sendPacket(player, new SChangeBlockPacket(worldIn, pos));
+			}
+		}
+	}
 
-            // Shovel
-            Material.SEA_GRASS, Material.EARTH, Material.SAND, Material.SNOW, Material.SNOW_BLOCK, Material.CLAY,
+	@Override
+	public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
+		if (tool == ToolType.PICKAXE) {
+			return itemTier.getLevel();
+		} else if (tool == ToolType.AXE) {
+			return itemTier.getLevel();
+		} else if (tool == ToolType.SHOVEL) {
+			return itemTier.getLevel();
+		} else if (tool == ToolType.get("sword")) {
+			return itemTier.getLevel();
+		}
+		return super.getHarvestLevel(stack, tool, player, blockState);
+	}
 
-            // Shear / Mitt
-            Material.LEAVES
-    );
+	@Override
+	public int getEnchantmentValue() {
+		return 0;
+	}
 
-    @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        Material material = state.getMaterial();
-        return EFFECTIVE_MATERIALS.contains(material) ? 14.0F : super.getDestroySpeed(stack, state);
-    }
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+		return false;
+	}
 
-    public float getAttackDamage() {
-        return this.itemTier.getAttackDamage();
-    }
+	@SuppressWarnings("deprecation")
+	@Override
+	public ActionResultType useOn(ItemUseContext context) {
+		World world = context.getLevel();
+		BlockPos blockpos = context.getClickedPos();
+		int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(context);
+		if (hook != 0) return hook > 0 ? ActionResultType.SUCCESS : ActionResultType.FAIL;
+		if (context.getClickedFace() != Direction.DOWN && world.isEmptyBlock(blockpos.above())) {
+			BlockState blockstate = world.getBlockState(blockpos).getToolModifiedState(world, blockpos, context.getPlayer(), context.getItemInHand(), net.minecraftforge.common.ToolType.HOE);
+			if (blockstate != null) {
+				PlayerEntity playerentity = context.getPlayer();
+				world.playSound(playerentity, blockpos, SoundEvents.HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				if (!world.isClientSide) {
+					world.setBlock(blockpos, blockstate, 11);
+					if (playerentity != null) {
+						context.getItemInHand().hurtAndBreak(1, playerentity, (player) -> player.broadcastBreakEvent(context.getHand()));
+					}
+				}
 
-    @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        stack.damageItem(1, attacker, (attackerEntity) -> attackerEntity.sendBreakAnimation(Hand.MAIN_HAND));
-        return true;
-    }
+				return ActionResultType.sidedSuccess(world.isClientSide);
+			}
+		}
 
-    @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
-        Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
-        if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-            if(multimap != null) {
-                Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-                builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon damage modifier", (double)this.attackDamage, Operation.ADDITION));
-                builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon speed modifier", -2.4000000953674316D,  Operation.ADDITION));
-                multimap = builder.build();
-            }
-        }
-        return multimap;
-    }
+		BlockState blockstate = world.getBlockState(blockpos);
+		BlockState block = blockstate.getToolModifiedState(world, blockpos, context.getPlayer(), context.getItemInHand(), net.minecraftforge.common.ToolType.AXE);
+		if (block != null) {
+			PlayerEntity playerentity = context.getPlayer();
+			world.playSound(playerentity, blockpos, SoundEvents.AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			if (!world.isClientSide) {
+				world.setBlock(blockpos, block, 11);
+				if (playerentity != null) {
+					context.getItemInHand().hurtAndBreak(1, playerentity, (p_220040_1_) -> {
+						p_220040_1_.broadcastBreakEvent(context.getHand());
+					});
+				}
+			}
 
-    @Override
-    public boolean canHarvestBlock(BlockState blockIn) {
-        return EFFECTIVE_MATERIALS.contains(blockIn.getMaterial()) || blockIn.matchesBlock(Blocks.COBWEB);
-    }
+			return ActionResultType.sidedSuccess(world.isClientSide);
+		}
+
+		return ActionResultType.PASS;
+	}
+
+	private static final Set<Material> EFFECTIVE_MATERIALS = ImmutableSet.of(
+			// Pickaxe
+			Material.STONE, Material.METAL, Material.ICE, Material.GLASS, Material.PISTON, Material.HEAVY_METAL, Material.DECORATION,
+
+			// Axe
+			Material.WOOD, Material.NETHER_WOOD, Material.PLANT, Material.REPLACEABLE_PLANT, Material.BAMBOO, Material.VEGETABLE,
+
+			// Shovel
+			Material.REPLACEABLE_WATER_PLANT, Material.DIRT, Material.SAND, Material.TOP_SNOW, Material.SNOW, Material.CLAY,
+
+			// Shear / Mitt
+			Material.LEAVES
+	);
+
+	@Override
+	public float getDestroySpeed(ItemStack stack, BlockState state) {
+		Material material = state.getMaterial();
+		return EFFECTIVE_MATERIALS.contains(material) ? 14.0F : super.getDestroySpeed(stack, state);
+	}
+
+	public float getAttackDamage() {
+		return this.itemTier.getAttackDamageBonus();
+	}
+
+	@Override
+	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+		stack.hurtAndBreak(1, attacker, (attackerEntity) -> attackerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+		return true;
+	}
+
+	@Override
+	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
+		Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(equipmentSlot);
+		if (equipmentSlot == EquipmentSlotType.MAINHAND) {
+			if (multimap != null) {
+				Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+				builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon damage modifier", (double) this.attackDamage, Operation.ADDITION));
+				builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon speed modifier", -2.4000000953674316D, Operation.ADDITION));
+				multimap = builder.build();
+			}
+		}
+		return multimap;
+	}
+
+	@Override
+	public boolean isCorrectToolForDrops(BlockState blockIn) {
+		return EFFECTIVE_MATERIALS.contains(blockIn.getMaterial()) || blockIn.is(Blocks.COBWEB);
+	}
 }

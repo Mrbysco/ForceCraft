@@ -79,167 +79,167 @@ public class ForceDataGen {
 		private class ForceBlocks extends BlockLootTables {
 			@Override
 			protected void addTables() {
-				registerLootTable(POWER_ORE.get(), (ore) -> {
-					return droppingWithSilkTouch(ore, withExplosionDecay(POWER_ORE_ITEM.get(), ItemLootEntry.builder(FORCE_GEM.get()).acceptFunction(SetCount.builder(RandomValueRange.of(2.0F, 4.0F))).acceptFunction(ApplyBonus.uniformBonusCount(Enchantments.FORTUNE))));
+				add(POWER_ORE.get(), (ore) -> {
+					return createSilkTouchDispatchTable(ore, applyExplosionDecay(POWER_ORE_ITEM.get(), ItemLootEntry.lootTableItem(FORCE_GEM.get()).apply(SetCount.setCount(RandomValueRange.between(2.0F, 4.0F))).apply(ApplyBonus.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
 				});
 
-				registerDropSelfLootTable(INFUSER.get());
-				registerLootTable(FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(BLACK_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(BLUE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(BROWN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(CYAN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(GRAY_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(GREEN_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(LIGHT_BLUE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(LIGHT_GRAY_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(LIME_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(MAGENTA_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(ORANGE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(PINK_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(PURPLE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(RED_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
-				registerLootTable(WHITE_FORCE_FURNACE.get(), (furnace) -> droppingWithName(furnace));
+				dropSelf(INFUSER.get());
+				add(FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(BLACK_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(BLUE_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(BROWN_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(CYAN_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(GRAY_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(GREEN_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(LIGHT_BLUE_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(LIGHT_GRAY_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(LIME_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(MAGENTA_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(ORANGE_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(PINK_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(PURPLE_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(RED_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
+				add(WHITE_FORCE_FURNACE.get(), (furnace) -> createNameableBlockEntityTable(furnace));
 
-				registerLootTable(FORCE_ENGINE.get(), (engine) -> droppingWithName(engine));
+				add(FORCE_ENGINE.get(), (engine) -> createNameableBlockEntityTable(engine));
 
-				registerDropSelfLootTable(FORCE_SAPLING.get());
-				registerDropSelfLootTable(FORCE_LOG.get());
-				registerDropSelfLootTable(FORCE_WOOD.get());
-				registerDropSelfLootTable(FORCE_PLANKS.get());
-				registerLootTable(FORCE_LEAVES.get(), (leaves) -> {
-					return droppingWithChancesSticksAndApples(leaves, FORCE_SAPLING.get(), DEFAULT_SAPLING_DROP_RATES);
+				dropSelf(FORCE_SAPLING.get());
+				dropSelf(FORCE_LOG.get());
+				dropSelf(FORCE_WOOD.get());
+				dropSelf(FORCE_PLANKS.get());
+				add(FORCE_LEAVES.get(), (leaves) -> {
+					return createOakLeavesDrops(leaves, FORCE_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES);
 				});
 
-				registerDropSelfLootTable(FORCE_TORCH.get());
-				registerDropSelfLootTable(FORCE_RED_TORCH.get());
-				registerDropSelfLootTable(FORCE_ORANGE_TORCH.get());
-				registerDropSelfLootTable(FORCE_GREEN_TORCH.get());
-				registerDropSelfLootTable(FORCE_BLUE_TORCH.get());
-				registerDropSelfLootTable(FORCE_WHITE_TORCH.get());
-				registerDropSelfLootTable(FORCE_BLACK_TORCH.get());
-				registerDropSelfLootTable(FORCE_BROWN_TORCH.get());
-				registerDropSelfLootTable(FORCE_LIGHT_BLUE_TORCH.get());
-				registerDropSelfLootTable(FORCE_MAGENTA_TORCH.get());
-				registerDropSelfLootTable(FORCE_PINK_TORCH.get());
-				registerDropSelfLootTable(FORCE_LIGHT_GRAY_TORCH.get());
-				registerDropSelfLootTable(FORCE_LIME_TORCH.get());
-				registerDropSelfLootTable(FORCE_CYAN_TORCH.get());
-				registerDropSelfLootTable(FORCE_PURPLE_TORCH.get());
-				registerDropSelfLootTable(FORCE_GRAY_TORCH.get());
-				registerDropSelfLootTable(TIME_TORCH.get());
+				dropSelf(FORCE_TORCH.get());
+				dropSelf(FORCE_RED_TORCH.get());
+				dropSelf(FORCE_ORANGE_TORCH.get());
+				dropSelf(FORCE_GREEN_TORCH.get());
+				dropSelf(FORCE_BLUE_TORCH.get());
+				dropSelf(FORCE_WHITE_TORCH.get());
+				dropSelf(FORCE_BLACK_TORCH.get());
+				dropSelf(FORCE_BROWN_TORCH.get());
+				dropSelf(FORCE_LIGHT_BLUE_TORCH.get());
+				dropSelf(FORCE_MAGENTA_TORCH.get());
+				dropSelf(FORCE_PINK_TORCH.get());
+				dropSelf(FORCE_LIGHT_GRAY_TORCH.get());
+				dropSelf(FORCE_LIME_TORCH.get());
+				dropSelf(FORCE_CYAN_TORCH.get());
+				dropSelf(FORCE_PURPLE_TORCH.get());
+				dropSelf(FORCE_GRAY_TORCH.get());
+				dropSelf(TIME_TORCH.get());
 
-				registerDropping(WALL_FORCE_TORCH.get(), FORCE_TORCH.get());
-				registerDropping(WALL_FORCE_RED_TORCH.get(), FORCE_RED_TORCH.get());
-				registerDropping(WALL_FORCE_ORANGE_TORCH.get(), FORCE_ORANGE_TORCH.get());
-				registerDropping(WALL_FORCE_GREEN_TORCH.get(), FORCE_GREEN_TORCH.get());
-				registerDropping(WALL_FORCE_BLUE_TORCH.get(), FORCE_BLUE_TORCH.get());
-				registerDropping(WALL_FORCE_WHITE_TORCH.get(), FORCE_WHITE_TORCH.get());
-				registerDropping(WALL_FORCE_BLACK_TORCH.get(), FORCE_BLACK_TORCH.get());
-				registerDropping(WALL_FORCE_BROWN_TORCH.get(), FORCE_BROWN_TORCH.get());
-				registerDropping(WALL_FORCE_LIGHT_BLUE_TORCH.get(), FORCE_LIGHT_BLUE_TORCH.get());
-				registerDropping(WALL_FORCE_MAGENTA_TORCH.get(), FORCE_MAGENTA_TORCH.get());
-				registerDropping(WALL_FORCE_PINK_TORCH.get(), FORCE_PINK_TORCH.get());
-				registerDropping(WALL_FORCE_LIGHT_GRAY_TORCH.get(), FORCE_LIGHT_GRAY_TORCH.get());
-				registerDropping(WALL_FORCE_LIME_TORCH.get(), FORCE_LIME_TORCH.get());
-				registerDropping(WALL_FORCE_CYAN_TORCH.get(), FORCE_CYAN_TORCH.get());
-				registerDropping(WALL_FORCE_PURPLE_TORCH.get(), FORCE_PURPLE_TORCH.get());
-				registerDropping(WALL_FORCE_GRAY_TORCH.get(), FORCE_GRAY_TORCH.get());
-				registerDropSelfLootTable(WALL_TIME_TORCH.get());
+				dropOther(WALL_FORCE_TORCH.get(), FORCE_TORCH.get());
+				dropOther(WALL_FORCE_RED_TORCH.get(), FORCE_RED_TORCH.get());
+				dropOther(WALL_FORCE_ORANGE_TORCH.get(), FORCE_ORANGE_TORCH.get());
+				dropOther(WALL_FORCE_GREEN_TORCH.get(), FORCE_GREEN_TORCH.get());
+				dropOther(WALL_FORCE_BLUE_TORCH.get(), FORCE_BLUE_TORCH.get());
+				dropOther(WALL_FORCE_WHITE_TORCH.get(), FORCE_WHITE_TORCH.get());
+				dropOther(WALL_FORCE_BLACK_TORCH.get(), FORCE_BLACK_TORCH.get());
+				dropOther(WALL_FORCE_BROWN_TORCH.get(), FORCE_BROWN_TORCH.get());
+				dropOther(WALL_FORCE_LIGHT_BLUE_TORCH.get(), FORCE_LIGHT_BLUE_TORCH.get());
+				dropOther(WALL_FORCE_MAGENTA_TORCH.get(), FORCE_MAGENTA_TORCH.get());
+				dropOther(WALL_FORCE_PINK_TORCH.get(), FORCE_PINK_TORCH.get());
+				dropOther(WALL_FORCE_LIGHT_GRAY_TORCH.get(), FORCE_LIGHT_GRAY_TORCH.get());
+				dropOther(WALL_FORCE_LIME_TORCH.get(), FORCE_LIME_TORCH.get());
+				dropOther(WALL_FORCE_CYAN_TORCH.get(), FORCE_CYAN_TORCH.get());
+				dropOther(WALL_FORCE_PURPLE_TORCH.get(), FORCE_PURPLE_TORCH.get());
+				dropOther(WALL_FORCE_GRAY_TORCH.get(), FORCE_GRAY_TORCH.get());
+				dropSelf(WALL_TIME_TORCH.get());
 
 				//Bricks
-				registerDropSelfLootTable(FORCE_BRICK_RED.get());
-				registerDropSelfLootTable(FORCE_BRICK_YELLOW.get());
-				registerDropSelfLootTable(FORCE_BRICK_GREEN.get());
-				registerDropSelfLootTable(FORCE_BRICK_BLUE.get());
-				registerDropSelfLootTable(FORCE_BRICK_WHITE.get());
-				registerDropSelfLootTable(FORCE_BRICK_BLACK.get());
-				registerDropSelfLootTable(FORCE_BRICK_BROWN.get());
-				registerDropSelfLootTable(FORCE_BRICK_ORANGE.get());
-				registerDropSelfLootTable(FORCE_BRICK_LIGHT_BLUE.get());
-				registerDropSelfLootTable(FORCE_BRICK_MAGENTA.get());
-				registerDropSelfLootTable(FORCE_BRICK_PINK.get());
-				registerDropSelfLootTable(FORCE_BRICK_LIGHT_GRAY.get());
-				registerDropSelfLootTable(FORCE_BRICK_LIME.get());
-				registerDropSelfLootTable(FORCE_BRICK_CYAN.get());
-				registerDropSelfLootTable(FORCE_BRICK_PURPLE.get());
-				registerDropSelfLootTable(FORCE_BRICK_GRAY.get());
-				registerDropSelfLootTable(FORCE_BRICK.get());
+				dropSelf(FORCE_BRICK_RED.get());
+				dropSelf(FORCE_BRICK_YELLOW.get());
+				dropSelf(FORCE_BRICK_GREEN.get());
+				dropSelf(FORCE_BRICK_BLUE.get());
+				dropSelf(FORCE_BRICK_WHITE.get());
+				dropSelf(FORCE_BRICK_BLACK.get());
+				dropSelf(FORCE_BRICK_BROWN.get());
+				dropSelf(FORCE_BRICK_ORANGE.get());
+				dropSelf(FORCE_BRICK_LIGHT_BLUE.get());
+				dropSelf(FORCE_BRICK_MAGENTA.get());
+				dropSelf(FORCE_BRICK_PINK.get());
+				dropSelf(FORCE_BRICK_LIGHT_GRAY.get());
+				dropSelf(FORCE_BRICK_LIME.get());
+				dropSelf(FORCE_BRICK_CYAN.get());
+				dropSelf(FORCE_BRICK_PURPLE.get());
+				dropSelf(FORCE_BRICK_GRAY.get());
+				dropSelf(FORCE_BRICK.get());
 
 				//Stairs
-				registerDropSelfLootTable(FORCE_PLANK_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_RED_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_YELLOW_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_GREEN_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_BLUE_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_WHITE_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_BLACK_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_BROWN_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_ORANGE_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_LIGHT_BLUE_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_MAGENTA_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_PINK_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_LIGHT_GRAY_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_LIME_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_CYAN_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_PURPLE_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_GRAY_STAIRS.get());
-				registerDropSelfLootTable(FORCE_BRICK_STAIRS.get());
+				dropSelf(FORCE_PLANK_STAIRS.get());
+				dropSelf(FORCE_BRICK_RED_STAIRS.get());
+				dropSelf(FORCE_BRICK_YELLOW_STAIRS.get());
+				dropSelf(FORCE_BRICK_GREEN_STAIRS.get());
+				dropSelf(FORCE_BRICK_BLUE_STAIRS.get());
+				dropSelf(FORCE_BRICK_WHITE_STAIRS.get());
+				dropSelf(FORCE_BRICK_BLACK_STAIRS.get());
+				dropSelf(FORCE_BRICK_BROWN_STAIRS.get());
+				dropSelf(FORCE_BRICK_ORANGE_STAIRS.get());
+				dropSelf(FORCE_BRICK_LIGHT_BLUE_STAIRS.get());
+				dropSelf(FORCE_BRICK_MAGENTA_STAIRS.get());
+				dropSelf(FORCE_BRICK_PINK_STAIRS.get());
+				dropSelf(FORCE_BRICK_LIGHT_GRAY_STAIRS.get());
+				dropSelf(FORCE_BRICK_LIME_STAIRS.get());
+				dropSelf(FORCE_BRICK_CYAN_STAIRS.get());
+				dropSelf(FORCE_BRICK_PURPLE_STAIRS.get());
+				dropSelf(FORCE_BRICK_GRAY_STAIRS.get());
+				dropSelf(FORCE_BRICK_STAIRS.get());
 
 				//Slabs
-				registerLootTable(FORCE_PLANK_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_PLANK_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_RED_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_RED_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_YELLOW_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_YELLOW_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_GREEN_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_GREEN_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_BLUE_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_BLUE_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_WHITE_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_WHITE_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_BLACK_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_BLACK_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_BROWN_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_BROWN_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_ORANGE_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_ORANGE_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_LIGHT_BLUE_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_LIGHT_BLUE_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_MAGENTA_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_MAGENTA_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_PINK_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_PINK_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_LIGHT_GRAY_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_LIGHT_GRAY_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_LIME_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_LIME_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_CYAN_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_CYAN_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_PURPLE_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_PURPLE_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_GRAY_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_GRAY_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
-				registerLootTable(FORCE_BRICK_SLAB.get(), (slab) -> {
-					return droppingSlab((SlabBlock)slab);
+				add(FORCE_BRICK_SLAB.get(), (slab) -> {
+					return createSlabItemTable((SlabBlock) slab);
 				});
 			}
 
@@ -262,83 +262,83 @@ public class ForceDataGen {
 		}
 
 		@Override
-		protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+		protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
 			//Stairs
-			ShapedRecipeBuilder.shapedRecipe(FORCE_PLANK_STAIRS.get(), 4).key('#', FORCE_PLANKS.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_planks", hasItem(FORCE_PLANKS.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_RED_STAIRS.get(), 4).key('#', FORCE_BRICK_RED.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_RED.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_YELLOW_STAIRS.get(), 4).key('#', FORCE_BRICK_YELLOW.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_YELLOW.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_GREEN_STAIRS.get(), 4).key('#', FORCE_BRICK_GREEN.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_GREEN.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_BLUE_STAIRS.get(), 4).key('#', FORCE_BRICK_BLUE.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_BLUE.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_WHITE_STAIRS.get(), 4).key('#', FORCE_BRICK_WHITE.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_WHITE.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_BLACK_STAIRS.get(), 4).key('#', FORCE_BRICK_BLACK.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_BLACK.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_BROWN_STAIRS.get(), 4).key('#', FORCE_BRICK_BROWN.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_BROWN.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_ORANGE_STAIRS.get(), 4).key('#', FORCE_BRICK_ORANGE.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_ORANGE.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_LIGHT_BLUE_STAIRS.get(), 4).key('#', FORCE_BRICK_LIGHT_BLUE.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_LIGHT_BLUE.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_MAGENTA_STAIRS.get(), 4).key('#', FORCE_BRICK_MAGENTA.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_MAGENTA.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_PINK_STAIRS.get(), 4).key('#', FORCE_BRICK_PINK.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_PINK.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_LIGHT_GRAY_STAIRS.get(), 4).key('#', FORCE_BRICK_LIGHT_GRAY.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_LIGHT_GRAY.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_LIME_STAIRS.get(), 4).key('#', FORCE_BRICK_LIME.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_LIME.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_CYAN_STAIRS.get(), 4).key('#', FORCE_BRICK_CYAN.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_CYAN.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_PURPLE_STAIRS.get(), 4).key('#', FORCE_BRICK_PURPLE.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_PURPLE.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_GRAY_STAIRS.get(), 4).key('#', FORCE_BRICK_GRAY.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_GRAY.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_STAIRS.get(), 4).key('#', FORCE_BRICK.get()).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK.get())).build(consumer);
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_RED.get()), FORCE_BRICK_RED_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_RED.get())).build(consumer, "force_brick_red_stairs_from_force_brick_red");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_YELLOW.get()), FORCE_BRICK_YELLOW_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_YELLOW.get())).build(consumer, "force_brick_yellow_stairs_from_force_brick_yellow");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_GREEN.get()), FORCE_BRICK_GREEN_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_GREEN.get())).build(consumer, "force_brick_green_stairs_from_force_brick_green");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_BLUE.get()), FORCE_BRICK_BLUE_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_BLUE.get())).build(consumer, "force_brick_blue_stairs_from_force_brick_blue");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_WHITE.get()), FORCE_BRICK_WHITE_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_WHITE.get())).build(consumer, "force_brick_white_stairs_from_force_brick_white");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_BLACK.get()), FORCE_BRICK_BLACK_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_BLACK.get())).build(consumer, "force_brick_black_stairs_from_force_brick_black");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_BROWN.get()), FORCE_BRICK_BROWN_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_BROWN.get())).build(consumer, "force_brick_brown_stairs_from_force_brick_brown");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_ORANGE.get()), FORCE_BRICK_ORANGE_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_ORANGE.get())).build(consumer, "force_brick_orange_stairs_from_force_brick_orange");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_LIGHT_BLUE.get()), FORCE_BRICK_LIGHT_BLUE_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_LIGHT_BLUE.get())).build(consumer, "force_brick_light_blue_stairs_from_force_brick_light_blue");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_MAGENTA.get()), FORCE_BRICK_MAGENTA_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_MAGENTA.get())).build(consumer, "force_brick_magenta_stairs_from_force_brick_magenta");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_PINK.get()), FORCE_BRICK_PINK_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_PINK.get())).build(consumer, "force_brick_pink_stairs_from_force_brick_pink");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_LIGHT_GRAY.get()), FORCE_BRICK_LIGHT_GRAY_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_LIGHT_GRAY.get())).build(consumer, "force_brick_light_gray_stairs_from_force_brick_light_gray");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_LIME.get()), FORCE_BRICK_LIME_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_LIME.get())).build(consumer, "force_brick_lime_stairs_from_force_brick_lime");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_CYAN.get()), FORCE_BRICK_CYAN_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_CYAN.get())).build(consumer, "force_brick_cyan_stairs_from_force_brick_cyan");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_PURPLE.get()), FORCE_BRICK_PURPLE_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_PURPLE.get())).build(consumer, "force_brick_purple_stairs_from_force_brick_purple");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_GRAY.get()), FORCE_BRICK_GRAY_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK_GRAY.get())).build(consumer, "force_brick_gray_stairs_from_force_brick_gray");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK.get()), FORCE_BRICK_STAIRS.get()).addCriterion("has_bricks", hasItem(FORCE_BRICK.get())).build(consumer, "force_brick_stairs_from_force_brick");
+			ShapedRecipeBuilder.shaped(FORCE_PLANK_STAIRS.get(), 4).define('#', FORCE_PLANKS.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_planks", has(FORCE_PLANKS.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_RED_STAIRS.get(), 4).define('#', FORCE_BRICK_RED.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_RED.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_YELLOW_STAIRS.get(), 4).define('#', FORCE_BRICK_YELLOW.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_YELLOW.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_GREEN_STAIRS.get(), 4).define('#', FORCE_BRICK_GREEN.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_GREEN.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_BLUE_STAIRS.get(), 4).define('#', FORCE_BRICK_BLUE.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_BLUE.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_WHITE_STAIRS.get(), 4).define('#', FORCE_BRICK_WHITE.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_WHITE.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_BLACK_STAIRS.get(), 4).define('#', FORCE_BRICK_BLACK.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_BLACK.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_BROWN_STAIRS.get(), 4).define('#', FORCE_BRICK_BROWN.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_BROWN.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_ORANGE_STAIRS.get(), 4).define('#', FORCE_BRICK_ORANGE.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_ORANGE.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_LIGHT_BLUE_STAIRS.get(), 4).define('#', FORCE_BRICK_LIGHT_BLUE.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_LIGHT_BLUE.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_MAGENTA_STAIRS.get(), 4).define('#', FORCE_BRICK_MAGENTA.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_MAGENTA.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_PINK_STAIRS.get(), 4).define('#', FORCE_BRICK_PINK.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_PINK.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_LIGHT_GRAY_STAIRS.get(), 4).define('#', FORCE_BRICK_LIGHT_GRAY.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_LIGHT_GRAY.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_LIME_STAIRS.get(), 4).define('#', FORCE_BRICK_LIME.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_LIME.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_CYAN_STAIRS.get(), 4).define('#', FORCE_BRICK_CYAN.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_CYAN.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_PURPLE_STAIRS.get(), 4).define('#', FORCE_BRICK_PURPLE.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_PURPLE.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_GRAY_STAIRS.get(), 4).define('#', FORCE_BRICK_GRAY.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_GRAY.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_STAIRS.get(), 4).define('#', FORCE_BRICK.get()).pattern("#  ").pattern("## ").pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK.get())).save(consumer);
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_RED.get()), FORCE_BRICK_RED_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_RED.get())).save(consumer, "force_brick_red_stairs_from_force_brick_red");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_YELLOW.get()), FORCE_BRICK_YELLOW_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_YELLOW.get())).save(consumer, "force_brick_yellow_stairs_from_force_brick_yellow");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_GREEN.get()), FORCE_BRICK_GREEN_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_GREEN.get())).save(consumer, "force_brick_green_stairs_from_force_brick_green");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_BLUE.get()), FORCE_BRICK_BLUE_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_BLUE.get())).save(consumer, "force_brick_blue_stairs_from_force_brick_blue");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_WHITE.get()), FORCE_BRICK_WHITE_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_WHITE.get())).save(consumer, "force_brick_white_stairs_from_force_brick_white");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_BLACK.get()), FORCE_BRICK_BLACK_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_BLACK.get())).save(consumer, "force_brick_black_stairs_from_force_brick_black");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_BROWN.get()), FORCE_BRICK_BROWN_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_BROWN.get())).save(consumer, "force_brick_brown_stairs_from_force_brick_brown");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_ORANGE.get()), FORCE_BRICK_ORANGE_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_ORANGE.get())).save(consumer, "force_brick_orange_stairs_from_force_brick_orange");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_LIGHT_BLUE.get()), FORCE_BRICK_LIGHT_BLUE_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_LIGHT_BLUE.get())).save(consumer, "force_brick_light_blue_stairs_from_force_brick_light_blue");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_MAGENTA.get()), FORCE_BRICK_MAGENTA_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_MAGENTA.get())).save(consumer, "force_brick_magenta_stairs_from_force_brick_magenta");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_PINK.get()), FORCE_BRICK_PINK_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_PINK.get())).save(consumer, "force_brick_pink_stairs_from_force_brick_pink");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_LIGHT_GRAY.get()), FORCE_BRICK_LIGHT_GRAY_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_LIGHT_GRAY.get())).save(consumer, "force_brick_light_gray_stairs_from_force_brick_light_gray");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_LIME.get()), FORCE_BRICK_LIME_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_LIME.get())).save(consumer, "force_brick_lime_stairs_from_force_brick_lime");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_CYAN.get()), FORCE_BRICK_CYAN_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_CYAN.get())).save(consumer, "force_brick_cyan_stairs_from_force_brick_cyan");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_PURPLE.get()), FORCE_BRICK_PURPLE_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_PURPLE.get())).save(consumer, "force_brick_purple_stairs_from_force_brick_purple");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_GRAY.get()), FORCE_BRICK_GRAY_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK_GRAY.get())).save(consumer, "force_brick_gray_stairs_from_force_brick_gray");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK.get()), FORCE_BRICK_STAIRS.get()).unlocks("has_bricks", has(FORCE_BRICK.get())).save(consumer, "force_brick_stairs_from_force_brick");
 			//Slabs
-			ShapedRecipeBuilder.shapedRecipe(FORCE_PLANK_SLAB.get(), 6).key('#', FORCE_PLANKS.get()).patternLine("###").addCriterion("has_planks", hasItem(FORCE_PLANKS.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_RED_SLAB.get(), 6).key('#', FORCE_BRICK_RED.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_RED.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_YELLOW_SLAB.get(), 6).key('#', FORCE_BRICK_YELLOW.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_YELLOW.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_GREEN_SLAB.get(), 6).key('#', FORCE_BRICK_GREEN.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_GREEN.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_BLUE_SLAB.get(), 6).key('#', FORCE_BRICK_BLUE.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_BLUE.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_WHITE_SLAB.get(), 6).key('#', FORCE_BRICK_WHITE.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_WHITE.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_BLACK_SLAB.get(), 6).key('#', FORCE_BRICK_BLACK.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_BLACK.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_BROWN_SLAB.get(), 6).key('#', FORCE_BRICK_BROWN.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_BROWN.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_ORANGE_SLAB.get(), 6).key('#', FORCE_BRICK_ORANGE.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_ORANGE.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_LIGHT_BLUE_SLAB.get(), 6).key('#', FORCE_BRICK_LIGHT_BLUE.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_LIGHT_BLUE.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_MAGENTA_SLAB.get(), 6).key('#', FORCE_BRICK_MAGENTA.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_MAGENTA.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_PINK_SLAB.get(), 6).key('#', FORCE_BRICK_PINK.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_PINK.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_LIGHT_GRAY_SLAB.get(), 6).key('#', FORCE_BRICK_LIGHT_GRAY.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_LIGHT_GRAY.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_LIME_SLAB.get(), 6).key('#', FORCE_BRICK_LIME.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_LIME.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_CYAN_SLAB.get(), 6).key('#', FORCE_BRICK_CYAN.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_CYAN.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_PURPLE_SLAB.get(), 6).key('#', FORCE_BRICK_PURPLE.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_PURPLE.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_GRAY_SLAB.get(), 6).key('#', FORCE_BRICK_GRAY.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK_GRAY.get())).build(consumer);
-			ShapedRecipeBuilder.shapedRecipe(FORCE_BRICK_SLAB.get(), 6).key('#', FORCE_BRICK.get()).patternLine("###").addCriterion("has_bricks", hasItem(FORCE_BRICK.get())).build(consumer);
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_RED.get()), FORCE_BRICK_RED_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_RED.get())).build(consumer, "force_brick_red_slab_from_force_brick_red");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_YELLOW.get()), FORCE_BRICK_YELLOW_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_YELLOW.get())).build(consumer, "force_brick_yellow_slab_from_force_brick_yellow");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_GREEN.get()), FORCE_BRICK_GREEN_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_GREEN.get())).build(consumer, "force_brick_green_slab_from_force_brick_green");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_BLUE.get()), FORCE_BRICK_BLUE_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_BLUE.get())).build(consumer, "force_brick_blue_slab_from_force_brick_blue");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_WHITE.get()), FORCE_BRICK_WHITE_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_WHITE.get())).build(consumer, "force_brick_white_slab_from_force_brick_white");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_BLACK.get()), FORCE_BRICK_BLACK_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_BLACK.get())).build(consumer, "force_brick_black_slab_from_force_brick_black");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_BROWN.get()), FORCE_BRICK_BROWN_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_BROWN.get())).build(consumer, "force_brick_brown_slab_from_force_brick_brown");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_ORANGE.get()), FORCE_BRICK_ORANGE_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_ORANGE.get())).build(consumer, "force_brick_orange_slab_from_force_brick_orange");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_LIGHT_BLUE.get()), FORCE_BRICK_LIGHT_BLUE_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_LIGHT_BLUE.get())).build(consumer, "force_brick_light_blue_slab_from_force_brick_light_blue");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_MAGENTA.get()), FORCE_BRICK_MAGENTA_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_MAGENTA.get())).build(consumer, "force_brick_magenta_slab_from_force_brick_magenta");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_PINK.get()), FORCE_BRICK_PINK_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_PINK.get())).build(consumer, "force_brick_pink_slab_from_force_brick_pink");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_LIGHT_GRAY.get()), FORCE_BRICK_LIGHT_GRAY_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_LIGHT_GRAY.get())).build(consumer, "force_brick_light_gray_slab_from_force_brick_light_gray");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_LIME.get()), FORCE_BRICK_LIME_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_LIME.get())).build(consumer, "force_brick_lime_slab_from_force_brick_lime");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_CYAN.get()), FORCE_BRICK_CYAN_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_CYAN.get())).build(consumer, "force_brick_cyan_slab_from_force_brick_cyan");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_PURPLE.get()), FORCE_BRICK_PURPLE_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_PURPLE.get())).build(consumer, "force_brick_purple_slab_from_force_brick_purple");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK_GRAY.get()), FORCE_BRICK_GRAY_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK_GRAY.get())).build(consumer, "force_brick_gray_slab_from_force_brick_gray");
-			SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(FORCE_BRICK.get()), FORCE_BRICK_SLAB.get(), 2).addCriterion("has_bricks", hasItem(FORCE_BRICK.get())).build(consumer, "force_brick_slab_from_force_brick");
+			ShapedRecipeBuilder.shaped(FORCE_PLANK_SLAB.get(), 6).define('#', FORCE_PLANKS.get()).pattern("###").unlockedBy("has_planks", has(FORCE_PLANKS.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_RED_SLAB.get(), 6).define('#', FORCE_BRICK_RED.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_RED.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_YELLOW_SLAB.get(), 6).define('#', FORCE_BRICK_YELLOW.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_YELLOW.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_GREEN_SLAB.get(), 6).define('#', FORCE_BRICK_GREEN.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_GREEN.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_BLUE_SLAB.get(), 6).define('#', FORCE_BRICK_BLUE.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_BLUE.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_WHITE_SLAB.get(), 6).define('#', FORCE_BRICK_WHITE.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_WHITE.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_BLACK_SLAB.get(), 6).define('#', FORCE_BRICK_BLACK.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_BLACK.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_BROWN_SLAB.get(), 6).define('#', FORCE_BRICK_BROWN.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_BROWN.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_ORANGE_SLAB.get(), 6).define('#', FORCE_BRICK_ORANGE.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_ORANGE.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_LIGHT_BLUE_SLAB.get(), 6).define('#', FORCE_BRICK_LIGHT_BLUE.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_LIGHT_BLUE.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_MAGENTA_SLAB.get(), 6).define('#', FORCE_BRICK_MAGENTA.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_MAGENTA.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_PINK_SLAB.get(), 6).define('#', FORCE_BRICK_PINK.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_PINK.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_LIGHT_GRAY_SLAB.get(), 6).define('#', FORCE_BRICK_LIGHT_GRAY.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_LIGHT_GRAY.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_LIME_SLAB.get(), 6).define('#', FORCE_BRICK_LIME.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_LIME.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_CYAN_SLAB.get(), 6).define('#', FORCE_BRICK_CYAN.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_CYAN.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_PURPLE_SLAB.get(), 6).define('#', FORCE_BRICK_PURPLE.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_PURPLE.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_GRAY_SLAB.get(), 6).define('#', FORCE_BRICK_GRAY.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK_GRAY.get())).save(consumer);
+			ShapedRecipeBuilder.shaped(FORCE_BRICK_SLAB.get(), 6).define('#', FORCE_BRICK.get()).pattern("###").unlockedBy("has_bricks", has(FORCE_BRICK.get())).save(consumer);
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_RED.get()), FORCE_BRICK_RED_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_RED.get())).save(consumer, "force_brick_red_slab_from_force_brick_red");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_YELLOW.get()), FORCE_BRICK_YELLOW_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_YELLOW.get())).save(consumer, "force_brick_yellow_slab_from_force_brick_yellow");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_GREEN.get()), FORCE_BRICK_GREEN_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_GREEN.get())).save(consumer, "force_brick_green_slab_from_force_brick_green");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_BLUE.get()), FORCE_BRICK_BLUE_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_BLUE.get())).save(consumer, "force_brick_blue_slab_from_force_brick_blue");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_WHITE.get()), FORCE_BRICK_WHITE_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_WHITE.get())).save(consumer, "force_brick_white_slab_from_force_brick_white");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_BLACK.get()), FORCE_BRICK_BLACK_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_BLACK.get())).save(consumer, "force_brick_black_slab_from_force_brick_black");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_BROWN.get()), FORCE_BRICK_BROWN_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_BROWN.get())).save(consumer, "force_brick_brown_slab_from_force_brick_brown");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_ORANGE.get()), FORCE_BRICK_ORANGE_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_ORANGE.get())).save(consumer, "force_brick_orange_slab_from_force_brick_orange");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_LIGHT_BLUE.get()), FORCE_BRICK_LIGHT_BLUE_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_LIGHT_BLUE.get())).save(consumer, "force_brick_light_blue_slab_from_force_brick_light_blue");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_MAGENTA.get()), FORCE_BRICK_MAGENTA_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_MAGENTA.get())).save(consumer, "force_brick_magenta_slab_from_force_brick_magenta");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_PINK.get()), FORCE_BRICK_PINK_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_PINK.get())).save(consumer, "force_brick_pink_slab_from_force_brick_pink");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_LIGHT_GRAY.get()), FORCE_BRICK_LIGHT_GRAY_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_LIGHT_GRAY.get())).save(consumer, "force_brick_light_gray_slab_from_force_brick_light_gray");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_LIME.get()), FORCE_BRICK_LIME_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_LIME.get())).save(consumer, "force_brick_lime_slab_from_force_brick_lime");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_CYAN.get()), FORCE_BRICK_CYAN_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_CYAN.get())).save(consumer, "force_brick_cyan_slab_from_force_brick_cyan");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_PURPLE.get()), FORCE_BRICK_PURPLE_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_PURPLE.get())).save(consumer, "force_brick_purple_slab_from_force_brick_purple");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK_GRAY.get()), FORCE_BRICK_GRAY_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK_GRAY.get())).save(consumer, "force_brick_gray_slab_from_force_brick_gray");
+			SingleItemRecipeBuilder.stonecutting(Ingredient.of(FORCE_BRICK.get()), FORCE_BRICK_SLAB.get(), 2).unlocks("has_bricks", has(FORCE_BRICK.get())).save(consumer, "force_brick_slab_from_force_brick");
 		}
 
 		@Override
-		protected void saveRecipeAdvancement(DirectoryCache cache, JsonObject advancementJson, Path path) {
+		protected void saveAdvancement(DirectoryCache cache, JsonObject advancementJson, Path path) {
 			// Nope
 		}
 	}

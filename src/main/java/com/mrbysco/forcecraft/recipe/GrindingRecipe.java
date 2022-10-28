@@ -17,13 +17,13 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class GrindingRecipe extends MultipleOutputFurnaceRecipe{
+public class GrindingRecipe extends MultipleOutputFurnaceRecipe {
 
 	public GrindingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results, float chance, float experienceIn, int cookTimeIn) {
 		super(ForceRecipes.GRINDING, idIn, groupIn, ingredientIn, results, chance, experienceIn, cookTimeIn);
 	}
 
-	public ItemStack getIcon() {
+	public ItemStack getToastSymbol() {
 		return new ItemStack(ForceRegistry.GRINDING_CORE.get());
 	}
 
@@ -33,31 +33,32 @@ public class GrindingRecipe extends MultipleOutputFurnaceRecipe{
 
 	public static class SerializerGrindingRecipe extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GrindingRecipe> {
 		@Override
-		public GrindingRecipe read(ResourceLocation recipeId, JsonObject json) {
-			String s = JSONUtils.getString(json, "group", "");
-			JsonElement jsonelement = (JsonElement)(JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
-			Ingredient ingredient = Ingredient.deserialize(jsonelement);
+		public GrindingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+			String s = JSONUtils.getAsString(json, "group", "");
+			JsonElement jsonelement = (JsonElement) (JSONUtils.isArrayNode(json, "ingredient") ? JSONUtils.getAsJsonArray(json, "ingredient") : JSONUtils.getAsJsonObject(json, "ingredient"));
+			Ingredient ingredient = Ingredient.fromJson(jsonelement);
 			//Forge: Check if primitive string to keep vanilla or a object which can contain a count field.
-			if (!json.has("results")) throw new com.google.gson.JsonSyntaxException("Missing results, expected to find a string or object");
-			NonNullList<ItemStack> nonnulllist = readItemStacks(JSONUtils.getJsonArray(json, "results"));
+			if (!json.has("results"))
+				throw new com.google.gson.JsonSyntaxException("Missing results, expected to find a string or object");
+			NonNullList<ItemStack> nonnulllist = readItemStacks(JSONUtils.getAsJsonArray(json, "results"));
 			if (nonnulllist.isEmpty()) {
 				throw new JsonParseException("No results for grinding recipe");
 			} else if (nonnulllist.size() > MAX_OUTPUT) {
 				throw new JsonParseException("Too many results for grinding recipe the max is " + MAX_OUTPUT);
 			}
 
-			float chance = JSONUtils.getFloat(json, "secondaryChance", 0.0F);
-			float f = JSONUtils.getFloat(json, "experience", 0.0F);
-			int i = JSONUtils.getInt(json, "processtime", 200);
-			return new GrindingRecipe(recipeId, s, ingredient, nonnulllist,chance, f, i);
+			float chance = JSONUtils.getAsFloat(json, "secondaryChance", 0.0F);
+			float f = JSONUtils.getAsFloat(json, "experience", 0.0F);
+			int i = JSONUtils.getAsInt(json, "processtime", 200);
+			return new GrindingRecipe(recipeId, s, ingredient, nonnulllist, chance, f, i);
 		}
 
 		private static NonNullList<ItemStack> readItemStacks(JsonArray resultArray) {
 			NonNullList<ItemStack> nonnulllist = NonNullList.create();
 
-			for(int i = 0; i < resultArray.size(); ++i) {
-				if(resultArray.get(i).isJsonObject()) {
-					ItemStack stack = ShapedRecipe.deserializeItem(resultArray.get(i).getAsJsonObject());
+			for (int i = 0; i < resultArray.size(); ++i) {
+				if (resultArray.get(i).isJsonObject()) {
+					ItemStack stack = ShapedRecipe.itemFromJson(resultArray.get(i).getAsJsonObject());
 					nonnulllist.add(stack);
 				}
 			}
@@ -67,14 +68,14 @@ public class GrindingRecipe extends MultipleOutputFurnaceRecipe{
 
 		@Nullable
 		@Override
-		public GrindingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-			String s = buffer.readString(32767);
-			Ingredient ingredient = Ingredient.read(buffer);
+		public GrindingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+			String s = buffer.readUtf(32767);
+			Ingredient ingredient = Ingredient.fromNetwork(buffer);
 
 			int size = buffer.readVarInt();
 			NonNullList<ItemStack> resultList = NonNullList.withSize(size, ItemStack.EMPTY);
-			for(int j = 0; j < resultList.size(); ++j) {
-				resultList.set(j, buffer.readItemStack());
+			for (int j = 0; j < resultList.size(); ++j) {
+				resultList.set(j, buffer.readItem());
 			}
 
 			float chance = buffer.readFloat();
@@ -84,18 +85,18 @@ public class GrindingRecipe extends MultipleOutputFurnaceRecipe{
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, GrindingRecipe recipe) {
-			buffer.writeString(recipe.group);
-			recipe.ingredient.write(buffer);
+		public void toNetwork(PacketBuffer buffer, GrindingRecipe recipe) {
+			buffer.writeUtf(recipe.group);
+			recipe.ingredient.toNetwork(buffer);
 
 			buffer.writeVarInt(recipe.resultItems.size());
-			for(ItemStack stack : recipe.resultItems) {
-				buffer.writeItemStack(stack);
+			for (ItemStack stack : recipe.resultItems) {
+				buffer.writeItem(stack);
 			}
 
 			buffer.writeFloat(recipe.secondaryChance);
 			buffer.writeFloat(recipe.experience);
-			buffer.writeVarInt(recipe.cookTime);
+			buffer.writeVarInt(recipe.cookingTime);
 		}
 	}
 }

@@ -8,17 +8,17 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 public class SlotForceTools extends SlotItemHandler {
-    public SlotForceTools(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-        super(itemHandler, index, xPosition, yPosition);
-    }
+	public SlotForceTools(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+		super(itemHandler, index, xPosition, yPosition);
+	}
 
-    @Override
-    public boolean isItemValid(ItemStack stack) {
-        return stack.getItem().isIn(ForceTags.VALID_INFUSER_TOOLS);
-    }
+	@Override
+	public boolean mayPlace(ItemStack stack) {
+		return stack.getItem().is(ForceTags.VALID_INFUSER_TOOLS);
+	}
 
-    @Override
-    public int getItemStackLimit(@Nonnull ItemStack stack) {
-        return 1;
-    }
+	@Override
+	public int getMaxStackSize(@Nonnull ItemStack stack) {
+		return 1;
+	}
 }

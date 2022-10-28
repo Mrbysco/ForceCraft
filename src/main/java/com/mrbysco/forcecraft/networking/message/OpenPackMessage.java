@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class OpenPackMessage {
-	public OpenPackMessage(){
+	public OpenPackMessage() {
 
 	}
 
@@ -42,11 +42,11 @@ public class OpenPackMessage {
 				Predicate<ItemStack> stackPredicate = (stack) -> stack.getItem() instanceof ForcePackItem;
 				if (FindingUtil.hasSingleStackInHotbar(player, stackPredicate)) {
 					ItemStack beltStack = FindingUtil.findInstanceStack(player, stackPredicate);
-					if(!beltStack.isEmpty()) {
-						player.openContainer(new INamedContainerProvider() {
+					if (!beltStack.isEmpty()) {
+						player.openMenu(new INamedContainerProvider() {
 							@Override
 							public ITextComponent getDisplayName() {
-								return beltStack.hasDisplayName() ? ((TextComponent)beltStack.getDisplayName()).mergeStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.pack");
+								return beltStack.hasCustomHoverName() ? ((TextComponent) beltStack.getHoverName()).withStyle(TextFormatting.BLACK) : new TranslationTextComponent(Reference.MOD_ID + ".container.pack");
 							}
 
 							@Nullable

@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 public class ForceFluidBucketItem extends BucketItem {
 	public ForceFluidBucketItem(Item.Properties properties, Supplier<? extends Fluid> fluidSupplier) {
-		super(fluidSupplier, properties.containerItem(Items.BUCKET).maxStackSize(1));
+		super(fluidSupplier, properties.craftRemainder(Items.BUCKET).stacksTo(1));
 	}
 
 	@Override

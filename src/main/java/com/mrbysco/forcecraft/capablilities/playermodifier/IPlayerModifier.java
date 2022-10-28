@@ -2,47 +2,66 @@ package com.mrbysco.forcecraft.capablilities.playermodifier;
 
 public interface IPlayerModifier {
 
-    //Damage
-    float getAttackDamage();
-    void setAttackDamage(float newDamage);
-    void addAttackDamage(float newDamage);
+	//Damage
+	float getAttackDamage();
 
-    //Wing
-    float getWingPower();
-    void setWingPower(float newWingPower);
+	void setAttackDamage(float newDamage);
 
-    float getFlightTimer();
-    void subtractFlightTimer();
-    void setFlightTimer(float newFlightCounter);
+	void addAttackDamage(float newDamage);
 
-    //Heat
-    float getHeatDamage();
-    void setHeatDamage(float newDamage);
-    void addHeatDamage(float newDamage);
-    boolean hasHeatDamage();
-    void setHeatPieces(int pieces);
-    int getHeatPieces();
+	//Wing
+	float getWingPower();
 
-    float getDamage();
-    void setDamage(float newDamage);
+	void setWingPower(float newWingPower);
 
-    //Luck
-    int getLuckLevel();
-    void setLuckLevel(int newLuck);
-    void incrementLuckLevel(int newLuck);
+	float getFlightTimer();
 
-    //SetBonus
-    boolean hasFullSet();
-    int getArmorPieces();
-    void incrementArmorPieces();
-    void setArmorPieces(int value);
+	void subtractFlightTimer();
 
-    //Bane
-    boolean hasBane();
-    void setBane(boolean value);
+	void setFlightTimer(float newFlightCounter);
 
-    //Bleeding
-    boolean hasBleeding();
-    int getBleedingLevel();
-    void setBleeding(int value);
+	//Heat
+	float getHeatDamage();
+
+	void setHeatDamage(float newDamage);
+
+	void addHeatDamage(float newDamage);
+
+	boolean hasHeatDamage();
+
+	void setHeatPieces(int pieces);
+
+	int getHeatPieces();
+
+	float getDamage();
+
+	void setDamage(float newDamage);
+
+	//Luck
+	int getLuckLevel();
+
+	void setLuckLevel(int newLuck);
+
+	void incrementLuckLevel(int newLuck);
+
+	//SetBonus
+	boolean hasFullSet();
+
+	int getArmorPieces();
+
+	void incrementArmorPieces();
+
+	void setArmorPieces(int value);
+
+	//Bane
+	boolean hasBane();
+
+	void setBane(boolean value);
+
+	//Bleeding
+	boolean hasBleeding();
+
+	int getBleedingLevel();
+
+	void setBleeding(int value);
 }
