@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -48,7 +48,7 @@ public class SpoilsBagMenu extends AbstractContainerMenu {
 		int yPosC = 20;
 		//Maxes at 40
 
-		IItemHandler itemHandler = forceBelt.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+		IItemHandler itemHandler = forceBelt.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 		if (itemHandler != null) {
 			for (int k = 0; k < 8; ++k) {
 				this.addSlot(new SlotItemHandler(itemHandler, k, xPosC + k * 18, yPosC) {

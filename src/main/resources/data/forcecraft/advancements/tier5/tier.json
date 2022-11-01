@@ -17,7 +17,6 @@
     },
     "frame": "goal",
     "show_toast": true,
-    "announce_to_chat": false,
     "announce_to_chat": true
   },
   "parent": "forcecraft:root",

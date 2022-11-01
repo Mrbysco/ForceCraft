@@ -27,10 +27,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -57,9 +57,9 @@ public class SpoilsBagItem extends BaseItem {
 		BlockPos pos = context.getClickedPos();
 		Direction face = context.getClickedFace();
 		BlockEntity tile = level.getBlockEntity(pos);
-		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-		if (handler != null && tile != null && tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent()) {
-			IItemHandler tileInventory = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).orElse(null);
+		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		if (handler != null && tile != null && tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).isPresent()) {
+			IItemHandler tileInventory = tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).orElse(null);
 			if (tileInventory != null && handler instanceof ItemStackHandler itemHandler) {
 				for (int i = 0; i < itemHandler.getSlots(); i++) {
 					ItemStack bagStack = itemHandler.getStackInSlot(i);
@@ -82,7 +82,7 @@ public class SpoilsBagItem extends BaseItem {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
-		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 		if (handler != null) {
 			this.populateBag(level, stack);
 			playerIn.openMenu(this.getContainer(stack));
@@ -101,7 +101,7 @@ public class SpoilsBagItem extends BaseItem {
 
 	public void populateBag(Level level, ItemStack stack) {
 		if (!level.isClientSide && !stack.getOrCreateTag().getBoolean("Filled")) {
-			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+			IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 			if (handler instanceof ItemStackHandler) {
 				if (ItemHandlerUtils.isEmpty(handler)) {
 					CompoundTag tag = stack.getOrCreateTag();
@@ -151,7 +151,7 @@ public class SpoilsBagItem extends BaseItem {
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (!level.isClientSide && stack.hasTag() && stack.getTag().getBoolean("Filled")) {
-			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+			IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 			if (ItemHandlerUtils.isEmpty(handler)) {
 				stack.shrink(1);
 			}
@@ -188,7 +188,7 @@ public class SpoilsBagItem extends BaseItem {
 		@Nonnull
 		@Override
 		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-			if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			if (cap == ForgeCapabilities.ITEM_HANDLER)
 				return inventory.cast();
 			else return LazyOptional.empty();
 		}

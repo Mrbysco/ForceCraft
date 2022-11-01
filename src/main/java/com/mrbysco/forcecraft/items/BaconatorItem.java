@@ -23,10 +23,10 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -44,7 +44,7 @@ public class BaconatorItem extends BaseItem {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack itemstack = playerIn.getItemInHand(handIn);
-		IItemHandler handler = itemstack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+		IItemHandler handler = itemstack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 		if (playerIn.isShiftKeyDown()) {
 			boolean isFull = ItemHandlerUtils.isFull(handler);
 			if (!isFull) {
@@ -79,7 +79,7 @@ public class BaconatorItem extends BaseItem {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
-		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 		ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
 		if (firstStack != null && !firstStack.isEmpty()) {
 			entityLiving.eat(level, firstStack);
@@ -90,7 +90,7 @@ public class BaconatorItem extends BaseItem {
 
 	@Override
 	public UseAnim getUseAnimation(ItemStack stack) {
-		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 		ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
 		return firstStack != null && firstStack.getItem().isEdible() ? UseAnim.EAT : UseAnim.NONE;
 	}
@@ -99,7 +99,7 @@ public class BaconatorItem extends BaseItem {
 	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (stack.getDamageValue() == 1 && entityIn instanceof Player playerIn && level.getGameTime() % 20 == 0) {
 			if (!playerIn.getAbilities().instabuild && playerIn.canEat(false) && stack.getOrCreateTag().getBoolean(HAS_FOOD_TAG)) {
-				IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+				IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 				ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
 				if (!firstStack.isEmpty()) {
 					playerIn.eat(level, firstStack);
@@ -111,7 +111,7 @@ public class BaconatorItem extends BaseItem {
 
 	@Override
 	public int getUseDuration(ItemStack stack) {
-		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 		ItemStack firstStack = ItemHandlerUtils.getFirstItem(handler);
 		if (!firstStack.isEmpty() && firstStack.getItem().isEdible()) {
 			return firstStack.getItem().getFoodProperties().isFastFood() ? 16 : 32;
@@ -130,7 +130,7 @@ public class BaconatorItem extends BaseItem {
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		if (Screen.hasShiftDown()) {
 			tooltip.add(Component.translatable("forcecraft.baconator.shift.carrying").withStyle(ChatFormatting.DARK_RED));
-			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+			IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 			if (handler != null) {
 				int stacks = 0;
 				for (int i = 0; i < handler.getSlots(); i++) {
@@ -167,7 +167,7 @@ public class BaconatorItem extends BaseItem {
 		@Nonnull
 		@Override
 		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-			if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			if (cap == ForgeCapabilities.ITEM_HANDLER)
 				return inventory.cast();
 			else return LazyOptional.empty();
 		}

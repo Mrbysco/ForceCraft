@@ -28,24 +28,20 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -121,7 +117,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	public final ItemStackHandler inputHandler = new ItemStackHandler(2) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
-			if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+			if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
 				if (stack.getMaxStackSize() > 1) {
 					return 1;
 				}
@@ -131,7 +127,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
-			IFluidHandler fluidCap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
+			IFluidHandler fluidCap = stack.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
 			if (slot == 0) {
 				if (fluidCap != null) {
 					FluidStack fluidStack = fluidCap.getFluidInTank(0);
@@ -160,7 +156,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	public final ItemStackHandler outputHandler = new ItemStackHandler(2) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
-			if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+			if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
 				if (stack.getMaxStackSize() > 1) {
 					return 1;
 				}
@@ -372,7 +368,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		BlockPos offsetPos = worldPosition.relative(getFacing());
 		BlockEntity tile = level.getBlockEntity(offsetPos);
 		if (tile != null) {
-			IEnergyStorage cap = tile.getCapability(CapabilityEnergy.ENERGY, getFacing().getOpposite()).orElse(null);
+			IEnergyStorage cap = tile.getCapability(ForgeCapabilities.ENERGY, getFacing().getOpposite()).orElse(null);
 			if (cap != null) {
 				return cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored() && !tankFuel.getFluid().isEmpty();
 			}
@@ -384,7 +380,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		BlockPos offsetPos = worldPosition.relative(getFacing());
 		BlockEntity tile = level.getBlockEntity(offsetPos);
 		if (tile != null) {
-			IEnergyStorage cap = tile.getCapability(CapabilityEnergy.ENERGY, getFacing().getOpposite()).orElse(null);
+			IEnergyStorage cap = tile.getCapability(ForgeCapabilities.ENERGY, getFacing().getOpposite()).orElse(null);
 			if (cap != null) {
 				if (cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored()) {
 					cap.receiveEnergy((int) generating, false);
@@ -558,10 +554,10 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (capability == ForgeCapabilities.ITEM_HANDLER) {
 			return this.stackWrapperCap.cast();
 		}
-		if (capability == FLUID_HANDLER_CAPABILITY) {
+		if (capability == ForgeCapabilities.FLUID_HANDLER) {
 			return this.tankWrapperCap.cast();
 		}
 

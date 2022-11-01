@@ -8,8 +8,8 @@ import com.mrbysco.forcecraft.storage.StorageManager;
 import com.mrbysco.forcecraft.storage.WSDCapability;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -102,7 +102,7 @@ public class ForcePackItem extends BaseItem {
 		CompoundTag shareTag = stack.getOrCreateTag();
 		// no capability, use all of it
 
-		IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 		if (handler instanceof PackItemStackHandler packHandler) {
 			shareTag.putInt(PackItemStackHandler.NBT_UPGRADES, packHandler.getUpgrades());
 		}
@@ -115,7 +115,7 @@ public class ForcePackItem extends BaseItem {
 		if (nbt != null && nbt.contains(PackItemStackHandler.NBT_UPGRADES)) {
 			stack.getOrCreateTag().putInt(SLOTS_USED, nbt.getInt(SLOTS_USED));
 
-			IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+			IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 			if (handler instanceof PackItemStackHandler packHandler) {
 				packHandler.setUpgrades(nbt.getInt(PackItemStackHandler.NBT_UPGRADES));
 

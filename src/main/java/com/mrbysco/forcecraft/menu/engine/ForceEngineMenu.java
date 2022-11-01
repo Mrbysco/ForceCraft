@@ -13,7 +13,7 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import java.util.Objects;
 
@@ -139,7 +139,7 @@ public class ForceEngineMenu extends AbstractContainerMenu {
 			itemstack = itemstack1.copy();
 			final int tileSize = 2;
 
-			if (itemstack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+			if (itemstack.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
 				if (itemstack.getMaxStackSize() > 1) {
 					return ItemStack.EMPTY;
 				}

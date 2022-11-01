@@ -5,7 +5,6 @@ import com.mrbysco.forcecraft.client.gui.furnace.ForceFurnaceScreen;
 import com.mrbysco.forcecraft.compat.jei.infuser.InfuserCategory;
 import com.mrbysco.forcecraft.compat.jei.multipleoutput.FreezingCategory;
 import com.mrbysco.forcecraft.compat.jei.multipleoutput.GrindingCategory;
-import com.mrbysco.forcecraft.compat.jei.transfer.ItemCardTransferHandler;
 import com.mrbysco.forcecraft.menu.furnace.ForceFurnaceMenu;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.recipe.FreezingRecipe;

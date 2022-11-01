@@ -5,7 +5,6 @@ import com.mrbysco.forcecraft.recipe.FreezingRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
-import net.minecraft.resources.ResourceLocation;
 
 public class FreezingCategory extends AbstractMultiOutputCategory<FreezingRecipe> {
 

@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.menu.engine.slot;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -20,7 +20,7 @@ public class FuelSlot extends SlotItemHandler {
 
 	@Override
 	public int getMaxStackSize(@Nonnull ItemStack stack) {
-		if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+		if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
 			if (stack.getMaxStackSize() > 1) {
 				return 1;
 			}

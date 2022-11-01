@@ -41,8 +41,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.Hopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -369,8 +369,8 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 								ResourceLocation typeLocation = ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(foundTile.getType());
 								boolean flag = foundTile instanceof Hopper || foundTile instanceof AbstractFurnaceBlockEntity || foundTile instanceof AbstractForceFurnaceBlockEntity;
 								boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
-								if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-									IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).orElse(null);
+								if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
+									IItemHandler itemHandler = foundTile.getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite()).orElse(null);
 									if (itemHandler != null) {
 										inventoryList.add(new BiggestInventory(offPos, itemHandler.getSlots(), dir.getOpposite()));
 									}
@@ -414,8 +414,8 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 							ResourceLocation typeLocation = ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(foundTile.getType());
 							boolean flag = foundTile instanceof Hopper || foundTile instanceof AbstractFurnaceBlockEntity || foundTile instanceof AbstractForceFurnaceBlockEntity;
 							boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
-							if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-								IItemHandler itemHandler = foundTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite()).orElse(null);
+							if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
+								IItemHandler itemHandler = foundTile.getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite()).orElse(null);
 								if (itemHandler != null) {
 									inventoryList.add(new BiggestInventory(offPos, itemHandler.getSlots(), dir.getOpposite()));
 								}
@@ -645,7 +645,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 	@Override
 	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-		if (!this.remove && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (!this.remove && facing != null && capability == net.minecraftforge.items.ForgeCapabilities.ITEM_HANDLER) {
 			if (facing == Direction.UP)
 				return handlers[0].cast();
 			else if (facing == Direction.DOWN)
@@ -680,8 +680,8 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		protected IItemHandler getIItemHandler(Level world) {
 			if (world.isAreaLoaded(worldPosition, 1)) {
 				BlockEntity tileEntity = world.getBlockEntity(tilePos);
-				if (!tileEntity.isRemoved() && tileEntity.hasLevel() && tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-					return tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction).orElse(null);
+				if (!tileEntity.isRemoved() && tileEntity.hasLevel() && tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
+					return tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, direction).orElse(null);
 				}
 			}
 			return null;

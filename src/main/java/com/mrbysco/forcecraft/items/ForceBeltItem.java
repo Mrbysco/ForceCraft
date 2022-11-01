@@ -8,8 +8,8 @@ import com.mrbysco.forcecraft.storage.StorageManager;
 import com.mrbysco.forcecraft.storage.WSDCapability;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -57,7 +57,7 @@ public class ForceBeltItem extends BaseItem {
     public InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
-        if(player != null && !context.getLevel().isClientSide && stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
+        if(player != null && !context.getLevel().isClientSide && stack.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
             player.openMenu(getContainer(stack));
             return InteractionResult.PASS;
         }

@@ -21,7 +21,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 
 	public boolean matchesModifier(ItemStack centerStack, ItemStack modifierStack) {
 		if (modifierStack.getItem() == ForceRegistry.FORCE_PACK_UPGRADE.get()) {
-			IItemHandler handler = centerStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+			IItemHandler handler = centerStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
 			if (handler instanceof PackItemStackHandler) {
 				if (((PackItemStackHandler) handler).getUpgrades() != getTier().ordinal() - 2) {
 					return false;

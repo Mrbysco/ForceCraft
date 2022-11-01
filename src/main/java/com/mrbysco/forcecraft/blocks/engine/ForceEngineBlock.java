@@ -32,9 +32,9 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -110,9 +110,9 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof ForceEngineBlockEntity) {
-			LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, hit.getDirection());
+			LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(ForgeCapabilities.FLUID_HANDLER, hit.getDirection());
 			fluidHandler.ifPresent((handler) -> {
-				if (player.getItemInHand(handIn).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+				if (player.getItemInHand(handIn).getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
 					FluidUtil.interactWithFluidHandler(player, handIn, level, pos, hit.getDirection());
 				} else {
 					if (!level.isClientSide) {

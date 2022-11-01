@@ -14,7 +14,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class RenderHelper {
 	public static void drawFluidTankInGUI(FluidStack fluid, double x, double y, double percent, int height) {

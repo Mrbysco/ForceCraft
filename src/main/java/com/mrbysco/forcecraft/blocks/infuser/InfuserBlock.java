@@ -28,11 +28,10 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -84,9 +83,9 @@ public class InfuserBlock extends BaseEntityBlock {
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player playerIn, InteractionHand handIn, BlockHitResult hit) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof InfuserBlockEntity) {
-			LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, hit.getDirection());
+			LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(ForgeCapabilities.FLUID_HANDLER, hit.getDirection());
 			fluidHandler.ifPresent((handler) -> {
-				if (playerIn.getItemInHand(handIn).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+				if (playerIn.getItemInHand(handIn).getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
 					FluidUtil.interactWithFluidHandler(playerIn, handIn, level, pos, hit.getDirection());
 				} else {
 					if (!level.isClientSide) {
@@ -106,7 +105,7 @@ public class InfuserBlock extends BaseEntityBlock {
 		if (!state.is(newState.getBlock())) {
 			BlockEntity blockentity = level.getBlockEntity(pos);
 			if (blockentity instanceof InfuserBlockEntity) {
-				blockentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
+				blockentity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
 					for (int i = 0; i < handler.getSlots(); ++i) {
 						Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));
 					}
