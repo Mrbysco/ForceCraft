@@ -645,7 +645,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 	@Override
 	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-		if (!this.remove && facing != null && capability == net.minecraftforge.items.ForgeCapabilities.ITEM_HANDLER) {
+		if (!this.remove && facing != null && capability == net.minecraftforge.common.capabilities.ForgeCapabilities.ITEM_HANDLER) {
 			if (facing == Direction.UP)
 				return handlers[0].cast();
 			else if (facing == Direction.DOWN)
