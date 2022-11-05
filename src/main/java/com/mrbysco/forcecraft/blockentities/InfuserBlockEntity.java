@@ -236,7 +236,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 				infuser.makesSpecialSound = false;
 			}
 			// auto turn off when done
-			//even if tool or book slot become empty, dont auto run next insert
+			//even if tool or book slot become empty, don't auto run next insert
 			infuser.canWork = false;
 			infuser.processTime = 0;
 
@@ -419,7 +419,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 			}
 		}
 
-		// TODO: is this notfiy needed?
+		// TODO: is this notify needed?
 		level.sendBlockUpdated(worldPosition, level.getBlockState(worldPosition), level.getBlockState(worldPosition), 2);
 	}
 
