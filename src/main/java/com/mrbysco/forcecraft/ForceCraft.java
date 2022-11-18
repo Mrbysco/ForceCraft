@@ -94,7 +94,6 @@ public class ForceCraft {
 		MinecraftForge.EVENT_BUS.register(new LootingHandler());
 		MinecraftForge.EVENT_BUS.register(new LootTableHandler());
 		MinecraftForge.EVENT_BUS.register(new ToolModifierHandler());
-		MinecraftForge.EVENT_BUS.register(new WorldGenHandler());
 		MinecraftForge.EVENT_BUS.addListener(NonBurnableItemEntity.EventHandler::onExpire); //Expire event of NonBurnableItemEntity
 
 		MinecraftForge.EVENT_BUS.addListener(CapabilityHandler::register);
