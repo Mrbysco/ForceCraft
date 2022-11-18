@@ -99,6 +99,7 @@ public class ForceCraft {
 		MinecraftForge.EVENT_BUS.addListener(CapabilityHandler::register);
 
 		eventBus.addListener(ForceEntities::registerEntityAttributes);
+		eventBus.addListener(ForceEntities::registerSpawnPlacement);
 
 		ForgeMod.enableMilkFluid(); //Enable milk from forge
 
@@ -114,7 +115,6 @@ public class ForceCraft {
 
 	private void setup(final FMLCommonSetupEvent event) {
 		PacketHandler.init();
-		ForceEntities.registerSpawnPlacement();
 		ForceFeatureConfigs.initialize();
 	}
 }
