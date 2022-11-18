@@ -138,7 +138,7 @@ public class ExperienceTomeItem extends Item {
 		return level >= 32 ? (9 * level * level - 325 * level + 4440) / 2 : level >= 17 ? (5 * level * level - 81 * level + 720) / 2 : (level * level + 6 * level);
 	}
 
-	public static int modifyExperience(ItemStack stack, int exp) {
+	public static void modifyExperience(ItemStack stack, int exp) {
 		int storedExp = getExperience(stack) + exp;
 
 		if (storedExp > getMaxExperience(stack)) {
@@ -149,7 +149,6 @@ public class ExperienceTomeItem extends Item {
 		CompoundTag tag = stack.getOrCreateTag();
 		tag.putInt("Experience", storedExp);
 		stack.setTag(tag);
-		return storedExp;
 	}
 
 	public static int getExperience(ItemStack stack) {

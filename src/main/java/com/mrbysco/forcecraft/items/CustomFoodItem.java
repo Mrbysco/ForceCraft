@@ -40,7 +40,7 @@ public class CustomFoodItem extends Item {
 		return stack;
 	}
 
-	public CustomFoodItem randPotionEffect(LivingEntity entityLiving) {
+	public void randPotionEffect(LivingEntity entityLiving) {
 		Random rnd = new Random();
 		int rand = rnd.nextInt(16);
 		Player player = (Player) entityLiving;
@@ -63,7 +63,6 @@ public class CustomFoodItem extends Item {
 			case 14 -> player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 1000, 0, false, false));
 			case 15 -> player.addEffect(new MobEffectInstance(MobEffects.LUCK, 1000, 0, false, false));
 		}
-		return this;
 	}
 
 }

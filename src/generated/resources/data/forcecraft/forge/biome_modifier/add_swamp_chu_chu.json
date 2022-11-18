@@ -1,0 +1,30 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#forge:is_swamp",
+  "spawners": [
+    {
+      "type": "forcecraft:red_chu_chu",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 1
+    },
+    {
+      "type": "forcecraft:green_chu_chu",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 1
+    },
+    {
+      "type": "forcecraft:blue_chu_chu",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 1
+    },
+    {
+      "type": "forcecraft:gold_chu_chu",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 1
+    }
+  ]
+}

@@ -22,10 +22,10 @@ import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceLootModifiers;
 import com.mrbysco.forcecraft.registry.ForceMenus;
+import com.mrbysco.forcecraft.registry.ForceModifiers;
 import com.mrbysco.forcecraft.registry.ForceRecipeSerializers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
-import com.mrbysco.forcecraft.world.WorldGenHandler;
 import com.mrbysco.forcecraft.world.feature.ForceFeatureConfigs;
 import com.mrbysco.forcecraft.world.feature.ForceFeatures;
 import net.minecraft.world.damagesource.DamageSource;
@@ -83,6 +83,7 @@ public class ForceCraft {
 		ForceLootModifiers.GLM.register(eventBus);
 		ForceRecipes.RECIPE_TYPES.register(eventBus);
 		ForceRecipeSerializers.RECIPE_SERIALIZERS.register(eventBus);
+		ForceModifiers.BIOME_MODIFIER_SERIALIZERS.register(eventBus);
 
 		MinecraftForge.EVENT_BUS.register(new HeartHandler());
 		MinecraftForge.EVENT_BUS.register(new ForceDeathHandler());

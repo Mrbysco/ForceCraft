@@ -38,27 +38,6 @@ public class ConfigHandler {
 		public final IntValue speedCap;
 		public final IntValue rodSpeedCap;
 
-		public final BooleanValue ChuChuSpawning;
-		public final IntValue ChuChuWeight;
-		public final IntValue ChuChuMinGroup;
-		public final IntValue ChuChuMaxGroup;
-
-		public final BooleanValue CreeperTotSpawning;
-		public final IntValue CreeperTotWeight;
-		public final IntValue CreeperTotMinGroup;
-		public final IntValue CreeperTotMaxGroup;
-
-		public final BooleanValue EnderTotSpawning;
-		public final IntValue EnderTotWeight;
-		public final IntValue EnderTotMinGroup;
-		public final IntValue EnderTotMaxGroup;
-
-		public final BooleanValue FairySpawning;
-		public final IntValue FairyWeight;
-		public final IntValue FairyMinGroup;
-		public final IntValue FairyMaxGroup;
-
-
 		Common(ForgeConfigSpec.Builder builder) {
 			//General settings
 			builder.comment("General settings")
@@ -339,74 +318,6 @@ public class ConfigHandler {
 			rodSpeedCap = builder
 					.comment("The max level of Speed that can be applied to a Force Rod [Default: 3]")
 					.defineInRange("rodSpeedCap", 3, 1, 5);
-
-			builder.pop();
-			builder.comment("Mob settings")
-					.push("mob");
-
-			ChuChuSpawning = builder
-					.comment("Enable Chu Chu's to spawn [Default: true]")
-					.define("ChuChuSpawning", true);
-
-			ChuChuWeight = builder
-					.comment("Chu Chu spawn weight [Default: 100]")
-					.defineInRange("ChuChuWeight", 100, 1, Integer.MAX_VALUE);
-
-			ChuChuMinGroup = builder
-					.comment("Chu Chu Min Group size [Default: 1]")
-					.defineInRange("ChuChuMinGroup", 1, 1, Integer.MAX_VALUE);
-
-			ChuChuMaxGroup = builder
-					.comment("Chu Chu Max Group size [Default: 1]")
-					.defineInRange("ChuChuMaxGroup", 1, 1, Integer.MAX_VALUE);
-
-			CreeperTotSpawning = builder
-					.comment("Enable Creeper Tot's to spawn [Default: true]")
-					.define("CreeperTotSpawning", true);
-
-			CreeperTotWeight = builder
-					.comment("Creeper Tot spawn weight [Default: 25]")
-					.defineInRange("CreeperTotWeight", 25, 1, Integer.MAX_VALUE);
-
-			CreeperTotMinGroup = builder
-					.comment("Creeper Tot Min Group size [Default: 1]")
-					.defineInRange("CreeperTotMinGroup", 1, 1, Integer.MAX_VALUE);
-
-			CreeperTotMaxGroup = builder
-					.comment("Creeper Tot Max Group size [Default: 1]")
-					.defineInRange("CreeperTotMaxGroup", 2, 1, Integer.MAX_VALUE);
-
-			EnderTotSpawning = builder
-					.comment("Enable Ender Tot's to spawn [Default: true]")
-					.define("CreeperTotSpawning", true);
-
-			EnderTotWeight = builder
-					.comment("Ender Tot spawn weight [Default: 5]")
-					.defineInRange("CreeperTotWeight", 5, 1, Integer.MAX_VALUE);
-
-			EnderTotMinGroup = builder
-					.comment("Ender Tot Min Group size [Default: 1]")
-					.defineInRange("CreeperTotMinGroup", 1, 1, Integer.MAX_VALUE);
-
-			EnderTotMaxGroup = builder
-					.comment("Ender Tot Max Group size [Default: 1]")
-					.defineInRange("CreeperTotMaxGroup", 1, 1, Integer.MAX_VALUE);
-
-			FairySpawning = builder
-					.comment("Enable Fairy's to spawn [Default: true]")
-					.define("FairySpawning", true);
-
-			FairyWeight = builder
-					.comment("Fairy spawn weight [Default: 4]")
-					.defineInRange("FairyWeight", 4, 1, Integer.MAX_VALUE);
-
-			FairyMinGroup = builder
-					.comment("Fairy Min Group size [Default: 1]")
-					.defineInRange("FairyMinGroup", 1, 1, Integer.MAX_VALUE);
-
-			FairyMaxGroup = builder
-					.comment("Fairy Max Group size [Default: 1]")
-					.defineInRange("FairyMaxGroup", 2, 1, Integer.MAX_VALUE);
 
 			builder.pop();
 		}

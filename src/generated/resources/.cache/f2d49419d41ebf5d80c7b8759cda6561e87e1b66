@@ -1,0 +1,4 @@
+// 1.19.2	2022-11-18T15:44:16.3740582	worldgen/placed_feature generator for forcecraft
+b8121b401afe5bf1716f561fdbe7c0f82439603c data/forcecraft/worldgen/placed_feature/force_ore.json
+9ad18747f35c14535313da267537974ea0c53e51 data/forcecraft/worldgen/placed_feature/force_ore_buried.json
+3932c7bfd8295c6e3a9cfb9be7b8c3e896f25133 data/forcecraft/worldgen/placed_feature/force_tree.json

@@ -272,7 +272,7 @@
   "info.forcecraft.book.speed_info.text": "This infusion does the following,$(br)$(li)On $(item)Force Tools$(), Increases the tool efficiency$(br)$(li)On a $(item)Force Bow$() (Max lvl, 1), Makes arrows fly faster and farther$(br)$(li)On $(item)Force Armor$() (Max lvl, 1), Increase player movement speed",
   "info.forcecraft.book.speed_info.text2": "$(li)On an $(l:forcecraft:infuser/upgrade_core)$(item)Upgrade Core$(), Converts the Upgrade Core to an $(item)Speed Core$() to use as an upgrade for the $(l:forcecraft:infuser/furnace)$(item)Force Furnace$()",
   "info.forcecraft.book.sturdy.entry.name": "Sturdy",
-  "info.forcecraft.book.sturdy_info.text": "This infusion does the following,$(br)$(li)On $(item)Force Tools$() (Max lvl, 3), will imbue with the vanilla Unbreaking enchantment$(br)$(li)On $(item)Force Armor$() (1 level per piece), Reduces damage from all sources for a total of 75%",
+  "info.forcecraft.book.sturdy_info.text": "This infusion does the following,$(br)$(li)On $(item)Force Tools$() (Max lvl, 3), will imbue with the vanilla Unbreaking enchantment$(br)$(li)On $(item)Force Armor$() (1 level per piece), Reduces damage from all sources for a total of 75%%",
   "info.forcecraft.book.subtitle": "For all your Force needs",
   "info.forcecraft.book.tier_0.desc": "Infusions that can be executed by default$(br)$(br)Complete all tier zero infusions to upgrade your Tome to the next tier (2 total)",
   "info.forcecraft.book.tier_0.name": "Tier 0 Infusions",

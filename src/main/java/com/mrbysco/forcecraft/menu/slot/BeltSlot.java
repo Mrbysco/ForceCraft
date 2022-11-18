@@ -10,11 +10,9 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 public class BeltSlot extends SlotItemHandler {
-	private final int index;
 
 	public BeltSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
 		super(itemHandler, index, xPosition, yPosition);
-		this.index = index;
 	}
 
 	@Override

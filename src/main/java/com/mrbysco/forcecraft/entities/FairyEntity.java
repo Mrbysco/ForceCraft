@@ -45,7 +45,6 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 		this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0F);
 	}
 
-	@SuppressWarnings("deprecation")
 	public float getWalkTargetValue(BlockPos pos, LevelReader level) {
 		return level.getBlockState(pos).isAir() ? 10.0F : 0.0F;
 	}
