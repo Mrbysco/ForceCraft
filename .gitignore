@@ -16,11 +16,7 @@ out
 # gradle
 build
 .gradle
-logs
 
 # other
 eclipse
 run
-
-# Files from Forge MDK
-forge*changelog.txt
