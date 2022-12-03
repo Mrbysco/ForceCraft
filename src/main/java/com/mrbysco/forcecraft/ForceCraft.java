@@ -28,9 +28,11 @@ import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.world.feature.ForceFeatureConfigs;
 import com.mrbysco.forcecraft.world.feature.ForceFeatures;
+import net.minecraft.core.dispenser.ShearsDispenseItemBehavior;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
@@ -116,6 +118,9 @@ public class ForceCraft {
 	private void setup(final FMLCommonSetupEvent event) {
 		PacketHandler.init();
 		ForceFeatureConfigs.initialize();
+		event.enqueueWork(() -> {
+			DispenserBlock.registerBehavior(ForceRegistry.FORCE_SHEARS.get(), new ShearsDispenseItemBehavior());
+		});
 	}
 }
 
