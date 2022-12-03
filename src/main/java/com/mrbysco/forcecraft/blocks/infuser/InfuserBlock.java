@@ -85,7 +85,7 @@ public class InfuserBlock extends BaseEntityBlock {
 		if (blockentity instanceof InfuserBlockEntity) {
 			LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(ForgeCapabilities.FLUID_HANDLER, hit.getDirection());
 			fluidHandler.ifPresent((handler) -> {
-				if (playerIn.getItemInHand(handIn).getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
+				if (playerIn.getItemInHand(handIn).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 					FluidUtil.interactWithFluidHandler(playerIn, handIn, level, pos, hit.getDirection());
 				} else {
 					if (!level.isClientSide) {

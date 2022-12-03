@@ -137,19 +137,13 @@ public class ForceEngineMenu extends AbstractContainerMenu {
 		if (slot != null && slot.hasItem()) {
 			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
-			final int tileSize = 2;
+			final int containerSize = 4;
 
-			if (itemstack.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
-				if (itemstack.getMaxStackSize() > 1) {
+			if (index < containerSize) {
+				if (!this.moveItemStackTo(itemstack1, containerSize, slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			}
-
-			if (index < tileSize) {
-				if (!this.moveItemStackTo(itemstack1, tileSize, slots.size(), true)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (!this.moveItemStackTo(itemstack1, 0, tileSize, false)) {
+			} else if (!this.moveItemStackTo(itemstack1, 0, containerSize, false)) {
 				return ItemStack.EMPTY;
 			}
 

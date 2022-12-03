@@ -112,7 +112,7 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 		if (blockentity instanceof ForceEngineBlockEntity) {
 			LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(ForgeCapabilities.FLUID_HANDLER, hit.getDirection());
 			fluidHandler.ifPresent((handler) -> {
-				if (player.getItemInHand(handIn).getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
+				if (player.getItemInHand(handIn).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 					FluidUtil.interactWithFluidHandler(player, handIn, level, pos, hit.getDirection());
 				} else {
 					if (!level.isClientSide) {

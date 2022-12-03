@@ -20,7 +20,7 @@ public class ThrottleSlot extends SlotItemHandler {
 
 	@Override
 	public int getMaxStackSize(@Nonnull ItemStack stack) {
-		if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
+		if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 			if (stack.getMaxStackSize() > 1) {
 				return 1;
 			}

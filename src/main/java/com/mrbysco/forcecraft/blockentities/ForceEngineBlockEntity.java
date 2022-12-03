@@ -117,7 +117,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	public final ItemStackHandler inputHandler = new ItemStackHandler(2) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
-			if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
+			if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 				if (stack.getMaxStackSize() > 1) {
 					return 1;
 				}
@@ -127,7 +127,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
-			IFluidHandler fluidCap = stack.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
+			IFluidHandler fluidCap = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
 			if (slot == 0) {
 				if (fluidCap != null) {
 					FluidStack fluidStack = fluidCap.getFluidInTank(0);
@@ -156,7 +156,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	public final ItemStackHandler outputHandler = new ItemStackHandler(2) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
-			if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
+			if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 				if (stack.getMaxStackSize() > 1) {
 					return 1;
 				}
