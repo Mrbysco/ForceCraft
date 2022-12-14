@@ -254,7 +254,6 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, AbstractForceFurnaceBlockEntity furnace) {
 		boolean wasBurning = furnace.isLit();
-		boolean dirty = false;
 		if (furnace.isLit() && furnace.canBurn(furnace.currentRecipe)) {
 			int speed = furnace.getSpeed();
 			if (furnace.burnSpeed != speed) {
@@ -263,7 +262,8 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			furnace.litTime -= furnace.burnSpeed;
 		}
 
-		if (furnace.level != null && !furnace.level.isClientSide) {
+		if (level != null) {
+			boolean dirty = false;
 			ItemStack fuel = furnace.handler.getStackInSlot(FUEL_SLOT);
 			if (furnace.isLit() || !fuel.isEmpty() && !furnace.handler.getStackInSlot(INPUT_SLOT).isEmpty()) {
 				AbstractCookingRecipe cookingRecipe = furnace.getRecipe();
@@ -307,12 +307,12 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 			if (wasBurning != furnace.isLit()) {
 				dirty = true;
-				furnace.level.setBlock(furnace.worldPosition, furnace.level.getBlockState(furnace.worldPosition).setValue(AbstractFurnaceBlock.LIT, Boolean.valueOf(furnace.isLit())), 3);
+				level.setBlock(pos, state.setValue(AbstractFurnaceBlock.LIT, Boolean.valueOf(furnace.isLit())), 3);
 			}
-		}
 
-		if (dirty) {
-			setChanged(level, pos, state);
+			if (dirty) {
+				setChanged(level, pos, state);
+			}
 		}
 	}
 

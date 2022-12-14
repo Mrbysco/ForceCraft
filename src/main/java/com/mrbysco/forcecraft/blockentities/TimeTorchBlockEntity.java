@@ -41,7 +41,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, TimeTorchBlockEntity timeTorch) {
 		timeTorch.updateCachedMode();
-		if (timeTorch.level.getGameTime() % 20 == 0) {
+		if (level.getGameTime() % 20 == 0) {
 			timeTorch.tickNeighbor();
 		}
 	}
