@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -39,6 +40,26 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 
 	public ForceWrenchItem(Item.Properties name) {
 		super(name.stacksTo(1));
+	}
+
+	@Override
+	public void onCraftedBy(ItemStack stack, Level level, Player player) {
+		super.onCraftedBy(stack, level, player);
+		initializeTag(stack);
+	}
+
+	@Override
+	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
+		if (stack.getTag() == null) {
+			initializeTag(stack);
+		}
+	}
+
+	private void initializeTag(ItemStack stack) {
+		CompoundTag tag = stack.getOrCreateTag();
+		tag.putBoolean("ForceInfused", false);
+		stack.setTag(tag);
 	}
 
 	@Override
