@@ -11,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -41,6 +42,26 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 
 	public ForceWrenchItem(Item.Properties name) {
 		super(name.stacksTo(1));
+	}
+
+	@Override
+	public void onCraftedBy(ItemStack stack, World world, PlayerEntity player) {
+		super.onCraftedBy(stack, world, player);
+		initializeTag(stack);
+	}
+
+	@Override
+	public void inventoryTick(ItemStack stack, World level, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
+		if (stack.getTag() == null) {
+			initializeTag(stack);
+		}
+	}
+
+	private void initializeTag(ItemStack stack) {
+		CompoundNBT tag = stack.getOrCreateTag();
+		tag.putBoolean("ForceInfused", false);
+		stack.setTag(tag);
 	}
 
 	@Override
