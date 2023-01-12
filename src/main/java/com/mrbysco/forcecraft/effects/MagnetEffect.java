@@ -37,7 +37,6 @@ public class MagnetEffect extends MobEffect {
 		//Inspired by Botania Code
 		double x = entity.getX();
 		double y = entity.getY() + 0.75;
-		;
 		double z = entity.getZ();
 		double range = 10.0d;
 
