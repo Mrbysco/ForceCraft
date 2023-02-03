@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -87,21 +88,18 @@ public class TimeTorchBlockEntity extends BlockEntity {
 						block.randomTick(blockState, (ServerLevel) this.level, pos, level.random);
 				}
 			}
-//            if(block.hasTileEntity(blockState)) { TODO: Fix Time Torch ticking Block Entities
-//                BlockEntity tile = this.level.getBlockEntity(pos);
-//
-//                if(tile == null || tile.isRemoved()) return;
-//
-//                for(int i = 0; i < this.speed; i++) {
-//                    if(tile.isRemoved()) {
-//                        break;
-//                    }
-//                    if(tile instanceof TickableBlockEntity) {
-//                        if(getLevel().random.nextBoolean())
-//                        ((TickableBlockEntity) tile).tick();
-//                    }
-//                }
-//            }
+			BlockEntity blockEntity = level.getBlockEntity(pos);
+			if (blockEntity != null) {
+				for (int i = 0; i < this.speed; i++) {
+					if (blockEntity.isRemoved()) {
+						break;
+					}
+					BlockEntityTicker<BlockEntity> ticker = blockState.getTicker(level, (BlockEntityType<BlockEntity>) blockEntity.getType());
+					if (ticker != null) {
+						ticker.tick(level, pos, blockEntity.getBlockState(), blockEntity);
+					}
+				}
+			}
 		}
 	}
 
