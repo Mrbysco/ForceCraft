@@ -37,13 +37,17 @@ public class TimeTorchBlock extends TorchBlock implements EntityBlock {
 	}
 
 	@Nullable
-	protected static <T extends BlockEntity> BlockEntityTicker<T> createTimeTorchTicker(Level level, BlockEntityType<T> p_151989_, BlockEntityType<? extends TimeTorchBlockEntity> timeTorchBlockEntityType) {
-		return level.isClientSide ? null : createTickerHelper(p_151989_, timeTorchBlockEntityType, TimeTorchBlockEntity::serverTick);
+	protected static <T extends BlockEntity> BlockEntityTicker<T> createTimeTorchTicker(Level level,
+																						BlockEntityType<T> entityType,
+																						BlockEntityType<? extends TimeTorchBlockEntity> timeTorchBlockEntityType) {
+		return level.isClientSide ? null : createTickerHelper(entityType, timeTorchBlockEntityType, TimeTorchBlockEntity::serverTick);
 	}
 
 	@Nullable
-	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> p_152133_, BlockEntityType<E> p_152134_, BlockEntityTicker<? super E> p_152135_) {
-		return p_152134_ == p_152133_ ? (BlockEntityTicker<A>) p_152135_ : null;
+	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> blockEntityType,
+																											BlockEntityType<E> blockEntityType1,
+																											BlockEntityTicker<? super E> blockEntityTicker) {
+		return blockEntityType1 == blockEntityType ? (BlockEntityTicker<A>) blockEntityTicker : null;
 	}
 
 	@Override
