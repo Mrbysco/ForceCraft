@@ -606,20 +606,20 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		this.recipes.clear();
 	}
 
-	public List<Recipe<?>> grantStoredRecipeExperience(Level world, Vec3 pos) {
+	public List<Recipe<?>> grantStoredRecipeExperience(Level level, Vec3 pos) {
 		List<Recipe<?>> list = Lists.newArrayList();
 
 		for (Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
-			world.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
+			level.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
 				list.add(recipe);
-				splitAndSpawnExperience(world, pos, entry.getIntValue(), (((AbstractCookingRecipe) recipe).getExperience() * getXPMultiplier()));
+				splitAndSpawnExperience(level, pos, entry.getIntValue(), (((AbstractCookingRecipe) recipe).getExperience() * getXPMultiplier()));
 			});
 		}
 
 		return list;
 	}
 
-	private static void splitAndSpawnExperience(Level world, Vec3 pos, int craftedAmount, float experience) {
+	private static void splitAndSpawnExperience(Level level, Vec3 pos, int craftedAmount, float experience) {
 		int i = Mth.floor((float) craftedAmount * experience);
 		float f = Mth.frac((float) craftedAmount * experience);
 		if (f != 0.0F && Math.random() < (double) f) {
@@ -629,7 +629,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		while (i > 0) {
 			int j = ExperienceOrb.getExperienceValue(i);
 			i -= j;
-			world.addFreshEntity(new ExperienceOrb(world, pos.x, pos.y, pos.z, j));
+			level.addFreshEntity(new ExperienceOrb(level, pos.x, pos.y, pos.z, j));
 		}
 
 	}
