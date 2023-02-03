@@ -7,6 +7,7 @@ import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -107,7 +109,9 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 						spawnItemStack(level, pos.getX(), pos.getY(), pos.getZ(), furnaceTile.getItem(i));
 					}
 				}
-				((AbstractForceFurnaceBlockEntity) blockentity).getRecipesToAwardAndPopExperience(level, Vec3.atCenterOf(pos));
+				if (level instanceof ServerLevel) {
+					((AbstractFurnaceBlockEntity) blockentity).getRecipesToAwardAndPopExperience((ServerLevel) level, Vec3.atCenterOf(pos));
+				}
 				level.updateNeighbourForOutputSignal(pos, this);
 			}
 

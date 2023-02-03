@@ -601,14 +601,10 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	public void awardUsedRecipes(Player player) {
 	}
 
-	public void awardUsedRecipesAndPopExperience(Player player) {
-		Level level = player.getLevel();
-		if(!level.isClientSide) {
-			ServerLevel serverLevel = (ServerLevel) level;
-			List<Recipe<?>> list = this.getRecipesToAwardAndPopExperience(serverLevel, player.position());
-			player.awardRecipes(list);
-			this.recipes.clear();
-		}
+	public void awardUsedRecipesAndPopExperience(ServerPlayer player) {
+		List<Recipe<?>> list = this.getRecipesToAwardAndPopExperience(player.getLevel(), player.position());
+		player.awardRecipes(list);
+		this.recipes.clear();
 	}
 
 	public List<Recipe<?>> getRecipesToAwardAndPopExperience(ServerLevel serverLevel, Vec3 pos) {
