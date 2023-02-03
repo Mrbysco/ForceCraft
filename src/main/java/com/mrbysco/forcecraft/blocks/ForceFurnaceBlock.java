@@ -107,7 +107,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 						spawnItemStack(level, pos.getX(), pos.getY(), pos.getZ(), furnaceTile.getItem(i));
 					}
 				}
-				((AbstractForceFurnaceBlockEntity) blockentity).grantStoredRecipeExperience(level, Vec3.atCenterOf(pos));
+				((AbstractForceFurnaceBlockEntity) blockentity).getRecipesToAwardAndPopExperience(level, Vec3.atCenterOf(pos));
 				level.updateNeighbourForOutputSignal(pos, this);
 			}
 

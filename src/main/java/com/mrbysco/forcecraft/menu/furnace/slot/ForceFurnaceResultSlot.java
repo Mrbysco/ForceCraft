@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.menu.furnace.slot;
 
 import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -53,8 +54,8 @@ public class ForceFurnaceResultSlot extends SlotItemHandler {
 	 */
 	protected void checkTakeAchievements(ItemStack stack) {
 		stack.onCraftedBy(this.player.level, this.player, this.removeCount);
-		if (!this.player.level.isClientSide && this.container instanceof AbstractForceFurnaceBlockEntity) {
-			((AbstractForceFurnaceBlockEntity) this.container).unlockRecipes(this.player);
+		if (this.player instanceof ServerPlayer && this.container instanceof AbstractForceFurnaceBlockEntity) {
+			((AbstractForceFurnaceBlockEntity) this.container).awardUsedRecipesAndPopExperience((ServerPlayer) this.player);
 		}
 
 		this.removeCount = 0;

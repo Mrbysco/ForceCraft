@@ -7,7 +7,7 @@ import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.recipe.MultipleOutputFurnaceRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
-import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,6 +16,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -600,38 +601,33 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	public void awardUsedRecipes(Player player) {
 	}
 
-	public void unlockRecipes(Player player) {
-		List<Recipe<?>> list = this.grantStoredRecipeExperience(player.level, player.position());
+	public void awardUsedRecipesAndPopExperience(ServerPlayer player) {
+		List<Recipe<?>> list = this.getRecipesToAwardAndPopExperience(player.getLevel(), player.position());
 		player.awardRecipes(list);
 		this.recipes.clear();
 	}
 
-	public List<Recipe<?>> grantStoredRecipeExperience(Level level, Vec3 pos) {
+	public List<Recipe<?>> getRecipesToAwardAndPopExperience(ServerLevel level, Vec3 pos) {
 		List<Recipe<?>> list = Lists.newArrayList();
 
-		for (Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
+		for (Object2IntMap.Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
 			level.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
 				list.add(recipe);
-				splitAndSpawnExperience(level, pos, entry.getIntValue(), (((AbstractCookingRecipe) recipe).getExperience() * getXPMultiplier()));
+				createExperience(level, pos, entry.getIntValue(), ((AbstractCookingRecipe) recipe).getExperience());
 			});
 		}
 
 		return list;
 	}
 
-	private static void splitAndSpawnExperience(Level level, Vec3 pos, int craftedAmount, float experience) {
+	private static void createExperience(ServerLevel level, Vec3 pos, int craftedAmount, float experience) {
 		int i = Mth.floor((float) craftedAmount * experience);
 		float f = Mth.frac((float) craftedAmount * experience);
 		if (f != 0.0F && Math.random() < (double) f) {
 			++i;
 		}
 
-		while (i > 0) {
-			int j = ExperienceOrb.getExperienceValue(i);
-			i -= j;
-			level.addFreshEntity(new ExperienceOrb(level, pos.x, pos.y, pos.z, j));
-		}
-
+		ExperienceOrb.award(level, pos, i);
 	}
 
 	public void fillStackedContents(StackedContents helper) {
