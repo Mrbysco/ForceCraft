@@ -54,8 +54,8 @@ public class ForceFurnaceResultSlot extends SlotItemHandler {
 	 */
 	protected void checkTakeAchievements(ItemStack stack) {
 		stack.onCraftedBy(this.player.level, this.player, this.removeCount);
-		if (this.player instanceof ServerPlayer && this.container instanceof AbstractForceFurnaceBlockEntity) {
-			((AbstractForceFurnaceBlockEntity) this.container).awardUsedRecipesAndPopExperience((ServerPlayer) this.player);
+		if (!this.player.level.isClientSide && this.container instanceof AbstractForceFurnaceBlockEntity) {
+			((AbstractForceFurnaceBlockEntity) this.container).awardUsedRecipesAndPopExperience(this.player);
 		}
 
 		this.removeCount = 0;

@@ -601,33 +601,37 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	public void awardUsedRecipes(Player player) {
 	}
 
-	public void awardUsedRecipesAndPopExperience(ServerPlayer player) {
-		List<Recipe<?>> list = this.getRecipesToAwardAndPopExperience(player.getLevel(), player.position());
-		player.awardRecipes(list);
-		this.recipes.clear();
+	public void awardUsedRecipesAndPopExperience(Player player) {
+		Level level = player.getLevel();
+		if(!level.isClientSide) {
+			ServerLevel serverLevel = (ServerLevel) level;
+			List<Recipe<?>> list = this.getRecipesToAwardAndPopExperience(serverLevel, player.position());
+			player.awardRecipes(list);
+			this.recipes.clear();
+		}
 	}
 
-	public List<Recipe<?>> getRecipesToAwardAndPopExperience(ServerLevel level, Vec3 pos) {
+	public List<Recipe<?>> getRecipesToAwardAndPopExperience(ServerLevel serverLevel, Vec3 pos) {
 		List<Recipe<?>> list = Lists.newArrayList();
 
 		for (Object2IntMap.Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
-			level.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
+			serverLevel.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
 				list.add(recipe);
-				createExperience(level, pos, entry.getIntValue(), ((AbstractCookingRecipe) recipe).getExperience());
+				createExperience(serverLevel, pos, entry.getIntValue(), ((AbstractCookingRecipe) recipe).getExperience());
 			});
 		}
 
 		return list;
 	}
 
-	private static void createExperience(ServerLevel level, Vec3 pos, int craftedAmount, float experience) {
+	private static void createExperience(ServerLevel serverLevel, Vec3 pos, int craftedAmount, float experience) {
 		int i = Mth.floor((float) craftedAmount * experience);
 		float f = Mth.frac((float) craftedAmount * experience);
 		if (f != 0.0F && Math.random() < (double) f) {
 			++i;
 		}
 
-		ExperienceOrb.award(level, pos, i);
+		ExperienceOrb.award(serverLevel, pos, i);
 	}
 
 	public void fillStackedContents(StackedContents helper) {
