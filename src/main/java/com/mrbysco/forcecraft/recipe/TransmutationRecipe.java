@@ -74,12 +74,12 @@ public class TransmutationRecipe implements CraftingRecipe {
 	public boolean matches(CraftingContainer inv, Level level) {
 		StackedContents recipeitemhelper = new StackedContents();
 		java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
-		int i = 0;
+		int stacks = 0;
 
-		for (int j = 0; j < inv.getContainerSize(); ++j) {
-			ItemStack itemstack = inv.getItem(j);
+		for (int i = 0; i < inv.getContainerSize(); ++i) {
+			ItemStack itemstack = inv.getItem(i);
 			if (!itemstack.isEmpty()) { //TEMP fix!
-				++i;
+				++stacks;
 				if ((itemstack.getItem() instanceof ForceRodItem)) {
 					if (isSimple)
 						recipeitemhelper.accountStack(itemstack, 1);
@@ -108,7 +108,7 @@ public class TransmutationRecipe implements CraftingRecipe {
 			}
 		}
 
-		return i == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this, (IntList) null) : net.minecraftforge.common.util.RecipeMatcher.findMatches(inputs, this.recipeItems) != null);
+		return stacks == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this, (IntList) null) : net.minecraftforge.common.util.RecipeMatcher.findMatches(inputs, this.recipeItems) != null);
 	}
 
 	public ItemStack assemble(CraftingContainer inv) {
