@@ -433,7 +433,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	@Override
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
-		load(packet.getTag());
+		this.load(packet.getTag());
 	}
 
 	@Override
