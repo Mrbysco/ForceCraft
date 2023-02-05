@@ -29,7 +29,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	private int yMax;
 	private int zMax;
 
-	private byte speed;
+	private int speed;
 
 	public TimeTorchBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
 		super(blockEntityType, pos, state);
@@ -45,10 +45,6 @@ public class TimeTorchBlockEntity extends BlockEntity {
 		if (level.getGameTime() % 20 == 0) {
 			timeTorch.tickNeighbor();
 		}
-	}
-
-	protected int speed(int base) {
-		return base;
 	}
 
 	private void tickNeighbor() {
@@ -106,12 +102,12 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	@Override
 	public void saveAdditional(CompoundTag compound) {
 		super.saveAdditional(compound);
-		compound.putByte("Speed", this.speed);
+		compound.putInt("Speed", this.speed);
 	}
 
 	@Override
 	public void load(CompoundTag nbt) {
-		this.speed = nbt.getByte("Speed");
+		this.speed = nbt.getInt("Speed");
 		super.load(nbt);
 	}
 
