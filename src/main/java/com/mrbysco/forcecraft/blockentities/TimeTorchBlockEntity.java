@@ -17,19 +17,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 //All Code Heavily inspired by Torcherino. Credit to Moze_Intel, Sci4me and NinjaPhenix
 public class TimeTorchBlockEntity extends BlockEntity {
 
-	private int xMin;
-	private int yMin;
-	private int zMin;
-	private int xMax;
-	private int yMax;
-	private int zMax;
-
-	private byte speed;
+	private List<BlockPos> positionList = new ArrayList<>();
+	private int speed;
 
 	public TimeTorchBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
 		super(blockEntityType, pos, state);
@@ -41,8 +36,8 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	}
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, TimeTorchBlockEntity timeTorch) {
-		timeTorch.updateCachedMode();
 		if (timeTorch.level.getGameTime() % 20 == 0) {
+			timeTorch.updateCachedMode();
 			timeTorch.tickNeighbor();
 		}
 	}
@@ -52,27 +47,20 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	}
 
 	private void tickNeighbor() {
-		for (int x = this.xMin; x <= this.xMax; x++) {
-			for (int y = this.yMin; y <= this.yMax; y++) {
-				for (int z = this.zMin; z <= this.zMax; z++) {
-					this.tickBlock(new BlockPos(x, y, z));
-				}
-			}
-		}
+		positionList.forEach(this::tickBlock);
 	}
 
 	private void updateCachedMode() {
-		this.xMin = this.worldPosition.getX() - 1;
-		this.yMin = this.worldPosition.getY() - 1;
-		this.zMin = this.worldPosition.getZ() - 1;
-		this.xMax = this.worldPosition.getX() + 1;
-		this.yMax = this.worldPosition.getY() + 1;
-		this.zMax = this.worldPosition.getZ() + 1;
+		positionList.clear();
+		BlockPos.betweenClosed(
+						worldPosition.offset(-1, -1, -1),
+						worldPosition.offset(1, 1, 1))
+				.forEach(positionList::add);
 	}
 
 	@SuppressWarnings("deprecation")
 	private void tickBlock(@Nonnull BlockPos pos) {
-		if (pos.equals(getBlockPos())) return;
+		if (pos.equals(getBlockPos()) || !level.isAreaLoaded(pos, 1)) return;
 
 		BlockState blockState = this.level.getBlockState(pos);
 		if (blockState != null) {
@@ -106,25 +94,41 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	@Override
 	public void saveAdditional(CompoundTag compound) {
 		super.saveAdditional(compound);
-		compound.putByte("Speed", this.speed);
+		compound.putInt("Speed", this.speed);
 	}
 
 	@Override
 	public void load(CompoundTag nbt) {
-		this.speed = nbt.getByte("Speed");
+		this.speed = nbt.getInt("Speed");
 		super.load(nbt);
 	}
 
-	@Nullable
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		CompoundTag nbt = new CompoundTag();
-		this.saveAdditional(nbt);
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-		this.load(pkt.getTag());
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
+		this.load(packet.getTag());
+	}
+
+	@Override
+	public CompoundTag getUpdateTag() {
+		CompoundTag nbt = new CompoundTag();
+		this.saveAdditional(nbt);
+		return nbt;
+	}
+
+	@Override
+	public void handleUpdateTag(CompoundTag tag) {
+		this.load(tag);
+	}
+
+	@Override
+	public CompoundTag getTileData() {
+		CompoundTag nbt = new CompoundTag();
+		this.saveAdditional(nbt);
+		return nbt;
 	}
 }
