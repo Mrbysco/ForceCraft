@@ -9,6 +9,7 @@ import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.SimpleContainer;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -68,7 +70,18 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 
 		this.addSlot(new SlotItemHandler(furnaceInventory, 0, 56, 17));
 		this.addSlot(new ForceFurnaceFuelSlot(this, furnaceInventory, 1, 56, 53));
-		this.addSlot(new ForceFurnaceResultSlot(player, furnaceInventory, 2, 116, 35));
+		this.addSlot(new ForceFurnaceResultSlot(player, furnaceInventory, 2, 116, 35) {
+			@Override
+			protected void checkTakeAchievements(ItemStack stack) {
+				stack.onCraftedBy(player.level, player, this.removeCount);
+				if (player instanceof ServerPlayer) {
+					tile.awardUsedRecipesAndPopExperience((ServerPlayer) player);
+				}
+
+				this.removeCount = 0;
+				ForgeEventFactory.firePlayerSmeltedEvent(player, stack);
+			}
+		});
 		this.addSlot(new UpgradeSlot(upgradeInventory, 0, 12, 12));
 
 		for (int i = 0; i < 3; ++i) {
