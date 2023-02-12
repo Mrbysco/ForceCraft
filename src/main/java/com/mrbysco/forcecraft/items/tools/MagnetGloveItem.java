@@ -49,7 +49,7 @@ public class MagnetGloveItem extends BaseItem {
 			stack.getCapability(CAPABILITY_MAGNET).ifPresent((cap) -> {
 				boolean state = cap.isActivated();
 				cap.setActivation(!state);
-				level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.UI_BUTTON_CLICK, SoundSource.NEUTRAL, 1.0F, 1.0F);
+				level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 			});
 		}
 		return super.use(level, playerIn, handIn);

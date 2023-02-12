@@ -195,7 +195,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 		if (slotId == 3) {
 			Slot slot = getSlot(slotId);
 			if (slot.hasItem() && clickTypeIn != ClickType.QUICK_MOVE) {
-				player.level.playSound((Player) null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.5F, 1.0F);
+				player.level.playSound((Player) null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
 				return;
 			}
 		}

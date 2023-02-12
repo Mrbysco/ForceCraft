@@ -1,7 +1,5 @@
 package com.mrbysco.forcecraft.client.gui.infuser;
 
-import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
-import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
@@ -12,7 +10,6 @@ import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.InfuserMessage;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -36,6 +33,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	private final ResourceLocation ENERGY = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/energy.png");
 	private final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forceinfuser.png");
 	private Button buttonInfuse;
+	private Button buttonGuide;
 
 	public InfuserScreen(InfuserMenu screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
@@ -56,33 +54,19 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 
 		int x = 123;
 		int y = 16;
-		this.addRenderableWidget(new Button(leftPos + x, topPos + y, 13, 13, Component.translatable("gui.forcecraft.infuser.button.guide"), (button) -> {
+
+
+		buttonGuide = this.addRenderableWidget(Button.builder(Component.translatable("gui.forcecraft.infuser.button.guide"), (button) -> {
 			if (ModList.get().isLoaded("patchouli")) {
 				com.mrbysco.forcecraft.compat.patchouli.PatchouliCompat.openBook();
 			} else {
 				this.inventory.player.displayClientMessage(Component.translatable("gui.forcecraft.infuser.patchouli"), false);
 			}
-		}) {
-			@Override
-			public void renderButton(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-				// skip drawing me
+		}).bounds(leftPos + x, topPos + y, 13, 13).build());
 
-				ItemStack bookStack = menu.getTile().getBookInSlot();
-				if (!bookStack.isEmpty()) {
-					Minecraft minecraft = Minecraft.getInstance();
-					RenderSystem.setShaderTexture(0, TEXTURE);
-					RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
-					RenderSystem.enableBlend();
-					RenderSystem.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-					this.blit(ms, x, y, 201, 0, btnSize, btnSize);
-
-					this.renderBg(ms, minecraft, mouseX, mouseY);
-				}
-			}
-		});
 		x = 39;
 		y = 101;
-		buttonInfuse = this.addRenderableWidget(new Button(leftPos + x, topPos + y, btnSize, btnSize, Component.translatable(""), (button) -> {
+		buttonInfuse = this.addRenderableWidget(Button.builder(Component.empty(), (button) -> {
 			ItemStack bookStack = menu.getTile().getBookInSlot();
 			if (bookStack.isEmpty()) {
 				this.inventory.player.displayClientMessage(Component.translatable("gui.forcecraft.infuser.nobook"), false);
@@ -90,25 +74,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 				PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
 			}
 //			container.getTile().canWork = false;
-		}) {
-			@Override
-			public void renderButton(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-				// skip drawing me
-				boolean flag = getMenu().validRecipe[0] == 1;
-				if (flag) {
-					// render special
-//				    super.renderWidget(ms, mouseX, mouseY, partialTicks);
-					Minecraft minecraft = Minecraft.getInstance();
-					RenderSystem.setShaderTexture(0, TEXTURE);
-					RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
-					RenderSystem.enableBlend();
-					RenderSystem.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-					this.blit(ms, x, y, 188, 0, btnSize, btnSize);
-
-					this.renderBg(ms, minecraft, mouseX, mouseY);
-				}
-			}
-		});
+		}).bounds(leftPos + x, topPos + y, btnSize, btnSize).build());
 	}
 
 	@Override
@@ -118,6 +84,11 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		boolean flag = getMenu().validRecipe[0] == 1;
 		if (buttonInfuse.active != flag) {
 			buttonInfuse.active = flag;
+		}
+
+		boolean flag2 = !menu.getTile().getBookInSlot().isEmpty();
+		if (buttonGuide.active != flag2) {
+			buttonGuide.active = flag2;
 		}
 	}
 

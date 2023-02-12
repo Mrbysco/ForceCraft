@@ -2,21 +2,23 @@ package com.mrbysco.forcecraft.datagen.data.tags;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceTags;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
+import java.util.concurrent.CompletableFuture;
 
 import static com.mrbysco.forcecraft.registry.ForceRegistry.*;
 
 public class ForceBlockTags extends BlockTagsProvider {
-	public ForceBlockTags(DataGenerator generator, @Nullable ExistingFileHelper existingFileHelper) {
-		super(generator, Reference.MOD_ID, existingFileHelper);
+	public ForceBlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+		super(output, lookupProvider, Reference.MOD_ID, existingFileHelper);
 	}
 
 	public static final TagKey<Block> RELOCATION_NOT_SUPPORTED = forgeTag("relocation_not_supported");
@@ -31,7 +33,7 @@ public class ForceBlockTags extends BlockTagsProvider {
 	}
 
 	@Override
-	protected void addTags() {
+	protected void addTags(HolderLookup.Provider provider) {
 		this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(INFUSER.get(), POWER_ORE.get(), DEEPSLATE_POWER_ORE.get(), FORCE_BRICK_RED.get(), FORCE_BRICK_YELLOW.get(),
 				FORCE_BRICK_GREEN.get(), FORCE_BRICK_BLUE.get(), FORCE_BRICK_WHITE.get(), FORCE_BRICK_BLACK.get(),
 				FORCE_BRICK_BROWN.get(), FORCE_BRICK_ORANGE.get(), FORCE_BRICK_LIGHT_BLUE.get(), FORCE_BRICK_MAGENTA.get(),

@@ -3,6 +3,7 @@ package com.mrbysco.forcecraft.datagen.patchouli;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -15,8 +16,8 @@ import xyz.brassgoggledcoders.patchouliprovider.PatchouliBookProvider;
 import java.util.function.Consumer;
 
 public class PatchouliProvider extends PatchouliBookProvider {
-	public PatchouliProvider(DataGenerator gen) {
-		super(gen, Reference.MOD_ID, "en_us");
+	public PatchouliProvider(PackOutput packOutput) {
+		super(packOutput, Reference.MOD_ID, "en_us");
 	}
 
 	@Override

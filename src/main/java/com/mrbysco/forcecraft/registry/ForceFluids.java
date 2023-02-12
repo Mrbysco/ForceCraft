@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.registry;
 
-import com.mojang.math.Vector3f;
 import com.mrbysco.forcecraft.Reference;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -22,6 +21,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 import java.util.function.Consumer;
 

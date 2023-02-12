@@ -2,7 +2,7 @@ package com.mrbysco.forcecraft.registry;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.util.TagLookup;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -46,7 +46,7 @@ public class ForceTags {
 
 	public static final TagKey<Block> ENDERTOT_HOLDABLE = forceBlockTag("endertot_holdable");
 
-	public static final TagKey<EntityType<?>> FLASK_BLACKLIST = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(Reference.MOD_ID, "flask_blacklist"));
+	public static final TagKey<EntityType<?>> FLASK_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(Reference.MOD_ID, "flask_blacklist"));
 	public static final TagLookup<EntityType<?>> FLASK_BLACKLIST_LOOKUP = new TagLookup<>(ForgeRegistries.ENTITY_TYPES, FLASK_BLACKLIST);
 
 	private static TagKey<Item> forgeItemTag(String name) {

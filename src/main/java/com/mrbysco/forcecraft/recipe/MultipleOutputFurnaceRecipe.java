@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 
@@ -15,7 +16,7 @@ public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe 
 	protected final NonNullList<ItemStack> resultItems;
 
 	public MultipleOutputFurnaceRecipe(RecipeType<?> typeIn, ResourceLocation idIn, String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results, float secondaryChance, float experienceIn, int cookTimeIn) {
-		super(typeIn, idIn, groupIn, ingredientIn, results.get(0), experienceIn, cookTimeIn);
+		super(typeIn, idIn, groupIn, CookingBookCategory.MISC, ingredientIn, results.get(0), experienceIn, cookTimeIn);
 		this.resultItems = results;
 		this.secondaryChance = secondaryChance;
 	}

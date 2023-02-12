@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -218,7 +218,7 @@ public class ForceRodCapability implements IForceRodModifier, ICapabilitySeriali
 			BlockPos pos = BlockPos.of(tag.getLong("HomeLocation"));
 			ResourceLocation location = ResourceLocation.tryParse(tag.getString("HomeDimension"));
 			if (location != null) {
-				ResourceKey<Level> dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, location);
+				ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, location);
 				instance.setHomeLocation(GlobalPos.of(dimension, pos));
 			}
 		}

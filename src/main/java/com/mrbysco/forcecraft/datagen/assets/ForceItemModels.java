@@ -1,13 +1,13 @@
 package com.mrbysco.forcecraft.datagen.assets;
 
 import com.mrbysco.forcecraft.Reference;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ForceItemModels extends ItemModelProvider {
-	public ForceItemModels(DataGenerator gen, ExistingFileHelper helper) {
-		super(gen, Reference.MOD_ID, helper);
+	public ForceItemModels(PackOutput packOutput, ExistingFileHelper helper) {
+		super(packOutput, Reference.MOD_ID, helper);
 	}
 
 	@Override

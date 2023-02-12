@@ -3,6 +3,7 @@ package com.mrbysco.forcecraft.datagen.assets;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
@@ -10,8 +11,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ForceBlockModels extends BlockModelProvider {
-	public ForceBlockModels(DataGenerator gen, ExistingFileHelper helper) {
-		super(gen, Reference.MOD_ID, helper);
+	public ForceBlockModels(PackOutput packOutput, ExistingFileHelper helper) {
+		super(packOutput, Reference.MOD_ID, helper);
 	}
 
 	@Override

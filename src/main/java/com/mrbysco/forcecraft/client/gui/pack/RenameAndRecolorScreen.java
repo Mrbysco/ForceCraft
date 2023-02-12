@@ -39,8 +39,8 @@ public class RenameAndRecolorScreen extends Screen {
 	protected void init() {
 		super.init();
 		selectedColor = itemstack.getOrCreateTag().getInt("Color");
-		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-		this.addRenderableWidget(new ItemButton(this.width / 2 - 89, this.height / 2 + 5, 18, 18, CommonComponents.GUI_DONE, this.itemstack, (button) -> {
+
+		this.addRenderableWidget(ItemButton.builder(CommonComponents.GUI_DONE, this.itemstack, (button) -> {
 			ItemButton itemButton = (ItemButton) button;
 			this.selectedColor++;
 			if (selectedColor > 15) {
@@ -52,16 +52,16 @@ public class RenameAndRecolorScreen extends Screen {
 			itemButton.getButtonStack().setTag(tag);
 
 			this.itemstack = itemButton.getButtonStack();
-		}));
+		}).bounds(this.width / 2 - 89, this.height / 2 + 5, 18, 18).build());
 
-		this.addRenderableWidget(new Button(this.width / 2 - 34, this.height / 2 + 3, 60, 20, CommonComponents.GUI_CANCEL, (p_238847_1_) -> {
+		this.addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL, (button) -> {
 			this.minecraft.setScreen((Screen) null);
-		}));
+		}).bounds(this.width / 2 - 34, this.height / 2 + 3, 60, 20).build());
 
-		this.addRenderableWidget(new Button(this.width / 2 + 31, this.height / 2 + 3, 60, 20, CommonComponents.GUI_DONE, (p_238847_1_) -> {
+		this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (button) -> {
 			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new PackChangeMessage(usedHand, textfield.getValue(), this.selectedColor));
 			this.minecraft.setScreen((Screen) null);
-		}));
+		}).bounds(this.width / 2 + 31, this.height / 2 + 3, 60, 20).build());
 
 		this.textfield = new EditBox(this.minecraft.font, this.width / 2 - 90, this.height / 2 - 24, 180, 20, Component.literal("Name"));
 		this.textfield.setMaxLength(31);
@@ -74,7 +74,6 @@ public class RenameAndRecolorScreen extends Screen {
 	@Override
 	public void removed() {
 		super.removed();
-		this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
 	}
 
 	@Override

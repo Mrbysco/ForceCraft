@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.datagen.data;
 
 import com.mrbysco.forcecraft.registry.ForceTables;
-import net.minecraft.data.loot.GiftLoot;
+import net.minecraft.data.loot.packs.VanillaGiftLoot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -17,10 +17,10 @@ import java.util.function.BiConsumer;
 
 import static com.mrbysco.forcecraft.registry.ForceRegistry.*;
 
-public class SpoilsBagLootTables extends GiftLoot {
+public class SpoilsBagLootTables extends VanillaGiftLoot {
 
 	@Override
-	public void accept(BiConsumer<ResourceLocation, Builder> consumer) {
+	public void generate(BiConsumer<ResourceLocation, Builder> consumer) {
 		consumer.accept(ForceTables.TIER_1, LootTable.lootTable()
 				.withPool(LootPool.lootPool().setRolls(UniformGenerator.between(1.0F, 4.0F))
 						.name("Force Loot")

@@ -3,6 +3,7 @@ package com.mrbysco.forcecraft.capabilities.forcewrench;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
@@ -115,7 +116,7 @@ public class ForceWrenchCapability implements IForceWrench, ICapabilitySerializa
 	public static void readNBT(IForceWrench instance, CompoundTag tag) {
 		instance.storeBlockNBT(tag.getCompound("storedNBT"));
 		if (tag.contains("storedBlockState")) {
-			instance.storeBlockState(NbtUtils.readBlockState(tag.getCompound("storedBlockState")));
+			instance.storeBlockState(NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("storedBlockState")));
 		}
 		instance.setBlockName(tag.getString("name"));
 	}

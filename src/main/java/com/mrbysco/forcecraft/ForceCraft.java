@@ -26,18 +26,21 @@ import com.mrbysco.forcecraft.registry.ForceModifiers;
 import com.mrbysco.forcecraft.registry.ForceRecipeSerializers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
-import com.mrbysco.forcecraft.world.feature.ForceFeatureConfigs;
+import com.mrbysco.forcecraft.world.feature.ForceFeatureKeys;
 import com.mrbysco.forcecraft.world.feature.ForceFeatures;
 import net.minecraft.core.dispenser.ShearsDispenseItemBehavior;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -47,6 +50,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+
 @Mod(Reference.MOD_ID)
 public class ForceCraft {
 
@@ -55,12 +60,7 @@ public class ForceCraft {
 	public static final DamageSource BLEEDING_DAMAGE = new DamageSource(Reference.MOD_ID + ".bleeding").setMagic().bypassArmor();
 	public static final DamageSource LIQUID_FORCE_DAMAGE = new DamageSource(Reference.MOD_ID + ".liquid_force").setMagic().bypassArmor();
 
-	public static final CreativeModeTab creativeTab = (new CreativeModeTab(Reference.MOD_ID) {
-		@OnlyIn(Dist.CLIENT)
-		public ItemStack makeIcon() {
-			return new ItemStack(ForceRegistry.FORCE_GEM.get());
-		}
-	});
+	private static CreativeModeTab creativeTab;
 
 	public ForceCraft() {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -100,6 +100,7 @@ public class ForceCraft {
 
 		MinecraftForge.EVENT_BUS.addListener(CapabilityHandler::register);
 
+		eventBus.addListener(this::registerCreativeTabs);
 		eventBus.addListener(ForceEntities::registerEntityAttributes);
 		eventBus.addListener(ForceEntities::registerSpawnPlacement);
 
@@ -117,10 +118,19 @@ public class ForceCraft {
 
 	private void setup(final FMLCommonSetupEvent event) {
 		PacketHandler.init();
-		ForceFeatureConfigs.initialize();
 		event.enqueueWork(() -> {
 			DispenserBlock.registerBehavior(ForceRegistry.FORCE_SHEARS.get(), new ShearsDispenseItemBehavior());
 		});
+	}
+
+	private void registerCreativeTabs(final CreativeModeTabEvent.Register event) {
+		creativeTab = event.registerCreativeModeTab(new ResourceLocation(Reference.MOD_ID, "tab"), builder ->
+				builder.icon(() -> new ItemStack(ForceRegistry.FORCE_GEM.get()))
+						.title(Component.translatable("itemGroup.forcecraft.tab"))
+						.displayItems((features, output, hasPermissions) -> {
+							List<ItemStack> stacks = ForceRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
+							output.acceptAll(stacks);
+						}));
 	}
 }
 
