@@ -20,7 +20,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -110,7 +109,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 					}
 				}
 				if (level instanceof ServerLevel) {
-					((AbstractFurnaceBlockEntity) blockentity).getRecipesToAwardAndPopExperience((ServerLevel) level, Vec3.atCenterOf(pos));
+					furnaceTile.getRecipesToAwardAndPopExperience((ServerLevel) level, Vec3.atCenterOf(pos));
 				}
 				level.updateNeighbourForOutputSignal(pos, this);
 			}

@@ -10,7 +10,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ForceFurnaceResultSlot extends SlotItemHandler {
 	private final Player player;
-	private int removeCount;
+	protected int removeCount;
 
 	public ForceFurnaceResultSlot(Player player, IItemHandler inventoryIn, int slotIndex, int xPosition, int yPosition) {
 		super(inventoryIn, slotIndex, xPosition, yPosition);
@@ -54,8 +54,8 @@ public class ForceFurnaceResultSlot extends SlotItemHandler {
 	 */
 	protected void checkTakeAchievements(ItemStack stack) {
 		stack.onCraftedBy(this.player.level, this.player, this.removeCount);
-		if (this.player instanceof ServerPlayer && this.container instanceof AbstractForceFurnaceBlockEntity) {
-			((AbstractForceFurnaceBlockEntity)this.container).awardUsedRecipesAndPopExperience((ServerPlayer)this.player);
+		if (this.player instanceof ServerPlayer && this.container instanceof AbstractForceFurnaceBlockEntity forceFurnaceBlockEntity) {
+			forceFurnaceBlockEntity.awardUsedRecipesAndPopExperience((ServerPlayer)this.player);
 		}
 
 		this.removeCount = 0;
