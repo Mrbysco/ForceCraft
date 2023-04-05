@@ -1,0 +1,1 @@
+* Fix a possible crash with the Force Pack
