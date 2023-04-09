@@ -1,6 +1,5 @@
 [![build](https://github.com/Mrbysco/ForceCraft/actions/workflows/build.yml/badge.svg)](https://github.com/Mrbysco/ForceCraft/actions/workflows/build.yml) 
 [![](http://cf.way2muchnoise.eu/versions/454802.svg)](https://www.curseforge.com/minecraft/mc-mods/forcecraft)
-[![](https://modrinth-utils.vercel.app/api/badge/versions?id=Nwz7U1QT)](https://modrinth.com/mod/forcecraft)
 # ForceCraft #
 
 ## About ##
