@@ -74,7 +74,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 	}
 
 	public static class TreeChopTask {
-		public final Level world;
+		public final Level level;
 		public final Player player;
 		public final ItemStack tool;
 		public final int blocksPerTick;
@@ -83,7 +83,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 		public Set<BlockPos> visited = new HashSet<>();
 
 		public TreeChopTask(ItemStack tool, BlockPos start, Player player, int blocksPerTick) {
-			this.world = player.getCommandSenderWorld();
+			this.level = player.getCommandSenderWorld();
 			this.player = player;
 			this.tool = tool;
 			this.blocksPerTick = blocksPerTick;
@@ -98,7 +98,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 				return;
 			}
 			// only if same dimension
-			if (event.level.dimension().location().equals(world.dimension().location())) {
+			if (event.level.dimension().location().equals(level.dimension().location())) {
 				return;
 			}
 
@@ -120,7 +120,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 				}
 
 				// can we harvest the block and is effective?
-				if (!isLog(world, pos)) {
+				if (!isLog(level, pos)) {
 					continue;
 				}
 
@@ -143,7 +143,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 				}
 
 				// break it, wooo!
-				ForceUtils.breakExtraBlock(tool, world, player, pos, pos);
+				ForceUtils.breakExtraBlock(tool, level, player, pos, pos);
 				left--;
 			}
 		}

@@ -38,13 +38,13 @@ public class SaveCardRecipeMessage {
 		ctx.enqueueWork(() -> {
 			if (ctx.getDirection().getReceptionSide().isServer() && ctx.getSender() != null) {
 				ServerPlayer player = ctx.getSender();
-				Level world = player.level;
+				Level level = player.level;
 				ItemStack stack = getCardStack(player);
 				if (!stack.isEmpty()) {
 					if (player.containerMenu instanceof ItemCardMenu itemCardContainer) {
 						CraftingContainer craftMatrix = itemCardContainer.getCraftMatrix();
 						ResultContainer craftResult = itemCardContainer.getCraftResult();
-						Optional<CraftingRecipe> iRecipe = player.server.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftMatrix, world);
+						Optional<CraftingRecipe> iRecipe = player.server.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftMatrix, level);
 						iRecipe.ifPresent((recipe) -> {
 							CompoundTag nbt = stack.getOrCreateTag();
 							CompoundTag recipeContents = new CompoundTag();

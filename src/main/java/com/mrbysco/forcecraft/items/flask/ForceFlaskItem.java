@@ -48,8 +48,8 @@ public class ForceFlaskItem extends BaseItem {
 
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity entity, InteractionHand hand) {
-		Level world = entity.level;
-		if (world.isClientSide)
+		Level level = entity.level;
+		if (level.isClientSide)
 			return InteractionResult.PASS;
 
 		if (entity instanceof Cow && !entity.isBaby()) {

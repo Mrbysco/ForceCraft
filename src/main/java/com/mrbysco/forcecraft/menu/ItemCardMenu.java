@@ -116,21 +116,21 @@ public class ItemCardMenu extends AbstractContainerMenu {
 		return ItemStack.EMPTY;
 	}
 
-	protected void updateCraftingResult(Level world, Player player, CraftingContainer inventory, ResultContainer inventoryResult) {
-		if (!world.isClientSide) {
-			ServerPlayer serverplayerentity = (ServerPlayer) player;
-			final Optional<CraftingRecipe> iRecipe = serverplayerentity.server.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory, world);
+	protected void updateCraftingResult(Level level, Player player, CraftingContainer inventory, ResultContainer inventoryResult) {
+		if (!level.isClientSide) {
+			ServerPlayer serverPlayer = (ServerPlayer) player;
+			final Optional<CraftingRecipe> iRecipe = serverPlayer.server.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory, level);
 			final ItemStack stack;
 			if (iRecipe.isPresent() && (iRecipe.get().isSpecial()
-					|| !world.getGameRules().getBoolean(GameRules.RULE_LIMITED_CRAFTING)
-					|| serverplayerentity.getRecipeBook().contains(iRecipe.get())
+					|| !level.getGameRules().getBoolean(GameRules.RULE_LIMITED_CRAFTING)
+					|| serverPlayer.getRecipeBook().contains(iRecipe.get())
 					|| player.isCreative())) {
 				stack = iRecipe.get().assemble(this.craftMatrix);
 				inventoryResult.setItem(0, stack);
-				serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, 0, stack));
+				serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, 0, stack));
 			} else {
 				inventoryResult.setItem(0, ItemStack.EMPTY);
-				serverplayerentity.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, 0, ItemStack.EMPTY));
+				serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, 0, ItemStack.EMPTY));
 			}
 		}
 	}

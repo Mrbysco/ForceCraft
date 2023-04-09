@@ -64,24 +64,24 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 	@Override
 	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
 		Player player = context.getPlayer();
-		Level world = context.getLevel();
+		Level level = context.getLevel();
 		BlockPos pos = context.getClickedPos();
 		InteractionHand hand = context.getHand();
 		if (stack.getItem() instanceof ForceWrenchItem) {
 			if (player.isCrouching()) {
 				IForceWrench wrenchCap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
 				if (wrenchCap != null) {
-					if (world.getBlockEntity(pos) instanceof BlockEntity && !wrenchCap.canStoreBlock()) {
-						return serializeNBT(world, pos, player, hand);
+					if (level.getBlockEntity(pos) instanceof BlockEntity && !wrenchCap.canStoreBlock()) {
+						return serializeNBT(level, pos, player, hand);
 					} else if (wrenchCap.canStoreBlock())
-						placeBlockFromWrench(world, pos, player, hand, context.getClickedFace());
+						placeBlockFromWrench(level, pos, player, hand, context.getClickedFace());
 				}
 			} else {
 				ForceToolData fd = new ForceToolData(stack);
 				if (fd.getForce() >= 10) {
-					BlockState state = world.getBlockState(pos);
+					BlockState state = level.getBlockState(pos);
 					if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
-						world.setBlockAndUpdate(pos, state.rotate(world, pos, Rotation.CLOCKWISE_90));
+						level.setBlockAndUpdate(pos, state.rotate(level, pos, Rotation.CLOCKWISE_90));
 						fd.setForce(fd.getForce() - 10);
 						fd.write(stack);
 					}
@@ -102,11 +102,11 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 		return new ForceWrenchCapability();
 	}
 
-	private InteractionResult serializeNBT(Level world, BlockPos pos, Player player, InteractionHand hand) {
+	private InteractionResult serializeNBT(Level level, BlockPos pos, Player player, InteractionHand hand) {
 		ItemStack heldWrench = player.getItemInHand(hand);
 		ForceToolData fd = new ForceToolData(heldWrench);
 		if (fd.getForce() >= 250) {
-			BlockState state = world.getBlockState(pos);
+			BlockState state = level.getBlockState(pos);
 			if (state.getPistonPushReaction() == PushReaction.BLOCK) {
 				return InteractionResult.FAIL;
 			}
@@ -114,17 +114,17 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 			IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
 			if (wrenchCap != null) {
 				String blockName = state.getBlock().getDescriptionId();
-				BlockEntity blockEntity = world.getBlockEntity(pos);
+				BlockEntity blockEntity = level.getBlockEntity(pos);
 
 				if (blockEntity != null) {
 					CompoundTag nbt = blockEntity.saveWithoutMetadata();
 					wrenchCap.storeBlockNBT(nbt);
 					wrenchCap.storeBlockState(state);
 					wrenchCap.setBlockName(blockName);
-					world.removeBlockEntity(pos);
+					level.removeBlockEntity(pos);
 					BlockState airState = Blocks.AIR.defaultBlockState();
-					world.removeBlock(pos, false);
-					world.setBlocksDirty(pos, state, airState);
+					level.removeBlock(pos, false);
+					level.setBlocksDirty(pos, state, airState);
 				}
 				fd.setForce(fd.getForce() - 250);
 				fd.write(heldWrench);
@@ -136,7 +136,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 		return InteractionResult.FAIL;
 	}
 
-	private InteractionResult placeBlockFromWrench(Level world, BlockPos pos, Player player, InteractionHand hand, Direction side) {
+	private InteractionResult placeBlockFromWrench(Level level, BlockPos pos, Player player, InteractionHand hand, Direction side) {
 		ItemStack heldWrench = player.getItemInHand(hand);
 		IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
 		if (wrenchCap != null) {
@@ -146,11 +146,11 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 				BlockPos offPos = pos.relative(side);
 				BlockEntity be = BlockEntity.loadStatic(offPos, state, blockTag);
 				if (state != null) {
-					world.setBlockAndUpdate(offPos, state);
+					level.setBlockAndUpdate(offPos, state);
 				}
 				if (be != null) {
 					be.load(blockTag);
-					world.setBlockEntity(be);
+					level.setBlockEntity(be);
 				}
 				wrenchCap.clearBlockStorage();
 			}
