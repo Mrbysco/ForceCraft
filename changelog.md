@@ -1,1 +1,1 @@
-* Fix a possible crash with the Force Pack
+* Fix adding items to the Force Furnace resetting the smelt time
