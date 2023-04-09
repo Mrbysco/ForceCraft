@@ -202,7 +202,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 	protected AbstractCookingRecipe getRecipe() {
 		ItemStack input = this.getItem(INPUT_SLOT);
-		if (input.isEmpty() || input == failedMatch) return null;
+		if (input.isEmpty() || input == failedMatch || level == null) return null;
 		if (currentRecipe != null && currentRecipe.matches(this, level) && currentRecipe.getType() == getRecipeType())
 			return currentRecipe;
 		else {
@@ -308,7 +308,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 			if (wasBurning != furnace.isLit()) {
 				dirty = true;
-				level.setBlock(pos, state.setValue(AbstractFurnaceBlock.LIT, Boolean.valueOf(furnace.isLit())), 3);
+				level.setBlock(pos, state.setValue(AbstractFurnaceBlock.LIT, furnace.isLit()), 3);
 			}
 
 			if (dirty) {
@@ -340,7 +340,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	}
 
 	private boolean burn(@Nullable Recipe<?> recipe) {
-		if (recipe != null && this.canBurn(recipe)) {
+		if (recipe != null && this.canBurn(recipe) && level != null) {
 			ItemStack itemstack = this.handler.getStackInSlot(INPUT_SLOT);
 			List<? extends String> additionalBlacklist = new ArrayList<>();
 			if (ConfigHandler.COMMON.furnaceOutputBlacklist.get() != null) {
@@ -382,8 +382,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					inventoryList.sort(Collections.reverseOrder());
 					for (BiggestInventory inventory : inventoryList) {
 						IItemHandler itemHandler = inventory.getIItemHandler(this.level);
-						ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
-						outputStack = rest;
+						outputStack = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
 						if (outputStack.isEmpty()) {
 							break;
 						}
@@ -427,8 +426,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 				inventoryList.sort(Collections.reverseOrder());
 				for (BiggestInventory inventory : inventoryList) {
 					IItemHandler itemHandler = inventory.getIItemHandler(this.level);
-					ItemStack rest = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
-					outputStack = rest;
+					outputStack = ItemHandlerHelper.insertItem(itemHandler, outputStack, false);
 					if (outputStack.isEmpty()) {
 						break;
 					}
@@ -465,9 +463,11 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	}
 
 	protected int getCookingProgress() {
+		if (level == null) return 200;
+
 		AbstractCookingRecipe rec = getRecipe();
 		if (rec == null) return 200;
-		return this.level.getRecipeManager().getRecipeFor((RecipeType<AbstractCookingRecipe>) this.getRecipeType(), this, this.level).map(AbstractCookingRecipe::getCookingTime).orElse(100);
+		return this.level.getRecipeManager().getRecipeFor(this.getRecipeType(), this, this.level).map(AbstractCookingRecipe::getCookingTime).orElse(100);
 	}
 
 	public static boolean isFuel(ItemStack stack) {
@@ -496,9 +496,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		if (direction == Direction.DOWN && index == 1) {
 			Item item = stack.getItem();
-			if (item != Items.WATER_BUCKET && item != Items.BUCKET) {
-				return false;
-			}
+			return item == Items.WATER_BUCKET || item == Items.BUCKET;
 		}
 
 		return true;
@@ -564,7 +562,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	 * Don't rename this method to canInteractWith due to conflicts with Container
 	 */
 	public boolean stillValid(Player player) {
-		if (this.level.getBlockEntity(this.worldPosition) != this) {
+		if (this.level != null && this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		} else {
 			return player.distanceToSqr((double) this.worldPosition.getX() + 0.5D, (double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) <= 64.0D;
@@ -673,9 +671,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			this.direction = dir;
 		}
 
-		protected IItemHandler getIItemHandler(Level world) {
-			if (world.isAreaLoaded(worldPosition, 1)) {
-				BlockEntity tileEntity = world.getBlockEntity(tilePos);
+		protected IItemHandler getIItemHandler(Level level) {
+			if (level.isAreaLoaded(worldPosition, 1)) {
+				BlockEntity tileEntity = level.getBlockEntity(tilePos);
 				if (!tileEntity.isRemoved() && tileEntity.hasLevel() && tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
 					return tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, direction).orElse(null);
 				}
