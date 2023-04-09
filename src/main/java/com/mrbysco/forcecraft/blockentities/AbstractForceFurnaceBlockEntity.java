@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.blockentities;
 
 import com.google.common.collect.Lists;
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
@@ -82,10 +83,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		@Override
 		public void setStackInSlot(int slot, @NotNull ItemStack stack) {
 			super.setStackInSlot(slot, stack);
-
-			if (slot == 0) {
-				cookingTotalTime = getCookingProgress();
-				cookingProgress = 0;
+			if (slot == 0) { // TODO: Should be checking if the stack was changed or not, currently isn't
+//				cookingTotalTime = getCookingProgress();
+//				cookingProgress = 0;
 				setChanged();
 			}
 		}
