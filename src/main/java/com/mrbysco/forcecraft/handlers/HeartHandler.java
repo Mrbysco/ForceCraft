@@ -17,8 +17,8 @@ public class HeartHandler {
 
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
-		Level world = event.getEntity().level;
-		if (world.isClientSide || event.getSource() == null || ConfigHandler.COMMON.disableRecoveryHearts.get() || world.random.nextDouble() >= CHANCE) {
+		Level level = event.getEntity().level;
+		if (level.isClientSide || event.getSource() == null || ConfigHandler.COMMON.disableRecoveryHearts.get() || level.random.nextDouble() >= CHANCE) {
 			return;
 		}
 		if (event.getSource().getEntity() instanceof Player && !(event.getSource().getEntity() instanceof FakePlayer)) {
@@ -27,7 +27,7 @@ public class HeartHandler {
 			if (classification == MobCategory.MONSTER) {
 				// and its a monster, not sheep or squid or something
 				BlockPos pos = event.getEntity().blockPosition();
-				world.addFreshEntity(new ItemEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(ForceRegistry.RECOVERY_HEART.get())));
+				level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(ForceRegistry.RECOVERY_HEART.get())));
 			}
 		}
 	}

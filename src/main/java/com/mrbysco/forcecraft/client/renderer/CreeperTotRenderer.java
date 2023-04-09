@@ -19,7 +19,7 @@ public class CreeperTotRenderer extends MobRenderer<CreeperTotEntity, CreeperTot
 		this.addLayer(new CreeperTotChargeLayer(this, context.getModelSet()));
 	}
 
-	protected void scale(CreeperTotEntity entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
+	protected void scale(CreeperTotEntity entitylivingbaseIn, PoseStack poseStack, float partialTickTime) {
 		float f = entitylivingbaseIn.getSwelling(partialTickTime);
 		float f1 = 1.0F + Mth.sin(f * 100.0F) * f * 0.01F;
 		f = Mth.clamp(f, 0.0F, 1.0F);
@@ -27,7 +27,7 @@ public class CreeperTotRenderer extends MobRenderer<CreeperTotEntity, CreeperTot
 		f = f * f;
 		float f2 = (1.0F + f * 0.4F) * f1;
 		float f3 = (1.0F + f * 0.1F) / f1;
-		matrixStackIn.scale(f2, f3, f2);
+		poseStack.scale(f2, f3, f2);
 	}
 
 	protected float getWhiteOverlayProgress(CreeperTotEntity livingEntityIn, float partialTicks) {

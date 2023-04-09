@@ -37,7 +37,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 	private IItemHandler furnaceInventory;
 	private IItemHandler upgradeInventory;
 	private ContainerData furnaceData;
-	private Level world;
+	private Level level;
 
 	public AbstractForceFurnaceMenu(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
 		this(windowId, playerInventory, getTileEntity(playerInventory, data));
@@ -59,7 +59,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 		super(ForceMenus.FORCE_FURNACE.get(), id);
 		this.tile = te;
 		Player player = playerInventoryIn.player;
-		this.world = player.level;
+		this.level = player.level;
 		this.furnaceInventory = tile.handler;
 		this.upgradeInventory = tile.upgradeHandler;
 		this.furnaceData = tile.getFurnaceData();
@@ -176,7 +176,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 	}
 
 	protected boolean hasRecipe(ItemStack stack) {
-		return this.world.getRecipeManager().getRecipeFor((RecipeType) this.getRecipeType(), new SimpleContainer(stack), this.world).isPresent();
+		return this.level.getRecipeManager().getRecipeFor((RecipeType) this.getRecipeType(), new SimpleContainer(stack), this.level).isPresent();
 	}
 
 	protected RecipeType<? extends AbstractCookingRecipe> getRecipeType() {

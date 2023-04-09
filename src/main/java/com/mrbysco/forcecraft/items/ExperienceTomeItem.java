@@ -47,9 +47,9 @@ public class ExperienceTomeItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
-		if (ForceUtils.isFakePlayer(player) || hand != InteractionHand.MAIN_HAND || world.isClientSide) {
+		if (ForceUtils.isFakePlayer(player) || hand != InteractionHand.MAIN_HAND || level.isClientSide) {
 			return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
 		}
 		int exp;

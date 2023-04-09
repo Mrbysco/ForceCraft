@@ -24,8 +24,8 @@ public class InertCoreItem extends BaseItem {
 
 	@Nullable
 	@Override
-	public Entity createEntity(Level world, Entity location, ItemStack itemstack) {
-		ItemEntity entity = new NonBurnableItemEntity(world, location.getX(), location.getY(), location.getZ(), itemstack);
+	public Entity createEntity(Level level, Entity location, ItemStack itemstack) {
+		ItemEntity entity = new NonBurnableItemEntity(level, location.getX(), location.getY(), location.getZ(), itemstack);
 		if (location instanceof ItemEntity) {
 			CompoundTag tag = new CompoundTag();
 			location.saveWithoutId(tag);

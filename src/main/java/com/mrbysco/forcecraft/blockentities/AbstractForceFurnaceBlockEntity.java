@@ -153,8 +153,8 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 	private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
 
-	protected AbstractForceFurnaceBlockEntity(BlockEntityType<?> tileTypeIn, BlockPos pos, BlockState state) {
-		super(tileTypeIn, pos, state);
+	protected AbstractForceFurnaceBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+		super(blockEntityType, pos, state);
 	}
 
 	protected RecipeType<? extends AbstractCookingRecipe> getRecipeType() {

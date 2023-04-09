@@ -27,12 +27,12 @@ public class EnderTotRenderer extends MobRenderer<EnderTotEntity, EnderTotModel<
 	}
 
 	@Override
-	public void render(EnderTotEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+	public void render(EnderTotEntity entityIn, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
 		BlockState blockstate = entityIn.getCarriedBlock();
 		EnderTotModel<EnderTotEntity> endertotModel = this.getModel();
 		endertotModel.isCarrying = blockstate != null;
 		endertotModel.isAttacking = entityIn.isCreepy();
-		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+		super.render(entityIn, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
 	}
 
 	@Override

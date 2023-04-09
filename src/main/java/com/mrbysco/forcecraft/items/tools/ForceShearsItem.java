@@ -61,8 +61,8 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 	private static final Item[] WOOL = {Items.RED_WOOL, Items.BLUE_WOOL, Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.WHITE_WOOL, Items.ORANGE_WOOL, Items.MAGENTA_WOOL, Items.LIGHT_BLUE_WOOL, Items.YELLOW_WOOL, Items.LIME_WOOL, Items.PINK_WOOL, Items.GRAY_WOOL, Items.LIGHT_GRAY_WOOL,
 			Items.CYAN_WOOL, Items.PURPLE_WOOL, Items.BROWN_WOOL, Items.GREEN_WOOL};
 
-	private ItemStack getRandomWool(Level world) {
-		return new ItemStack(WOOL[Mth.nextInt(world.random, 0, WOOL.length)]);
+	private ItemStack getRandomWool(Level level) {
+		return new ItemStack(WOOL[Mth.nextInt(level.random, 0, WOOL.length)]);
 	}
 
 	@Override
