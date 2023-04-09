@@ -613,7 +613,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		for (Object2IntMap.Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
 			serverLevel.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
 				list.add(recipe);
-				createExperience(serverLevel, pos, entry.getIntValue(), ((AbstractCookingRecipe) recipe).getExperience());
+				createExperience(serverLevel, pos, entry.getIntValue(), (((AbstractCookingRecipe) recipe).getExperience() * getXPMultiplier()));
 			});
 		}
 
