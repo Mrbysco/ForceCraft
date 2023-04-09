@@ -53,7 +53,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -74,11 +73,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			if (slot == FUEL_SLOT) {
 				ItemStack itemstack = getStackInSlot(FUEL_SLOT);
 				return isFuel(stack) || stack.getItem() == Items.BUCKET && itemstack.getItem() != Items.BUCKET;
-			} else if (slot == OUTPUT_SLOT) {
-				return false;
-			} else {
-				return true;
-			}
+			} else return slot != OUTPUT_SLOT;
 		}
 
 		@Override
@@ -113,10 +108,15 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	};
 	private LazyOptional<IItemHandler> upgradeHandlerHolder = LazyOptional.of(() -> upgradeHandler);
 
-	private static final List<ResourceLocation> hopperBlacklist = Arrays.asList(ResourceLocation.tryParse("hopper"), new ResourceLocation("cyclic", "hopper"),
-			new ResourceLocation("cyclic", "hopper_gold"), new ResourceLocation("cyclic", "hopper_fluid"),
-			new ResourceLocation("uppers", "upper"), new ResourceLocation("goldenhopper", "golden_hopper"),
-			new ResourceLocation("woodenhopper", "wooden_hopper"));
+	private static final List<ResourceLocation> hopperBlacklist = List.of(
+			new ResourceLocation("hopper"),
+			new ResourceLocation("cyclic", "hopper"),
+			new ResourceLocation("cyclic", "hopper_gold"),
+			new ResourceLocation("cyclic", "hopper_fluid"),
+			new ResourceLocation("uppers", "upper"),
+			new ResourceLocation("goldenhopper", "golden_hopper"),
+			new ResourceLocation("woodenhopper", "wooden_hopper")
+	);
 
 	private int litTime;
 	private int litDuration;
@@ -206,7 +206,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		if (currentRecipe != null && currentRecipe.matches(this, level) && currentRecipe.getType() == getRecipeType())
 			return currentRecipe;
 		else {
-			AbstractCookingRecipe rec = level.getRecipeManager().getRecipeFor((RecipeType<AbstractCookingRecipe>) this.getRecipeType(), this, this.level).orElse(null);
+			AbstractCookingRecipe rec = level.getRecipeManager().getRecipeFor(this.getRecipeType(), this, this.level).orElse(null);
 			if (rec == null) failedMatch = input;
 			else failedMatch = ItemStack.EMPTY;
 			return currentRecipe = rec;
