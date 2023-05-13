@@ -1,7 +1,6 @@
 package com.mrbysco.forcecraft.blockentities;
 
 import com.google.common.collect.Lists;
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import com.mrbysco.forcecraft.recipe.ForceRecipes;
@@ -289,6 +288,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					if (furnace.cookingSpeed != speed) {
 						furnace.cookingSpeed = speed;
 					}
+
+					if (cookingRecipe != null && furnace.cookingTotalTime != cookingRecipe.getCookingTime())
+						furnace.cookingTotalTime = cookingRecipe.getCookingTime();
 
 					furnace.cookingProgress += furnace.cookingSpeed;
 					if (furnace.cookingProgress >= furnace.cookingTotalTime) {
