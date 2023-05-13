@@ -288,6 +288,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 						furnace.cookingSpeed = speed;
 					}
 
+					if (cookingRecipe != null && furnace.cookingTotalTime != cookingRecipe.getCookingTime())
+						furnace.cookingTotalTime = cookingRecipe.getCookingTime();
+
 					furnace.cookingProgress += furnace.cookingSpeed;
 					if (furnace.cookingProgress >= furnace.cookingTotalTime) {
 						furnace.cookingProgress = 0;
