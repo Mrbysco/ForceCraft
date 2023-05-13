@@ -1,1 +1,1 @@
-* Fix adding items to the Force Furnace resetting the smelt time
+* Fix Force Furnace auto smelting the first item in a stack
