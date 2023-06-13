@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.items.tools;
 
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capabilities.forcewrench.ForceWrenchCapability;
 import com.mrbysco.forcecraft.capabilities.forcewrench.IForceWrench;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -121,13 +123,12 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 					wrenchCap.storeBlockNBT(nbt);
 					wrenchCap.storeBlockState(state);
 					wrenchCap.setBlockName(blockName);
-					level.removeBlockEntity(pos);
-					BlockState airState = Blocks.AIR.defaultBlockState();
-					level.removeBlock(pos, false);
-					level.setBlocksDirty(pos, state, airState);
 				}
 				fd.setForce(fd.getForce() - 250);
 				fd.write(heldWrench);
+				level.removeBlockEntity(pos);
+				BlockState airState = Blocks.AIR.defaultBlockState();
+				level.setBlockAndUpdate(pos, airState);
 				return InteractionResult.SUCCESS;
 			}
 		} else {
@@ -141,17 +142,27 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 		IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
 		if (wrenchCap != null) {
 			if (wrenchCap.getStoredBlockState() != null) {
-				CompoundTag blockTag = wrenchCap.getStoredBlockNBT();
 				BlockState state = wrenchCap.getStoredBlockState();
 				BlockPos offPos = pos.relative(side);
-				BlockEntity be = BlockEntity.loadStatic(offPos, state, blockTag);
+
 				if (state != null) {
 					level.setBlockAndUpdate(offPos, state);
 				}
-				if (be != null) {
-					be.load(blockTag);
-					level.setBlockEntity(be);
+				if (wrenchCap.getStoredBlockNBT() != null && state.getBlock() instanceof EntityBlock entityBlock) {
+					CompoundTag blockTag = wrenchCap.getStoredBlockNBT();
+					BlockEntity be = entityBlock.newBlockEntity(offPos, state);
+					if (be != null) {
+						be.load(blockTag);
+						be.setChanged();
+						level.setBlockEntity(be);
+						level.blockEntityChanged(offPos);
+					} else {
+						if(blockTag != null) {
+							ForceCraft.LOGGER.error("Was unable to load block entity");
+						}
+					}
 				}
+
 				wrenchCap.clearBlockStorage();
 			}
 		}
