@@ -123,10 +123,10 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 					wrenchCap.storeBlockNBT(nbt);
 					wrenchCap.storeBlockState(state);
 					wrenchCap.setBlockName(blockName);
+					level.removeBlockEntity(pos);
 				}
 				fd.setForce(fd.getForce() - 250);
 				fd.write(heldWrench);
-				level.removeBlockEntity(pos);
 				BlockState airState = Blocks.AIR.defaultBlockState();
 				level.setBlockAndUpdate(pos, airState);
 				return InteractionResult.SUCCESS;
