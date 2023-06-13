@@ -1,1 +1,1 @@
-* Fix Force Furnace auto smelting the first item in a stack
+* Fix a mistake in the Force Wrench that caused it to not keep the data of the block entity it stored
