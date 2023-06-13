@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.items.tools;
 
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capabilities.forcewrench.ForceWrenchCapability;
 import com.mrbysco.forcecraft.capabilities.forcewrench.IForceWrench;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -103,11 +105,11 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 		return new ForceWrenchCapability();
 	}
 
-	private InteractionResult serializeNBT(Level world, BlockPos pos, Player player, InteractionHand hand) {
+	private InteractionResult serializeNBT(Level level, BlockPos pos, Player player, InteractionHand hand) {
 		ItemStack heldWrench = player.getItemInHand(hand);
 		ForceToolData fd = new ForceToolData(heldWrench);
 		if (fd.getForce() >= 250) {
-			BlockState state = world.getBlockState(pos);
+			BlockState state = level.getBlockState(pos);
 			if (state.getPistonPushReaction() == PushReaction.BLOCK) {
 				return InteractionResult.FAIL;
 			}
@@ -136,7 +138,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 		return InteractionResult.FAIL;
 	}
 
-	private InteractionResult placeBlockFromWrench(Level world, BlockPos pos, Player player, InteractionHand hand, Direction side) {
+	private InteractionResult placeBlockFromWrench(Level level, BlockPos pos, Player player, InteractionHand hand, Direction side) {
 		ItemStack heldWrench = player.getItemInHand(hand);
 		IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
 		if (wrenchCap != null) {
