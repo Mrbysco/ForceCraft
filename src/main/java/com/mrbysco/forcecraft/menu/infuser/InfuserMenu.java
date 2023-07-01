@@ -233,9 +233,7 @@ public class InfuserMenu extends AbstractContainerMenu {
 			super.slotsChanged(inventoryIn);
 		}
 		getTile().setChanged();
-		if (!player.level.isClientSide) {
-			this.validRecipe[0] = tile.updateValidRecipe() ? 1 : 0;
-		}
+		this.validRecipe[0] = tile.updateValidRecipe() ? 1 : 0;
 		AdvancementUtil.unlockTierAdvancements(player, tile.getBookTier());
 	}
 
