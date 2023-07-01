@@ -17,14 +17,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 //All Code Heavily inspired by Torcherino. Credit to Moze_Intel, Sci4me and NinjaPhenix
 public class TimeTorchBlockEntity extends BlockEntity {
 
-	private List<BlockPos> positionList = new ArrayList<>();
+	private final List<BlockPos> positionList = new ArrayList<>();
 	private int speed;
 
 	public TimeTorchBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {

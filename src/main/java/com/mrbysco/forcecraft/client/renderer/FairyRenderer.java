@@ -12,7 +12,7 @@ public class FairyRenderer extends MobRenderer<FairyEntity, FairyModel<FairyEnti
 	private static final ResourceLocation FAIRY_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/fairy.png");
 
 	public FairyRenderer(EntityRendererProvider.Context context) {
-		super(context, new FairyModel(context.bakeLayer(ClientHandler.FAIRY)), 0.2F);
+		super(context, new FairyModel<>(context.bakeLayer(ClientHandler.FAIRY)), 0.2F);
 	}
 
 	@Override

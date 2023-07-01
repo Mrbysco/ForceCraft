@@ -15,7 +15,7 @@ public class CreeperTotRenderer extends MobRenderer<CreeperTotEntity, CreeperTot
 	private static final ResourceLocation CREEPER_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/creeper_tot.png");
 
 	public CreeperTotRenderer(EntityRendererProvider.Context context) {
-		super(context, new CreeperTotModel(context.bakeLayer(ClientHandler.CREEPER_TOT)), 0.2F);
+		super(context, new CreeperTotModel<>(context.bakeLayer(ClientHandler.CREEPER_TOT)), 0.2F);
 		this.addLayer(new CreeperTotChargeLayer(this, context.getModelSet()));
 	}
 

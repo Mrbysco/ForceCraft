@@ -47,7 +47,7 @@ public class PackChangeMessage {
 					if (customName.isEmpty()) {
 						stack.resetHoverName();
 					} else {
-						if (!stack.getHoverName().getContents().equals(customName)) {
+						if (!stack.getHoverName().getString().equals(customName)) {
 							stack.setHoverName(Component.literal(customName).withStyle(ChatFormatting.YELLOW));
 						}
 					}

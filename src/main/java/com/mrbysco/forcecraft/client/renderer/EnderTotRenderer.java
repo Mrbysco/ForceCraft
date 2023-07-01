@@ -21,7 +21,7 @@ public class EnderTotRenderer extends MobRenderer<EnderTotEntity, EnderTotModel<
 	private final Random rnd = new Random();
 
 	public EnderTotRenderer(EntityRendererProvider.Context context) {
-		super(context, new EnderTotModel(context.bakeLayer(ClientHandler.ENDERTOT)), 0.5F);
+		super(context, new EnderTotModel<>(context.bakeLayer(ClientHandler.ENDERTOT)), 0.5F);
 		this.addLayer(new EndertotEyesLayer<>(this));
 		this.addLayer(new EnderTotHeldBlockLayer(this));
 	}

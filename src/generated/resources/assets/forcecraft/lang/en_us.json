@@ -164,6 +164,7 @@
   "gui.forcecraft.infuser.nobook": "Upgrade Tome required",
   "gui.forcecraft.infuser.patchouli": "The info screen requires Patchouli",
   "gui.forcecraft.infuser.start.tooltip": "Start Infusion",
+  "gui.forcecraft.rename.title": "Rename and Recolor",
   "info.forcecraft.book.bacon.entry.name": "Bacon",
   "info.forcecraft.book.bacon_info.text": "$(item)Bacon$() is a food item added by ForceCraft.$(br)$(br)It can be obtained by using $(l:forcecraft:infuser/force_shears)Force Shears$() on a $(l)Pig$(), which will drop $(item)Raw Bacon$() or $(item)Cooked Bacon$() when infused with $(l:forcecraft:tier_4/heat_upgrade)Heat$()$(br)$(br)The $(item)Bacon$() can be eaten or inserted into a $(l:forcecraft:infuser/baconator)Baconator$() to allow for automated eating.",
   "info.forcecraft.book.bacon_recipe.text": "The $(item)Bacon$() Smelting Recipe",

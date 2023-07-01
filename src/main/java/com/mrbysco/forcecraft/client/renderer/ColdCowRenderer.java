@@ -12,7 +12,7 @@ public class ColdCowRenderer extends MobRenderer<ColdCowEntity, ColdCowModel<Col
 	private static final ResourceLocation COW_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/cold_cow.png");
 
 	public ColdCowRenderer(EntityRendererProvider.Context context) {
-		super(context, new ColdCowModel(context.bakeLayer(ModelLayers.COW)), 0.7F);
+		super(context, new ColdCowModel<>(context.bakeLayer(ModelLayers.COW)), 0.7F);
 	}
 
 	/**

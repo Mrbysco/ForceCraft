@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class RecipeToCardMessage {
-	private List<ItemStack> stacks;
+	private final List<ItemStack> stacks;
 
 	public RecipeToCardMessage(List<ItemStack> stacks) {
 		this.stacks = stacks;

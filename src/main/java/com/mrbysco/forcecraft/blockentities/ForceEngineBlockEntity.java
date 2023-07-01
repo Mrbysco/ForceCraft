@@ -111,8 +111,8 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		}
 	};
 
-	private FluidHandlerWrapper tankWrapper = new FluidHandlerWrapper(tankThrottle, tankFuel);
-	private LazyOptional<IFluidHandler> tankWrapperCap = LazyOptional.of(() -> tankWrapper);
+	private final FluidHandlerWrapper tankWrapper = new FluidHandlerWrapper(tankThrottle, tankFuel);
+	private final LazyOptional<IFluidHandler> tankWrapperCap = LazyOptional.of(() -> tankWrapper);
 
 	public final ItemStackHandler inputHandler = new ItemStackHandler(2) {
 		@Override
@@ -170,8 +170,8 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		}
 	};
 
-	private ItemStackHandlerWrapper stackWrapper = new ItemStackHandlerWrapper(inputHandler, outputHandler);
-	private LazyOptional<IItemHandler> stackWrapperCap = LazyOptional.of(() -> stackWrapper);
+	private final ItemStackHandlerWrapper stackWrapper = new ItemStackHandlerWrapper(inputHandler, outputHandler);
+	private final LazyOptional<IItemHandler> stackWrapperCap = LazyOptional.of(() -> stackWrapper);
 
 	private static final int FLUID_PER_GEM = 500;
 

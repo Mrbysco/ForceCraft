@@ -13,7 +13,7 @@ public class ColdChickenRenderer extends MobRenderer<ColdChickenEntity, ColdChic
 	private static final ResourceLocation CHICKEN_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/cold_chicken.png");
 
 	public ColdChickenRenderer(EntityRendererProvider.Context context) {
-		super(context, new ColdChickenModel(context.bakeLayer(ModelLayers.CHICKEN)), 0.3F);
+		super(context, new ColdChickenModel<>(context.bakeLayer(ModelLayers.CHICKEN)), 0.3F);
 	}
 
 	/**
