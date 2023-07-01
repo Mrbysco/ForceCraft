@@ -1,7 +1,6 @@
 package com.mrbysco.forcecraft.networking;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.networking.message.InfuserMessage;
 import com.mrbysco.forcecraft.networking.message.OpenBeltMessage;
 import com.mrbysco.forcecraft.networking.message.OpenPackMessage;
 import com.mrbysco.forcecraft.networking.message.PackChangeMessage;
@@ -29,7 +28,6 @@ public class PacketHandler {
 	private static int id = 0;
 
 	public static void init() {
-		CHANNEL.registerMessage(id++, InfuserMessage.class, InfuserMessage::encode, InfuserMessage::decode, InfuserMessage::handle);
 		CHANNEL.registerMessage(id++, PackChangeMessage.class, PackChangeMessage::encode, PackChangeMessage::decode, PackChangeMessage::handle);
 		CHANNEL.registerMessage(id++, RecipeToCardMessage.class, RecipeToCardMessage::encode, RecipeToCardMessage::decode, RecipeToCardMessage::handle);
 		CHANNEL.registerMessage(id++, SaveCardRecipeMessage.class, SaveCardRecipeMessage::encode, SaveCardRecipeMessage::decode, SaveCardRecipeMessage::handle);

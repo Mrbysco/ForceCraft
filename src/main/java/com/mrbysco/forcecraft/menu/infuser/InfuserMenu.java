@@ -220,6 +220,14 @@ public class InfuserMenu extends AbstractContainerMenu {
 	}
 
 	@Override
+	public boolean clickMenuButton(Player player, int id) {
+		if(id == 0) {
+			getTile().startWork();
+		}
+		return super.clickMenuButton(player, id);
+	}
+
+	@Override
 	public void slotsChanged(Container inventoryIn) {
 		if (inventoryIn != null) {
 			super.slotsChanged(inventoryIn);
