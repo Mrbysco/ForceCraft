@@ -23,15 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_CHARGE;
-import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_CHARGEII;
-import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_GRINDING;
-import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_HEAT;
-import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_LUCK;
-import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_REPAIR;
-import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_SPEED;
-import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_STURDY;
-import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_TOUCH;
+import static com.mrbysco.forcecraft.Reference.MODIFIERS.*;
 import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
 
 public class ForceShovelItem extends ShovelItem implements IForceChargingTool {

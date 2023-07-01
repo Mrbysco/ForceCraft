@@ -17,9 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_BANE;
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.*;
 
 public class ToolModifierHandler {
 

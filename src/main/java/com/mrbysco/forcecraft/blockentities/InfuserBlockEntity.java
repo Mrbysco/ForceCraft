@@ -125,7 +125,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 			return stack.getFluid().is(ForceTags.FORCE);
 		}
 	};
-	private LazyOptional<IFluidHandler> tankHolder = LazyOptional.of(() -> tank);
+	private final LazyOptional<IFluidHandler> tankHolder = LazyOptional.of(() -> tank);
 
 	public final ItemStackHandler handler = new ItemStackHandler(11) {
 		@Override
@@ -154,12 +154,12 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 			return true;
 		}
 	};
-	private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
+	private final LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
 
 	public ForceEnergyStorage energyStorage = new ForceEnergyStorage(64000, 1000);
-	private LazyOptional<ForceEnergyStorage> energyHolder = LazyOptional.of(() -> energyStorage);
+	private final LazyOptional<ForceEnergyStorage> energyHolder = LazyOptional.of(() -> energyStorage);
 
-	private NonNullList<ItemStack> infuserContents = NonNullList.create();
+	private final NonNullList<ItemStack> infuserContents = NonNullList.create();
 
 
 	public InfuserBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {

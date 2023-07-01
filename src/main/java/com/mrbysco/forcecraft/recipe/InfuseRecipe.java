@@ -111,10 +111,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 			}
 		}
 
-		if (!this.input.test(modifierStack)) {
-			return false;
-		}
-		return true;
+		return this.input.test(modifierStack);
 	}
 
 	public boolean matchesTool(ItemStack toolStack, boolean ignoreInfused) {
@@ -124,9 +121,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 		}
 		if (!ignoreInfused) {
 			//Ignore if the tool is infused in case of infusing for the first time
-			if ((toolStack.hasTag() && toolStack.getTag().getBoolean("ForceInfused"))) {
-				return false;
-			}
+			return !toolStack.hasTag() || !toolStack.getTag().getBoolean("ForceInfused");
 		}
 		return true;
 	}

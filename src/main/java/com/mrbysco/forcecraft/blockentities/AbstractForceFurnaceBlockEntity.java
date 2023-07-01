@@ -86,7 +86,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			}
 		}
 	};
-	private LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
+	private final LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
 
 	public final ItemStackHandler upgradeHandler = new ItemStackHandler(1) {
 		@Override
@@ -105,7 +105,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			return ItemStack.EMPTY;
 		}
 	};
-	private LazyOptional<IItemHandler> upgradeHandlerHolder = LazyOptional.of(() -> upgradeHandler);
+	private final LazyOptional<IItemHandler> upgradeHandlerHolder = LazyOptional.of(() -> upgradeHandler);
 
 	private static final List<ResourceLocation> hopperBlacklist = List.of(
 			new ResourceLocation("hopper"),

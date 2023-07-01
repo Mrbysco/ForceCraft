@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class SpoilsBagScreen extends AbstractContainerScreen<SpoilsBagMenu> {
-	private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/spoilsbag.png");
+	private final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/spoilsbag.png");
 
 	public SpoilsBagScreen(SpoilsBagMenu screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);

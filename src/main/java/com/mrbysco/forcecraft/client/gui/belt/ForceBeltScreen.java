@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class ForceBeltScreen extends AbstractContainerScreen<ForceBeltMenu> {
-	private ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcebelt.png");
+	private final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forcebelt.png");
 
 	public ForceBeltScreen(ForceBeltMenu screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
