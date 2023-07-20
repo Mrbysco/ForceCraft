@@ -7,8 +7,6 @@ import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.client.gui.widgets.ProgressBar;
 import com.mrbysco.forcecraft.client.util.RenderHelper;
 import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
-import com.mrbysco.forcecraft.networking.PacketHandler;
-import com.mrbysco.forcecraft.networking.message.InfuserMessage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -19,7 +17,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +68,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 			if (bookStack.isEmpty()) {
 				this.inventory.player.displayClientMessage(Component.translatable("gui.forcecraft.infuser.nobook"), false);
 			} else {
-				PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new InfuserMessage(true));
+				this.minecraft.gameMode.handleInventoryButtonClick(menu.containerId, 0);
 			}
 //			container.getTile().canWork = false;
 		}).bounds(leftPos + x, topPos + y, btnSize, btnSize).build());
