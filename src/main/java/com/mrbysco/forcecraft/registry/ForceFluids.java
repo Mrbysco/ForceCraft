@@ -26,8 +26,8 @@ import org.joml.Vector3f;
 import java.util.function.Consumer;
 
 public class ForceFluids {
-	private static final ResourceLocation STILL_METAL = new ResourceLocation(Reference.MOD_ID, "fluid/force_fluid_source");
-	private static final ResourceLocation FLOWING_METAL = new ResourceLocation(Reference.MOD_ID, "fluid/force_fluid_flowing");
+	private static final ResourceLocation STILL_METAL = new ResourceLocation(Reference.MOD_ID, "block/force_fluid_source");
+	private static final ResourceLocation FLOWING_METAL = new ResourceLocation(Reference.MOD_ID, "block/force_fluid_flowing");
 
 	public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, Reference.MOD_ID);
 	public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, Reference.MOD_ID);
