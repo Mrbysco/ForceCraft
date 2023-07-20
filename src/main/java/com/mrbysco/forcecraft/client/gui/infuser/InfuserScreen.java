@@ -53,7 +53,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		int y = 16;
 
 
-		buttonGuide = this.addRenderableWidget(Button.builder(Component.translatable("gui.forcecraft.infuser.button.guide"), (button) -> {
+		buttonGuide = this.addWidget(Button.builder(Component.translatable("gui.forcecraft.infuser.button.guide"), (button) -> {
 			if (ModList.get().isLoaded("patchouli")) {
 				com.mrbysco.forcecraft.compat.patchouli.PatchouliCompat.openBook();
 			} else {
@@ -63,7 +63,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 
 		x = 39;
 		y = 101;
-		buttonInfuse = this.addRenderableWidget(Button.builder(Component.empty(), (button) -> {
+		buttonInfuse = this.addWidget(Button.builder(Component.empty(), (button) -> {
 			ItemStack bookStack = menu.getTile().getBookInSlot();
 			if (bookStack.isEmpty()) {
 				this.inventory.player.displayClientMessage(Component.translatable("gui.forcecraft.infuser.nobook"), false);
