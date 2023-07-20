@@ -124,7 +124,7 @@ public class ForceCraft {
 	private void registerCreativeTabs(final CreativeModeTabEvent.Register event) {
 		creativeTab = event.registerCreativeModeTab(new ResourceLocation(Reference.MOD_ID, "tab"), builder ->
 				builder.icon(() -> new ItemStack(ForceRegistry.FORCE_GEM.get()))
-						.title(Component.translatable("itemGroup.forcecraft.tab"))
+						.title(Component.translatable("itemGroup.forcecraft"))
 						.displayItems((features, output, hasPermissions) -> {
 							List<ItemStack> stacks = ForceRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
 							output.acceptAll(stacks);
