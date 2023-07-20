@@ -9,6 +9,7 @@ import com.mrbysco.forcecraft.client.util.RenderHelper;
 import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -53,17 +54,20 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		int y = 16;
 
 
-		buttonGuide = this.addWidget(Button.builder(Component.translatable("gui.forcecraft.infuser.button.guide"), (button) -> {
+		buttonGuide = this.addRenderableWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
+				201, 0, 0, TEXTURE, 256, 256, (button) -> {
 			if (ModList.get().isLoaded("patchouli")) {
 				com.mrbysco.forcecraft.compat.patchouli.PatchouliCompat.openBook();
 			} else {
 				this.inventory.player.displayClientMessage(Component.translatable("gui.forcecraft.infuser.patchouli"), false);
 			}
-		}).bounds(leftPos + x, topPos + y, 13, 13).build());
+		}, Component.translatable("gui.forcecraft.infuser.button.guide")));
 
 		x = 39;
 		y = 101;
-		buttonInfuse = this.addWidget(Button.builder(Component.empty(), (button) -> {
+
+		buttonInfuse = this.addRenderableWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
+				188, 0, 0, TEXTURE, 256, 256, (button) -> {
 			ItemStack bookStack = menu.getTile().getBookInSlot();
 			if (bookStack.isEmpty()) {
 				this.inventory.player.displayClientMessage(Component.translatable("gui.forcecraft.infuser.nobook"), false);
@@ -71,7 +75,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 				this.minecraft.gameMode.handleInventoryButtonClick(menu.containerId, 0);
 			}
 //			container.getTile().canWork = false;
-		}).bounds(leftPos + x, topPos + y, btnSize, btnSize).build());
+		}, Component.empty()));
 	}
 
 	@Override
@@ -79,13 +83,13 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		super.containerTick();
 
 		boolean flag = getMenu().validRecipe[0] == 1;
-		if (buttonInfuse.active != flag) {
-			buttonInfuse.active = flag;
+		if (buttonInfuse.visible != flag) {
+			buttonInfuse.visible = flag;
 		}
 
 		boolean flag2 = !menu.getTile().getBookInSlot().isEmpty();
-		if (buttonGuide.active != flag2) {
-			buttonGuide.active = flag2;
+		if (buttonGuide.visible != flag2) {
+			buttonGuide.visible = flag2;
 		}
 	}
 
