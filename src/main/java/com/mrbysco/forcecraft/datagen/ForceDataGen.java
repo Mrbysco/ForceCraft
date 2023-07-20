@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.datagen;
 
+import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.datagen.assets.ForceBlockModels;
 import com.mrbysco.forcecraft.datagen.assets.ForceBlockStates;
 import com.mrbysco.forcecraft.datagen.assets.ForceItemModels;
@@ -37,7 +38,7 @@ public class ForceDataGen {
 	public static void gatherData(GatherDataEvent event) {
 		DataGenerator generator = event.getGenerator();
 		PackOutput packOutput = generator.getPackOutput();
-		CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+		CompletableFuture<HolderLookup.Provider> lookupProvider = CompletableFuture.supplyAsync(ForceDataGen::getProvider);
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 		if (event.includeServer()) {
@@ -51,7 +52,7 @@ public class ForceDataGen {
 
 
 			generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(
-					packOutput, CompletableFuture.supplyAsync(ForceDataGen::getProvider), Set.of("rocks")));
+					packOutput, lookupProvider, Set.of(Reference.MOD_ID)));
 		}
 		if (event.includeClient()) {
 			generator.addProvider(event.includeClient(), new ForceLanguage(packOutput));

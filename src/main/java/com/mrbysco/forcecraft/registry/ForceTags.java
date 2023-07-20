@@ -10,6 +10,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -49,6 +50,9 @@ public class ForceTags {
 	public static final TagKey<EntityType<?>> FLASK_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(Reference.MOD_ID, "flask_blacklist"));
 	public static final TagLookup<EntityType<?>> FLASK_BLACKLIST_LOOKUP = new TagLookup<>(ForgeRegistries.ENTITY_TYPES, FLASK_BLACKLIST);
 
+	public static final TagKey<Biome> IS_PEACEFUL = forceBiomeTag("is_peaceful");
+
+
 	private static TagKey<Item> forgeItemTag(String name) {
 		return ItemTags.create(new ResourceLocation("forge", name));
 	}
@@ -63,6 +67,10 @@ public class ForceTags {
 
 	private static TagKey<Fluid> optionalForgeFluidTag(String name) {
 		return FluidTags.create(new ResourceLocation("forge", name));
+	}
+
+	private static TagKey<Biome> forceBiomeTag(String name) {
+		return TagKey.create(Registries.BIOME, new ResourceLocation(Reference.MOD_ID, name));
 	}
 
 }

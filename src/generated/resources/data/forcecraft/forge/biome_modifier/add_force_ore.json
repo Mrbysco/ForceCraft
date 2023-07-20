@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:add_config_features",
   "biomes": "#minecraft:is_overworld",
-  "enabledConfig": "force_ore",
-  "features": "forcecraft:force_ore",
+  "enabledConfig": "add_force_ore_modifier",
+  "features": "forcecraft:ore_force",
   "step": "underground_ores"
 }
