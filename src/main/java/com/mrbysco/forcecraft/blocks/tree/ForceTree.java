@@ -1,7 +1,6 @@
 package com.mrbysco.forcecraft.blocks.tree;
 
 import com.mrbysco.forcecraft.world.feature.ForceFeatureKeys;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;

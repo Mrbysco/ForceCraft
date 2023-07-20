@@ -2,7 +2,6 @@ package com.mrbysco.forcecraft.datagen.patchouli;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

@@ -1,7 +1,6 @@
 package com.mrbysco.forcecraft.recipe;
 
 import com.mrbysco.forcecraft.Reference;
-import net.minecraft.core.Registry;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
