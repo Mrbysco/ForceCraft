@@ -5,7 +5,7 @@ if (System.getenv().CURSEFORGE_KEY) {
         apiKey = System.getenv().CURSEFORGE_KEY
         project {
             id = project.curseforge_id
-            releaseType = "release"
+            releaseType = "beta"
             addGameVersion "Forge"
             addGameVersion "${mc_version}"
             addGameVersion "Java 17"
