@@ -14,5 +14,6 @@
   "result": {
     "count": 4,
     "item": "forcecraft:force_plank_stairs"
-  }
+  },
+  "show_notification": true
 }

@@ -9,6 +9,7 @@ import com.mrbysco.forcecraft.registry.ForceRecipeSerializers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -58,7 +59,7 @@ public class TransmutationRecipe implements CraftingRecipe {
 		return this.group;
 	}
 
-	public ItemStack getResultItem() {
+	public ItemStack getResultItem(RegistryAccess registryAccess) {
 		return this.recipeOutput;
 	}
 
@@ -112,8 +113,8 @@ public class TransmutationRecipe implements CraftingRecipe {
 		return stacks == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this, (IntList) null) : net.minecraftforge.common.util.RecipeMatcher.findMatches(inputs, this.recipeItems) != null);
 	}
 
-	public ItemStack assemble(CraftingContainer inv) {
-		ItemStack resultStack = this.recipeOutput.copy();
+	public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+		ItemStack resultStack = getResultItem(registryAccess).copy();
 		for (int j = 0; j < inv.getContainerSize(); ++j) {
 			ItemStack itemstack = inv.getItem(j);
 			if ((itemstack.getItem() instanceof ExperienceTomeItem)) {

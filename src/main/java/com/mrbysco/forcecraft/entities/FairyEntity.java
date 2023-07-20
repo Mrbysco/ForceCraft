@@ -152,9 +152,9 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 		 * Execute a one shot task or start executing a continuous task
 		 */
 		public void start() {
-			Vec3 vector3d = this.getRandomLocation();
-			if (vector3d != null) {
-				FairyEntity.this.navigation.moveTo(FairyEntity.this.navigation.createPath(new BlockPos(vector3d), 1), 1.0D);
+			Vec3 randomLocation = this.getRandomLocation();
+			if (randomLocation != null) {
+				FairyEntity.this.navigation.moveTo(FairyEntity.this.navigation.createPath(BlockPos.containing(randomLocation), 1), 1.0D);
 			}
 		}
 

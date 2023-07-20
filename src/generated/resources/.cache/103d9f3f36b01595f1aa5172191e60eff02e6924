@@ -1,4 +1,6 @@
-// 1.19.3	2023-07-20T20:33:01.9650278	Registries
+// 1.19.4	2023-07-20T21:58:27.9335065	Registries
+60ee9492bc063eb6c2bab075da9af619affa45a5 data/forcecraft/damage_type/bleeding.json
+acec5f281dd1e80bdfa05bfcbb148f13e9cee25a data/forcecraft/damage_type/liquid_force.json
 dac71b6389a1e7ebdc38a96e9e10d7bf0ef2cf87 data/forcecraft/forge/biome_modifier/add_chu_chu.json
 03f5c550c482cfcf4f253c6b5543026d76d0be14 data/forcecraft/forge/biome_modifier/add_creeper_tot.json
 bcc305768d02033dc6baeddb00a4abbac3c47f95 data/forcecraft/forge/biome_modifier/add_ender_tot.json

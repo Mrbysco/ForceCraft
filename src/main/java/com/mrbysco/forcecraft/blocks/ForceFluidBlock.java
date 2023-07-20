@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.blocks;
 
 import com.mrbysco.forcecraft.ForceCraft;
+import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.entities.IColdMob;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,7 +39,8 @@ public class ForceFluidBlock extends LiquidBlock {
 				boolean damageEntity = creatureAttribute == MobType.UNDEAD || creatureAttribute == MobType.UNDEFINED || creatureAttribute == MobType.ARTHROPOD;
 				if (classification == MobCategory.MONSTER && damageEntity) {
 					if (level.getGameTime() % 10 == 0) {
-						livingEntity.hurt(ForceCraft.LIQUID_FORCE_DAMAGE, 1.0F);
+
+						livingEntity.hurt(Reference.causeLiquidForceDamage(livingEntity), 1.0F);
 					}
 				} else {
 					if (level.getGameTime() % 10 == 0) {

@@ -18,6 +18,8 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -53,6 +55,13 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 
 	@Override
 	public void setRecipe(IRecipeLayoutBuilder builder, InfuseRecipe recipe, IFocusGroup focuses) {
+		Minecraft minecraft = Minecraft.getInstance();
+		ClientLevel level = minecraft.level;
+		if (level == null) {
+			throw new NullPointerException("level must not be null.");
+		}
+		RegistryAccess registryAccess = level.registryAccess();
+
 		final Optional<IFocus<?>> focused = focuses.getAllFocuses().stream().findFirst();
 		ItemStack[] matchingStacks = recipe.getCenter().getItems();
 
@@ -65,7 +74,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 			if (modifierStack.length > 0) {
 				builder.addSlot(RecipeIngredientRole.CATALYST, 46, 10).addItemStack(modifierStack[0]);
 			}
-			if (recipe.getResultItem().isEmpty()) {
+			if (recipe.getResultItem(registryAccess).isEmpty()) {
 				if (modifierStack.length > 0) {
 					ItemStack modifier = modifierStack[0].copy();
 					InfuserModifierType type = recipe.getModifier();
@@ -91,7 +100,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 					builder.addSlot(RecipeIngredientRole.OUTPUT, 120, 47).addItemStack(matchingStacks[0]);
 				}
 			} else {
-				builder.addSlot(RecipeIngredientRole.OUTPUT, 120, 47).addItemStack(recipe.getResultItem());
+				builder.addSlot(RecipeIngredientRole.OUTPUT, 120, 47).addItemStack(recipe.getResultItem(registryAccess));
 			}
 		} else {
 			builder.addSlot(RecipeIngredientRole.INPUT, 46, 47).addIngredients(recipe.getIngredients().get(0));
@@ -101,7 +110,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 			if (modifierStack.length > 0) {
 				builder.addSlot(RecipeIngredientRole.CATALYST, 46, 10).addItemStack(modifierStack[0]);
 			}
-			if (recipe.getResultItem().isEmpty()) {
+			if (recipe.getResultItem(registryAccess).isEmpty()) {
 				if (modifierStack.length > 0) {
 					ItemStack modifier = modifierStack[0].copy();
 					InfuserModifierType type = recipe.getModifier();
@@ -127,7 +136,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 					builder.addSlot(RecipeIngredientRole.OUTPUT, 120, 47).addItemStack(matchingStacks[0]);
 				}
 			} else {
-				builder.addSlot(RecipeIngredientRole.OUTPUT, 120, 47).addItemStack(recipe.getResultItem());
+				builder.addSlot(RecipeIngredientRole.OUTPUT, 120, 47).addItemStack(recipe.getResultItem(registryAccess));
 			}
 		}
 	}

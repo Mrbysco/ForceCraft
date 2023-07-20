@@ -1,7 +1,9 @@
 package com.mrbysco.forcecraft.handlers;
 
 import com.mrbysco.forcecraft.ForceCraft;
+import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.entities.CreeperTotEntity;
+import com.mrbysco.forcecraft.registry.ForceDamageTypes;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
@@ -21,7 +23,7 @@ public class ForceDeathHandler {
 		final Level level = event.getEntity().level;
 		if (level.isClientSide) return;
 
-		if (event.getSource() != null && event.getSource() == ForceCraft.LIQUID_FORCE_DAMAGE) {
+		if (event.getSource() != null && event.getSource().is(ForceDamageTypes.LIQUID_FORCE)) {
 			// Killed by Liquid Force
 			if (livingEntity instanceof Mob mob) {
 				CompoundTag mobData = mob.getPersistentData();

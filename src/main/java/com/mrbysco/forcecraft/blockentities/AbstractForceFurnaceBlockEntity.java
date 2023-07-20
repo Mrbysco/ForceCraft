@@ -321,7 +321,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 	protected boolean canBurn(@Nullable Recipe<?> recipeIn) {
 		if (!this.handler.getStackInSlot(INPUT_SLOT).isEmpty() && recipeIn != null) {
-			ItemStack recipeOutput = recipeIn.getResultItem();
+			ItemStack recipeOutput = recipeIn.getResultItem(level.registryAccess());
 			if (recipeOutput.isEmpty()) {
 				return false;
 			} else {
@@ -404,7 +404,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					}
 				}
 			} else {
-				ItemStack itemstack1 = recipe.getResultItem();
+				ItemStack itemstack1 = recipe.getResultItem(level.registryAccess());
 				ItemStack outputStack = itemstack1.copy();
 
 				List<BiggestInventory> inventoryList = new ArrayList<>();

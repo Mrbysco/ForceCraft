@@ -53,7 +53,7 @@ import com.mrbysco.forcecraft.items.tools.MagnetGloveItem;
 import com.mrbysco.forcecraft.registry.material.ModArmor;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -265,13 +265,13 @@ public class ForceRegistry {
 			new CustomFoodItem(itemBuilder().food(ForceFoods.COOKED_BACON)));
 
 	public static final RegistryObject<Item> FORCE_HELMET = ITEMS.register("force_helmet", () ->
-			new ForceArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlot.HEAD, itemBuilder()));
+			new ForceArmorItem(ModArmor.FORCE_ARMOR, ArmorItem.Type.HELMET, itemBuilder()));
 	public static final RegistryObject<Item> FORCE_CHEST = ITEMS.register("force_chest", () ->
-			new ForceArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlot.CHEST, itemBuilder()));
+			new ForceArmorItem(ModArmor.FORCE_ARMOR, ArmorItem.Type.CHESTPLATE, itemBuilder()));
 	public static final RegistryObject<Item> FORCE_LEGS = ITEMS.register("force_legs", () ->
-			new ForceArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlot.LEGS, itemBuilder()));
+			new ForceArmorItem(ModArmor.FORCE_ARMOR, ArmorItem.Type.LEGGINGS, itemBuilder()));
 	public static final RegistryObject<Item> FORCE_BOOTS = ITEMS.register("force_boots", () ->
-			new ForceArmorItem(ModArmor.FORCE_ARMOR, EquipmentSlot.FEET, itemBuilder()));
+			new ForceArmorItem(ModArmor.FORCE_ARMOR, ArmorItem.Type.BOOTS, itemBuilder()));
 
 	public static final RegistryObject<Item> FORCE_ROD = ITEMS.register("force_rod", () -> new ForceRodItem(itemBuilder()));
 	public static final RegistryObject<Item> FORCE_WRENCH = ITEMS.register("force_wrench", () -> new ForceWrenchItem(itemBuilder()));

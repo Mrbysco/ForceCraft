@@ -101,7 +101,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 						// Armor
 						if (itemEntity.getItem().getItem() instanceof ArmorItem) {
 							if (((ArmorItem) itemEntity.getItem().getItem())
-									.getSlot() == EquipmentSlot.CHEST) {
+									.getEquipmentSlot() == EquipmentSlot.CHEST) {
 								if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.IRON) {
 									itemEntity.discard();
@@ -123,7 +123,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 								}
 							}
 							if (((ArmorItem) itemEntity.getItem().getItem())
-									.getSlot() == EquipmentSlot.LEGS) {
+									.getEquipmentSlot() == EquipmentSlot.LEGS) {
 								if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.IRON) {
 									itemEntity.discard();
@@ -145,7 +145,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 								}
 							}
 							if (((ArmorItem) itemEntity.getItem().getItem())
-									.getSlot() == EquipmentSlot.FEET) {
+									.getEquipmentSlot() == EquipmentSlot.FEET) {
 								if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.IRON) {
 									itemEntity.discard();
@@ -167,7 +167,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 								}
 							}
 							if (((ArmorItem) itemEntity.getItem().getItem())
-									.getSlot() == EquipmentSlot.HEAD) {
+									.getEquipmentSlot() == EquipmentSlot.HEAD) {
 								if (((ArmorItem) itemEntity.getItem().getItem())
 										.getMaterial() == ArmorMaterials.IRON) {
 									itemEntity.discard();

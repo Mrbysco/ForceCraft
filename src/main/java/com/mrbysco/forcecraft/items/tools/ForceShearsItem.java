@@ -81,7 +81,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 		// should not drop rainbow wool
 		if (toolModifier != null && toolModifier.hasRainbow() && entity instanceof Sheep target) {
 
-			BlockPos pos = new BlockPos(entity.getX(), entity.getY(), entity.getZ());
+			BlockPos pos = BlockPos.containing(entity.getX(), entity.getY(), entity.getZ());
 
 			if (target.isShearable(stack, world, pos)) {
 				List<ItemStack> drops = target.onSheared(playerIn, stack, world, pos, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack));

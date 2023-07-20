@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -39,10 +40,11 @@ public class SmeltingModifier extends LootModifier {
 
 	private static ItemStack smelt(ItemStack stack, LootContext context) {
 		ItemStack ctxTool = context.getParamOrNull(LootContextParams.TOOL);
+		RegistryAccess registryAccess = context.getLevel().registryAccess();
 		IToolModifier toolModifierCap = ctxTool.getCapability(CAPABILITY_TOOLMOD).orElse(null);
 		if (toolModifierCap != null && toolModifierCap.hasHeat()) {
 			return context.getLevel().getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(stack), context.getLevel())
-					.map(SmeltingRecipe::getResultItem)
+					.map(smeltRecipe -> smeltRecipe.getResultItem(registryAccess))
 					.filter(itemStack -> !itemStack.isEmpty())
 					.map(itemStack -> ItemHandlerHelper.copyStackWithSize(itemStack, stack.getCount() * itemStack.getCount()))
 					.orElse(stack);

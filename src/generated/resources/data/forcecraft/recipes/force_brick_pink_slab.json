@@ -12,5 +12,6 @@
   "result": {
     "count": 6,
     "item": "forcecraft:force_brick_pink_slab"
-  }
+  },
+  "show_notification": true
 }

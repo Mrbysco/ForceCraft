@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.recipe;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -27,16 +28,16 @@ public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe 
 	}
 
 	@Override
-	public ItemStack assemble(Container inv) {
-		return this.resultItems.get(0).copy();
+	public ItemStack assemble(Container inv, RegistryAccess registryAccess) {
+		return getResultItem(registryAccess).copy();
 	}
 
 	@Override
-	public ItemStack getResultItem() {
+	public ItemStack getResultItem(RegistryAccess registryAccess) {
 		return this.resultItems.get(0);
 	}
 
-	public NonNullList<ItemStack> getCraftingResults(Container inv) {
+	public NonNullList<ItemStack> getCraftingResults(Container inv) { //TODO: Check what getCraftingResults was used for
 		NonNullList<ItemStack> results = NonNullList.create();
 		for (ItemStack stack : this.resultItems) {
 			results.add(stack.copy());

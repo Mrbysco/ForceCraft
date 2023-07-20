@@ -23,7 +23,7 @@ public class RecoveryHeartItem extends BaseItem {
 		if (!(entityIn instanceof Player player))
 			return;
 
-		BlockPos pos = new BlockPos(player.getX(), player.getY() + player.getMyRidingOffset(), player.getZ());
+		BlockPos pos = BlockPos.containing(player.getX(), player.getY() + player.getMyRidingOffset(), player.getZ());
 
 		int HEAL_AMT = 2;
 		for (int i = 0; i < stack.getCount(); i++) {

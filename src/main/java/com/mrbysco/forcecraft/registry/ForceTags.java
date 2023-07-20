@@ -16,9 +16,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ForceTags {
-	public static void initialize() {
-
-	}
 
 	public static final TagKey<Block> NEEDS_FORCE_TOOL = forceBlockTag("needs_force_tool");
 	public static final TagKey<Block> MINEABLE_WITH_MITTS = forceBlockTag("mineable_with_mitts");

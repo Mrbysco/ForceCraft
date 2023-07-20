@@ -32,6 +32,7 @@ public class PatchouliProvider extends PatchouliBookProvider {
 //                .setUseBlockyFont(true)
 				.setFillerTexture("forcecraft:textures/gui/page_filler.png")
 				.addMacro("$(item)", "$(#b89232)")
+				.setUseResourcePack(true)
 
 				//infuser category
 				.addCategory("infuser", "info.forcecraft.book.infuser.name", "info.forcecraft.book.infuser.desc", "forcecraft:infuser")

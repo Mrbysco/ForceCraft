@@ -28,8 +28,8 @@ import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_T
 
 public class ForceArmorItem extends ArmorItem implements IForceChargingTool {
 
-	public ForceArmorItem(ArmorMaterial materialIn, EquipmentSlot slot, Item.Properties builderIn) {
-		super(materialIn, slot, builderIn);
+	public ForceArmorItem(ArmorMaterial materialIn, ArmorItem.Type type, Item.Properties builderIn) {
+		super(materialIn, type, builderIn);
 	}
 
 	@Nullable

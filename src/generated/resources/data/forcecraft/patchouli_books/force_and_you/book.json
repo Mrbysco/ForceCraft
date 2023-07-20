@@ -11,5 +11,6 @@
   "model": "forcecraft:force_and_you",
   "name": "item.forcecraft.book.name",
   "show_progress": false,
-  "subtitle": "info.forcecraft.book.subtitle"
+  "subtitle": "info.forcecraft.book.subtitle",
+  "use_resource_pack": true
 }

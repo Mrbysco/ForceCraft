@@ -125,7 +125,7 @@ public class ItemCardMenu extends AbstractContainerMenu {
 					|| !level.getGameRules().getBoolean(GameRules.RULE_LIMITED_CRAFTING)
 					|| serverPlayer.getRecipeBook().contains(iRecipe.get())
 					|| player.isCreative())) {
-				stack = iRecipe.get().assemble(this.craftMatrix);
+				stack = iRecipe.get().assemble(this.craftMatrix, level.registryAccess());
 				inventoryResult.setItem(0, stack);
 				serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, 0, stack));
 			} else {

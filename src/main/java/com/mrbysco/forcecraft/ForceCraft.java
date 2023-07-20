@@ -30,8 +30,6 @@ import com.mrbysco.forcecraft.world.feature.ForceFeatures;
 import net.minecraft.core.dispenser.ShearsDispenseItemBehavior;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.api.distmarker.Dist;
@@ -54,11 +52,6 @@ import java.util.List;
 public class ForceCraft {
 
 	public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
-
-	public static final DamageSource BLEEDING_DAMAGE = new DamageSource(Reference.MOD_ID + ".bleeding").setMagic().bypassArmor();
-	public static final DamageSource LIQUID_FORCE_DAMAGE = new DamageSource(Reference.MOD_ID + ".liquid_force").setMagic().bypassArmor();
-
-	private static CreativeModeTab creativeTab;
 
 	public ForceCraft() {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -122,10 +115,10 @@ public class ForceCraft {
 	}
 
 	private void registerCreativeTabs(final CreativeModeTabEvent.Register event) {
-		creativeTab = event.registerCreativeModeTab(new ResourceLocation(Reference.MOD_ID, "tab"), builder ->
+		event.registerCreativeModeTab(new ResourceLocation(Reference.MOD_ID, "tab"), builder ->
 				builder.icon(() -> new ItemStack(ForceRegistry.FORCE_GEM.get()))
 						.title(Component.translatable("itemGroup.forcecraft"))
-						.displayItems((features, output, hasPermissions) -> {
+						.displayItems((features, output) -> {
 							List<ItemStack> stacks = ForceRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
 							output.acceptAll(stacks);
 						}));

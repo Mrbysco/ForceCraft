@@ -5,10 +5,12 @@ import com.mrbysco.forcecraft.datagen.assets.ForceBlockModels;
 import com.mrbysco.forcecraft.datagen.assets.ForceBlockStates;
 import com.mrbysco.forcecraft.datagen.assets.ForceItemModels;
 import com.mrbysco.forcecraft.datagen.assets.ForceLanguage;
+import com.mrbysco.forcecraft.datagen.data.ForceDamageTypeProvider;
 import com.mrbysco.forcecraft.datagen.data.ForceLoot;
 import com.mrbysco.forcecraft.datagen.data.ForceLootModifiers;
 import com.mrbysco.forcecraft.datagen.data.ForceRecipeProvider;
 import com.mrbysco.forcecraft.datagen.data.tags.ForceBlockTags;
+import com.mrbysco.forcecraft.datagen.data.tags.ForceDamageTypeTags;
 import com.mrbysco.forcecraft.datagen.data.tags.ForceItemTags;
 import com.mrbysco.forcecraft.datagen.patchouli.PatchouliProvider;
 import com.mrbysco.forcecraft.world.feature.ForceBiomeModifiers;
@@ -48,8 +50,8 @@ public class ForceDataGen {
 			BlockTagsProvider provider;
 			generator.addProvider(event.includeServer(), provider = new ForceBlockTags(packOutput, lookupProvider, existingFileHelper));
 			generator.addProvider(event.includeServer(), new ForceItemTags(packOutput, lookupProvider, provider, existingFileHelper));
+			generator.addProvider(event.includeServer(), new ForceDamageTypeTags(packOutput, lookupProvider, existingFileHelper));
 			generator.addProvider(event.includeServer(), new ForceLootModifiers(packOutput));
-
 
 			generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(
 					packOutput, lookupProvider, Set.of(Reference.MOD_ID)));
@@ -64,6 +66,7 @@ public class ForceDataGen {
 
 	private static HolderLookup.Provider getProvider() {
 		final RegistrySetBuilder registryBuilder = new RegistrySetBuilder();
+		registryBuilder.add(Registries.DAMAGE_TYPE, ForceDamageTypeProvider::bootstrap);
 		registryBuilder.add(Registries.CONFIGURED_FEATURE, ForceFeatureKeys::configuredBootstrap);
 		registryBuilder.add(Registries.PLACED_FEATURE, ForceFeatureKeys::placedBootstrap);
 		registryBuilder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, ForceBiomeModifiers::modifierBootstrap);

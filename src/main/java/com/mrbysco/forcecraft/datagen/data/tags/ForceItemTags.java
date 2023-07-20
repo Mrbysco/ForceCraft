@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 public class ForceItemTags extends ItemTagsProvider {
 	public ForceItemTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
 						 TagsProvider<Block> blockTagProvider, ExistingFileHelper existingFileHelper) {
-		super(output, lookupProvider, blockTagProvider, Reference.MOD_ID, existingFileHelper);
+		super(output, lookupProvider, blockTagProvider.contentsGetter(), Reference.MOD_ID, existingFileHelper);
 	}
 
 	@Override

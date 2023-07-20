@@ -14,5 +14,6 @@
   "result": {
     "count": 4,
     "item": "forcecraft:force_brick_light_gray_stairs"
-  }
+  },
+  "show_notification": true
 }

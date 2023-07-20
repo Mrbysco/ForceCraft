@@ -526,7 +526,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 			if (recipe.resultModifier == InfuserModifierType.ITEM && recipe.hasOutput()) {
 				//overwrite / convert item
-				handler.setStackInSlot(SLOT_TOOL, recipe.getResultItem().copy());
+				handler.setStackInSlot(SLOT_TOOL, recipe.getResultItem(level.registryAccess()).copy());
 			} else {
 				//sync item changes
 				handler.setStackInSlot(SLOT_TOOL, tool);

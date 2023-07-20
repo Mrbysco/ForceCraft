@@ -28,11 +28,11 @@ public class ItemButton extends Button {
 	}
 
 	@Override
-	public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
 		//RENDER THE STACK
 		Minecraft minecraft = Minecraft.getInstance();
 		ItemRenderer itemRender = minecraft.getItemRenderer();
-		itemRender.renderGuiItem(this.buttonStack, this.getX(), this.getY());
+		itemRender.renderGuiItem(poseStack, this.buttonStack, this.getX(), this.getY());
 //		super.renderWidget(poseStack, mouseX, mouseY, partialTicks);
 	}
 

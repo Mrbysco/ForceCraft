@@ -11,6 +11,7 @@ import com.mrbysco.forcecraft.items.infuser.UpgradeBookTier;
 import com.mrbysco.forcecraft.registry.ForceRecipeSerializers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -132,7 +133,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 	}
 
 	@Override
-	public ItemStack getResultItem() {
+	public ItemStack getResultItem(RegistryAccess registryAccess) {
 		return output;
 	}
 
@@ -141,8 +142,8 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 	}
 
 	@Override
-	public ItemStack assemble(InfuserBlockEntity inv) {
-		return getResultItem();
+	public ItemStack assemble(InfuserBlockEntity inv, RegistryAccess registryAccess) {
+		return getResultItem(registryAccess);
 	}
 
 	@Override
@@ -243,7 +244,7 @@ public class InfuseRecipe implements Recipe<InfuserBlockEntity> {
 			recipe.input.toNetwork(buffer);
 			buffer.writeVarInt(recipe.resultModifier.ordinal());
 			buffer.writeInt(recipe.getTier().ordinal());
-			buffer.writeItem(recipe.getResultItem());
+			buffer.writeItem(recipe.getResultItem(null));
 			buffer.writeInt(recipe.getTime());
 		}
 	}

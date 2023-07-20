@@ -3,7 +3,6 @@ package com.mrbysco.forcecraft.world.feature;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.modifier.AddConfigFeatureBiomeModifier;
 import com.mrbysco.forcecraft.registry.ForceEntities;
-import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
