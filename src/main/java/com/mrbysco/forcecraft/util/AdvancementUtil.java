@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class AdvancementUtil {
 	public static void unlockTierAdvancements(Player player, int tier) {
-		if (!player.level.isClientSide) {
+		if (!player.level().isClientSide) {
 			ServerPlayer serverPlayer = (ServerPlayer) player;
 			if (tier >= 1) {
 				unlockAdvancement(serverPlayer, "tier1/tier");

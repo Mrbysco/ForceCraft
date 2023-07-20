@@ -46,10 +46,10 @@ public class QuickUseBeltMessage {
 						data.ifPresent(belt -> {
 							IItemHandler handler = belt.getInventory();
 							ItemStack stack = handler.getStackInSlot(slot);
-							Level level = player.level;
+							Level level = player.level();
 							if (!stack.isEmpty()) {
 								stack.finishUsingItem(level, player);
-								level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), stack.getDrinkingSound(), player.getSoundSource(), 0.5F, player.level.random.nextFloat() * 0.1F + 0.9F);
+								level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), stack.getDrinkingSound(), player.getSoundSource(), 0.5F, player.level().random.nextFloat() * 0.1F + 0.9F);
 							}
 						});
 					}

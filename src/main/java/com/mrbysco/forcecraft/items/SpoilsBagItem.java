@@ -24,7 +24,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -107,9 +108,10 @@ public class SpoilsBagItem extends BaseItem {
 					CompoundTag tag = stack.getOrCreateTag();
 					List<ItemStack> stacks = new ArrayList<>();
 					do {
-						LootContext ctx = new LootContext.Builder((ServerLevel) level).create(LootContextParamSets.EMPTY);
-						List<ItemStack> lootStacks = ((ServerLevel) level).getServer().getLootTables()
-								.get(getTable()).getRandomItems(ctx);
+						LootTable table = level.getServer().getLootData().getLootTable(getTable());
+
+						LootParams.Builder lootParams = (new LootParams.Builder((ServerLevel) level));
+						List<ItemStack> lootStacks = table.getRandomItems(lootParams.create(LootContextParamSets.EMPTY));
 						if (lootStacks.isEmpty()) {
 							return;
 						} else {

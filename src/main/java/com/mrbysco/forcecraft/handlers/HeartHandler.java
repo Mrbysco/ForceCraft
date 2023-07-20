@@ -17,7 +17,7 @@ public class HeartHandler {
 
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
-		Level level = event.getEntity().level;
+		Level level = event.getEntity().level();
 		if (level.isClientSide || event.getSource() == null || ConfigHandler.COMMON.disableRecoveryHearts.get() || level.random.nextDouble() >= CHANCE) {
 			return;
 		}

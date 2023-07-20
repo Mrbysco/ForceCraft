@@ -1,9 +1,8 @@
 package com.mrbysco.forcecraft.client.gui.pack;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.menu.ForcePackMenu;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -25,21 +24,21 @@ public class ForcePackScreen extends AbstractContainerScreen<ForcePackMenu> {
 	}
 
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(poseStack);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(poseStack, mouseX, mouseY);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
-		switch (this.menu.getUpgrades()) {
-			default -> RenderSystem.setShaderTexture(0, this.TEXTURE);
-			case 1 -> RenderSystem.setShaderTexture(0, this.TEXTURE_UPGRADE_1);
-			case 2 -> RenderSystem.setShaderTexture(0, this.TEXTURE_UPGRADE_2);
-			case 3 -> RenderSystem.setShaderTexture(0, this.TEXTURE_UPGRADE_3);
-			case 4 -> RenderSystem.setShaderTexture(0, this.TEXTURE_UPGRADE_4);
-		}
-		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int x, int y) {
+		ResourceLocation texture = switch (this.menu.getUpgrades()) {
+			default -> this.TEXTURE;
+			case 1 -> this.TEXTURE_UPGRADE_1;
+			case 2 -> this.TEXTURE_UPGRADE_2;
+			case 3 -> this.TEXTURE_UPGRADE_3;
+			case 4 -> this.TEXTURE_UPGRADE_4;
+		};
+		guiGraphics.blit(texture, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 	}
 }

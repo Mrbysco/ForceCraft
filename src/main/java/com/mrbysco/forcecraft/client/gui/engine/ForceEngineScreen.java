@@ -1,12 +1,11 @@
 package com.mrbysco.forcecraft.client.gui.engine;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
 import com.mrbysco.forcecraft.client.util.RenderHelper;
 import com.mrbysco.forcecraft.menu.engine.ForceEngineMenu;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -29,24 +28,23 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineMenu> 
 	}
 
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(poseStack);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(guiGraphics);
 
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(poseStack, mouseX, mouseY);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
-		RenderSystem.setShaderTexture(0, TEXTURE);
-		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int x, int y) {
+		guiGraphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
-		this.drawFuelTank(poseStack);
-		this.drawThrottleTank(poseStack);
+		this.drawFuelTank(guiGraphics);
+		this.drawThrottleTank(guiGraphics);
 	}
 
 	@Override
-	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 		int actualMouseX = mouseX - ((this.width - this.imageWidth) / 2);
 		int actualMouseY = mouseY - ((this.height - this.imageHeight) / 2);
 
@@ -63,7 +61,7 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineMenu> 
 				}
 			}
 
-			renderComponentTooltip(poseStack, text, actualMouseX, actualMouseY);
+			guiGraphics.renderComponentTooltip(font, text, actualMouseX, actualMouseY);
 		}
 
 		if (isHovering(94, 11, 16, 58, mouseX, mouseY)) {
@@ -78,11 +76,11 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineMenu> 
 				}
 			}
 
-			renderComponentTooltip(poseStack, text, actualMouseX, actualMouseY);
+			guiGraphics.renderComponentTooltip(font, text, actualMouseX, actualMouseY);
 		}
 	}
 
-	private void drawFuelTank(PoseStack poseStack) {
+	private void drawFuelTank(GuiGraphics guiGraphics) {
 		if (menu.getTile() == null || menu.getTile().getFuelFluid() == null) {
 			return;
 		}
@@ -90,11 +88,10 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineMenu> 
 		float tankPercentage = RenderHelper.getTankPercentage(getMenu().getTile().getFuelAmount(), 10000);
 		RenderHelper.drawFluidTankInGUI(fluidStack, leftPos + 66, topPos + 11, tankPercentage, 58);
 
-		RenderSystem.setShaderTexture(0, TEXTURE);
-		blit(poseStack, leftPos + 66, topPos + 11, 176, 0, 16, 64);
+		guiGraphics.blit(TEXTURE, leftPos + 66, topPos + 11, 176, 0, 16, 64);
 	}
 
-	private void drawThrottleTank(PoseStack poseStack) {
+	private void drawThrottleTank(GuiGraphics guiGraphics) {
 		if (menu.getTile() == null || menu.getTile().getThrottleFluid() == null) {
 			return;
 		}
@@ -102,8 +99,7 @@ public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineMenu> 
 		float tankPercentage = RenderHelper.getTankPercentage(getMenu().getTile().getThrottleAmount(), 10000);
 		RenderHelper.drawFluidTankInGUI(fluidStack, leftPos + 94, topPos + 11, tankPercentage, 58);
 
-		RenderSystem.setShaderTexture(0, TEXTURE);
-		blit(poseStack, leftPos + 94, topPos + 11, 176, 0, 16, 64);
+		guiGraphics.blit(TEXTURE, leftPos + 94, topPos + 11, 176, 0, 16, 64);
 	}
 
 }

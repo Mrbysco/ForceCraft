@@ -64,7 +64,7 @@ public class FairyModel<T extends FairyEntity> extends HierarchicalModel<T> {
 	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.leftWings.yRot = 0.0F;
 		this.rightWings.yRot = 0.0F;
-		boolean flag = entityIn.isOnGround() && entityIn.getDeltaMovement().lengthSqr() < 1.0E-7D;
+		boolean flag = entityIn.onGround() && entityIn.getDeltaMovement().lengthSqr() < 1.0E-7D;
 		if (flag) {
 			this.leftWings.yRot = -0.2618F;
 			this.rightWings.yRot = 0.2618F;

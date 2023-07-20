@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -38,7 +39,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ToolActions;
@@ -59,7 +59,7 @@ public class ForceMittItem extends DiggerItem {
 
 	@Override
 	public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		if (entityLiving instanceof Player player && state.getMaterial() == Material.LEAVES) {
+		if (entityLiving instanceof Player player && state.is(BlockTags.LEAVES)) {
 			BlockHitResult traceResult = getPlayerPOVHitResult(level, player, Fluid.NONE);
 			switch (traceResult.getDirection().getAxis()) {
 				case X -> {
@@ -101,7 +101,7 @@ public class ForceMittItem extends DiggerItem {
 
 	public void breakBlockAt(Player player, Level level, ItemStack stack, BlockPos pos) {
 		BlockEntity tileEntity = level.getBlockEntity(pos);
-		if (level.getBlockState(pos).getMaterial() == Material.LEAVES) {
+		if (level.getBlockState(pos).is(BlockTags.LEAVES)) {
 			BlockState state = level.getBlockState(pos);
 			if (!ForgeHooks.isCorrectToolForDrops(state, player)) return;
 

@@ -31,7 +31,7 @@ public class RecoveryHeartItem extends BaseItem {
 			player.heal(HEAL_AMT);
 			stack.shrink(1);
 		}
-		player.level.playSound((Player) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.HEART_PICKUP.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+		player.level().playSound((Player) null, pos.getX(), pos.getY(), pos.getZ(), ForceSounds.HEART_PICKUP.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 
 		for (int i1 = 0; i1 < 15; ++i1) {
 			double d0 = level.random.nextGaussian() * 0.02D;

@@ -36,7 +36,7 @@ public class NonBurnableItemEntity extends ItemEntity {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		return source.is(DamageTypes.OUT_OF_WORLD);
+		return source.is(DamageTypes.FELL_OUT_OF_WORLD);
 	}
 
 	@Nonnull

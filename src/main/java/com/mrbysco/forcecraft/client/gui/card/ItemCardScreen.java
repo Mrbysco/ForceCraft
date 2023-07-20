@@ -1,11 +1,11 @@
 package com.mrbysco.forcecraft.client.gui.card;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -53,17 +53,16 @@ public class ItemCardScreen extends AbstractContainerScreen<ItemCardMenu> {
 		}
 	}
 
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(poseStack);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(poseStack, mouseX, mouseY);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 
-	protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int x, int y) {
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, ITEM_CARD_GUI);
 		int i = this.leftPos;
 		int j = (this.height - this.imageHeight) / 2;
-		this.blit(poseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+		guiGraphics.blit(ITEM_CARD_GUI, i, j, 0, 0, this.imageWidth, this.imageHeight);
 	}
 }

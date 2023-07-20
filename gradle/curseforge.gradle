@@ -7,16 +7,12 @@ if (System.getenv().CURSEFORGE_KEY) {
             id = project.curseforge_id
             releaseType = "beta"
             addGameVersion "Forge"
+            addGameVersion "1.20"
             addGameVersion "${mc_version}"
             addGameVersion "Java 17"
             mainArtifact(jar)
             changelog = file("$project.rootDir/changelog.md")
             changelogType = 'markdown'
-
-            relations {
-                optionalDependency "jei"
-                optionalDependency "patchouli"
-            }
         }
     }
 }

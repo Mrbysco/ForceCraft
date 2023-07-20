@@ -126,5 +126,6 @@
       "name": "Other Tables",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "forcecraft:spoils/tier2"
 }

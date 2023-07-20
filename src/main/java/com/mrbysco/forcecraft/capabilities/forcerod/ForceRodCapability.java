@@ -74,7 +74,7 @@ public class ForceRodCapability implements IForceRodModifier, ICapabilitySeriali
 
 	@Override
 	public void teleportPlayerToLocation(Player player, GlobalPos globalPos) {
-		if (player.level.dimension().location().equals(globalPos.dimension().location())) {
+		if (player.level().dimension().location().equals(globalPos.dimension().location())) {
 			BlockPos pos = globalPos.pos();
 			int x = pos.getX();
 			int y = pos.getY() + 1;
@@ -82,7 +82,7 @@ public class ForceRodCapability implements IForceRodModifier, ICapabilitySeriali
 
 			player.randomTeleport(x, y, z, true);
 		} else {
-			if (!player.level.isClientSide) {
+			if (!player.level().isClientSide) {
 				player.sendSystemMessage(Component.translatable("forcecraft.ender_rod.dimension.text").withStyle(ChatFormatting.YELLOW));
 			}
 		}

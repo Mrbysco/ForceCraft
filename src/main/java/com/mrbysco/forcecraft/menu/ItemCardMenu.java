@@ -16,6 +16,7 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ItemCardMenu extends AbstractContainerMenu {
-	private final CraftingContainer craftMatrix = new CraftingContainer(this, 3, 3);
+	private final CraftingContainer craftMatrix = new TransientCraftingContainer(this, 3, 3);
 	private final ResultContainer craftResult = new ResultContainer();
 	private final ContainerLevelAccess worldPosCallable;
 	private final Player player;
@@ -96,7 +97,7 @@ public class ItemCardMenu extends AbstractContainerMenu {
 			CompoundTag tag = heldStack.getOrCreateTag();
 			if (tag.contains("RecipeContents")) {
 				CompoundTag recipeContents = tag.getCompound("RecipeContents");
-				if (!player.level.isClientSide) {
+				if (!player.level().isClientSide) {
 					for (int i = 0; i < craftMatrix.getContainerSize(); i++) {
 						craftMatrix.setItem(i, ItemStack.of(recipeContents.getCompound("slot_" + i)));
 					}

@@ -46,7 +46,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 	protected static AbstractForceFurnaceBlockEntity getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
 		Objects.requireNonNull(data, "data cannot be null!");
-		final BlockEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
+		final BlockEntity tileAtPos = playerInventory.player.level().getBlockEntity(data.readBlockPos());
 
 		if (tileAtPos instanceof AbstractForceFurnaceBlockEntity) {
 			return (AbstractForceFurnaceBlockEntity) tileAtPos;
@@ -59,7 +59,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 		super(ForceMenus.FORCE_FURNACE.get(), id);
 		this.tile = te;
 		Player player = playerInventoryIn.player;
-		this.level = player.level;
+		this.level = player.level();
 		this.furnaceInventory = tile.handler;
 		this.upgradeInventory = tile.upgradeHandler;
 		this.furnaceData = tile.getFurnaceData();
@@ -73,7 +73,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 		this.addSlot(new ForceFurnaceResultSlot(player, furnaceInventory, 2, 116, 35) {
 			@Override
 			protected void checkTakeAchievements(ItemStack stack) {
-				stack.onCraftedBy(player.level, player, this.removeCount);
+				stack.onCraftedBy(player.level(), player, this.removeCount);
 				if (player instanceof ServerPlayer) {
 					tile.awardUsedRecipesAndPopExperience((ServerPlayer) player);
 				}
@@ -146,7 +146,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 					}
 				} else if (isUpgrade(itemstack1) && index == 3) {
 					itemstack1.shrink(1);
-					playerIn.level.playSound((Player) null, playerIn.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
+					playerIn.level().playSound((Player) null, playerIn.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
 					return ItemStack.EMPTY;
 				} else if (index >= 4 && index < 31) {
 					if (!this.moveItemStackTo(itemstack1, 31, 40, false)) {
@@ -208,7 +208,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 		if (slotId == 3) {
 			Slot slot = getSlot(slotId);
 			if (slot.hasItem() && clickTypeIn != ClickType.QUICK_MOVE) {
-				player.level.playSound((Player) null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
+				player.level().playSound((Player) null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
 				return;
 			}
 		}

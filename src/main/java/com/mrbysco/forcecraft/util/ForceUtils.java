@@ -214,7 +214,7 @@ public class ForceUtils {
 	}
 
 	public static void teleportRandomly(LivingEntity livingEntity) {
-		if (!livingEntity.level.isClientSide() && livingEntity.isAlive() && !livingEntity.isInWaterOrBubble()) {
+		if (!livingEntity.level().isClientSide() && livingEntity.isAlive() && !livingEntity.isInWaterOrBubble()) {
 			double d0 = livingEntity.getX() + (livingEntity.getRandom().nextDouble() - 0.5D) * 32.0D;
 			double d1 = livingEntity.getY() + (double) (livingEntity.getRandom().nextInt(32) - 16);
 			double d2 = livingEntity.getZ() + (livingEntity.getRandom().nextDouble() - 0.5D) * 32.0D;
@@ -225,19 +225,19 @@ public class ForceUtils {
 	public static void teleportTo(LivingEntity living, double x, double y, double z) {
 		BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos(x, y, z);
 
-		while (blockpos$mutable.getY() > 0 && !living.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
+		while (blockpos$mutable.getY() > 0 && !living.level().getBlockState(blockpos$mutable).blocksMotion()) {
 			blockpos$mutable.move(Direction.DOWN);
 		}
 
-		BlockState blockstate = living.level.getBlockState(blockpos$mutable);
-		boolean flag = blockstate.getMaterial().blocksMotion();
+		BlockState blockstate = living.level().getBlockState(blockpos$mutable);
+		boolean flag = blockstate.blocksMotion();
 		boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
 		if (flag && !flag1) {
 			EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(living, x, y, z);
 			if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return;
 			boolean flag2 = living.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 			if (flag2 && !living.isSilent()) {
-				living.level.playSound((Player) null, living.xo, living.yo, living.zo, SoundEvents.ENDERMAN_TELEPORT, living.getSoundSource(), 1.0F, 1.0F);
+				living.level().playSound((Player) null, living.xo, living.yo, living.zo, SoundEvents.ENDERMAN_TELEPORT, living.getSoundSource(), 1.0F, 1.0F);
 				living.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			}
 		}

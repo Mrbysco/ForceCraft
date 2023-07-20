@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.client.gui.infuser;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
@@ -8,6 +7,7 @@ import com.mrbysco.forcecraft.client.gui.widgets.ProgressBar;
 import com.mrbysco.forcecraft.client.util.RenderHelper;
 import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -94,26 +94,25 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	}
 
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(poseStack);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(guiGraphics);
 
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(poseStack, mouseX, mouseY);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y) {
-		RenderSystem.setShaderTexture(0, TEXTURE);
-		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int x, int y) {
+		guiGraphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
 
-		this.drawFluidBar(poseStack);
-		this.drawEnergyBar(poseStack);
-		this.drawProgressBar(poseStack);
+		this.drawFluidBar(guiGraphics);
+		this.drawEnergyBar(guiGraphics);
+		this.drawProgressBar(guiGraphics);
 	}
 
 	@Override
-	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 		int actualMouseX = mouseX - ((this.width - this.imageWidth) / 2);
 		int actualMouseY = mouseY - ((this.height - this.imageHeight) / 2);
 
@@ -124,7 +123,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 			List<Component> text = new ArrayList<>();
 			text.add(Component.translatable("gui.forcecraft.infuser.help.tooltip")
 					.withStyle(ChatFormatting.GRAY));
-			renderComponentTooltip(poseStack, text, actualMouseX, actualMouseY);
+			guiGraphics.renderComponentTooltip(font, text, actualMouseX, actualMouseY);
 		}
 
 		if (isHovering(39, 101, 12, 12, mouseX, mouseY)) {
@@ -142,7 +141,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 							.withStyle(ChatFormatting.RED));
 				}
 			}
-			renderComponentTooltip(poseStack, text, actualMouseX, actualMouseY);
+			guiGraphics.renderComponentTooltip(font, text, actualMouseX, actualMouseY);
 		}
 
 		if (isHovering(156, 8, 12, 112, mouseX, mouseY)) {
@@ -150,7 +149,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 			MutableComponent tt = Component.literal(tile.getEnergyStored() + " RF")
 					.withStyle(ChatFormatting.GOLD);
 			text.add(tt);
-			renderComponentTooltip(poseStack, text, actualMouseX, actualMouseY);
+			guiGraphics.renderComponentTooltip(font, text, actualMouseX, actualMouseY);
 		}
 
 		if (isHovering(10, 41, 15, 82, mouseX, mouseY)) {
@@ -164,11 +163,11 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 						.withStyle(ChatFormatting.YELLOW));
 			}
 
-			renderComponentTooltip(poseStack, text, actualMouseX, actualMouseY);
+			guiGraphics.renderComponentTooltip(font, text, actualMouseX, actualMouseY);
 		}
 	}
 
-	private void drawFluidBar(PoseStack poseStack) {
+	private void drawFluidBar(GuiGraphics guiGraphics) {
 		if (menu.getTile() == null || menu.getTile().getFluid() == null) {
 			return;
 		}
@@ -176,32 +175,30 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		float tankPercentage = RenderHelper.getTankPercentage(getMenu().getTile().getFluidAmount(), 50000);
 		RenderHelper.drawFluidTankInGUI(fluidStack, leftPos + 8, topPos + 41, tankPercentage, 82);
 
-		RenderSystem.setShaderTexture(0, TEXTURE);
-		blit(poseStack, leftPos + 8, topPos + 41, 188, 26, 16, 82);
+		guiGraphics.blit(TEXTURE, leftPos + 8, topPos + 41, 188, 26, 16, 82);
 	}
 
-	private void drawEnergyBar(PoseStack ms) {
+	private void drawEnergyBar(GuiGraphics guiGraphics) {
 		if (menu.getTile() == null || menu.getTile().energyStorage.getMaxEnergyStored() <= 0) {
 			return;
 		}
 
-		RenderSystem.setShaderTexture(0, ENERGY);
 		float energy = getMenu().getTile().getEnergyStored();
 		float capacity = menu.getTile().energyStorage.getMaxEnergyStored();
 		float pct = Math.min(energy / capacity, 1.0F);
 
 		final float height = 107;
 		int width = 12;
-		blit(ms, leftPos + 156, topPos + 13, 0, 0,
+		guiGraphics.blit(ENERGY, leftPos + 156, topPos + 13, 0, 0,
 				width, (int) (height * pct),
 				width, (int) height);
 	}
 
-	private void drawProgressBar(PoseStack poseStack) {
+	private void drawProgressBar(GuiGraphics guiGraphics) {
 		InfuserBlockEntity tile = menu.getTile();
 		if (tile.canWork) {
 			this.infuserProgress.setMin(tile.processTime).setMax(tile.maxProcessTime);
-			this.infuserProgress.draw(poseStack, this.minecraft);
+			this.infuserProgress.draw(guiGraphics);
 		}
 	}
 }

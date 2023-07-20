@@ -38,7 +38,7 @@ public class SaveCardRecipeMessage {
 		ctx.enqueueWork(() -> {
 			if (ctx.getDirection().getReceptionSide().isServer() && ctx.getSender() != null) {
 				ServerPlayer player = ctx.getSender();
-				Level level = player.level;
+				Level level = player.level();
 				ItemStack stack = getCardStack(player);
 				if (!stack.isEmpty()) {
 					if (player.containerMenu instanceof ItemCardMenu itemCardContainer) {

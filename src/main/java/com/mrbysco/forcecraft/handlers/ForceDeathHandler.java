@@ -20,7 +20,7 @@ public class ForceDeathHandler {
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
 		final LivingEntity livingEntity = event.getEntity();
-		final Level level = event.getEntity().level;
+		final Level level = event.getEntity().level();
 		if (level.isClientSide) return;
 
 		if (event.getSource() != null && event.getSource().is(ForceDamageTypes.LIQUID_FORCE)) {

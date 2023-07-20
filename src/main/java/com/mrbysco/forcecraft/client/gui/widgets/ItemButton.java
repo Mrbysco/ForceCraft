@@ -1,10 +1,9 @@
 package com.mrbysco.forcecraft.client.gui.widgets;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -28,12 +27,11 @@ public class ItemButton extends Button {
 	}
 
 	@Override
-	public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
 		//RENDER THE STACK
 		Minecraft minecraft = Minecraft.getInstance();
-		ItemRenderer itemRender = minecraft.getItemRenderer();
-		itemRender.renderGuiItem(poseStack, this.buttonStack, this.getX(), this.getY());
-//		super.renderWidget(poseStack, mouseX, mouseY, partialTicks);
+		guiGraphics.renderItemDecorations(minecraft.font, this.buttonStack, this.getX(), this.getY());
+//		super.renderWidget(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 
 	public static ItemButton.Builder builder(Component component, ItemStack stack, Button.OnPress onPress) {

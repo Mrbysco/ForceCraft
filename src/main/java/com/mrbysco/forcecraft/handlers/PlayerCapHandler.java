@@ -23,7 +23,7 @@ public class PlayerCapHandler {
 
 	@SubscribeEvent
 	public void onPlayerUpdate(TickEvent.PlayerTickEvent event) {
-		if (event.phase == TickEvent.Phase.END && !event.player.level.isClientSide) {
+		if (event.phase == TickEvent.Phase.END && !event.player.level().isClientSide) {
 			Player player = event.player;
 
 			Iterable<ItemStack> armor = player.getArmorSlots();

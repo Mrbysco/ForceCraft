@@ -153,7 +153,7 @@ public class ForcePackMenu extends AbstractContainerMenu {
 					for (ItemStack ingredient : ingredientList) {
 						int countPossible = 0;
 						for (ItemStack rest : restList) {
-							if (ingredient.getItem() == rest.getItem() && ItemStack.tagMatches(ingredient, rest)) {
+							if (ItemStack.isSameItemSameTags(ingredient, rest)) {
 								countPossible += (double) rest.getCount() / ingredient.getCount();
 							}
 						}
@@ -172,7 +172,7 @@ public class ForcePackMenu extends AbstractContainerMenu {
 						for (int l = 0; l < craftCount; l++) {
 							for (ItemStack ingredient : ingredientList) {
 								for (ItemStack rest : restList) {
-									if (ingredient.getItem() == rest.getItem() && ItemStack.tagMatches(ingredient, rest)) {
+									if (ItemStack.isSameItemSameTags(ingredient, rest)) {
 										if (rest.getCount() >= ingredient.getCount()) {
 											rest.shrink(ingredient.getCount());
 										}

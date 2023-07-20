@@ -91,15 +91,15 @@ public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier
 	@Override
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			ItemStack stack = getItem();
 			if (stack.getItem() instanceof EntityFlaskItem forceFlask) {
 				Entity entity = result.getEntity();
 				if (forceFlask.hasEntityStored(stack)) {
-					Entity storedEntity = forceFlask.getStoredEntity(stack, this.level);
+					Entity storedEntity = forceFlask.getStoredEntity(stack, this.level());
 					BlockPos pos = entity.blockPosition();
 					storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-					this.level.addFreshEntity(storedEntity);
+					this.level().addFreshEntity(storedEntity);
 
 					this.setItem(new ItemStack(ForceRegistry.FORCE_FLASK.get()));
 				} else {
@@ -196,14 +196,14 @@ public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier
 
 	protected void onHitBlock(BlockHitResult result) {
 		super.onHitBlock(result);
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			ItemStack stack = this.getItem();
 			if (stack.getItem() instanceof EntityFlaskItem forceFlask) {
 				if (forceFlask.hasEntityStored(stack)) {
-					Entity storedEntity = forceFlask.getStoredEntity(stack, this.level);
+					Entity storedEntity = forceFlask.getStoredEntity(stack, this.level());
 					BlockPos pos = result.getBlockPos().relative(result.getDirection());
 					storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-					this.level.addFreshEntity(storedEntity);
+					this.level().addFreshEntity(storedEntity);
 				}
 				this.setItem(new ItemStack(ForceRegistry.FORCE_FLASK.get()));
 			}
@@ -212,10 +212,10 @@ public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier
 
 	protected void onHit(HitResult result) {
 		super.onHit(result);
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.spawnAtLocation(this.getItem(), 0.5F);
 
-			this.level.broadcastEntityEvent(this, (byte) 3);
+			this.level().broadcastEntityEvent(this, (byte) 3);
 			this.discard();
 		}
 	}

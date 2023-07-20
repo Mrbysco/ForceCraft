@@ -36,7 +36,7 @@ public class CreeperTotEntity extends Creeper {
 
 	@Override
 	public void explodeCreeper() {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			for (int i = 0; i < 4; i++) {
 				summonFireworkParticles(getFirework(), 0.5D);
 			}
@@ -44,11 +44,11 @@ public class CreeperTotEntity extends Creeper {
 			summonFireworkParticles(getCreeperFirework(), 2.5D);
 		}
 
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.dead = true;
-			this.playSound(SoundEvents.GENERIC_EXPLODE, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
+			this.playSound(SoundEvents.GENERIC_EXPLODE, 4.0F, (1.0F + (this.level().random.nextFloat() - this.level().random.nextFloat()) * 0.2F) * 0.7F);
 
-			if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT) && this.getRandom().nextInt(4) == 0) {
+			if (this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT) && this.getRandom().nextInt(4) == 0) {
 				spawnAtLocation(new ItemStack(ForceRegistry.PILE_OF_GUNPOWDER.get(), this.getRandom().nextInt(2) + 1));
 			}
 
@@ -59,7 +59,7 @@ public class CreeperTotEntity extends Creeper {
 	public void summonFireworkParticles(ItemStack fireworkRocket, double yOffset) {
 		CompoundTag compoundnbt = fireworkRocket.isEmpty() ? null : fireworkRocket.getTagElement("Fireworks");
 		Vec3 vector3d = this.getDeltaMovement();
-		this.level.createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), vector3d.x, vector3d.y, vector3d.z, compoundnbt);
+		this.level().createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), vector3d.x, vector3d.y, vector3d.z, compoundnbt);
 	}
 
 	public ItemStack getFirework() {

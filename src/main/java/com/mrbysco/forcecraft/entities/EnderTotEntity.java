@@ -77,7 +77,7 @@ public class EnderTotEntity extends EnderMan {
 
 	@Override
 	public boolean teleport() {
-		if (!this.level.isClientSide() && this.isAlive() && !this.isInWaterOrBubble()) {
+		if (!this.level().isClientSide() && this.isAlive() && !this.isInWaterOrBubble()) {
 			double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 32.0D;
 			double d1 = this.getY() + (double) (this.random.nextInt(32) - 16);
 			double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 32;
@@ -90,13 +90,13 @@ public class EnderTotEntity extends EnderMan {
 	@Override
 	public void die(DamageSource cause) {
 		Entity entitySource = cause.getDirectEntity();
-		if (entitySource instanceof LivingEntity livingEntity && !this.level.isClientSide) {
+		if (entitySource instanceof LivingEntity livingEntity && !this.level().isClientSide) {
 			int total = getRandom().nextInt(2) + 1;
 			for (int i = 0; i < total; i++) {
-				AngryEndermanEntity endermanEntity = ForceEntities.ANGRY_ENDERMAN.get().create(level);
+				AngryEndermanEntity endermanEntity = ForceEntities.ANGRY_ENDERMAN.get().create(this.level());
 				endermanEntity.moveTo(getX(), getY() + 0.5D, getZ(), 0.0F, 0.0F);
 				endermanEntity.setTarget(livingEntity);
-				level.addFreshEntity(endermanEntity);
+				this.level().addFreshEntity(endermanEntity);
 			}
 		}
 		super.die(cause);
@@ -170,7 +170,7 @@ public class EnderTotEntity extends EnderMan {
 		 * method as well.
 		 */
 		public boolean canUse() {
-			this.player = this.endertot.level.getNearestPlayer(this.startAggroTargetConditions, this.endertot);
+			this.player = this.endertot.level().getNearestPlayer(this.startAggroTargetConditions, this.endertot);
 			return this.player != null;
 		}
 
@@ -253,7 +253,7 @@ public class EnderTotEntity extends EnderMan {
 		public boolean canUse() {
 			if (this.endertot.getCarriedBlock() != null) {
 				return false;
-			} else if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.endertot.level, this.endertot)) {
+			} else if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.endertot.level(), this.endertot)) {
 				return false;
 			} else {
 				return this.endertot.getRandom().nextInt(20) == 0;
@@ -265,7 +265,7 @@ public class EnderTotEntity extends EnderMan {
 		 */
 		public void tick() {
 			RandomSource random = this.endertot.getRandom();
-			Level world = this.endertot.level;
+			Level world = this.endertot.level();
 			int i = Mth.floor(this.endertot.getX() - 2.0D + random.nextDouble() * 4.0D);
 			int j = Mth.floor(this.endertot.getY() + random.nextDouble() * 3.0D);
 			int k = Mth.floor(this.endertot.getZ() - 2.0D + random.nextDouble() * 4.0D);
@@ -297,7 +297,7 @@ public class EnderTotEntity extends EnderMan {
 		public boolean canUse() {
 			if (this.endertot.getCarriedBlock() == null) {
 				return false;
-			} else if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.endertot.level, this.endertot)) {
+			} else if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.endertot.level(), this.endertot)) {
 				return false;
 			} else {
 				return this.endertot.getRandom().nextInt(2000) == 0;
@@ -309,7 +309,7 @@ public class EnderTotEntity extends EnderMan {
 		 */
 		public void tick() {
 			RandomSource random = this.endertot.getRandom();
-			Level world = this.endertot.level;
+			Level world = this.endertot.level();
 			int i = Mth.floor(this.endertot.getX() - 1.0D + random.nextDouble() * 2.0D);
 			int j = Mth.floor(this.endertot.getY() + random.nextDouble() * 2.0D);
 			int k = Mth.floor(this.endertot.getZ() - 1.0D + random.nextDouble() * 2.0D);
@@ -319,7 +319,7 @@ public class EnderTotEntity extends EnderMan {
 			BlockState belowState = world.getBlockState(belowPos);
 			BlockState carriedState = this.endertot.getCarriedBlock();
 			if (carriedState != null) {
-				carriedState = Block.updateFromNeighbourShapes(carriedState, this.endertot.level, blockpos);
+				carriedState = Block.updateFromNeighbourShapes(carriedState, this.endertot.level(), blockpos);
 				if (this.canPlaceBlock(world, blockpos, carriedState, blockstate, belowState, belowPos) && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace(endertot, net.minecraftforge.common.util.BlockSnapshot.create(world.dimension(), world, belowPos), net.minecraft.core.Direction.UP)) {
 					world.setBlock(blockpos, carriedState, 3);
 					this.endertot.setCarriedBlock((BlockState) null);

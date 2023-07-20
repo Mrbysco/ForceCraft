@@ -30,7 +30,7 @@ public class EatGrassToRestoreGoal extends Goal {
 
 	public EatGrassToRestoreGoal(Mob grassEaterEntityIn) {
 		this.grassEaterEntity = grassEaterEntityIn;
-		this.entityWorld = grassEaterEntityIn.level;
+		this.entityWorld = grassEaterEntityIn.level();
 		this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.JUMP));
 	}
 

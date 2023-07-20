@@ -328,7 +328,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 				ItemStack output = this.handler.getStackInSlot(OUTPUT_SLOT);
 				if (output.isEmpty()) {
 					return true;
-				} else if (!output.sameItem(recipeOutput)) {
+				} else if (!ItemStack.isSameItem(output, recipeOutput)) {
 					return false;
 				} else if (output.getCount() + recipeOutput.getCount() <= this.getMaxStackSize() && output.getCount() + recipeOutput.getCount() <= output.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
 					return true;
@@ -547,7 +547,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	 */
 	public void setItem(int index, ItemStack stack) {
 		ItemStack itemstack = this.handler.getStackInSlot(index);
-		boolean flag = handler.isItemValid(index, stack) && !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.tagMatches(stack, itemstack);
+		boolean flag = handler.isItemValid(index, stack) && !stack.isEmpty() && ItemStack.isSameItemSameTags(stack, itemstack);
 		this.handler.setStackInSlot(index, stack);
 		if (stack.getCount() > handler.getSlotLimit(index)) {
 			stack.setCount(handler.getSlotLimit(index));
@@ -602,7 +602,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	}
 
 	public void awardUsedRecipesAndPopExperience(ServerPlayer player) {
-		List<Recipe<?>> list = this.getRecipesToAwardAndPopExperience(player.getLevel(), player.position());
+		List<Recipe<?>> list = this.getRecipesToAwardAndPopExperience(player.serverLevel(), player.position());
 		player.awardRecipes(list);
 		this.recipes.clear();
 	}

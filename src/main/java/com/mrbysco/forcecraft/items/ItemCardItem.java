@@ -54,7 +54,7 @@ public class ItemCardItem extends BaseItem {
 
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
-		Level level = playerIn.level;
+		Level level = playerIn.level();
 		level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.NOTE_BLOCK_DIDGERIDOO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 
 		if (level.isClientSide) {

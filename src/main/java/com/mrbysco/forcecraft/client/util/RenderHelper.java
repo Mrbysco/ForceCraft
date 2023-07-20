@@ -56,14 +56,14 @@ public class RenderHelper {
 	}
 
 	private static void drawQuad(double x, double y, double width, double height, float minU, float minV, float maxU, float maxV) {
-		Tesselator tessellator = Tesselator.getInstance();
-		BufferBuilder buffer = tessellator.getBuilder();
+		Tesselator tesselator = Tesselator.getInstance();
+		BufferBuilder buffer = tesselator.getBuilder();
 		buffer.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(x, y + height, 0).uv(minU, maxV).endVertex();
 		buffer.vertex(x + width, y + height, 0).uv(maxU, maxV).endVertex();
 		buffer.vertex(x + width, y, 0).uv(maxU, minV).endVertex();
 		buffer.vertex(x, y, 0).uv(minU, minV).endVertex();
-		tessellator.end();
+		tesselator.end();
 	}
 
 	public static float getTankPercentage(int fluidAmount, int fluidMax) {

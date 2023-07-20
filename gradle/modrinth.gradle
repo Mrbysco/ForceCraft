@@ -10,12 +10,7 @@ if (System.getenv().MODRINTH_KEY) {
         versionNumber = project.version
         uploadFile = jar
         changelog = fileContents
-        gameVersions = ["${mc_version}"]
+        gameVersions = ["1.20", "${mc_version}"]
         loaders = ["forge"]
-
-        dependencies {
-            optional.project "jei"
-            optional.project "patchouli"
-        }
     }
 }

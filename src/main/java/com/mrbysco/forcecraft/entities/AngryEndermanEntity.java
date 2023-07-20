@@ -54,7 +54,7 @@ public class AngryEndermanEntity extends EnderMan {
 
 	@Override
 	public boolean teleport() {
-		if (!this.level.isClientSide() && this.isAlive() && !this.isInWaterOrBubble()) {
+		if (!this.level().isClientSide() && this.isAlive() && !this.isInWaterOrBubble()) {
 			double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
 			double d1 = this.getY() + (double) (this.random.nextInt(64) - 32);
 			double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
@@ -126,7 +126,7 @@ public class AngryEndermanEntity extends EnderMan {
 		 * method as well.
 		 */
 		public boolean canUse() {
-			this.player = this.enderman.level.getNearestPlayer(this.startAggroTargetConditions, this.enderman);
+			this.player = this.enderman.level().getNearestPlayer(this.startAggroTargetConditions, this.enderman);
 			return this.player != null;
 		}
 

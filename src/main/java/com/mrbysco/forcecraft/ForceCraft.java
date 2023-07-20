@@ -28,14 +28,10 @@ import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.world.feature.ForceFeatures;
 import net.minecraft.core.dispenser.ShearsDispenseItemBehavior;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -45,8 +41,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
 
 @Mod(Reference.MOD_ID)
 public class ForceCraft {
@@ -66,6 +60,7 @@ public class ForceCraft {
 		ForceRegistry.BLOCKS.register(eventBus);
 		ForceRegistry.BLOCK_ENTITY_TYPES.register(eventBus);
 		ForceRegistry.ITEMS.register(eventBus);
+		ForceRegistry.CREATIVE_MODE_TABS.register(eventBus);
 		ForceSounds.SOUND_EVENTS.register(eventBus);
 		ForceFluids.FLUID_TYPES.register(eventBus);
 		ForceFluids.FLUIDS.register(eventBus);
@@ -91,7 +86,6 @@ public class ForceCraft {
 
 		MinecraftForge.EVENT_BUS.addListener(CapabilityHandler::register);
 
-		eventBus.addListener(this::registerCreativeTabs);
 		eventBus.addListener(ForceEntities::registerEntityAttributes);
 		eventBus.addListener(ForceEntities::registerSpawnPlacement);
 
@@ -112,16 +106,6 @@ public class ForceCraft {
 		event.enqueueWork(() -> {
 			DispenserBlock.registerBehavior(ForceRegistry.FORCE_SHEARS.get(), new ShearsDispenseItemBehavior());
 		});
-	}
-
-	private void registerCreativeTabs(final CreativeModeTabEvent.Register event) {
-		event.registerCreativeModeTab(new ResourceLocation(Reference.MOD_ID, "tab"), builder ->
-				builder.icon(() -> new ItemStack(ForceRegistry.FORCE_GEM.get()))
-						.title(Component.translatable("itemGroup.forcecraft"))
-						.displayItems((features, output) -> {
-							List<ItemStack> stacks = ForceRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
-							output.acceptAll(stacks);
-						}));
 	}
 }
 

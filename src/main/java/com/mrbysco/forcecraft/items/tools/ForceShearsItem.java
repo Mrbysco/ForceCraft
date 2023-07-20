@@ -67,7 +67,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity entity, InteractionHand hand) {
-		Level world = entity.level;
+		Level world = entity.level();
 		if (world.isClientSide) {
 			return InteractionResult.PASS;
 		}
@@ -131,7 +131,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 				return InteractionResult.SUCCESS;
 			}
 			if (entity instanceof Chicken originalChicken) {
-				Level level = originalChicken.level;
+				Level level = originalChicken.level();
 
 				int i = 1 + rand.nextInt(3);
 
@@ -163,7 +163,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 				return InteractionResult.SUCCESS;
 			}
 			if (entity instanceof Pig originalPig) {
-				Level level = originalPig.level;
+				Level level = originalPig.level();
 
 				int i = 1 + rand.nextInt(2);
 

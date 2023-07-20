@@ -30,5 +30,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "forcecraft:blocks/force_brick_cyan_slab"
 }

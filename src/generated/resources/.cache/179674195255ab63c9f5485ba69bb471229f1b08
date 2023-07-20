@@ -1,4 +1,4 @@
-// 1.19.4	2023-07-20T21:58:27.9315067	Tags for minecraft:block mod id forcecraft
+// 1.20.1	2023-07-20T22:42:40.0863623	Tags for minecraft:block mod id forcecraft
 6682e317fdf17b7ed16b01be6244689ba18716a1 data/forcecraft/tags/blocks/needs_force_tool.json
 d24fa89133e2e0d0fed52aec4122ab12ef2313f8 data/minecraft/tags/blocks/mineable/pickaxe.json
 bbb8aafb9fe8b2ac991b03b55e4a2bee3318a1da data/minecraft/tags/blocks/needs_diamond_tool.json

@@ -1,12 +1,11 @@
 package com.mrbysco.forcecraft.client.gui.pack;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.client.gui.widgets.ItemButton;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.PackChangeMessage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -19,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.PacketDistributor;
 
 public class RenameAndRecolorScreen extends Screen {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/rename_screen.png");
 	private ItemStack itemstack;
 	private final InteractionHand usedHand;
 	private EditBox textfield;
@@ -83,20 +83,18 @@ public class RenameAndRecolorScreen extends Screen {
 	}
 
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(poseStack);
-		final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/rename_screen.png");
-		RenderSystem.setShaderTexture(0, TEXTURE);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(guiGraphics);
 
 		int xSize = 197;
 		int ySize = 66;
 		int guiLeft = (this.width - xSize) / 2;
 		int guiTop = (this.height - ySize) / 2;
 
-		this.blit(poseStack, guiLeft, guiTop, 0, 0, xSize, ySize);
+		guiGraphics.blit(TEXTURE, guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		this.textfield.render(poseStack, mouseX, mouseY, partialTicks);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		font.draw(poseStack, Component.literal("Color"), (int) (this.width / 2d - 68), (int) (this.height / 2d + 9), 5592405);
+		this.textfield.render(guiGraphics, mouseX, mouseY, partialTicks);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		guiGraphics.drawString(font, Component.literal("Color"), (int) (this.width / 2d - 68), (int) (this.height / 2d + 9), 5592405, false);
 	}
 }

@@ -197,7 +197,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
 			if (cap.hasEnderModifier()) {
 				if (player.isShiftKeyDown()) {
-					cap.setHomeLocation(GlobalPos.of(player.level.dimension(), player.blockPosition()));
+					cap.setHomeLocation(GlobalPos.of(player.level().dimension(), player.blockPosition()));
 					if (!level.isClientSide) {
 						player.displayClientMessage(Component.translatable("forcecraft.ender_rod.location.set").withStyle(ChatFormatting.DARK_PURPLE), true);
 					}
@@ -237,7 +237,7 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
 				if (cap.hasEnderModifier()) {
 					if (playerIn.isShiftKeyDown()) {
-						cap.setHomeLocation(GlobalPos.of(playerIn.level.dimension(), playerIn.blockPosition()));
+						cap.setHomeLocation(GlobalPos.of(playerIn.level().dimension(), playerIn.blockPosition()));
 					} else {
 						if (cap.getHomeLocation() != null) {
 							cap.teleportPlayerToLocation(playerIn, cap.getHomeLocation());

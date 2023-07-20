@@ -67,7 +67,7 @@ public class ToolModifierHandler {
 				}
 
 				if (playerCap.getAttackDamage() > 0 && player.getMainHandItem().isEmpty()) {
-					player.level.playSound((Player) null, target.getX(), target.getY(), target.getZ(), ForceSounds.FORCE_PUNCH.get(), player.getSoundSource(), 1.0F, 1.0F);
+					player.level().playSound((Player) null, target.getX(), target.getY(), target.getZ(), ForceSounds.FORCE_PUNCH.get(), player.getSoundSource(), 1.0F, 1.0F);
 					event.setAmount(damage);
 				}
 			}

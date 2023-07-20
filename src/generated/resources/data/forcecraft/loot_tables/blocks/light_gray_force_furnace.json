@@ -22,5 +22,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "forcecraft:blocks/light_gray_force_furnace"
 }

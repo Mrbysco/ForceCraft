@@ -35,7 +35,7 @@ public class ForceFluids {
 	private static RegistryObject<FluidType> FORCE_TYPE = FLUID_TYPES.register("force", () -> new FluidType(createTypeProperties()) {
 		@Override
 		public double motionScale(Entity entity) {
-			return entity.level.dimensionType().ultraWarm() ? 0.007D : 0.0023333333333333335D;
+			return entity.level().dimensionType().ultraWarm() ? 0.007D : 0.0023333333333333335D;
 		}
 
 		@Override

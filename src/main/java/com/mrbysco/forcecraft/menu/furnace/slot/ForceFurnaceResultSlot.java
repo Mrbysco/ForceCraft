@@ -53,7 +53,7 @@ public class ForceFurnaceResultSlot extends SlotItemHandler {
 	 * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood.
 	 */
 	protected void checkTakeAchievements(ItemStack stack) {
-		stack.onCraftedBy(this.player.level, this.player, this.removeCount);
+		stack.onCraftedBy(this.player.level(), this.player, this.removeCount);
 		if (this.player instanceof ServerPlayer && this.container instanceof AbstractForceFurnaceBlockEntity forceFurnaceBlockEntity) {
 			forceFurnaceBlockEntity.awardUsedRecipesAndPopExperience((ServerPlayer)this.player);
 		}

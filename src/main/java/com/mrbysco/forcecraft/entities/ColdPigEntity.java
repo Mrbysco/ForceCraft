@@ -70,7 +70,7 @@ public class ColdPigEntity extends Pig implements IColdMob {
 	}
 
 	public void aiStep() {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			this.grassTimer = Math.max(0, this.grassTimer - 1);
 		}
 

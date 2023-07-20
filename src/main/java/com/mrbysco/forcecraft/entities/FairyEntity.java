@@ -83,7 +83,7 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 	}
 
 	public SoundEvent collideSound(Player playerEntity) {
-		int randomInt = level.random.nextInt(100);
+		int randomInt = this.level().random.nextInt(100);
 		if (UUID.fromString("7135da42-d327-47bb-bb04-5ba4e212fb32").equals(playerEntity.getUUID())) {
 			return ForceSounds.FAIRY_PICKUP.get();
 		}
@@ -100,7 +100,7 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 		super.tick();
 		if (this.random.nextFloat() < 0.05F && getDeltaMovement() != Vec3.ZERO) {
 			for (int i = 0; i < this.random.nextInt(2) + 1; ++i) {
-				this.addParticle(this.level, this.getX() - (double) 0.3F, this.getX() + (double) 0.3F,
+				this.addParticle(this.level(), this.getX() - (double) 0.3F, this.getX() + (double) 0.3F,
 						this.getZ() - (double) 0.3F, this.getZ() + (double) 0.3F, this.getY(0.5D),
 						ParticleTypes.POOF);
 			}
@@ -113,7 +113,7 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 
 	@Override
 	public boolean isFlying() {
-		return !this.onGround;
+		return !this.onGround();
 	}
 
 	static class LookHelperController extends LookControl {
