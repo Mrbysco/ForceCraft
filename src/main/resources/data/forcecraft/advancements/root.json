@@ -1,43 +1,43 @@
 {
-    "display": {
-        "title": {
-            "text": "ForceCraft",
-            "color": "gold",
-            "bold": false,
-            "italic": false,
-            "underlined": false,
-            "strikethrough": false,
-            "obfuscated": false
-        },
-        "description": {
-            "text": "Make an Infuser by Combining a Force Rod and an Enchantment Table"
-        },
-        "icon": {
-            "item": "forcecraft:infuser"
-        },
-        "frame": "challenge",
-        "show_toast": true,
-        "announce_to_chat": true,
-        "hidden": false,
-        "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  "display": {
+    "title": {
+      "text": "ForceCraft",
+      "color": "gold",
+      "bold": false,
+      "italic": false,
+      "underlined": false,
+      "strikethrough": false,
+      "obfuscated": false
     },
-    "criteria": {
-        "crafting_table": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "items": [
-                            "forcecraft:infuser"
-                        ]
-                    }
-                ]
-            }
-        }
+    "description": {
+      "text": "Make an Infuser by Combining a Force Rod and an Enchantment Table"
     },
-    "requirements": [
-        [
-            "crafting_table"
+    "icon": {
+      "item": "forcecraft:infuser"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "crafting_table": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forcecraft:infuser"
+            ]
+          }
         ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafting_table"
     ]
+  ]
 }

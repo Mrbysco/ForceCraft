@@ -1,33 +1,33 @@
 {
-    "display": {
-        "title": {
-            "text": "Tier 1",
-            "color": "gold",
-            "bold": false,
-            "italic": false,
-            "underlined": false,
-            "strikethrough": false,
-            "obfuscated": false
-        },
-        "description": {
-            "text": "Make an Infuser by Combining a Force Rod and an Enchantment Table"
-        },
-        "icon": {
-            "item": "forcecraft:infuser"
-        },
-        "frame": "goal",
-        "show_toast": true,
-        "announce_to_chat": true
+  "display": {
+    "title": {
+      "text": "Tier 1",
+      "color": "gold",
+      "bold": false,
+      "italic": false,
+      "underlined": false,
+      "strikethrough": false,
+      "obfuscated": false
     },
-    "parent": "forcecraft:root",
-    "criteria": {
-        "impossible": {
-            "trigger": "minecraft:impossible"
-        }
+    "description": {
+      "text": "Make an Infuser by Combining a Force Rod and an Enchantment Table"
     },
-    "requirements": [
-        [
-            "impossible"
-        ]
+    "icon": {
+      "item": "forcecraft:infuser"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "forcecraft:root",
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "impossible"
     ]
+  ]
 }
