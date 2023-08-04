@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.entities;
 
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.nbt.CompoundTag;
@@ -12,7 +13,6 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -36,13 +36,7 @@ public class CreeperTotEntity extends Creeper {
 
 	@Override
 	public void explodeCreeper() {
-		if (this.level.isClientSide) {
-			for (int i = 0; i < 4; i++) {
-				summonFireworkParticles(getFirework(), 0.5D);
-			}
-
-			summonFireworkParticles(getCreeperFirework(), 2.5D);
-		}
+		this.level.broadcastEntityEvent(this, (byte) 17);
 
 		if (!this.level.isClientSide) {
 			this.dead = true;
@@ -56,15 +50,27 @@ public class CreeperTotEntity extends Creeper {
 		}
 	}
 
-	public void summonFireworkParticles(ItemStack fireworkRocket, double yOffset) {
-		CompoundTag compoundnbt = fireworkRocket.isEmpty() ? null : fireworkRocket.getTagElement("Fireworks");
-		Vec3 vector3d = this.getDeltaMovement();
-		this.level.createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), vector3d.x, vector3d.y, vector3d.z, compoundnbt);
+	public void summonFireworkParticles(CompoundTag fireworksTag, double yOffset) {
+		if (fireworksTag != null) {
+			ForceCraft.LOGGER.info(fireworksTag.toString());
+			Vec3 vector3d = this.getDeltaMovement();
+			this.level.createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), vector3d.x, vector3d.y, vector3d.z, fireworksTag);
+		}
 	}
 
-	public ItemStack getFirework() {
-		ItemStack firework = new ItemStack(Items.FIREWORK_ROCKET);
-		firework.setTag(new CompoundTag());
+	@Override
+	public void handleEntityEvent(byte id) {
+		if (id == 17 && this.level.isClientSide) {
+			for (int i = 0; i < 4; i++) {
+				summonFireworkParticles(getFireworkTag(), 0.5D);
+			}
+
+			summonFireworkParticles(getCreeperFireworkTag(), 2.5D);
+		}
+		super.handleEntityEvent(id);
+	}
+
+	public CompoundTag getFireworkTag() {
 		CompoundTag nbt = new CompoundTag();
 		nbt.putBoolean("Flicker", true);
 
@@ -80,14 +86,11 @@ public class CreeperTotEntity extends Creeper {
 
 		CompoundTag fireworkTag = new CompoundTag();
 		fireworkTag.put("Explosions", explosions);
-		firework.getOrCreateTag().put("Fireworks", fireworkTag);
 
-		return firework;
+		return fireworkTag;
 	}
 
-	public ItemStack getCreeperFirework() {
-		ItemStack firework = new ItemStack(Items.FIREWORK_ROCKET);
-		firework.setTag(new CompoundTag());
+	public CompoundTag getCreeperFireworkTag() {
 		CompoundTag nbt = new CompoundTag();
 		nbt.putBoolean("Flicker", true);
 
@@ -101,8 +104,7 @@ public class CreeperTotEntity extends Creeper {
 
 		CompoundTag fireworkTag = new CompoundTag();
 		fireworkTag.put("Explosions", explosions);
-		firework.getOrCreateTag().put("Fireworks", fireworkTag);
 
-		return firework;
+		return fireworkTag;
 	}
 }
