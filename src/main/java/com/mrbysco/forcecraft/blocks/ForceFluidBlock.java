@@ -1,7 +1,9 @@
 package com.mrbysco.forcecraft.blocks;
 
 import com.mrbysco.forcecraft.ForceCraft;
+import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.entities.IColdMob;
+import com.mrbysco.forcecraft.registry.ForceEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -32,7 +34,12 @@ public class ForceFluidBlock extends LiquidBlock {
 		if (entityIn instanceof LivingEntity livingEntity) {
 
 			if (livingEntity instanceof Player player) {
-				player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 10, 0, false, false));
+				if (player.getHealth() < player.getMaxHealth()) {
+					player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 10, ConfigHandler.COMMON.liquidRegenLevel.get(), false, false));
+					if (ConfigHandler.COMMON.enableForceShake.get()) {
+						player.addEffect(new MobEffectInstance(ForceEffects.SHAKING.get(), 10, 0, false, false));
+					}
+				}
 			} else {
 				if (livingEntity instanceof Zombie zombie && !zombie.isBaby()) {
 					zombie.setBaby(true);
