@@ -10,7 +10,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,15 +31,25 @@ public class ForceFluidBlock extends LiquidBlock {
 	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn) {
 		if (entityIn instanceof LivingEntity livingEntity) {
 
-			if (livingEntity instanceof Player) {
-				((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.REGENERATION, 10, 0, false, false));
+			if (livingEntity instanceof Player player) {
+				player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 10, 0, false, false));
 			} else {
+				if (livingEntity instanceof Zombie zombie && !zombie.isBaby()) {
+					zombie.setBaby(true);
+					for (ItemStack armor : zombie.getArmorSlots()) {
+						zombie.spawnAtLocation(armor.copy());
+						armor.shrink(armor.getMaxStackSize());
+					}
+					for (ItemStack held : zombie.getHandSlots()) {
+						zombie.spawnAtLocation(held.copy());
+						held.shrink(held.getMaxStackSize());
+					}
+				}
 				MobType creatureAttribute = livingEntity.getMobType();
 				MobCategory classification = livingEntity.getClassification(false);
 				boolean secondPassed = level.getGameTime() % 20 == 0;
-				boolean damageEntity = creatureAttribute == MobType.UNDEAD || creatureAttribute == MobType.UNDEFINED || creatureAttribute == MobType.ARTHROPOD;
-				if (classification == MobCategory.MONSTER && damageEntity) {
-					if (level.getGameTime() % 10 == 0) {
+				if (classification == MobCategory.MONSTER) {
+					if (creatureAttribute == MobType.UNDEAD && level.getGameTime() % 10 == 0) {
 						livingEntity.hurt(ForceCraft.LIQUID_FORCE_DAMAGE, 1.0F);
 					}
 				} else {
