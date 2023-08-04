@@ -307,6 +307,7 @@ public class ForceLanguage extends LanguageProvider {
 
 		//Fluid
 		add("fluid.forcecraft.fluid_force_source", "Liquid Force");
+		add("fluid_type.forcecraft.force", "Liquid Force");
 
 		//Info Text
 		add("forcecraft.tooltip.press_shift", "Press Shift for Details");
