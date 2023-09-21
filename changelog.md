@@ -1,2 +1,1 @@
-* Adjust the rate of the Time Torch
-* Make the time torch rate configurable
+* Remove unwanted logging from Creeper Tot 
