@@ -21,6 +21,8 @@ public class ConfigHandler {
 		public final BooleanValue generateForceTree;
 		public final BooleanValue timeTorchEnabled;
 		public final BooleanValue timeTorchLogging;
+		public final IntValue timeTorchRate;
+		public final IntValue timeTorchAmount;
 		public final BooleanValue disableRecoveryHearts;
 		public final IntValue baconatorMaxStacks;
 		public final DoubleValue sturdyDamageReduction;
@@ -58,6 +60,14 @@ public class ConfigHandler {
 			timeTorchLogging = builder
 					.comment("Print in Log when Time Torch is placed and by who [Default: true]")
 					.define("timeTorchLogging", true);
+
+			timeTorchRate = builder
+					.comment("How many ticks in between ticking neighbour blocks [Default: 5]")
+					.defineInRange("timeTorchRate", 5, 0, Integer.MAX_VALUE);
+
+			timeTorchAmount = builder
+					.comment("The amount of ticks the Time Torch applies to neighbour blocks [Default: 3]")
+					.defineInRange("timeTorchAmount", 3, 1, Integer.MAX_VALUE);
 
 			disableRecoveryHearts = builder
 					.comment("Disable recovery hearts from dropping [Default: false]")
