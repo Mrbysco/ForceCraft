@@ -52,7 +52,6 @@ public class CreeperTotEntity extends Creeper {
 
 	public void summonFireworkParticles(CompoundTag fireworksTag, double yOffset) {
 		if (fireworksTag != null) {
-			ForceCraft.LOGGER.info(fireworksTag.toString());
 			Vec3 vector3d = this.getDeltaMovement();
 			this.level.createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), vector3d.x, vector3d.y, vector3d.z, fireworksTag);
 		}
