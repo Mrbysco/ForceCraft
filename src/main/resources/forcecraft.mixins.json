@@ -6,8 +6,11 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "GrindstoneSlotMixin",
-    "GrindstoneSecondSlotMixin"
+    "GrindstoneSecondSlotMixin",
+    "GrindstoneSlotMixin"
+  ],
+  "client": [
+    "GameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

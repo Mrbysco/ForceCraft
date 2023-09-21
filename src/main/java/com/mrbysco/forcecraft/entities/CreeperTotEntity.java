@@ -36,13 +36,7 @@ public class CreeperTotEntity extends Creeper {
 
 	@Override
 	public void explodeCreeper() {
-		if (this.level().isClientSide) {
-			for (int i = 0; i < 4; i++) {
-				summonFireworkParticles(getFirework(), 0.5D);
-			}
-
-			summonFireworkParticles(getCreeperFirework(), 2.5D);
-		}
+		this.level().broadcastEntityEvent(this, (byte) 17);
 
 		if (!this.level().isClientSide) {
 			this.dead = true;
@@ -56,10 +50,61 @@ public class CreeperTotEntity extends Creeper {
 		}
 	}
 
-	public void summonFireworkParticles(ItemStack fireworkRocket, double yOffset) {
-		CompoundTag compoundnbt = fireworkRocket.isEmpty() ? null : fireworkRocket.getTagElement("Fireworks");
-		Vec3 vector3d = this.getDeltaMovement();
-		this.level().createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), vector3d.x, vector3d.y, vector3d.z, compoundnbt);
+	public void summonFireworkParticles(CompoundTag fireworksTag, double yOffset) {
+		if (fireworksTag != null) {
+			Vec3 vector3d = this.getDeltaMovement();
+			this.level().createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), vector3d.x, vector3d.y, vector3d.z, fireworksTag);
+		}
+	}
+
+	@Override
+	public void handleEntityEvent(byte id) {
+		if (id == 17 && this.level().isClientSide) {
+			for (int i = 0; i < 4; i++) {
+				summonFireworkParticles(getFireworkTag(), 0.5D);
+			}
+
+			summonFireworkParticles(getCreeperFireworkTag(), 2.5D);
+		}
+		super.handleEntityEvent(id);
+	}
+
+	public CompoundTag getFireworkTag() {
+		CompoundTag nbt = new CompoundTag();
+		nbt.putBoolean("Flicker", true);
+
+		int[] colors = new int[16];
+		for (int i = 0; i < 16; i++) {
+			colors[i] = DyeColor.byId(i).getFireworkColor();
+		}
+		nbt.putIntArray("Colors", colors);
+		nbt.putByte("Type", (byte) 0);
+
+		ListTag explosions = new ListTag();
+		explosions.add(nbt);
+
+		CompoundTag fireworkTag = new CompoundTag();
+		fireworkTag.put("Explosions", explosions);
+
+		return fireworkTag;
+	}
+
+	public CompoundTag getCreeperFireworkTag() {
+		CompoundTag nbt = new CompoundTag();
+		nbt.putBoolean("Flicker", true);
+
+		int[] colors = new int[1];
+		colors[0] = DyeColor.LIME.getFireworkColor();
+		nbt.putIntArray("Colors", colors);
+		nbt.putByte("Type", (byte) 3);
+
+		ListTag explosions = new ListTag();
+		explosions.add(nbt);
+
+		CompoundTag fireworkTag = new CompoundTag();
+		fireworkTag.put("Explosions", explosions);
+
+		return fireworkTag;
 	}
 
 	public ItemStack getFirework() {

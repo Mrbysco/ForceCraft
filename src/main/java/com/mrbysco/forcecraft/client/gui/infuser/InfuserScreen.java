@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.client.gui.infuser;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.client.gui.widgets.ProgressBar;

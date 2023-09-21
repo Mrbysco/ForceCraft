@@ -1,7 +1,5 @@
 package com.mrbysco.forcecraft.handlers;
 
-import com.mrbysco.forcecraft.ForceCraft;
-import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.entities.CreeperTotEntity;
 import com.mrbysco.forcecraft.registry.ForceDamageTypes;
 import com.mrbysco.forcecraft.registry.ForceEntities;

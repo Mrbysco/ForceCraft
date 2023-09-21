@@ -24,6 +24,7 @@ public class ConfigHandler {
 		public final IntValue timeTorchRate;
 		public final IntValue timeTorchAmount;
 		public final BooleanValue disableRecoveryHearts;
+		public final BooleanValue enableForceShake;
 		public final IntValue baconatorMaxStacks;
 		public final DoubleValue sturdyDamageReduction;
 		public final DoubleValue forcePunchDamage;
@@ -39,6 +40,7 @@ public class ConfigHandler {
 		public final IntValue forceCap;
 		public final IntValue speedCap;
 		public final IntValue rodSpeedCap;
+		public final IntValue liquidRegenLevel;
 
 		Common(ForgeConfigSpec.Builder builder) {
 			//General settings
@@ -72,6 +74,10 @@ public class ConfigHandler {
 			disableRecoveryHearts = builder
 					.comment("Disable recovery hearts from dropping [Default: false]")
 					.define("disableRecoveryHearts", false);
+
+			enableForceShake = builder
+					.comment("Enables screen shake when in Liquid Force [Default: false]")
+					.define("enableForceShake", false);
 
 			baconatorMaxStacks = builder
 					.comment("The max amount of food stacks stored in the baconator [Default: 4]")
@@ -328,6 +334,10 @@ public class ConfigHandler {
 			rodSpeedCap = builder
 					.comment("The max level of Speed that can be applied to a Force Rod [Default: 3]")
 					.defineInRange("rodSpeedCap", 3, 1, 5);
+
+			liquidRegenLevel = builder
+					.comment("The level of Regeneration given to the player when standing in Liquid Force (0 = Regeneration 1) [Default: 0]")
+					.defineInRange("liquidRegenLevel", 0, 0, 16);
 
 			builder.pop();
 		}

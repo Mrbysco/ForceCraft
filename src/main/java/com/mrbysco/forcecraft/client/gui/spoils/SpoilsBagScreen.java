@@ -1,7 +1,5 @@
 package com.mrbysco.forcecraft.client.gui.spoils;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.menu.SpoilsBagMenu;
 import net.minecraft.client.gui.GuiGraphics;

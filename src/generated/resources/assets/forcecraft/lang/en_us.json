@@ -102,6 +102,7 @@
   "death.attack.forcecraft.liquid_force.player": "%1$s was forced not to exist whilst trying to escape %2$s",
   "effect.forcecraft.bleeding": "Bleeding",
   "effect.forcecraft.magnet": "Magnet",
+  "effect.forcecraft.shaking": "Shaking",
   "entity.forcecraft.angry_enderman": "Angry Enderman",
   "entity.forcecraft.blue_chu_chu": "Blue Chu Chu",
   "entity.forcecraft.cold_chicken": "Cold Chicken",

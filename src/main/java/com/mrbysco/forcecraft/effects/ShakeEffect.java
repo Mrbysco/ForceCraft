@@ -1,12 +1,10 @@
 package com.mrbysco.forcecraft.effects;
 
-import com.mrbysco.forcecraft.Reference;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.LivingEntity;
 
-public class BleedingEffect extends MobEffect {
-	public BleedingEffect() {
+public class ShakeEffect extends MobEffect {
+	public ShakeEffect() {
 		super(MobEffectCategory.HARMFUL, 0);
 	}
 
@@ -23,13 +21,5 @@ public class BleedingEffect extends MobEffect {
 	@Override
 	public boolean isDurationEffectTick(int duration, int amplifier) {
 		return true;
-	}
-
-	@Override
-	public void applyEffectTick(LivingEntity target, int amplifier) {
-		//once per tick
-		if (target.level().getGameTime() % 20 == 0) {
-			target.hurt(Reference.causeBleedingDamage(target), 2.0F);
-		}
 	}
 }

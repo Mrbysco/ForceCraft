@@ -492,6 +492,7 @@ public class ForceLanguage extends LanguageProvider {
 		//Effects
 		addEffect(ForceEffects.BLEEDING, "Bleeding");
 		addEffect(ForceEffects.MAGNET, "Magnet");
+		addEffect(ForceEffects.SHAKING, "Shaking");
 
 		//Damage
 		add("death.attack.forcecraft.bleeding", "%1$s bled to death");
