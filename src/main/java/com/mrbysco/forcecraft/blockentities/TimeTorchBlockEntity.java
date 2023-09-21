@@ -29,6 +29,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	public TimeTorchBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
 		super(blockEntityType, pos, state);
 		this.speed = 3;
+		initializePositions();
 	}
 
 	public TimeTorchBlockEntity(BlockPos pos, BlockState state) {
@@ -36,8 +37,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	}
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, TimeTorchBlockEntity timeTorch) {
-		if (level.getGameTime() % 20 == 0) {
-			timeTorch.updateCachedMode();
+		if (level.getGameTime() % 5 == 0) {
 			timeTorch.tickNeighbor();
 		}
 	}
@@ -46,12 +46,12 @@ public class TimeTorchBlockEntity extends BlockEntity {
 		positionList.forEach(this::tickBlock);
 	}
 
-	private void updateCachedMode() {
+	private void initializePositions() {
 		positionList.clear();
-		BlockPos.betweenClosed(
+		positionList.addAll(BlockPos.betweenClosedStream(
 						worldPosition.offset(-1, -1, -1),
 						worldPosition.offset(1, 1, 1))
-				.forEach(positionList::add);
+				.map(BlockPos::immutable).toList());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -66,6 +66,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 			if (block == null || block instanceof LiquidBlock || block instanceof TimeTorchBlock || block == Blocks.AIR)
 				return;
 
+
 			if (block.isRandomlyTicking(blockState) && !level.isClientSide) {
 				for (int i = 0; i < this.speed; i++) {
 					if (getLevel().getBlockState(pos) != blockState) break;
@@ -73,6 +74,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 						block.randomTick(blockState, (ServerLevel) this.level, pos, level.random);
 				}
 			}
+
 			BlockEntity blockEntity = level.getBlockEntity(pos);
 			if (blockEntity != null) {
 				for (int i = 0; i < this.speed; i++) {
