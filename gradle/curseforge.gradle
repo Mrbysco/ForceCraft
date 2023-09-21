@@ -6,6 +6,7 @@ if (System.getenv().CURSEFORGE_KEY) {
         project {
             id = project.curseforge_id
             releaseType = "beta"
+            addGameVersion "NeoForge"
             addGameVersion "Forge"
             addGameVersion "1.20"
             addGameVersion "${mc_version}"

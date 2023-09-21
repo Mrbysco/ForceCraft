@@ -11,6 +11,6 @@ if (System.getenv().MODRINTH_KEY) {
         uploadFile = jar
         changelog = fileContents
         gameVersions = ["1.20", "${mc_version}"]
-        loaders = ["forge"]
+        loaders = ["neoforge", "forge"]
     }
 }
