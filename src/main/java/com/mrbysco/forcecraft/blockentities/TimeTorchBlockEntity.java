@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.blockentities;
 
 import com.mrbysco.forcecraft.blocks.torch.TimeTorchBlock;
+import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -28,7 +29,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 
 	public TimeTorchBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
 		super(blockEntityType, pos, state);
-		this.speed = 3;
+		this.speed = ConfigHandler.COMMON.timeTorchAmount.get();
 		initializePositions();
 	}
 
@@ -37,7 +38,8 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	}
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, TimeTorchBlockEntity timeTorch) {
-		if (level.getGameTime() % 5 == 0) {
+		int rate = ConfigHandler.COMMON.timeTorchRate.get();
+		if (rate > 0 && level.getGameTime() % rate == 0) {
 			timeTorch.tickNeighbor();
 		}
 	}
