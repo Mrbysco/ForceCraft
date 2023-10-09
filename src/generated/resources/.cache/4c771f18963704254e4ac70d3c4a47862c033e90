@@ -1,1 +1,5 @@
-// 1.20.1	2023-07-20T22:42:40.0883623	Tags for minecraft:item mod id forcecraft
+// 1.20.1	2023-10-09T13:18:06.9011402	Tags for minecraft:item mod id forcecraft
+5ec6a48a81a06d202f30aee8ebfbbb9b9564386b data/forge/tags/items/ores.json
+f002772c304bb8350635523d7d3bb1c4fdb5796a data/forge/tags/items/ores/power.json
+b73848b6920747aedc21ffb8aed7e3aa8d325f04 data/forge/tags/items/ores_in_ground/deepslate.json
+5b2618b88b5b044099742e91e0a5e3ed254d91cf data/forge/tags/items/ores_in_ground/stone.json

@@ -1,5 +1,9 @@
-// 1.20.1	2023-07-20T22:42:40.0863623	Tags for minecraft:block mod id forcecraft
+// 1.20.1	2023-10-09T13:18:06.8991362	Tags for minecraft:block mod id forcecraft
 6682e317fdf17b7ed16b01be6244689ba18716a1 data/forcecraft/tags/blocks/needs_force_tool.json
+5ec6a48a81a06d202f30aee8ebfbbb9b9564386b data/forge/tags/blocks/ores.json
+f002772c304bb8350635523d7d3bb1c4fdb5796a data/forge/tags/blocks/ores/power.json
+b73848b6920747aedc21ffb8aed7e3aa8d325f04 data/forge/tags/blocks/ores_in_ground/deepslate.json
+5b2618b88b5b044099742e91e0a5e3ed254d91cf data/forge/tags/blocks/ores_in_ground/stone.json
 d24fa89133e2e0d0fed52aec4122ab12ef2313f8 data/minecraft/tags/blocks/mineable/pickaxe.json
 bbb8aafb9fe8b2ac991b03b55e4a2bee3318a1da data/minecraft/tags/blocks/needs_diamond_tool.json
 f002772c304bb8350635523d7d3bb1c4fdb5796a data/minecraft/tags/blocks/needs_iron_tool.json
