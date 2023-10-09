@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:add_config_features",
   "biomes": "#minecraft:is_forest",
-  "enabledConfig": "add_force_tree",
+  "enabledConfig": "force_tree",
   "features": "forcecraft:force_tree",
   "step": "vegetal_decoration"
 }
