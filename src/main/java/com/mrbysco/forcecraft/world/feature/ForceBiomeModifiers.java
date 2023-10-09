@@ -52,17 +52,17 @@ public class ForceBiomeModifiers {
 		context.register(ADD_FORCE_ORE_MODIFIER, new AddConfigFeatureBiomeModifier(
 				overworldHolder,
 				HolderSet.direct(placedGetter.getOrThrow(ForceFeatureKeys.PLACED_ORE_FORCE)),
-				GenerationStep.Decoration.UNDERGROUND_ORES, "add_force_ore_modifier"
+				GenerationStep.Decoration.UNDERGROUND_ORES, "force_ore"
 		));
 		context.register(ADD_FORCE_ORE_BURIED_MODIFIER, new AddConfigFeatureBiomeModifier(
 				overworldHolder,
 				HolderSet.direct(placedGetter.getOrThrow(ForceFeatureKeys.PLACED_ORE_FORCE_BURIED)),
-				GenerationStep.Decoration.UNDERGROUND_ORES, "add_force_ore_buried_modifier"
+				GenerationStep.Decoration.UNDERGROUND_ORES, "force_ore"
 		));
 		context.register(ADD_FORCE_TREE, new AddConfigFeatureBiomeModifier(
 				forestHolder,
 				HolderSet.direct(placedGetter.getOrThrow(ForceFeatureKeys.PLACED_FORCE_TREE)),
-				GenerationStep.Decoration.VEGETAL_DECORATION, "add_force_tree"
+				GenerationStep.Decoration.VEGETAL_DECORATION, "force_tree"
 		));
 
 		context.register(ADD_CHU_CHU_MODIFIER, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
