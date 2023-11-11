@@ -161,6 +161,7 @@
   "gui.forcecraft.infuser.button.guide": "Open Guide GUI",
   "gui.forcecraft.infuser.empty.tooltip": "Empty",
   "gui.forcecraft.infuser.help.tooltip": "Help",
+  "gui.forcecraft.infuser.missing.recipe": "Cannot find matching infusion recipe",
   "gui.forcecraft.infuser.missing.rf.tooltip": "Need more RF to operate",
   "gui.forcecraft.infuser.missing.tooltip": "Upgrade Tome or Center Slot empty",
   "gui.forcecraft.infuser.nobook": "Upgrade Tome required",

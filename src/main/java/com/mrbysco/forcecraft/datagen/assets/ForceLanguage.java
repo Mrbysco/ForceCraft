@@ -595,6 +595,7 @@ public class ForceLanguage extends LanguageProvider {
 		add("gui.forcecraft.infuser.start.tooltip", "Start Infusion");
 		add("gui.forcecraft.infuser.missing.tooltip", "Upgrade Tome or Center Slot empty");
 		add("gui.forcecraft.infuser.missing.rf.tooltip", "Need more RF to operate");
+		add("gui.forcecraft.infuser.missing.recipe", "Cannot find matching infusion recipe");
 		add("gui.forcecraft.infuser.button.guide", "Open Guide GUI");
 		add("gui.forcecraft.infuser.button.button", "Start Button");
 

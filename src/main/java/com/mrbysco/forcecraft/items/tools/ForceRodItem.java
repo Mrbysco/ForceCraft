@@ -11,7 +11,6 @@ import com.mrbysco.forcecraft.items.nonburnable.NonBurnableItemEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,6 +20,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -282,6 +282,20 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 			});
 		}
 		return super.interactLivingEntity(stack, playerIn, target, handIn);
+	}
+
+	@Override
+	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
+		if (stack.getTag() != null && !stack.getTag().contains("ForceInfused")) {
+			initializeTag(stack);
+		}
+	}
+
+	private void initializeTag(ItemStack stack) {
+		CompoundTag tag = stack.getOrCreateTag();
+		tag.putBoolean("ForceInfused", false);
+		stack.setTag(tag);
 	}
 
 	@Nullable

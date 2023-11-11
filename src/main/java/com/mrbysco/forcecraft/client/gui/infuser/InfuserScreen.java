@@ -128,8 +128,13 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		if (isHovering(39, 101, 12, 12, mouseX, mouseY)) {
 			List<Component> text = new ArrayList<>();
 			if (getMenu().isWorkAllowed()) {
-				text.add(Component.translatable("gui.forcecraft.infuser.start.tooltip")
-						.withStyle(ChatFormatting.GRAY));
+				if (getMenu().validRecipe[0] == 0) {
+					text.add(Component.translatable("gui.forcecraft.infuser.missing.recipe")
+							.withStyle(ChatFormatting.RED));
+				} else {
+					text.add(Component.translatable("gui.forcecraft.infuser.start.tooltip")
+							.withStyle(ChatFormatting.GRAY));
+				}
 			} else {
 				boolean modifiersEmpty = tile.areAllModifiersEmpty();
 				if (!modifiersEmpty && tile.getEnergyStored() < tile.getEnergyCostPer()) {
