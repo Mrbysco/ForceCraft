@@ -512,9 +512,10 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	/**
 	 * Loop on all modifiers and apply first one that matches the input test.
 	 *
-	 * @param tool
-	 * @param modifier
-	 * @return
+	 * @param tool     the tool to apply the modifier to
+	 * @param modifier the modifier to apply
+	 * @param recipe   the recipe to apply
+	 * @return true if a modifier was applied
 	 */
 	private boolean applyModifier(ItemStack tool, ItemStack modifier, InfuseRecipe recipe) {
 		UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
