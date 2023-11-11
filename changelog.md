@@ -1,2 +1,4 @@
-* Fix Power Ore not generating (Thanks to [allanf181](https://github.com/allanf181) for [PR 81](https://github.com/Mrbysco/ForceCraft/pull/81))
-* Add the ore related Item tags (Also thanks to above PR)
+* Fix the 2nd Force Rod recipe
+* Fix Force Rods not being charge-able
+* Make force infusing repair charge-able items
+* Add hover message to the infuse button if the recipe doesn't match
