@@ -61,7 +61,6 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 	public InteractionResult useOn(UseOnContext context) {
 		Level level = context.getLevel();
 		BlockPos pos = context.getClickedPos();
-		Direction facing = context.getClickedFace();
 		Player player = context.getPlayer();
 		InteractionHand handIn = context.getHand();
 		ItemStack stack = context.getItemInHand();
