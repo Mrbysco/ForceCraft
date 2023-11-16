@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.items.tools;
 
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.capablilities.forcewrench.ForceWrenchProvider;
 import com.mrbysco.forcecraft.capablilities.forcewrench.ForceWrenchStorage;
@@ -125,12 +126,11 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 					wrenchCap.storeBlockState(state);
 					wrenchCap.setBlockName(blockName);
 					world.removeBlockEntity(pos);
-					BlockState airState = Blocks.AIR.defaultBlockState();
-					world.removeBlock(pos, false);
-					world.setBlocksDirty(pos, state, airState);
 				}
 				fd.setForce(fd.getForce() - 250);
 				fd.write(heldWrench);
+				BlockState airState = Blocks.AIR.defaultBlockState();
+				world.setBlockAndUpdate(pos, airState);
 				return ActionResultType.SUCCESS;
 			}
 		} else {
@@ -144,18 +144,26 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 		IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
 		if (wrenchCap != null) {
 			if (wrenchCap.getStoredBlockState() != null) {
-				CompoundNBT tileCmp = wrenchCap.getStoredBlockNBT();
 				BlockState state = wrenchCap.getStoredBlockState();
-				TileEntity te = TileEntity.loadStatic(state, tileCmp);
 				BlockPos offPos = pos.relative(side);
 				if (state != null) {
 					world.setBlockAndUpdate(offPos, state);
 				}
-				if (te != null) {
-					te.load(state, tileCmp);
-					te.setPosition(offPos);
-					world.setBlockEntity(offPos, te);
+				if (wrenchCap.getStoredBlockNBT() != null && state.getBlock().hasTileEntity(state)) {
+					CompoundNBT blockTag = wrenchCap.getStoredBlockNBT();
+					TileEntity te = TileEntity.loadStatic(state, blockTag);
+					if (te != null) {
+						te.load(state, blockTag);
+						te.setPosition(offPos);
+						world.setBlockEntity(offPos, te);
+						te.setChanged();
+					} else {
+						if(blockTag != null) {
+							ForceCraft.LOGGER.error("Was unable to load block entity");
+						}
+					}
 				}
+
 				wrenchCap.clearBlockStorage();
 			}
 		}
