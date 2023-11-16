@@ -25,7 +25,7 @@ public class RenameAndRecolorScreen extends Screen {
 	private int selectedColor;
 
 	protected RenameAndRecolorScreen(ItemStack stack, Hand hand) {
-		super(new TranslationTextComponent("forcecraft.pack.rename"));
+		super(new TranslationTextComponent("gui.forcecraft.rename.title"));
 
 		this.itemstack = stack.copy();
 		this.usedHand = hand;

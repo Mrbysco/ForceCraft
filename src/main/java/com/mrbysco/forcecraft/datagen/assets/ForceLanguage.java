@@ -596,6 +596,9 @@ public class ForceLanguage extends LanguageProvider {
 		//Force Engine UI
 		add("gui.forcecraft.force_engine.empty", "Empty");
 
+		//Rename and recolor screen
+		add("gui.forcecraft.rename.title", "Rename and Recolor");
+
 		//Patchouli
 		add("item.forcecraft.book.name", "Force and You");
 		add("info.forcecraft.book.subtitle", "For all your Force needs");
