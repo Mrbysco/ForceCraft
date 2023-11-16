@@ -37,7 +37,7 @@ public class FairyEntity extends CreatureEntity implements IFlyingAnimal {
 	public FairyEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
 		super(type, worldIn);
 		this.moveControl = new FlyingMovementController(this, 20, true);
-		this.lookControl = new FairyEntity.LookHelperController(this);
+		this.lookControl = new LookHelperController(this);
 		this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
 		this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
 		this.setPathfindingMalus(PathNodeType.WATER_BORDER, 16.0F);
@@ -112,7 +112,7 @@ public class FairyEntity extends CreatureEntity implements IFlyingAnimal {
 		worldIn.addParticle(particleData, MathHelper.lerp(worldIn.random.nextDouble(), posX, posX2), posY - 0.2F, MathHelper.lerp(worldIn.random.nextDouble(), posZ, posZ2), 0.0D, 0.0D, 0.0D);
 	}
 
-	class LookHelperController extends LookController {
+	static class LookHelperController extends LookController {
 		public LookHelperController(MobEntity entityIn) {
 			super(entityIn);
 		}
