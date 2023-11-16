@@ -39,9 +39,6 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
-            // required for patchouli
-            property 'mixin.env.disableRefMap', 'true'
-
             // Recommended logging data for a userdev environment
             // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
@@ -127,8 +124,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    implementation fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
@@ -138,20 +134,20 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:industrial-foregoing-266515:3446262")
     runtimeOnly fg.deobf("curse.maven:titanium-287342:3525770")
-    runtimeOnly fg.deobf("curse.maven:pipez-443900:3569511")
+    runtimeOnly fg.deobf("curse.maven:pipez-443900:3760254")
     runtimeOnly fg.deobf("curse.maven:CTM-267602:3137659")
     runtimeOnly fg.deobf("curse.maven:StorageDrawers-223852:3402515")
-
-    runtimeOnly fg.deobf("curse.maven:Mantle-74924:3482897")
-    runtimeOnly fg.deobf("curse.maven:TConstruct-74072:3482903")
 
     runtimeOnly fg.deobf("curse.maven:invtweaks-383070:3102237")
 
     runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:3279930")
 
-    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3853310")
+    runtimeOnly fg.deobf("curse.maven:cyclic-239286:4656875")
 //    implementation fg.deobf("curse.maven:simple-storage-network-268495:3230736")
 //    implementation fg.deobf("curse.maven:simple-tomb-399669:3229015")
+
+    runtimeOnly fg.deobf("curse.maven:bookshelf-228525:4351252")
+    runtimeOnly fg.deobf("curse.maven:botany-pots-353928:4514691")
 }
 
 jar {
