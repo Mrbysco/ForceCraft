@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.handlers;
 
+import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.item.ItemEntity;
@@ -17,7 +18,7 @@ public class HeartHandler {
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
 		World world = event.getEntity().level;
-		if (world.isClientSide || event.getSource() == null || world.random.nextDouble() >= CHANCE) {
+		if (world.isClientSide || event.getSource() == null || ConfigHandler.COMMON.disableRecoveryHearts.get() || world.random.nextDouble() >= CHANCE) {
 			return;
 		}
 		if (event.getSource().getEntity() instanceof PlayerEntity && !(event.getSource().getEntity() instanceof FakePlayer)) {
