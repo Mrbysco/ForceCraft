@@ -27,6 +27,8 @@ import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.world.WorldGenHandler;
 import com.mrbysco.forcecraft.world.feature.ForceFeatureConfigs;
 import com.mrbysco.forcecraft.world.feature.ForceFeatures;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.dispenser.BeehiveDispenseBehavior;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -110,6 +112,9 @@ public class ForceCraft {
 		CapabilityHandler.register();
 		ForceEntities.registerSpawnPlacement();
 		ForceFeatureConfigs.initialize();
+		event.enqueueWork(() -> {
+			DispenserBlock.registerBehavior(ForceRegistry.FORCE_SHEARS.get(), new BeehiveDispenseBehavior());
+		});
 	}
 }
 
