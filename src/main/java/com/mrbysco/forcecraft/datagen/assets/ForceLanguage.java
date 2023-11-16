@@ -427,7 +427,6 @@ public class ForceLanguage extends LanguageProvider {
 		addBlock(FORCE_BRICK_SLAB, "Force Brick Slab");
 		addBlock(FORCE_BRICK, "Force Brick");
 		addBlock(TIME_TORCH, "§bTime Torch");
-//		addBlock(WALL_TIME_TORCH, "§bTime Torch");
 		addBlock(FORCE_TORCH, "Force Torch");
 		addBlock(FORCE_RED_TORCH, "Red Force Torch");
 		addBlock(FORCE_ORANGE_TORCH, "Orange Force Torch");
@@ -444,22 +443,6 @@ public class ForceLanguage extends LanguageProvider {
 		addBlock(FORCE_CYAN_TORCH, "Cyan Force Torch");
 		addBlock(FORCE_PURPLE_TORCH, "Purple Force Torch");
 		addBlock(FORCE_GRAY_TORCH, "Gray Force Torch");
-//		addBlock(WALL_FORCE_TORCH, "Force Torch");
-//		addBlock(WALL_FORCE_RED_TORCH, "Red Force Torch");
-//		addBlock(WALL_FORCE_ORANGE_TORCH, "Orange Force Torch");
-//		addBlock(WALL_FORCE_GREEN_TORCH, "Green Force Torch");
-//		addBlock(WALL_FORCE_BLUE_TORCH, "Blue Force Torch");
-//		addBlock(WALL_FORCE_WHITE_TORCH, "White Force Torch");
-//		addBlock(WALL_FORCE_BLACK_TORCH, "Black Force Torch");
-//		addBlock(WALL_FORCE_BROWN_TORCH, "Brown Force Torch");
-//		addBlock(WALL_FORCE_LIGHT_BLUE_TORCH, "Light Blue Force Torch");
-//		addBlock(WALL_FORCE_MAGENTA_TORCH, "Magenta Force Torch");
-//		addBlock(WALL_FORCE_PINK_TORCH, "Pink Force Torch");
-//		addBlock(WALL_FORCE_LIGHT_GRAY_TORCH, "Light Gray Force Torch");
-//		addBlock(WALL_FORCE_LIME_TORCH, "Lime Force Torch");
-//		addBlock(WALL_FORCE_CYAN_TORCH, "Cyan Force Torch");
-//		addBlock(WALL_FORCE_PURPLE_TORCH, "Purple Force Torch");
-//		addBlock(WALL_FORCE_GRAY_TORCH, "Gray Force Torch");
 
 		//Entities
 		addEntityType(ForceEntities.COLD_CHICKEN, "Cold Chicken");
