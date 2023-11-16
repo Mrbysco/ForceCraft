@@ -8,6 +8,7 @@ import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.items.ForceArmorItem;
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
+import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
 import com.mrbysco.forcecraft.items.infuser.UpgradeTomeItem;
 import com.mrbysco.forcecraft.items.tools.ForceAxeItem;
@@ -411,7 +412,22 @@ public class InfuserTileEntity extends TileEntity implements ITickableTileEntity
 		ItemStack tool = getFromToolSlot();
 
 		ForceToolData force = new ForceToolData(tool);
-		force.charge(FLUID_CHARGE);
+		int charge = FLUID_CHARGE;
+		if (tool.isDamaged()) {
+			final int ratio = IForceChargingTool.FORCE_DMG_RATIO;
+			int damage = tool.getDamageValue();
+			int repaired = 0;
+			for (int i = 0; i < damage; i++) {
+				if (charge >= ratio) {
+					repaired++;
+					charge -= ratio;
+				}
+			}
+			tool.setDamageValue(damage - repaired);
+		}
+		if(charge > 0) {
+			force.charge(charge);
+		}
 		tank.drain(FLUID_CHARGE, FluidAction.EXECUTE);
 		force.write(tool);
 	}
