@@ -441,3 +441,7 @@ ce64149c04018c446a4cd52f73cbb6f56cb71fdb data/forcecraft/recipes/force_brick_yel
 cd17d28e9e11fe25bb14e9843bc187edb622a3fc data/forcecraft/recipes/force_brick_yellow_stairs_from_force_brick_yellow.json
 2b0d41eb51609195cfca6b93a94355086fd5210c data/forcecraft/recipes/force_plank_slab.json
 d6459ae5293e8192c9729ad65d2a96cc9e569a87 data/forcecraft/recipes/force_plank_stairs.json
+73b94234a9ea427eae9b5a77044c8962a3e0c1c4 data/forge/tags/blocks/ores.json
+57165ed8a46c0f621646543138125b53d57d209d data/forge/tags/blocks/ores/power.json
+73b94234a9ea427eae9b5a77044c8962a3e0c1c4 data/forge/tags/items/ores.json
+57165ed8a46c0f621646543138125b53d57d209d data/forge/tags/items/ores/power.json
