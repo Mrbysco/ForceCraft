@@ -123,32 +123,34 @@ public class ClientHandler {
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FORCE_ARROW.get(), ForceArrowRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ForceEntities.FORCE_FLASK.get(), renderManager -> new SpriteRenderer<>(renderManager, Minecraft.getInstance().getItemRenderer()));
 
-		ItemModelsProperties.register(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity) -> {
-			IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
-			return magnetCap != null && magnetCap.isActivated() ? 1.0F : 0.0F;
+		event.enqueueWork(() -> {
+			ItemModelsProperties.register(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity) -> {
+				IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
+				return magnetCap != null && magnetCap.isActivated() ? 1.0F : 0.0F;
+			});
+
+			ItemModelsProperties.register(ForceRegistry.ENTITY_FLASK.get(), new ResourceLocation("captured"), (stack, world, livingEntity) ->
+					stack.hasTag() && stack.getTag().contains("StoredEntity") ? 1.0F : 0.0F);
+
+			ItemModelsProperties.register(ForceRegistry.BACONATOR.get(), new ResourceLocation("filled"), (stack, world, livingEntity) ->
+					stack.hasTag() && stack.getTag().contains(BaconatorItem.HAS_FOOD_TAG) ? 1.0F : 0.0F);
+
+			ItemModelsProperties.register(ForceRegistry.FORCE_PACK.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
+					stack.hasTag() && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
+
+			ItemModelsProperties.register(ForceRegistry.FORCE_BELT.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
+					stack.hasTag() && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
+
+			ItemModelsProperties.register(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pull"), (stack, world, livingEntity) -> {
+				if (livingEntity == null) {
+					return 0.0F;
+				} else {
+					return livingEntity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - livingEntity.getUseItemRemainingTicks()) / 20.0F;
+				}
+			});
+			ItemModelsProperties.register(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pulling"), (stack, world, livingEntity) ->
+					livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F);
 		});
-
-		ItemModelsProperties.register(ForceRegistry.ENTITY_FLASK.get(), new ResourceLocation("captured"), (stack, world, livingEntity) ->
-				stack.hasTag() && stack.getTag().contains("StoredEntity") ? 1.0F : 0.0F);
-
-		ItemModelsProperties.register(ForceRegistry.BACONATOR.get(), new ResourceLocation("filled"), (stack, world, livingEntity) ->
-				stack.hasTag() && stack.getTag().contains(BaconatorItem.HAS_FOOD_TAG) ? 1.0F : 0.0F);
-
-		ItemModelsProperties.register(ForceRegistry.FORCE_PACK.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
-				stack.hasTag() && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
-
-		ItemModelsProperties.register(ForceRegistry.FORCE_BELT.get(), new ResourceLocation("color"), (stack, world, livingEntity) ->
-				stack.hasTag() && stack.getTag().contains("Color") ? (1.0F / 16) * stack.getTag().getInt("Color") : 0.9375F);
-
-		ItemModelsProperties.register(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pull"), (stack, world, livingEntity) -> {
-			if (livingEntity == null) {
-				return 0.0F;
-			} else {
-				return livingEntity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration() - livingEntity.getUseItemRemainingTicks()) / 20.0F;
-			}
-		});
-		ItemModelsProperties.register(ForceRegistry.FORCE_BOW.get(), new ResourceLocation("pulling"), (stack, world, livingEntity) ->
-				livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F);
 	}
 
 	public static void registerItemColors(final ColorHandlerEvent.Item event) {
