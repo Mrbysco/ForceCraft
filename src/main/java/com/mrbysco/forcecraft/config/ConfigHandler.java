@@ -439,7 +439,7 @@ public class ConfigHandler {
 
 	@SubscribeEvent
 	public static void onFileChange(final ModConfig.Reloading configEvent) {
-		ForceCraft.LOGGER.fatal("ForceCraft's config just got changed on the file system!");
+		ForceCraft.LOGGER.debug("ForceCraft's config just got changed on the file system!");
 	}
 }
 
