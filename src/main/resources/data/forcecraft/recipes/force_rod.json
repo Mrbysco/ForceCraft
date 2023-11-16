@@ -3,7 +3,8 @@
   "pattern": [
     "  F",
     " S ",
-    "N  "  ],
+    "N  "
+  ],
   "key": {
     "F": [
       {
@@ -21,8 +22,9 @@
       }
     ]
   },
-
   "result": {
-    "item": "forcecraft:force_rod"
+    "type": "forge:nbt",
+    "item": "forcecraft:force_rod",
+    "nbt": "{ForceInfused:1b}"
   }
 }

@@ -289,6 +289,20 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		return super.interactLivingEntity(stack, playerIn, target, handIn);
 	}
 
+	@Override
+	public void inventoryTick(ItemStack stack, World level, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
+		if (stack.getTag() != null && !stack.getTag().contains("ForceInfused")) {
+			initializeTag(stack);
+		}
+	}
+
+	private void initializeTag(ItemStack stack) {
+		CompoundNBT tag = stack.getOrCreateTag();
+		tag.putBoolean("ForceInfused", false);
+		stack.setTag(tag);
+	}
+
 	@Nullable
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
