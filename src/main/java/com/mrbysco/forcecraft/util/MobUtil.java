@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.util;
 
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
 import com.mrbysco.forcecraft.registry.ForceEffects;
 import net.minecraft.entity.Entity;

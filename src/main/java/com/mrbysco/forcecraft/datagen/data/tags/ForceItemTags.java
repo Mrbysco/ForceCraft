@@ -1,18 +1,15 @@
 package com.mrbysco.forcecraft.datagen.data.tags;
 
 import com.mrbysco.forcecraft.Reference;
-import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import static com.mrbysco.forcecraft.registry.ForceRegistry.POWER_ORE;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.POWER_ORE_ITEM;
 
 public class ForceItemTags extends ItemTagsProvider {

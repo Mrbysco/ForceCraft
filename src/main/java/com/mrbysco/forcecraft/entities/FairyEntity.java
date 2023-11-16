@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.entities;
 
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;

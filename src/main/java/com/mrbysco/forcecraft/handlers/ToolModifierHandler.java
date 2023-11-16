@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.handlers;
 
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.capablilities.playermodifier.IPlayerModifier;
 import com.mrbysco.forcecraft.capablilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.config.ConfigHandler;
