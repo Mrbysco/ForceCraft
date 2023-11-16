@@ -118,11 +118,12 @@ repositories {
 
 mixin {
     add sourceSets.main, "forcecraft.refmap.json"
+    config "forcecraft.mixins.json"
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     implementation fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
