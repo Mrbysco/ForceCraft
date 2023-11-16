@@ -12,5 +12,10 @@ if (System.getenv().MODRINTH_KEY) {
         changelog = fileContents
         gameVersions = ["1.20", "${mc_version}"]
         loaders = ["neoforge", "forge"]
+
+        dependencies {
+            optional.project "jei"
+            optional.project "patchouli"
+        }
     }
 }
