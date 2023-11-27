@@ -1,1 +1,1 @@
-* Fix invalid name for one of the mods assets
+* Fix a potential crash with the Liquid Force screen shaking mechanic
