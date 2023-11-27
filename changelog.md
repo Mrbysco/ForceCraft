@@ -1,1 +1,1 @@
-* Change 2nd Force Rod recipe to use vanilla sticks only because Force Rods are in the tag it was using
+* Fix invalid name for one of the mods assets
