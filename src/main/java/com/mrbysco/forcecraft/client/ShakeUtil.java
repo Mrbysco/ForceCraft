@@ -11,8 +11,7 @@ public class ShakeUtil {
 
 	public static void shakeScreen(Minecraft minecraft, float partialTicks, long finishTimeNano, PoseStack poseStack) {
 		float effectScale = minecraft.options.screenEffectScale().get().floatValue();
-		Player player = (Player) minecraft.getCameraEntity();
-		if (player != null && player.hasEffect(ForceEffects.SHAKING.get()) & effectScale > 0.0F) {
+		if (minecraft.getCameraEntity() instanceof Player player && player.hasEffect(ForceEffects.SHAKING.get()) & effectScale > 0.0F) {
 			float f = player.walkDist - player.walkDistO;
 			float f1 = -(player.walkDist + f * partialTicks);
 			float f2 = Mth.lerp(partialTicks, player.oBob, player.bob);
