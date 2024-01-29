@@ -1,4 +1,11 @@
-// 1.20.1	2023-10-09T13:18:06.9011402	Tags for minecraft:item mod id forcecraft
+// 1.20.4	2024-01-29T21:43:15.1733754	Tags for minecraft:item mod id forcecraft
+53afa95f4f2972f61ad4870a14ffdad392433608 data/forcecraft/tags/items/baconator_food.json
+f37c1227f073af48a0e3f526510a90a1f11811d7 data/forcecraft/tags/items/chu_jelly.json
+ca0dfb4cd17d1a8bebda73a2ba9587fde8c1486d data/forcecraft/tags/items/ender.json
+2266034e578a6f8f80f45b0fadae1a067a3319d6 data/forcecraft/tags/items/entity_flasks.json
+ba8baa1de0654d18f27068517c95b5fb869c254a data/forcecraft/tags/items/force_furnace.json
+eff2e9b711edce9a5ae1875f820c2b5272b0779f data/forcecraft/tags/items/force_logs.json
+f6578c63f571b1fa389775ac66b9218c094d5150 data/forcecraft/tags/items/fortune.json
 5ec6a48a81a06d202f30aee8ebfbbb9b9564386b data/forge/tags/items/ores.json
 f002772c304bb8350635523d7d3bb1c4fdb5796a data/forge/tags/items/ores/power.json
 b73848b6920747aedc21ffb8aed7e3aa8d325f04 data/forge/tags/items/ores_in_ground/deepslate.json

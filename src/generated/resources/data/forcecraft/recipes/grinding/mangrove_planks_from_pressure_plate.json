@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:grinding",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:mangrove_pressure_plate"
+  },
+  "processTime": 400,
+  "results": [
+    {
+      "count": 2,
+      "result": "minecraft:mangrove_planks"
+    }
+  ],
+  "secondaryChance": 1.0
+}

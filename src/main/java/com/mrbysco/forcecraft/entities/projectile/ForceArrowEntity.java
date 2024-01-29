@@ -1,13 +1,12 @@
 package com.mrbysco.forcecraft.entities.projectile;
 
 import com.mrbysco.forcecraft.ForceCraft;
+import com.mrbysco.forcecraft.attachment.banemodifier.BaneModifierAttachment;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.util.ForceUtils;
 import com.mrbysco.forcecraft.util.MobUtil;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -23,11 +22,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
 
-import javax.annotation.Nonnull;
-
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_BANE;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.BANE_MODIFIER;
 
 public class ForceArrowEntity extends Arrow {
 	private static final EntityDataAccessor<Boolean> ENDER = SynchedEntityData.defineId(ForceArrowEntity.class, EntityDataSerializers.BOOLEAN);
@@ -42,7 +38,7 @@ public class ForceArrowEntity extends Arrow {
 	}
 
 	public ForceArrowEntity(Level level, LivingEntity shooter) {
-		super(level, shooter);
+		super(ForceEntities.FORCE_ARROW.get(), level);
 		this.setOwner(shooter);
 	}
 
@@ -52,6 +48,7 @@ public class ForceArrowEntity extends Arrow {
 		super.shootFromRotation(projectile, x, y, z, newVelocity, inaccuracy);
 	}
 
+	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 		this.entityData.define(ENDER, false);
@@ -177,15 +174,16 @@ public class ForceArrowEntity extends Arrow {
 
 		if (isBane()) {
 			if (living instanceof Creeper creeper) {
-				creeper.getCapability(CAPABILITY_BANE).ifPresent((entityCap) -> {
-					if (entityCap.canExplode()) {
-						creeper.setSwellDir(-1);
-						creeper.getEntityData().set(Creeper.DATA_IS_IGNITED, false);
-						entityCap.setExplodeAbility(false);
-						creeper.goalSelector.availableGoals.removeIf(goal -> goal.getGoal() instanceof SwellGoal);
-						ForceCraft.LOGGER.debug("Added Bane to " + living.getName());
-					}
-				});
+				BaneModifierAttachment attachment = creeper.getData(BANE_MODIFIER);
+				if (attachment.canExplode()) {
+					creeper.setSwellDir(-1);
+					creeper.getEntityData().set(Creeper.DATA_IS_IGNITED, false);
+					attachment.setExplodeAbility(false);
+					creeper.goalSelector.getAvailableGoals().removeIf(goal -> goal.getGoal() instanceof SwellGoal);
+					ForceCraft.LOGGER.debug("Added Bane to " + living.getName());
+
+					creeper.setData(BANE_MODIFIER, attachment);
+				}
 			}
 		}
 	}
@@ -198,11 +196,5 @@ public class ForceArrowEntity extends Arrow {
 	@Override
 	public EntityType<?> getType() {
 		return ForceEntities.FORCE_ARROW.get();
-	}
-
-	@Nonnull
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

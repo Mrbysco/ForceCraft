@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_enchanting_table": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:enchanting_table"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_rod": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forcecraft:force_rod"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:transmutation/infuser_from_enchanting_table"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rod",
+      "has_enchanting_table"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:transmutation/infuser_from_enchanting_table"
+    ]
+  }
+}

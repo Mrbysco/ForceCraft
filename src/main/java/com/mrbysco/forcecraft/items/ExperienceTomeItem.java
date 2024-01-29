@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.items;
 
-import com.mrbysco.forcecraft.capabilities.experiencetome.ExperienceTomeCapability;
 import com.mrbysco.forcecraft.util.ForceUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -13,12 +12,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
-
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_EXPTOME;
 
 public class ExperienceTomeItem extends Item {
 
@@ -35,15 +31,6 @@ public class ExperienceTomeItem extends Item {
 			return;
 		}
 		tooltip.add(Component.literal(Float.toString(getExperience(stack)) + " / " + Float.toString(getMaxExperience(stack))));
-	}
-
-	@Nullable
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		if (CAPABILITY_EXPTOME == null) {
-			return null;
-		}
-		return new ExperienceTomeCapability();
 	}
 
 	@Override

@@ -1,10 +1,12 @@
 package com.mrbysco.forcecraft.blockentities;
 
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.attachment.forcerod.ForceRodAttachment;
+import com.mrbysco.forcecraft.attachment.storage.PackStackHandler;
+import com.mrbysco.forcecraft.attachment.storage.StorageManager;
+import com.mrbysco.forcecraft.attachment.toolmodifier.ToolModifierAttachment;
 import com.mrbysco.forcecraft.blockentities.energy.ForceEnergyStorage;
-import com.mrbysco.forcecraft.capabilities.forcerod.IForceRodModifier;
-import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
-import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.items.ForceArmorItem;
 import com.mrbysco.forcecraft.items.ForcePackItem;
@@ -20,16 +22,16 @@ import com.mrbysco.forcecraft.items.tools.ForceShearsItem;
 import com.mrbysco.forcecraft.items.tools.ForceShovelItem;
 import com.mrbysco.forcecraft.items.tools.ForceSwordItem;
 import com.mrbysco.forcecraft.menu.infuser.InfuserMenu;
-import com.mrbysco.forcecraft.networking.PacketHandler;
-import com.mrbysco.forcecraft.recipe.ForceRecipes;
+import com.mrbysco.forcecraft.networking.message.StopInfuserSoundPayload;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
 import com.mrbysco.forcecraft.registry.ForceFluids;
+import com.mrbysco.forcecraft.registry.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.registry.ForceTags;
-import com.mrbysco.forcecraft.storage.StorageManager;
 import com.mrbysco.forcecraft.util.EnchantUtils;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -37,6 +39,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -48,35 +51,36 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.RecipeCraftingHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_FORCEROD;
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.FORCE_ROD;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.TOOL_MODIFIER;
 
-public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Container {
+public class InfuserBlockEntity extends BlockEntity implements MenuProvider, RecipeCraftingHolder, Container {
+	private static final Set<String> HASHES = new HashSet<>();
+	public static final Map<Integer, List<InfuseRecipe>> LEVEL_RECIPE_LIST = new HashMap<>();
 
 	private static final int FLUID_CHARGE = 1000;
 
@@ -96,7 +100,6 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	// Ratio o f gem slot to fluid tank
 	private static final int FLUID_PER_GEM = 500;
 
-	protected Map<Integer, InfuseRecipe> currentRecipes = new HashMap<>();
 
 	protected FluidTank tank = new FluidTank(50000) {
 		@Override
@@ -126,7 +129,6 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 			return stack.getFluid().is(ForceTags.FORCE);
 		}
 	};
-	private final LazyOptional<IFluidHandler> tankHolder = LazyOptional.of(() -> tank);
 
 	public final ItemStackHandler handler = new ItemStackHandler(11) {
 		@Override
@@ -155,13 +157,12 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 			return true;
 		}
 	};
-	private final LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
 
 	public ForceEnergyStorage energyStorage = new ForceEnergyStorage(64000, 1000);
-	private final LazyOptional<ForceEnergyStorage> energyHolder = LazyOptional.of(() -> energyStorage);
 
 	private final NonNullList<ItemStack> infuserContents = NonNullList.create();
 
+	private Object2IntOpenHashMap<RecipeHolder<InfuseRecipe>> recipesUsed = new Object2IntOpenHashMap<>();
 
 	public InfuserBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
 		super(blockEntityType, pos, state);
@@ -198,6 +199,15 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, InfuserBlockEntity infuser) {
+		if (level.getGameTime() % 20 == 0) {
+			if (LEVEL_RECIPE_LIST.isEmpty()) {
+				List<RecipeHolder<InfuseRecipe>> holders = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
+				for (RecipeHolder<InfuseRecipe> holder : holders) {
+					addRecipe(holder);
+				}
+			}
+		}
+
 		if (infuser.handler.getStackInSlot(SLOT_GEM).getItem() == ForceRegistry.FORCE_GEM.get()) {
 			infuser.processForceGems();
 		}
@@ -287,9 +297,9 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	public void stopWorkSound() {
 		if (!level.isClientSide) {
 			BlockPos pos = getBlockPos();
-			for (Player playerentity : level.players()) {
-				if (playerentity.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 200) {
-					PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) playerentity), new com.mrbysco.forcecraft.networking.message.StopInfuserSoundMessage());
+			for (Player player : level.players()) {
+				if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 200) {
+					((ServerPlayer) player).connection.send(new StopInfuserSoundPayload());
 				}
 			}
 		}
@@ -298,41 +308,43 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	private void setMaxTimeFromRecipes() {
 		maxProcessTime = 0;
 		if (!this.getBookInSlot().isEmpty()) { //Make sure it doesn't run if the book is missing
-			List<InfuseRecipe> recipes = new ArrayList<>(getMatchingRecipes().values());
+			List<RecipeHolder<InfuseRecipe>> recipes = new ArrayList<>(getMatchingRecipes().keySet());
 			if (!recipes.isEmpty()) {
-				for (InfuseRecipe recipeCurrent : recipes) {
+				for (RecipeHolder<InfuseRecipe> currentHolder : recipes) {
 //					ForceCraft.LOGGER.info(recipeCurrent.getId() + " increase  "+ recipeCurrent.getTime());
-					maxProcessTime += recipeCurrent.getTime();
+					maxProcessTime += currentHolder.value().getTime();
 				}
 			}
 		}
 	}
 
-	protected Map<Integer, InfuseRecipe> getMatchingRecipes() {
-		if (getBookInSlot().isEmpty()) return new HashMap<>();
-		if (!currentRecipes.isEmpty() && recipesStillMatch()) return currentRecipes;
+	protected Object2IntOpenHashMap<RecipeHolder<InfuseRecipe>> getMatchingRecipes() {
+		if (getBookInSlot().isEmpty()) return new Object2IntOpenHashMap<>();
+		if (!recipesUsed.isEmpty() && recipesStillMatch()) return recipesUsed;
 		else {
-			Map<Integer, InfuseRecipe> matchingRecipes = new HashMap<>();
+			Object2IntOpenHashMap<RecipeHolder<InfuseRecipe>> matchingRecipes = new Object2IntOpenHashMap<>();
 			for (int i = 0; i < SLOT_TOOL; i++) {
 				ItemStack modifier = getModifier(i);
 				if (modifier.isEmpty()) continue;
 
-				List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
-				for (InfuseRecipe recipe : recipes) {
+				List<RecipeHolder<InfuseRecipe>> holders = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
+				for (RecipeHolder<InfuseRecipe> holder : holders) {
+					InfuseRecipe recipe = holder.value();
 					if (recipe.matchesModifier(this, modifier, false)) {
-						matchingRecipes.put(i, recipe);
+						matchingRecipes.put(holder, i);
 						break;
 					}
 				}
 			}
-			return currentRecipes = matchingRecipes;
+			return recipesUsed = matchingRecipes;
 		}
 	}
 
 	protected boolean matchesModifier(ItemStack stack) {
 		if (level != null) {
-			List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
-			for (InfuseRecipe recipe : recipes) {
+			List<RecipeHolder<InfuseRecipe>> holders = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
+			for (RecipeHolder<InfuseRecipe> holder : holders) {
+				InfuseRecipe recipe = holder.value();
 				if (recipe.matchesModifier(this, stack)) {
 					return true;
 				}
@@ -343,8 +355,9 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	protected boolean matchesTool(ItemStack toolStack) {
 		if (level != null) {
-			List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
-			for (InfuseRecipe recipe : recipes) {
+			List<RecipeHolder<InfuseRecipe>> holders = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
+			for (RecipeHolder<InfuseRecipe> holder : holders) {
+				InfuseRecipe recipe = holder.value();
 				if (recipe.matchesTool(toolStack, true)) {
 					return true;
 				}
@@ -354,9 +367,9 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	protected boolean recipesStillMatch() {
-		for (HashMap.Entry<Integer, InfuseRecipe> entry : currentRecipes.entrySet()) {
-			ItemStack modifier = getModifier(entry.getKey());
-			if (!entry.getValue().matchesModifier(this, modifier, false)) {
+		for (Map.Entry<RecipeHolder<InfuseRecipe>, Integer> entry : recipesUsed.entrySet()) {
+			ItemStack modifier = getModifier(entry.getValue());
+			if (!entry.getKey().value().matchesModifier(this, modifier, false)) {
 				return false;
 			}
 		}
@@ -408,7 +421,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 			}
 			tool.setDamageValue(damage - repaired);
 		}
-		if(charge > 0) {
+		if (charge > 0) {
 			force.charge(charge);
 		}
 		tank.drain(FLUID_CHARGE, FluidAction.EXECUTE);
@@ -416,12 +429,12 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	private void processTool() {
-		for (HashMap.Entry<Integer, InfuseRecipe> entry : currentRecipes.entrySet()) {
-			ItemStack modifier = getModifier(entry.getKey());
-			InfuseRecipe recipe = entry.getValue();
-			if (recipe.matchesModifier(this, modifier, true)) {
+		for (HashMap.Entry<RecipeHolder<InfuseRecipe>, Integer> entry : recipesUsed.entrySet()) {
+			ItemStack modifier = getModifier(entry.getValue());
+			RecipeHolder<InfuseRecipe> recipeHolder = entry.getKey();
+			if (recipeHolder.value().matchesModifier(this, modifier, true)) {
 				ItemStack tool = getFromToolSlot();
-				boolean success = applyModifier(tool, modifier, recipe);
+				boolean success = applyModifier(tool, modifier, recipeHolder);
 				if (success) {
 
 					// for EACH modifier
@@ -463,24 +476,21 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	@Override
 	public CompoundTag getPersistentData() {
-		CompoundTag nbt = new CompoundTag();
-		this.saveAdditional(nbt);
-		return nbt;
+		CompoundTag tag = new CompoundTag();
+		this.saveAdditional(tag);
+		return tag;
 	}
 
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-		if (capability == ForgeCapabilities.ITEM_HANDLER) {
-			return handlerHolder.cast();
-		}
-		if (capability == ForgeCapabilities.FLUID_HANDLER) {
-			return tankHolder.cast();
-		}
-		if (capability == ForgeCapabilities.ENERGY) {
-			return energyHolder.cast();
-		}
+	public ItemStackHandler getItemHandler(@Nullable Direction facing) {
+		return handler;
+	}
 
-		return super.getCapability(capability, facing);
+	public FluidTank getFluidTank(@Nullable Direction facing) {
+		return tank;
+	}
+
+	public ForceEnergyStorage getEnergyStorage(@Nullable Direction facing) {
+		return energyStorage;
 	}
 
 	public boolean hasTool() {
@@ -528,18 +538,19 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	/**
 	 * Loop on all modifiers and apply first one that matches the input test.
 	 *
-	 * @param tool     the tool to apply the modifier to
-	 * @param modifier the modifier to apply
-	 * @param recipe   the recipe to apply
+	 * @param tool         the tool to apply the modifier to
+	 * @param modifier     the modifier to apply
+	 * @param recipeHolder the recipe to apply
 	 * @return true if a modifier was applied
 	 */
-	private boolean applyModifier(ItemStack tool, ItemStack modifier, InfuseRecipe recipe) {
+	private boolean applyModifier(ItemStack tool, ItemStack modifier, RecipeHolder<InfuseRecipe> recipeHolder) {
 		UpgradeBookData bd = new UpgradeBookData(this.getBookInSlot());
 		//if the recipe level does not exceed what the book has
 		//test the ingredient of this recipe, if it matches me
 
+		InfuseRecipe recipe = recipeHolder.value();
 		if (recipe.resultModifier.apply(tool, modifier, bd)) {
-			bd.onRecipeApply(recipe, getBookInSlot());
+			bd.onRecipeApply(recipeHolder, getBookInSlot());
 
 			if (recipe.resultModifier == InfuserModifierType.ITEM && recipe.hasOutput()) {
 				//overwrite / convert item
@@ -575,17 +586,19 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	static boolean addLightModifier(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ForceRodItem) {
-			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-			if (rodCap != null && !rodCap.hasLight()) {
-				rodCap.setLight(true);
+			ForceRodAttachment attachment = stack.getData(FORCE_ROD);
+			if (!attachment.hasLight()) {
+				attachment.setLight(true);
 				addInfusedTag(stack);
+				stack.setData(FORCE_ROD, attachment);
 				return true;
 			}
 		} else if (item instanceof ForceBowItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && !modifierCap.hasLight()) {
-				modifierCap.setLight(true);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasLight()) {
+				attachment.setLight(true);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		}
@@ -595,17 +608,19 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	private static boolean addCamoModifier(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ForceRodItem) {
-			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-			if (rodCap != null && !rodCap.hasCamoModifier()) {
-				rodCap.setCamoModifier(true);
+			ForceRodAttachment attachment = stack.getData(FORCE_ROD);
+			if (!attachment.hasCamoModifier()) {
+				attachment.setCamoModifier(true);
 				addInfusedTag(stack);
+				stack.setData(FORCE_ROD, attachment);
 				return true;
 			}
 		} else if (item instanceof ForceArmorItem) {
-			IToolModifier toolCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (toolCap != null && !toolCap.hasCamo()) {
-				toolCap.setCamo(true);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasCamo()) {
+				attachment.setCamo(true);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		}
@@ -614,10 +629,11 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	private static boolean addSightModifier(ItemStack stack) {
 		if (stack.getItem() instanceof ForceRodItem) {
-			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-			if (rodCap != null && !rodCap.hasSightModifier()) {
-				rodCap.setSightModifier(true);
+			ForceRodAttachment attachment = stack.getData(FORCE_ROD);
+			if (!attachment.hasSightModifier()) {
+				attachment.setSightModifier(true);
 				addInfusedTag(stack);
+				stack.setData(FORCE_ROD, attachment);
 				return true;
 			}
 		}
@@ -627,17 +643,19 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	static boolean addWingModifier(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ForceSwordItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && !modifierCap.hasWing()) {
-				modifierCap.setWing(true);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasWing()) {
+				attachment.setWing(true);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		} else if (item instanceof ForceArmorItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && !modifierCap.hasWing()) {
-				modifierCap.setWing(true);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasWing()) {
+				attachment.setWing(true);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		}
@@ -648,27 +666,28 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	static boolean addBaneModifier(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ForceSwordItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && !modifierCap.hasBane()) {
-				modifierCap.setBane(1);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasBane()) {
+				attachment.setBane(1);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		} else if (item instanceof ForceBowItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && !modifierCap.hasBane()) {
-				modifierCap.setBane(1);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasBane()) {
+				attachment.setBane(1);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		} else if (item instanceof ForceArmorItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap != null && !modifierCap.hasBane()) {
-					modifierCap.setBane(1);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasBane()) {
+				attachment.setBane(1);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		}
 		return false;
@@ -678,27 +697,28 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		Item item = stack.getItem();
 		int MAX_CAP = ConfigHandler.COMMON.bleedCap.get();
 		if (item instanceof ForceSwordItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && modifierCap.getBleedLevel() < MAX_CAP) {
-				modifierCap.incrementBleed();
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getBleedLevel() < MAX_CAP) {
+				attachment.incrementBleed();
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		} else if (item instanceof ForceBowItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && modifierCap.getBleedLevel() < MAX_CAP) {
-				modifierCap.incrementBleed();
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getBleedLevel() < MAX_CAP) {
+				attachment.incrementBleed();
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		} else if (item instanceof ForceArmorItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getBleedLevel() < MAX_CAP) {
-					modifierCap.incrementBleed();
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getBleedLevel() < MAX_CAP) {
+				attachment.incrementBleed();
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		}
 		return false;
@@ -707,24 +727,27 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	static boolean addEnderModifier(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ForceRodItem) {
-			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-			if (rodCap != null && !rodCap.isRodofEnder()) {
-				rodCap.setEnderModifier(true);
+			ForceRodAttachment attachment = stack.getData(FORCE_ROD);
+			if (!attachment.isRodofEnder()) {
+				attachment.setEnderModifier(true);
 				addInfusedTag(stack);
+				stack.setData(FORCE_ROD, attachment);
 				return true;
 			}
 		} else if (item instanceof ForceSwordItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && !modifierCap.hasEnder()) {
-				modifierCap.setEnder(true);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasEnder()) {
+				attachment.setEnder(true);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		} else if (item instanceof ForceBowItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && !modifierCap.hasEnder()) {
-				modifierCap.setEnder(true);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasEnder()) {
+				attachment.setEnder(true);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		}
@@ -733,10 +756,11 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	static boolean addFreezingModifier(ItemStack stack) {
 		if (stack.getItem() instanceof ForceBowItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && !modifierCap.hasFreezing()) {
-				modifierCap.setFreezing(true);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasFreezing()) {
+				attachment.setFreezing(true);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		}
@@ -745,14 +769,13 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	static boolean addHealingModifier(ItemStack stack) {
 		if (stack.getItem() instanceof ForceRodItem) {
-			IForceRodModifier rodCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-			if (rodCap != null) {
-				int MAX_CAP = ConfigHandler.COMMON.healingCap.get();
-				if (rodCap.getHealingLevel() < MAX_CAP) {
-					rodCap.incrementHealing();
-					addInfusedTag(stack);
-					return true;
-				}
+			ForceRodAttachment attachment = stack.getData(FORCE_ROD);
+			int MAX_CAP = ConfigHandler.COMMON.healingCap.get();
+			if (attachment.getHealingLevel() < MAX_CAP) {
+				attachment.incrementHealing();
+				addInfusedTag(stack);
+				stack.setData(FORCE_ROD, attachment);
+				return true;
 			}
 		}
 		return false;
@@ -760,10 +783,11 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	static boolean addLumberjackModifier(ItemStack stack) {
 		if (stack.getItem() instanceof ForceAxeItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && !modifierCap.hasLumberjack()) {
-				modifierCap.setLumberjack(true);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasLumberjack()) {
+				attachment.setLumberjack(true);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		}
@@ -772,22 +796,22 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	static boolean addRainbowModifier(ItemStack stack) {
 		if (stack.getItem() instanceof ForceShearsItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				modifierCap.setRainbow(true);
-				addInfusedTag(stack);
-				return true;
-			}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			attachment.setRainbow(true);
+			addInfusedTag(stack);
+			stack.setData(TOOL_MODIFIER, attachment);
+			return true;
 		}
 		return false;
 	}
 
 	static boolean addTreasureModifier(ItemStack stack) {
 		if (stack.getItem() instanceof ForceSwordItem || stack.getItem() instanceof ForceAxeItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null && !modifierCap.hasTreasure()) {
-				modifierCap.setTreasure(true);
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasTreasure()) {
+				attachment.setTreasure(true);
 				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
 				return true;
 			}
 		}
@@ -796,7 +820,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 	static boolean upgradeBag(ItemStack stack, UpgradeBookData bd) {
 		if (stack.getItem() instanceof ForcePackItem) {
-			PackItemStackHandler handler = StorageManager.getOrCreatePack(stack).getInventory();
+			PackStackHandler handler = StorageManager.getOrCreatePack(stack).getInventory();
 
 			if (handler.canUpgrade(bd)) {
 				handler.applyUpgrade();
@@ -817,23 +841,21 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	static boolean addSturdyModifier(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ForceSwordItem || item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceRodItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getSturdyLevel() < ConfigHandler.COMMON.sturdyToolCap.get()) {
-					modifierCap.incrementSturdy();
-					EnchantUtils.incrementLevel(stack, Enchantments.UNBREAKING);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getSturdyLevel() < ConfigHandler.COMMON.sturdyToolCap.get()) {
+				attachment.incrementSturdy();
+				EnchantUtils.incrementLevel(stack, Enchantments.UNBREAKING);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceArmorItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getSturdyLevel() == 0) {
-					modifierCap.incrementSturdy();
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getSturdyLevel() == 0) {
+				attachment.incrementSturdy();
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		}
 		return false;
@@ -843,42 +865,38 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		Item item = stack.getItem();
 		int MAX_CAP = ConfigHandler.COMMON.luckCap.get();
 		if (item instanceof ForcePickaxeItem || item instanceof ForceShovelItem || item instanceof ForceAxeItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getLuckLevel() < MAX_CAP) {
-					modifierCap.incrementLuck();
-					EnchantUtils.incrementLevel(stack, Enchantments.BLOCK_FORTUNE);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getLuckLevel() < MAX_CAP) {
+				attachment.incrementLuck();
+				EnchantUtils.incrementLevel(stack, Enchantments.BLOCK_FORTUNE);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceSwordItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getLuckLevel() < MAX_CAP) {
-					modifierCap.incrementLuck();
-					EnchantUtils.incrementLevel(stack, Enchantments.MOB_LOOTING);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getLuckLevel() < MAX_CAP) {
+				attachment.incrementLuck();
+				EnchantUtils.incrementLevel(stack, Enchantments.MOB_LOOTING);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceBowItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getLuckLevel() < MAX_CAP) {
-					modifierCap.incrementLuck();
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getLuckLevel() < MAX_CAP) {
+				attachment.incrementLuck();
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceArmorItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getLuckLevel() < MAX_CAP) {
-					modifierCap.incrementLuck();
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getLuckLevel() < MAX_CAP) {
+				attachment.incrementLuck();
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		}
 		return false;
@@ -888,33 +906,30 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		Item item = stack.getItem();
 		int MAX_CAP = ConfigHandler.COMMON.damageCap.get();
 		if (item instanceof ForceSwordItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getSharpLevel() < MAX_CAP) {
-					modifierCap.incrementSharp();
-					EnchantUtils.incrementLevel(stack, Enchantments.SHARPNESS);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getSharpLevel() < MAX_CAP) {
+				attachment.incrementSharp();
+				EnchantUtils.incrementLevel(stack, Enchantments.SHARPNESS);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceBowItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getSharpLevel() < MAX_CAP) {
-					modifierCap.incrementSharp();
-					EnchantUtils.incrementLevel(stack, Enchantments.POWER_ARROWS);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getSharpLevel() < MAX_CAP) {
+				attachment.incrementSharp();
+				EnchantUtils.incrementLevel(stack, Enchantments.POWER_ARROWS);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceArmorItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getSharpLevel() < 1) {
-					modifierCap.incrementSharp();
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getSharpLevel() < 1) {
+				attachment.incrementSharp();
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		}
 		return false;
@@ -923,14 +938,13 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	static boolean addSilkTouchModifier(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ForceAxeItem || item instanceof ForceShovelItem || item instanceof ForcePickaxeItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (!modifierCap.hasSilk()) {
-					modifierCap.setSilk(true);
-					stack.enchant(Enchantments.SILK_TOUCH, 1);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasSilk()) {
+				attachment.setSilk(true);
+				stack.enchant(Enchantments.SILK_TOUCH, 1);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		}
 		return false;
@@ -940,14 +954,13 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		Item item = stack.getItem();
 		int MAX_CAP = ConfigHandler.COMMON.forceCap.get();
 		if (item instanceof ForceSwordItem || item instanceof ForceAxeItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getForceLevel() < MAX_CAP) {
-					modifierCap.incrementForce();
-					EnchantUtils.incrementLevel(stack, Enchantments.KNOCKBACK);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getForceLevel() < MAX_CAP) {
+				attachment.incrementForce();
+				EnchantUtils.incrementLevel(stack, Enchantments.KNOCKBACK);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		}
 		return false;
@@ -956,32 +969,29 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	static boolean addHeatModifier(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceShearsItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (!modifierCap.hasHeat()) {
-					modifierCap.setHeat(true);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasHeat()) {
+				attachment.setHeat(true);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceSwordItem || item instanceof ForceAxeItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (!modifierCap.hasHeat()) {
-					stack.enchant(Enchantments.FIRE_ASPECT, 1);
-					modifierCap.setHeat(true);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasHeat()) {
+				stack.enchant(Enchantments.FIRE_ASPECT, 1);
+				attachment.setHeat(true);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceArmorItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (!modifierCap.hasHeat()) {
-					modifierCap.setHeat(true);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (!attachment.hasHeat()) {
+				attachment.setHeat(true);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		}
 		return false;
@@ -991,41 +1001,37 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		Item item = stack.getItem();
 		int MAX_CAP = ConfigHandler.COMMON.speedCap.get();
 		if (item instanceof ForceShovelItem || item instanceof ForcePickaxeItem || item instanceof ForceAxeItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getSpeedLevel() < MAX_CAP) {
-					modifierCap.incrementSpeed();
-					EnchantUtils.incrementLevel(stack, Enchantments.BLOCK_EFFICIENCY);
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getSpeedLevel() < MAX_CAP) {
+				attachment.incrementSpeed();
+				EnchantUtils.incrementLevel(stack, Enchantments.BLOCK_EFFICIENCY);
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceBowItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getSpeedLevel() < 1) {
-					modifierCap.incrementSpeed();
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getSpeedLevel() < 1) {
+				attachment.incrementSpeed();
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceArmorItem) {
-			IToolModifier modifierCap = stack.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getSpeedLevel() < 1) {
-					modifierCap.incrementSpeed();
-					addInfusedTag(stack);
-					return true;
-				}
+			ToolModifierAttachment attachment = stack.getData(TOOL_MODIFIER);
+			if (attachment.getSpeedLevel() < 1) {
+				attachment.incrementSpeed();
+				addInfusedTag(stack);
+				stack.setData(TOOL_MODIFIER, attachment);
+				return true;
 			}
 		} else if (item instanceof ForceRodItem) {
-			IForceRodModifier modifierCap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-			if (modifierCap != null) {
-				if (modifierCap.getSpeedLevel() < ConfigHandler.COMMON.rodSpeedCap.get()) {
-					modifierCap.incrementSpeed();
-					addInfusedTag(stack);
-					return true;
-				}
+			ForceRodAttachment attachment = stack.getData(FORCE_ROD);
+			if (attachment.getSpeedLevel() < ConfigHandler.COMMON.rodSpeedCap.get()) {
+				attachment.incrementSpeed();
+				addInfusedTag(stack);
+				stack.setData(FORCE_ROD, attachment);
+				return true;
 			}
 		}
 		return false;
@@ -1086,10 +1092,11 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		int requiredForce = 0;
 		int requiredPower = 0;
 
-		List<InfuseRecipe> recipes = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
+		List<RecipeHolder<InfuseRecipe>> holders = level.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get());
 		boolean foundMatch = false;
 
-		for (InfuseRecipe recipe : recipes) {
+		for (RecipeHolder<InfuseRecipe> holder : holders) {
+			InfuseRecipe recipe = holder.value();
 			ItemStack centerStack = getFromToolSlot();
 			int amountFound = 0;
 			for (int i = 0; i < SLOT_TOOL; i++) {
@@ -1219,10 +1226,32 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	@Override
-	public void invalidateCaps() {
-		super.invalidateCaps();
-		this.tankHolder.invalidate();
-		this.handlerHolder.invalidate();
-		this.energyHolder.invalidate();
+	public void setRecipeUsed(@Nullable RecipeHolder<?> pRecipe) {
+		if (pRecipe != null && pRecipe.value() instanceof InfuseRecipe) {
+			this.recipesUsed.addTo((RecipeHolder<InfuseRecipe>) pRecipe, 1);
+		}
+	}
+
+	@Nullable
+	@Override
+	public RecipeHolder<?> getRecipeUsed() {
+		return null;
+	}
+
+	public static boolean addRecipe(RecipeHolder<InfuseRecipe> holder) {
+		ResourceLocation id = holder.id();
+		if (HASHES.contains(id.toString())) {
+			return false;
+		}
+		InfuseRecipe recipe = holder.value();
+		int thisTier = recipe.getTier().ordinal();
+		//by level is for the GUI
+		if (!LEVEL_RECIPE_LIST.containsKey(thisTier)) {
+			LEVEL_RECIPE_LIST.put(thisTier, new ArrayList<>());
+		}
+		LEVEL_RECIPE_LIST.get(thisTier).add(recipe);
+		HASHES.add(id.toString());
+		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}", id.toString(), recipe.resultModifier, recipe.ingredient);
+		return true;
 	}
 }

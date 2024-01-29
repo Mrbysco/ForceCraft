@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_damage_tools"
+  },
+  "ingredient": {
+    "item": "forcecraft:claw"
+  },
+  "resultType": "damage",
+  "tier": "0",
+  "time": 20
+}

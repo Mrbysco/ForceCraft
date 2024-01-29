@@ -1,16 +1,14 @@
 package com.mrbysco.forcecraft.items;
 
 import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.attachment.storage.BeltStorage;
+import com.mrbysco.forcecraft.attachment.storage.StorageManager;
 import com.mrbysco.forcecraft.menu.ForceBeltMenu;
 import com.mrbysco.forcecraft.registry.ForceTags;
-import com.mrbysco.forcecraft.storage.BeltStorage;
-import com.mrbysco.forcecraft.storage.StorageManager;
-import com.mrbysco.forcecraft.storage.WSDCapability;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
@@ -20,12 +18,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,24 +42,12 @@ public class ForceBeltItem extends BaseItem {
 			if (!level.isClientSide) {
 				BeltStorage data = StorageManager.getOrCreateBelt(stack);
 
-				NetworkHooks.openScreen((ServerPlayer) playerIn, getContainer(stack, data.getInventory()));
+				playerIn.openMenu(getContainer(stack, data.getInventory()));
 			}
 		}
-		//If it doesn't nothing bad happens
+		//If it doesn't, nothing bad happens
 		return super.use(level, playerIn, handIn);
 	}
-
-/*    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Player player = context.getPlayer();
-        ItemStack stack = context.getItemInHand();
-        if(player != null && !context.getLevel().isClientSide && stack.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
-            player.openMenu(getContainer(stack));
-            return InteractionResult.PASS;
-        }
-        //If it doesn't nothing bad happens
-        return super.useOn(context);
-    }*/
 
 	@Nullable
 	public MenuProvider getContainer(ItemStack stack, IItemHandler handler) {
@@ -96,12 +80,6 @@ public class ForceBeltItem extends BaseItem {
 	@Override
 	public Component getName(ItemStack stack) {
 		return ((MutableComponent) super.getName(stack)).withStyle(ChatFormatting.YELLOW);
-	}
-
-	@Nullable
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new WSDCapability(stack);
 	}
 
 	public static boolean filter(ItemStack stack) {

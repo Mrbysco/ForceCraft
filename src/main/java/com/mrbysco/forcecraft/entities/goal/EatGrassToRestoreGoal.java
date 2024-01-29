@@ -9,12 +9,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
+import net.neoforged.neoforge.event.EventHooks;
 
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
 public class EatGrassToRestoreGoal extends Goal {
-	private static final Predicate<BlockState> IS_GRASS = BlockStatePredicate.forBlock(Blocks.GRASS);
+	private static final Predicate<BlockState> IS_GRASS = BlockStatePredicate.forBlock(Blocks.GRASS_BLOCK);
 	/**
 	 * The entity owner of this AITask
 	 */
@@ -89,7 +90,7 @@ public class EatGrassToRestoreGoal extends Goal {
 		if (this.getEatingGrassTimer() == 4) {
 			BlockPos blockpos = this.grassEaterEntity.blockPosition();
 			if (IS_GRASS.test(this.entityWorld.getBlockState(blockpos))) {
-				if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.entityWorld, this.grassEaterEntity)) {
+				if (EventHooks.getMobGriefingEvent(this.entityWorld, this.grassEaterEntity)) {
 					this.entityWorld.destroyBlock(blockpos, false);
 				}
 
@@ -97,7 +98,7 @@ public class EatGrassToRestoreGoal extends Goal {
 			} else {
 				BlockPos blockpos1 = blockpos.below();
 				if (this.entityWorld.getBlockState(blockpos1).is(Blocks.GRASS_BLOCK)) {
-					if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.entityWorld, this.grassEaterEntity)) {
+					if (EventHooks.getMobGriefingEvent(this.entityWorld, this.grassEaterEntity)) {
 						this.entityWorld.levelEvent(2001, blockpos1, Block.getId(Blocks.GRASS_BLOCK.defaultBlockState()));
 						this.entityWorld.setBlock(blockpos1, Blocks.DIRT.defaultBlockState(), 2);
 					}

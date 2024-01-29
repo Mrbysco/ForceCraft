@@ -5,10 +5,16 @@ import net.minecraft.client.model.ChickenModel;
 import net.minecraft.client.model.geom.ModelPart;
 
 public class ColdChickenModel<T extends ColdChickenEntity> extends ChickenModel<T> {
+	private final ModelPart head;
+	private final ModelPart beak;
+	private final ModelPart redThing;
 	private float headRotationAngleX;
 
 	public ColdChickenModel(ModelPart root) {
 		super(root);
+		this.head = root.getChild("head");
+		this.beak = root.getChild("beak");
+		this.redThing = root.getChild("red_thing");
 	}
 
 	public void prepareMobModel(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {

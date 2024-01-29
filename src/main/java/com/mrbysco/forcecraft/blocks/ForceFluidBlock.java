@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraftforge.common.IForgeShearable;
+import net.neoforged.neoforge.common.IShearable;
 
 import java.util.function.Supplier;
 
@@ -63,7 +63,7 @@ public class ForceFluidBlock extends LiquidBlock {
 					if (level.getGameTime() % 10 == 0) {
 						livingEntity.heal(0.5F);
 					}
-					if (livingEntity instanceof IForgeShearable && secondPassed) {
+					if (livingEntity instanceof IShearable && secondPassed) {
 						if (level.getRandom().nextInt(10) <= 3) {
 							if (livingEntity instanceof Sheep) {
 								((Sheep) livingEntity).setSheared(false);

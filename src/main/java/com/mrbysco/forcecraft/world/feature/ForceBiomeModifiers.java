@@ -14,30 +14,30 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.common.world.ForgeBiomeModifiers;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.common.world.BiomeModifiers;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.List;
 
 public class ForceBiomeModifiers {
 
-	protected static final ResourceKey<BiomeModifier> ADD_FORCE_ORE_MODIFIER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+	protected static final ResourceKey<BiomeModifier> ADD_FORCE_ORE_MODIFIER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(Reference.MOD_ID, "add_force_ore"));
-	protected static final ResourceKey<BiomeModifier> ADD_FORCE_ORE_BURIED_MODIFIER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+	protected static final ResourceKey<BiomeModifier> ADD_FORCE_ORE_BURIED_MODIFIER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(Reference.MOD_ID, "add_force_ore_buried"));
-	protected static final ResourceKey<BiomeModifier> ADD_FORCE_TREE = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+	protected static final ResourceKey<BiomeModifier> ADD_FORCE_TREE = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(Reference.MOD_ID, "add_force_tree"));
-	protected static final ResourceKey<BiomeModifier> ADD_CHU_CHU_MODIFIER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+	protected static final ResourceKey<BiomeModifier> ADD_CHU_CHU_MODIFIER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(Reference.MOD_ID, "add_chu_chu"));
-	protected static final ResourceKey<BiomeModifier> ADD_SWAMP_CHU_CHU_MODIFIER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+	protected static final ResourceKey<BiomeModifier> ADD_SWAMP_CHU_CHU_MODIFIER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(Reference.MOD_ID, "add_swamp_chu_chu"));
-	protected static final ResourceKey<BiomeModifier> ADD_CREEPER_TOT_MODIFIER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+	protected static final ResourceKey<BiomeModifier> ADD_CREEPER_TOT_MODIFIER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(Reference.MOD_ID, "add_creeper_tot"));
-	protected static final ResourceKey<BiomeModifier> ADD_ENDER_TOT_MODIFIER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+	protected static final ResourceKey<BiomeModifier> ADD_ENDER_TOT_MODIFIER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(Reference.MOD_ID, "add_ender_tot"));
-	protected static final ResourceKey<BiomeModifier> ADD_FAIRY_MODIFIER = ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS,
+	protected static final ResourceKey<BiomeModifier> ADD_FAIRY_MODIFIER = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
 			new ResourceLocation(Reference.MOD_ID, "add_fairy"));
 
 	public static void modifierBootstrap(BootstapContext<BiomeModifier> context) {
@@ -65,7 +65,7 @@ public class ForceBiomeModifiers {
 				GenerationStep.Decoration.VEGETAL_DECORATION, "force_tree"
 		));
 
-		context.register(ADD_CHU_CHU_MODIFIER, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+		context.register(ADD_CHU_CHU_MODIFIER, new BiomeModifiers.AddSpawnsBiomeModifier(
 				overworldHolder,
 				List.of(
 						new MobSpawnSettings.SpawnerData(ForceEntities.RED_CHU_CHU.get(), 100, 1, 1),
@@ -75,7 +75,7 @@ public class ForceBiomeModifiers {
 				)
 		));
 
-		context.register(ADD_SWAMP_CHU_CHU_MODIFIER, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+		context.register(ADD_SWAMP_CHU_CHU_MODIFIER, new BiomeModifiers.AddSpawnsBiomeModifier(
 				swampHolder,
 				List.of(
 						new MobSpawnSettings.SpawnerData(ForceEntities.RED_CHU_CHU.get(), 1, 1, 1),
@@ -85,15 +85,15 @@ public class ForceBiomeModifiers {
 				)
 		));
 
-		context.register(ADD_CREEPER_TOT_MODIFIER, ForgeBiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
+		context.register(ADD_CREEPER_TOT_MODIFIER, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				overworldHolder,
 				new MobSpawnSettings.SpawnerData(ForceEntities.CREEPER_TOT.get(), 25, 1, 1))
 		);
-		context.register(ADD_ENDER_TOT_MODIFIER, ForgeBiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
+		context.register(ADD_ENDER_TOT_MODIFIER, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				overworldHolder,
 				new MobSpawnSettings.SpawnerData(ForceEntities.ENDER_TOT.get(), 5, 1, 1))
 		);
-		context.register(ADD_FAIRY_MODIFIER, ForgeBiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
+		context.register(ADD_FAIRY_MODIFIER, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				overworldHolder,
 				new MobSpawnSettings.SpawnerData(ForceEntities.FAIRY.get(), 4, 1, 2))
 		);

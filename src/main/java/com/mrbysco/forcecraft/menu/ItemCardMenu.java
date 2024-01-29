@@ -19,6 +19,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -120,13 +121,13 @@ public class ItemCardMenu extends AbstractContainerMenu {
 	protected void updateCraftingResult(Level level, Player player, CraftingContainer inventory, ResultContainer inventoryResult) {
 		if (!level.isClientSide) {
 			ServerPlayer serverPlayer = (ServerPlayer) player;
-			final Optional<CraftingRecipe> iRecipe = serverPlayer.server.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory, level);
+			final Optional<RecipeHolder<CraftingRecipe>> iRecipe = serverPlayer.server.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory, level);
 			final ItemStack stack;
-			if (iRecipe.isPresent() && (iRecipe.get().isSpecial()
+			if (iRecipe.isPresent() && (iRecipe.get().value().isSpecial()
 					|| !level.getGameRules().getBoolean(GameRules.RULE_LIMITED_CRAFTING)
 					|| serverPlayer.getRecipeBook().contains(iRecipe.get())
 					|| player.isCreative())) {
-				stack = iRecipe.get().assemble(this.craftMatrix, level.registryAccess());
+				stack = iRecipe.get().value().assemble(this.craftMatrix, level.registryAccess());
 				inventoryResult.setItem(0, stack);
 				serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, 0, 0, stack));
 			} else {

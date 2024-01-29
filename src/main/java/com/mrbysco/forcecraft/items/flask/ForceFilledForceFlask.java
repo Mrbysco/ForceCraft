@@ -18,8 +18,8 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ForceFilledForceFlask extends BaseItem {
@@ -68,10 +68,5 @@ public class ForceFilledForceFlask extends BaseItem {
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		tooltip.add(Component.translatable("item.force_filled_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
 		super.appendHoverText(stack, level, tooltip, flagIn);
-	}
-
-	@Override
-	public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @javax.annotation.Nullable net.minecraft.nbt.CompoundTag nbt) {
-		return new FlaskFluidHandler(stack);
 	}
 }

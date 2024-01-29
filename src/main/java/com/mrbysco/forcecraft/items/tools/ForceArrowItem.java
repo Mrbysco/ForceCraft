@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.items.tools;
 
+import com.mrbysco.forcecraft.attachment.toolmodifier.ToolModifierAttachment;
 import com.mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -10,7 +11,7 @@ import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.TOOL_MODIFIER;
 
 public class ForceArrowItem extends ArrowItem {
 	public ForceArrowItem(Properties builder) {
@@ -23,30 +24,29 @@ public class ForceArrowItem extends ArrowItem {
 		if (shooter instanceof Player player) {
 			ItemStack heldItem = player.getUseItem();
 			if (heldItem.getItem() instanceof ForceBowItem) {
-				heldItem.getCapability(CAPABILITY_TOOLMOD).ifPresent(cap -> {
-					if (cap.hasFreezing()) {
-						forceArrow.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2, false, false));
-					}
-					if (cap.hasEnder()) {
-						forceArrow.setEnder();
-					}
-					if (cap.hasBane()) {
-						forceArrow.setBane();
-					}
-					if (cap.hasLight()) {
-						forceArrow.setAppliesGlowing();
-					}
-					if (cap.hasBleed()) {
-						forceArrow.setBleeding(cap.getBleedLevel());
-					}
-					if (cap.hasLuck()) {
-						int luckValue = cap.getLuckLevel();
-						forceArrow.setLuck(luckValue);
-					}
-					if (cap.getSpeedLevel() > 0) {
-						forceArrow.setSpeedy();
-					}
-				});
+				ToolModifierAttachment attachment = heldItem.getData(TOOL_MODIFIER);
+				if (attachment.hasFreezing()) {
+					forceArrow.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2, false, false));
+				}
+				if (attachment.hasEnder()) {
+					forceArrow.setEnder();
+				}
+				if (attachment.hasBane()) {
+					forceArrow.setBane();
+				}
+				if (attachment.hasLight()) {
+					forceArrow.setAppliesGlowing();
+				}
+				if (attachment.hasBleed()) {
+					forceArrow.setBleeding(attachment.getBleedLevel());
+				}
+				if (attachment.hasLuck()) {
+					int luckValue = attachment.getLuckLevel();
+					forceArrow.setLuck(luckValue);
+				}
+				if (attachment.getSpeedLevel() > 0) {
+					forceArrow.setSpeedy();
+				}
 			}
 		}
 		forceArrow.setEffectsFromItem(stack);

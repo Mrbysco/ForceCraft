@@ -1,0 +1,45 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rod": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forcecraft:force_rod"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_sapling": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "minecraft:saplings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:transmutation/force_sapling_from_sapling"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rod",
+      "has_sapling"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:transmutation/force_sapling_from_sapling"
+    ]
+  }
+}

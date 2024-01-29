@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:grinding",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:light_weighted_pressure_plate"
+  },
+  "processTime": 400,
+  "results": [
+    {
+      "count": 2,
+      "result": "minecraft:gold_ingot"
+    }
+  ],
+  "secondaryChance": 1.0
+}

@@ -1,9 +1,7 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.ForceCraft;
-import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capabilities.forcewrench.ForceWrenchCapability;
-import com.mrbysco.forcecraft.capabilities.forcewrench.IForceWrench;
+import com.mrbysco.forcecraft.attachment.forcewrench.ForceWrenchAttachment;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
@@ -29,13 +27,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_FORCEWRENCH;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.FORCE_WRENCH;
 
 public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 
@@ -71,13 +68,11 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 		InteractionHand hand = context.getHand();
 		if (stack.getItem() instanceof ForceWrenchItem) {
 			if (player.isCrouching()) {
-				IForceWrench wrenchCap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
-				if (wrenchCap != null) {
-					if (level.getBlockEntity(pos) instanceof BlockEntity && !wrenchCap.canStoreBlock()) {
-						return serializeNBT(level, pos, player, hand);
-					} else if (wrenchCap.canStoreBlock())
-						placeBlockFromWrench(level, pos, player, hand, context.getClickedFace());
-				}
+				ForceWrenchAttachment attachment = stack.getData(FORCE_WRENCH);
+				if (level.getBlockEntity(pos) instanceof BlockEntity && !attachment.canStoreBlock()) {
+					return serializeNBT(level, pos, player, hand);
+				} else if (attachment.canStoreBlock())
+					placeBlockFromWrench(level, pos, player, hand, context.getClickedFace());
 			} else {
 				ForceToolData fd = new ForceToolData(stack);
 				if (fd.getForce() >= 10) {
@@ -95,15 +90,6 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 		return super.onItemUseFirst(stack, context);
 	}
 
-	@Nullable
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		if (CAPABILITY_FORCEWRENCH == null) {
-			return null;
-		}
-		return new ForceWrenchCapability();
-	}
-
 	private InteractionResult serializeNBT(Level level, BlockPos pos, Player player, InteractionHand hand) {
 		ItemStack heldWrench = player.getItemInHand(hand);
 		ForceToolData fd = new ForceToolData(heldWrench);
@@ -113,24 +99,24 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 				return InteractionResult.FAIL;
 			}
 
-			IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
-			if (wrenchCap != null) {
-				String blockName = state.getBlock().getDescriptionId();
-				BlockEntity blockEntity = level.getBlockEntity(pos);
+			ForceWrenchAttachment attachment = heldWrench.getData(FORCE_WRENCH);
+			String blockName = state.getBlock().getDescriptionId();
+			BlockEntity blockEntity = level.getBlockEntity(pos);
 
-				if (blockEntity != null) {
-					CompoundTag nbt = blockEntity.saveWithoutMetadata();
-					wrenchCap.storeBlockNBT(nbt);
-					wrenchCap.storeBlockState(state);
-					wrenchCap.setBlockName(blockName);
-					level.removeBlockEntity(pos);
-				}
-				fd.setForce(fd.getForce() - 250);
-				fd.write(heldWrench);
-				BlockState airState = Blocks.AIR.defaultBlockState();
-				level.setBlockAndUpdate(pos, airState);
-				return InteractionResult.SUCCESS;
+			if (blockEntity != null) {
+				CompoundTag tag = blockEntity.saveWithoutMetadata();
+				attachment.storeBlockNBT(tag);
+				attachment.storeBlockState(state);
+				attachment.setBlockName(blockName);
+				level.removeBlockEntity(pos);
+
+				heldWrench.setData(FORCE_WRENCH, attachment);
 			}
+			fd.setForce(fd.getForce() - 250);
+			fd.write(heldWrench);
+			BlockState airState = Blocks.AIR.defaultBlockState();
+			level.setBlockAndUpdate(pos, airState);
+			return InteractionResult.SUCCESS;
 		} else {
 			player.displayClientMessage(Component.translatable("forcecraft.wrench_transport.insufficient", 250).withStyle(ChatFormatting.RED), true);
 		}
@@ -139,70 +125,39 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 
 	private InteractionResult placeBlockFromWrench(Level level, BlockPos pos, Player player, InteractionHand hand, Direction side) {
 		ItemStack heldWrench = player.getItemInHand(hand);
-		IForceWrench wrenchCap = heldWrench.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
-		if (wrenchCap != null) {
-			if (wrenchCap.getStoredBlockState() != null) {
-				BlockState state = wrenchCap.getStoredBlockState();
-				BlockPos offPos = pos.relative(side);
+		ForceWrenchAttachment attachment = heldWrench.getData(FORCE_WRENCH);
+		if (attachment.getStoredBlockState() != null) {
+			BlockState state = attachment.getStoredBlockState();
+			BlockPos offPos = pos.relative(side);
 
-				if (state != null) {
-					level.setBlockAndUpdate(offPos, state);
-				}
-				if (wrenchCap.getStoredBlockNBT() != null && state.getBlock() instanceof EntityBlock entityBlock) {
-					CompoundTag blockTag = wrenchCap.getStoredBlockNBT();
-					BlockEntity be = entityBlock.newBlockEntity(offPos, state);
-					if (be != null) {
-						be.load(blockTag);
-						be.setChanged();
-						level.setBlockEntity(be);
-						level.blockEntityChanged(offPos);
-					} else {
-						if(blockTag != null) {
-							ForceCraft.LOGGER.error("Was unable to load block entity");
-						}
+			if (state != null) {
+				level.setBlockAndUpdate(offPos, state);
+			}
+			if (attachment.getStoredBlockNBT() != null && state.getBlock() instanceof EntityBlock entityBlock) {
+				CompoundTag blockTag = attachment.getStoredBlockNBT();
+				BlockEntity be = entityBlock.newBlockEntity(offPos, state);
+				if (be != null) {
+					be.load(blockTag);
+					be.setChanged();
+					level.setBlockEntity(be);
+					level.blockEntityChanged(offPos);
+				} else {
+					if (blockTag != null) {
+						ForceCraft.LOGGER.error("Was unable to load block entity");
 					}
 				}
-
-				wrenchCap.clearBlockStorage();
 			}
+
+			attachment.clearBlockStorage();
+			heldWrench.setData(FORCE_WRENCH, attachment);
 		}
 
 		return InteractionResult.SUCCESS;
 	}
 
-	// ShareTag for server->client capability data sync
-	@Override
-	public CompoundTag getShareTag(ItemStack stack) {
-		CompoundTag nbt = super.getShareTag(stack);
-
-		IForceWrench cap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
-		if (cap != null) {
-			CompoundTag shareTag = ForceWrenchCapability.writeNBT(cap);
-			if (nbt == null) {
-				nbt = new CompoundTag();
-			}
-			nbt.put(Reference.MOD_ID, shareTag);
-		}
-		return nbt;
-	}
-
-	@Override
-	public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
-		if (nbt == null || !nbt.contains(Reference.MOD_ID)) {
-			return;
-		}
-
-		IForceWrench cap = stack.getCapability(CAPABILITY_FORCEWRENCH).orElse(null);
-		if (cap != null) {
-			CompoundTag shareTag = nbt.getCompound(Reference.MOD_ID);
-			ForceWrenchCapability.readNBT(cap, shareTag);
-		}
-		super.readShareTag(stack, nbt);
-	}
-
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lores, TooltipFlag flagIn) {
-		ForceWrenchCapability.attachInformation(stack, lores);
+		ForceWrenchAttachment.attachInformation(stack, lores);
 		super.appendHoverText(stack, level, lores, flagIn);
 	}
 

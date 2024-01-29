@@ -1,0 +1,20 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "freezingTime": 200,
+  "ingredient": {
+    "type": "neoforge:nbt",
+    "item": "minecraft:potion",
+    "tag": "{Potion:\"minecraft:water\"}"
+  },
+  "results": [
+    {
+      "count": 1,
+      "result": "minecraft:ice"
+    },
+    {
+      "count": 1,
+      "result": "minecraft:glass_bottle"
+    }
+  ]
+}

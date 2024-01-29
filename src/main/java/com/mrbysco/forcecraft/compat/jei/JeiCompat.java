@@ -6,11 +6,11 @@ import com.mrbysco.forcecraft.compat.jei.infuser.InfuserCategory;
 import com.mrbysco.forcecraft.compat.jei.multipleoutput.FreezingCategory;
 import com.mrbysco.forcecraft.compat.jei.multipleoutput.GrindingCategory;
 import com.mrbysco.forcecraft.menu.furnace.ForceFurnaceMenu;
-import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.recipe.FreezingRecipe;
 import com.mrbysco.forcecraft.recipe.GrindingRecipe;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
 import com.mrbysco.forcecraft.registry.ForceMenus;
+import com.mrbysco.forcecraft.registry.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -28,8 +28,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 
 @JeiPlugin
@@ -113,8 +114,8 @@ public class JeiCompat implements IModPlugin {
 		assert INFUSER_TYPE != null;
 
 		ClientLevel world = Objects.requireNonNull(Minecraft.getInstance().level);
-		registration.addRecipes(FREEZING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.FREEZING.get()));
-		registration.addRecipes(GRINDING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.GRINDING.get()));
-		registration.addRecipes(INFUSER_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get()));
+		registration.addRecipes(FREEZING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.FREEZING.get()).stream().map(RecipeHolder::value).toList());
+		registration.addRecipes(GRINDING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.GRINDING.get()).stream().map(RecipeHolder::value).toList());
+		registration.addRecipes(INFUSER_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get()).stream().map(RecipeHolder::value).toList());
 	}
 }

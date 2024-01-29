@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.blocks;
 
+import com.mojang.serialization.MapCodec;
 import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
 import com.mrbysco.forcecraft.blockentities.ForceFurnaceBlockEntity;
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
@@ -8,10 +9,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -28,20 +29,22 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.Random;
 import java.util.function.ToIntFunction;
 
 public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlock {
+	public static final MapCodec<ForceFurnaceBlock> CODEC = simpleCodec(ForceFurnaceBlock::new);
 
 	private static final String NBT_UPGRADE = "upgrade";
 
 	public ForceFurnaceBlock(BlockBehaviour.Properties builder) {
 		super(builder);
+	}
+
+	@Override
+	protected MapCodec<? extends AbstractFurnaceBlock> codec() {
+		return CODEC;
 	}
 
 	public static ToIntFunction<BlockState> getLightValueLit(int lightValue) {
@@ -54,14 +57,14 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof ForceFurnaceBlockEntity) {
 			if (!level.isClientSide) {
-				NetworkHooks.openScreen((ServerPlayer) player, (ForceFurnaceBlockEntity) blockentity, pos);
+				player.openMenu((ForceFurnaceBlockEntity) blockentity, pos);
 			}
 			player.awardStat(Stats.INTERACT_WITH_FURNACE);
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand) {
+	@Override
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand) {
 		if (stateIn.getValue(LIT)) {
 			double d0 = (double) pos.getX() + 0.5D;
 			double d1 = (double) pos.getY();
@@ -89,6 +92,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 	}
 
 	@Nullable
+	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
 		return createForceFurnaceTicker(level, blockEntityType, ForceRegistry.FURNACE_BLOCK_ENTITY.get());
 	}

@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.menu;
 
-import com.mrbysco.forcecraft.capabilities.pack.PackItemStackHandler;
+import com.mrbysco.forcecraft.attachment.storage.PackStackHandler;
 import com.mrbysco.forcecraft.items.ForceBeltItem;
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.items.ItemCardItem;
@@ -16,8 +16,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class ForcePackMenu extends AbstractContainerMenu {
 
 	private ItemStack heldStack;
 	private int upgrades;
-	private PackItemStackHandler inventory;
+	private PackStackHandler inventory;
 
 	@Override
 	public boolean stillValid(Player playerIn) {
@@ -35,12 +35,12 @@ public class ForcePackMenu extends AbstractContainerMenu {
 	}
 
 	public static ForcePackMenu fromNetwork(int windowId, Inventory playerInventory, FriendlyByteBuf data) {
-		PackItemStackHandler handler = new PackItemStackHandler();
+		PackStackHandler handler = new PackStackHandler();
 		handler.setUpgrades(data.readInt());
 		return new ForcePackMenu(windowId, playerInventory, handler);
 	}
 
-	public ForcePackMenu(int id, Inventory playerInventory, PackItemStackHandler inv) {
+	public ForcePackMenu(int id, Inventory playerInventory, PackStackHandler inv) {
 		super(ForceMenus.FORCE_PACK.get(), id);
 		this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForcePackItem);
 		if (heldStack == null || heldStack.isEmpty()) {
@@ -87,6 +87,7 @@ public class ForcePackMenu extends AbstractContainerMenu {
 
 	/**
 	 * Handles inventory management and crafting with ItemCards when the menu is closed by the player.
+	 *
 	 * @param player the player that closed the menu
 	 */
 	@Override
@@ -154,7 +155,7 @@ public class ForcePackMenu extends AbstractContainerMenu {
 						int countPossible = 0;
 						for (ItemStack rest : restList) {
 							if (ItemStack.isSameItemSameTags(ingredient, rest)) {
-								countPossible += (double) rest.getCount() / ingredient.getCount();
+								countPossible += (int) ((double) rest.getCount() / ingredient.getCount());
 							}
 						}
 						if (countPossible == 0) {

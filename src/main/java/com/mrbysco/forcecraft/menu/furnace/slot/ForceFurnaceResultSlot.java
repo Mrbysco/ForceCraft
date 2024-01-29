@@ -4,9 +4,9 @@ import com.mrbysco.forcecraft.blockentities.AbstractForceFurnaceBlockEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class ForceFurnaceResultSlot extends SlotItemHandler {
 	private final Player player;
@@ -55,10 +55,10 @@ public class ForceFurnaceResultSlot extends SlotItemHandler {
 	protected void checkTakeAchievements(ItemStack stack) {
 		stack.onCraftedBy(this.player.level(), this.player, this.removeCount);
 		if (this.player instanceof ServerPlayer && this.container instanceof AbstractForceFurnaceBlockEntity forceFurnaceBlockEntity) {
-			forceFurnaceBlockEntity.awardUsedRecipesAndPopExperience((ServerPlayer)this.player);
+			forceFurnaceBlockEntity.awardUsedRecipesAndPopExperience((ServerPlayer) this.player);
 		}
 
 		this.removeCount = 0;
-		ForgeEventFactory.firePlayerSmeltedEvent(this.player, stack);
+		EventHooks.firePlayerSmeltedEvent(this.player, stack);
 	}
 }

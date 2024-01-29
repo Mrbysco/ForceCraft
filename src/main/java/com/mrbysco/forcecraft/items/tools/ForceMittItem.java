@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
 import com.mojang.datafixers.util.Pair;
-import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.registry.material.ModToolTiers;
@@ -40,8 +39,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.ToolActions;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.ToolActions;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -103,10 +102,10 @@ public class ForceMittItem extends DiggerItem {
 		BlockEntity tileEntity = level.getBlockEntity(pos);
 		if (level.getBlockState(pos).is(BlockTags.LEAVES)) {
 			BlockState state = level.getBlockState(pos);
-			if (!ForgeHooks.isCorrectToolForDrops(state, player)) return;
+			if (!CommonHooks.isCorrectToolForDrops(state, player)) return;
 
 			if (!level.isClientSide) {
-				int xp = ForgeHooks.onBlockBreakEvent(level, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos);
+				int xp = CommonHooks.onBlockBreakEvent(level, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos);
 				if (xp == -1) {
 					return;
 				}
@@ -121,7 +120,7 @@ public class ForceMittItem extends DiggerItem {
 				}
 
 				((ServerLevel) level).sendParticles(ParticleTypes.SWEEP_ATTACK, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), 1, 0, 0, 0, 0.0D);
-				PacketHandler.sendPacket(player, new ClientboundBlockUpdatePacket(level, pos));
+				((ServerPlayer) player).connection.send(new ClientboundBlockUpdatePacket(level, pos));
 			}
 		}
 	}

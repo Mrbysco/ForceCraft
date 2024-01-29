@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_camo_tools"
+  },
+  "ingredient": {
+    "type": "neoforge:nbt",
+    "item": "minecraft:potion",
+    "tag": "{Potion:\"minecraft:invisibility\"}"
+  },
+  "resultType": "camo",
+  "tier": "3",
+  "time": 20
+}

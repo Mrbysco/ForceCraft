@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_card": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forcecraft:darkness_card"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:spoils_bag_t2"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_card"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:spoils_bag_t2"
+    ]
+  }
+}

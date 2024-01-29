@@ -1,18 +1,13 @@
 package com.mrbysco.forcecraft.items.nonburnable;
 
 import com.mrbysco.forcecraft.registry.ForceEntities;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.network.NetworkHooks;
-
-import javax.annotation.Nonnull;
+import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 
 public class NonBurnableItemEntity extends ItemEntity {
 
@@ -37,12 +32,6 @@ public class NonBurnableItemEntity extends ItemEntity {
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		return source.is(DamageTypes.FELL_OUT_OF_WORLD);
-	}
-
-	@Nonnull
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	public static class EventHandler {

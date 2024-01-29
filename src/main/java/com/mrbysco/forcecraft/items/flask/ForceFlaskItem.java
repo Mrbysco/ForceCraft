@@ -65,9 +65,4 @@ public class ForceFlaskItem extends BaseItem {
 		}
 		return super.interactLivingEntity(stack, playerIn, entity, hand);
 	}
-
-	@Override
-	public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @javax.annotation.Nullable net.minecraft.nbt.CompoundTag nbt) {
-		return new FlaskFluidHandler(stack);
-	}
 }

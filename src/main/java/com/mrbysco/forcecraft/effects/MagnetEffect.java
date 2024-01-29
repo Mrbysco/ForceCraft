@@ -7,7 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -28,7 +28,7 @@ public class MagnetEffect extends MobEffect {
 	}
 
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier) {
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
 		return true;
 	}
 
@@ -51,7 +51,7 @@ public class MagnetEffect extends MobEffect {
 			// constant force!
 			float strength = 0.14F;
 
-			Vec3 entityVector = new Vec3(item.getX(), item.getY() - item.getMyRidingOffset() + item.getBbHeight() / 2, item.getZ());
+			Vec3 entityVector = new Vec3(item.getX(), item.getY() - item.getMyRidingOffset(entity) + item.getBbHeight() / 2, item.getZ());
 			Vec3 finalVector = new Vec3(x, y, z).subtract(entityVector);
 
 			if (Math.sqrt(finalVector.x * finalVector.x + finalVector.y * finalVector.y + finalVector.z * finalVector.z) > 1) {

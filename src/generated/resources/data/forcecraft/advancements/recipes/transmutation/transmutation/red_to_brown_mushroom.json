@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_red_mushroom": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:red_mushroom"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_rod": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forcecraft:force_rod"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:transmutation/red_to_brown_mushroom"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rod",
+      "has_red_mushroom"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:transmutation/red_to_brown_mushroom"
+    ]
+  }
+}

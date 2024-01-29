@@ -3,8 +3,8 @@ package com.mrbysco.forcecraft.menu.furnace.slot;
 import com.mrbysco.forcecraft.menu.furnace.AbstractForceFurnaceMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class ForceFurnaceFuelSlot extends SlotItemHandler {
 	private final AbstractForceFurnaceMenu furnaceContainer;

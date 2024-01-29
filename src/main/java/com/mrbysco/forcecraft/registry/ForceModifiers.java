@@ -7,15 +7,16 @@ import com.mrbysco.forcecraft.modifier.AddConfigFeatureBiomeModifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep.Decoration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+
+import java.util.function.Supplier;
 
 public class ForceModifiers {
-	public static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, Reference.MOD_ID);
+	public static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, Reference.MOD_ID);
 
-	public static final RegistryObject<Codec<AddConfigFeatureBiomeModifier>> ADD_CONFIG_FEATURES_BIOME_MODIFIER_TYPE = BIOME_MODIFIER_SERIALIZERS.register("add_config_features", () ->
+	public static final Supplier<Codec<AddConfigFeatureBiomeModifier>> ADD_CONFIG_FEATURES_BIOME_MODIFIER_TYPE = BIOME_MODIFIER_SERIALIZERS.register("add_config_features", () ->
 			RecordCodecBuilder.create(builder -> builder.group(
 					Biome.LIST_CODEC.fieldOf("biomes").forGetter(AddConfigFeatureBiomeModifier::biomes),
 					PlacedFeature.LIST_CODEC.fieldOf("features").forGetter(AddConfigFeatureBiomeModifier::features),

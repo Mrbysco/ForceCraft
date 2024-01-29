@@ -1,9 +1,9 @@
 package com.mrbysco.forcecraft.blockentities;
 
 import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.attachment.FluidHandlerWrapper;
+import com.mrbysco.forcecraft.attachment.ItemStackHandlerWrapper;
 import com.mrbysco.forcecraft.blocks.engine.ForceEngineBlock;
-import com.mrbysco.forcecraft.capabilities.FluidHandlerWrapper;
-import com.mrbysco.forcecraft.capabilities.ItemStackHandlerWrapper;
 import com.mrbysco.forcecraft.menu.engine.ForceEngineMenu;
 import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
@@ -26,22 +26,17 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.fluids.FluidActionResult;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -73,7 +68,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		}
 
 		@Override
-		public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
+		public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
 			Fluid fluid = stack.getFluid();
 			return fluid.is(ForceTags.FORCE) || fluid.is(FluidTags.LAVA) ||
 					fluid.is(ForceTags.FUEL) || fluid.is(ForceTags.BIOFUEL);
@@ -105,19 +100,18 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		}
 
 		@Override
-		public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
+		public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
 			Fluid fluid = stack.getFluid();
 			return fluid.isSame(Fluids.WATER) || fluid.is(ForceTags.MILK);
 		}
 	};
 
 	private final FluidHandlerWrapper tankWrapper = new FluidHandlerWrapper(tankThrottle, tankFuel);
-	private final LazyOptional<IFluidHandler> tankWrapperCap = LazyOptional.of(() -> tankWrapper);
 
 	public final ItemStackHandler inputHandler = new ItemStackHandler(2) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
-			if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+			if (stack.getCapability(Capabilities.FluidHandler.ITEM) != null) {
 				if (stack.getMaxStackSize() > 1) {
 					return 1;
 				}
@@ -127,7 +121,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
-			IFluidHandler fluidCap = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+			IFluidHandler fluidCap = stack.getCapability(Capabilities.FluidHandler.ITEM);
 			if (slot == 0) {
 				if (fluidCap != null) {
 					FluidStack fluidStack = fluidCap.getFluidInTank(0);
@@ -137,7 +131,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 								fluid.is(ForceTags.FUEL) || fluid.is(ForceTags.BIOFUEL);
 					}
 				}
-				return stack.is(ForceTags.FORGE_GEM) || stack.is(Tags.Items.NETHER_STARS) ||
+				return stack.is(ForceTags.FORCE_GEM) || stack.is(Tags.Items.NETHER_STARS) ||
 						(fluidCap != null && fluidCap.getFluidInTank(0).getFluid().is(ForceTags.FORCE));
 			} else if (slot == 1) {
 				if (fluidCap != null) {
@@ -156,7 +150,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	public final ItemStackHandler outputHandler = new ItemStackHandler(2) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
-			if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+			if (stack.getCapability(Capabilities.FluidHandler.ITEM) != null) {
 				if (stack.getMaxStackSize() > 1) {
 					return 1;
 				}
@@ -171,7 +165,6 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	};
 
 	private final ItemStackHandlerWrapper stackWrapper = new ItemStackHandlerWrapper(inputHandler, outputHandler);
-	private final LazyOptional<IItemHandler> stackWrapperCap = LazyOptional.of(() -> stackWrapper);
 
 	private static final int FLUID_PER_GEM = 500;
 
@@ -194,18 +187,18 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	}
 
 	@Override
-	public void load(CompoundTag nbt) {
-		super.load(nbt);
-		this.processTime = nbt.getInt("processTime");
-		this.maxProcessTime = nbt.getInt("maxProcessTime");
-		this.throttleTime = nbt.getInt("throttleTime");
-		this.maxThrottleTime = nbt.getInt("maxThrottleTime");
+	public void load(CompoundTag tag) {
+		super.load(tag);
+		this.processTime = tag.getInt("processTime");
+		this.maxProcessTime = tag.getInt("maxProcessTime");
+		this.throttleTime = tag.getInt("throttleTime");
+		this.maxThrottleTime = tag.getInt("maxThrottleTime");
 
-		this.generating = nbt.getFloat("generating");
+		this.generating = tag.getFloat("generating");
 
 		//Caps
-		this.stackWrapper.deserializeNBT(nbt.getCompound("stackHandler"));
-		this.tankWrapper.deserializeNBT(nbt.getCompound("fluid"));
+		this.stackWrapper.deserializeNBT(tag.getCompound("stackHandler"));
+		this.tankWrapper.deserializeNBT(tag.getCompound("fluid"));
 	}
 
 	@Override
@@ -250,7 +243,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 				forceEngine.insertPower();
 
 				if (forceEngine.processTime >= forceEngine.maxProcessTime) {
-					forceEngine.tankFuel.drain(1, FluidAction.EXECUTE);
+					forceEngine.tankFuel.drain(1, IFluidHandler.FluidAction.EXECUTE);
 					forceEngine.processTime = 0;
 				}
 			}
@@ -258,7 +251,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 				forceEngine.throttleTime++;
 
 				if (forceEngine.throttleTime >= forceEngine.maxThrottleTime) {
-					forceEngine.tankThrottle.drain(1, FluidAction.EXECUTE);
+					forceEngine.tankThrottle.drain(1, IFluidHandler.FluidAction.EXECUTE);
 					forceEngine.throttleTime = 0;
 				}
 			}
@@ -368,7 +361,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		BlockPos offsetPos = worldPosition.relative(getFacing());
 		BlockEntity tile = level.getBlockEntity(offsetPos);
 		if (tile != null) {
-			IEnergyStorage cap = tile.getCapability(ForgeCapabilities.ENERGY, getFacing().getOpposite()).orElse(null);
+			IEnergyStorage cap = level.getCapability(Capabilities.EnergyStorage.BLOCK, offsetPos, getFacing().getOpposite());
 			if (cap != null) {
 				return cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored() && !tankFuel.getFluid().isEmpty();
 			}
@@ -380,7 +373,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		BlockPos offsetPos = worldPosition.relative(getFacing());
 		BlockEntity tile = level.getBlockEntity(offsetPos);
 		if (tile != null) {
-			IEnergyStorage cap = tile.getCapability(ForgeCapabilities.ENERGY, getFacing().getOpposite()).orElse(null);
+			IEnergyStorage cap = level.getCapability(Capabilities.EnergyStorage.BLOCK, offsetPos, getFacing().getOpposite());
 			if (cap != null) {
 				if (cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored()) {
 					cap.receiveEnergy((int) generating, false);
@@ -392,11 +385,11 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	private void processFuelSlot() {
 		ItemStack slotStack = stackWrapper.getStackInSlot(0);
 
-		if (slotStack.is(ForceTags.FORGE_GEM)) {
+		if (slotStack.is(ForceTags.FORCE_GEM)) {
 			FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
 
 			if (getFuelAmount() + force.getAmount() <= tankFuel.getCapacity()) {
-				fillFuel(force, FluidAction.EXECUTE);
+				fillFuel(force, IFluidHandler.FluidAction.EXECUTE);
 				slotStack.shrink(1);
 			}
 		} else if (slotStack.is(Tags.Items.NETHER_STARS)) {
@@ -404,7 +397,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 
 			ItemStack extraSlot = outputHandler.getStackInSlot(0);
 			if (getFuelAmount() + force.getAmount() <= tankFuel.getCapacity() && extraSlot.getCount() < inputHandler.getSlotLimit(1)) {
-				fillFuel(force, FluidAction.EXECUTE);
+				fillFuel(force, IFluidHandler.FluidAction.EXECUTE);
 				slotStack.shrink(1);
 				if (outputHandler.getStackInSlot(0).isEmpty()) {
 					outputHandler.setStackInSlot(0, new ItemStack(ForceRegistry.INERT_CORE.get()));
@@ -423,7 +416,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		}
 	}
 
-	public int fillFuel(FluidStack resource, FluidAction action) {
+	public int fillFuel(FluidStack resource, IFluidHandler.FluidAction action) {
 		FluidStack resourceCopy = resource.copy();
 
 		if (action.execute()) {
@@ -446,7 +439,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		}
 	}
 
-	public int fillThrottle(FluidStack resource, FluidAction action) {
+	public int fillThrottle(FluidStack resource, IFluidHandler.FluidAction action) {
 		FluidStack resourceCopy = resource.copy();
 
 		if (action.execute()) {
@@ -521,9 +514,9 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 
 	@Override
 	public CompoundTag getUpdateTag() {
-		CompoundTag nbt = new CompoundTag();
-		this.saveAdditional(nbt);
-		return nbt;
+		CompoundTag tag = new CompoundTag();
+		this.saveAdditional(tag);
+		return tag;
 	}
 
 	@Override
@@ -533,9 +526,9 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 
 	@Override
 	public CompoundTag getPersistentData() {
-		CompoundTag nbt = new CompoundTag();
-		this.saveAdditional(nbt);
-		return nbt;
+		CompoundTag tag = new CompoundTag();
+		this.saveAdditional(tag);
+		return tag;
 	}
 
 	private void refreshClient() {
@@ -552,22 +545,11 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		}
 	}
 
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-		if (capability == ForgeCapabilities.ITEM_HANDLER) {
-			return this.stackWrapperCap.cast();
-		}
-		if (capability == ForgeCapabilities.FLUID_HANDLER) {
-			return this.tankWrapperCap.cast();
-		}
-
-		return super.getCapability(capability, facing);
+	public ItemStackHandlerWrapper getItemHandler(@Nullable Direction facing) {
+		return stackWrapper;
 	}
 
-	@Override
-	public void invalidateCaps() {
-		super.invalidateCaps();
-		stackWrapperCap.invalidate();
-		tankWrapperCap.invalidate();
+	public FluidHandlerWrapper getFluidTank(@Nullable Direction facing) {
+		return tankWrapper;
 	}
 }

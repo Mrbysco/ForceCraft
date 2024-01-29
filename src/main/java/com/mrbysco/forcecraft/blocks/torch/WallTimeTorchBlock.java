@@ -5,7 +5,7 @@ import com.mrbysco.forcecraft.blockentities.TimeTorchBlockEntity;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -15,13 +15,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class WallTimeTorchBlock extends WallTorchBlock implements EntityBlock {
 
-	public WallTimeTorchBlock(Properties properties, ParticleOptions particleData) {
-		super(properties, particleData);
+	public WallTimeTorchBlock(Properties properties, SimpleParticleType particleData) {
+		super(particleData, properties);
 	}
 
 	@Nullable
@@ -31,18 +30,21 @@ public class WallTimeTorchBlock extends WallTorchBlock implements EntityBlock {
 	}
 
 	@Nullable
+	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
 		return createTimeTorchTicker(level, blockEntityType, ForceRegistry.TIME_TORCH_BLOCK_ENTITY.get());
 	}
 
 	@Nullable
-	protected static <T extends BlockEntity> BlockEntityTicker<T> createTimeTorchTicker(Level level, BlockEntityType<T> p_151989_, BlockEntityType<? extends TimeTorchBlockEntity> timeTorchBlockEntityType) {
-		return level.isClientSide ? null : createTickerHelper(p_151989_, timeTorchBlockEntityType, TimeTorchBlockEntity::serverTick);
+	protected static <T extends BlockEntity> BlockEntityTicker<T> createTimeTorchTicker(Level level, BlockEntityType<T> entityType, BlockEntityType<? extends TimeTorchBlockEntity> timeTorchBlockEntityType) {
+		return level.isClientSide ? null : createTickerHelper(entityType, timeTorchBlockEntityType, TimeTorchBlockEntity::serverTick);
 	}
 
 	@Nullable
-	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> p_152133_, BlockEntityType<E> p_152134_, BlockEntityTicker<? super E> p_152135_) {
-		return p_152134_ == p_152133_ ? (BlockEntityTicker<A>) p_152135_ : null;
+	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> blockEntityType,
+																											BlockEntityType<E> entityType,
+																											BlockEntityTicker<? super E> entityTicker) {
+		return entityType == blockEntityType ? (BlockEntityTicker<A>) entityTicker : null;
 	}
 
 	@Override

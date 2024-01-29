@@ -6,7 +6,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -20,9 +19,8 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemCardItem extends BaseItem {
@@ -39,7 +37,7 @@ public class ItemCardItem extends BaseItem {
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		if (playerIn.isShiftKeyDown()) {
 			if (!level.isClientSide) {
-				NetworkHooks.openScreen((ServerPlayer) playerIn, getContainer(level, playerIn.blockPosition()), playerIn.blockPosition());
+				playerIn.openMenu(getContainer(level, playerIn.blockPosition()), playerIn.blockPosition());
 			}
 		}
 		return super.use(level, playerIn, handIn);
@@ -55,7 +53,7 @@ public class ItemCardItem extends BaseItem {
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
 		Level level = playerIn.level();
-		level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.NOTE_BLOCK_DIDGERIDOO.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+		level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 
 		if (level.isClientSide) {
 			int rand = playerIn.getRandom().nextInt(3);

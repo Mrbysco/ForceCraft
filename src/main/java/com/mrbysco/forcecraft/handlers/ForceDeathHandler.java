@@ -3,14 +3,14 @@ package com.mrbysco.forcecraft.handlers;
 import com.mrbysco.forcecraft.entities.CreeperTotEntity;
 import com.mrbysco.forcecraft.registry.ForceDamageTypes;
 import com.mrbysco.forcecraft.registry.ForceEntities;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 public class ForceDeathHandler {
 	private static final String SPAWNED_TAG = "LiquidForceSpawned";
@@ -26,7 +26,7 @@ public class ForceDeathHandler {
 			if (livingEntity instanceof Mob mob) {
 				CompoundTag mobData = mob.getPersistentData();
 				if (!mobData.contains(SPAWNED_TAG)) {
-					if (ForgeRegistries.ENTITY_TYPES.getKey(livingEntity.getType()).equals(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.CREEPER))) {
+					if (BuiltInRegistries.ENTITY_TYPE.getKey(livingEntity.getType()).equals(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.CREEPER))) {
 						CreeperTotEntity totEntity = ForceEntities.CREEPER_TOT.get().create(level);
 						if (totEntity != null) {
 							totEntity.absMoveTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), mob.getXRot());

@@ -1,21 +1,21 @@
 package com.mrbysco.forcecraft.handlers;
 
-import com.mrbysco.forcecraft.capabilities.toolmodifier.IToolModifier;
+import com.mrbysco.forcecraft.attachment.playermodifier.PlayerModifierAttachment;
+import com.mrbysco.forcecraft.attachment.toolmodifier.ToolModifierAttachment;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.items.ForceArmorItem;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
-import net.minecraftforge.event.entity.player.PlayerEvent.HarvestCheck;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_TOOLMOD;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.PLAYER_MOD;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.TOOL_MODIFIER;
 
 public class PlayerCapHandler {
 
@@ -30,11 +30,9 @@ public class PlayerCapHandler {
 			int speed = 0;
 			for (ItemStack slotSelected : armor) {
 				if (slotSelected.getItem() instanceof ForceArmorItem) {
-					IToolModifier modifierCap = slotSelected.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-					if (modifierCap != null) {
-						// Speed
-						speed += modifierCap.getSpeedLevel();
-					}
+					ToolModifierAttachment attachment = slotSelected.getData(TOOL_MODIFIER);
+					// Speed
+					speed += attachment.getSpeedLevel();
 				}
 			}
 
@@ -71,76 +69,78 @@ public class PlayerCapHandler {
 
 		for (ItemStack slotSelected : armor) {
 			if (slotSelected.getItem() instanceof ForceArmorItem) {
-				IToolModifier modifierCap = slotSelected.getCapability(CAPABILITY_TOOLMOD).orElse(null);
-				if (modifierCap != null) {
-					// Pieces
-					armorPieces++;
+				ToolModifierAttachment attachment = slotSelected.getData(TOOL_MODIFIER);
+				// Pieces
+				armorPieces++;
 
-					// Damage
-					damage += (int) (modifierCap.getSharpLevel() * ConfigHandler.COMMON.forcePunchDamage.get());
-					// Heat
-					if (modifierCap.hasHeat()) {
-						heat++;
-					}
-					// Luck
-					if (modifierCap.hasLuck()) {
-						luck++;
-					}
-					// Bane
-					if (modifierCap.hasBane()) {
-						bane++;
-					}
-					// Bleed
-					if (modifierCap.hasBleed()) {
-						bleed += modifierCap.getBleedLevel();
-					}
+				// Damage
+				damage += (int) (attachment.getSharpLevel() * ConfigHandler.COMMON.forcePunchDamage.get());
+				// Heat
+				if (attachment.hasHeat()) {
+					heat++;
+				}
+				// Luck
+				if (attachment.hasLuck()) {
+					luck++;
+				}
+				// Bane
+				if (attachment.hasBane()) {
+					bane++;
+				}
+				// Bleed
+				if (attachment.hasBleed()) {
+					bleed += attachment.getBleedLevel();
 				}
 			}
 		}
 
+		PlayerModifierAttachment attachment = player.getData(PLAYER_MOD);
 		int finalArmorPieces = armorPieces;
-		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> cap.setArmorPieces(finalArmorPieces));
+		attachment.setArmorPieces(finalArmorPieces);
 
 		int finalDamage = damage;
-		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> cap.setAttackDamage(1.0F * finalDamage));
+		attachment.setAttackDamage(1.0F * finalDamage);
 
 		int finalHeat = heat;
-		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-			cap.setHeatPieces(finalHeat);
-			cap.setHeatDamage(2.0F * finalHeat);
-		});
+		attachment.setHeatPieces(finalHeat);
+		attachment.setHeatDamage(2.0F * finalHeat);
 
 		int finalLuck = luck;
-		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> cap.setLuckLevel(finalLuck));
+		attachment.setLuckLevel(finalLuck);
 
 		int finalBane = bane;
-		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> cap.setBane(finalBane > 0));
+		attachment.setBane(finalBane > 0);
 
 		int finalBleed = bleed;
-		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> cap.setBleeding(finalBleed));
+		attachment.setBleeding(finalBleed);
+
+		//Save the attachment data
+		player.setData(PLAYER_MOD, attachment);
 	}
 
 	@SubscribeEvent
-	public void harvestCheckEvent(HarvestCheck event) {
+	public void harvestCheckEvent(PlayerEvent.HarvestCheck event) {
 		final Player player = event.getEntity();
-		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-			if (cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
+		if (player.hasData(PLAYER_MOD)) {
+			PlayerModifierAttachment attachment = player.getData(PLAYER_MOD);
+			if (attachment.hasFullSet() && player.getMainHandItem().isEmpty()) {
 				if (event.getTargetBlock().getBlock().getExplosionResistance() <= 2) {
 					event.setCanHarvest(true);
 				}
 			}
-		});
+		}
 	}
 
 	@SubscribeEvent
-	public void breakSpeedEvent(BreakSpeed event) {
+	public void breakSpeedEvent(PlayerEvent.BreakSpeed event) {
 		final Player player = event.getEntity();
-		player.getCapability(CAPABILITY_PLAYERMOD).ifPresent((cap) -> {
-			if (cap.hasFullSet() && player.getMainHandItem().isEmpty()) {
+		if (player.hasData(PLAYER_MOD)) {
+			PlayerModifierAttachment attachment = player.getData(PLAYER_MOD);
+			if (attachment.hasFullSet() && player.getMainHandItem().isEmpty()) {
 				if (event.getOriginalSpeed() < 6) {
 					event.setNewSpeed(6);
 				}
 			}
-		});
+		}
 	}
 }

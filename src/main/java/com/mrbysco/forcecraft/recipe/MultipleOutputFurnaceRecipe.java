@@ -2,7 +2,6 @@ package com.mrbysco.forcecraft.recipe;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
@@ -14,11 +13,11 @@ public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe 
 	protected final float secondaryChance;
 	static int MAX_OUTPUT = 2;
 
-	protected final NonNullList<ItemStack> resultItems;
+	protected final NonNullList<ItemStack> results;
 
-	public MultipleOutputFurnaceRecipe(RecipeType<?> typeIn, ResourceLocation idIn, String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results, float secondaryChance, float experienceIn, int cookTimeIn) {
-		super(typeIn, idIn, groupIn, CookingBookCategory.MISC, ingredientIn, results.get(0), experienceIn, cookTimeIn);
-		this.resultItems = results;
+	public MultipleOutputFurnaceRecipe(RecipeType<?> typeIn, String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results, float secondaryChance, float experienceIn, int cookTimeIn) {
+		super(typeIn, groupIn, CookingBookCategory.MISC, ingredientIn, results.get(0), experienceIn, cookTimeIn);
+		this.results = results;
 		this.secondaryChance = secondaryChance;
 	}
 
@@ -34,19 +33,11 @@ public abstract class MultipleOutputFurnaceRecipe extends AbstractCookingRecipe 
 
 	@Override
 	public ItemStack getResultItem(RegistryAccess registryAccess) {
-		return this.resultItems.get(0);
-	}
-
-	public NonNullList<ItemStack> getCraftingResults(Container inv) { //TODO: Check what getCraftingResults was used for
-		NonNullList<ItemStack> results = NonNullList.create();
-		for (ItemStack stack : this.resultItems) {
-			results.add(stack.copy());
-		}
-		return results;
+		return this.results.get(0);
 	}
 
 	public NonNullList<ItemStack> getRecipeOutputs() {
-		return this.resultItems;
+		return this.results;
 	}
 
 	public float getSecondaryChance() {

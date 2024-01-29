@@ -38,8 +38,11 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.util.BlockSnapshot;
+import net.neoforged.neoforge.event.EventHooks;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
@@ -253,7 +256,7 @@ public class EnderTotEntity extends EnderMan {
 		public boolean canUse() {
 			if (this.endertot.getCarriedBlock() != null) {
 				return false;
-			} else if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.endertot.level(), this.endertot)) {
+			} else if (!EventHooks.getMobGriefingEvent(this.endertot.level(), this.endertot)) {
 				return false;
 			} else {
 				return this.endertot.getRandom().nextInt(20) == 0;
@@ -297,7 +300,7 @@ public class EnderTotEntity extends EnderMan {
 		public boolean canUse() {
 			if (this.endertot.getCarriedBlock() == null) {
 				return false;
-			} else if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.endertot.level(), this.endertot)) {
+			} else if (!EventHooks.getMobGriefingEvent(this.endertot.level(), this.endertot)) {
 				return false;
 			} else {
 				return this.endertot.getRandom().nextInt(2000) == 0;
@@ -320,7 +323,7 @@ public class EnderTotEntity extends EnderMan {
 			BlockState carriedState = this.endertot.getCarriedBlock();
 			if (carriedState != null) {
 				carriedState = Block.updateFromNeighbourShapes(carriedState, this.endertot.level(), blockpos);
-				if (this.canPlaceBlock(world, blockpos, carriedState, blockstate, belowState, belowPos) && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace(endertot, net.minecraftforge.common.util.BlockSnapshot.create(world.dimension(), world, belowPos), net.minecraft.core.Direction.UP)) {
+				if (this.canPlaceBlock(world, blockpos, carriedState, blockstate, belowState, belowPos) && !EventHooks.onBlockPlace(endertot, BlockSnapshot.create(world.dimension(), world, belowPos), net.minecraft.core.Direction.UP)) {
 					world.setBlock(blockpos, carriedState, 3);
 					this.endertot.setCarriedBlock((BlockState) null);
 				}
@@ -329,7 +332,7 @@ public class EnderTotEntity extends EnderMan {
 		}
 
 		private boolean canPlaceBlock(Level level, BlockPos p_32560_, BlockState p_32561_, BlockState p_32562_, BlockState p_32563_, BlockPos p_32564_) {
-			return p_32562_.isAir() && !p_32563_.isAir() && !p_32563_.is(Blocks.BEDROCK) && !p_32563_.is(net.minecraftforge.common.Tags.Blocks.ENDERMAN_PLACE_ON_BLACKLIST) && p_32563_.isCollisionShapeFullBlock(level, p_32564_) && p_32561_.canSurvive(level, p_32560_) && level.getEntities(this.endertot, AABB.unitCubeFromLowerCorner(Vec3.atLowerCornerOf(p_32560_))).isEmpty();
+			return p_32562_.isAir() && !p_32563_.isAir() && !p_32563_.is(Blocks.BEDROCK) && !p_32563_.is(Tags.Blocks.ENDERMAN_PLACE_ON_BLACKLIST) && p_32563_.isCollisionShapeFullBlock(level, p_32564_) && p_32561_.canSurvive(level, p_32560_) && level.getEntities(this.endertot, AABB.unitCubeFromLowerCorner(Vec3.atLowerCornerOf(p_32560_))).isEmpty();
 		}
 	}
 }

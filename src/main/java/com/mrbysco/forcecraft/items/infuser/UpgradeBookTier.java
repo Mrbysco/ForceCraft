@@ -1,6 +1,9 @@
 package com.mrbysco.forcecraft.items.infuser;
 
-public enum UpgradeBookTier {
+import com.mojang.serialization.Codec;
+import net.minecraft.util.StringRepresentable;
+
+public enum UpgradeBookTier implements StringRepresentable {
 	//zero is unused, but we want .ordinal() to match the meaning
 	ZERO(0), ONE(1), TWO(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7);
 
@@ -35,5 +38,12 @@ public enum UpgradeBookTier {
 
 	public int asInt() {
 		return tier;
+	}
+
+	public static final Codec<UpgradeBookTier> CODEC = StringRepresentable.fromEnum(UpgradeBookTier::values);
+
+	@Override
+	public String getSerializedName() {
+		return String.valueOf(asInt());
 	}
 }

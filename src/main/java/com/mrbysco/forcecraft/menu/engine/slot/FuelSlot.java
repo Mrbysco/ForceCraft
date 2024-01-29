@@ -1,9 +1,9 @@
 package com.mrbysco.forcecraft.menu.engine.slot;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
@@ -20,7 +20,7 @@ public class FuelSlot extends SlotItemHandler {
 
 	@Override
 	public int getMaxStackSize(@Nonnull ItemStack stack) {
-		if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+		if (stack.getCapability(Capabilities.FluidHandler.ITEM) != null) {
 			if (stack.getMaxStackSize() > 1) {
 				return 1;
 			}

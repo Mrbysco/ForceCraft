@@ -1,8 +1,7 @@
 package com.mrbysco.forcecraft.compat.jei.transfer;
 
 import com.mrbysco.forcecraft.menu.ItemCardMenu;
-import com.mrbysco.forcecraft.networking.PacketHandler;
-import com.mrbysco.forcecraft.networking.message.RecipeToCardMessage;
+import com.mrbysco.forcecraft.networking.message.RecipeToCardPayload;
 import com.mrbysco.forcecraft.registry.ForceMenus;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -14,8 +13,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,12 +50,15 @@ public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardM
 
 		List<IRecipeSlotView> ingredients = recipeSlots.getSlotViews(RecipeIngredientRole.INPUT);
 		for (int i = 0; i < ingredients.size(); i++) {
-			items.set(i, ingredients.get(i).getDisplayedItemStack().get());
+			if (ingredients.get(i).getDisplayedItemStack().isPresent())
+				items.set(i, ingredients.get(i).getDisplayedItemStack().get());
 		}
 		List<IRecipeSlotView> outputs = recipeSlots.getSlotViews(RecipeIngredientRole.OUTPUT);
-		items.set(9, outputs.get(0).getDisplayedItemStack().get());
 
-		PacketHandler.CHANNEL.sendToServer(new RecipeToCardMessage(items));
+		if (outputs.get(0).getDisplayedItemStack().isPresent())
+			items.set(9, outputs.get(0).getDisplayedItemStack().get());
+
+		PacketDistributor.SERVER.noArg().send(new RecipeToCardPayload(items));
 
 		return null;
 	}

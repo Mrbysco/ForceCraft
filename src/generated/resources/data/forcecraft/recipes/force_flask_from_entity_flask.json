@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:shaped_no_remainder",
+  "category": "misc",
+  "key": {
+    "E": {
+      "tag": "forcecraft:entity_flasks"
+    }
+  },
+  "pattern": [
+    "E"
+  ],
+  "result": {
+    "item": "forcecraft:force_flask"
+  }
+}

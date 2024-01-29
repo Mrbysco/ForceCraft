@@ -3,8 +3,8 @@ package com.mrbysco.forcecraft.blockentities;
 import com.google.common.collect.Lists;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.items.UpgradeCoreItem;
-import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.recipe.MultipleOutputFurnaceRecipe;
+import com.mrbysco.forcecraft.registry.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.util.ItemHandlerUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -24,13 +25,14 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.inventory.RecipeCraftingHolder;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
@@ -42,21 +44,20 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.Hopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, RecipeHolder, StackedContentsCompatible {
+public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, RecipeCraftingHolder, StackedContentsCompatible {
 	public static final int INPUT_SLOT = 0;
 	public static final int FUEL_SLOT = 1;
 	public static final int OUTPUT_SLOT = 2;
@@ -86,8 +87,6 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			}
 		}
 	};
-	private final LazyOptional<IItemHandler> handlerHolder = LazyOptional.of(() -> handler);
-
 	public final ItemStackHandler upgradeHandler = new ItemStackHandler(1) {
 		@Override
 		protected int getStackLimit(int slot, ItemStack stack) {
@@ -105,7 +104,6 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			return ItemStack.EMPTY;
 		}
 	};
-	private final LazyOptional<IItemHandler> upgradeHandlerHolder = LazyOptional.of(() -> upgradeHandler);
 
 	private static final List<ResourceLocation> hopperBlacklist = List.of(
 			new ResourceLocation("hopper"),
@@ -147,7 +145,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			return 4;
 		}
 	};
-	protected AbstractCookingRecipe currentRecipe;
+	protected RecipeHolder<? extends AbstractCookingRecipe> currentRecipe;
 	protected ItemStack failedMatch = ItemStack.EMPTY;
 
 	private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
@@ -199,13 +197,13 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		return hasXPMultiplied() ? 2 : 1;
 	}
 
-	protected AbstractCookingRecipe getRecipe() {
+	protected RecipeHolder<? extends AbstractCookingRecipe> getRecipe() {
 		ItemStack input = this.getItem(INPUT_SLOT);
 		if (input.isEmpty() || input == failedMatch || level == null) return null;
-		if (currentRecipe != null && currentRecipe.matches(this, level) && currentRecipe.getType() == getRecipeType())
+		if (currentRecipe != null && currentRecipe.value().matches(this, level) && currentRecipe.value().getType() == getRecipeType())
 			return currentRecipe;
 		else {
-			AbstractCookingRecipe rec = level.getRecipeManager().getRecipeFor(this.getRecipeType(), this, this.level).orElse(null);
+			RecipeHolder<? extends AbstractCookingRecipe> rec = level.getRecipeManager().getRecipeFor(this.getRecipeType(), this, this.level).orElse(null);
 			if (rec == null) failedMatch = input;
 			else failedMatch = ItemStack.EMPTY;
 			return currentRecipe = rec;
@@ -216,19 +214,19 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		return this.litTime > 0;
 	}
 
-	public void load(CompoundTag nbt) {
-		super.load(nbt);
+	public void load(CompoundTag tag) {
+		super.load(tag);
 
-		this.upgradeHandler.deserializeNBT(nbt.getCompound("UpgradeHandler"));
-		this.handler.deserializeNBT(nbt.getCompound("ItemStackHandler"));
+		this.upgradeHandler.deserializeNBT(tag.getCompound("UpgradeHandler"));
+		this.handler.deserializeNBT(tag.getCompound("ItemStackHandler"));
 
-		this.litTime = nbt.getInt("BurnTime");
-		this.burnSpeed = nbt.getInt("BurnSpeed");
-		this.cookingProgress = nbt.getInt("CookTime");
-		this.cookingTotalTime = nbt.getInt("CookTimeTotal");
-		this.litDuration = nbt.contains("BurnTimeTotal") ? nbt.getInt("BurnTimeTotal") : this.getBurnDuration(this.handler.getStackInSlot(FUEL_SLOT));
-		this.cookingSpeed = nbt.getInt("CookSpeed");
-		CompoundTag recipesUsed = nbt.getCompound("RecipesUsed");
+		this.litTime = tag.getInt("BurnTime");
+		this.burnSpeed = tag.getInt("BurnSpeed");
+		this.cookingProgress = tag.getInt("CookTime");
+		this.cookingTotalTime = tag.getInt("CookTimeTotal");
+		this.litDuration = tag.contains("BurnTimeTotal") ? tag.getInt("BurnTimeTotal") : this.getBurnDuration(this.handler.getStackInSlot(FUEL_SLOT));
+		this.cookingSpeed = tag.getInt("CookSpeed");
+		CompoundTag recipesUsed = tag.getCompound("RecipesUsed");
 
 		for (String s : recipesUsed.getAllKeys()) {
 			this.recipes.put(new ResourceLocation(s), recipesUsed.getInt(s));
@@ -266,8 +264,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			boolean dirty = false;
 			ItemStack fuel = furnace.handler.getStackInSlot(FUEL_SLOT);
 			if (furnace.isLit() || !fuel.isEmpty() && !furnace.handler.getStackInSlot(INPUT_SLOT).isEmpty()) {
-				AbstractCookingRecipe cookingRecipe = furnace.getRecipe();
-				if (!furnace.isLit() && furnace.canBurn(cookingRecipe)) {
+				RecipeHolder<? extends AbstractCookingRecipe> recipeHolder = furnace.getRecipe();
+				AbstractCookingRecipe cookingRecipe = recipeHolder != null ? recipeHolder.value() : null;
+				if (!furnace.isLit() && furnace.canBurn(recipeHolder)) {
 					furnace.litTime = furnace.getBurnDuration(fuel);
 					furnace.litDuration = furnace.litTime;
 					if (furnace.isLit()) {
@@ -283,7 +282,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					}
 				}
 
-				if (furnace.isLit() && furnace.canBurn(cookingRecipe)) {
+				if (furnace.isLit() && furnace.canBurn(recipeHolder)) {
 					int speed = furnace.isEfficient() ? 4 : furnace.getSpeed();
 					if (furnace.cookingSpeed != speed) {
 						furnace.cookingSpeed = speed;
@@ -296,8 +295,8 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					if (furnace.cookingProgress >= furnace.cookingTotalTime) {
 						furnace.cookingProgress = 0;
 						furnace.cookingTotalTime = furnace.getCookingProgress();
-						if (furnace.burn(cookingRecipe)) {
-							furnace.setRecipeUsed(cookingRecipe);
+						if (furnace.burn(recipeHolder)) {
+							furnace.setRecipeUsed(recipeHolder);
 						}
 						dirty = true;
 					}
@@ -319,7 +318,8 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 	}
 
-	protected boolean canBurn(@Nullable Recipe<?> recipeIn) {
+	protected boolean canBurn(@Nullable RecipeHolder<?> recipeHolder) {
+		Recipe<?> recipeIn = recipeHolder != null ? recipeHolder.value() : null;
 		if (!this.handler.getStackInSlot(INPUT_SLOT).isEmpty() && recipeIn != null) {
 			ItemStack recipeOutput = recipeIn.getResultItem(level.registryAccess());
 			if (recipeOutput.isEmpty()) {
@@ -341,8 +341,9 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 	}
 
-	private boolean burn(@Nullable Recipe<?> recipe) {
-		if (recipe != null && this.canBurn(recipe) && level != null) {
+	private boolean burn(@Nullable RecipeHolder<?> holder) {
+		if (holder != null && this.canBurn(holder) && level != null) {
+			Recipe<?> recipe = holder.value();
 			ItemStack itemstack = this.handler.getStackInSlot(INPUT_SLOT);
 			List<? extends String> additionalBlacklist = new ArrayList<>();
 			if (ConfigHandler.COMMON.furnaceOutputBlacklist.get() != null) {
@@ -368,15 +369,13 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 						BlockPos offPos = worldPosition.relative(dir);
 						if (this.level.isAreaLoaded(worldPosition, 1)) {
 							BlockEntity foundTile = this.level.getBlockEntity(offPos);
+							IItemHandler itemHandler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, offPos, dir.getOpposite());
 							if (foundTile != null) {
-								ResourceLocation typeLocation = ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(foundTile.getType());
+								ResourceLocation typeLocation = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(foundTile.getType());
 								boolean flag = foundTile instanceof Hopper || foundTile instanceof AbstractFurnaceBlockEntity || foundTile instanceof AbstractForceFurnaceBlockEntity;
 								boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
-								if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
-									IItemHandler itemHandler = foundTile.getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite()).orElse(null);
-									if (itemHandler != null) {
-										inventoryList.add(new BiggestInventory(offPos, itemHandler.getSlots(), dir.getOpposite()));
-									}
+								if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && itemHandler != null) {
+									inventoryList.add(new BiggestInventory(offPos, itemHandler.getSlots(), dir.getOpposite()));
 								}
 							}
 						}
@@ -412,15 +411,13 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					BlockPos offPos = worldPosition.relative(dir);
 					if (this.level.isAreaLoaded(worldPosition, 1)) {
 						BlockEntity foundTile = this.level.getBlockEntity(offPos);
+						IItemHandler itemHandler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, offPos, dir.getOpposite());
 						if (foundTile != null) {
-							ResourceLocation typeLocation = ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(foundTile.getType());
+							ResourceLocation typeLocation = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(foundTile.getType());
 							boolean flag = foundTile instanceof Hopper || foundTile instanceof AbstractFurnaceBlockEntity || foundTile instanceof AbstractForceFurnaceBlockEntity;
 							boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
-							if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
-								IItemHandler itemHandler = foundTile.getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite()).orElse(null);
-								if (itemHandler != null) {
-									inventoryList.add(new BiggestInventory(offPos, itemHandler.getSlots(), dir.getOpposite()));
-								}
+							if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile != null) {
+								inventoryList.add(new BiggestInventory(offPos, itemHandler.getSlots(), dir.getOpposite()));
 							}
 						}
 					}
@@ -443,7 +440,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 			}
 
 			if (!this.level.isClientSide) {
-				this.setRecipeUsed(recipe);
+				this.setRecipeUsed(holder);
 			}
 
 			if (itemstack.getItem() == Blocks.WET_SPONGE.asItem() && !this.handler.getStackInSlot(FUEL_SLOT).isEmpty() && this.handler.getStackInSlot(FUEL_SLOT).getItem() == Items.BUCKET) {
@@ -460,20 +457,21 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		if (fuel.isEmpty()) {
 			return 0;
 		} else {
-			return net.minecraftforge.common.ForgeHooks.getBurnTime(fuel, null);
+			return CommonHooks.getBurnTime(fuel, null);
 		}
 	}
 
 	protected int getCookingProgress() {
 		if (level == null) return 200;
 
-		AbstractCookingRecipe rec = getRecipe();
-		if (rec == null) return 200;
-		return this.level.getRecipeManager().getRecipeFor(this.getRecipeType(), this, this.level).map(AbstractCookingRecipe::getCookingTime).orElse(100);
+		RecipeHolder<? extends AbstractCookingRecipe> rec = getRecipe();
+		if (rec == null)
+			return this.level.getRecipeManager().getRecipeFor(this.getRecipeType(), this, this.level).map(RecipeHolder::value).map(AbstractCookingRecipe::getCookingTime).orElse(100);
+		return rec.value().getCookingTime();
 	}
 
 	public static boolean isFuel(ItemStack stack) {
-		return net.minecraftforge.common.ForgeHooks.getBurnTime(stack, null) > 0;
+		return CommonHooks.getBurnTime(stack, null) > 0;
 	}
 
 	@Override
@@ -586,34 +584,36 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 	}
 
-	public void setRecipeUsed(@Nullable Recipe<?> recipe) {
+	public void setRecipeUsed(@Nullable RecipeHolder<?> recipe) {
 		if (recipe != null) {
-			ResourceLocation resourcelocation = recipe.getId();
+			ResourceLocation resourcelocation = recipe.id();
 			this.recipes.addTo(resourcelocation, 1);
 		}
 	}
 
 	@Nullable
-	public Recipe<?> getRecipeUsed() {
+	public RecipeHolder<?> getRecipeUsed() {
 		return null;
 	}
 
-	public void awardUsedRecipes(Player player) {
+
+	@Override
+	public void awardUsedRecipes(Player player, List<ItemStack> stacks) {
 	}
 
 	public void awardUsedRecipesAndPopExperience(ServerPlayer player) {
-		List<Recipe<?>> list = this.getRecipesToAwardAndPopExperience(player.serverLevel(), player.position());
+		List<RecipeHolder<?>> list = this.getRecipesToAwardAndPopExperience(player.serverLevel(), player.position());
 		player.awardRecipes(list);
 		this.recipes.clear();
 	}
 
-	public List<Recipe<?>> getRecipesToAwardAndPopExperience(ServerLevel serverLevel, Vec3 pos) {
-		List<Recipe<?>> list = Lists.newArrayList();
+	public List<RecipeHolder<?>> getRecipesToAwardAndPopExperience(ServerLevel serverLevel, Vec3 pos) {
+		List<RecipeHolder<?>> list = Lists.newArrayList();
 
 		for (Object2IntMap.Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
 			serverLevel.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
 				list.add(recipe);
-				createExperience(serverLevel, pos, entry.getIntValue(), (((AbstractCookingRecipe) recipe).getExperience() * getXPMultiplier()));
+				createExperience(serverLevel, pos, entry.getIntValue(), (((AbstractCookingRecipe) recipe.value()).getExperience() * getXPMultiplier()));
 			});
 		}
 
@@ -636,32 +636,6 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 	}
 
-	net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-			net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
-
-	@Override
-	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-		if (!this.remove && facing != null && capability == net.minecraftforge.common.capabilities.ForgeCapabilities.ITEM_HANDLER) {
-			if (facing == Direction.UP)
-				return handlers[0].cast();
-			else if (facing == Direction.DOWN)
-				return handlers[1].cast();
-			else
-				return handlers[2].cast();
-		}
-		return super.getCapability(capability, facing);
-	}
-
-	@Override
-	public void invalidateCaps() {
-		super.invalidateCaps();
-		for (int x = 0; x < handlers.length; x++)
-			handlers[x].invalidate();
-
-		handlerHolder.invalidate();
-		upgradeHandlerHolder.invalidate();
-	}
-
 	private class BiggestInventory implements Comparable<BiggestInventory> {
 		private final int inventorySize;
 		private final BlockPos tilePos;
@@ -675,10 +649,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 		protected IItemHandler getIItemHandler(Level level) {
 			if (level.isAreaLoaded(worldPosition, 1)) {
-				BlockEntity tileEntity = level.getBlockEntity(tilePos);
-				if (!tileEntity.isRemoved() && tileEntity.hasLevel() && tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
-					return tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, direction).orElse(null);
-				}
+				return level.getCapability(Capabilities.ItemHandler.BLOCK, tilePos, direction);
 			}
 			return null;
 		}

@@ -5,10 +5,8 @@ import com.mrbysco.forcecraft.menu.furnace.ForceFurnaceMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+
 public class ForceFurnaceScreen extends AbstractForceFurnaceScreen<ForceFurnaceMenu> {
 	private static final ResourceLocation FURNACE_GUI_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/furnace_gui.png");
 

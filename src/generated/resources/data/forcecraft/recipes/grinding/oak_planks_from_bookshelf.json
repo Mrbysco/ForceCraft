@@ -1,0 +1,19 @@
+{
+  "type": "forcecraft:grinding",
+  "experience": 0.1,
+  "ingredient": {
+    "tag": "forge:bookshelves"
+  },
+  "processTime": 400,
+  "results": [
+    {
+      "count": 6,
+      "result": "minecraft:oak_planks"
+    },
+    {
+      "count": 9,
+      "result": "minecraft:paper"
+    }
+  ],
+  "secondaryChance": 1.0
+}

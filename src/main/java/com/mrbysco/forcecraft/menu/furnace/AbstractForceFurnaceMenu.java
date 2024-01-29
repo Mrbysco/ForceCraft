@@ -5,8 +5,8 @@ import com.mrbysco.forcecraft.items.UpgradeCoreItem;
 import com.mrbysco.forcecraft.menu.furnace.slot.ForceFurnaceFuelSlot;
 import com.mrbysco.forcecraft.menu.furnace.slot.ForceFurnaceResultSlot;
 import com.mrbysco.forcecraft.menu.furnace.slot.UpgradeSlot;
-import com.mrbysco.forcecraft.recipe.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceMenus;
+import com.mrbysco.forcecraft.registry.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,11 +24,9 @@ import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 import java.util.Objects;
 
@@ -79,7 +77,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 				}
 
 				this.removeCount = 0;
-				ForgeEventFactory.firePlayerSmeltedEvent(player, stack);
+				EventHooks.firePlayerSmeltedEvent(player, stack);
 			}
 		});
 		this.addSlot(new UpgradeSlot(upgradeInventory, 0, 12, 12));
@@ -208,21 +206,21 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 		if (slotId == 3) {
 			Slot slot = getSlot(slotId);
 			if (slot.hasItem() && clickTypeIn != ClickType.QUICK_MOVE) {
-				player.level().playSound((Player) null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
+				player.level().playSound((Player) null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.5F, 1.0F);
 				return;
 			}
 		}
 		super.clicked(slotId, dragType, clickTypeIn, player);
 	}
 
-	@OnlyIn(Dist.CLIENT)
+
 	public int getCookProgressionScaled() {
 		int i = this.furnaceData.get(2);
 		int j = this.furnaceData.get(3);
 		return j != 0 && i != 0 ? i * 24 / j : 0;
 	}
 
-	@OnlyIn(Dist.CLIENT)
+
 	public int getBurnLeftScaled() {
 		int i = this.furnaceData.get(1);
 		if (i == 0) {
@@ -232,7 +230,7 @@ public abstract class AbstractForceFurnaceMenu extends AbstractContainerMenu {
 		return this.furnaceData.get(0) * 13 / i;
 	}
 
-	@OnlyIn(Dist.CLIENT)
+
 	public boolean isBurning() {
 		return this.furnaceData.get(0) > 0;
 	}

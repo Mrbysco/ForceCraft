@@ -30,7 +30,7 @@ public class IsHardCommand implements IForceCommand {
 			bookTier = UpgradeBookTier.values()[Integer.parseInt(arg)];
 		} catch (Exception e) {
 			bookTier = UpgradeBookTier.FINAL;
-			//dont care, just use max level
+			//don't care, just use max level
 		}
 
 		ItemStack book = new ItemStack(ForceRegistry.UPGRADE_TOME.get());

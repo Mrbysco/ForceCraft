@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:grinding",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:cooked_porkchop"
+  },
+  "processTime": 400,
+  "results": [
+    {
+      "count": 2,
+      "result": "forcecraft:cooked_bacon"
+    }
+  ],
+  "secondaryChance": 1.0
+}

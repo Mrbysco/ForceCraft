@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_armor": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:iron_leggings"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_rod": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forcecraft:force_rod"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:transmutation/iron_ingot_from_leggings"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rod",
+      "has_armor"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:transmutation/iron_ingot_from_leggings"
+    ]
+  }
+}

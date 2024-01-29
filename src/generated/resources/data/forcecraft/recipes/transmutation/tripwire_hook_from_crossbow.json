@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "minecraft:crossbow"
+    }
+  ],
+  "result": {
+    "item": "minecraft:tripwire_hook"
+  }
+}

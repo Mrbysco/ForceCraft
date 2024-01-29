@@ -1,26 +1,25 @@
 package com.mrbysco.forcecraft.recipe;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mrbysco.forcecraft.registry.ForceRecipeSerializers;
+import com.mrbysco.forcecraft.registry.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapedRecipe;
-
-import javax.annotation.Nullable;
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
+import org.jetbrains.annotations.Nullable;
 
 public class GrindingRecipe extends MultipleOutputFurnaceRecipe {
 
-	public GrindingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results, float chance, float experienceIn, int cookTimeIn) {
-		super(ForceRecipes.GRINDING.get(), idIn, groupIn, ingredientIn, results, chance, experienceIn, cookTimeIn);
+	public GrindingRecipe(String groupIn, Ingredient ingredientIn, NonNullList<ItemStack> results,
+						  float secondaryChance, float experience, int processTime) {
+		super(ForceRecipes.GRINDING.get(), groupIn, ingredientIn, results, secondaryChance, experience, processTime);
 	}
 
 	@Override
@@ -37,43 +36,42 @@ public class GrindingRecipe extends MultipleOutputFurnaceRecipe {
 	}
 
 	public static class SerializerGrindingRecipe implements RecipeSerializer<GrindingRecipe> {
+		public static final Codec<GrindingRecipe> CODEC = RecordCodecBuilder.create(
+				instance -> instance.group(
+								ExtraCodecs.strictOptionalField(Codec.STRING, "group", "").forGetter(recipe -> recipe.group),
+								Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
+								ItemStack.RESULT_CODEC.codec()
+										.listOf()
+										.fieldOf("results")
+										.flatXmap(
+												array -> {
+													ItemStack[] stacks = array.toArray(ItemStack[]::new);
+													if (stacks.length == 0) {
+														return DataResult.error(() -> "No results for grinding recipe");
+													} else {
+														return stacks.length > 2
+																? DataResult.error(() -> "Too many itemstacks for grinding recipe. The maximum is: %s".formatted(9))
+																: DataResult.success(NonNullList.of(ItemStack.EMPTY, stacks));
+													}
+												},
+												DataResult::success
+										)
+										.forGetter(recipe -> recipe.results),
+								Codec.FLOAT.fieldOf("secondaryChance").orElse(0.0F).forGetter(recipe -> recipe.secondaryChance),
+								Codec.FLOAT.fieldOf("experience").orElse(0.0F).forGetter(recipe -> recipe.experience),
+								Codec.INT.fieldOf("processTime").orElse(200).forGetter(recipe -> recipe.cookingTime)
+						)
+						.apply(instance, GrindingRecipe::new)
+		);
+
 		@Override
-		public GrindingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			String s = GsonHelper.getAsString(json, "group", "");
-			JsonElement jsonelement = (JsonElement) (GsonHelper.isArrayNode(json, "ingredient") ? GsonHelper.getAsJsonArray(json, "ingredient") : GsonHelper.getAsJsonObject(json, "ingredient"));
-			Ingredient ingredient = Ingredient.fromJson(jsonelement);
-			//Forge: Check if primitive string to keep vanilla or a object which can contain a count field.
-			if (!json.has("results"))
-				throw new com.google.gson.JsonSyntaxException("Missing results, expected to find a string or object");
-			NonNullList<ItemStack> nonnulllist = readItemStacks(GsonHelper.getAsJsonArray(json, "results"));
-			if (nonnulllist.isEmpty()) {
-				throw new JsonParseException("No results for grinding recipe");
-			} else if (nonnulllist.size() > MAX_OUTPUT) {
-				throw new JsonParseException("Too many results for grinding recipe the max is " + MAX_OUTPUT);
-			}
-
-			float chance = GsonHelper.getAsFloat(json, "secondaryChance", 0.0F);
-			float f = GsonHelper.getAsFloat(json, "experience", 0.0F);
-			int i = GsonHelper.getAsInt(json, "processtime", 200);
-			return new GrindingRecipe(recipeId, s, ingredient, nonnulllist, chance, f, i);
-		}
-
-		private static NonNullList<ItemStack> readItemStacks(JsonArray resultArray) {
-			NonNullList<ItemStack> nonnulllist = NonNullList.create();
-
-			for (int i = 0; i < resultArray.size(); ++i) {
-				if (resultArray.get(i).isJsonObject()) {
-					ItemStack stack = ShapedRecipe.itemStackFromJson(resultArray.get(i).getAsJsonObject());
-					nonnulllist.add(stack);
-				}
-			}
-
-			return nonnulllist;
+		public Codec<GrindingRecipe> codec() {
+			return CODEC;
 		}
 
 		@Nullable
 		@Override
-		public GrindingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+		public GrindingRecipe fromNetwork(FriendlyByteBuf buffer) {
 			String s = buffer.readUtf(32767);
 			Ingredient ingredient = Ingredient.fromNetwork(buffer);
 
@@ -86,7 +84,7 @@ public class GrindingRecipe extends MultipleOutputFurnaceRecipe {
 			float chance = buffer.readFloat();
 			float f = buffer.readFloat();
 			int i = buffer.readVarInt();
-			return new GrindingRecipe(recipeId, s, ingredient, resultList, chance, f, i);
+			return new GrindingRecipe(s, ingredient, resultList, chance, f, i);
 		}
 
 		@Override
@@ -94,8 +92,8 @@ public class GrindingRecipe extends MultipleOutputFurnaceRecipe {
 			buffer.writeUtf(recipe.group);
 			recipe.ingredient.toNetwork(buffer);
 
-			buffer.writeVarInt(recipe.resultItems.size());
-			for (ItemStack stack : recipe.resultItems) {
+			buffer.writeVarInt(recipe.results.size());
+			for (ItemStack stack : recipe.results) {
 				buffer.writeItem(stack);
 			}
 

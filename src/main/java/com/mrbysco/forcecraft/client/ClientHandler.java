@@ -1,7 +1,6 @@
 package com.mrbysco.forcecraft.client;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capabilities.magnet.IMagnet;
 import com.mrbysco.forcecraft.client.gui.belt.ForceBeltScreen;
 import com.mrbysco.forcecraft.client.gui.card.ItemCardScreen;
 import com.mrbysco.forcecraft.client.gui.engine.ForceEngineScreen;
@@ -28,7 +27,6 @@ import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -36,16 +34,17 @@ import net.minecraft.client.renderer.entity.EndermanRenderer;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_MAGNET;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.MAGNET;
 
 public class ClientHandler {
 	public static final ModelLayerLocation CREEPER_TOT = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "creeper_tot"), "main");
@@ -53,22 +52,12 @@ public class ClientHandler {
 	public static final ModelLayerLocation ENDERTOT = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "endertot"), "main");
 
 	public static void onClientSetup(final FMLClientSetupEvent event) {
-		MenuScreens.register(ForceMenus.FORCE_FURNACE.get(), ForceFurnaceScreen::new);
-		MenuScreens.register(ForceMenus.INFUSER.get(), InfuserScreen::new);
-		MenuScreens.register(ForceMenus.FORCE_BELT.get(), ForceBeltScreen::new);
-		MenuScreens.register(ForceMenus.FORCE_PACK.get(), ForcePackScreen::new);
-		MenuScreens.register(ForceMenus.SPOILS_BAG.get(), SpoilsBagScreen::new);
-		MenuScreens.register(ForceMenus.ITEM_CARD.get(), ItemCardScreen::new);
-		MenuScreens.register(ForceMenus.FORCE_ENGINE.get(), ForceEngineScreen::new);
-
 		ItemBlockRenderTypes.setRenderLayer(ForceFluids.FORCE_FLUID_FLOWING.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(ForceFluids.FORCE_FLUID_SOURCE.get(), RenderType.translucent());
 
 		event.enqueueWork(() -> {
-			ItemProperties.register(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity, i) -> {
-				IMagnet magnetCap = stack.getCapability(CAPABILITY_MAGNET).orElse(null);
-				return magnetCap != null && magnetCap.isActivated() ? 1.0F : 0.0F;
-			});
+			ItemProperties.register(ForceRegistry.MAGNET_GLOVE.get(), new ResourceLocation("active"), (stack, world, livingEntity, i) ->
+					stack.hasData(MAGNET) && stack.getData(MAGNET).isActivated() ? 1.0F : 0.0F);
 
 			ItemProperties.register(ForceRegistry.ENTITY_FLASK.get(), new ResourceLocation("captured"), (stack, world, livingEntity, i) ->
 					stack.hasTag() && stack.getTag().contains("StoredEntity") ? 1.0F : 0.0F);
@@ -94,6 +83,15 @@ public class ClientHandler {
 		});
 	}
 
+	public static void onRegisterMenu(final RegisterMenuScreensEvent event) {
+		event.register(ForceMenus.FORCE_FURNACE.get(), ForceFurnaceScreen::new);
+		event.register(ForceMenus.INFUSER.get(), InfuserScreen::new);
+		event.register(ForceMenus.FORCE_BELT.get(), ForceBeltScreen::new);
+		event.register(ForceMenus.FORCE_PACK.get(), ForcePackScreen::new);
+		event.register(ForceMenus.SPOILS_BAG.get(), SpoilsBagScreen::new);
+		event.register(ForceMenus.ITEM_CARD.get(), ItemCardScreen::new);
+		event.register(ForceMenus.FORCE_ENGINE.get(), ForceEngineScreen::new);
+	}
 
 	public static void registerKeymapping(final RegisterKeyMappingsEvent event) {
 		event.register(KeybindHandler.KEY_OPEN_HOTBAR_PACK);
@@ -137,7 +135,7 @@ public class ClientHandler {
 			if (tintIndex == 0 || tintIndex == 1) {
 				if (stack.hasTag() && stack.getTag().contains("StoredEntity", CompoundTag.TAG_STRING)) {
 					ResourceLocation id = new ResourceLocation(stack.getTag().getString("StoredEntity"));
-					SpawnEggItem info = SpawnEggItem.byId(ForgeRegistries.ENTITY_TYPES.getValue(id));
+					SpawnEggItem info = SpawnEggItem.byId(BuiltInRegistries.ENTITY_TYPE.get(id));
 
 					if (info != null) {
 						return tintIndex == 0 ? info.getColor(0) : info.getColor(1);

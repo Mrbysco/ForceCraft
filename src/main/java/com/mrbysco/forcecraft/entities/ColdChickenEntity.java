@@ -10,8 +10,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ColdChickenEntity extends Chicken implements IColdMob {
 	private int grassTimer;
@@ -77,7 +75,6 @@ public class ColdChickenEntity extends Chicken implements IColdMob {
 		super.aiStep();
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	public void handleEntityEvent(byte id) {
 		if (id == 10) {
 			this.grassTimer = 40;
@@ -87,7 +84,6 @@ public class ColdChickenEntity extends Chicken implements IColdMob {
 
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	public float getHeadRotationPointY(float p_70894_1_) {
 		if (this.grassTimer <= 0) {
 			return 0.0F;
@@ -98,7 +94,6 @@ public class ColdChickenEntity extends Chicken implements IColdMob {
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	public float getHeadRotationAngleX(float p_70890_1_) {
 		if (this.grassTimer > 4 && this.grassTimer <= 36) {
 			float f = ((float) (this.grassTimer - 4) - p_70890_1_) / 32.0F;

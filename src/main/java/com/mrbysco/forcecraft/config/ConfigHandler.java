@@ -2,13 +2,11 @@ package com.mrbysco.forcecraft.config;
 
 
 import com.mrbysco.forcecraft.ForceCraft;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
+import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
@@ -21,28 +19,27 @@ public class ConfigHandler {
 		public final BooleanValue generateForceTree;
 		public final BooleanValue timeTorchEnabled;
 		public final BooleanValue timeTorchLogging;
-		public final IntValue timeTorchRate;
-		public final IntValue timeTorchAmount;
+		public final ModConfigSpec.IntValue timeTorchRate;
+		public final ModConfigSpec.IntValue timeTorchAmount;
 		public final BooleanValue disableRecoveryHearts;
 		public final BooleanValue enableForceShake;
-		public final IntValue baconatorMaxStacks;
-		public final DoubleValue sturdyDamageReduction;
-		public final DoubleValue forcePunchDamage;
-		public final IntValue forceInfusingTime;
+		public final ModConfigSpec.DoubleValue sturdyDamageReduction;
+		public final ModConfigSpec.DoubleValue forcePunchDamage;
+		public final ModConfigSpec.IntValue forceInfusingTime;
 		public final ConfigValue<List<? extends String>> furnaceOutputBlacklist;
 		public final ConfigValue<List<? extends String>> fortuneMessages;
 
-		public final IntValue bleedCap;
-		public final IntValue healingCap;
-		public final IntValue sturdyToolCap;
-		public final IntValue luckCap;
-		public final IntValue damageCap;
-		public final IntValue forceCap;
-		public final IntValue speedCap;
-		public final IntValue rodSpeedCap;
-		public final IntValue liquidRegenLevel;
+		public final ModConfigSpec.IntValue bleedCap;
+		public final ModConfigSpec.IntValue healingCap;
+		public final ModConfigSpec.IntValue sturdyToolCap;
+		public final ModConfigSpec.IntValue luckCap;
+		public final ModConfigSpec.IntValue damageCap;
+		public final ModConfigSpec.IntValue forceCap;
+		public final ModConfigSpec.IntValue speedCap;
+		public final ModConfigSpec.IntValue rodSpeedCap;
+		public final ModConfigSpec.IntValue liquidRegenLevel;
 
-		Common(ForgeConfigSpec.Builder builder) {
+		Common(ModConfigSpec.Builder builder) {
 			//General settings
 			builder.comment("General settings")
 					.push("general");
@@ -78,10 +75,6 @@ public class ConfigHandler {
 			enableForceShake = builder
 					.comment("Enables screen shake when in Liquid Force [Default: false]")
 					.define("enableForceShake", false);
-
-			baconatorMaxStacks = builder
-					.comment("The max amount of food stacks stored in the baconator [Default: 4]")
-					.defineInRange("baconatorMaxStacks", 4, 1, Integer.MAX_VALUE);
 
 			sturdyDamageReduction = builder
 					.comment("The max amount of damage blocked when all armor pieces have the Sturdy infusion [Default: 0.75]")
@@ -343,11 +336,11 @@ public class ConfigHandler {
 		}
 	}
 
-	public static final ForgeConfigSpec commonSpec;
+	public static final ModConfigSpec commonSpec;
 	public static final Common COMMON;
 
 	static {
-		final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+		final Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
 		commonSpec = specPair.getRight();
 		COMMON = specPair.getLeft();
 	}

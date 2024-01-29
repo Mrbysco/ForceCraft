@@ -9,14 +9,15 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,16 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	private final ResourceLocation INFO = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/info.png");
 	private final ResourceLocation ENERGY = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/energy.png");
 	private final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/forceinfuser.png");
+
+	private static final WidgetSprites GUIDE_SPRITE = new WidgetSprites(
+			new ResourceLocation(Reference.MOD_ID, "infuser/guide"),
+			new ResourceLocation(Reference.MOD_ID, "infuser/guide_highlighted")
+	);
+	private static final WidgetSprites CHISEL = new WidgetSprites(
+			new ResourceLocation("infuser/chisel"),
+			new ResourceLocation("infuser/chisel_highlight")
+	);
+
 	private Button buttonInfuse;
 	private Button buttonGuide;
 
@@ -54,7 +65,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 
 
 		buttonGuide = this.addRenderableWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
-				201, 0, 0, TEXTURE, 256, 256, (button) -> {
+				GUIDE_SPRITE, (button) -> {
 			if (ModList.get().isLoaded("patchouli")) {
 				com.mrbysco.forcecraft.compat.patchouli.PatchouliCompat.openBook();
 			} else {
@@ -66,14 +77,14 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		y = 101;
 
 		buttonInfuse = this.addRenderableWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
-				188, 0, 0, TEXTURE, 256, 256, (button) -> {
+				CHISEL, (button) -> {
 			ItemStack bookStack = menu.getTile().getBookInSlot();
 			if (bookStack.isEmpty()) {
 				this.inventory.player.displayClientMessage(Component.translatable("gui.forcecraft.infuser.nobook"), false);
 			} else {
 				this.minecraft.gameMode.handleInventoryButtonClick(menu.containerId, 0);
 			}
-//			container.getTile().canWork = false;
+//			menu.getTile().canWork = false;
 		}, Component.empty()));
 	}
 
@@ -94,7 +105,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics);
+		this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);

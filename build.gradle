@@ -1,9 +1,10 @@
 plugins {
+    id 'java-library'
+    id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.spongepowered.mixin'
-    id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'net.neoforged.gradle.userdev' version '7.0.84'
+    id 'net.darkhax.curseforgegradle' version '1.1.17'
     id 'com.modrinth.minotaur' version "2.+"
 }
 
@@ -16,95 +17,45 @@ base {
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-minecraft {
-    mappings channel: "${mapping_channel}", version: "${mapping_version}"
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
+//minecraft.accessTransformers.entry public net.minecraft.client.Minecraft textureManager # textureManager
 
-    copyIdeResources = true
+runs {
+    // applies to all the run configs below
+    configureEach {
+        // Recommended logging data for a userdev environment
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
 
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+        // Recommended logging level for the console
+        systemProperty 'forge.logging.console.level', 'debug'
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
-    runs {
-        client {
-            workingDirectory project.file('run')
-            arg "--mixin.config=${mod_id}.mixins.json"
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+        //Limit ram usage for the dev environment to 4GB
+        jvmArgument '-Xmx4G'
 
-            // Recommended logging data for a userdev environment
-            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.markers', 'REGISTRIES'
+        modSource project.sourceSets.main
+    }
 
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
+    client {
+        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+        systemProperty 'neoforge.enabledGameTestNamespaces', "${mod_id}"
+    }
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', "${mod_id}"
+    server {
+        systemProperty 'neoforge.enabledGameTestNamespaces', "${mod_id}"
+        programArgument '--nogui'
+    }
 
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
+    data {
+        // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+        // workingDirectory project.file('run-data')
 
-        server {
-            workingDirectory project.file('run')
-            arg "--mixin.config=${mod_id}.mixins.json"
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-            // Recommended logging data for a userdev environment
-            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', "${mod_id}"
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-            arg "--mixin.config=${mod_id}.mixins.json"
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-            // Recommended logging data for a userdev environment
-            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
+        // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+        programArguments.addAll '--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
 // Include resources generated by data generators.
 sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-}
 
 repositories {
     maven {
@@ -122,26 +73,25 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    implementation "net.neoforged:neoforge:${neo_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+    compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}"
 
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    runtimeOnly "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
 
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+    compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}:api"
+    runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
 
-    implementation fg.deobf("xyz.brassgoggledcoders:PatchouliProvider:${patchouli_provider_version}")
+    implementation "xyz.brassgoggledcoders:PatchouliProvider:${patchouli_provider_version}"
 
-    //runtimeOnly fg.deobf("curse.maven:titanium-287342:3570210")
-//    runtimeOnly fg.deobf("curse.maven:pipez-443900:3877192")
-    //runtimeOnly fg.deobf("curse.maven:CTM-267602:3586556")
+    //runtimeOnly "curse.maven:titanium-287342:3570210"
+//    runtimeOnly "curse.maven:pipez-443900:5005762"
+    //runtimeOnly "curse.maven:CTM-267602:3586556"
 
-//    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:3843050")
+//    runtimeOnly "curse.maven:mmmmmmmmmmmm-225738:3843050"
 
-//    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3708026")
+//    runtimeOnly "curse.maven:cyclic-239286:3708026"
 }
 
 jar {
@@ -159,19 +109,13 @@ jar {
     }
 }
 
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact(reobfArtifact) {
-                builtBy reobfArtifact
-                artifactId = base.archivesName.get()
-                classifier null
-            }
+        register('mavenJava', MavenPublication) {
+            groupId project.group
+            artifactId base.archivesName.get()
+            version project.version
+            from components.java
         }
     }
     repositories {
@@ -187,21 +131,42 @@ publishing {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+if (System.getenv().CURSEFORGE_KEY) {
+    task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+        apiToken = System.getenv().CURSEFORGE_KEY
+
+        def mainFile = upload(project.curseforge_id, jar)
+        mainFile.releaseType = 'beta'
+        mainFile.addGameVersion "NeoForge"
+        mainFile.addGameVersion "${mc_version}"
+        mainFile.addGameVersion "Java 17"
+
+        mainFile.changelog = file("$project.rootDir/changelog.md")
+        mainFile.changelogType = 'markdown'
+
+        mainFile.addOptional("jei", "patchouli")
+    }
 }
 
-apply from: 'gradle/curseforge.gradle'
-apply from: 'gradle/modrinth.gradle'
+if (System.getenv().MODRINTH_KEY) {
+    modrinth {
+        token = System.getenv().MODRINTH_KEY
+        projectId = project.modrinth_id
+        versionType = "beta"
+        versionName = "${mod_name} ${mc_version}"
+        versionNumber = project.version
+        uploadFile = jar
+        changelog = file("$project.rootDir/changelog.md").text
+        gameVersions = ["${mc_version}"]
+        loaders = ["neoforge"]
 
-////////////////
-// IntelliJ Project Import
-// The Mixin annotation process does not have an obfuscation source when running through the IntelliJ compiler,
-// thus we have to prevent it from being activated as part of importing this Gradle project into IntelliJ.
-if (System.getProperty("idea.sync.active") == "true") {
-    afterEvaluate {
-        tasks.withType(JavaCompile).all {
-            it.options.annotationProcessorPath = files()
+        dependencies {
+            optional.project "jei"
+            optional.project "patchouli"
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }

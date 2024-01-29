@@ -23,21 +23,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,10 +51,9 @@ public class SpoilsBagItem extends BaseItem {
 		populateBag(level, stack);
 		BlockPos pos = context.getClickedPos();
 		Direction face = context.getClickedFace();
-		BlockEntity tile = level.getBlockEntity(pos);
-		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
-		if (handler != null && tile != null && tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).isPresent()) {
-			IItemHandler tileInventory = tile.getCapability(ForgeCapabilities.ITEM_HANDLER, face).orElse(null);
+		IItemHandler tileInventory = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, face);
+		IItemHandler handler = stack.getCapability(Capabilities.ItemHandler.ITEM);
+		if (handler != null && tileInventory != null) {
 			if (tileInventory != null && handler instanceof ItemStackHandler itemHandler) {
 				for (int i = 0; i < itemHandler.getSlots(); i++) {
 					ItemStack bagStack = itemHandler.getStackInSlot(i);
@@ -83,7 +76,7 @@ public class SpoilsBagItem extends BaseItem {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
-		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+		IItemHandler handler = stack.getCapability(Capabilities.ItemHandler.ITEM);
 		if (handler != null) {
 			this.populateBag(level, stack);
 			playerIn.openMenu(this.getContainer(stack));
@@ -102,7 +95,7 @@ public class SpoilsBagItem extends BaseItem {
 
 	public void populateBag(Level level, ItemStack stack) {
 		if (!level.isClientSide && !stack.getOrCreateTag().getBoolean("Filled")) {
-			IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+			IItemHandler handler = stack.getCapability(Capabilities.ItemHandler.ITEM);
 			if (handler instanceof ItemStackHandler) {
 				if (ItemHandlerUtils.isEmpty(handler)) {
 					CompoundTag tag = stack.getOrCreateTag();
@@ -153,7 +146,7 @@ public class SpoilsBagItem extends BaseItem {
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (!level.isClientSide && stack.hasTag() && stack.getTag().getBoolean("Filled")) {
-			IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+			IItemHandler handler = stack.getCapability(Capabilities.ItemHandler.ITEM);
 			if (ItemHandlerUtils.isEmpty(handler)) {
 				stack.shrink(1);
 			}
@@ -164,48 +157,5 @@ public class SpoilsBagItem extends BaseItem {
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		super.appendHoverText(stack, level, tooltip, flagIn);
 		tooltip.add(Component.literal("Tier: " + tier).withStyle(ChatFormatting.GRAY));
-	}
-
-	@Nullable
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new SpoilsBagItem.InventoryProvider();
-	}
-
-	private static class InventoryProvider implements ICapabilitySerializable<CompoundTag> {
-		private final LazyOptional<ItemStackHandler> inventory = LazyOptional.of(() -> new ItemStackHandler(8) {
-			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
-				//No inserting
-				return false;
-			}
-
-			@Nonnull
-			@Override
-			public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-				return stack;
-			}
-		});
-
-		@Nonnull
-		@Override
-		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-			if (cap == ForgeCapabilities.ITEM_HANDLER)
-				return inventory.cast();
-			else return LazyOptional.empty();
-		}
-
-		@Override
-		public CompoundTag serializeNBT() {
-			if (inventory.isPresent()) {
-				return inventory.resolve().get().serializeNBT();
-			}
-			return new CompoundTag();
-		}
-
-		@Override
-		public void deserializeNBT(CompoundTag nbt) {
-			inventory.ifPresent(h -> h.deserializeNBT(nbt));
-		}
 	}
 }

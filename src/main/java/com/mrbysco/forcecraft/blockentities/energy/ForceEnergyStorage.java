@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.blockentities.energy;
 
-import net.minecraftforge.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.EnergyStorage;
 
 public class ForceEnergyStorage extends EnergyStorage {
 

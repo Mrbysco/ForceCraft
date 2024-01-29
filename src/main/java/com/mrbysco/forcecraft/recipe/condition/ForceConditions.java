@@ -1,15 +1,14 @@
 package com.mrbysco.forcecraft.recipe.condition;
 
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
+import com.mojang.serialization.Codec;
+import com.mrbysco.forcecraft.Reference;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class ForceConditions {
-	@SubscribeEvent
-	public void onRegisterSerializers(RegisterEvent event) {
-		if (event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) {
-			CraftingHelper.register(ForceTorchRecipeCondition.Serializer.INSTANCE);
-		}
-	}
+	public static final DeferredRegister<Codec<? extends ICondition>> CONDITION_CODECS = DeferredRegister.create(NeoForgeRegistries.Keys.CONDITION_CODECS, Reference.MOD_ID);
+
+	public static final DeferredHolder<Codec<? extends ICondition>, Codec<TorchEnabledCondition>> TIME_TORCH_ENABLED = CONDITION_CODECS.register("time_torch_enabled", () -> TorchEnabledCondition.CODEC);
 }

@@ -25,15 +25,15 @@ public class FortuneItem extends BaseItem {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
-		CompoundTag nbt;
+		CompoundTag tag;
 		if (stack.hasTag()) {
-			nbt = stack.getTag();
+			tag = stack.getTag();
 		} else {
-			nbt = new CompoundTag();
+			tag = new CompoundTag();
 		}
 
-		if (!nbt.contains("message")) {
-			addMessage(stack, nbt);
+		if (!tag.contains("message")) {
+			addMessage(stack, tag);
 		}
 
 		if (!level.isClientSide) {
@@ -46,13 +46,13 @@ public class FortuneItem extends BaseItem {
 					playerIn.spawnAtLocation(paperStack);
 				}
 			} else {
-				playerIn.sendSystemMessage(Component.literal(nbt.getString("message")));
+				playerIn.sendSystemMessage(Component.literal(tag.getString("message")));
 			}
 		}
 		return super.use(level, playerIn, handIn);
 	}
 
-	public static void addMessage(ItemStack stack, CompoundTag nbt) {
+	public static void addMessage(ItemStack stack, CompoundTag tag) {
 		List<String> messages = new ArrayList<>(ConfigHandler.COMMON.fortuneMessages.get());
 		String message = "No fortune for you";
 		if (!messages.isEmpty()) {
@@ -60,7 +60,7 @@ public class FortuneItem extends BaseItem {
 			message = messages.get(idx);
 		}
 
-		nbt.putString("message", message);
-		stack.setTag(nbt);
+		tag.putString("message", message);
+		stack.setTag(tag);
 	}
 }

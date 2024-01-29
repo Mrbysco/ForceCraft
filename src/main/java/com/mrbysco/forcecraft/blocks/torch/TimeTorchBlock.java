@@ -5,7 +5,7 @@ import com.mrbysco.forcecraft.blockentities.TimeTorchBlockEntity;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -16,13 +16,12 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class TimeTorchBlock extends TorchBlock implements EntityBlock {
 
-	public TimeTorchBlock(BlockBehaviour.Properties properties, ParticleOptions particleData) {
-		super(properties, particleData);
+	public TimeTorchBlock(BlockBehaviour.Properties properties, SimpleParticleType particleData) {
+		super(particleData, properties);
 	}
 
 	@Nullable
@@ -32,6 +31,7 @@ public class TimeTorchBlock extends TorchBlock implements EntityBlock {
 	}
 
 	@Nullable
+	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
 		return createTimeTorchTicker(level, blockEntityType, ForceRegistry.TIME_TORCH_BLOCK_ENTITY.get());
 	}
@@ -45,9 +45,9 @@ public class TimeTorchBlock extends TorchBlock implements EntityBlock {
 
 	@Nullable
 	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> blockEntityType,
-																											BlockEntityType<E> blockEntityType1,
-																											BlockEntityTicker<? super E> blockEntityTicker) {
-		return blockEntityType1 == blockEntityType ? (BlockEntityTicker<A>) blockEntityTicker : null;
+																											BlockEntityType<E> entityType,
+																											BlockEntityTicker<? super E> entityTicker) {
+		return entityType == blockEntityType ? (BlockEntityTicker<A>) entityTicker : null;
 	}
 
 	@Override

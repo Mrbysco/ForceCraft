@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_force_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/force"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:force_boots"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_force_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:force_boots"
+    ]
+  }
+}

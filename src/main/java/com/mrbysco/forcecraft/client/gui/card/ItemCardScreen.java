@@ -3,8 +3,7 @@ package com.mrbysco.forcecraft.client.gui.card;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.menu.ItemCardMenu;
-import com.mrbysco.forcecraft.networking.PacketHandler;
-import com.mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
+import com.mrbysco.forcecraft.networking.message.SaveCardRecipePayload;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -12,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class ItemCardScreen extends AbstractContainerScreen<ItemCardMenu> {
 	private static final ResourceLocation ITEM_CARD_GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/crafting3x3.png");
@@ -28,7 +28,7 @@ public class ItemCardScreen extends AbstractContainerScreen<ItemCardMenu> {
 		this.titleLabelX = 29;
 
 		this.buttonSave = this.addRenderableWidget(Button.builder(saveText, (button) -> {
-			PacketHandler.CHANNEL.sendToServer(new SaveCardRecipeMessage());
+			PacketDistributor.SERVER.noArg().send(new SaveCardRecipePayload());
 		}).bounds(this.width / 2 + 62, this.height / 2 - 76, 20, 20).build());
 	}
 
@@ -54,7 +54,7 @@ public class ItemCardScreen extends AbstractContainerScreen<ItemCardMenu> {
 	}
 
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics);
+		this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}

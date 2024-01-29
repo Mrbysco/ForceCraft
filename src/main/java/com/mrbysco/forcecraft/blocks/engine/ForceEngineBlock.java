@@ -1,12 +1,12 @@
 package com.mrbysco.forcecraft.blocks.engine;
 
+import com.mojang.serialization.MapCodec;
 import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -32,14 +32,11 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.Random;
 import java.util.function.ToIntFunction;
 import java.util.stream.Stream;
 
@@ -101,25 +98,32 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
+	public static final MapCodec<ForceEngineBlock> CODEC = simpleCodec(ForceEngineBlock::new);
+
 	public ForceEngineBlock(Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP).setValue(ACTIVE, false));
 	}
 
 	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
+	}
+
+	@Override
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof ForceEngineBlockEntity) {
-			LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(ForgeCapabilities.FLUID_HANDLER, hit.getDirection());
-			fluidHandler.ifPresent((handler) -> {
-				if (player.getItemInHand(handIn).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+			IFluidHandler handler = level.getCapability(Capabilities.FluidHandler.BLOCK, pos, hit.getDirection());
+			if (handler != null) {
+				if (player.getItemInHand(handIn).getCapability(Capabilities.FluidHandler.ITEM) != null) {
 					FluidUtil.interactWithFluidHandler(player, handIn, level, pos, hit.getDirection());
 				} else {
 					if (!level.isClientSide) {
-						NetworkHooks.openScreen((ServerPlayer) player, (ForceEngineBlockEntity) blockentity, pos);
+						player.openMenu((ForceEngineBlockEntity) blockentity, pos);
 					}
 				}
-			});
+			}
 
 			return InteractionResult.SUCCESS;
 		}
@@ -144,10 +148,12 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 		builder.add(FACING, ACTIVE);
 	}
 
+	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
 		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
+	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
 		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
@@ -161,6 +167,7 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 				this.defaultBlockState().setValue(FACING, direction.getOpposite()).setValue(ACTIVE, Boolean.valueOf(context.getLevel().hasNeighborSignal(context.getClickedPos())));
 	}
 
+	@Override
 	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		if (!level.isClientSide) {
 			boolean flag = state.getValue(ACTIVE);
@@ -174,7 +181,8 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 		}
 	}
 
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand) {
+	@Override
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
 		if (state.getValue(ACTIVE) && !level.hasNeighborSignal(pos)) {
 			level.setBlock(pos, state.cycle(ACTIVE), 2);
 		}
@@ -187,6 +195,7 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 	}
 
 	@Nullable
+	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
 		return createEngineTicker(level, blockEntityType, ForceRegistry.FORCE_ENGINE_BLOCK_ENTITY.get());
 	}
@@ -206,7 +215,6 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 	}
 
 	@Override
-
 	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand) {
 		if (stateIn.getValue(ACTIVE)) {
 			Direction direction = stateIn.getValue(FACING);

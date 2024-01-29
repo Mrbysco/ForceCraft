@@ -2,8 +2,7 @@ package com.mrbysco.forcecraft.client.gui.pack;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.client.gui.widgets.ItemButton;
-import com.mrbysco.forcecraft.networking.PacketHandler;
-import com.mrbysco.forcecraft.networking.message.PackChangeMessage;
+import com.mrbysco.forcecraft.networking.message.PackChangePayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -15,7 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class RenameAndRecolorScreen extends Screen {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/container/rename_screen.png");
@@ -59,7 +58,7 @@ public class RenameAndRecolorScreen extends Screen {
 		}).bounds(this.width / 2 - 34, this.height / 2 + 3, 60, 20).build());
 
 		this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (button) -> {
-			PacketHandler.CHANNEL.send(PacketDistributor.SERVER.noArg(), new PackChangeMessage(usedHand, textfield.getValue(), this.selectedColor));
+			PacketDistributor.SERVER.noArg().send(new PackChangePayload(usedHand, textfield.getValue(), this.selectedColor));
 			this.minecraft.setScreen((Screen) null);
 		}).bounds(this.width / 2 + 31, this.height / 2 + 3, 60, 20).build());
 
@@ -79,12 +78,11 @@ public class RenameAndRecolorScreen extends Screen {
 	@Override
 	public void tick() {
 		super.tick();
-		this.textfield.tick();
 	}
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics);
+		this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 
 		int xSize = 197;
 		int ySize = 66;

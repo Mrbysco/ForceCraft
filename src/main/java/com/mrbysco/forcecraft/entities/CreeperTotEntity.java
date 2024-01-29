@@ -12,7 +12,6 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -70,18 +69,18 @@ public class CreeperTotEntity extends Creeper {
 	}
 
 	public CompoundTag getFireworkTag() {
-		CompoundTag nbt = new CompoundTag();
-		nbt.putBoolean("Flicker", true);
+		CompoundTag tag = new CompoundTag();
+		tag.putBoolean("Flicker", true);
 
 		int[] colors = new int[16];
 		for (int i = 0; i < 16; i++) {
 			colors[i] = DyeColor.byId(i).getFireworkColor();
 		}
-		nbt.putIntArray("Colors", colors);
-		nbt.putByte("Type", (byte) 0);
+		tag.putIntArray("Colors", colors);
+		tag.putByte("Type", (byte) 0);
 
 		ListTag explosions = new ListTag();
-		explosions.add(nbt);
+		explosions.add(tag);
 
 		CompoundTag fireworkTag = new CompoundTag();
 		fireworkTag.put("Explosions", explosions);
@@ -90,64 +89,20 @@ public class CreeperTotEntity extends Creeper {
 	}
 
 	public CompoundTag getCreeperFireworkTag() {
-		CompoundTag nbt = new CompoundTag();
-		nbt.putBoolean("Flicker", true);
+		CompoundTag tag = new CompoundTag();
+		tag.putBoolean("Flicker", true);
 
 		int[] colors = new int[1];
 		colors[0] = DyeColor.LIME.getFireworkColor();
-		nbt.putIntArray("Colors", colors);
-		nbt.putByte("Type", (byte) 3);
+		tag.putIntArray("Colors", colors);
+		tag.putByte("Type", (byte) 3);
 
 		ListTag explosions = new ListTag();
-		explosions.add(nbt);
+		explosions.add(tag);
 
 		CompoundTag fireworkTag = new CompoundTag();
 		fireworkTag.put("Explosions", explosions);
 
 		return fireworkTag;
-	}
-
-	public ItemStack getFirework() {
-		ItemStack firework = new ItemStack(Items.FIREWORK_ROCKET);
-		firework.setTag(new CompoundTag());
-		CompoundTag nbt = new CompoundTag();
-		nbt.putBoolean("Flicker", true);
-
-		int[] colors = new int[16];
-		for (int i = 0; i < 16; i++) {
-			colors[i] = DyeColor.byId(i).getFireworkColor();
-		}
-		nbt.putIntArray("Colors", colors);
-		nbt.putByte("Type", (byte) 0);
-
-		ListTag explosions = new ListTag();
-		explosions.add(nbt);
-
-		CompoundTag fireworkTag = new CompoundTag();
-		fireworkTag.put("Explosions", explosions);
-		firework.getOrCreateTag().put("Fireworks", fireworkTag);
-
-		return firework;
-	}
-
-	public ItemStack getCreeperFirework() {
-		ItemStack firework = new ItemStack(Items.FIREWORK_ROCKET);
-		firework.setTag(new CompoundTag());
-		CompoundTag nbt = new CompoundTag();
-		nbt.putBoolean("Flicker", true);
-
-		int[] colors = new int[1];
-		colors[0] = DyeColor.LIME.getFireworkColor();
-		nbt.putIntArray("Colors", colors);
-		nbt.putByte("Type", (byte) 3);
-
-		ListTag explosions = new ListTag();
-		explosions.add(nbt);
-
-		CompoundTag fireworkTag = new CompoundTag();
-		fireworkTag.put("Explosions", explosions);
-		firework.getOrCreateTag().put("Fireworks", fireworkTag);
-
-		return firework;
 	}
 }

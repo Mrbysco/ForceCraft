@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_minecart": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:minecart"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_rod": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "forcecraft:force_rod"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:transmutation/iron_ingot_from_minecart"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rod",
+      "has_minecart"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:transmutation/iron_ingot_from_minecart"
+    ]
+  }
+}

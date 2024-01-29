@@ -5,9 +5,9 @@ import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 
 import javax.annotation.Nonnull;
 
@@ -34,8 +34,8 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 		Item item = container.getItem();
 		if (item instanceof ForceFilledForceFlask) {
 			return new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), 1000);
-		} else if (item instanceof MilkFlaskItem && ForgeMod.MILK.isPresent()) {
-			return new FluidStack(ForgeMod.MILK.get(), 1000);
+		} else if (item instanceof MilkFlaskItem && NeoForgeMod.MILK.isBound()) {
+			return new FluidStack(NeoForgeMod.MILK.get(), 1000);
 		} else {
 			return FluidStack.EMPTY;
 		}
@@ -43,7 +43,7 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 
 	@Override
 	public boolean canFillFluidType(FluidStack stack) {
-		return stack.getFluid().is(ForceTags.FORCE) || (ForgeMod.MILK.isPresent() && stack.getFluid().is(ForceTags.MILK));
+		return stack.getFluid().is(ForceTags.FORCE) || (NeoForgeMod.MILK.isBound() && stack.getFluid().is(ForceTags.MILK));
 	}
 
 	@Override
@@ -61,11 +61,11 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 		if (stack.isEmpty()) {
 			setContainerToEmpty();
 		} else {
-			if (stack.getFluid().is(ForceTags.FORCE)) {
+			if (!stack.isEmpty() && stack.getFluid().is(ForceTags.FORCE)) {
 				container = new ItemStack(ForceRegistry.FORCE_FILLED_FORCE_FLASK.get());
 				return;
 			}
-			if (ForgeMod.MILK.isPresent() && stack.getFluid().is(ForceTags.MILK)) {
+			if (NeoForgeMod.MILK.isBound() && stack.getFluid().is(ForceTags.MILK)) {
 				container = new ItemStack(ForceRegistry.MILK_FORCE_FLASK.get());
 				return;
 			}

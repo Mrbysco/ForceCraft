@@ -1,11 +1,12 @@
 package com.mrbysco.forcecraft.blocks.infuser;
 
+import com.mojang.serialization.MapCodec;
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,16 +27,12 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.IItemHandler;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.Random;
 import java.util.stream.Stream;
 
 public class InfuserBlock extends BaseEntityBlock {
@@ -48,9 +45,15 @@ public class InfuserBlock extends BaseEntityBlock {
 			Block.box(2, 0, 12, 4, 5, 14),
 			Block.box(2, 5, 2, 14, 10, 14)
 	).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+	public static final MapCodec<InfuserBlock> CODEC = simpleCodec(InfuserBlock::new);
 
 	public InfuserBlock(BlockBehaviour.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return CODEC;
 	}
 
 	@Override
@@ -65,6 +68,7 @@ public class InfuserBlock extends BaseEntityBlock {
 	}
 
 	@Nullable
+	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
 		return createInfuserTicker(level, blockEntityType, ForceRegistry.INFUSER_BLOCK_ENTITY.get());
 	}
@@ -83,16 +87,16 @@ public class InfuserBlock extends BaseEntityBlock {
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player playerIn, InteractionHand handIn, BlockHitResult hit) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof InfuserBlockEntity) {
-			LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(ForgeCapabilities.FLUID_HANDLER, hit.getDirection());
-			fluidHandler.ifPresent((handler) -> {
-				if (playerIn.getItemInHand(handIn).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+			IFluidHandler handler = level.getCapability(Capabilities.FluidHandler.BLOCK, pos, hit.getDirection());
+			if (handler != null) {
+				if (playerIn.getItemInHand(handIn).getCapability(Capabilities.FluidHandler.ITEM) != null) {
 					FluidUtil.interactWithFluidHandler(playerIn, handIn, level, pos, hit.getDirection());
 				} else {
 					if (!level.isClientSide) {
-						NetworkHooks.openScreen((ServerPlayer) playerIn, (InfuserBlockEntity) blockentity, pos);
+						playerIn.openMenu((InfuserBlockEntity) blockentity, pos);
 					}
 				}
-			});
+			}
 
 			return InteractionResult.SUCCESS;
 		}
@@ -105,11 +109,12 @@ public class InfuserBlock extends BaseEntityBlock {
 		if (!state.is(newState.getBlock())) {
 			BlockEntity blockentity = level.getBlockEntity(pos);
 			if (blockentity instanceof InfuserBlockEntity) {
-				blockentity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+				IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, null);
+				if (handler != null) {
 					for (int i = 0; i < handler.getSlots(); ++i) {
 						Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));
 					}
-				});
+				}
 			}
 
 			super.onRemove(state, level, pos, newState, isMoving);
@@ -121,8 +126,8 @@ public class InfuserBlock extends BaseEntityBlock {
 		return PushReaction.BLOCK;
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand) {
+	@Override
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof InfuserBlockEntity infuserTile) {
 			if (infuserTile.processTime > 0) {

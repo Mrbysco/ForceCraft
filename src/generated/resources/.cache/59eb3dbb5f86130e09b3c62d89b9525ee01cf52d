@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-20T22:42:40.0863623	Loot Tables
+// 1.20.4	2024-01-29T23:26:10.6779185	Loot Tables
 ca5af9d0e5bf5dbe2e2c28f177710795753d744a data/forcecraft/loot_tables/blocks/black_force_furnace.json
 d241beda60667659c0a5111512d10bfa846fdc88 data/forcecraft/loot_tables/blocks/blue_force_furnace.json
 e9eb4380443b0050fec72dd137f268485f812117 data/forcecraft/loot_tables/blocks/brown_force_furnace.json
@@ -111,6 +111,17 @@ e42ec7db52131d98b76e7c9f2c55ff6cd9d3413e data/forcecraft/loot_tables/blocks/wall
 62d700390e76061cd84d84deac5163115c63559e data/forcecraft/loot_tables/blocks/wall_force_white_torch.json
 978bdaf0685e3d54e79f98a7ad8fb35f2727a2fb data/forcecraft/loot_tables/blocks/wall_time_torch.json
 85043052fb03a7f7bd6241f2848cc068833a22e1 data/forcecraft/loot_tables/blocks/white_force_furnace.json
+0dc091408e4fdcc140418cafd9b75112c1ecf4c4 data/forcecraft/loot_tables/entities/angry_enderman.json
+f1f75d6da95336f7fdc0e6f8a5cc3e92fa713ee0 data/forcecraft/loot_tables/entities/blue_chu_chu.json
+693971ef52f8cb678877e55c230fee1209c52f9c data/forcecraft/loot_tables/entities/cold_chicken.json
+553095efdc12b65b9fac6559f8839f30a30b3839 data/forcecraft/loot_tables/entities/cold_cow.json
+d1c79f0e3c12d30dcd6dac64cd41fc41776fd753 data/forcecraft/loot_tables/entities/cold_pig.json
+60c15f99e6dee367087dab93f98a7aada6e19eed data/forcecraft/loot_tables/entities/creeper_tot.json
+d4248781dc628bab48f187e81a249226d436e495 data/forcecraft/loot_tables/entities/ender_tot.json
+f65b5c47fb6dba3eee707487b2bd3a7b7de8bec3 data/forcecraft/loot_tables/entities/fairy.json
+2c1de53f8e094e1176c37b0b8f273c8ec57774e9 data/forcecraft/loot_tables/entities/gold_chu_chu.json
+93e4f44fe4f321d104c078df83654d4dc4c1b273 data/forcecraft/loot_tables/entities/green_chu_chu.json
+ce7e61339241058bc098ea5c1d7e1ba8bf10f606 data/forcecraft/loot_tables/entities/red_chu_chu.json
 0ed4d70d997be807c121d7debff58e88536646a9 data/forcecraft/loot_tables/spoils/tier1.json
 7af9a23a3ff320d507b7ec0db456bcaf11c90dbe data/forcecraft/loot_tables/spoils/tier2.json
 e443d97f08eaf435708178f6beed3fd93352a066 data/forcecraft/loot_tables/spoils/tier3.json

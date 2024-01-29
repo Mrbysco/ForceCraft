@@ -1,0 +1,16 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "type": "neoforge:nbt",
+      "item": "forcecraft:upgrade_tome",
+      "tag": "{Experience:100}"
+    }
+  ],
+  "result": {
+    "item": "forcecraft:upgrade_core"
+  }
+}

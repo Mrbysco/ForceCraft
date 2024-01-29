@@ -4,8 +4,6 @@ import com.mrbysco.forcecraft.items.flask.EntityFlaskItem;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -54,15 +52,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages.SpawnEntity;
 
-@OnlyIn(
-		value = Dist.CLIENT,
-		_interface = ItemSupplier.class
-)
 public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier {
 	public FlaskEntity(EntityType<? extends FlaskEntity> typeIn, Level level) {
 		super(typeIn, level);
@@ -74,10 +64,6 @@ public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier
 
 	public FlaskEntity(Level level, double x, double y, double z) {
 		super(ForceEntities.FORCE_FLASK.get(), x, y, z, level);
-	}
-
-	public FlaskEntity(SpawnEntity spawnEntity, Level level) {
-		this(ForceEntities.FORCE_FLASK.get(), level);
 	}
 
 	protected Item getDefaultItem() {
@@ -218,10 +204,5 @@ public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier
 			this.level().broadcastEntityEvent(this, (byte) 3);
 			this.discard();
 		}
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

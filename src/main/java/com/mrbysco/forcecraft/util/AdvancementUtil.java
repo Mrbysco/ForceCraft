@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.util;
 
 import com.mrbysco.forcecraft.Reference;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -56,12 +56,12 @@ public class AdvancementUtil {
 	}
 
 	public static void unlockAdvancement(ServerPlayer serverPlayer, String name) {
-		Advancement advancementIn = serverPlayer.getServer().getAdvancements().getAdvancement(new ResourceLocation(Reference.MOD_ID + ":" + name));
-		if (advancementIn != null) {
-			AdvancementProgress advancementprogress = serverPlayer.getAdvancements().getOrStartProgress(advancementIn);
+		AdvancementHolder holder = serverPlayer.getServer().getAdvancements().get(new ResourceLocation(Reference.MOD_ID + ":" + name));
+		if (holder != null) {
+			AdvancementProgress advancementprogress = serverPlayer.getAdvancements().getOrStartProgress(holder);
 			if (!advancementprogress.isDone()) {
 				for (String s : advancementprogress.getRemainingCriteria()) {
-					serverPlayer.getAdvancements().award(advancementIn, s);
+					serverPlayer.getAdvancements().award(holder, s);
 				}
 			}
 		}

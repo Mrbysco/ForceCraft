@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:grinding",
+  "experience": 0.1,
+  "ingredient": {
+    "tag": "forge:rods/blaze"
+  },
+  "processTime": 400,
+  "results": [
+    {
+      "count": 6,
+      "result": "minecraft:blaze_powder"
+    }
+  ],
+  "secondaryChance": 1.0
+}

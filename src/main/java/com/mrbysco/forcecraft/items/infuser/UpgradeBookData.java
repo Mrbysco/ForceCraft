@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.items.infuser;
 
 import com.mrbysco.forcecraft.ForceCraft;
+import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.nbt.CompoundTag;
@@ -8,6 +9,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,15 +46,15 @@ public class UpgradeBookData {
 		return Math.max(0, getTier().pointsForLevelup() - points);
 	}
 
-	public void onRecipeApply(InfuseRecipe recipe, ItemStack bookStack) {
-		Integer tier = recipe.getTier().ordinal();
+	public void onRecipeApply(RecipeHolder<InfuseRecipe> recipeHolder, ItemStack bookStack) {
+		Integer tier = recipeHolder.value().getTier().ordinal();
 		Set<ResourceLocation> tierSet = new HashSet<>();
 
 		if (recipesUsed.containsKey(tier)) {
 			tierSet = recipesUsed.get(tier);
 		}
 
-		tierSet.add(recipe.getId());
+		tierSet.add(recipeHolder.id());
 		recipesUsed.put(tier, tierSet);
 
 		tryLevelUp();
@@ -80,8 +82,8 @@ public class UpgradeBookData {
 		//Update tooltip
 		Set<ResourceLocation> thisTier = this.recipesUsed.get(this.tier.ordinal());
 		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
-		if (!InfuseRecipe.RECIPESBYLEVEL.isEmpty()) {
-			int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
+		if (!InfuserBlockEntity.LEVEL_RECIPE_LIST.isEmpty()) {
+			int totalThisTier = InfuserBlockEntity.LEVEL_RECIPE_LIST.get(this.tier.ordinal()).size();
 			this.progressCache = recipesThisTier + "/" + totalThisTier;
 		}
 	}
@@ -90,7 +92,7 @@ public class UpgradeBookData {
 		// check more
 		Set<ResourceLocation> thisTier = this.recipesUsed.get(this.tier.ordinal());
 		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
-		int totalThisTier = InfuseRecipe.RECIPESBYLEVEL.get(this.tier.ordinal()).size();
+		int totalThisTier = InfuserBlockEntity.LEVEL_RECIPE_LIST.get(this.tier.ordinal()).size();
 
 //		ForceCraft.LOGGER.debug("can lvlup?  ?  " + recipesThisTier + " >= " + totalThisTier);
 
@@ -142,7 +144,7 @@ public class UpgradeBookData {
 			}
 			ListTag listTag = new ListTag();
 			for (ResourceLocation id : tierSet) {
-				// i dont know where this bug comes from
+				// I don't know where this bug comes from
 				if (!"minecraft:".equalsIgnoreCase(id.toString())) {
 					CompoundTag tg = new CompoundTag();
 					tg.putString("id", id.toString());

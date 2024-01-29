@@ -1,8 +1,7 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.capabilities.forcerod.ForceRodCapability;
-import com.mrbysco.forcecraft.capabilities.forcerod.IForceRodModifier;
+import com.mrbysco.forcecraft.attachment.forcerod.ForceRodAttachment;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
@@ -35,18 +34,15 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_ENDER;
 import static com.mrbysco.forcecraft.Reference.MODIFIERS.MOD_HEALING;
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_FORCEROD;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.FORCE_ROD;
 
 public class ForceRodItem extends BaseItem implements IForceChargingTool {
 
@@ -191,26 +187,28 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 					}
 				}
 			}
-		}
 
-		stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
-			if (cap.hasEnderModifier()) {
-				if (player.isShiftKeyDown()) {
-					cap.setHomeLocation(GlobalPos.of(player.level().dimension(), player.blockPosition()));
-					if (!level.isClientSide) {
-						player.displayClientMessage(Component.translatable("forcecraft.ender_rod.location.set").withStyle(ChatFormatting.DARK_PURPLE), true);
-					}
-				} else {
-					if (cap.getHomeLocation() != null) {
-						cap.teleportPlayerToLocation(player, cap.getHomeLocation());
-						stack.hurtAndBreak(1, player, (playerIn) -> player.broadcastBreakEvent(handIn));
-						player.getCooldowns().addCooldown(this, 10);
-						level.playSound((Player) null, player.xo, player.yo, player.zo, SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
-						player.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+			if (stack.hasData(FORCE_ROD)) {
+				ForceRodAttachment attachment = stack.getData(FORCE_ROD);
+				if (attachment.hasEnderModifier()) {
+					if (player.isShiftKeyDown()) {
+						attachment.setHomeLocation(GlobalPos.of(player.level().dimension(), player.blockPosition()));
+						stack.setData(FORCE_ROD, attachment);
+						if (!level.isClientSide) {
+							player.displayClientMessage(Component.translatable("forcecraft.ender_rod.location.set").withStyle(ChatFormatting.DARK_PURPLE), true);
+						}
+					} else {
+						if (attachment.getHomeLocation() != null) {
+							attachment.teleportPlayerToLocation(player, attachment.getHomeLocation());
+							stack.hurtAndBreak(1, player, (playerIn) -> player.broadcastBreakEvent(handIn));
+							player.getCooldowns().addCooldown(this, 10);
+							level.playSound((Player) null, player.xo, player.yo, player.zo, SoundEvents.ENDERMAN_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
+							player.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+						}
 					}
 				}
 			}
-		});
+		}
 
 		return InteractionResult.SUCCESS;
 	}
@@ -220,51 +218,51 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (playerIn != null) {
-			stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
-				if (cap.getHealingLevel() > 0) {
-					int healingLevel = cap.getHealingLevel();
-					playerIn.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, healingLevel - 1, false, false));
-					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
-					playerIn.getCooldowns().addCooldown(this, 10);
-				}
+			ForceRodAttachment attachment = stack.getData(FORCE_ROD);
+			if (attachment.getHealingLevel() > 0) {
+				int healingLevel = attachment.getHealingLevel();
+				playerIn.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, healingLevel - 1, false, false));
+				stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+				playerIn.getCooldowns().addCooldown(this, 10);
+			}
 
-				if (cap.hasCamoModifier()) {
-					playerIn.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 1000, 0, false, false));
-					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
-					playerIn.getCooldowns().addCooldown(this, 10);
-				}
+			if (attachment.hasCamoModifier()) {
+				playerIn.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 1000, 0, false, false));
+				stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+				playerIn.getCooldowns().addCooldown(this, 10);
+			}
 
-				if (cap.hasEnderModifier()) {
-					if (playerIn.isShiftKeyDown()) {
-						cap.setHomeLocation(GlobalPos.of(playerIn.level().dimension(), playerIn.blockPosition()));
-					} else {
-						if (cap.getHomeLocation() != null) {
-							cap.teleportPlayerToLocation(playerIn, cap.getHomeLocation());
-							stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
-							playerIn.getCooldowns().addCooldown(this, 10);
-							level.playSound((Player) null, playerIn.xo, playerIn.yo, playerIn.zo, SoundEvents.ENDERMAN_TELEPORT, playerIn.getSoundSource(), 1.0F, 1.0F);
-							playerIn.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-						}
+			if (attachment.hasEnderModifier()) {
+				if (playerIn.isShiftKeyDown()) {
+					attachment.setHomeLocation(GlobalPos.of(playerIn.level().dimension(), playerIn.blockPosition()));
+				} else {
+					if (attachment.getHomeLocation() != null) {
+						attachment.teleportPlayerToLocation(playerIn, attachment.getHomeLocation());
+						stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+						playerIn.getCooldowns().addCooldown(this, 10);
+						level.playSound((Player) null, playerIn.xo, playerIn.yo, playerIn.zo, SoundEvents.ENDERMAN_TELEPORT, playerIn.getSoundSource(), 1.0F, 1.0F);
+						playerIn.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 					}
 				}
+			}
 
-				if (cap.hasSightModifier()) {
-					playerIn.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1000, 0, false, false));
-					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
-					playerIn.getCooldowns().addCooldown(this, 10);
-				}
+			if (attachment.hasSightModifier()) {
+				playerIn.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1000, 0, false, false));
+				stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+				playerIn.getCooldowns().addCooldown(this, 10);
+			}
 
-				if (cap.hasLight()) {
-					playerIn.addEffect(new MobEffectInstance(MobEffects.GLOWING, 1000, 0, false, false));
-					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
-					playerIn.getCooldowns().addCooldown(this, 10);
-				}
-				if (cap.getSpeedLevel() > 0) {
-					playerIn.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10 * 20, cap.getSpeedLevel() - 1, false, false));
-					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
-					playerIn.getCooldowns().addCooldown(this, 10);
-				}
-			});
+			if (attachment.hasLight()) {
+				playerIn.addEffect(new MobEffectInstance(MobEffects.GLOWING, 1000, 0, false, false));
+				stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+				playerIn.getCooldowns().addCooldown(this, 10);
+			}
+			if (attachment.getSpeedLevel() > 0) {
+				playerIn.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10 * 20, attachment.getSpeedLevel() - 1, false, false));
+				stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+				playerIn.getCooldowns().addCooldown(this, 10);
+			}
+			stack.setData(FORCE_ROD, attachment);
 		}
 
 		return super.use(level, playerIn, handIn);
@@ -273,13 +271,12 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand handIn) {
 		if (playerIn != null) {
-			stack.getCapability(CAPABILITY_FORCEROD).ifPresent((cap) -> {
-				if (cap.hasLight()) {
-					target.addEffect(new MobEffectInstance(MobEffects.GLOWING, 2400, 0, false, false));
-					stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
-					playerIn.getCooldowns().addCooldown(this, 10);
-				}
-			});
+			ForceRodAttachment attachment = stack.getData(FORCE_ROD);
+			if (attachment.hasLight()) {
+				target.addEffect(new MobEffectInstance(MobEffects.GLOWING, 2400, 0, false, false));
+				stack.hurtAndBreak(1, playerIn, (player) -> player.broadcastBreakEvent(handIn));
+				playerIn.getCooldowns().addCooldown(this, 10);
+			}
 		}
 		return super.interactLivingEntity(stack, playerIn, target, handIn);
 	}
@@ -298,15 +295,6 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		stack.setTag(tag);
 	}
 
-	@Nullable
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		if (CAPABILITY_FORCEROD == null) {
-			return null;
-		}
-		return new ForceRodCapability();
-	}
-
 	public void setApplicableModifiers() {
 		applicableModifiers.add(MOD_HEALING);
 		applicableModifiers.add(MOD_ENDER);
@@ -317,39 +305,11 @@ public class ForceRodItem extends BaseItem implements IForceChargingTool {
 		return this.damageItem(stack, amount);
 	}
 
-	// ShareTag for server->client capability data sync
-	@Override
-	public CompoundTag getShareTag(ItemStack stack) {
-		CompoundTag nbt = super.getShareTag(stack);
-
-		IForceRodModifier cap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-		if (cap != null) {
-			CompoundTag shareTag = ForceRodCapability.writeNBT(cap);
-			nbt.put(Reference.MOD_ID, shareTag);
-		}
-		return nbt;
-	}
-
-	@Override
-	public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
-		if (nbt == null || !nbt.contains(Reference.MOD_ID)) {
-			return;
-		}
-
-		IForceRodModifier cap = stack.getCapability(CAPABILITY_FORCEROD).orElse(null);
-		if (cap != null) {
-			CompoundTag shareTag = nbt.getCompound(Reference.MOD_ID);
-			ForceRodCapability.readNBT(cap, shareTag);
-		}
-		super.readShareTag(stack, nbt);
-	}
-
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lores, TooltipFlag flagIn) {
 		ForceToolData fd = new ForceToolData(stack);
 		fd.attachInformation(lores);
-		ForceRodCapability.attachInformation(stack, lores);
+		ForceRodAttachment.attachInformation(stack, lores);
 		super.appendHoverText(stack, level, lores, flagIn);
 	}
 }

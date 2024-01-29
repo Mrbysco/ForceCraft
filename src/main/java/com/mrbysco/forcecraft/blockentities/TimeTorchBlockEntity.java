@@ -93,16 +93,16 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	public void saveAdditional(CompoundTag compound) {
-		super.saveAdditional(compound);
-		compound.putInt("Speed", this.speed);
+	public void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+		tag.putInt("Speed", this.speed);
 	}
 
 	@Override
-	public void load(CompoundTag nbt) {
-		super.load(nbt);
-		if (nbt.contains("Speed"))
-			this.speed = nbt.getInt("Speed");
+	public void load(CompoundTag tag) {
+		super.load(tag);
+		if (tag.contains("Speed"))
+			this.speed = tag.getInt("Speed");
 	}
 
 	@Override
@@ -117,9 +117,9 @@ public class TimeTorchBlockEntity extends BlockEntity {
 
 	@Override
 	public CompoundTag getUpdateTag() {
-		CompoundTag nbt = new CompoundTag();
-		this.saveAdditional(nbt);
-		return nbt;
+		CompoundTag tag = new CompoundTag();
+		this.saveAdditional(tag);
+		return tag;
 	}
 
 	@Override
@@ -129,8 +129,8 @@ public class TimeTorchBlockEntity extends BlockEntity {
 
 	@Override
 	public CompoundTag getPersistentData() {
-		CompoundTag nbt = new CompoundTag();
-		this.saveAdditional(nbt);
-		return nbt;
+		CompoundTag tag = new CompoundTag();
+		this.saveAdditional(tag);
+		return tag;
 	}
 }

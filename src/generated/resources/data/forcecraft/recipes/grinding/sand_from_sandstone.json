@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:grinding",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:sandstone"
+  },
+  "processTime": 400,
+  "results": [
+    {
+      "count": 1,
+      "result": "minecraft:sand"
+    }
+  ],
+  "secondaryChance": 1.0
+}

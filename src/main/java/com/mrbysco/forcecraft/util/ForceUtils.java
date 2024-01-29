@@ -1,8 +1,7 @@
 package com.mrbysco.forcecraft.util;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.blocks.ForceLogBlock;
-import com.mrbysco.forcecraft.networking.PacketHandler;
+import com.mrbysco.forcecraft.blocks.flammable.ForceLogBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.BlockPos;
@@ -27,10 +26,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.EntityTeleportEvent;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 
 import java.util.Map;
 import java.util.Stack;
@@ -116,7 +115,7 @@ public class ForceUtils {
 		// server sided handling
 		if (!level.isClientSide) {
 			// send the blockbreak event
-			int xp = ForgeHooks.onBlockBreakEvent(level, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos);
+			int xp = CommonHooks.onBlockBreakEvent(level, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), (ServerPlayer) player, pos);
 			if (xp == -1) {
 				return;
 			}
@@ -132,7 +131,7 @@ public class ForceUtils {
 			}
 
 			// always send block update to client
-			PacketHandler.sendPacket(player, new ClientboundBlockUpdatePacket(level, pos));
+			((ServerPlayer) player).connection.send(new ClientboundBlockUpdatePacket(level, pos));
 		}
 		// client sided handling
 		else {
@@ -148,7 +147,7 @@ public class ForceUtils {
 			stack.mineBlock(level, state, pos, player);
 
 			if (stack.getCount() == 0 && stack == player.getMainHandItem()) {
-				ForgeEventFactory.onPlayerDestroyItem(player, stack, InteractionHand.MAIN_HAND);
+				EventHooks.onPlayerDestroyItem(player, stack, InteractionHand.MAIN_HAND);
 				player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
 			}
 
@@ -180,7 +179,7 @@ public class ForceUtils {
 		float strength = state.getDestroyProgress(player, level, pos);
 
 		// only harvestable blocks that aren't impossibly slow to harvest
-		if (!ForgeHooks.isCorrectToolForDrops(state, player) || refStrength / strength > 10f) {
+		if (!CommonHooks.isCorrectToolForDrops(state, player) || refStrength / strength > 10f) {
 			return false;
 		}
 
@@ -194,7 +193,7 @@ public class ForceUtils {
 
 			// send update to client
 			if (!level.isClientSide) {
-				PacketHandler.sendPacket(player, new ClientboundBlockUpdatePacket(level, pos));
+				((ServerPlayer) player).connection.send(new ClientboundBlockUpdatePacket(level, pos));
 			}
 			return false;
 		}
@@ -234,7 +233,7 @@ public class ForceUtils {
 		boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
 		if (flag && !flag1) {
 			EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(living, x, y, z);
-			if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return;
+			if (event.isCanceled()) return;
 			boolean flag2 = living.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 			if (flag2 && !living.isSilent()) {
 				living.level().playSound((Player) null, living.xo, living.yo, living.zo, SoundEvents.ENDERMAN_TELEPORT, living.getSoundSource(), 1.0F, 1.0F);

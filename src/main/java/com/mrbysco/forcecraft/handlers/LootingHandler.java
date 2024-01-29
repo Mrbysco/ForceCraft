@@ -1,7 +1,6 @@
 package com.mrbysco.forcecraft.handlers;
 
-import com.mrbysco.forcecraft.capabilities.CapabilityHandler;
-import com.mrbysco.forcecraft.capabilities.playermodifier.IPlayerModifier;
+import com.mrbysco.forcecraft.attachment.toolmodifier.ToolModifierAttachment;
 import com.mrbysco.forcecraft.entities.projectile.ForceArrowEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
@@ -13,11 +12,12 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LootingLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.event.entity.living.LootingLevelEvent;
 
-import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_PLAYERMOD;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.PLAYER_MOD;
+import static com.mrbysco.forcecraft.attachment.CapabilityHandler.TOOL_MODIFIER;
 
 public class LootingHandler {
 
@@ -30,10 +30,9 @@ public class LootingHandler {
 
 		int level = event.getLootingLevel();
 
-		IPlayerModifier playerModifier = source.getEntity().getCapability(CAPABILITY_PLAYERMOD).orElse(null);
 		int customLevel = 0;
-		if (playerModifier != null) {
-			customLevel += playerModifier.getLuckLevel();
+		if (source.getEntity().hasData(PLAYER_MOD)) {
+			customLevel += source.getEntity().getData(PLAYER_MOD).getLuckLevel();
 		}
 
 		if (source.getDirectEntity() instanceof ForceArrowEntity forceArrow) {
@@ -56,8 +55,10 @@ public class LootingHandler {
 
 		Entity source = event.getSource().getEntity();
 		if (source instanceof Player player) {
-			player.getMainHandItem().getCapability(CapabilityHandler.CAPABILITY_TOOLMOD).ifPresent(cap -> {
-				if (cap.hasTreasure()) {
+			ItemStack heldStack = player.getMainHandItem();
+			if (heldStack.hasData(TOOL_MODIFIER)) {
+				ToolModifierAttachment attachment = heldStack.getData(TOOL_MODIFIER);
+				if (attachment.hasTreasure()) {
 					RandomSource rand = player.getRandom();
 					int looting = event.getLootingLevel();
 					LivingEntity entity = event.getEntity();
@@ -83,7 +84,7 @@ public class LootingHandler {
 						}
 					}
 				}
-			});
+			}
 		}
 	}
 }

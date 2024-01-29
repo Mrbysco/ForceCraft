@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "forcecraft:chu_jelly"
+    }
+  ],
+  "result": {
+    "item": "minecraft:slime_ball"
+  }
+}

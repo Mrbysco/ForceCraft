@@ -6,6 +6,7 @@ import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,9 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -94,7 +94,7 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	public Entity getStoredEntity(ItemStack stack, Level level) {
-		EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(stack.getTag().getString("StoredEntity")));
+		EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.tryParse(stack.getTag().getString("StoredEntity")));
 		if (type != null) {
 			Entity entity = type.create(level);
 			entity.load(stack.getTag().getCompound("EntityData"));
@@ -116,7 +116,7 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	public boolean isBlacklisted(LivingEntity livingEntity) {
-		return ForceTags.FLASK_BLACKLIST_LOOKUP.contains(livingEntity.getType());
+		return livingEntity.getType().is(ForceTags.FLASK_BLACKLIST);
 	}
 
 	@Override

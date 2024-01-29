@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "forcecraft:time_torch_enabled",
+      "value": {}
+    }
+  ],
+  "type": "forcecraft:infuser",
+  "center": {
+    "item": "forcecraft:force_torch"
+  },
+  "ingredient": {
+    "item": "minecraft:clock"
+  },
+  "output": {
+    "item": "forcecraft:time_torch"
+  },
+  "resultType": "item",
+  "tier": "6",
+  "time": 60
+}

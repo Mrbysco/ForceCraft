@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_light_tools"
+  },
+  "ingredient": {
+    "item": "forcecraft:treasure_core"
+  },
+  "resultType": "treasure",
+  "tier": "7",
+  "time": 20
+}

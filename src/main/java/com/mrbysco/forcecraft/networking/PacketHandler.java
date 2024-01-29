@@ -1,45 +1,34 @@
 package com.mrbysco.forcecraft.networking;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.networking.message.OpenBeltMessage;
-import com.mrbysco.forcecraft.networking.message.OpenPackMessage;
-import com.mrbysco.forcecraft.networking.message.PackChangeMessage;
-import com.mrbysco.forcecraft.networking.message.QuickUseBeltMessage;
-import com.mrbysco.forcecraft.networking.message.RecipeToCardMessage;
-import com.mrbysco.forcecraft.networking.message.SaveCardRecipeMessage;
-import com.mrbysco.forcecraft.networking.message.StopInfuserSoundMessage;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import com.mrbysco.forcecraft.networking.handler.ClientPayloadHandler;
+import com.mrbysco.forcecraft.networking.handler.ServerPayloadHandler;
+import com.mrbysco.forcecraft.networking.message.OpenInventoryPayload;
+import com.mrbysco.forcecraft.networking.message.PackChangePayload;
+import com.mrbysco.forcecraft.networking.message.QuickUseBeltPayload;
+import com.mrbysco.forcecraft.networking.message.RecipeToCardPayload;
+import com.mrbysco.forcecraft.networking.message.SaveCardRecipePayload;
+import com.mrbysco.forcecraft.networking.message.StopInfuserSoundPayload;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 public class PacketHandler {
 
-	private static final String PROTOCOL_VERSION = "1";
-	public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-			new ResourceLocation(Reference.MOD_ID, "main"),
-			() -> PROTOCOL_VERSION,
-			PROTOCOL_VERSION::equals,
-			PROTOCOL_VERSION::equals
-	);
+	public static void setupPackets(final RegisterPayloadHandlerEvent event) {
+		final IPayloadRegistrar registrar = event.registrar(Reference.MOD_ID);
 
-	private static int id = 0;
+		registrar.play(StopInfuserSoundPayload.ID, StopInfuserSoundPayload::new, handler -> handler
+				.client(ClientPayloadHandler.getInstance()::handleStopData));
 
-	public static void init() {
-		CHANNEL.registerMessage(id++, PackChangeMessage.class, PackChangeMessage::encode, PackChangeMessage::decode, PackChangeMessage::handle);
-		CHANNEL.registerMessage(id++, RecipeToCardMessage.class, RecipeToCardMessage::encode, RecipeToCardMessage::decode, RecipeToCardMessage::handle);
-		CHANNEL.registerMessage(id++, SaveCardRecipeMessage.class, SaveCardRecipeMessage::encode, SaveCardRecipeMessage::decode, SaveCardRecipeMessage::handle);
-		CHANNEL.registerMessage(id++, OpenBeltMessage.class, OpenBeltMessage::encode, OpenBeltMessage::decode, OpenBeltMessage::handle);
-		CHANNEL.registerMessage(id++, OpenPackMessage.class, OpenPackMessage::encode, OpenPackMessage::decode, OpenPackMessage::handle);
-		CHANNEL.registerMessage(id++, QuickUseBeltMessage.class, QuickUseBeltMessage::encode, QuickUseBeltMessage::decode, QuickUseBeltMessage::handle);
-		CHANNEL.registerMessage(id++, StopInfuserSoundMessage.class, StopInfuserSoundMessage::encode, StopInfuserSoundMessage::decode, StopInfuserSoundMessage::handle);
-	}
-
-	public static void sendPacket(Entity player, Packet<?> packet) {
-		if (player instanceof ServerPlayer && ((ServerPlayer) player).connection != null) {
-			((ServerPlayer) player).connection.send(packet);
-		}
+		registrar.play(OpenInventoryPayload.ID, OpenInventoryPayload::new, handler -> handler
+				.server(ServerPayloadHandler.getInstance()::handleOpen));
+		registrar.play(QuickUseBeltPayload.ID, QuickUseBeltPayload::new, handler -> handler
+				.server(ServerPayloadHandler.getInstance()::handleQuickUse));
+		registrar.play(PackChangePayload.ID, PackChangePayload::new, handler -> handler
+				.server(ServerPayloadHandler.getInstance()::handlePackChange));
+		registrar.play(RecipeToCardPayload.ID, RecipeToCardPayload::new, handler -> handler
+				.server(ServerPayloadHandler.getInstance()::handleCard));
+		registrar.play(SaveCardRecipePayload.ID, SaveCardRecipePayload::new, handler -> handler
+				.server(ServerPayloadHandler.getInstance()::handleSaveCard));
 	}
 }

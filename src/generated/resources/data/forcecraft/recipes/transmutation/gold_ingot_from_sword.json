@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "item": "minecraft:golden_sword"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "item": "minecraft:gold_ingot"
+  }
+}

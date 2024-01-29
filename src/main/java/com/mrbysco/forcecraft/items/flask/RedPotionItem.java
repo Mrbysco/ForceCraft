@@ -16,8 +16,8 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class RedPotionItem extends BaseItem {
@@ -30,9 +30,9 @@ public class RedPotionItem extends BaseItem {
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
 		if (!level.isClientSide) entityLiving.heal(Float.MAX_VALUE);
 
-		if (entityLiving instanceof ServerPlayer serverplayerentity) {
-			CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
-			serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
+		if (entityLiving instanceof ServerPlayer serverPlayer) {
+			CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
+			serverPlayer.awardStat(Stats.ITEM_USED.get(this));
 		}
 
 		ItemStack flaskStack = ForceRegistry.FORCE_FLASK.get().getDefaultInstance();

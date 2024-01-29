@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:grinding",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:dark_oak_door"
+  },
+  "processTime": 400,
+  "results": [
+    {
+      "count": 2,
+      "result": "minecraft:dark_oak_planks"
+    }
+  ],
+  "secondaryChance": 1.0
+}

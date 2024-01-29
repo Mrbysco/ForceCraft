@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:grinding",
+  "experience": 0.1,
+  "ingredient": {
+    "tag": "minecraft:wool"
+  },
+  "processTime": 400,
+  "results": [
+    {
+      "count": 4,
+      "result": "forcecraft:force_planks"
+    }
+  ],
+  "secondaryChance": 1.0
+}
