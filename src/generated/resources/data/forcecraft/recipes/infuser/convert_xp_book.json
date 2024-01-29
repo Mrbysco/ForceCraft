@@ -7,7 +7,7 @@
     "item": "minecraft:experience_bottle"
   },
   "output": {
-    "item": "forcecraft:heat_core"
+    "item": "forcecraft:experience_tome"
   },
   "resultType": "item",
   "tier": "2",

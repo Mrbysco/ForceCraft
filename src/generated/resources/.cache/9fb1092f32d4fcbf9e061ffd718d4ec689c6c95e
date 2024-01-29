@@ -1,4 +1,4 @@
-// 1.20.4	2024-01-29T21:51:37.6039367	Recipes
+// 1.20.4	2024-01-30T00:44:29.6055767	Recipes
 336bd70bf0493a85ea26c5c55c7a0f3c6471dbf0 data/forcecraft/advancements/recipes/building_blocks/force_black_torch.json
 fbc6710f4224d531b5bba07f413f06838cb299ee data/forcecraft/advancements/recipes/building_blocks/force_blue_torch.json
 8e907873e2ff90f9e39f2306846e7dabc767618e data/forcecraft/advancements/recipes/building_blocks/force_brick.json
@@ -516,7 +516,7 @@ aef0261351c9d8a15a67670eb17f8dfcb2f425bd data/forcecraft/recipes/grinding/warped
 a942f0527792e6b7667beb77d9cacbef16458c99 data/forcecraft/recipes/infuser/convert_speed.json
 707e8510eaaad1f2a7515865b099d24b8a0a5f79 data/forcecraft/recipes/infuser/convert_time_torch.json
 85a9e708f8188f918bdf05e172db36842962be99 data/forcecraft/recipes/infuser/convert_xp.json
-39d1b169e9142b1d0200a3f7455d02617dce730e data/forcecraft/recipes/infuser/convert_xp_book.json
+fdde3cfe407a127f0f44fe500efab22f0bee95ab data/forcecraft/recipes/infuser/convert_xp_book.json
 e2b0799ab886a316dc9e9c4f2c5aaeec890ea637 data/forcecraft/recipes/infuser/infuse_bane.json
 d8217dcdd6ce12096f28fe5fc91e3d9dd81739ff data/forcecraft/recipes/infuser/infuse_bleeding.json
 f4bcac04cd8a71994a5293350a77469a1313f5b0 data/forcecraft/recipes/infuser/infuse_camo.json

@@ -1017,7 +1017,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 						Ingredient.of(Items.BOOK),
 						UpgradeBookTier.TWO,
 						20
-				).output(ForceRegistry.HEAT_CORE.get())
+				).output(ForceRegistry.EXPERIENCE_TOME.get())
 				.save(output, new ResourceLocation(Reference.MOD_ID, "infuser/convert_xp_book"));
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(ForceTags.FORTUNE),
