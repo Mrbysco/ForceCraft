@@ -1,1 +1,1 @@
-* Fix a potential crash with the Liquid Force screen shaking mechanic
+* Initial 1.20.4 build (NeoForge)
