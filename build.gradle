@@ -136,7 +136,7 @@ if (System.getenv().CURSEFORGE_KEY) {
         apiToken = System.getenv().CURSEFORGE_KEY
 
         def mainFile = upload(project.curseforge_id, jar)
-        mainFile.releaseType = 'beta'
+        mainFile.releaseType = 'alpha'
         mainFile.addGameVersion "NeoForge"
         mainFile.addGameVersion "${mc_version}"
         mainFile.addGameVersion "Java 17"
@@ -152,7 +152,7 @@ if (System.getenv().MODRINTH_KEY) {
     modrinth {
         token = System.getenv().MODRINTH_KEY
         projectId = project.modrinth_id
-        versionType = "beta"
+        versionType = "alpha"
         versionName = "${mod_name} ${mc_version}"
         versionNumber = project.version
         uploadFile = jar
