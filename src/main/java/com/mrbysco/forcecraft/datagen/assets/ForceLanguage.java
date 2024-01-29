@@ -792,7 +792,7 @@ public class ForceLanguage extends LanguageProvider {
 	}
 
 	public void addSubtitle(RegistryObject<SoundEvent> sound, String name) {
-		String path = Reference.MOD_ID + sound.getId().getPath() + ".subtitle.";
+		String path = Reference.MOD_ID + "." + sound.getId().getPath() + ".subtitle";
 		this.add(path, name);
 	}
 }
