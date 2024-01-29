@@ -1,1 +1,1 @@
-* Fix a potential crash with the Liquid Force screen shaking mechanic
+* Fix subtitles localization
