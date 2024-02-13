@@ -1,1 +1,1 @@
-* Fix subtitles localization
+* Fix crash when placing multiple Time Torches on a wall near each other
