@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.blockentities;
 
 import com.mrbysco.forcecraft.blocks.torch.TimeTorchBlock;
+import com.mrbysco.forcecraft.blocks.torch.WallTimeTorchBlock;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
@@ -65,7 +66,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 		if (blockState != null) {
 			Block block = blockState.getBlock();
 
-			if (block == null || block instanceof LiquidBlock || block instanceof TimeTorchBlock || block == Blocks.AIR)
+			if (block == null || block instanceof LiquidBlock || block instanceof TimeTorchBlock || block instanceof WallTimeTorchBlock || block == Blocks.AIR)
 				return;
 
 
