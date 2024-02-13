@@ -1,1 +1,1 @@
-* Fix a potential crash with the Liquid Force screen shaking mechanic
+* Fix crash when placing multiple Time Torches on a wall near each other
