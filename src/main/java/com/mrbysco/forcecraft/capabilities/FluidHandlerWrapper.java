@@ -3,6 +3,7 @@ package com.mrbysco.forcecraft.capabilities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
@@ -26,19 +27,18 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 
 	@Override
 	public CompoundTag serializeNBT() {
-		CompoundTag nbt = new CompoundTag();
-		nbt.put(NBT_INPUT, throttleTank.writeToNBT(new CompoundTag()));
-		nbt.put(NBT_OUTPUT, fuelTank.writeToNBT(new CompoundTag()));
-		return nbt;
+		CompoundTag tag = new CompoundTag();
+		tag.put(NBT_INPUT, throttleTank.writeToNBT(new CompoundTag()));
+		tag.put(NBT_OUTPUT, fuelTank.writeToNBT(new CompoundTag()));
+		return tag;
 	}
 
 	@Override
-	public void deserializeNBT(CompoundTag nbt) {
-		if (nbt.contains(NBT_OUTPUT))
-			fuelTank.readFromNBT(nbt.getCompound(NBT_OUTPUT));
-		if (nbt.contains(NBT_INPUT))
-			throttleTank.readFromNBT(nbt.getCompound(NBT_INPUT));
-
+	public void deserializeNBT(CompoundTag tag) {
+		if (tag.contains(NBT_OUTPUT))
+			fuelTank.readFromNBT(tag.getCompound(NBT_OUTPUT));
+		if (tag.contains(NBT_INPUT))
+			throttleTank.readFromNBT(tag.getCompound(NBT_INPUT));
 	}
 
 	@Override
@@ -48,32 +48,56 @@ public class FluidHandlerWrapper implements IFluidHandler, INBTSerializable<Comp
 
 	@Override
 	public FluidStack getFluidInTank(int tank) {
-		// TODO: we could make an array of tanks, or switch statement to clean up these
-		// maybe
-		return (tank == 0) ? this.fuelTank.getFluid() : throttleTank.getFluid();
+		switch (tank) {
+			default:
+				return fuelTank.getFluid();
+			case 1:
+				return throttleTank.getFluid();
+		}
 	}
 
 	@Override
 	public int getTankCapacity(int tank) {
-		return (tank == 0) ? this.fuelTank.getCapacity() : throttleTank.getCapacity();
+		switch (tank) {
+			default:
+				return fuelTank.getCapacity();
+			case 1:
+				return throttleTank.getCapacity();
+		}
 	}
 
 	@Override
 	public boolean isFluidValid(int tank, FluidStack stack) {
-		return (tank == 0) ? this.fuelTank.isFluidValid(stack) : throttleTank.isFluidValid(stack);
+		switch (tank) {
+			default:
+				return fuelTank.isFluidValid(stack);
+			case 1:
+				return throttleTank.isFluidValid(stack);
+		}
 	}
 
 	@Override
 	public int fill(FluidStack resource, FluidAction action) {
-		if (this.fuelTank.isFluidValid(resource)) {
-			return this.fuelTank.fill(resource, action);
+		if (resource.isEmpty()) {
+			return 0;
 		}
-		return this.throttleTank.fill(resource, action);
+
+		if (this.fuelTank.isFluidValid(resource)) {
+			int count = this.fuelTank.fill(resource, action);
+			return count < FluidType.BUCKET_VOLUME ? 0 : count;
+		} else {
+			int count = this.throttleTank.fill(resource, action);
+			return count < FluidType.BUCKET_VOLUME ? 0 : count;
+		}
 	}
 
 	@Override
 	public FluidStack drain(FluidStack resource, FluidAction action) {
-		if (this.fuelTank.getFluid().isFluidEqual(resource)) {
+		if (resource.isEmpty()) {
+			return FluidStack.EMPTY;
+		}
+
+		if (this.fuelTank.isFluidValid(resource)) {
 			return this.fuelTank.drain(resource, action);
 		}
 		return this.throttleTank.drain(resource, action);
