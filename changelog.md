@@ -1,1 +1,2 @@
-* Fix crash when placing multiple Time Torches on a wall near each other
+* Fix breaking speed of Deepslate Power Ore
+* Allow Infuser to be triggered by redstone
