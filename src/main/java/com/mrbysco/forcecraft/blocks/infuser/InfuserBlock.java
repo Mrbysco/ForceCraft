@@ -82,14 +82,14 @@ public class InfuserBlock extends BaseEntityBlock {
 	@Override
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player playerIn, InteractionHand handIn, BlockHitResult hit) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
-		if (blockentity instanceof InfuserBlockEntity) {
+		if (blockentity instanceof InfuserBlockEntity infuserBE) {
 			LazyOptional<IFluidHandler> fluidHandler = blockentity.getCapability(ForgeCapabilities.FLUID_HANDLER, hit.getDirection());
 			fluidHandler.ifPresent((handler) -> {
 				if (playerIn.getItemInHand(handIn).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 					FluidUtil.interactWithFluidHandler(playerIn, handIn, level, pos, hit.getDirection());
 				} else {
 					if (!level.isClientSide) {
-						NetworkHooks.openScreen((ServerPlayer) playerIn, (InfuserBlockEntity) blockentity, pos);
+						NetworkHooks.openScreen((ServerPlayer) playerIn, infuserBE, pos);
 					}
 				}
 			});
@@ -113,6 +113,21 @@ public class InfuserBlock extends BaseEntityBlock {
 			}
 
 			super.onRemove(state, level, pos, newState, isMoving);
+		}
+	}
+
+	@Override
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock, BlockPos neighborPos,
+	                            boolean movedByPiston) {
+		if (!level.isClientSide) {
+			boolean flag = level.hasNeighborSignal(pos);
+			BlockEntity blockentity = level.getBlockEntity(pos);
+			if (flag && blockentity instanceof InfuserBlockEntity infuserBE) {
+				if (infuserBE.hasValidRecipe() && !infuserBE.canWork) {
+					infuserBE.startWork();
+					infuserBE.setChanged();
+				}
+			}
 		}
 	}
 
