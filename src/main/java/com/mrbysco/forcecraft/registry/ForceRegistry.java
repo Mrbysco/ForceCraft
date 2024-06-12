@@ -97,7 +97,7 @@ public class ForceRegistry {
 	public static final RegistryObject<Block> POWER_ORE = BLOCKS.register("power_ore", () ->
 			new DropExperienceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
 	public static final RegistryObject<Block> DEEPSLATE_POWER_ORE = BLOCKS.register("deepslate_power_ore", () ->
-			new DropExperienceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
+			new DropExperienceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).requiresCorrectToolForDrops().strength(4.5F, 3.0F)));
 	public static final RegistryObject<Block> FORCE_SAPLING = BLOCKS.register("force_sapling", () ->
 			new SaplingBlock(new ForceTree(), BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
 	public static final RegistryObject<Block> FORCE_LOG = BLOCKS.register("force_log", () ->
