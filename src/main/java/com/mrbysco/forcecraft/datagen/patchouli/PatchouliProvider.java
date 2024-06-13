@@ -318,7 +318,7 @@ public class PatchouliProvider extends PatchouliBookProvider {
 				.setText("info.forcecraft.book.bane_info.text2").build()
 				.build();
 
-		ItemStack powerSourceStack = new ItemStack(ForceRegistry.GOLDEN_POWER_SOURCE.get());
+		ItemStack powerSourceStack = new ItemStack(ForceRegistry.HEAT_CORE.get());
 		tierCategory.addEntry("tier_4/heat_upgrade", "info.forcecraft.book.heat_upgrade.entry.name", powerSourceStack).setSecret(true)
 				.setAdvancement("forcecraft:tier4/tier")
 				.addTextPage("info.forcecraft.book.heat_upgrade_info.text").build()
