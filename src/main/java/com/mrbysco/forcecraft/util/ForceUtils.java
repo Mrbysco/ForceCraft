@@ -37,6 +37,26 @@ import java.util.Stack;
 
 public class ForceUtils {
 
+	/**
+	 * A modified version of LivingEntity#randomTeleport that allows teleporting to unloaded chunks
+	 *
+	 * @param player The entity to teleport
+	 * @param x            the x coordinate
+	 * @param y            the y coordinate
+	 * @param z            the z coordinate
+	 * @param broadcast    if the teleport should be broadcasted to other players
+	 * @return if the teleport was successful
+	 */
+	public static boolean teleportToLocation(Player player, double x, double y, double z, boolean broadcast) {
+		Level level = player.level();
+
+		player.teleportTo(x, y, z);
+		if (broadcast) {
+			level.broadcastEntityEvent(player, (byte) 46);
+		}
+		return true;
+	}
+
 	public static void removeEnchant(Enchantment enchantment, ItemStack stack) {
 		Map<Enchantment, Integer> enchantMap = EnchantmentHelper.getEnchantments(stack);
 		if (enchantMap.containsKey(enchantment)) {
