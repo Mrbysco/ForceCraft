@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-20T22:42:40.0828619	Patchouli Book Provider
+// 1.20.1	2024-08-13T20:44:00.118072	Patchouli Book Provider
 32e348ff36c416065a34159ff6ff141da1db8d45 assets/forcecraft/patchouli_books/force_and_you/en_us/categories/infuser.json
 e88d1941fc0b6d9e137df52d0a31db79d529ccd3 assets/forcecraft/patchouli_books/force_and_you/en_us/categories/tier_0.json
 4f94f2846a491b0763ff728099aa598bf7cd558d assets/forcecraft/patchouli_books/force_and_you/en_us/categories/tier_1.json
@@ -41,7 +41,7 @@ ffe70844f59734481e8625055d77d0d9af03fdf7 assets/forcecraft/patchouli_books/force
 f473de5ed1a4de2d101cb0e535734ff331b4f59e assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_3/holding_2.json
 9983444a73348a62c7e947ac9bf3b3da49de217b assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_3/silk.json
 f29590e4756584c06d2c8d270de5cc2e7cbde3d7 assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_4/bane.json
-5ac42cb92468a2854a5117282b1091970bd618d6 assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_4/heat_upgrade.json
+299c59379634bb6210f7091f13b922f69a508301 assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_4/heat_upgrade.json
 d42377fddab5f3c33ad7f341c3fc8348c18cf30f assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_4/holding_3.json
 dafdec8276765a00a033c942a990b7205a3388d0 assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_5/healing.json
 52548c2c54195cb3500318eb88a21abdfe683de2 assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_5/holding_4.json
