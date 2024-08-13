@@ -25,6 +25,6 @@
   "result": {
     "type": "forge:nbt",
     "item": "forcecraft:force_rod",
-    "nbt": "{Damage:73,ForceInfused:1b}"
+    "nbt": "{Damage:73}"
   }
 }

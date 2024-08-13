@@ -23,8 +23,6 @@
     ]
   },
   "result": {
-    "type": "forge:nbt",
-    "item": "forcecraft:force_rod",
-    "nbt": "{ForceInfused:1b}"
+    "item": "forcecraft:force_rod"
   }
 }
