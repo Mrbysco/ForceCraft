@@ -1,4 +1,2 @@
-* Change patchouli icon for Heat core page
-* Change ender teleporting to allow teleporting to unloaded chunks
-* Remove `ForceInfused` tag from force-rod recipe result stopping it from being infuse-able
-* Backport the glowing of the Power Ore
+* Backport datagen (**All recipes should still be present, if not please make an issue on the issue tracker!**)
+* Add Force Wood recipe which was forgotten
