@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_light_tools"
+  },
+  "ingredient": {
+    "item": "minecraft:glowstone"
+  },
+  "result": "forcecraft:light",
+  "tier": 7,
+  "time": 20
+}

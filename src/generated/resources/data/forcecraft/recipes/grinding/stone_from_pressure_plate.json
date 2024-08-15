@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:stone_pressure_plate"
+  },
+  "processtime": 400,
+  "results": [
+    {
+      "count": 2,
+      "item": "minecraft:stone"
+    }
+  ],
+  "secondaryChance": 1.0
+}

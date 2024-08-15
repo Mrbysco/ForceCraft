@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "processtime": 200,
+  "results": [
+    {
+      "item": "minecraft:leather"
+    }
+  ]
+}

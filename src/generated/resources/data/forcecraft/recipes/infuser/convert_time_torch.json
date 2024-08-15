@@ -1,0 +1,27 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forcecraft:time_torch_enabled"
+        }
+      ],
+      "recipe": {
+        "type": "forcecraft:infuser",
+        "center": {
+          "item": "forcecraft:force_torch"
+        },
+        "ingredient": {
+          "item": "minecraft:clock"
+        },
+        "output": {
+          "item": "forcecraft:time_torch"
+        },
+        "result": "forcecraft:item",
+        "tier": 6,
+        "time": 60
+      }
+    }
+  ]
+}

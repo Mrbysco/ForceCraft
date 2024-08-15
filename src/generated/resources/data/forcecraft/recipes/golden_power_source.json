@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.15,
+  "ingredient": {
+    "tag": "forcecraft:force_logs"
+  },
+  "result": "forcecraft:golden_power_source"
+}

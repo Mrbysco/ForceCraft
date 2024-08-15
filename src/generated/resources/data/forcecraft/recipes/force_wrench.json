@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "tag": "forge:ingots/force"
+    },
+    "G": {
+      "item": "forcecraft:force_gear"
+    }
+  },
+  "pattern": [
+    "F F",
+    " G ",
+    " F "
+  ],
+  "result": {
+    "item": "forcecraft:force_wrench"
+  },
+  "show_notification": true
+}

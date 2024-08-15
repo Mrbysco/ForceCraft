@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "tag": "forge:sand/red"
+  },
+  "processtime": 200,
+  "results": [
+    {
+      "item": "minecraft:red_sandstone"
+    }
+  ]
+}

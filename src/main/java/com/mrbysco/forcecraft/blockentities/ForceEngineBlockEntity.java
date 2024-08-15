@@ -39,9 +39,9 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -137,7 +137,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 								fluid.is(ForceTags.FUEL) || fluid.is(ForceTags.BIOFUEL);
 					}
 				}
-				return stack.is(ForceTags.FORGE_GEM) || stack.is(Tags.Items.NETHER_STARS) ||
+				return stack.is(ForceTags.FORCE_GEM) || stack.is(Tags.Items.NETHER_STARS) ||
 						(fluidCap != null && fluidCap.getFluidInTank(0).getFluid().is(ForceTags.FORCE));
 			} else if (slot == 1) {
 				if (fluidCap != null) {
@@ -392,7 +392,7 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	private void processFuelSlot() {
 		ItemStack slotStack = stackWrapper.getStackInSlot(0);
 
-		if (slotStack.is(ForceTags.FORGE_GEM)) {
+		if (slotStack.is(ForceTags.FORCE_GEM)) {
 			FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
 
 			if (getFuelAmount() + force.getAmount() <= tankFuel.getCapacity()) {

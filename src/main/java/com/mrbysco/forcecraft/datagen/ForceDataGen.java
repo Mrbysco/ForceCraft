@@ -1,17 +1,17 @@
 package com.mrbysco.forcecraft.datagen;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.datagen.assets.ForceBlockModels;
-import com.mrbysco.forcecraft.datagen.assets.ForceBlockStates;
-import com.mrbysco.forcecraft.datagen.assets.ForceItemModels;
-import com.mrbysco.forcecraft.datagen.assets.ForceLanguage;
+import com.mrbysco.forcecraft.datagen.assets.ForceBlockModelProvider;
+import com.mrbysco.forcecraft.datagen.assets.ForceBlockStateProvider;
+import com.mrbysco.forcecraft.datagen.assets.ForceItemModelProvider;
+import com.mrbysco.forcecraft.datagen.assets.ForceLanguageProvider;
 import com.mrbysco.forcecraft.datagen.data.ForceDamageTypeProvider;
-import com.mrbysco.forcecraft.datagen.data.ForceLoot;
-import com.mrbysco.forcecraft.datagen.data.ForceLootModifiers;
+import com.mrbysco.forcecraft.datagen.data.ForceLootModifierProvider;
+import com.mrbysco.forcecraft.datagen.data.ForceLootProvider;
 import com.mrbysco.forcecraft.datagen.data.ForceRecipeProvider;
-import com.mrbysco.forcecraft.datagen.data.tags.ForceBlockTags;
-import com.mrbysco.forcecraft.datagen.data.tags.ForceDamageTypeTags;
-import com.mrbysco.forcecraft.datagen.data.tags.ForceItemTags;
+import com.mrbysco.forcecraft.datagen.data.tags.ForceBlockTagProvider;
+import com.mrbysco.forcecraft.datagen.data.tags.ForceDamageTypeTagProvider;
+import com.mrbysco.forcecraft.datagen.data.tags.ForceItemTagProvider;
 import com.mrbysco.forcecraft.datagen.patchouli.PatchouliProvider;
 import com.mrbysco.forcecraft.world.feature.ForceBiomeModifiers;
 import com.mrbysco.forcecraft.world.feature.ForceFeatureKeys;
@@ -44,23 +44,23 @@ public class ForceDataGen {
 		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 		if (event.includeServer()) {
-			generator.addProvider(event.includeServer(), new ForceLoot(packOutput));
+			generator.addProvider(event.includeServer(), new ForceLootProvider(packOutput));
 			generator.addProvider(event.includeServer(), new ForceRecipeProvider(packOutput));
 			generator.addProvider(event.includeServer(), new PatchouliProvider(packOutput));
 			BlockTagsProvider provider;
-			generator.addProvider(event.includeServer(), provider = new ForceBlockTags(packOutput, lookupProvider, existingFileHelper));
-			generator.addProvider(event.includeServer(), new ForceItemTags(packOutput, lookupProvider, provider, existingFileHelper));
-			generator.addProvider(event.includeServer(), new ForceDamageTypeTags(packOutput, lookupProvider, existingFileHelper));
-			generator.addProvider(event.includeServer(), new ForceLootModifiers(packOutput));
+			generator.addProvider(event.includeServer(), provider = new ForceBlockTagProvider(packOutput, lookupProvider, existingFileHelper));
+			generator.addProvider(event.includeServer(), new ForceItemTagProvider(packOutput, lookupProvider, provider, existingFileHelper));
+			generator.addProvider(event.includeServer(), new ForceDamageTypeTagProvider(packOutput, lookupProvider, existingFileHelper));
+			generator.addProvider(event.includeServer(), new ForceLootModifierProvider(packOutput));
 
 			generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(
-					packOutput, lookupProvider, Set.of(Reference.MOD_ID)));
+					packOutput, CompletableFuture.supplyAsync(ForceDataGen::getProvider), Set.of(Reference.MOD_ID)));
 		}
 		if (event.includeClient()) {
-			generator.addProvider(event.includeClient(), new ForceLanguage(packOutput));
-			generator.addProvider(event.includeClient(), new ForceBlockModels(packOutput, existingFileHelper));
-			generator.addProvider(event.includeClient(), new ForceBlockStates(packOutput, existingFileHelper));
-			generator.addProvider(event.includeClient(), new ForceItemModels(packOutput, existingFileHelper));
+			generator.addProvider(event.includeClient(), new ForceLanguageProvider(packOutput));
+			generator.addProvider(event.includeClient(), new ForceBlockModelProvider(packOutput, existingFileHelper));
+			generator.addProvider(event.includeClient(), new ForceBlockStateProvider(packOutput, existingFileHelper));
+			generator.addProvider(event.includeClient(), new ForceItemModelProvider(packOutput, existingFileHelper));
 		}
 	}
 
@@ -70,8 +70,8 @@ public class ForceDataGen {
 		registryBuilder.add(Registries.CONFIGURED_FEATURE, ForceFeatureKeys::configuredBootstrap);
 		registryBuilder.add(Registries.PLACED_FEATURE, ForceFeatureKeys::placedBootstrap);
 		registryBuilder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, ForceBiomeModifiers::modifierBootstrap);
-		// We need the BIOME registry to be present so we can use a biome tag, doesn't matter that it's empty
-		registryBuilder.add(Registries.BIOME, context -> {
+		// We need the BIOME registry to be present, so we can use a biome tag, doesn't matter that it's empty
+		registryBuilder.add(Registries.BIOME, $ -> {
 		});
 		RegistryAccess.Frozen regAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
 		return registryBuilder.buildPatch(regAccess, VanillaRegistries.createLookup());

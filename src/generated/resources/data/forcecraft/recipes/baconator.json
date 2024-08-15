@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "M": {
+      "item": "forcecraft:pig_flask"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    " M ",
+    "IPI",
+    "IPI"
+  ],
+  "result": {
+    "item": "forcecraft:baconator"
+  },
+  "show_notification": true
+}

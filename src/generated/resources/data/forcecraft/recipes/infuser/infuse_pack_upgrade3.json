@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "item": "forcecraft:force_pack"
+  },
+  "ingredient": {
+    "item": "forcecraft:force_pack_upgrade"
+  },
+  "result": "forcecraft:pack3",
+  "tier": 4,
+  "time": 20
+}

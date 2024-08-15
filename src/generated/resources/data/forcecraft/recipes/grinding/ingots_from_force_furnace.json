@@ -1,0 +1,19 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "tag": "forcecraft:force_furnace"
+  },
+  "processtime": 400,
+  "results": [
+    {
+      "count": 3,
+      "item": "forcecraft:force_ingot"
+    },
+    {
+      "count": 2,
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "secondaryChance": 1.0
+}

@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:furnace"
+  },
+  "processtime": 400,
+  "results": [
+    {
+      "count": 8,
+      "item": "minecraft:cobblestone"
+    }
+  ],
+  "secondaryChance": 1.0
+}

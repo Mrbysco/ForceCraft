@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "forge:gems/diamond"
+    },
+    "F": {
+      "tag": "forge:ingots/force"
+    },
+    "G": {
+      "tag": "forge:storage_blocks/gold"
+    },
+    "N": {
+      "tag": "forge:nether_stars"
+    }
+  },
+  "pattern": [
+    "FGF",
+    "DND",
+    "FGF"
+  ],
+  "result": {
+    "item": "forcecraft:treasure_core"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "forge:bones"
+    },
+    "F": {
+      "item": "minecraft:rotten_flesh"
+    },
+    "G": {
+      "tag": "forge:gunpowder"
+    },
+    "L": {
+      "tag": "forge:dyes/light_blue"
+    },
+    "S": {
+      "item": "forcecraft:snow_cookie"
+    }
+  },
+  "pattern": [
+    " G ",
+    "BSF",
+    " L "
+  ],
+  "result": {
+    "item": "forcecraft:soul_wafer"
+  },
+  "show_notification": true
+}

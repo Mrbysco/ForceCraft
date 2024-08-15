@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_ender_tools"
+  },
+  "ingredient": {
+    "tag": "forcecraft:ender"
+  },
+  "result": "forcecraft:ender",
+  "tier": 6,
+  "time": 20
+}

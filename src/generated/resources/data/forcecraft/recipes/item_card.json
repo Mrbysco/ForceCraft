@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "forge:dyes/blue"
+    },
+    "I": {
+      "tag": "forge:ingots/force"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "R": {
+      "tag": "forge:dyes/red"
+    }
+  },
+  "pattern": [
+    "PRP",
+    "PIP",
+    "PBP"
+  ],
+  "result": {
+    "item": "forcecraft:item_card"
+  },
+  "show_notification": true
+}

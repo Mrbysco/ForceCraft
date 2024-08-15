@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_knockback_tools"
+  },
+  "ingredient": {
+    "tag": "forge:nuggets/force"
+  },
+  "result": "forcecraft:force",
+  "tier": 0,
+  "time": 20
+}

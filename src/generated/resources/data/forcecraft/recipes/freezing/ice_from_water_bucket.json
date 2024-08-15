@@ -1,0 +1,16 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:water_bucket"
+  },
+  "processtime": 200,
+  "results": [
+    {
+      "item": "minecraft:packed_ice"
+    },
+    {
+      "item": "minecraft:bucket"
+    }
+  ]
+}

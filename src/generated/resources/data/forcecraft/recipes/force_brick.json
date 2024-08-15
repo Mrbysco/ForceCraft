@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "tag": "minecraft:stone_bricks"
+    },
+    "F": {
+      "item": "forcecraft:force_gem"
+    }
+  },
+  "pattern": [
+    "BBB",
+    "BFB",
+    "BBB"
+  ],
+  "result": {
+    "count": 8,
+    "item": "forcecraft:force_brick"
+  },
+  "show_notification": true
+}

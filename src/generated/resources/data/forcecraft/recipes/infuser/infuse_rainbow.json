@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "item": "forcecraft:force_shears"
+  },
+  "ingredient": {
+    "item": "minecraft:blue_dye"
+  },
+  "result": "forcecraft:rainbow",
+  "tier": 2,
+  "time": 20
+}

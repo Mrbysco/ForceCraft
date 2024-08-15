@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_lucky_tools"
+  },
+  "ingredient": {
+    "tag": "forcecraft:fortune"
+  },
+  "result": "forcecraft:fortune",
+  "tier": 2,
+  "time": 20
+}

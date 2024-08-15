@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "item": "forcecraft:upgrade_core"
+  },
+  "ingredient": {
+    "item": "forcecraft:snow_cookie"
+  },
+  "output": {
+    "item": "forcecraft:freezing_core"
+  },
+  "result": "forcecraft:item",
+  "tier": 2,
+  "time": 20
+}

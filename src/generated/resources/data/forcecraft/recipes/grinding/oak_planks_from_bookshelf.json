@@ -1,0 +1,19 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "tag": "forge:bookshelves"
+  },
+  "processtime": 400,
+  "results": [
+    {
+      "count": 6,
+      "item": "minecraft:oak_planks"
+    },
+    {
+      "count": 9,
+      "item": "minecraft:paper"
+    }
+  ],
+  "secondaryChance": 1.0
+}

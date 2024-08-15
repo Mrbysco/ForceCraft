@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_bleeding_tools"
+  },
+  "ingredient": {
+    "item": "minecraft:arrow"
+  },
+  "result": "forcecraft:bleeding",
+  "tier": 3,
+  "time": 20
+}

@@ -1,0 +1,16 @@
+{
+  "type": "forcecraft:shaped_no_remainder",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "forcecraft:item_card"
+    }
+  },
+  "pattern": [
+    "E"
+  ],
+  "result": {
+    "item": "forcecraft:item_card"
+  },
+  "show_notification": true
+}

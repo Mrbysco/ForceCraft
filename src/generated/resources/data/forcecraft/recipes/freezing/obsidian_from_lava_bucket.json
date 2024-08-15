@@ -1,0 +1,16 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:lava_bucket"
+  },
+  "processtime": 200,
+  "results": [
+    {
+      "item": "minecraft:obsidian"
+    },
+    {
+      "item": "minecraft:bucket"
+    }
+  ]
+}

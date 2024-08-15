@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [],
+      "name": "main",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "forcecraft:entities/fairy"
+}

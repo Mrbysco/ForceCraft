@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/force"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "forcecraft:force_nugget"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_treasure_tools"
+  },
+  "ingredient": {
+    "item": "forcecraft:treasure_core"
+  },
+  "result": "forcecraft:treasure",
+  "tier": 7,
+  "time": 20
+}

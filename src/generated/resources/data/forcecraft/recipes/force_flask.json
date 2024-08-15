@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "forge:glass"
+    },
+    "N": {
+      "tag": "forge:nuggets/force"
+    }
+  },
+  "pattern": [
+    " N ",
+    "G G",
+    " G "
+  ],
+  "result": {
+    "count": 3,
+    "item": "forcecraft:force_flask"
+  },
+  "show_notification": true
+}

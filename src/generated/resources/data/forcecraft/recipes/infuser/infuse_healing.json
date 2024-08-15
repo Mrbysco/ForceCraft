@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_healing_tools"
+  },
+  "ingredient": {
+    "item": "minecraft:ghast_tear"
+  },
+  "result": "forcecraft:healing",
+  "tier": 5,
+  "time": 20
+}

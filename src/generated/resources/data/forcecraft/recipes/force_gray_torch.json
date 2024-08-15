@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "D": {
+      "tag": "forge:dyes/gray"
+    },
+    "T": {
+      "item": "forcecraft:force_torch"
+    }
+  },
+  "pattern": [
+    "TTT",
+    "TDT",
+    "TTT"
+  ],
+  "result": {
+    "count": 8,
+    "item": "forcecraft:force_gray_torch"
+  },
+  "show_notification": true
+}

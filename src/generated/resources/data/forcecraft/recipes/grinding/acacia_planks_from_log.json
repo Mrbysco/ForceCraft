@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "tag": "minecraft:acacia_logs"
+  },
+  "processtime": 400,
+  "results": [
+    {
+      "count": 6,
+      "item": "minecraft:acacia_planks"
+    }
+  ],
+  "secondaryChance": 1.0
+}

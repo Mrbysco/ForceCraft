@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "tag": "forge:ingots/nether_brick"
+  },
+  "processtime": 200,
+  "results": [
+    {
+      "item": "minecraft:brick"
+    }
+  ]
+}

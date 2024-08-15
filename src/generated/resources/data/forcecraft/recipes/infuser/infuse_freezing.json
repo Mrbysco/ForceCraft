@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_freezing_tools"
+  },
+  "ingredient": {
+    "item": "forcecraft:snow_cookie"
+  },
+  "result": "forcecraft:freezing",
+  "tier": 2,
+  "time": 20
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "F": {
+      "tag": "forge:ingots/force"
+    },
+    "N": {
+      "tag": "forge:nether_stars"
+    }
+  },
+  "pattern": [
+    " N ",
+    "FCF",
+    " F "
+  ],
+  "result": {
+    "item": "forcecraft:magnet_glove"
+  },
+  "show_notification": true
+}

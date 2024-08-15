@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "tag": "minecraft:planks"
+    },
+    "F": {
+      "tag": "forge:ingots/force"
+    },
+    "L": {
+      "tag": "forge:leather"
+    }
+  },
+  "pattern": [
+    "FLF",
+    "LCL",
+    "FLF"
+  ],
+  "result": {
+    "item": "forcecraft:force_pack"
+  },
+  "show_notification": true
+}

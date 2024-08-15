@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_heat_tools"
+  },
+  "ingredient": {
+    "item": "forcecraft:golden_power_source"
+  },
+  "result": "forcecraft:heat",
+  "tier": 1,
+  "time": 60
+}

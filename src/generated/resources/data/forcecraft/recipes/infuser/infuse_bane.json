@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_bane_tools"
+  },
+  "ingredient": {
+    "item": "minecraft:spider_eye"
+  },
+  "result": "forcecraft:bane",
+  "tier": 4,
+  "time": 20
+}

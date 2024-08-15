@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:shapeless_no_remainder",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "forcecraft:entity_flasks"
+    }
+  ],
+  "result": {
+    "item": "forcecraft:force_flask"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_wing_tools"
+  },
+  "ingredient": {
+    "item": "minecraft:feather"
+  },
+  "result": "forcecraft:wing",
+  "tier": 5,
+  "time": 20
+}

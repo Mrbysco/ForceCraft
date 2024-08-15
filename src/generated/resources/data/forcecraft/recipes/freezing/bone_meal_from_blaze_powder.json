@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:blaze_powder"
+  },
+  "processtime": 200,
+  "results": [
+    {
+      "item": "minecraft:bone_meal"
+    }
+  ]
+}

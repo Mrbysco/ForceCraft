@@ -1,0 +1,21 @@
+{
+  "type": "forcecraft:shaped_no_remainder",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "forcecraft:force_filled_force_flask"
+    },
+    "R": {
+      "item": "forcecraft:red_chu_jelly"
+    }
+  },
+  "pattern": [
+    "RR",
+    "RR",
+    "RF"
+  ],
+  "result": {
+    "item": "forcecraft:red_potion"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:sandstone"
+  },
+  "processtime": 400,
+  "results": [
+    {
+      "item": "minecraft:sand"
+    }
+  ],
+  "secondaryChance": 1.0
+}

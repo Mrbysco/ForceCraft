@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_speed_tools"
+  },
+  "ingredient": {
+    "item": "minecraft:sugar"
+  },
+  "result": "forcecraft:speed",
+  "tier": 1,
+  "time": 20
+}

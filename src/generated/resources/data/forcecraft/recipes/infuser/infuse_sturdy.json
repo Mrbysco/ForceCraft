@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_sturdy_tools"
+  },
+  "ingredient": {
+    "item": "minecraft:obsidian"
+  },
+  "result": "forcecraft:sturdy",
+  "tier": 6,
+  "time": 20
+}

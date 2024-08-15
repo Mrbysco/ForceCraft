@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "tag": "forge:ingots/force"
+    }
+  },
+  "pattern": [
+    " F ",
+    "F F",
+    " F "
+  ],
+  "result": {
+    "item": "forcecraft:force_gear"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "tag": "forge:rods/force"
+    },
+    "X": {
+      "tag": "forge:nuggets/force"
+    },
+    "Y": {
+      "tag": "forge:feathers"
+    }
+  },
+  "pattern": [
+    "X",
+    "#",
+    "Y"
+  ],
+  "result": {
+    "count": 6,
+    "item": "forcecraft:force_arrow"
+  },
+  "show_notification": true
+}

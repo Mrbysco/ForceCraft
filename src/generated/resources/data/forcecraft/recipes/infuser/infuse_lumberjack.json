@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_lumber_tools"
+  },
+  "ingredient": {
+    "item": "forcecraft:force_log"
+  },
+  "result": "forcecraft:lumberjack",
+  "tier": 1,
+  "time": 60
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "F": {
+      "tag": "forge:ingots/force"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "U": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "pattern": [
+    " F ",
+    "F F",
+    "IUI"
+  ],
+  "result": {
+    "item": "forcecraft:force_furnace"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "tag": "forcecraft:valid_silky_tools"
+  },
+  "ingredient": {
+    "item": "minecraft:cobweb"
+  },
+  "result": "forcecraft:silk",
+  "tier": 3,
+  "time": 20
+}

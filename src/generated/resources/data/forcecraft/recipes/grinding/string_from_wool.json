@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "tag": "minecraft:wool"
+  },
+  "processtime": 400,
+  "results": [
+    {
+      "count": 4,
+      "item": "forcecraft:force_planks"
+    }
+  ],
+  "secondaryChance": 1.0
+}

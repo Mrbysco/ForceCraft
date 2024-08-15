@@ -5,6 +5,7 @@ import com.mrbysco.forcecraft.recipe.FreezingRecipe.SerializerFreezingRecipe;
 import com.mrbysco.forcecraft.recipe.GrindingRecipe.SerializerGrindingRecipe;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe.SerializeInfuserRecipe;
 import com.mrbysco.forcecraft.recipe.ShapedNoRemainderRecipe.SerializerShapedNoRemainderRecipe;
+import com.mrbysco.forcecraft.recipe.ShapelessNoRemainderRecipe.SerializerShapelessNoRemainderRecipe;
 import com.mrbysco.forcecraft.recipe.TransmutationRecipe.SerializerTransmutationRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,6 +18,7 @@ public class ForceRecipeSerializers {
 	public static final RegistryObject<SerializeInfuserRecipe> INFUSER_SERIALIZER = RECIPE_SERIALIZERS.register("infuser", SerializeInfuserRecipe::new);
 	public static final RegistryObject<SerializerTransmutationRecipe> TRANSMUTATION_SERIALIZER = RECIPE_SERIALIZERS.register("transmutation", SerializerTransmutationRecipe::new);
 	public static final RegistryObject<SerializerShapedNoRemainderRecipe> SHAPED_NO_REMAINDER_SERIALIZER = RECIPE_SERIALIZERS.register("shaped_no_remainder", SerializerShapedNoRemainderRecipe::new);
+	public static final RegistryObject<SerializerShapelessNoRemainderRecipe> SHAPELESS_NO_REMAINDER_SERIALIZER = RECIPE_SERIALIZERS.register("shapeless_no_remainder", SerializerShapelessNoRemainderRecipe::new);
 	public static final RegistryObject<SerializerFreezingRecipe> FREEZING_SERIALIZER = RECIPE_SERIALIZERS.register("freezing", SerializerFreezingRecipe::new);
 	public static final RegistryObject<SerializerGrindingRecipe> GRINDING_SERIALIZER = RECIPE_SERIALIZERS.register("grinding", SerializerGrindingRecipe::new);
 }

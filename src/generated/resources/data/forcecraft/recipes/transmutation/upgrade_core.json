@@ -1,0 +1,16 @@
+{
+  "type": "forcecraft:transmutation",
+  "ingredients": [
+    {
+      "item": "forcecraft:force_rod"
+    },
+    {
+      "type": "forge:partial_nbt",
+      "item": "forcecraft:experience_tome",
+      "nbt": "{Experience:100}"
+    }
+  ],
+  "result": {
+    "item": "forcecraft:upgrade_core"
+  }
+}

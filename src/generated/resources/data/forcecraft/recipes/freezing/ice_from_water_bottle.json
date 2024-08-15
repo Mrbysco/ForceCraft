@@ -1,0 +1,18 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "type": "forge:partial_nbt",
+    "item": "minecraft:potion",
+    "nbt": "{Potion:\"minecraft:water\"}"
+  },
+  "processtime": 200,
+  "results": [
+    {
+      "item": "minecraft:ice"
+    },
+    {
+      "item": "minecraft:glass_bottle"
+    }
+  ]
+}

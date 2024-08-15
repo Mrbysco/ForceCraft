@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:infuser",
+  "center": {
+    "item": "forcecraft:upgrade_core"
+  },
+  "ingredient": {
+    "item": "minecraft:flint"
+  },
+  "output": {
+    "item": "forcecraft:grinding_core"
+  },
+  "result": "forcecraft:item",
+  "tier": 2,
+  "time": 20
+}

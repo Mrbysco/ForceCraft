@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "tag": "forge:ingots/force"
+    },
+    "N": {
+      "tag": "forge:nuggets/force"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "  F",
+    " S ",
+    "N  "
+  ],
+  "result": {
+    "item": "forcecraft:force_rod",
+    "nbt": "{Damage:73}"
+  },
+  "show_notification": true
+}

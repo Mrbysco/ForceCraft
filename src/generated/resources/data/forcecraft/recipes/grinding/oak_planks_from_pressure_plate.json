@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:freezing",
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:oak_pressure_plate"
+  },
+  "processtime": 400,
+  "results": [
+    {
+      "count": 2,
+      "item": "minecraft:oak_planks"
+    }
+  ],
+  "secondaryChance": 1.0
+}
