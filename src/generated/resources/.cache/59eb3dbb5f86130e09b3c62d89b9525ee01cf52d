@@ -1,4 +1,4 @@
-// 1.21.1	2024-08-25T23:46:34.836875276	Loot Tables
+// 1.21.1	2024-10-31T14:17:58.1192349	Loot Tables
 a3f924f448e689c5b6356bc3513913f4a3e9d232 data/forcecraft/loot_table/blocks/black_force_furnace.json
 08db02555ece2c9aa153c66c226a557cd8dc8f97 data/forcecraft/loot_table/blocks/blue_force_furnace.json
 7abfdb8279c0cbb51bcbf6546cdf8618ac5676a4 data/forcecraft/loot_table/blocks/brown_force_furnace.json
@@ -63,7 +63,7 @@ f9722d90ff154c2af7308081c18c5c7af4972fb6 data/forcecraft/loot_table/blocks/force
 2beb7934090b2c2f09592e1e9b980a50bdc87536 data/forcecraft/loot_table/blocks/force_furnace.json
 3d040912271d927c4fdd10a2a71fd89821f1de70 data/forcecraft/loot_table/blocks/force_gray_torch.json
 4aa0d21c2520bf48db242337c5be1c4cca6f64bb data/forcecraft/loot_table/blocks/force_green_torch.json
-ca78ec4c4855ebeb2489705fa72bb6158cc78dd4 data/forcecraft/loot_table/blocks/force_leaves.json
+0403e710e2f1bb4e864381db03bf72b18e808f17 data/forcecraft/loot_table/blocks/force_leaves.json
 28da173cfba709dfbb594bf9f45f06badf34d3e0 data/forcecraft/loot_table/blocks/force_light_blue_torch.json
 f24da43bc2b85f1140daeafb90640308683d0fe0 data/forcecraft/loot_table/blocks/force_light_gray_torch.json
 38fd4c2a5d05f1260da54dd06f9bd93fdb51e284 data/forcecraft/loot_table/blocks/force_lime_torch.json
@@ -71,9 +71,9 @@ f24da43bc2b85f1140daeafb90640308683d0fe0 data/forcecraft/loot_table/blocks/force
 acb7e9c8292bd186e836fe5c0d28acb12d6fbe43 data/forcecraft/loot_table/blocks/force_magenta_torch.json
 ec7ca1de7a6751bc696bc4f547a27ae3ad4e8acb data/forcecraft/loot_table/blocks/force_orange_torch.json
 0779d86e0cf67fcdcc03b4d5e0d691d4c48276db data/forcecraft/loot_table/blocks/force_pink_torch.json
+343e4bef1e27494008e39e5bf990486e42b50d19 data/forcecraft/loot_table/blocks/force_planks.json
 75081f63b92cb2a22860243684dba8f45024d7f1 data/forcecraft/loot_table/blocks/force_plank_slab.json
 04cc0186657cfcb9900cd27d801910e761dfe82a data/forcecraft/loot_table/blocks/force_plank_stairs.json
-343e4bef1e27494008e39e5bf990486e42b50d19 data/forcecraft/loot_table/blocks/force_planks.json
 4f87db2d1c069ab627216e6dd7ddf51b64a7a242 data/forcecraft/loot_table/blocks/force_purple_torch.json
 379baf564fba3e64b30e6e25760725045b358dd1 data/forcecraft/loot_table/blocks/force_red_torch.json
 4332e2e370d812736b9ae462ed6597f023cf3f83 data/forcecraft/loot_table/blocks/force_sapling.json

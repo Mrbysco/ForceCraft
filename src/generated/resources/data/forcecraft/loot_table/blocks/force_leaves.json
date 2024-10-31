@@ -187,6 +187,63 @@
         }
       ],
       "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "minecraft:any_of",
+            "terms": [
+              {
+                "condition": "minecraft:match_tool",
+                "predicate": {
+                  "items": "minecraft:shears"
+                }
+              },
+              {
+                "condition": "minecraft:match_tool",
+                "predicate": {
+                  "predicates": {
+                    "minecraft:enchantments": [
+                      {
+                        "enchantments": "minecraft:silk_touch",
+                        "levels": {
+                          "min": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "chances": [
+                0.025,
+                0.03,
+                0.035,
+                0.04,
+                0.045
+              ],
+              "condition": "minecraft:table_bonus",
+              "enchantment": "minecraft:fortune"
+            }
+          ],
+          "name": "forcecraft:force_nugget"
+        }
+      ],
+      "rolls": 1.0
     }
   ],
   "random_sequence": "forcecraft:blocks/force_leaves"
