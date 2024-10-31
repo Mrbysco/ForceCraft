@@ -1,1 +1,2 @@
-* Fix Force Flasks trying to use a client class for getting a mob name causing crashes with some mods
+* Add force tools to the appropriate item tags (Courtesy of ACCBDD on Github)
+* Make leaves have a chance to drop force nuggets (Courtesy of ACCBDD on Github)
