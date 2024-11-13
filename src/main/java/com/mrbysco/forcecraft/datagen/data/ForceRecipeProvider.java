@@ -35,7 +35,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.PartialNBTIngredient;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.List;
 import java.util.function.Consumer;

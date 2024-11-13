@@ -7,7 +7,6 @@ import com.mrbysco.forcecraft.registry.ForceRecipeSerializers;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -29,8 +28,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class TransmutationRecipeBuilder extends CraftingRecipeBuilder implements RecipeBuilder {

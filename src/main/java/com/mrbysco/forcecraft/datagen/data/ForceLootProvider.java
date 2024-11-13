@@ -21,11 +21,13 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -109,6 +111,7 @@ import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_LIGHT_GRAY_TOR
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_LIME_TORCH;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_LOG;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_MAGENTA_TORCH;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_NUGGET;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_ORANGE_TORCH;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_PINK_TORCH;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_PLANKS;
@@ -199,7 +202,25 @@ public class ForceLootProvider extends LootTableProvider {
 			dropSelf(FORCE_LOG.get());
 			dropSelf(FORCE_WOOD.get());
 			dropSelf(FORCE_PLANKS.get());
-			add(FORCE_LEAVES.get(), (leaves) -> createOakLeavesDrops(leaves, FORCE_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
+			add(FORCE_LEAVES.get(), (leaves) -> {
+				var pool = createOakLeavesDrops(leaves, FORCE_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES);
+				//add a loot pool for nuggets, base chance 0.025 (as in og dartcraft), + 0.005 per level of fortune
+				pool.withPool(
+						LootPool.lootPool()
+								.setRolls(ConstantValue.exactly(1.0F))
+								.when(HAS_SHEARS.or(HAS_SILK_TOUCH).invert())
+								.add(
+										((LootPoolSingletonContainer.Builder<?>) this.applyExplosionCondition(leaves, LootItem.lootTableItem(FORCE_NUGGET.get())))
+												.when(
+														BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
+																0.025f, 0.03f, 0.035f, 0.04f, 0.045f
+														)
+												)
+								)
+
+				);
+				return pool;
+			});
 
 			dropSelf(FORCE_TORCH.get());
 			dropSelf(FORCE_RED_TORCH.get());
