@@ -1,4 +1,4 @@
-// 1.20.1	2024-08-13T20:44:00.118072	Patchouli Book Provider
+// 1.20.1	2024-11-13T19:53:40.080417	Patchouli Book Provider
 32e348ff36c416065a34159ff6ff141da1db8d45 assets/forcecraft/patchouli_books/force_and_you/en_us/categories/infuser.json
 e88d1941fc0b6d9e137df52d0a31db79d529ccd3 assets/forcecraft/patchouli_books/force_and_you/en_us/categories/tier_0.json
 4f94f2846a491b0763ff728099aa598bf7cd558d assets/forcecraft/patchouli_books/force_and_you/en_us/categories/tier_1.json
@@ -51,4 +51,4 @@ e27adca39855b32a79ab5ab9cde517408a18c782 assets/forcecraft/patchouli_books/force
 53325f2a0864e39c3ed722997c6950c222007deb assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_6/time.json
 4c23814b7bfc7019dfde873fadb44bd8c95a5b28 assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_7/light.json
 5c1beb69c21660556c722cc84e10ba7023550d90 assets/forcecraft/patchouli_books/force_and_you/en_us/entries/tier_7/treasure.json
-7330236de85e472e933394081596db0b86af0c4f data/forcecraft/patchouli_books/force_and_you/book.json
+aae2a17fcd38b188336640ae773d63d6c319049a data/forcecraft/patchouli_books/force_and_you/book.json

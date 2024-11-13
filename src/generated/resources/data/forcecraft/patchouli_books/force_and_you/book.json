@@ -1,7 +1,7 @@
 {
   "advancements_tab": "forcecraft:root",
   "book_texture": "forcecraft:textures/gui/book.png",
-  "creative_tab": "forcecraft",
+  "creative_tab": "forcecraft:tab",
   "filler_texture": "forcecraft:textures/gui/page_filler.png",
   "i18n": true,
   "landing_text": "info.forcecraft.book.landing",

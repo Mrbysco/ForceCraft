@@ -24,7 +24,7 @@ public class PatchouliProvider extends PatchouliBookProvider {
 		BookBuilder bookBuilder = createBookBuilder("force_and_you", "item.forcecraft.book.name", "info.forcecraft.book.landing")
 				.setSubtitle("info.forcecraft.book.subtitle")
 				.setAdvancementsTab("forcecraft:root")
-				.setCreativeTab("forcecraft")
+				.setCreativeTab("forcecraft:tab")
 				.setModel("forcecraft:force_and_you")
 				.setBookTexture("forcecraft:textures/gui/book.png")
 				.setShowProgress(false)
