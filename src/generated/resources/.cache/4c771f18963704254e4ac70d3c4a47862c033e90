@@ -1,4 +1,4 @@
-// 1.20.1	2024-08-15T22:47:42.484897	Tags for minecraft:item mod id forcecraft
+// 1.20.1	2024-11-13T20:01:10.3212121	Tags for minecraft:item mod id forcecraft
 53afa95f4f2972f61ad4870a14ffdad392433608 data/forcecraft/tags/items/baconator_food.json
 f37c1227f073af48a0e3f526510a90a1f11811d7 data/forcecraft/tags/items/chu_jelly.json
 ca0dfb4cd17d1a8bebda73a2ba9587fde8c1486d data/forcecraft/tags/items/ender.json
@@ -10,3 +10,9 @@ f6578c63f571b1fa389775ac66b9218c094d5150 data/forcecraft/tags/items/fortune.json
 f002772c304bb8350635523d7d3bb1c4fdb5796a data/forge/tags/items/ores/power.json
 b73848b6920747aedc21ffb8aed7e3aa8d325f04 data/forge/tags/items/ores_in_ground/deepslate.json
 5b2618b88b5b044099742e91e0a5e3ed254d91cf data/forge/tags/items/ores_in_ground/stone.json
+55b2df2a4c01e88a6f28e303e1f2bc4dee7cdfec data/forge/tags/items/shears.json
+e05efd811922fbbe385b35f046fa78667f037490 data/forge/tags/items/tools/bows.json
+d0839816bc5ce3b45313754d9906dbff2041e63c data/minecraft/tags/items/axes.json
+ec66e38ccaacb630b256b4fde7d82d7b895d7172 data/minecraft/tags/items/pickaxes.json
+fafc476436a7cda16b83454f46b5a07b7e398a14 data/minecraft/tags/items/shovels.json
+919e6d75ea4faf772493aad779bb387136859c88 data/minecraft/tags/items/swords.json
