@@ -1,2 +1,3 @@
-* Backport datagen (**All recipes should still be present, if not please make an issue on the issue tracker!**)
-* Add Force Wood recipe which was forgotten
+* Fix creative tab linked to the Force and You book being incorrect
+* Add the force tools to appropriate tool tags
+* Backport change to make leaves have a chance to drop force nuggets
