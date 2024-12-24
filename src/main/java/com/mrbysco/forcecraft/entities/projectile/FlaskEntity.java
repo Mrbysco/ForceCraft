@@ -106,7 +106,7 @@ public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier
 							entityFlask = new ItemStack(ForceRegistry.CAVE_SPIDER_FLASK.get());
 						} else if (entity instanceof Cod) {
 							entityFlask = new ItemStack(ForceRegistry.COD_FLASK.get());
-						} else if (entity instanceof Cow) {
+						} else if (entity instanceof Cow && !(entity instanceof MushroomCow)) {
 							entityFlask = new ItemStack(ForceRegistry.COW_FLASK.get());
 						} else if (entity instanceof Dolphin) {
 							entityFlask = new ItemStack(ForceRegistry.DOLPHIN_FLASK.get());
