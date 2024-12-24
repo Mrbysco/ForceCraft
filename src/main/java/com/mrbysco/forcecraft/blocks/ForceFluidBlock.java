@@ -32,12 +32,17 @@ public class ForceFluidBlock extends LiquidBlock {
 	@Override
 	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn) {
 		if (entityIn instanceof LivingEntity livingEntity) {
-
 			if (livingEntity instanceof Player player) {
 				if (player.getHealth() < player.getMaxHealth()) {
-					player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 10, ConfigHandler.COMMON.liquidRegenLevel.get(), false, false));
+					MobEffectInstance effectInstance = player.getEffect(MobEffects.REGENERATION);
+					MobEffectInstance newInstance = new MobEffectInstance(MobEffects.REGENERATION, 50, ConfigHandler.COMMON.liquidRegenLevel.get(), false, false);
+					if (effectInstance != null) {
+						effectInstance.update(newInstance);
+					} else {
+						player.addEffect(newInstance);
+					}
 					if (ConfigHandler.COMMON.enableForceShake.get()) {
-						player.addEffect(new MobEffectInstance(ForceEffects.SHAKING.get(), 10, 0, false, false));
+						player.addEffect(new MobEffectInstance(ForceEffects.SHAKING.get(), 50, 0, false, false));
 					}
 				}
 			} else {
