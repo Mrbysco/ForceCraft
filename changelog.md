@@ -1,3 +1,2 @@
-* Fix creative tab linked to the Force and You book being incorrect
-* Add the force tools to appropriate tool tags
-* Backport change to make leaves have a chance to drop force nuggets
+* Fix flask saying "Cow Flask" when a Mooshroom was captured with the Force Flask
+* Update Liquid Force behavior to make the regen effect more functional
