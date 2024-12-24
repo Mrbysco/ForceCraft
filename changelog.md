@@ -1,2 +1,2 @@
-* Add force tools to the appropriate item tags (Courtesy of ACCBDD on Github)
-* Make leaves have a chance to drop force nuggets (Courtesy of ACCBDD on Github)
+* Fix flask saying "Cow Flask" when a Mooshroom was captured with the Force Flask
+* Update Liquid Force behavior to make the regen effect more functional
