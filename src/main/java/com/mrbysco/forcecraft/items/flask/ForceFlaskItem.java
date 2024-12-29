@@ -38,9 +38,7 @@ public class ForceFlaskItem extends BaseItem {
 			}
 
 			playerIn.awardStat(Stats.ITEM_USED.get(this));
-			if (!playerIn.getAbilities().instabuild) {
-				itemstack.shrink(1);
-			}
+			itemstack.consume(1, playerIn);
 		}
 
 		return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
@@ -48,6 +46,9 @@ public class ForceFlaskItem extends BaseItem {
 
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity entity, InteractionHand hand) {
+		if (playerIn.isShiftKeyDown()) {
+			return InteractionResult.PASS;
+		}
 		Level level = entity.level();
 		if (level.isClientSide)
 			return InteractionResult.PASS;
@@ -58,8 +59,7 @@ public class ForceFlaskItem extends BaseItem {
 			if (!playerIn.getInventory().add(milkStack)) {
 				playerIn.spawnAtLocation(milkStack, 0F);
 			}
-			if (!playerIn.getAbilities().instabuild)
-				stack.shrink(1);
+			stack.consume(1, playerIn);
 
 			return InteractionResult.SUCCESS;
 		}

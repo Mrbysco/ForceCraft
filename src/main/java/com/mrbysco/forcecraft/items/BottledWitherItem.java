@@ -26,9 +26,7 @@ public class BottledWitherItem extends BaseItem {
 		}
 
 		Player player = context.getPlayer();
-		if (player != null && !player.getAbilities().instabuild) {
-			context.getItemInHand().shrink(1);
-		}
+		context.getItemInHand().consume(1, player);
 
 		return super.useOn(context);
 	}

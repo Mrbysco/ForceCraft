@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.items.flask;
 
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.ChatFormatting;
@@ -37,9 +38,7 @@ public class MilkFlaskItem extends BaseItem {
 
 		ItemStack flaskStack = ForceRegistry.FORCE_FLASK.get().getDefaultInstance();
 		if (entityLiving instanceof Player playerIn) {
-			if (!playerIn.getAbilities().instabuild) {
-				stack.shrink(1);
-			}
+			stack.consume(1, playerIn);
 
 			if (!playerIn.getInventory().add(flaskStack)) {
 				playerIn.spawnAtLocation(flaskStack, 0F);
@@ -49,14 +48,17 @@ public class MilkFlaskItem extends BaseItem {
 		return stack.isEmpty() ? flaskStack : stack;
 	}
 
-	public int getUseDuration(ItemStack stack) {
+	@Override
+	public int getUseDuration(ItemStack stack, LivingEntity livingEntity) {
 		return 32;
 	}
 
+	@Override
 	public UseAnim getUseAnimation(ItemStack stack) {
 		return UseAnim.DRINK;
 	}
 
+	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		return ItemUtils.startUsingInstantly(level, playerIn, handIn);
 	}
