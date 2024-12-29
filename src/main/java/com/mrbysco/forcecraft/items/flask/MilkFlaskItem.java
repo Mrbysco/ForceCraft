@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.items.flask;
 
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.ChatFormatting;
