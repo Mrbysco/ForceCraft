@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.compat.jei.transfer;
 
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.networking.PacketHandler;
 import com.mrbysco.forcecraft.networking.message.RecipeToCardMessage;
@@ -48,12 +49,13 @@ public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardM
 			items.add(ItemStack.EMPTY);
 		}
 
+		List<IRecipeSlotView> outputs = recipeSlots.getSlotViews(RecipeIngredientRole.OUTPUT);
+		items.set(0, outputs.get(0).getDisplayedItemStack().orElse(ItemStack.EMPTY));
+
 		List<IRecipeSlotView> ingredients = recipeSlots.getSlotViews(RecipeIngredientRole.INPUT);
 		for (int i = 0; i < ingredients.size(); i++) {
-			items.set(i, ingredients.get(i).getDisplayedItemStack().get());
+			items.set((i + 1), ingredients.get(i).getDisplayedItemStack().orElse(ItemStack.EMPTY));
 		}
-		List<IRecipeSlotView> outputs = recipeSlots.getSlotViews(RecipeIngredientRole.OUTPUT);
-		items.set(9, outputs.get(0).getDisplayedItemStack().get());
 
 		PacketHandler.CHANNEL.sendToServer(new RecipeToCardMessage(items));
 
