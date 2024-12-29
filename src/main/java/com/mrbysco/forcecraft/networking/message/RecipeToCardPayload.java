@@ -19,14 +19,14 @@ public record RecipeToCardPayload(List<ItemStack> stacks) implements CustomPacke
 		this(new ArrayList<>());
 		int size = packetBuffer.readInt();
 		for (int i = 0; i < size; i++) {
-			stacks.add(ItemStack.STREAM_CODEC.decode(packetBuffer));
+			stacks.add(ItemStack.OPTIONAL_STREAM_CODEC.decode(packetBuffer));
 		}
 	}
 
 	public void write(RegistryFriendlyByteBuf buf) {
 		buf.writeInt(stacks.size());
 		for (ItemStack output : stacks) {
-			ItemStack.STREAM_CODEC.encode(buf, output);
+			ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, output);
 		}
 	}
 
