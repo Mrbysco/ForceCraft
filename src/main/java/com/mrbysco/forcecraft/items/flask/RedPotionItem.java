@@ -36,9 +36,7 @@ public class RedPotionItem extends BaseItem {
 
 		ItemStack flaskStack = ForceRegistry.FORCE_FLASK.get().getDefaultInstance();
 		if (entityLiving instanceof Player playerIn) {
-			if (!playerIn.getAbilities().instabuild) {
-				stack.shrink(1);
-			}
+			stack.consume(1, playerIn);
 
 			if (!playerIn.getInventory().add(flaskStack)) {
 				playerIn.spawnAtLocation(flaskStack, 0F);
@@ -48,18 +46,22 @@ public class RedPotionItem extends BaseItem {
 		return stack.isEmpty() ? flaskStack : stack;
 	}
 
-	public int getUseDuration(ItemStack stack) {
+	@Override
+	public int getUseDuration(ItemStack stack, LivingEntity livingEntity) {
 		return 32;
 	}
 
+	@Override
 	public UseAnim getUseAnimation(ItemStack stack) {
 		return UseAnim.DRINK;
 	}
 
+	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		return ItemUtils.startUsingInstantly(level, playerIn, handIn);
 	}
 
+	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
 		super.appendHoverText(stack, context, tooltip, tooltipFlag);
 		tooltip.add(Component.translatable("item.red_potion.tooltip").withStyle(ChatFormatting.GRAY));
