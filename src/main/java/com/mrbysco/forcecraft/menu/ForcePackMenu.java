@@ -94,6 +94,7 @@ public class ForcePackMenu extends AbstractContainerMenu {
 	@Override
 	public void removed(Player player) {
 		if (inventory != null) {
+			if (player.level().isClientSide) return;
 			for (int i = 0; i < inventory.getSlots(); i++) {
 				ItemStack stack = inventory.getStackInSlot(i);
 				if (stack.getItem() instanceof ItemCardItem && stack.has(ForceComponents.RECIPE_CONTENTS)) {
@@ -103,10 +104,10 @@ public class ForcePackMenu extends AbstractContainerMenu {
 					for (int j = 0; j < 9; j++) {
 						ItemStack recipeStack = recipeData.recipeItems().get(j);
 						if (!recipeStack.isEmpty()) {
-							if (ingredientList.isEmpty()) {
-								ingredientList.add(recipeStack);
+							if (ingredientList.stream().noneMatch(s -> ItemStack.isSameItemSameComponents(s, recipeStack))) {
+								ingredientList.add(recipeStack.copy());
 							} else {
-								mergeList.add(recipeStack);
+								mergeList.add(recipeStack.copy());
 							}
 						}
 					}
@@ -114,25 +115,33 @@ public class ForcePackMenu extends AbstractContainerMenu {
 					for (ItemStack recipeStack : mergeList) {
 						if (!ingredientList.isEmpty()) {
 							List<ItemStack> buffer = new ArrayList<>();
-							for (ItemStack ingredient : ingredientList) {
-								if (ingredient != null && !ingredient.isEmpty()) {
-									if (ItemStack.isSameItemSameComponents(ingredient, recipeStack)) {
-										int addedCount = ingredient.getCount() + recipeStack.getCount();
-										int maxCount = ingredient.getMaxStackSize();
-										if (addedCount <= maxCount) {
-											recipeStack.setCount(0);
-											ingredient.setCount(addedCount);
-										} else if (recipeStack.getCount() < maxCount) {
-											recipeStack.shrink(maxCount - ingredient.getCount());
-											ingredient.setCount(maxCount);
+							if (recipeStack.getMaxStackSize() == 1) {
+								//We can't merge these, so just add them to the buffer
+								ingredientList.add(recipeStack.copy());
+								recipeStack.shrink(1);
+								continue;
+							} else {
+								for (ItemStack ingredient : ingredientList) {
+									if (ingredient != null && !ingredient.isEmpty() && ingredient.getMaxStackSize() > 1) {
+										if (ItemStack.isSameItemSameComponents(ingredient, recipeStack)) {
+											int addedCount = ingredient.getCount() + recipeStack.getCount();
+											int maxCount = ingredient.getMaxStackSize();
+											if (addedCount <= maxCount) {
+												recipeStack.shrink(1);
+												ingredient.setCount(addedCount);
+											} else if (recipeStack.getCount() < maxCount) {
+												recipeStack.shrink(maxCount - ingredient.getCount());
+												ingredient.setCount(maxCount);
+											}
 										}
 									}
-								}
 
-								if (!recipeStack.isEmpty()) {
-									buffer.add(recipeStack);
+									if (!recipeStack.isEmpty()) {
+										buffer.add(recipeStack);
+									}
 								}
 							}
+							buffer.removeIf(ItemStack::isEmpty);
 							if (!buffer.isEmpty()) {
 								ingredientList.addAll(buffer);
 							}
@@ -155,7 +164,7 @@ public class ForcePackMenu extends AbstractContainerMenu {
 						int countPossible = 0;
 						for (ItemStack rest : restList) {
 							if (ItemStack.isSameItemSameComponents(ingredient, rest)) {
-								countPossible += (int) ((double) rest.getCount() / ingredient.getCount());
+								countPossible += (int) Math.floor((double) rest.getCount() / ingredient.getCount());
 							}
 						}
 						if (countPossible == 0) {
@@ -175,7 +184,17 @@ public class ForcePackMenu extends AbstractContainerMenu {
 								for (ItemStack rest : restList) {
 									if (ItemStack.isSameItemSameComponents(ingredient, rest)) {
 										if (rest.getCount() >= ingredient.getCount()) {
-											rest.shrink(ingredient.getCount());
+											if (rest.hasCraftingRemainingItem()) {
+												ItemStack remainderStack = rest.getCraftingRemainingItem().copy();
+												rest.shrink(1);
+												ItemStack insertResult = ItemHandlerHelper.insertItem(inventory,
+														remainderStack, false);
+												if (!insertResult.isEmpty()) {
+													player.drop(insertResult, true);
+												}
+											} else {
+												rest.shrink(ingredient.getCount());
+											}
 										}
 									}
 								}
