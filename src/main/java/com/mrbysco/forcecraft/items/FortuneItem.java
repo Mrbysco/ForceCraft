@@ -34,9 +34,8 @@ public class FortuneItem extends BaseItem {
 
 		if (!level.isClientSide) {
 			if (playerIn != null && playerIn.isShiftKeyDown()) {
-				if (!playerIn.getAbilities().instabuild) {
-					stack.shrink(1);
-				}
+				stack.consume(1, playerIn);
+
 				ItemStack paperStack = new ItemStack(Items.PAPER);
 				if (!playerIn.addItem(paperStack)) {
 					playerIn.spawnAtLocation(paperStack);
