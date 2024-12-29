@@ -14,6 +14,7 @@ import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Credit to Buuz135 for the Mob Imprisonment Tool code <3
@@ -47,10 +48,15 @@ public class ForceFlaskItem extends BaseItem {
 	}
 
 	@Override
+	@NotNull
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity entity, InteractionHand hand) {
 		Level level = entity.level();
 		if (level.isClientSide)
 			return InteractionResult.PASS;
+
+		if (playerIn.isShiftKeyDown()) {
+			return InteractionResult.PASS;
+		}
 
 		if (entity instanceof Cow && !entity.isBaby()) {
 			playerIn.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
