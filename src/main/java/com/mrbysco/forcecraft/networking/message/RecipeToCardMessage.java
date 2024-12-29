@@ -48,7 +48,7 @@ public class RecipeToCardMessage {
 			} else if (player.getOffhandItem().getItem() instanceof ItemCardItem) {
 				mainhand = player.getOffhandItem();
 			}
-			if (!mainhand.isEmpty() && mainhand.getItem() == ForceRegistry.ITEM_CARD.get()) {
+			if (!mainhand.isEmpty() && mainhand.is(ForceRegistry.ITEM_CARD.get())) {
 				if (player.containerMenu instanceof ItemCardMenu itemCardContainer) {
 					itemCardContainer.setMatrixContents(player, stacks);
 				}
