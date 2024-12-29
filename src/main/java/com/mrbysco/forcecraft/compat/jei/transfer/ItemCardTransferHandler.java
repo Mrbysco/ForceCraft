@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.compat.jei.transfer;
 
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.menu.ItemCardMenu;
 import com.mrbysco.forcecraft.networking.message.RecipeToCardPayload;
 import com.mrbysco.forcecraft.registry.ForceMenus;
@@ -14,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardMenu, CraftingRecipe> {
+public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardMenu, RecipeHolder<CraftingRecipe>> {
 	public ItemCardTransferHandler() {
 
 	}
@@ -32,7 +32,7 @@ public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardM
 	}
 
 	@Override
-	public RecipeType<CraftingRecipe> getRecipeType() {
+	public RecipeType<RecipeHolder<CraftingRecipe>> getRecipeType() {
 		return null;
 	}
 
@@ -43,7 +43,7 @@ public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardM
 	}
 
 	@Override
-	public @Nullable IRecipeTransferError transferRecipe(ItemCardMenu container, CraftingRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer) {
+	public @Nullable IRecipeTransferError transferRecipe(ItemCardMenu container, RecipeHolder<CraftingRecipe> recipeHolder, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer) {
 		List<ItemStack> items = new ArrayList<>(10);
 		for (int i = 0; i < 10; i++) {
 			items.add(ItemStack.EMPTY);
