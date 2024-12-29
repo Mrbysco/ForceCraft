@@ -24,12 +24,13 @@ public class LootTableHandler {
 	public void onLootTableLoadEvent(LootTableLoadEvent event) {
 		HolderLookup.Provider registries = ServerLifecycleHooks.getCurrentServer() != null ?
 				ServerLifecycleHooks.getCurrentServer().registryAccess() : RegistryAccess.EMPTY;
-		if (event.getName().equals(BAT)) {
+		if (event.getName().equals(BAT.location())) {
 			LootPool.Builder builder = LootPool.lootPool();
 			builder.add(LootItem.lootTableItem(ForceRegistry.CLAW.get())
 							.setWeight(1)
 							.apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F)))
-							.apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformGenerator.between(0.0F, 1.0F))))
+//							.apply(EnchantedCountIncreaseFunction.lootingMultiplier(registries, UniformGenerator.between(0.0F, 1.0F)))
+					)
 					.name("forcecraft_inject");
 			builder.add(EmptyLootItem.emptyItem()
 							.setWeight(1))
