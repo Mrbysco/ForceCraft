@@ -5,7 +5,7 @@ if (System.getenv().MODRINTH_KEY) {
     modrinth {
         token = System.getenv().MODRINTH_KEY
         projectId = project.modrinth_id
-        versionType = "beta"
+        versionType = "release"
         versionName = "${mod_name} ${mc_version}"
         versionNumber = project.version
         uploadFile = jar
