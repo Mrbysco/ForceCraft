@@ -28,8 +28,8 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Map;
 
 public class TransmutationRecipe implements CraftingRecipe {
@@ -157,7 +157,8 @@ public class TransmutationRecipe implements CraftingRecipe {
 				if (itemstack1.getItem().getDamage(itemstack1) >= itemstack1.getMaxDamage()) {
 					itemstack1.shrink(1);
 				} else {
-					itemstack1.setDamageValue(itemstack1.getDamageValue() + damage);
+					if (damage > 0)
+						itemstack1.setDamageValue(itemstack1.getDamageValue() + damage);
 					nonnulllist.set(i, itemstack1);
 				}
 				continue;
