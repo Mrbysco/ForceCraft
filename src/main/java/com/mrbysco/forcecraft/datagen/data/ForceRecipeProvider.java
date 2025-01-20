@@ -1407,11 +1407,11 @@ public class ForceRecipeProvider extends RecipeProvider {
 
 		//String
 		MultipleOutputRecipeBuilder.grinding(Ingredient.of(ItemTags.WOOL), 1.0F, 0.1F, 400)
-				.setResult(ForceRegistry.FORCE_PLANKS.get(), 4)
+				.setResult(Items.STRING, 4)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE.get()))
 				.save(output, new ResourceLocation(Reference.MOD_ID, "grinding/string_from_wool"));
 		MultipleOutputRecipeBuilder.grinding(Ingredient.of(ItemTags.WOOL_CARPETS), 1.0F, 0.1F, 400)
-				.setResult(ForceRegistry.FORCE_PLANKS.get(), 2)
+				.setResult(Items.STRING, 2)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE.get()))
 				.save(output, new ResourceLocation(Reference.MOD_ID, "grinding/string_from_wool_carpet"));
 
@@ -1439,7 +1439,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE.get()))
 				.save(output, new ResourceLocation(Reference.MOD_ID, "grinding/sand_from_red_sandstone"));
 		MultipleOutputRecipeBuilder.grinding(Ingredient.of(Tags.Items.COBBLESTONE_NORMAL), 1.0F, 0.1F, 400)
-				.setResult(Items.COBBLESTONE, 1)
+				.setResult(Items.SAND, 1)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE.get()))
 				.save(output, new ResourceLocation(Reference.MOD_ID, "grinding/sand_from_cobblestone"));
 
