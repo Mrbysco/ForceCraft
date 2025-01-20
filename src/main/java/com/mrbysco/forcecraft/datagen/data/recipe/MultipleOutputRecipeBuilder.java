@@ -244,7 +244,7 @@ public class MultipleOutputRecipeBuilder extends CraftingRecipeBuilder implement
 		}
 
 		public RecipeSerializer<?> getType() {
-			return ForceRecipeSerializers.FREEZING_SERIALIZER.get();
+			return ForceRecipeSerializers.GRINDING_SERIALIZER.get();
 		}
 
 		public ResourceLocation getId() {
