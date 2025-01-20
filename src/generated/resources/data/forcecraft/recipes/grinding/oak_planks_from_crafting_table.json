@@ -1,5 +1,5 @@
 {
-  "type": "forcecraft:freezing",
+  "type": "forcecraft:grinding",
   "experience": 0.1,
   "ingredient": {
     "item": "minecraft:crafting_table"

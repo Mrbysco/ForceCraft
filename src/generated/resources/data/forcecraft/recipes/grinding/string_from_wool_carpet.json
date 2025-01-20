@@ -1,5 +1,5 @@
 {
-  "type": "forcecraft:freezing",
+  "type": "forcecraft:grinding",
   "experience": 0.1,
   "ingredient": {
     "tag": "minecraft:wool_carpets"
@@ -8,7 +8,7 @@
   "results": [
     {
       "count": 2,
-      "item": "forcecraft:force_planks"
+      "item": "minecraft:string"
     }
   ],
   "secondaryChance": 1.0
