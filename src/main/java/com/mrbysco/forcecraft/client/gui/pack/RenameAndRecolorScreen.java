@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -78,8 +79,8 @@ public class RenameAndRecolorScreen extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+		this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
 
 		int xSize = 197;
 		int ySize = 66;
@@ -88,8 +89,11 @@ public class RenameAndRecolorScreen extends Screen {
 
 		guiGraphics.blit(TEXTURE, guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		this.textfield.render(guiGraphics, mouseX, mouseY, partialTicks);
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		for (Renderable renderable : this.renderables) {
+			renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+		}
+
+		this.textfield.render(guiGraphics, mouseX, mouseY, partialTick);
 		guiGraphics.drawString(font, Component.literal("Color"), (int) (this.width / 2d - 68), (int) (this.height / 2d + 9), 5592405, false);
 	}
 }

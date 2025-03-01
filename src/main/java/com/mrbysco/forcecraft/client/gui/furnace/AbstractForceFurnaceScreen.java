@@ -31,7 +31,7 @@ public abstract class AbstractForceFurnaceScreen<T extends AbstractForceFurnaceM
 	}
 
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 
 		if (isHovering(60, 36, 10, 12, mouseX, mouseY)) {
 			List<Component> text = new ArrayList<>();
@@ -40,7 +40,6 @@ public abstract class AbstractForceFurnaceScreen<T extends AbstractForceFurnaceM
 			guiGraphics.renderComponentTooltip(font, text, mouseX, mouseY + 10);
 		}
 
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 
