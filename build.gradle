@@ -64,6 +64,10 @@ repositories {
         url = "https://maven.blamejared.com/"
     }
     maven {
+        // location of REI
+        url = "https://maven.shedaniel.me/"
+    }
+    maven {
         name = "Curse"
         url = 'https://www.cursemaven.com'
         content {
@@ -79,6 +83,13 @@ dependencies {
     compileOnly "mezz.jei:jei-${jei_minecraft}-neoforge-api:${jei_version}"
 
     localRuntime "mezz.jei:jei-${jei_minecraft}-neoforge:${jei_version}"
+
+    compileOnly "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+    compileOnly "dev.architectury:architectury-neoforge:${architectury_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
+
+    compileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
 
     compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
     localRuntime "vazkii.patchouli:Patchouli:${patchouli_version}"
