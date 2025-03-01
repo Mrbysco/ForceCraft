@@ -158,7 +158,7 @@ if (System.getenv().CURSEFORGE_KEY) {
         mainFile.changelogType = 'markdown'
 
         mainFile.addRequirement("patchouli")
-        mainFile.addOptional("jei", "rei")
+        mainFile.addOptional("jei", "roughly-enough-items")
     }
 }
 
