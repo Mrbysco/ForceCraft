@@ -9,11 +9,13 @@ import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -32,8 +34,13 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 	}
 
 	@Override
-	public IDrawable getBackground() {
-		return background;
+	public int getWidth() {
+		return 140;
+	}
+
+	@Override
+	public int getHeight() {
+		return 37;
 	}
 
 	@Override
@@ -54,6 +61,12 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 				secondOutputBuilder.addRichTooltipCallback(new ChanceTooltip(recipe));
 			}
 		}
+	}
+
+	@Override
+	public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+		this.background.draw(guiGraphics);
+		IRecipeCategory.super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
 	}
 
 	@Override

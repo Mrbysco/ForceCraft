@@ -45,8 +45,13 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 	}
 
 	@Override
-	public IDrawable getBackground() {
-		return background;
+	public int getWidth() {
+		return 137;
+	}
+
+	@Override
+	public int getHeight() {
+		return 109;
 	}
 
 	@Override
@@ -146,6 +151,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 
 	@Override
 	public void draw(InfuseRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+		this.background.draw(guiGraphics);
 		IRecipeCategory.super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
 
 		Minecraft minecraft = Minecraft.getInstance();
