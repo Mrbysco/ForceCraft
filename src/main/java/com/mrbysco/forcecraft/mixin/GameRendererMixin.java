@@ -18,12 +18,12 @@ public abstract class GameRendererMixin {
 
 	@Shadow
 	@Final
-	private Minecraft minecraft;
+	Minecraft minecraft;
 
 	@Inject(method = "renderLevel(Lnet/minecraft/client/DeltaTracker;)V", at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/client/Options;screenEffectScale()Lnet/minecraft/client/OptionInstance;",
-			shift = At.Shift.BEFORE,
+			shift = At.Shift.AFTER,
 			ordinal = 0))
 	public void renderLevel(DeltaTracker deltaTracker, CallbackInfo ci, @Local PoseStack poseStack) {
 		ShakeUtil.shakeScreen(minecraft, deltaTracker, poseStack);

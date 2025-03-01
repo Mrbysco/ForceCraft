@@ -48,7 +48,7 @@ public class GrindingRecipe extends MultipleOutputFurnaceRecipe {
 													if (stacks.length == 0) {
 														return DataResult.error(() -> "No results for freezing recipe");
 													} else {
-														return stacks.length > 2
+														return stacks.length > MAX_OUTPUT
 																? DataResult.error(() -> "Too many itemstacks for freezing recipe. The maximum is: %s".formatted(9))
 																: DataResult.success(NonNullList.of(ItemStack.EMPTY, stacks));
 													}

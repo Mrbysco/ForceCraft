@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.datagen.assets;
 
 import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.blockentities.InfuserModifierType;
 import com.mrbysco.forcecraft.registry.ForceEffects;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
@@ -665,6 +666,40 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("forcecraft.gui.jei.category.grinding.tooltip", "% Chance");
 		add("forcecraft.gui.jei.category.infuser", "Infuser");
 		add("forcecraft.gui.jei.category.infuser.tier", "Tier, %s");
+
+		addInfuserType(InfuserModifierType.SPEED, "Speed");
+		addInfuserType(InfuserModifierType.HEAT, "Heat");
+		addInfuserType(InfuserModifierType.FORCE, "Force");
+		addInfuserType(InfuserModifierType.SILK, "Silk");
+		addInfuserType(InfuserModifierType.DAMAGE, "Damage");
+		addInfuserType(InfuserModifierType.FORTUNE, "Fortune");
+		addInfuserType(InfuserModifierType.LIGHT, "Light");
+		addInfuserType(InfuserModifierType.STURDY, "Sturdy");
+		addInfuserType(InfuserModifierType.LUMBERJACK, "Lumberjack");
+		addInfuserType(InfuserModifierType.HEALING, "Healing");
+		addInfuserType(InfuserModifierType.ENDER, "Ender");
+		addInfuserType(InfuserModifierType.BLEEDING, "Bleeding");
+		addInfuserType(InfuserModifierType.BANE, "Bane");
+		addInfuserType(InfuserModifierType.WING, "Wing");
+		addInfuserType(InfuserModifierType.CAMO, "Camo");
+		addInfuserType(InfuserModifierType.RAINBOW, "Rainbow");
+		addInfuserType(InfuserModifierType.TIME, "Time");
+		addInfuserType(InfuserModifierType.PACK1, "Pack Upgrade 1");
+		addInfuserType(InfuserModifierType.PACK2, "Pack Upgrade 2");
+		addInfuserType(InfuserModifierType.PACK3, "Pack Upgrade 3");
+		addInfuserType(InfuserModifierType.PACK4, "Pack Upgrade 4");
+		addInfuserType(InfuserModifierType.GRINDING, "Grinding");
+		addInfuserType(InfuserModifierType.FREEZING, "Freezing");
+		addInfuserType(InfuserModifierType.EXP, "Experience");
+		addInfuserType(InfuserModifierType.STORAGE, "Storage");
+		addInfuserType(InfuserModifierType.SIGHT, "Sight");
+		addInfuserType(InfuserModifierType.TREASURE, "Treasure");
+		addInfuserType(InfuserModifierType.ITEM, "Item");
+
+	}
+
+	public void addInfuserType(InfuserModifierType type, String name) {
+		this.add(type.getTooltip(), name);
 	}
 
 	public void addSubtitle(DeferredHolder<SoundEvent, SoundEvent> sound, String name) {
