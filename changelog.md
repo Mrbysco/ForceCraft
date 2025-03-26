@@ -1,4 +1,1 @@
-* Fix double background rendering in most ForceCraft GUIs
-* Add force gem tag `c:gems/force` to the `c:gems` item tag
-* Add REI support
-* Fix mod dependencies being wrong
+* Add `forcecraft:ticking_not_supported` block tag that will prevent the block from being tickable by the Time Torches.
