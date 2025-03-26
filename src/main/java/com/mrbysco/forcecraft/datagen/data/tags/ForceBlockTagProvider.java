@@ -1,6 +1,8 @@
 package com.mrbysco.forcecraft.datagen.data.tags;
 
 import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.registry.ForceRecipes;
+import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -141,6 +143,8 @@ public class ForceBlockTagProvider extends BlockTagsProvider {
 				FORCE_BRICK_LIGHT_GRAY_SLAB.get(), FORCE_BRICK_LIME_SLAB.get(), FORCE_BRICK_CYAN_SLAB.get(), FORCE_BRICK_PURPLE_SLAB.get(),
 				FORCE_BRICK_GRAY_SLAB.get(), FORCE_BRICK_SLAB.get()
 		);
+
+		this.tag(ForceTags.TICKING_NOT_SUPPORTED);
 
 		this.tag(BlockTags.NEEDS_IRON_TOOL).add(POWER_ORE.get(), DEEPSLATE_POWER_ORE.get());
 

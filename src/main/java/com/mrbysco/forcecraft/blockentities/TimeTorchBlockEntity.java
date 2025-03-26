@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.blocks.torch.TimeTorchBlock;
 import com.mrbysco.forcecraft.blocks.torch.WallTimeTorchBlock;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
+import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -61,15 +62,13 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	@SuppressWarnings("deprecation")
 	private void tickBlock(@NotNull BlockPos pos) {
 		if (pos.equals(getBlockPos()) || !level.isAreaLoaded(pos, 1)) return;
-
-
+		
 		BlockState blockState = this.level.getBlockState(pos);
-		if (blockState != null) {
+		if (blockState != null && !blockState.is(ForceTags.TICKING_NOT_SUPPORTED)) {
 			Block block = blockState.getBlock();
 
 			if (block == null || block instanceof LiquidBlock || block instanceof TimeTorchBlock || block instanceof WallTimeTorchBlock || block == Blocks.AIR)
 				return;
-
 
 			if (blockState.isRandomlyTicking() && !level.isClientSide) {
 				for (int i = 0; i < this.speed; i++) {

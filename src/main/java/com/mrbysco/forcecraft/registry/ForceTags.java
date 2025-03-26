@@ -17,6 +17,7 @@ public class ForceTags {
 	public static final TagKey<Block> INCORRECT_FOR_FORCE = forceBlockTag("needs_force_tool");
 	public static final TagKey<Block> MINEABLE_WITH_MITTS = forceBlockTag("mineable_with_mitts");
 	public static final TagKey<Block> FORCE_BRICKS = forceBlockTag("force_bricks");
+	public static final TagKey<Block> TICKING_NOT_SUPPORTED = forceBlockTag("ticking_not_supported");
 
 	public static final TagKey<Item> VALID_INFUSER_MODIFIERS = ItemTags.create(Reference.modLoc("valid_infuser_modifiers"));
 	public static final TagKey<Item> VALID_INFUSER_TOOLS = ItemTags.create(Reference.modLoc("valid_infuser_tools"));
