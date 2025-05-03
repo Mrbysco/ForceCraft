@@ -39,7 +39,7 @@ public record RecipeContentsData(NonNullList<ItemStack> recipeItems, ItemStack r
 	private static RecipeContentsData fromNetwork(RegistryFriendlyByteBuf byteBuf) {
 		NonNullList<ItemStack> recipeItems = NonNullList.withSize(9, ItemStack.EMPTY);
 		for (int i = 0; i < 9; i++) {
-			recipeItems.set(i, ItemStack.STREAM_CODEC.decode(byteBuf));
+			recipeItems.set(i, ItemStack.OPTIONAL_STREAM_CODEC.decode(byteBuf));
 		}
 		ItemStack resultItem = ItemStack.STREAM_CODEC.decode(byteBuf);
 		return new RecipeContentsData(recipeItems, resultItem);
@@ -47,7 +47,7 @@ public record RecipeContentsData(NonNullList<ItemStack> recipeItems, ItemStack r
 
 	private static void toNetwork(RegistryFriendlyByteBuf byteBuf, RecipeContentsData playerCompassData) {
 		for (int i = 0; i < 9; i++) {
-			ItemStack.STREAM_CODEC.encode(byteBuf, playerCompassData.recipeItems.get(i));
+			ItemStack.OPTIONAL_STREAM_CODEC.encode(byteBuf, playerCompassData.recipeItems.get(i));
 		}
 		ItemStack.STREAM_CODEC.encode(byteBuf, playerCompassData.resultItem);
 	}
