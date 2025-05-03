@@ -1,1 +1,1 @@
-* Add `forcecraft:ticking_not_supported` block tag that will prevent the block from being tickable by the Time Torches.
+* Fix potential crash with the Item Card
