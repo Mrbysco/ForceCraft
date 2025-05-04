@@ -8,8 +8,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Supplier;
 
 public class ForceFluidBucketItem extends BucketItem {

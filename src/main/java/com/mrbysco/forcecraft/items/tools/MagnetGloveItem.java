@@ -21,8 +21,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.FakePlayer;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_MAGNET;

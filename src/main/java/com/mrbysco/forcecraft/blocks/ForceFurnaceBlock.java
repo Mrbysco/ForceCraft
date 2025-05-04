@@ -31,8 +31,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Random;
 import java.util.function.ToIntFunction;
 

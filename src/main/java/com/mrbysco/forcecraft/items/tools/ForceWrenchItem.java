@@ -30,8 +30,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.function.Consumer;
 

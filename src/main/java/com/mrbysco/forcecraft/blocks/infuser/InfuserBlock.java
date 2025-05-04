@@ -33,8 +33,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Random;
 import java.util.stream.Stream;
 

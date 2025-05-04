@@ -14,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-
 import org.jetbrains.annotations.Nullable;
 
 public class GrindingRecipe extends MultipleOutputFurnaceRecipe {

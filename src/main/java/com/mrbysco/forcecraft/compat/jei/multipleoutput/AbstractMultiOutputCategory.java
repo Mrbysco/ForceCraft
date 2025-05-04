@@ -32,6 +32,7 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 		this.showChance = showChance;
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public IDrawable getBackground() {
 		return background;

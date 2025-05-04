@@ -22,8 +22,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;

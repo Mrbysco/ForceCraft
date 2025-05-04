@@ -43,6 +43,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 		return JeiCompat.INFUSER_TYPE;
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public IDrawable getBackground() {
 		return background;
