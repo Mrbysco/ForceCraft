@@ -15,7 +15,9 @@ import net.minecraft.world.item.ItemStack;
 
 public class ItemCardScreen extends AbstractContainerScreen<ItemCardMenu> {
 	private static final ResourceLocation ITEM_CARD_GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/crafting3x3.png");
+	@SuppressWarnings("UnnecessaryUnicodeEscape")
 	private static final Component saveText = Component.literal("\u2714");
+	@SuppressWarnings("UnnecessaryUnicodeEscape")
 	private static final Component invalidText = Component.literal("\u2718");
 	private Button buttonSave;
 
