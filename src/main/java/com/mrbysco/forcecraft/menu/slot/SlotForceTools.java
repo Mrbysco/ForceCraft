@@ -4,8 +4,7 @@ import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class SlotForceTools extends SlotItemHandler {
 	public SlotForceTools(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
@@ -18,7 +17,7 @@ public class SlotForceTools extends SlotItemHandler {
 	}
 
 	@Override
-	public int getMaxStackSize(@Nonnull ItemStack stack) {
+	public int getMaxStackSize(@NotNull ItemStack stack) {
 		return 1;
 	}
 }

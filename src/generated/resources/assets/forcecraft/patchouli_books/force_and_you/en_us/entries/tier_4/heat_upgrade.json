@@ -1,7 +1,7 @@
 {
   "advancement": "forcecraft:tier4/tier",
   "category": "forcecraft:tier_4",
-  "icon": "forcecraft:golden_power_source",
+  "icon": "forcecraft:heat_core",
   "name": "info.forcecraft.book.heat_upgrade.entry.name",
   "pages": [
     {
@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:spotlight",
-      "item": "forcecraft:golden_power_source"
+      "item": "forcecraft:heat_core"
     }
   ],
   "secret": true

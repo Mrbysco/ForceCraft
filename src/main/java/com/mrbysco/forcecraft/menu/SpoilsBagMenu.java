@@ -10,8 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class SpoilsBagMenu extends AbstractContainerMenu {
 
@@ -53,7 +52,7 @@ public class SpoilsBagMenu extends AbstractContainerMenu {
 			for (int k = 0; k < 8; ++k) {
 				this.addSlot(new SlotItemHandler(itemHandler, k, xPosC + k * 18, yPosC) {
 					@Override
-					public boolean mayPlace(@Nonnull ItemStack stack) {
+					public boolean mayPlace(@NotNull ItemStack stack) {
 						return false;
 					}
 				});

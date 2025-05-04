@@ -24,7 +24,7 @@ public class PatchouliProvider extends PatchouliBookProvider {
 		BookBuilder bookBuilder = createBookBuilder("force_and_you", "item.forcecraft.book.name", "info.forcecraft.book.landing")
 				.setSubtitle("info.forcecraft.book.subtitle")
 				.setAdvancementsTab("forcecraft:root")
-				.setCreativeTab("forcecraft")
+				.setCreativeTab("forcecraft:tab")
 				.setModel("forcecraft:force_and_you")
 				.setBookTexture("forcecraft:textures/gui/book.png")
 				.setShowProgress(false)
@@ -32,6 +32,7 @@ public class PatchouliProvider extends PatchouliBookProvider {
 //                .setUseBlockyFont(true)
 				.setFillerTexture("forcecraft:textures/gui/page_filler.png")
 				.addMacro("$(item)", "$(#b89232)")
+				.setUseResourcePack(true)
 
 				//infuser category
 				.addCategory("infuser", "info.forcecraft.book.infuser.name", "info.forcecraft.book.infuser.desc", "forcecraft:infuser")
@@ -317,7 +318,7 @@ public class PatchouliProvider extends PatchouliBookProvider {
 				.setText("info.forcecraft.book.bane_info.text2").build()
 				.build();
 
-		ItemStack powerSourceStack = new ItemStack(ForceRegistry.GOLDEN_POWER_SOURCE.get());
+		ItemStack powerSourceStack = new ItemStack(ForceRegistry.HEAT_CORE.get());
 		tierCategory.addEntry("tier_4/heat_upgrade", "info.forcecraft.book.heat_upgrade.entry.name", powerSourceStack).setSecret(true)
 				.setAdvancement("forcecraft:tier4/tier")
 				.addTextPage("info.forcecraft.book.heat_upgrade_info.text").build()

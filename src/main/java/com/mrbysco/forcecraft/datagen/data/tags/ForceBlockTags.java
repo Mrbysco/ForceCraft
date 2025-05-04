@@ -9,8 +9,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static com.mrbysco.forcecraft.registry.ForceRegistry.*;
 
@@ -19,8 +18,10 @@ public class ForceBlockTags extends BlockTagsProvider {
 		super(generator, Reference.MOD_ID, existingFileHelper);
 	}
 
-	public static final TagKey<Block> RELOCATION_NOT_SUPPORTED = forgeTag("relocation_not_supported");
-	public static final TagKey<Block> NON_MOVABLE = optionalTag("create", "non_movable");
+	public static final TagKey<Block> ORES_IN_GROUND_DEEPSLATE = forgeTag("ores_in_ground/deepslate");
+	public static final TagKey<Block> ORES_IN_GROUND_STONE = forgeTag("ores_in_ground/stone");
+	public static final TagKey<Block> ORES = forgeTag("ores");
+	public static final TagKey<Block> ORES_POWER = forgeTag("ores/power");
 
 	private static TagKey<Block> forgeTag(String name) {
 		return BlockTags.create(new ResourceLocation("forge", name));
@@ -69,5 +70,10 @@ public class ForceBlockTags extends BlockTagsProvider {
 		);
 
 		this.tag(BlockTags.NEEDS_IRON_TOOL).add(POWER_ORE.get(), DEEPSLATE_POWER_ORE.get());
+
+		this.tag(ORES_IN_GROUND_DEEPSLATE).add(DEEPSLATE_POWER_ORE.get());
+		this.tag(ORES_IN_GROUND_STONE).add(POWER_ORE.get());
+		this.tag(ORES_POWER).add(POWER_ORE.get(), DEEPSLATE_POWER_ORE.get());
+		this.tag(ORES).addTag(ORES_POWER);
 	}
 }

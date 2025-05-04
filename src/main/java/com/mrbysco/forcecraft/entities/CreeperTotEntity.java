@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.entities;
 
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.nbt.CompoundTag;

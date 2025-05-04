@@ -23,8 +23,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_BANE;
 
@@ -199,7 +198,7 @@ public class ForceArrowEntity extends Arrow {
 		return ForceEntities.FORCE_ARROW.get();
 	}
 
-	@Nonnull
+	@NotNull
 	@Override
 	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);

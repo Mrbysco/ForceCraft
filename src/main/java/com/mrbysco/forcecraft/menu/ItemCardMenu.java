@@ -21,8 +21,8 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,13 +56,13 @@ public class ItemCardMenu extends AbstractContainerMenu {
 						return 1;
 					}
 
-					@Nonnull
+					@NotNull
 					@Override
-					public void onTake(final Player player, @Nonnull final ItemStack stack) {
+					public void onTake(final Player player, @NotNull final ItemStack stack) {
 
 					}
 
-					@Nonnull
+					@NotNull
 					@Override
 					public ItemStack remove(final int par1) {
 						return ItemStack.EMPTY;

@@ -9,8 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.network.NetworkHooks;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class NonBurnableItemEntity extends ItemEntity {
 
@@ -37,7 +36,7 @@ public class NonBurnableItemEntity extends ItemEntity {
 		return source.getMsgId().equals(DamageSource.OUT_OF_WORLD.msgId);
 	}
 
-	@Nonnull
+	@NotNull
 	@Override
 	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);

@@ -7,15 +7,15 @@
 //import net.minecraftforge.common.util.LazyOptional;
 //import net.minecraftforge.common.capabilities.ForgeCapabilities;
 //
-//import javax.annotation.Nonnull;
+//import org.jetbrains.annotations.Nullable;
 //import javax.annotation.Nullable;
 //
 //public class PackInventoryProvider implements ICapabilitySerializable<CompoundTag> {
 //	private final LazyOptional<PackItemStackHandler> inventory = LazyOptional.of(() -> new PackItemStackHandler());
 //
-//	@Nonnull
+//	@NotNull
 //	@Override
-//	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+//	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
 //		if (cap == ForgeCapabilities.ITEM_HANDLER) {
 //			return inventory.cast();
 //		}

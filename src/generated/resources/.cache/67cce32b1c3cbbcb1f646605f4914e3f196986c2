@@ -1,4 +1,4 @@
-// 1.19.2	2022-11-18T15:44:16.3760599	LootTables
+// 1.19.2	2025-05-04T21:59:26.8917025	LootTables
 6cbe5a16142122b99a1d6d9144094d824f552378 data/forcecraft/loot_tables/blocks/black_force_furnace.json
 bc329d50905ade59f829f16fce5b1d67f01fd06a data/forcecraft/loot_tables/blocks/blue_force_furnace.json
 ea748a14c067d521989c3d3b42c04a583f83fc96 data/forcecraft/loot_tables/blocks/brown_force_furnace.json
@@ -63,7 +63,7 @@ e696d2de3eede8497c330d8f53fb40462504ac8e data/forcecraft/loot_tables/blocks/forc
 aad2ffa6bd18eb3b467a8a0f5379786514518319 data/forcecraft/loot_tables/blocks/force_furnace.json
 d7b406f18ad0362def68dfb728ceb06a386668fe data/forcecraft/loot_tables/blocks/force_gray_torch.json
 7905a446920ea5106860e11192aac613e8161d0c data/forcecraft/loot_tables/blocks/force_green_torch.json
-200918c999a628a3f1c361c40f4146bd1d1f0ab3 data/forcecraft/loot_tables/blocks/force_leaves.json
+56084eb1537434f4844bfa59f0a25fc8b0e68115 data/forcecraft/loot_tables/blocks/force_leaves.json
 82133c47549fe8187ab07cd1a2bb43d8302d579a data/forcecraft/loot_tables/blocks/force_light_blue_torch.json
 4011689c52fd329c84048b7c8dab615bd42709d5 data/forcecraft/loot_tables/blocks/force_light_gray_torch.json
 311aa96bd98a73beefb7e50384c8c82e29d9b95b data/forcecraft/loot_tables/blocks/force_lime_torch.json

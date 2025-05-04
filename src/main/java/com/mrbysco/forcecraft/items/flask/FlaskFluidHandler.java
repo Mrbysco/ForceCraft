@@ -8,12 +8,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 
-	public FlaskFluidHandler(@Nonnull ItemStack container) {
+	public FlaskFluidHandler(@NotNull ItemStack container) {
 		super(container, 1000);
 	}
 
@@ -22,13 +21,13 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 		return 1000;
 	}
 
-	@Nonnull
+	@NotNull
 	@Override
 	public FluidStack getFluidInTank(int tank) {
 		return getFluid();
 	}
 
-	@Nonnull
+	@NotNull
 	@Override
 	public FluidStack getFluid() {
 		Item item = container.getItem();
@@ -47,7 +46,7 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 	}
 
 	@Override
-	public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
+	public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
 		return canFillFluidType(stack);
 	}
 

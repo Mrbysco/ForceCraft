@@ -13,8 +13,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
@@ -177,7 +177,7 @@ public class StorageManager {
 		}
 
 		@Override
-		@Nonnull
+		@NotNull
 		public CompoundTag save(CompoundTag compound) {
 			ListTag packs = new ListTag();
 			PACKS.forEach(((uuid, data) -> packs.add(data.toNBT())));
@@ -220,7 +220,7 @@ public class StorageManager {
 		}
 
 		@Override
-		@Nonnull
+		@NotNull
 		public CompoundTag save(CompoundTag compound) {
 			ListTag belts = new ListTag();
 			BELTS.forEach(((uuid, data) -> belts.add(data.toNBT())));

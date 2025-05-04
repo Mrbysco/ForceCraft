@@ -6,9 +6,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.mrbysco.forcecraft.capabilities.CapabilityHandler.CAPABILITY_EXPTOME;
 
@@ -55,9 +54,9 @@ public class ExperienceTomeCapability implements IExperienceTome, ICapabilitySer
 		instance.setExperienceValue(tag.getFloat("experience"));
 	}
 
-	@Nonnull
+	@NotNull
 	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
 		return CAPABILITY_EXPTOME.orEmpty(cap, LazyOptional.of(() -> this));
 	}
 

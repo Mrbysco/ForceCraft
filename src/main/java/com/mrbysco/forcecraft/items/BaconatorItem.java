@@ -29,9 +29,9 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class BaconatorItem extends BaseItem {
@@ -164,9 +164,9 @@ public class BaconatorItem extends BaseItem {
 			}
 		});
 
-		@Nonnull
+		@NotNull
 		@Override
-		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
 			if (cap == ForgeCapabilities.ITEM_HANDLER)
 				return inventory.cast();
 			else return LazyOptional.empty();

@@ -2,6 +2,7 @@ package com.mrbysco.forcecraft.menu.infuser;
 
 import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.menu.slot.SlotForceGems;
+import com.mrbysco.forcecraft.menu.slot.SlotForceTools;
 import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.util.AdvancementUtil;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,8 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 public class InfuserMenu extends AbstractContainerMenu {
@@ -58,7 +59,7 @@ public class InfuserMenu extends AbstractContainerMenu {
 		this.addSlot(new UnlockableSlot(te.handler, 7, 56, 32));
 
 		//Tools Slot in the middle
-		this.addSlot(new MatrixUpdatingSlot(te.handler, InfuserBlockEntity.SLOT_TOOL, 80, 57));
+		this.addSlot(new SlotForceTools(te.handler, InfuserBlockEntity.SLOT_TOOL, 80, 57));
 
 		//Force Gem Slot top left
 		this.addSlot(new SlotForceGems(te.handler, InfuserBlockEntity.SLOT_GEM, 8, 23));
@@ -173,7 +174,7 @@ public class InfuserMenu extends AbstractContainerMenu {
 	}
 
 	@Override
-	@Nonnull
+	@NotNull
 	public ItemStack quickMoveStack(Player playerIn, int index) {
 
 		ItemStack itemstack = ItemStack.EMPTY;
@@ -265,7 +266,7 @@ public class InfuserMenu extends AbstractContainerMenu {
 		}
 
 		@Override
-		public boolean mayPlace(@Nonnull ItemStack stack) {
+		public boolean mayPlace(@NotNull ItemStack stack) {
 			return slot <= tile.getBookTier() && super.mayPlace(stack);
 		}
 

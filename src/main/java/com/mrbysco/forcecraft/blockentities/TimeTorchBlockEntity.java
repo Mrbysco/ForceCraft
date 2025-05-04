@@ -17,8 +17,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	}
 
 	@SuppressWarnings("deprecation")
-	private void tickBlock(@Nonnull BlockPos pos) {
+	private void tickBlock(@NotNull BlockPos pos) {
 		if (pos.equals(getBlockPos()) || !level.isAreaLoaded(pos, 1)) return;
 
 

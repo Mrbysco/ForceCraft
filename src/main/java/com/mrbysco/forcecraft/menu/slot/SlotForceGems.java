@@ -4,8 +4,7 @@ import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class SlotForceGems extends SlotItemHandler {
 
@@ -15,11 +14,11 @@ public class SlotForceGems extends SlotItemHandler {
 
 	@Override
 	public boolean mayPlace(ItemStack stack) {
-		return stack.is(ForceTags.FORGE_GEM);
+		return stack.is(ForceTags.FORCE_GEM);
 	}
 
 	@Override
-	public int getMaxStackSize(@Nonnull ItemStack stack) {
+	public int getMaxStackSize(@NotNull ItemStack stack) {
 		return 64;
 	}
 }

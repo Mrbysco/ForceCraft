@@ -34,9 +34,9 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -178,16 +178,16 @@ public class SpoilsBagItem extends BaseItem {
 				return false;
 			}
 
-			@Nonnull
+			@NotNull
 			@Override
-			public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+			public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
 				return stack;
 			}
 		});
 
-		@Nonnull
+		@NotNull
 		@Override
-		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
 			if (cap == ForgeCapabilities.ITEM_HANDLER)
 				return inventory.cast();
 			else return LazyOptional.empty();
