@@ -50,7 +50,7 @@ public class ForceFeatureKeys {
 	public static ResourceKey<ConfiguredFeature<?, ?>> createConfiguredKey(String name) {
 		return ResourceKey.create(Registries.CONFIGURED_FEATURE, Reference.modLoc(name));
 	}
-	
+
 	public static final ResourceKey<PlacedFeature> PLACED_ORE_FORCE = createPlacedKey("ore_force");
 	public static final ResourceKey<PlacedFeature> PLACED_ORE_FORCE_BURIED = createPlacedKey("ore_force_buried");
 	public static final ResourceKey<PlacedFeature> PLACED_FORCE_TREE = createPlacedKey("force_tree");
@@ -59,7 +59,7 @@ public class ForceFeatureKeys {
 	public static ResourceKey<PlacedFeature> createPlacedKey(String name) {
 		return ResourceKey.create(Registries.PLACED_FEATURE, Reference.modLoc(name));
 	}
-	
+
 	private static TreeConfiguration.TreeConfigurationBuilder createStraightBlobTree(BlockState trunkState, BlockState foliageState, int baseHeight, int heightRandA, int heightRandB, int p_195152_) {
 		return new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(trunkState), new StraightTrunkPlacer(baseHeight, heightRandA, heightRandB),
 				BlockStateProvider.simple(foliageState), new BlobFoliagePlacer(ConstantInt.of(p_195152_), ConstantInt.of(0), 3), new TwoLayersFeatureSize(1, 0, 1));

@@ -1,8 +1,6 @@
 package com.mrbysco.forcecraft.datagen.data.tags;
 
 import com.mrbysco.forcecraft.Reference;
-import com.mrbysco.forcecraft.registry.ForceRecipes;
-import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;

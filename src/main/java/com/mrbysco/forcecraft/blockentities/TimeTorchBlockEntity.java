@@ -62,7 +62,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 	@SuppressWarnings("deprecation")
 	private void tickBlock(@NotNull BlockPos pos) {
 		if (pos.equals(getBlockPos()) || !level.isAreaLoaded(pos, 1)) return;
-		
+
 		BlockState blockState = this.level.getBlockState(pos);
 		if (blockState != null && !blockState.is(ForceTags.TICKING_NOT_SUPPORTED)) {
 			Block block = blockState.getBlock();

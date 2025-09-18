@@ -40,7 +40,7 @@ public class CapabilityHandler {
 						new ComponentItemHandler(stack, ForceComponents.SPOILS_CONTENT.get(), 8),
 				ForceRegistry.SPOILS_BAG, ForceRegistry.SPOILS_BAG_T2, ForceRegistry.SPOILS_BAG_T3);
 
-		event.registerItem(Capabilities.ItemHandler.ITEM, (stack, unused) -> StorageManager.getCapability(stack), 
+		event.registerItem(Capabilities.ItemHandler.ITEM, (stack, unused) -> StorageManager.getCapability(stack),
 				ForceRegistry.FORCE_BELT, ForceRegistry.FORCE_PACK);
 	}
 }

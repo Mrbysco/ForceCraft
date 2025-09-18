@@ -34,7 +34,7 @@ public class ForceBiomeModifiers {
 	private static ResourceKey<BiomeModifier> createKey(String name) {
 		return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, Reference.modLoc(name));
 	}
-	
+
 	public static void modifierBootstrap(BootstrapContext<BiomeModifier> context) {
 		HolderGetter<Biome> biomeGetter = context.lookup(Registries.BIOME);
 		HolderGetter<PlacedFeature> placedGetter = context.lookup(Registries.PLACED_FEATURE);
