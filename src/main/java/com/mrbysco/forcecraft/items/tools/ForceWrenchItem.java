@@ -41,35 +41,30 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 	}
 
 	@Override
-	public void onCraftedBy(ItemStack stack, Level level, Player player) {
-		super.onCraftedBy(stack, level, player);
-	}
-
-	@Override
 	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
 		Player player = context.getPlayer();
 		Level level = context.getLevel();
 		BlockPos pos = context.getClickedPos();
 		InteractionHand hand = context.getHand();
-		if (stack.getItem() instanceof ForceWrenchItem) {
-			if (player != null && player.isCrouching()) {
-				ForceWrenchData attachment = stack.getOrDefault(WRENCH, ForceWrenchData.EMPTY);
-				if (level.getBlockEntity(pos) instanceof BlockEntity && !attachment.canStoreBlock()) {
-					return serializeNBT(level, pos, player, hand);
-				} else if (attachment.canStoreBlock())
-					placeBlockFromWrench(level, pos, player, hand, context.getClickedFace());
-			} else {
-				ForceToolData fd = new ForceToolData(stack);
-				if (fd.getForce() >= 10) {
-					BlockState state = level.getBlockState(pos);
-					if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
-						level.setBlockAndUpdate(pos, state.rotate(level, pos, Rotation.CLOCKWISE_90));
-						fd.setForce(fd.getForce() - 10);
-					}
-				} else {
-					if (player != null)
-						player.displayClientMessage(Component.translatable("forcecraft.wrench_rotate.insufficient", 10).withStyle(ChatFormatting.RED), true);
+		if (!stack.has(ForceComponents.FORCE_INFUSED))
+			stack.set(ForceComponents.FORCE_INFUSED, false);
+		if (player != null && player.isCrouching()) {
+			ForceWrenchData attachment = stack.getOrDefault(WRENCH, ForceWrenchData.EMPTY);
+			if (level.getBlockEntity(pos) instanceof BlockEntity && !attachment.canStoreBlock()) {
+				return serializeNBT(level, pos, player, hand);
+			} else if (attachment.canStoreBlock())
+				placeBlockFromWrench(level, pos, player, hand, context.getClickedFace());
+		} else {
+			ForceToolData fd = new ForceToolData(stack);
+			if (fd.getForce() >= 10) {
+				BlockState state = level.getBlockState(pos);
+				if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+					level.setBlockAndUpdate(pos, state.rotate(level, pos, Rotation.CLOCKWISE_90));
+					fd.setForce(fd.getForce() - 10);
 				}
+			} else {
+				if (player != null)
+					player.displayClientMessage(Component.translatable("forcecraft.wrench_rotate.insufficient", 10).withStyle(ChatFormatting.RED), true);
 			}
 		}
 		return super.onItemUseFirst(stack, context);
