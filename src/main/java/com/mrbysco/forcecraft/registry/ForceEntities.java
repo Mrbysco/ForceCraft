@@ -50,16 +50,16 @@ public class ForceEntities {
 
 	public static final Supplier<EntityType<ChuChuEntity>> RED_CHU_CHU = ENTITY_TYPES.register("red_chu_chu", () ->
 			register("red_chu_chu", EntityType.Builder.<ChuChuEntity>of(ChuChuEntity::new, MobCategory.MONSTER)
-					.sized(2.04F, 2.04F).clientTrackingRange(10)));
+					.sized(0.52F, 0.52F).eyeHeight(0.325F).spawnDimensionsScale(4.0F).clientTrackingRange(10)));
 	public static final Supplier<EntityType<ChuChuEntity>> GREEN_CHU_CHU = ENTITY_TYPES.register("green_chu_chu", () ->
 			register("green_chu_chu", EntityType.Builder.<ChuChuEntity>of(ChuChuEntity::new, MobCategory.MONSTER)
-					.sized(2.04F, 2.04F).clientTrackingRange(10)));
+					.sized(0.52F, 0.52F).eyeHeight(0.325F).spawnDimensionsScale(4.0F).clientTrackingRange(10)));
 	public static final Supplier<EntityType<ChuChuEntity>> BLUE_CHU_CHU = ENTITY_TYPES.register("blue_chu_chu", () ->
 			register("blue_chu_chu", EntityType.Builder.<ChuChuEntity>of(ChuChuEntity::new, MobCategory.MONSTER)
-					.sized(2.04F, 2.04F).clientTrackingRange(10)));
+					.sized(0.52F, 0.52F).eyeHeight(0.325F).spawnDimensionsScale(4.0F).clientTrackingRange(10)));
 	public static final Supplier<EntityType<ChuChuEntity>> GOLD_CHU_CHU = ENTITY_TYPES.register("gold_chu_chu", () ->
 			register("gold_chu_chu", EntityType.Builder.<ChuChuEntity>of(ChuChuEntity::new, MobCategory.MONSTER)
-					.sized(2.04F, 2.04F).clientTrackingRange(10)));
+					.sized(0.52F, 0.52F).eyeHeight(0.325F).spawnDimensionsScale(4.0F).clientTrackingRange(10)));
 
 	public static final Supplier<EntityType<CreeperTotEntity>> CREEPER_TOT = ENTITY_TYPES.register("creeper_tot", () ->
 			register("creeper_tot", EntityType.Builder.<CreeperTotEntity>of(CreeperTotEntity::new, MobCategory.MONSTER)
