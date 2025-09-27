@@ -34,25 +34,25 @@ public class ModArmor {
 			() -> Ingredient.of(Items.NETHERITE_INGOT)
 	);
 
-	private static Holder<ArmorMaterial> register(String string, EnumMap<ArmorItem.Type, Integer> enumMap, int i,
-	                                              Holder<SoundEvent> arg, float f, float g,
-	                                              Supplier<Ingredient> supplier) {
-		List<ArmorMaterial.Layer> list = List.of(new ArmorMaterial.Layer(Reference.modLoc(string)));
-		return register(string, enumMap, i, arg, f, g, supplier, list);
+	private static Holder<ArmorMaterial> register(String name, EnumMap<ArmorItem.Type, Integer> defense, int enchantmentValue,
+	                                              Holder<SoundEvent> equipSound, float toughness, float knockbackResistance,
+	                                              Supplier<Ingredient> repairIngredient) {
+		List<ArmorMaterial.Layer> list = List.of(new ArmorMaterial.Layer(Reference.modLoc(name)));
+		return register(name, defense, enchantmentValue, equipSound, toughness, knockbackResistance, repairIngredient, list);
 	}
 
-	private static Holder<ArmorMaterial> register(String string, EnumMap<ArmorItem.Type, Integer> enumMap, int i,
-	                                              Holder<SoundEvent> arg, float f, float g,
-	                                              Supplier<Ingredient> supplier, List<ArmorMaterial.Layer> list) {
-		EnumMap<ArmorItem.Type, Integer> typeIntegerEnumMap = new EnumMap<>(ArmorItem.Type.class);
-		ArmorItem.Type[] values = ArmorItem.Type.values();
-		int var10 = values.length;
-
-		for (int var11 = 0; var11 < var10; ++var11) {
-			ArmorItem.Type type = values[var11];
-			typeIntegerEnumMap.put(type, (Integer) enumMap.get(type));
+	private static Holder<ArmorMaterial> register(String name, EnumMap<ArmorItem.Type, Integer> defense, int enchantmentValue,
+	                                              Holder<SoundEvent> arequipSound, float toughness, float knockbackResistance,
+	                                              Supplier<Ingredient> repairIngredient, List<ArmorMaterial.Layer> armorLayers) {
+		EnumMap<ArmorItem.Type, Integer> enummap = new EnumMap<>(ArmorItem.Type.class);
+		for (ArmorItem.Type armoritem$type : ArmorItem.Type.values()) {
+			enummap.put(armoritem$type, defense.get(armoritem$type));
 		}
 
-		return Registry.registerForHolder(BuiltInRegistries.ARMOR_MATERIAL, Reference.modLoc(string), new ArmorMaterial(typeIntegerEnumMap, i, arg, supplier, list, f, g));
+		return Registry.registerForHolder(BuiltInRegistries.ARMOR_MATERIAL, Reference.modLoc(name),
+				new ArmorMaterial(enummap, enchantmentValue, arequipSound, repairIngredient, armorLayers,
+						toughness, knockbackResistance
+				)
+		);
 	}
 }
