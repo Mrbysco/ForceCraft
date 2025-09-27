@@ -277,13 +277,13 @@ public class ForceRegistry {
 			new CustomFoodItem(itemBuilder().food(ForceFoods.COOKED_BACON)));
 
 	public static final DeferredItem<ForceArmorItem> FORCE_HELMET = ITEMS.register("force_helmet", () ->
-			new ForceArmorItem(ModArmor.FORCE, ArmorItem.Type.HELMET, itemBuilder()));
+			new ForceArmorItem(ModArmor.FORCE, ArmorItem.Type.HELMET, itemBuilder().durability(ArmorItem.Type.HELMET.getDurability(31))));
 	public static final DeferredItem<ForceArmorItem> FORCE_CHEST = ITEMS.register("force_chest", () ->
-			new ForceArmorItem(ModArmor.FORCE, ArmorItem.Type.CHESTPLATE, itemBuilder()));
+			new ForceArmorItem(ModArmor.FORCE, ArmorItem.Type.CHESTPLATE, itemBuilder().durability(ArmorItem.Type.CHESTPLATE.getDurability(31))));
 	public static final DeferredItem<ForceArmorItem> FORCE_LEGS = ITEMS.register("force_legs", () ->
-			new ForceArmorItem(ModArmor.FORCE, ArmorItem.Type.LEGGINGS, itemBuilder()));
+			new ForceArmorItem(ModArmor.FORCE, ArmorItem.Type.LEGGINGS, itemBuilder().durability(ArmorItem.Type.LEGGINGS.getDurability(31))));
 	public static final DeferredItem<ForceArmorItem> FORCE_BOOTS = ITEMS.register("force_boots", () ->
-			new ForceArmorItem(ModArmor.FORCE, ArmorItem.Type.BOOTS, itemBuilder()));
+			new ForceArmorItem(ModArmor.FORCE, ArmorItem.Type.BOOTS, itemBuilder().durability(ArmorItem.Type.BOOTS.getDurability(31))));
 
 	public static final DeferredItem<ForceRodItem> FORCE_ROD = ITEMS.register("force_rod", () -> new ForceRodItem(itemBuilder()));
 	public static final DeferredItem<ForceWrenchItem> FORCE_WRENCH = ITEMS.register("force_wrench", () -> new ForceWrenchItem(itemBuilder()));
