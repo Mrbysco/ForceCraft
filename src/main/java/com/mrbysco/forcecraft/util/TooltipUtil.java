@@ -35,9 +35,6 @@ public class TooltipUtil {
 		if (stack.has(ForceComponents.TOOL_FORCE)) {
 			tooltip.add(Component.translatable("item.infuser.tooltip.force" + stack.get(ForceComponents.TOOL_FORCE)).withStyle(ChatFormatting.GOLD));
 		}
-		if (stack.has(ForceComponents.FORCE)) {
-			tooltip.add(Component.translatable("item.infuser.tooltip.bane").withStyle(ChatFormatting.LIGHT_PURPLE));
-		}
 		if (stack.has(ForceComponents.TOOL_STURDY)) {
 			if (stack.getItem() instanceof ForceArmorItem) {
 				tooltip.add(Component.translatable("item.infuser.tooltip.sturdy" + stack.get(ForceComponents.TOOL_STURDY)).withStyle(ChatFormatting.DARK_PURPLE));
