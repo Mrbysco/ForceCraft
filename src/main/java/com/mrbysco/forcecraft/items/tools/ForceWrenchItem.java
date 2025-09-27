@@ -6,6 +6,7 @@ import com.mrbysco.forcecraft.components.forcewrench.ForceWrenchData;
 import com.mrbysco.forcecraft.items.BaseItem;
 import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
+import com.mrbysco.forcecraft.util.TooltipUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -131,6 +132,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
 		super.appendHoverText(stack, context, tooltip, tooltipFlag);
+		TooltipUtil.addForceTooltips(stack, tooltip);
 		if (stack.has(ForceComponents.WRENCH)) {
 			ForceWrenchData attachment = stack.getOrDefault(ForceComponents.WRENCH, ForceWrenchData.EMPTY);
 			if (attachment.name() != null && !attachment.name().isEmpty()) { // idk what this is
