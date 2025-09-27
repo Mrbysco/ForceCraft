@@ -140,6 +140,14 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		}
 
 		@Override
+		public int getSlotLimit(int slot) {
+			if (slot == SLOT_GEM) {
+				return 64;
+			}
+			return 1;
+		}
+
+		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
 			if (slot < SLOT_TOOL) {
 				return matchesModifier(stack);
