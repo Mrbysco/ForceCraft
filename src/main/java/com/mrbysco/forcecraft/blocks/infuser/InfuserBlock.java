@@ -9,6 +9,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -87,22 +88,28 @@ public class InfuserBlock extends BaseEntityBlock {
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
 	                                          Player player, InteractionHand hand, BlockHitResult hitResult) {
-		BlockEntity blockentity = level.getBlockEntity(pos);
-		if (blockentity instanceof InfuserBlockEntity infuserBE) {
-			IFluidHandler handler = level.getCapability(Capabilities.FluidHandler.BLOCK, pos, hitResult.getDirection());
-			if (handler != null) {
-				if (player.getItemInHand(hand).getCapability(Capabilities.FluidHandler.ITEM) != null) {
-					FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection());
-				} else {
-					if (!level.isClientSide) {
-						player.openMenu(infuserBE, pos);
-					}
-				}
+		IFluidHandler handler = level.getCapability(Capabilities.FluidHandler.BLOCK, pos, hitResult.getDirection());
+		if (handler != null) {
+			if (player.getItemInHand(hand).getCapability(Capabilities.FluidHandler.ITEM) != null) {
+				if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection()))
+					return ItemInteractionResult.SUCCESS;
 			}
-
-			return ItemInteractionResult.SUCCESS;
 		}
 		return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+	}
+
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+		if (level.isClientSide) {
+			return InteractionResult.SUCCESS;
+		} else {
+			BlockEntity blockentity = level.getBlockEntity(pos);
+			if (blockentity instanceof InfuserBlockEntity infuserBE) {
+				player.openMenu(infuserBE, pos);
+			}
+
+			return InteractionResult.CONSUME;
+		}
 	}
 
 	@SuppressWarnings("deprecation")
