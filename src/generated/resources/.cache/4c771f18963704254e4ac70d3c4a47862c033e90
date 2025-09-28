@@ -1,4 +1,6 @@
-// 1.21.1	2025-09-28T13:03:49.3366731	Tags for minecraft:item mod id forcecraft
+// 1.21.1	2025-09-28T13:12:49.0732844	Tags for minecraft:item mod id forcecraft
+b12a8deef84b0f4599bb566aef9d35a4fe8274f1 data/c/tags/item/drinks/magic.json
+6824d1c0b20b1c10665844bdd9dfd7379602fb11 data/c/tags/item/drinks/milk.json
 d964b17dbbb1870466808060f50c0991f7cfaf65 data/c/tags/item/ores.json
 f002772c304bb8350635523d7d3bb1c4fdb5796a data/c/tags/item/ores/power.json
 b73848b6920747aedc21ffb8aed7e3aa8d325f04 data/c/tags/item/ores_in_ground/deepslate.json

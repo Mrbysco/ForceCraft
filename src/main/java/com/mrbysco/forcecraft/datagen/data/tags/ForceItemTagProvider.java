@@ -147,6 +147,11 @@ public class ForceItemTagProvider extends ItemTagsProvider {
 		this.tag(Tags.Items.TOOLS_SHEAR)
 				.add(ForceRegistry.FORCE_SHEARS.get());
 
+		this.tag(Tags.Items.DRINKS_MILK)
+				.add(ForceRegistry.MILK_FORCE_FLASK.get());
+		this.tag(Tags.Items.DRINKS_MAGIC)
+				.add(ForceRegistry.FORCE_FLASK.get());
+
 		this.tag(ItemTags.WOODEN_STAIRS).add(FORCE_PLANK_STAIRS.asItem());
 		this.tag(ItemTags.STAIRS).add(FORCE_BRICK_RED_STAIRS.asItem(), FORCE_BRICK_YELLOW_STAIRS.asItem(),
 				FORCE_BRICK_GREEN_STAIRS.asItem(), FORCE_BRICK_BLUE_STAIRS.asItem(), FORCE_BRICK_WHITE_STAIRS.asItem(),
