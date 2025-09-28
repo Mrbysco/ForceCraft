@@ -2,7 +2,6 @@ package com.mrbysco.forcecraft.blocks.engine;
 
 import com.mojang.serialization.MapCodec;
 import com.mrbysco.forcecraft.blockentities.ForceEngineBlockEntity;
-import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

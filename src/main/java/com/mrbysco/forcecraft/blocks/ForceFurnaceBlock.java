@@ -37,8 +37,6 @@ import java.util.function.ToIntFunction;
 public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlock {
 	public static final MapCodec<ForceFurnaceBlock> CODEC = simpleCodec(ForceFurnaceBlock::new);
 
-	private static final String NBT_UPGRADE = "upgrade";
-
 	public ForceFurnaceBlock(BlockBehaviour.Properties builder) {
 		super(builder);
 	}
