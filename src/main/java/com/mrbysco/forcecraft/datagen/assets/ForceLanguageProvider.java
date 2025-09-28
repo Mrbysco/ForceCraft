@@ -392,6 +392,11 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("forcecraft.ender_rod.unset", "Coordinates Not Set");
 		add("forcecraft.wrench_rotate.insufficient", "Insufficient Force, need at least %s force to rotate a block");
 		add("forcecraft.wrench_transport.insufficient", "Insufficient Force, need at least %s force to transport a block");
+		add("forcecraft.wrench_transport.unmovable", "This block cannot be moved");
+		add("forcecraft.wrench_transport.pickup", "Successfully picked up block");
+		add("forcecraft.wrench_transport.success", "Successfully moved block");
+		add("forcecraft.wrench_rotate.unrotatable", "This block cannot be rotated");
+		add("forcecraft.wrench_rotate.success", "Successfully rotated block");
 
 		add("item.infuser.tooltip.forcelevel", "Force, ");
 		add("item.infuser.tooltip.lumberjack", "Lumberjack");
