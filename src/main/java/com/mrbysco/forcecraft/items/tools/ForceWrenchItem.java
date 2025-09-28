@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.PushReaction;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -59,9 +59,14 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 			ForceToolData fd = new ForceToolData(stack);
 			if (fd.getForce() >= 10) {
 				BlockState state = level.getBlockState(pos);
-				if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+				if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING) || state.hasProperty(BlockStateProperties.FACING)) {
 					level.setBlockAndUpdate(pos, state.rotate(level, pos, Rotation.CLOCKWISE_90));
 					fd.setForce(fd.getForce() - 10);
+					if (player != null)
+						player.displayClientMessage(Component.translatable("forcecraft.wrench_rotate.success").withStyle(ChatFormatting.YELLOW), true);
+				} else {
+					if (player != null)
+						player.displayClientMessage(Component.translatable("forcecraft.wrench_rotate.unrotatable").withStyle(ChatFormatting.RED), true);
 				}
 			} else {
 				if (player != null)
@@ -76,7 +81,8 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 		ForceToolData fd = new ForceToolData(heldWrench);
 		if (fd.getForce() >= 250) {
 			BlockState state = level.getBlockState(pos);
-			if (state.getPistonPushReaction() == PushReaction.BLOCK) {
+			if (state.is(Tags.Blocks.RELOCATION_NOT_SUPPORTED)) {
+				player.displayClientMessage(Component.translatable("forcecraft.wrench_transport.unmovable").withStyle(ChatFormatting.RED), true);
 				return InteractionResult.FAIL;
 			}
 
@@ -93,6 +99,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 			fd.setForce(fd.getForce() - 250);
 			BlockState airState = Blocks.AIR.defaultBlockState();
 			level.setBlockAndUpdate(pos, airState);
+			player.displayClientMessage(Component.translatable("forcecraft.wrench_transport.pickup").withStyle(ChatFormatting.YELLOW), true);
 			return InteractionResult.SUCCESS;
 		} else {
 			player.displayClientMessage(Component.translatable("forcecraft.wrench_transport.insufficient", 250).withStyle(ChatFormatting.RED), true);
@@ -126,6 +133,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 			heldWrench.remove(WRENCH);
 		}
 
+		player.displayClientMessage(Component.translatable("forcecraft.wrench_transport.success").withStyle(ChatFormatting.YELLOW), true);
 		return InteractionResult.SUCCESS;
 	}
 
