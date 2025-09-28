@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-31T14:33:25.8092152	Tags for minecraft:item mod id forcecraft
+// 1.21.1	2025-09-28T13:03:49.3366731	Tags for minecraft:item mod id forcecraft
 d964b17dbbb1870466808060f50c0991f7cfaf65 data/c/tags/item/ores.json
 f002772c304bb8350635523d7d3bb1c4fdb5796a data/c/tags/item/ores/power.json
 b73848b6920747aedc21ffb8aed7e3aa8d325f04 data/c/tags/item/ores_in_ground/deepslate.json
@@ -13,7 +13,18 @@ ba8baa1de0654d18f27068517c95b5fb869c254a data/forcecraft/tags/item/force_furnace
 eff2e9b711edce9a5ae1875f820c2b5272b0779f data/forcecraft/tags/item/force_logs.json
 f6578c63f571b1fa389775ac66b9218c094d5150 data/forcecraft/tags/item/fortune.json
 d0839816bc5ce3b45313754d9906dbff2041e63c data/minecraft/tags/item/axes.json
-d1415442d2f9003a49daa7a187adfa9f33413cf4 data/minecraft/tags/item/meat.json
+68339fe69114320ca45df4429d821064bd426711 data/minecraft/tags/item/chest_armor.json
+fc65e3ffc7e6b13b468b8c65cde171609867ca78 data/minecraft/tags/item/foot_armor.json
+937548fd28bc68befd2d0b888fa0e207ff481aa5 data/minecraft/tags/item/head_armor.json
+299ef3da8e95b3dd24c877780bb80bc97f1415e8 data/minecraft/tags/item/leaves.json
+32f70e32fd7d06eb47ad3e5954f910de2e9f1610 data/minecraft/tags/item/leg_armor.json
+5735e1c0769971033c17f1285a4c739a18804eaa data/minecraft/tags/item/logs_that_burn.json
+706b750991d47136ebc751f6dffb57851484ee81 data/minecraft/tags/item/meat.json
 ec66e38ccaacb630b256b4fde7d82d7b895d7172 data/minecraft/tags/item/pickaxes.json
+cde75bc2fd92249c9a82eb34bc90e0886cb053b2 data/minecraft/tags/item/planks.json
+cb4fcce1d3c5198eee0cfaa60cfea934ecab68e2 data/minecraft/tags/item/saplings.json
 fafc476436a7cda16b83454f46b5a07b7e398a14 data/minecraft/tags/item/shovels.json
+a6e42b91b664111ab69f79acb07412d5a5e9e9ec data/minecraft/tags/item/slabs.json
+254e8f68ed4ceb11eaa56d69e7098db25adef92a data/minecraft/tags/item/stairs.json
 919e6d75ea4faf772493aad779bb387136859c88 data/minecraft/tags/item/swords.json
+839940226aa79cde250c70cfc041e8cffb0e742e data/minecraft/tags/item/wooden_stairs.json

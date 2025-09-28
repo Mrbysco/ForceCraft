@@ -326,7 +326,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addTag(() -> ForceTags.VALID_SPEED_TOOLS, "Valid Speed Tools");
 		addTag(() -> ForceTags.VALID_KNOCKBACK_TOOLS, "Valid Knockback Tools");
 		addTag(() -> ForceTags.ENDER, "Ender");
-		addTag(() -> ForceTags.FORCE_LOGS, "Force Logs");
+		addTag(() -> ForceTags.FORCE_LOGS_ITEM, "Force Logs");
 		addTag(() -> ForceTags.ENTITY_FLASKS, "Entity Flasks");
 		addTag(() -> ForceTags.CHU_JELLY, "Chu Jelly");
 		addTag(() -> ForceTags.FORCE_INGOT, "Force Ingots");

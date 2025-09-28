@@ -128,9 +128,9 @@ public class ForceRecipeProvider extends RecipeProvider {
 						ForceRegistry.COOKED_BACON.get(), 0.1F, 200)
 				.unlockedBy("has_raw_bacon", has(ForceRegistry.RAW_BACON.get()))
 				.save(output, Reference.modLoc("cooked_bacon_from_smelting"));
-		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ForceTags.FORCE_LOGS), RecipeCategory.MISC,
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ForceTags.FORCE_LOGS_ITEM), RecipeCategory.MISC,
 						ForceRegistry.GOLDEN_POWER_SOURCE.get(), 0.15F, 200)
-				.unlockedBy("has_force_logs", has(ForceTags.FORCE_LOGS))
+				.unlockedBy("has_force_logs", has(ForceTags.FORCE_LOGS_ITEM))
 				.save(output);
 		//Smoking
 		simpleCookingRecipe(output, "smoking", RecipeSerializer.SMOKING_RECIPE, SmokingRecipe::new, 100,
@@ -686,8 +686,8 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output);
 		//Planks
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ForceRegistry.FORCE_PLANKS.get(), 4)
-				.requires(ForceTags.FORCE_LOGS)
-				.unlockedBy("has_force_log", has(ForceTags.FORCE_LOGS))
+				.requires(ForceTags.FORCE_LOGS_ITEM)
+				.unlockedBy("has_force_log", has(ForceTags.FORCE_LOGS_ITEM))
 				.save(output);
 		//Wood
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ForceRegistry.FORCE_WOOD.get(), 3)

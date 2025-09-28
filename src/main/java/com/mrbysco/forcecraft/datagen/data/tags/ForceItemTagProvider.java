@@ -8,6 +8,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -19,6 +20,44 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import java.util.concurrent.CompletableFuture;
 
 import static com.mrbysco.forcecraft.registry.ForceRegistry.DEEPSLATE_POWER_ORE_ITEM;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_BLACK_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_BLACK_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_BLUE_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_BLUE_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_BROWN_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_BROWN_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_CYAN_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_CYAN_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_GRAY_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_GRAY_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_GREEN_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_GREEN_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_LIGHT_BLUE_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_LIGHT_BLUE_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_LIGHT_GRAY_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_LIGHT_GRAY_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_LIME_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_LIME_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_MAGENTA_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_MAGENTA_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_ORANGE_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_ORANGE_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_PINK_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_PINK_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_PURPLE_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_PURPLE_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_RED_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_RED_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_WHITE_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_WHITE_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_YELLOW_SLAB;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_YELLOW_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_LEAVES;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_PLANKS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_PLANK_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_SAPLING_ITEM;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.POWER_ORE_ITEM;
 
 public class ForceItemTagProvider extends ItemTagsProvider {
@@ -47,7 +86,6 @@ public class ForceItemTagProvider extends ItemTagsProvider {
 		this.tag(ORES_IN_GROUND_STONE).add(POWER_ORE_ITEM.get());
 		this.tag(ORES_POWER).add(POWER_ORE_ITEM.get(), DEEPSLATE_POWER_ORE_ITEM.get());
 		this.tag(ORES).addTag(ORES_POWER);
-		this.tag(ForceTags.FORCE_LOGS).add(ForceRegistry.FORCE_LOG_ITEM.get(), ForceRegistry.FORCE_WOOD_ITEM.get());
 		this.tag(ForceTags.FORTUNE).add(ForceRegistry.FORTUNE.get(), ForceRegistry.FORTUNE_COOKIE.get());
 		this.tag(ForceTags.BACONATOR_FOOD).add(ForceRegistry.COOKED_BACON.get());
 		this.tag(ForceTags.ENDER).add(Items.ENDER_EYE, Items.ENDER_PEARL);
@@ -83,12 +121,13 @@ public class ForceItemTagProvider extends ItemTagsProvider {
 						ForceRegistry.PINK_FORCE_FURNACE.asItem(), ForceRegistry.PURPLE_FORCE_FURNACE.asItem(),
 						ForceRegistry.RED_FORCE_FURNACE.asItem(), ForceRegistry.WHITE_FORCE_FURNACE.asItem());
 
+		this.tag(ItemTags.MEAT).add(ForceRegistry.RAW_BACON.get(), ForceRegistry.COOKED_BACON.get());
 		this.tag(MEAT).add(ForceRegistry.RAW_BACON.get(), ForceRegistry.COOKED_BACON.get());
 
-//		this.tag(Tags.Items.TOOLS)
-//				.add(ForceRegistry.FORCE_AXE.get(), ForceRegistry.FORCE_PICKAXE.get(),
-//						ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_SWORD.get(),
-//						ForceRegistry.FORCE_BOW.get(), ForceRegistry.FORCE_SHEARS.get());
+		this.tag(ItemTags.FOOT_ARMOR).add(ForceRegistry.FORCE_BOOTS.get());
+		this.tag(ItemTags.LEG_ARMOR).add(ForceRegistry.FORCE_LEGS.get());
+		this.tag(ItemTags.CHEST_ARMOR).add(ForceRegistry.FORCE_CHEST.get());
+		this.tag(ItemTags.HEAD_ARMOR).add(ForceRegistry.FORCE_HELMET.get());
 
 		this.tag(ItemTags.PICKAXES)
 				.add(ForceRegistry.FORCE_PICKAXE.get());
@@ -107,6 +146,28 @@ public class ForceItemTagProvider extends ItemTagsProvider {
 
 		this.tag(Tags.Items.TOOLS_SHEAR)
 				.add(ForceRegistry.FORCE_SHEARS.get());
+
+		this.tag(ItemTags.WOODEN_STAIRS).add(FORCE_PLANK_STAIRS.asItem());
+		this.tag(ItemTags.STAIRS).add(FORCE_BRICK_RED_STAIRS.asItem(), FORCE_BRICK_YELLOW_STAIRS.asItem(),
+				FORCE_BRICK_GREEN_STAIRS.asItem(), FORCE_BRICK_BLUE_STAIRS.asItem(), FORCE_BRICK_WHITE_STAIRS.asItem(),
+				FORCE_BRICK_BLACK_STAIRS.asItem(), FORCE_BRICK_BROWN_STAIRS.asItem(), FORCE_BRICK_ORANGE_STAIRS.asItem(),
+				FORCE_BRICK_LIGHT_BLUE_STAIRS.asItem(), FORCE_BRICK_MAGENTA_STAIRS.asItem(), FORCE_BRICK_PINK_STAIRS.asItem(),
+				FORCE_BRICK_LIGHT_GRAY_STAIRS.asItem(), FORCE_BRICK_LIME_STAIRS.asItem(), FORCE_BRICK_CYAN_STAIRS.asItem(),
+				FORCE_BRICK_PURPLE_STAIRS.asItem(), FORCE_BRICK_GRAY_STAIRS.asItem(), FORCE_BRICK_STAIRS.asItem());
+		this.tag(ItemTags.WOODEN_STAIRS).add(FORCE_PLANK_STAIRS.asItem());
+		this.tag(ItemTags.SLABS).add(FORCE_BRICK_RED_SLAB.asItem(), FORCE_BRICK_YELLOW_SLAB.asItem(),
+				FORCE_BRICK_GREEN_SLAB.asItem(), FORCE_BRICK_BLUE_SLAB.asItem(), FORCE_BRICK_WHITE_SLAB.asItem(),
+				FORCE_BRICK_BLACK_SLAB.asItem(), FORCE_BRICK_BROWN_SLAB.asItem(), FORCE_BRICK_ORANGE_SLAB.asItem(),
+				FORCE_BRICK_LIGHT_BLUE_SLAB.asItem(), FORCE_BRICK_MAGENTA_SLAB.asItem(), FORCE_BRICK_PINK_SLAB.asItem(),
+				FORCE_BRICK_LIGHT_GRAY_SLAB.asItem(), FORCE_BRICK_LIME_SLAB.asItem(), FORCE_BRICK_CYAN_SLAB.asItem(),
+				FORCE_BRICK_PURPLE_SLAB.asItem(), FORCE_BRICK_GRAY_SLAB.asItem(), FORCE_BRICK_SLAB.asItem());
+		this.tag(ItemTags.LEAVES).add(FORCE_LEAVES.asItem());
+		this.tag(ItemTags.PLANKS).add(FORCE_PLANKS.asItem());
+
+		this.tag(ForceTags.FORCE_LOGS_ITEM).add(ForceRegistry.FORCE_LOG_ITEM.get(), ForceRegistry.FORCE_WOOD_ITEM.get());
+		this.tag(ItemTags.LOGS_THAT_BURN).addTag(ForceTags.FORCE_LOGS_ITEM);
+
+		this.tag(ItemTags.SAPLINGS).add(FORCE_SAPLING_ITEM.get());
 
 	}
 }
