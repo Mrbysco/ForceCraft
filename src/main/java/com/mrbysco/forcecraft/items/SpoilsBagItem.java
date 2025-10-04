@@ -28,9 +28,9 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.ComponentItemHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -54,21 +54,19 @@ public class SpoilsBagItem extends BaseItem {
 		Direction face = context.getClickedFace();
 		IItemHandler blockInventory = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, face);
 		IItemHandler handler = stack.getCapability(Capabilities.ItemHandler.ITEM);
-		if (handler != null && blockInventory != null) {
-			if (blockInventory != null && handler instanceof ItemStackHandler itemHandler) {
-				for (int i = 0; i < itemHandler.getSlots(); i++) {
-					ItemStack bagStack = itemHandler.getStackInSlot(i);
-					ItemStack remaining = bagStack.copyWithCount(bagStack.getCount());
-					if (!bagStack.isEmpty()) {
-						remaining = ItemHandlerHelper.insertItem(blockInventory, bagStack, false);
-						itemHandler.setStackInSlot(i, remaining);
-					}
+		if (handler instanceof ComponentItemHandler itemHandler && blockInventory != null) {
+			for (int i = 0; i < itemHandler.getSlots(); i++) {
+				ItemStack bagStack = itemHandler.getStackInSlot(i);
+				ItemStack remaining;
+				if (!bagStack.isEmpty()) {
+					remaining = ItemHandlerHelper.insertItem(blockInventory, bagStack, false);
+					itemHandler.setStackInSlot(i, remaining);
 				}
-				if (ItemHandlerUtils.isEmpty(itemHandler)) {
-					stack.shrink(1);
-				}
-				return InteractionResult.SUCCESS;
 			}
+			if (ItemHandlerUtils.isEmpty(itemHandler)) {
+				stack.shrink(1);
+			}
+			return InteractionResult.SUCCESS;
 		}
 
 		return super.useOn(context);
@@ -88,16 +86,16 @@ public class SpoilsBagItem extends BaseItem {
 
 	public ResourceKey<LootTable> getTable() {
 		return switch (this.tier) {
-			default -> ForceTables.TIER_1;
 			case 2 -> ForceTables.TIER_2;
 			case 3 -> ForceTables.TIER_3;
+			default -> ForceTables.TIER_1;
 		};
 	}
 
 	public void populateBag(Level level, ItemStack stack) {
 		if (!level.isClientSide && !stack.has(ForceComponents.SPOILS_FILLED)) {
 			IItemHandler handler = stack.getCapability(Capabilities.ItemHandler.ITEM);
-			if (handler instanceof ItemStackHandler) {
+			if (handler instanceof ComponentItemHandler componentItemHandler) {
 				if (ItemHandlerUtils.isEmpty(handler)) {
 					List<ItemStack> stacks = new ArrayList<>();
 					do {
@@ -125,9 +123,8 @@ public class SpoilsBagItem extends BaseItem {
 						stacks = newStacks;
 					}
 
-					ItemStackHandler stackhandler = (ItemStackHandler) handler;
 					for (int i = 0; i < stacks.size(); i++) {
-						stackhandler.setStackInSlot(i, stacks.get(i));
+						componentItemHandler.setStackInSlot(i, stacks.get(i));
 					}
 					stack.set(ForceComponents.SPOILS_FILLED, true);
 				}
