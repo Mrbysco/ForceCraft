@@ -1,1 +1,1 @@
-* Fix Spoil Bags not getting populated with loot
+* Remove leftover debug message when a Chu Chu entity spawns
