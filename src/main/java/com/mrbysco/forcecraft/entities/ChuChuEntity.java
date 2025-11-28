@@ -33,7 +33,6 @@ public class ChuChuEntity extends Slime {
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
 		SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
 		int newSize = 1 + random.nextInt(2);
-		System.out.println(newSize);
 		this.setSize(newSize, true);
 		return data;
 	}
