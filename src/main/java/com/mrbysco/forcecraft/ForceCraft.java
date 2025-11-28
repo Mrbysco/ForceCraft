@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft;
 
+import com.mojang.logging.LogUtils;
 import com.mrbysco.forcecraft.attachments.ForceAttachments;
 import com.mrbysco.forcecraft.capability.CapabilityHandler;
 import com.mrbysco.forcecraft.client.ClientHandler;
@@ -41,13 +42,12 @@ import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 @Mod(Reference.MOD_ID)
 public class ForceCraft {
 
-	public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
+	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public ForceCraft(IEventBus eventBus, ModContainer container, Dist dist) {
 		container.registerConfig(ModConfig.Type.COMMON, ConfigHandler.commonSpec);
