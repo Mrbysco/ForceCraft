@@ -4,14 +4,16 @@ import com.mrbysco.forcecraft.items.ForceBeltItem;
 import com.mrbysco.forcecraft.items.ForcePackItem;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.IndexModifier;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 import org.jetbrains.annotations.NotNull;
 
-public class BeltSlot extends SlotItemHandler {
+public class BeltSlot extends ResourceHandlerSlot {
 
-	public BeltSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-		super(itemHandler, index, xPosition, yPosition);
+	public BeltSlot(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> slotModifier, int index, int xPosition, int yPosition) {
+		super(handler, slotModifier, index, xPosition, yPosition);
 	}
 
 	@Override
@@ -27,10 +29,5 @@ public class BeltSlot extends SlotItemHandler {
 	@Override
 	public int getMaxStackSize(@NotNull ItemStack stack) {
 		return 1;
-	}
-
-	@Override
-	public void set(@NotNull ItemStack stack) {
-		super.set(stack);
 	}
 }

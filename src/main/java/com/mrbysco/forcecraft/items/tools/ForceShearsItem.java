@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -21,11 +22,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.animal.Chicken;
-import net.minecraft.world.entity.animal.Cow;
-import net.minecraft.world.entity.animal.MushroomCow;
-import net.minecraft.world.entity.animal.Pig;
-import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.chicken.Chicken;
+import net.minecraft.world.entity.animal.cow.Cow;
+import net.minecraft.world.entity.animal.cow.MushroomCow;
+import net.minecraft.world.entity.animal.pig.Pig;
+import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -33,6 +34,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,24 +50,27 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 	private static final int SHEARS_DMG = 238; // vanilla shears have this max damage
 
 	public ForceShearsItem(Item.Properties properties) {
-		super(properties.stacksTo(1).durability(SHEARS_DMG * 4).component(DataComponents.TOOL, createToolProperties()));
+		super(properties.stacksTo(1).durability(SHEARS_DMG * 4)
+				.component(DataComponents.TOOL, createToolProperties())
+				.enchantable(0)
+		);
 	}
 
 	private static final Item[] WOOL = {Items.RED_WOOL, Items.BLUE_WOOL, Items.BLACK_WOOL, Items.BLUE_WOOL, Items.BROWN_WOOL, Items.WHITE_WOOL, Items.ORANGE_WOOL, Items.MAGENTA_WOOL, Items.LIGHT_BLUE_WOOL, Items.YELLOW_WOOL, Items.LIME_WOOL, Items.PINK_WOOL, Items.GRAY_WOOL, Items.LIGHT_GRAY_WOOL,
 			Items.CYAN_WOOL, Items.PURPLE_WOOL, Items.BROWN_WOOL, Items.GREEN_WOOL};
 
 	private ItemStack getRandomWool(Level level) {
-		return new ItemStack(WOOL[Mth.nextInt(level.random, 0, WOOL.length)]);
+		return new ItemStack(WOOL[Mth.nextInt(level.getRandom(), 0, WOOL.length)]);
 	}
 
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity entity, InteractionHand hand) {
 		Level level = entity.level();
-		if (level.isClientSide) {
+		if (!(level instanceof ServerLevel serverLevel)) {
 			return InteractionResult.PASS;
 		}
 
-		RandomSource rand = level.random;
+		RandomSource rand = level.getRandom();
 
 		// don't drop wool from ALL IForgeShearable mobs, only sheep
 		// for example: snow golems and Mooshroom are both IForgeShearable, but they
@@ -78,12 +84,12 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 
 				// get drops to test and see the COUNT of how many we should drop
 				for (int i = 0; i < drops.size(); i++) {
-					ItemEntity ent = entity.spawnAtLocation(getRandomWool(level), 1.0F);
+					ItemEntity ent = entity.spawnAtLocation(serverLevel, getRandomWool(level), 1.0F);
 					if (ent != null)
 						ent.setDeltaMovement(ent.getDeltaMovement().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
 				}
 
-				stack.hurtAndBreak(1, playerIn, Player.getSlotForHand(hand));
+				stack.hurtAndBreak(1, playerIn, hand.asEquipmentSlot());
 				return InteractionResult.SUCCESS;
 			}
 		}
@@ -100,7 +106,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					drops.add(new ItemStack(Items.LEATHER, 1));
 
 				drops.forEach(d -> {
-					ItemEntity ent = entity.spawnAtLocation(d, 1.0F);
+					ItemEntity ent = entity.spawnAtLocation(serverLevel, d, 1.0F);
 					if (ent != null)
 						ent.setDeltaMovement(ent.getDeltaMovement().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
 				});
@@ -119,7 +125,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					replacementMob.igniteForSeconds(SET_FIRE_TIME);
 				}
 
-				stack.hurtAndBreak(1, playerIn, Player.getSlotForHand(hand));
+				stack.hurtAndBreak(1, playerIn, hand.asEquipmentSlot());
 				return InteractionResult.SUCCESS;
 			}
 			if (entity instanceof Chicken originalChicken) {
@@ -133,7 +139,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 				}
 
 				drops.forEach(d -> {
-					ItemEntity ent = entity.spawnAtLocation(d, 1.0F);
+					ItemEntity ent = entity.spawnAtLocation(serverLevel, d, 1.0F);
 					if (ent != null)
 						ent.setDeltaMovement(ent.getDeltaMovement().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
 				});
@@ -152,7 +158,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					replacementMob.igniteForSeconds(SET_FIRE_TIME);
 				}
 
-				stack.hurtAndBreak(1, playerIn, Player.getSlotForHand(hand));
+				stack.hurtAndBreak(1, playerIn, hand.asEquipmentSlot());
 				return InteractionResult.SUCCESS;
 			}
 			if (entity instanceof Pig originalPig) {
@@ -165,7 +171,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					drops.add(new ItemStack(hasHeat ? ForceRegistry.COOKED_BACON.get() : ForceRegistry.RAW_BACON.get(), 1));
 
 				drops.forEach(d -> {
-					net.minecraft.world.entity.item.ItemEntity ent = entity.spawnAtLocation(d, 1.0F);
+					net.minecraft.world.entity.item.ItemEntity ent = entity.spawnAtLocation(serverLevel, d, 1.0F);
 					if (ent != null)
 						ent.setDeltaMovement(ent.getDeltaMovement().add((double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double) (rand.nextFloat() * 0.05F), (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
 				});
@@ -184,7 +190,7 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 					replacementMob.igniteForSeconds(SET_FIRE_TIME);
 				}
 
-				stack.hurtAndBreak(1, entity, Player.getSlotForHand(hand));
+				stack.hurtAndBreak(1, entity, hand.asEquipmentSlot());
 				return InteractionResult.SUCCESS;
 			}
 		}
@@ -193,11 +199,10 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-		TooltipUtil.addForceTooltips(stack, tooltip);
-		ForceToolData fd = new ForceToolData(stack);
-		fd.attachInformation(tooltip);
-		super.appendHoverText(stack, context, tooltip, tooltipFlag);
+	public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+		TooltipUtil.addForceTooltips(itemStack, builder);
+		ForceToolData fd = new ForceToolData(itemStack);
+		fd.attachInformation(builder);
 	}
 
 	@Override
@@ -205,13 +210,13 @@ public class ForceShearsItem extends ShearsItem implements IForceChargingTool {
 		return this.damageItem(stack, amount);
 	}
 
-	@Override
-	public int getEnchantmentValue() {
-		return 0;
-	}
-
-	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
-	}
+//	@Override
+//	public int getEnchantmentValue() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+//		return false;
+//	}
 }

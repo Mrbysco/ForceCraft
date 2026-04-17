@@ -7,7 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mrbysco.forcecraft.components.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceLootModifiers;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -36,14 +36,13 @@ public class SmeltingModifier extends LootModifier {
 	}
 
 	private static ItemStack smelt(ItemStack stack, LootContext context) {
-		ItemStack ctxTool = context.getParamOrNull(LootContextParams.TOOL);
+		ItemInstance ctxTool = context.getOptionalParameter(LootContextParams.TOOL);
 		if (ctxTool == null)
 			return stack;
-		RegistryAccess registryAccess = context.getLevel().registryAccess();
 		if (ctxTool.has(ForceComponents.TOOL_HEAT)) {
-			return context.getLevel().getRecipeManager().getRecipeFor(RecipeType.SMELTING,
+			return context.getLevel().recipeAccess().getRecipeFor(RecipeType.SMELTING,
 							new SingleRecipeInput(stack), context.getLevel())
-					.map(smeltRecipe -> smeltRecipe.value().getResultItem(registryAccess))
+					.map(smeltRecipe -> smeltRecipe.value().result().create())
 					.filter(itemStack -> !itemStack.isEmpty())
 					.map(itemStack -> itemStack.copyWithCount(stack.getCount() * itemStack.getCount()))
 					.orElse(stack);

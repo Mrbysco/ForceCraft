@@ -4,48 +4,49 @@ import com.mrbysco.forcecraft.items.flask.EntityFlaskItem;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ambient.Bat;
-import net.minecraft.world.entity.animal.Bee;
-import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Chicken;
-import net.minecraft.world.entity.animal.Cod;
-import net.minecraft.world.entity.animal.Cow;
-import net.minecraft.world.entity.animal.Dolphin;
-import net.minecraft.world.entity.animal.Fox;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.MushroomCow;
-import net.minecraft.world.entity.animal.Panda;
-import net.minecraft.world.entity.animal.Parrot;
-import net.minecraft.world.entity.animal.Pig;
-import net.minecraft.world.entity.animal.PolarBear;
-import net.minecraft.world.entity.animal.Pufferfish;
-import net.minecraft.world.entity.animal.Rabbit;
-import net.minecraft.world.entity.animal.Salmon;
-import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.entity.animal.SnowGolem;
-import net.minecraft.world.entity.animal.Squid;
-import net.minecraft.world.entity.animal.TropicalFish;
-import net.minecraft.world.entity.animal.Turtle;
-import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.animal.horse.Donkey;
-import net.minecraft.world.entity.animal.horse.Horse;
-import net.minecraft.world.entity.animal.horse.Llama;
-import net.minecraft.world.entity.animal.horse.Mule;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
-import net.minecraft.world.entity.monster.CaveSpider;
+import net.minecraft.world.entity.animal.bee.Bee;
+import net.minecraft.world.entity.animal.chicken.Chicken;
+import net.minecraft.world.entity.animal.cow.Cow;
+import net.minecraft.world.entity.animal.cow.MushroomCow;
+import net.minecraft.world.entity.animal.dolphin.Dolphin;
+import net.minecraft.world.entity.animal.equine.Donkey;
+import net.minecraft.world.entity.animal.equine.Horse;
+import net.minecraft.world.entity.animal.equine.Llama;
+import net.minecraft.world.entity.animal.equine.Mule;
+import net.minecraft.world.entity.animal.feline.Cat;
+import net.minecraft.world.entity.animal.fish.Cod;
+import net.minecraft.world.entity.animal.fish.Pufferfish;
+import net.minecraft.world.entity.animal.fish.Salmon;
+import net.minecraft.world.entity.animal.fish.TropicalFish;
+import net.minecraft.world.entity.animal.fox.Fox;
+import net.minecraft.world.entity.animal.golem.IronGolem;
+import net.minecraft.world.entity.animal.golem.SnowGolem;
+import net.minecraft.world.entity.animal.panda.Panda;
+import net.minecraft.world.entity.animal.parrot.Parrot;
+import net.minecraft.world.entity.animal.pig.Pig;
+import net.minecraft.world.entity.animal.polarbear.PolarBear;
+import net.minecraft.world.entity.animal.rabbit.Rabbit;
+import net.minecraft.world.entity.animal.sheep.Sheep;
+import net.minecraft.world.entity.animal.squid.Squid;
+import net.minecraft.world.entity.animal.turtle.Turtle;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.monster.EnderMan;
-import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Strider;
-import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
+import net.minecraft.world.entity.monster.spider.CaveSpider;
+import net.minecraft.world.entity.monster.spider.Spider;
+import net.minecraft.world.entity.monster.zombie.ZombifiedPiglin;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ItemSupplier;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -58,12 +59,12 @@ public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier
 		super(typeIn, level);
 	}
 
-	public FlaskEntity(Level level, LivingEntity livingEntityIn) {
-		super(ForceEntities.FORCE_FLASK.get(), livingEntityIn, level);
+	public FlaskEntity(Level level, LivingEntity livingEntityIn, ItemStack stack) {
+		super(ForceEntities.FORCE_FLASK.get(), livingEntityIn, level, stack);
 	}
 
-	public FlaskEntity(Level level, double x, double y, double z) {
-		super(ForceEntities.FORCE_FLASK.get(), x, y, z, level);
+	public FlaskEntity(Level level, double x, double y, double z, ItemStack stack) {
+		super(ForceEntities.FORCE_FLASK.get(), x, y, z, level, stack);
 	}
 
 	protected Item getDefaultItem() {
@@ -78,20 +79,20 @@ public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier
 	@Override
 	protected void onHitEntity(EntityHitResult result) {
 		super.onHitEntity(result);
-		if (!this.level().isClientSide) {
+		if (!this.level().isClientSide()) {
 			ItemStack stack = getItem();
 			if (stack.getItem() instanceof EntityFlaskItem forceFlask) {
 				Entity entity = result.getEntity();
 				if (forceFlask.hasEntityStored(stack)) {
 					Entity storedEntity = forceFlask.getStoredEntity(stack, this.level());
 					BlockPos pos = entity.blockPosition();
-					storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+					storedEntity.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
 					this.level().addFreshEntity(storedEntity);
 
 					this.setItem(new ItemStack(ForceRegistry.FORCE_FLASK.get()));
 				} else {
 					if (entity.isAlive() && !entity.isInvulnerable() && !(entity instanceof Player) &&
-							entity instanceof LivingEntity livingEntity && entity.canChangeDimensions(this.level(), entity.level()) &&
+							entity instanceof LivingEntity livingEntity && entity.canTeleport(this.level(), entity.level()) &&
 							!forceFlask.isBlacklisted(livingEntity)) {
 						ItemStack entityFlask = null;
 						if (entity instanceof Bat) {
@@ -185,13 +186,13 @@ public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier
 
 	protected void onHitBlock(BlockHitResult result) {
 		super.onHitBlock(result);
-		if (!this.level().isClientSide) {
+		if (!this.level().isClientSide()) {
 			ItemStack stack = this.getItem();
 			if (stack.getItem() instanceof EntityFlaskItem forceFlask) {
 				if (forceFlask.hasEntityStored(stack)) {
 					Entity storedEntity = forceFlask.getStoredEntity(stack, this.level());
 					BlockPos pos = result.getBlockPos().relative(result.getDirection());
-					storedEntity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+					storedEntity.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
 					this.level().addFreshEntity(storedEntity);
 				}
 				this.setItem(new ItemStack(ForceRegistry.FORCE_FLASK.get()));
@@ -201,8 +202,8 @@ public class FlaskEntity extends ThrowableItemProjectile implements ItemSupplier
 
 	protected void onHit(HitResult result) {
 		super.onHit(result);
-		if (!this.level().isClientSide) {
-			this.spawnAtLocation(this.getItem(), 0.5F);
+		if (!this.level().isClientSide()) {
+			this.spawnAtLocation((ServerLevel) this.level(), this.getItem(), 0.5F);
 
 			this.level().broadcastEntityEvent(this, (byte) 3);
 			this.discard();

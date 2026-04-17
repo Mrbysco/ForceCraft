@@ -6,10 +6,10 @@ import com.mrbysco.forcecraft.entities.ColdCowEntity;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class ColdCowRenderer extends MobRenderer<ColdCowEntity, ColdCowModel<ColdCowEntity>> {
-	private static final ResourceLocation COW_TEXTURES = Reference.modLoc("textures/entity/cold_cow.png");
+	private static final Identifier COW_TEXTURES = Reference.modLoc("textures/entity/cold_cow.png");
 
 	public ColdCowRenderer(EntityRendererProvider.Context context) {
 		super(context, new ColdCowModel<>(context.bakeLayer(ModelLayers.COW)), 0.7F);
@@ -18,7 +18,7 @@ public class ColdCowRenderer extends MobRenderer<ColdCowEntity, ColdCowModel<Col
 	/**
 	 * Returns the location of an entity's texture.
 	 */
-	public ResourceLocation getTextureLocation(ColdCowEntity entity) {
+	public Identifier getTextureLocation(ColdCowEntity entity) {
 		return COW_TEXTURES;
 	}
 }

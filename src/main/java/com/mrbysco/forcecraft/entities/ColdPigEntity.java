@@ -2,26 +2,28 @@ package com.mrbysco.forcecraft.entities;
 
 import com.mrbysco.forcecraft.entities.goal.EatGrassToRestoreGoal;
 import com.mrbysco.forcecraft.registry.ForceEntities;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class ColdPigEntity extends Pig implements IColdMob {
 	private int grassTimer;
 	private EatGrassToRestoreGoal eatGrassGoal;
-	private ResourceLocation originalTypeLocation;
+	private Identifier originalTypeLocation;
 
 	public ColdPigEntity(EntityType<? extends Pig> type, Level level) {
 		super(type, level);
-		this.originalTypeLocation = ResourceLocation.withDefaultNamespace("pig");
+		this.originalTypeLocation = Identifier.withDefaultNamespace("pig");
 	}
 
-	public ColdPigEntity(Level level, ResourceLocation typeLocation) {
+	public ColdPigEntity(Level level, Identifier typeLocation) {
 		super(ForceEntities.COLD_PIG.get(), level);
 		if (typeLocation != null) {
 			this.originalTypeLocation = typeLocation;
@@ -34,20 +36,21 @@ public class ColdPigEntity extends Pig implements IColdMob {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
+	protected void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
 
-		if (compound.getString("OriginalMob").isEmpty()) {
-			this.originalTypeLocation = ResourceLocation.withDefaultNamespace("pig");
+		if (input.getString("OriginalMob").isEmpty()) {
+			this.originalTypeLocation = Identifier.withDefaultNamespace("pig");
 		} else {
-			this.originalTypeLocation = ResourceLocation.tryParse(compound.getString("OriginalMob"));
+			this.originalTypeLocation = Identifier.tryParse(input.getStringOr("OriginalMob", ""));
 		}
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("OriginalMob", this.originalTypeLocation.toString());
+	protected void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+
+		output.putString("OriginalMob", this.originalTypeLocation.toString());
 	}
 
 	@Override
@@ -62,13 +65,13 @@ public class ColdPigEntity extends Pig implements IColdMob {
 	}
 
 	@Override
-	protected void customServerAiStep() {
+	protected void customServerAiStep(ServerLevel serverLevel) {
 		this.grassTimer = this.eatGrassGoal.getEatingGrassTimer();
-		super.customServerAiStep();
+		super.customServerAiStep(serverLevel);
 	}
 
 	public void aiStep() {
-		if (this.level().isClientSide) {
+		if (this.level().isClientSide()) {
 			this.grassTimer = Math.max(0, this.grassTimer - 1);
 		}
 
@@ -104,7 +107,7 @@ public class ColdPigEntity extends Pig implements IColdMob {
 	}
 
 	@Override
-	public ResourceLocation getOriginal() {
+	public Identifier getOriginal() {
 		return this.originalTypeLocation;
 	}
 }

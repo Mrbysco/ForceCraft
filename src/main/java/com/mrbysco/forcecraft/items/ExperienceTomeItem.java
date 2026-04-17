@@ -2,18 +2,17 @@ package com.mrbysco.forcecraft.items;
 
 import com.mrbysco.forcecraft.components.ForceComponents;
 import com.mrbysco.forcecraft.util.ForceUtils;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class ExperienceTomeItem extends Item {
 
@@ -24,20 +23,19 @@ public class ExperienceTomeItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-		super.appendHoverText(stack, context, tooltip, tooltipFlag);
-		if (!Screen.hasShiftDown()) {
-			tooltip.add(Component.translatable("forcecraft.tooltip.press_shift"));
+	public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+		if (!tooltipFlag.hasShiftDown()) {
+			builder.accept(Component.translatable("forcecraft.tooltip.press_shift"));
 			return;
 		}
-		tooltip.add(Component.literal(Float.toString(getExperience(stack)) + " / " + Float.toString(getMaxExperience(stack))));
+		builder.accept(Component.literal(Float.toString(getExperience(itemStack)) + " / " + Float.toString(getMaxExperience(itemStack))));
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
-		if (ForceUtils.isFakePlayer(player) || hand != InteractionHand.MAIN_HAND || level.isClientSide) {
-			return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
+		if (ForceUtils.isFakePlayer(player) || hand != InteractionHand.MAIN_HAND || level.isClientSide()) {
+			return InteractionResult.FAIL;
 		}
 		int exp;
 		int curLevel = player.experienceLevel;
@@ -70,7 +68,7 @@ public class ExperienceTomeItem extends Item {
 				modifyExperience(stack, exp);
 			}
 		}
-		return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
+		return InteractionResult.FAIL;
 	}
 
 	public static int getPlayerExperience(Player player) {

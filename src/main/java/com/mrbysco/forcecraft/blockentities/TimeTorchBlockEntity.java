@@ -70,11 +70,11 @@ public class TimeTorchBlockEntity extends BlockEntity {
 			if (block == null || block instanceof LiquidBlock || block instanceof TimeTorchBlock || block instanceof WallTimeTorchBlock || block == Blocks.AIR)
 				return;
 
-			if (blockState.isRandomlyTicking() && !level.isClientSide) {
+			if (blockState.isRandomlyTicking() && !level.isClientSide()) {
 				for (int i = 0; i < this.speed; i++) {
-					if (getLevel().getBlockState(pos) != blockState) break;
-					if (getLevel().random.nextBoolean())
-						blockState.randomTick((ServerLevel) this.level, pos, level.random);
+					if (level.getBlockState(pos) != blockState) break;
+					if (level.getRandom().nextBoolean())
+						blockState.randomTick((ServerLevel) this.level, pos, level.getRandom());
 				}
 			}
 

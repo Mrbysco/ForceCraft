@@ -2,30 +2,18 @@ package com.mrbysco.forcecraft.util;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.function.Predicate;
 
 public class ItemHandlerUtils {
-	public static ItemStack getFirstItem(IItemHandler itemHandler) {
-		if (itemHandler == null) return ItemStack.EMPTY;
-
-		for (int i = 0; i < itemHandler.getSlots(); i++) {
-			ItemStack stack = itemHandler.getStackInSlot(i);
-			if (!stack.isEmpty()) {
-				return stack;
-			}
-		}
-		return ItemStack.EMPTY;
-	}
-
-	public static boolean hasItems(IItemHandler itemHandler) {
+	public static boolean hasItems(ResourceHandler<ItemResource> itemHandler) {
 		if (itemHandler == null) return false;
 
-		for (int i = 0; i < itemHandler.getSlots(); i++) {
-			ItemStack stack = itemHandler.getStackInSlot(i);
+		for (int i = 0; i < itemHandler.size(); i++) {
+			ItemResource stack = itemHandler.getResource(i);
 			if (!stack.isEmpty()) {
 				return true;
 			}
@@ -33,23 +21,23 @@ public class ItemHandlerUtils {
 		return false;
 	}
 
-	public static boolean isFull(IItemHandler itemHandler) {
+	public static boolean isFull(ResourceHandler<ItemResource> itemHandler) {
 		if (itemHandler == null) return true;
 
-		for (int i = 0; i < itemHandler.getSlots(); i++) {
-			ItemStack stack = itemHandler.getStackInSlot(i);
-			if (stack.isEmpty() || (stack.getCount() < stack.getMaxStackSize())) {
+		for (int i = 0; i < itemHandler.size(); i++) {
+			ItemResource stack = itemHandler.getResource(i);
+			if (stack.isEmpty() || (itemHandler.getAmountAsInt(i) < stack.getMaxStackSize())) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public static boolean isEmpty(IItemHandler itemHandler) {
+	public static boolean isEmpty(ResourceHandler<ItemResource> itemHandler) {
 		if (itemHandler == null) return true;
 
-		for (int i = 0; i < itemHandler.getSlots(); i++) {
-			ItemStack stack = itemHandler.getStackInSlot(i);
+		for (int i = 0; i < itemHandler.size(); i++) {
+			ItemResource stack = itemHandler.getResource(i);
 			if (!stack.isEmpty()) {
 				return false;
 			}
@@ -57,12 +45,12 @@ public class ItemHandlerUtils {
 		return true;
 	}
 
-	public static int getUsedSlots(IItemHandler itemHandler) {
+	public static int getUsedSlots(ResourceHandler<ItemResource> itemHandler) {
 		if (itemHandler == null) return 0;
 
 		int usedSlots = 0;
-		for (int i = 0; i < itemHandler.getSlots(); i++) {
-			ItemStack stack = itemHandler.getStackInSlot(i);
+		for (int i = 0; i < itemHandler.size(); i++) {
+			ItemResource stack = itemHandler.getResource(i);
 			if (!stack.isEmpty()) {
 				usedSlots++;
 			}
@@ -70,13 +58,18 @@ public class ItemHandlerUtils {
 		return usedSlots;
 	}
 
-	public static boolean extractStackFromPlayer(Inventory inventory, IItemHandler targetHandler, Predicate<ItemStack> stackPredicate) {
+	public static boolean extractStackFromPlayer(Inventory inventory, ResourceHandler<ItemResource> targetHandler, Predicate<ItemStack> stackPredicate) {
 		if (targetHandler != null) {
 			for (int i = 0; i < inventory.getContainerSize(); i++) {
 				ItemStack stack = inventory.getItem(i);
 				if (stackPredicate.test(stack)) {
-					ItemStack restStack = ItemHandlerHelper.insertItem(targetHandler, stack, false);
-					inventory.setItem(i, restStack);
+					try (Transaction tx = Transaction.openRoot()) {
+						if (targetHandler.insert(ItemResource.of(stack), stack.getCount(), tx) != stack.getCount())
+							continue;
+
+						tx.commit();
+						inventory.setItem(i, ItemStack.EMPTY);
+					}
 					return true;
 				}
 			}
@@ -85,16 +78,17 @@ public class ItemHandlerUtils {
 	}
 
 
-	public static ItemStack getAndSplit(IItemHandler itemhandler, int index, int amount) {
-		return index >= 0 && index < itemhandler.getSlots() && !itemhandler.getStackInSlot(index).isEmpty() && amount > 0 ? itemhandler.getStackInSlot(index).split(amount) : ItemStack.EMPTY;
-	}
+//	public static ItemStack getAndSplit(ResourceHandler<ItemResource> itemhandler, int index, int amount) {
+//		return index >= 0 && index < itemhandler.size() && !itemhandler.getResource(index).isEmpty() &&
+//				amount > 0 ? itemhandler.getResource(index).toStack(amount) : ItemStack.EMPTY;
+//	}
 
-	public static ItemStack getAndRemove(IItemHandler itemhandler, int index) {
-		if (index >= 0 && index < itemhandler.getSlots() && itemhandler instanceof IItemHandlerModifiable modifiable) {
-			modifiable.setStackInSlot(index, ItemStack.EMPTY);
-			return modifiable.getStackInSlot(index);
-		} else {
-			return ItemStack.EMPTY;
-		}
-	}
+//	public static ItemStack getAndRemove(ResourceHandler<ItemResource> itemhandler, int index) {
+//		if (index >= 0 && index < itemhandler.size() && itemhandler instanceof IItemHandlerModifiable modifiable) {
+//			modifiable.setStackInSlot(index, ItemStack.EMPTY);
+//			return modifiable.getStackInSlot(index);
+//		} else {
+//			return ItemStack.EMPTY;
+//		}
+//	}
 }

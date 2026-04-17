@@ -4,9 +4,8 @@ import com.mojang.datafixers.util.Pair;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.registry.material.ModToolTiers;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerLevel;
@@ -15,36 +14,37 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DiggerItem;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.level.ClipContext.Fluid;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.CommonHooks;
-import net.neoforged.neoforge.common.ItemAbilities;
+import org.jspecify.annotations.NonNull;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class ForceMittItem extends DiggerItem {
-
-	private final Tier itemTier = ModToolTiers.FORCE;
+public class ForceMittItem extends Item {
 
 	public ForceMittItem(Item.Properties properties) {
-		super(ModToolTiers.FORCE, ForceTags.MINEABLE_WITH_MITTS, properties
-				.attributes(createAttributes(ModToolTiers.FORCE, 3.0F, -2.4F))
-				.durability(1000));
+		super(ModToolTiers.FORCE
+				.applyToolProperties(properties, ForceTags.MINEABLE_WITH_MITTS,
+						3.0F, -2.4F, 0.0F)
+				.durability(1000)
+				.enchantable(0)
+		);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class ForceMittItem extends DiggerItem {
 			BlockState state = level.getBlockState(pos);
 			if (!stack.isCorrectToolForDrops(state)) return;
 
-			if (!level.isClientSide) {
+			if (!level.isClientSide()) {
 				if (CommonHooks.fireBlockBreak(level, ((ServerPlayer) player).gameMode.getGameModeForPlayer(),
 						(ServerPlayer) player, pos, state).isCanceled()) {
 					return;
@@ -104,7 +104,7 @@ public class ForceMittItem extends DiggerItem {
 				FluidState fluidState = level.getFluidState(pos);
 				Block block = state.getBlock();
 
-				if (block.onDestroyedByPlayer(state, level, pos, player, true, fluidState)) {
+				if (block.onDestroyedByPlayer(state, level, pos, player, stack, true, fluidState)) {
 					block.playerWillDestroy(level, pos, state, player);
 					block.playerDestroy(level, player, pos, state, tileEntity, stack);
 					int exp = block.getExpDrop(state, level, pos, null, player, stack);
@@ -117,64 +117,49 @@ public class ForceMittItem extends DiggerItem {
 		}
 	}
 
-	@Override
-	public int getEnchantmentValue() {
-		return 0;
-	}
+//	@Override
+//	public int getEnchantmentValue() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+//		return false;
+//	}
 
 	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public InteractionResult useOn(UseOnContext context) {
+	public @NonNull InteractionResult useOn(UseOnContext context) {
 		Level level = context.getLevel();
-		BlockPos blockpos = context.getClickedPos();
-		BlockState blockstate = level.getBlockState(blockpos);
-		Player player = context.getPlayer();
-		ItemStack itemstack = context.getItemInHand();
-
-		Pair<Predicate<UseOnContext>, Consumer<UseOnContext>> pair = HoeItem.TILLABLES.get(level.getBlockState(blockpos).getBlock());
-		if (context.getClickedFace() != Direction.DOWN && level.isEmptyBlock(blockpos.above())) {
-			if (pair == null) {
-				return InteractionResult.PASS;
-			} else {
-				Predicate<UseOnContext> predicate = pair.getFirst();
-				Consumer<UseOnContext> consumer = pair.getSecond();
-				if (predicate.test(context)) {
-					level.playSound(player, blockpos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-					if (!level.isClientSide) {
-						consumer.accept(context);
-						if (player != null) {
-							context.getItemInHand().hurtAndBreak(1, player, Player.getSlotForHand(context.getHand()));
-						}
+		BlockPos pos = context.getClickedPos();
+		BlockState toolModifiedState = level.getBlockState(pos).getToolModifiedState(context, net.neoforged.neoforge.common.ItemAbilities.HOE_TILL, false);
+		Pair<Predicate<UseOnContext>, Consumer<UseOnContext>> logicPair = toolModifiedState == null ? null : Pair.of(ctx -> true, changeIntoState(toolModifiedState));
+		if (logicPair == null) {
+			return InteractionResult.PASS;
+		} else {
+			Predicate<UseOnContext> predicate = logicPair.getFirst();
+			Consumer<UseOnContext> action = logicPair.getSecond();
+			if (predicate.test(context)) {
+				Player player = context.getPlayer();
+				level.playSound(player, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+				if (!level.isClientSide()) {
+					action.accept(context);
+					if (player != null) {
+						context.getItemInHand().hurtAndBreak(1, player, context.getHand());
 					}
-
-					return InteractionResult.sidedSuccess(level.isClientSide);
-				} else {
-					return InteractionResult.PASS;
 				}
+
+				return InteractionResult.SUCCESS;
+			} else {
+				return InteractionResult.PASS;
 			}
 		}
+	}
 
-		Optional<BlockState> optional = Optional.ofNullable(blockstate.getToolModifiedState(context, ItemAbilities.AXE_STRIP, false));
-		if (optional.isPresent()) {
-			level.playSound(player, blockpos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
-			if (player instanceof ServerPlayer) {
-				CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer) player, blockpos, itemstack);
-			}
-
-			level.setBlock(blockpos, optional.get(), 11);
-			if (player != null) {
-				itemstack.hurtAndBreak(1, player, Player.getSlotForHand(context.getHand()));
-			}
-
-			return InteractionResult.sidedSuccess(level.isClientSide);
-		}
-
-		return InteractionResult.PASS;
+	public static Consumer<UseOnContext> changeIntoState(BlockState state) {
+		return context -> {
+			context.getLevel().setBlock(context.getClickedPos(), state, 11);
+			context.getLevel().gameEvent(GameEvent.BLOCK_CHANGE, context.getClickedPos(), GameEvent.Context.of(context.getPlayer(), state));
+		};
 	}
 
 	@Override
@@ -182,13 +167,13 @@ public class ForceMittItem extends DiggerItem {
 		return state.is(ForceTags.MINEABLE_WITH_MITTS) ? 14.0F : 1.0F;
 	}
 
-	public float getAttackDamage() {
-		return this.itemTier.getAttackDamageBonus();
+	@Override
+	public float getAttackDamageBonus(Entity victim, float damage, DamageSource damageSource) {
+		return ModToolTiers.FORCE.attackDamageBonus();
 	}
 
 	@Override
-	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-		stack.hurtAndBreak(1, attacker, Player.getSlotForHand(attacker.getUsedItemHand()));
-		return true;
+	public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+		stack.hurtAndBreak(1, attacker, attacker.getUsedItemHand());
 	}
 }

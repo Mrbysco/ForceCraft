@@ -1,9 +1,8 @@
 package com.mrbysco.forcecraft.blockentities;
 
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.blocks.engine.ForceEngineBlock;
-import com.mrbysco.forcecraft.capability.FluidHandlerWrapper;
-import com.mrbysco.forcecraft.capability.ItemStackHandlerWrapper;
 import com.mrbysco.forcecraft.menu.engine.ForceEngineMenu;
 import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
@@ -11,11 +10,14 @@ import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -27,119 +29,87 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.fluids.FluidActionResult;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.Nullable;
 
 public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider {
 
 	private static final int MAX_FLUID = 10000;
 
-	protected FluidTank tankFuel = new FluidTank(MAX_FLUID) {
+	protected FluidStacksResourceHandler tankFuel = new FluidStacksResourceHandler(1, MAX_FLUID) {
 		@Override
-		public FluidStack drain(FluidStack resource, FluidAction action) {
-			if (!isFluidEqual(this, resource)) {
-				return FluidStack.EMPTY;
-			}
-			if (action.simulate()) {
-				int amount = this.getFluidAmount() - resource.getAmount() < 0 ? this.getFluidAmount() : resource.getAmount();
-				return new FluidStack(this.getFluid().getFluid(), amount);
-			}
-			return super.drain(resource.getAmount(), action);
-		}
-
-		@Override
-		protected void onContentsChanged() {
+		protected void onContentsChanged(int index, FluidStack previousContents) {
+			super.onContentsChanged(index, previousContents);
 			refreshClient();
 		}
 
 		@Override
-		public boolean isFluidValid(FluidStack stack) {
-			Fluid fluid = stack.getFluid();
-			return fluid.is(ForceTags.FORCE) || fluid.is(FluidTags.LAVA) ||
-					fluid.is(ForceTags.FUEL) || fluid.is(ForceTags.BIOFUEL);
-		}
-
-		@Override
-		public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-			Fluid fluid = stack.getFluid();
-			return fluid.is(ForceTags.FORCE) || fluid.is(FluidTags.LAVA) ||
-					fluid.is(ForceTags.FUEL) || fluid.is(ForceTags.BIOFUEL);
+		public boolean isValid(int index, FluidResource resource) {
+			return resource.is(ForceTags.FORCE) || resource.is(FluidTags.LAVA) ||
+					resource.is(ForceTags.FUEL) || resource.is(ForceTags.BIOFUEL);
 		}
 	};
 
-	protected FluidTank tankThrottle = new FluidTank(MAX_FLUID) {
-		@Override
-		public FluidStack drain(FluidStack resource, FluidAction action) {
-			if (!isFluidEqual(this, resource)) {
-				return FluidStack.EMPTY;
-			}
-			if (action.simulate()) {
-				int amount = this.getFluidAmount() - resource.getAmount() < 0 ? this.getFluidAmount() : resource.getAmount();
-				return new FluidStack(this.getFluid().getFluid(), amount);
-			}
-			return super.drain(resource.getAmount(), action);
-		}
+	protected FluidStacksResourceHandler tankThrottle = new FluidStacksResourceHandler(1, MAX_FLUID) {
 
 		@Override
-		protected void onContentsChanged() {
+		protected void onContentsChanged(int index, FluidStack previousContents) {
+			super.onContentsChanged(index, previousContents);
 			refreshClient();
 		}
 
 		@Override
-		public boolean isFluidValid(FluidStack stack) {
-			Fluid fluid = stack.getFluid();
-			return fluid.isSame(Fluids.WATER) || fluid.is(ForceTags.MILK);
-		}
-
-		@Override
-		public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-			Fluid fluid = stack.getFluid();
-			return fluid.isSame(Fluids.WATER) || fluid.is(ForceTags.MILK);
+		public boolean isValid(int index, FluidResource resource) {
+			return resource.is(Fluids.WATER) || resource.is(ForceTags.MILK);
 		}
 	};
 
-	private final FluidHandlerWrapper tankWrapper = new FluidHandlerWrapper(tankThrottle, tankFuel);
+//	private final FluidHandlerWrapper tankWrapper = new FluidHandlerWrapper(tankThrottle, tankFuel);
 
-	public final ItemStackHandler inputHandler = new ItemStackHandler(2) {
+	public final ItemStacksResourceHandler inputHandler = new ItemStacksResourceHandler(2) {
 		@Override
-		protected int getStackLimit(int slot, ItemStack stack) {
-			if (stack.getCapability(Capabilities.FluidHandler.ITEM) != null) {
-				if (stack.getMaxStackSize() > 1) {
-					return 1;
-				}
-			}
-			return 64;
+		protected int getCapacity(int index, ItemResource resource) {
+//			if (resource.getCapability(Capabilities.Fluid.ITEM) != null) {
+//				if (stack.getMaxStackSize() > 1) {
+//					return 1;
+//				}
+//			}
+			return super.getCapacity(index, resource);
 		}
 
 		@Override
-		public boolean isItemValid(int slot, ItemStack stack) {
-			IFluidHandler fluidCap = stack.getCapability(Capabilities.FluidHandler.ITEM);
-			if (slot == 0) {
-				if (fluidCap != null) {
-					FluidStack fluidStack = fluidCap.getFluidInTank(0);
-					if (!fluidStack.isEmpty()) {
-						Fluid fluid = fluidStack.getFluid();
-						return fluid.is(ForceTags.FORCE) || fluid.is(FluidTags.LAVA) ||
-								fluid.is(ForceTags.FUEL) || fluid.is(ForceTags.BIOFUEL);
+		public boolean isValid(int index, ItemResource resource) {
+			ItemStack stack = resource.toStack(1);
+			ResourceHandler<FluidResource> resourceHandler = stack.getCapability(Capabilities.Fluid.ITEM, ItemAccess.forStack(stack));
+			if (index == 0) {
+				if (resourceHandler != null) {
+					FluidResource fluidResource = resourceHandler.getResource(0);
+					if (!fluidResource.isEmpty()) {
+						return fluidResource.is(ForceTags.FORCE) || fluidResource.is(FluidTags.LAVA) ||
+								fluidResource.is(ForceTags.FUEL) || fluidResource.is(ForceTags.BIOFUEL);
 					}
 				}
 				return stack.is(ForceTags.FORCE_GEM) || stack.is(Tags.Items.NETHER_STARS) ||
-						(fluidCap != null && fluidCap.getFluidInTank(0).getFluid().is(ForceTags.FORCE));
-			} else if (slot == 1) {
-				if (fluidCap != null) {
-					FluidStack fluidStack = fluidCap.getFluidInTank(0);
-					if (!fluidStack.isEmpty()) {
-						Fluid fluid = fluidStack.getFluid();
-						return fluid.isSame(Fluids.WATER) || fluid.is(ForceTags.MILK);
+						(resourceHandler != null && resourceHandler.getResource(0).is(ForceTags.FORCE));
+			} else if (index == 1) {
+				if (resourceHandler != null) {
+					FluidResource fluidResource = resourceHandler.getResource(0);
+					if (!fluidResource.isEmpty()) {
+						return fluidResource.is(Fluids.WATER) || fluidResource.is(ForceTags.MILK);
 					}
 				}
 				return false;
@@ -148,24 +118,24 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 			}
 		}
 	};
-	public final ItemStackHandler outputHandler = new ItemStackHandler(2) {
+	public final ItemStacksResourceHandler outputHandler = new ItemStacksResourceHandler(2) {
 		@Override
-		protected int getStackLimit(int slot, ItemStack stack) {
-			if (stack.getCapability(Capabilities.FluidHandler.ITEM) != null) {
-				if (stack.getMaxStackSize() > 1) {
-					return 1;
-				}
-			}
-			return 64;
+		protected int getCapacity(int index, ItemResource resource) {
+//			if (resource.getCapability(Capabilities.Fluid.ITEM) != null) {
+//				if (stack.getMaxStackSize() > 1) {
+//					return 1;
+//				}
+//			}
+			return super.getCapacity(index, resource);
 		}
 
 		@Override
-		public boolean isItemValid(int slot, ItemStack stack) {
+		public boolean isValid(int index, ItemResource resource) {
 			return false;
 		}
 	};
 
-	private final ItemStackHandlerWrapper stackWrapper = new ItemStackHandlerWrapper(inputHandler, outputHandler);
+//	private final ItemStackHandlerWrapper stackWrapper = new ItemStackHandlerWrapper(inputHandler, outputHandler);
 
 	private static final int FLUID_PER_GEM = 500;
 
@@ -188,32 +158,37 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	}
 
 	@Override
-	public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.loadAdditional(tag, registries);
-		this.processTime = tag.getInt("processTime");
-		this.maxProcessTime = tag.getInt("maxProcessTime");
-		this.throttleTime = tag.getInt("throttleTime");
-		this.maxThrottleTime = tag.getInt("maxThrottleTime");
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		this.processTime = input.getIntOr("processTime", 0);
+		this.maxProcessTime = input.getIntOr("maxProcessTime", 0);
+		this.throttleTime = input.getIntOr("throttleTime", 0);
+		this.maxThrottleTime = input.getIntOr("maxThrottleTime", 0);
 
-		this.generating = tag.getFloat("generating");
+		this.generating = input.getFloatOr("generating", 0);
 
 		//Caps
-		this.stackWrapper.deserializeNBT(registries, tag.getCompound("stackHandler"));
-		this.tankWrapper.deserializeNBT(registries, tag.getCompound("fluid"));
+		this.inputHandler.deserialize(input.childOrEmpty("inputHandler"));
+		this.outputHandler.deserialize(input.childOrEmpty("outputHandler"));
+		this.tankThrottle.deserialize(input.childOrEmpty("throttleTank"));
+		this.tankFuel.deserialize(input.childOrEmpty("fuelTank"));
 	}
 
 	@Override
-	public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
-		super.saveAdditional(compound, registries);
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
 
-		compound.putInt("processTime", this.processTime);
-		compound.putInt("maxProcessTime", this.maxProcessTime);
-		compound.putInt("throttleTime", this.throttleTime);
-		compound.putInt("maxThrottleTime", this.maxThrottleTime);
-		compound.putFloat("generating", this.generating);
+		output.putInt("processTime", this.processTime);
+		output.putInt("maxProcessTime", this.maxProcessTime);
+		output.putInt("throttleTime", this.throttleTime);
+		output.putInt("maxThrottleTime", this.maxThrottleTime);
+		output.putFloat("generating", this.generating);
+
 		//Caps
-		compound.put("stackHandler", stackWrapper.serializeNBT(registries));
-		compound.put("fluid", tankWrapper.serializeNBT(registries));
+		this.inputHandler.serialize(output.child("inputHandler"));
+		this.outputHandler.serialize(output.child("outputHandler"));
+		this.tankThrottle.serialize(output.child("throttleTank"));
+		this.tankFuel.serialize(output.child("fuelTank"));
 	}
 
 	@Override
@@ -228,11 +203,11 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	}
 
 	public static void serverTick(Level level, BlockPos pos, BlockState state, ForceEngineBlockEntity forceEngine) {
-		if (!forceEngine.inputHandler.getStackInSlot(0).isEmpty()) {
+		if (!forceEngine.inputHandler.getResource(0).isEmpty()) {
 			forceEngine.processFuelSlot();
 			forceEngine.refreshClient();
 		}
-		if (!forceEngine.inputHandler.getStackInSlot(1).isEmpty()) {
+		if (!forceEngine.inputHandler.getResource(1).isEmpty()) {
 			forceEngine.processThrottleSlot();
 			forceEngine.refreshClient();
 		}
@@ -244,7 +219,12 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 				forceEngine.insertPower();
 
 				if (forceEngine.processTime >= forceEngine.maxProcessTime) {
-					forceEngine.tankFuel.drain(1, IFluidHandler.FluidAction.EXECUTE);
+					try (var tx = Transaction.openRoot()) {
+						FluidResource fluidResource = forceEngine.tankFuel.getResource(0);
+						if (forceEngine.tankFuel.extract(fluidResource, 1, tx) == 1) {
+							tx.commit();
+						}
+					}
 					forceEngine.processTime = 0;
 				}
 			}
@@ -252,7 +232,12 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 				forceEngine.throttleTime++;
 
 				if (forceEngine.throttleTime >= forceEngine.maxThrottleTime) {
-					forceEngine.tankThrottle.drain(1, IFluidHandler.FluidAction.EXECUTE);
+					try (var tx = Transaction.openRoot()) {
+						FluidResource fluidResource = forceEngine.tankThrottle.getResource(0);
+						if (forceEngine.tankThrottle.extract(fluidResource, 1, tx) == 1) {
+							tx.commit();
+						}
+					}
 					forceEngine.throttleTime = 0;
 				}
 			}
@@ -363,9 +348,9 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 			BlockPos offsetPos = worldPosition.relative(getFacing());
 			BlockEntity tile = level.getBlockEntity(offsetPos);
 			if (tile != null) {
-				IEnergyStorage cap = level.getCapability(Capabilities.EnergyStorage.BLOCK, offsetPos, getFacing().getOpposite());
+				EnergyHandler cap = level.getCapability(Capabilities.Energy.BLOCK, offsetPos, getFacing().getOpposite());
 				if (cap != null) {
-					return cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored() && !tankFuel.getFluid().isEmpty();
+					return cap.getAmountAsInt() < cap.getCapacityAsInt() && !tankFuel.getResource(0).isEmpty();
 				}
 			}
 		}
@@ -377,10 +362,14 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		if (level != null) {
 			BlockEntity tile = level.getBlockEntity(offsetPos);
 			if (tile != null) {
-				IEnergyStorage cap = level.getCapability(Capabilities.EnergyStorage.BLOCK, offsetPos, getFacing().getOpposite());
+				EnergyHandler cap = level.getCapability(Capabilities.Energy.BLOCK, offsetPos, getFacing().getOpposite());
 				if (cap != null) {
-					if (cap.canReceive() && cap.getEnergyStored() < cap.getMaxEnergyStored()) {
-						cap.receiveEnergy((int) generating, false);
+					if (cap.getAmountAsInt() < cap.getCapacityAsInt()) {
+						try (var tx = Transaction.openRoot()) {
+							if (cap.insert((int) generating, tx) == (int) generating) {
+								tx.commit();
+							}
+						}
 					}
 				}
 			}
@@ -388,71 +377,66 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	}
 
 	private void processFuelSlot() {
-		ItemStack slotStack = stackWrapper.getStackInSlot(0);
+		ItemResource inputResource = inputHandler.getResource(0);
+		ItemResource outputResource = outputHandler.getResource(0);
 
-		if (slotStack.is(ForceTags.FORCE_GEM)) {
+		if (inputResource.is(ForceTags.FORCE_GEM)) {
 			FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM);
-
-			if (getFuelAmount() + force.getAmount() <= tankFuel.getCapacity()) {
-				fillFuel(force, IFluidHandler.FluidAction.EXECUTE);
-				slotStack.shrink(1);
+			try (var tx = Transaction.openRoot()) {
+				if (tankFuel.insert(FluidResource.of(force), force.amount(), tx) == force.amount()) {
+					if (inputHandler.extract(inputResource, 1, tx) == 1) {
+						tx.commit();
+					}
+				}
 			}
-		} else if (slotStack.is(Tags.Items.NETHER_STARS)) {
+		} else if (inputResource.is(Tags.Items.NETHER_STARS)) {
 			FluidStack force = new FluidStack(ForceFluids.FORCE_FLUID_SOURCE.get(), FLUID_PER_GEM * 10);
 
-			ItemStack extraSlot = outputHandler.getStackInSlot(0);
-			if (getFuelAmount() + force.getAmount() <= tankFuel.getCapacity() && extraSlot.getCount() < inputHandler.getSlotLimit(1)) {
-				fillFuel(force, IFluidHandler.FluidAction.EXECUTE);
-				slotStack.shrink(1);
-				if (outputHandler.getStackInSlot(0).isEmpty()) {
-					outputHandler.setStackInSlot(0, new ItemStack(ForceRegistry.INERT_CORE.get()));
-				} else {
-					extraSlot.setCount(extraSlot.getCount() + 1);
+			try (var tx = Transaction.openRoot()) {
+				if (tankFuel.insert(FluidResource.of(force), force.amount(), tx) == force.amount()) {
+					if (inputHandler.extract(inputResource, 1, tx) == 1) {
+						if (outputHandler.getResource(0).isEmpty()) {
+							outputHandler.set(0, ItemResource.of(ForceRegistry.INERT_CORE.get()), 1);
+						} else {
+							if (outputHandler.insert(outputResource, 1, tx) != 1) return;
+						}
+						tx.commit();
+					}
 				}
 			}
 		} else {
-			if (outputHandler.getStackInSlot(0).isEmpty()) {
-				FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, tankFuel, Integer.MAX_VALUE, null, true);
-				if (result.isSuccess()) {
-					slotStack.shrink(1);
-					outputHandler.setStackInSlot(0, result.getResult());
+			if (outputResource.isEmpty()) {
+				try (var tx = Transaction.openRoot()) {
+					var itemAccess = ItemAccess.forHandlerIndex(inputHandler, 0).oneByOne();
+					var resourceHandler = itemAccess.getCapability(Capabilities.Fluid.ITEM);
+
+					if (ResourceHandlerUtil.move(resourceHandler, tankFuel, (resource) -> true, Integer.MAX_VALUE, tx) != 0) {
+						if (inputHandler.extract(inputResource, 1, tx) != 1) {
+							return;
+						}
+						tx.commit();
+					}
 				}
 			}
 		}
 	}
 
-	public int fillFuel(FluidStack resource, IFluidHandler.FluidAction action) {
-		FluidStack resourceCopy = resource.copy();
-
-		if (action.execute()) {
-			if (tankFuel.getFluid().isEmpty() || FluidStack.isSameFluidSameComponents(tankFuel.getFluid(), resource)) {
-				tankFuel.fill(resourceCopy, action);
-			}
-		}
-		return resource.getAmount();
-	}
-
 	private void processThrottleSlot() {
-		ItemStack slotStack = inputHandler.getStackInSlot(1);
+		ItemResource slotStack = inputHandler.getResource(1);
 
-		if (outputHandler.getStackInSlot(1).isEmpty()) {
-			FluidActionResult result = FluidUtil.tryEmptyContainer(slotStack, tankThrottle, Integer.MAX_VALUE, null, true);
-			if (result.isSuccess()) {
-				slotStack.shrink(1);
-				outputHandler.setStackInSlot(1, result.getResult());
+		if (outputHandler.getResource(1).isEmpty()) {
+			try (var tx = Transaction.openRoot()) {
+				var itemAccess = ItemAccess.forHandlerIndex(inputHandler, 1).oneByOne();
+				var resourceHandler = itemAccess.getCapability(Capabilities.Fluid.ITEM);
+
+				if (ResourceHandlerUtil.move(resourceHandler, tankFuel, (resource) -> true, Integer.MAX_VALUE, tx) != 0) {
+					if (inputHandler.extract(slotStack, 1, tx) != 1) {
+						return;
+					}
+					tx.commit();
+				}
 			}
 		}
-	}
-
-	public int fillThrottle(FluidStack resource, IFluidHandler.FluidAction action) {
-		FluidStack resourceCopy = resource.copy();
-
-		if (action.execute()) {
-			if (tankThrottle.getFluid().isEmpty() || FluidStack.isSameFluidSameComponents(tankThrottle.getFluid(), resource)) {
-				tankThrottle.fill(resourceCopy, action);
-			}
-		}
-		return resource.getAmount();
 	}
 
 	public Fluid getFuelFluid() {
@@ -460,20 +444,23 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	}
 
 	public FluidStack getFuelFluidStack() {
-		return tankFuel.getFluid();
+		return tankFuel.getResource(0).toStack(tankFuel.getAmountAsInt(0));
 	}
 
 	public int getFuelAmount() {
-		return tankFuel.getFluidAmount();
+		return tankFuel.getAmountAsInt(0);
 	}
 
 	public void setFuelAmount(int amount) {
-		if (amount > 0) {
-			if (!tankFuel.getFluid().isEmpty()) {
-				tankFuel.getFluid().setAmount(amount);
+		try (var tx = Transaction.openRoot()) {
+			if (amount > 0) {
+				if (!tankFuel.getResource(0).isEmpty()) {
+					tankFuel.set(0, tankFuel.getResource(0), amount);
+				}
+			} else {
+				tankFuel.set(0, FluidResource.EMPTY, 0);
 			}
-		} else {
-			tankFuel.setFluid(FluidStack.EMPTY);
+			tx.commit();
 		}
 	}
 
@@ -482,29 +469,24 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	}
 
 	public FluidStack getThrottleFluidStack() {
-		return tankThrottle.getFluid();
+		return tankThrottle.getResource(0).toStack(tankThrottle.getAmountAsInt(0));
 	}
 
 	public int getThrottleAmount() {
-		return tankThrottle.getFluidAmount();
+		return tankThrottle.getAmountAsInt(0);
 	}
 
 	public void setThrottleAmount(int amount) {
-		if (amount > 0) {
-			if (!tankThrottle.getFluid().isEmpty()) {
-				tankThrottle.getFluid().setAmount(amount);
+		try (var tx = Transaction.openRoot()) {
+			if (amount > 0) {
+				if (!tankThrottle.getResource(0).isEmpty()) {
+					tankThrottle.set(0, tankThrottle.getResource(0), amount);
+				}
+			} else {
+				tankThrottle.set(0, FluidResource.EMPTY, 0);
 			}
-		} else {
-			tankThrottle.setFluid(FluidStack.EMPTY);
+			tx.commit();
 		}
-	}
-
-	protected boolean isFluidEqual(FluidTank fluidTank, FluidStack fluid) {
-		return isFluidEqual(fluidTank, fluid.getFluid());
-	}
-
-	protected boolean isFluidEqual(FluidTank fluidTank, Fluid fluid) {
-		return fluidTank.getFluid().getFluid().equals(fluid);
 	}
 
 	@Override
@@ -513,26 +495,30 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 	}
 
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
-		super.onDataPacket(net, pkt, lookupProvider);
+	public void onDataPacket(Connection net, ValueInput valueInput) {
+		super.onDataPacket(net, valueInput);
 	}
 
 	@Override
-	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+	public CompoundTag getUpdateTag(HolderLookup.Provider lookupProvider) {
 		CompoundTag tag = new CompoundTag();
-		this.saveAdditional(tag, registries);
+		try (ProblemReporter.ScopedCollector problemreporter$scopedcollector = new ProblemReporter.ScopedCollector(ForceCraft.LOGGER)) {
+			TagValueOutput output = TagValueOutput.createWithContext(problemreporter$scopedcollector, lookupProvider);
+			this.saveAdditional(output);
+			tag.merge(output.buildResult());
+		}
 		return tag;
-	}
-
-	@Override
-	public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
-		this.loadAdditional(tag, registries);
 	}
 
 	@Override
 	public CompoundTag getPersistentData() {
 		CompoundTag tag = new CompoundTag();
-		this.saveAdditional(tag, this.level.registryAccess());
+		try (ProblemReporter.ScopedCollector problemreporter$scopedcollector = new ProblemReporter.ScopedCollector(ForceCraft.LOGGER)) {
+			HolderLookup.Provider lookupProvider = this.level != null ? this.level.registryAccess() : VanillaRegistries.createLookup();
+			TagValueOutput output = TagValueOutput.createWithContext(problemreporter$scopedcollector, lookupProvider);
+			this.saveAdditional(output);
+			tag.merge(output.buildResult());
+		}
 		return tag;
 	}
 
@@ -552,11 +538,19 @@ public class ForceEngineBlockEntity extends BlockEntity implements MenuProvider 
 		}
 	}
 
-	public ItemStackHandlerWrapper getItemHandler(@Nullable Direction facing) {
-		return stackWrapper;
-	}
-
-	public FluidHandlerWrapper getFluidTank(@Nullable Direction facing) {
-		return tankWrapper;
+	@Override
+	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+		super.preRemoveSideEffects(pos, state);
+		try (Transaction tx = Transaction.openRoot()) {
+			for (int i = 0; i < inputHandler.size(); ++i) {
+				if (!inputHandler.getResource(i).isEmpty())
+					Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), inputHandler.getResource(i).toStack());
+			}
+			for (int i = 0; i < outputHandler.size(); ++i) {
+				if (!outputHandler.getResource(i).isEmpty())
+					Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), inputHandler.getResource(i).toStack());
+			}
+			tx.commit();
+		}
 	}
 }

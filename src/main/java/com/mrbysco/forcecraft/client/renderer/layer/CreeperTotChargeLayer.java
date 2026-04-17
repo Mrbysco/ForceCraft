@@ -7,10 +7,10 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class CreeperTotChargeLayer extends EnergySwirlLayer<CreeperTotEntity, CreeperTotModel<CreeperTotEntity>> {
-	private static final ResourceLocation LIGHTNING_TEXTURE = ResourceLocation.withDefaultNamespace("textures/entity/creeper/creeper_armor.png");
+	private static final Identifier LIGHTNING_TEXTURE = Identifier.withDefaultNamespace("textures/entity/creeper/creeper_armor.png");
 	private final CreeperTotModel<CreeperTotEntity> creeperModel;
 
 	public CreeperTotChargeLayer(RenderLayerParent<CreeperTotEntity, CreeperTotModel<CreeperTotEntity>> renderLayerParent, EntityModelSet modelSet) {
@@ -22,7 +22,7 @@ public class CreeperTotChargeLayer extends EnergySwirlLayer<CreeperTotEntity, Cr
 		return p_225634_1_ * 0.01F;
 	}
 
-	protected ResourceLocation getTextureLocation() {
+	protected Identifier getTextureLocation() {
 		return LIGHTNING_TEXTURE;
 	}
 

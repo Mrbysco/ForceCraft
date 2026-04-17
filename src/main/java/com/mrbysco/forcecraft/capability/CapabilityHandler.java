@@ -17,20 +17,20 @@ public class CapabilityHandler {
 
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ForceRegistry.INFUSER_BLOCK_ENTITY.get(), InfuserBlockEntity::getItemHandler);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ForceRegistry.INFUSER_BLOCK_ENTITY.get(), InfuserBlockEntity::getFluidTank);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, ForceRegistry.INFUSER_BLOCK_ENTITY.get(), InfuserBlockEntity::getFluidTank);
 		event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ForceRegistry.INFUSER_BLOCK_ENTITY.get(), InfuserBlockEntity::getEnergyStorage);
 
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ForceRegistry.FURNACE_BLOCK_ENTITY.get(), (sidedContainer, side) ->
 				side == null ? new InvWrapper(sidedContainer) : new SidedInvWrapper(sidedContainer, side));
 
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ForceRegistry.FORCE_ENGINE_BLOCK_ENTITY.get(), ForceEngineBlockEntity::getItemHandler);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ForceRegistry.FORCE_ENGINE_BLOCK_ENTITY.get(), ForceEngineBlockEntity::getFluidTank);
+		event.registerBlockEntity(Capabilities.Fluid.BLOCK, ForceRegistry.FORCE_ENGINE_BLOCK_ENTITY.get(), ForceEngineBlockEntity::getFluidTank);
 
-		event.registerItem(Capabilities.FluidHandler.ITEM, (stack, unused) -> new FlaskFluidHandler(ForceComponents.FLASK_FLUID, stack),
+		event.registerItem(Capabilities.Fluid.ITEM, (stack, unused) -> new FlaskFluidHandler(ForceComponents.FLASK_FLUID, stack),
 				ForceRegistry.FORCE_FLASK,
 				ForceRegistry.FORCE_FILLED_FORCE_FLASK,
 				ForceRegistry.MILK_FORCE_FLASK);
-		event.registerItem(Capabilities.FluidHandler.ITEM, (stack, unused) -> new FluidBucketWrapper(stack),
+		event.registerItem(Capabilities.Fluid.ITEM, (stack, unused) -> new FluidBucketWrapper(stack),
 				ForceRegistry.BUCKET_FLUID_FORCE);
 		event.registerItem(Capabilities.ItemHandler.ITEM, (stack, context) ->
 						new ComponentItemHandler(stack, ForceComponents.STORED_FOOD.get(), 4),

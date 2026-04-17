@@ -4,7 +4,7 @@ import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.recipe.GrindingRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 
 public class GrindingCategory extends AbstractMultiOutputCategory<GrindingRecipe> {
 
@@ -13,7 +13,7 @@ public class GrindingCategory extends AbstractMultiOutputCategory<GrindingRecipe
 	}
 
 	@Override
-	public RecipeType<GrindingRecipe> getRecipeType() {
+	public IRecipeType<GrindingRecipe> getRecipeType() {
 		return JeiCompat.GRINDING_TYPE;
 	}
 }

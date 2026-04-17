@@ -35,8 +35,10 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -94,12 +96,30 @@ public class ServerPayloadHandler {
 							if (!beltStack.isEmpty()) {
 								Optional<BeltStorage> data = StorageManager.getBelt(beltStack);
 								data.ifPresent(belt -> {
-									IItemHandler handler = belt.getInventory();
-									ItemStack stack = handler.getStackInSlot(beltData.slot());
+									ResourceHandler<ItemResource> handler = belt.getInventory();
+									ItemResource resource = handler.getResource(beltData.slot());
 									Level level = player.level();
-									if (!stack.isEmpty()) {
-										stack.finishUsingItem(level, player);
-										level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), stack.getDrinkingSound(), player.getSoundSource(), 0.5F, player.level().random.nextFloat() * 0.1F + 0.9F);
+									if (!resource.isEmpty()) {
+										try (Transaction tx = Transaction.openRoot()) {
+											if (handler.extract(resource, 1, tx) != 1) {
+												ItemStack stack = resource.toStack();
+
+												stack.finishUsingItem(level, player);
+												if (stack.has(DataComponents.CONSUMABLE)) {
+													level.playSound((Player) null, player.getX(), player.getY(), player.getZ(),
+															stack.get(DataComponents.CONSUMABLE).sound().value(), player.getSoundSource(),
+															0.5F, player.level().getRandom().nextFloat() * 0.1F + 0.9F);
+
+												}
+
+												if (!stack.isEmpty()) {
+													if (handler.insert(ItemResource.of(stack), 1, tx) != 1) return;
+												}
+												tx.commit();
+											}
+											;
+
+										}
 									}
 								});
 							}
@@ -173,7 +193,7 @@ public class ServerPayloadHandler {
 							if (player.containerMenu instanceof ItemCardMenu itemCardContainer) {
 								CraftingContainer craftMatrix = itemCardContainer.getCraftMatrix();
 								ResultContainer craftResult = itemCardContainer.getCraftResult();
-								Optional<RecipeHolder<CraftingRecipe>> iRecipe = player.server.getRecipeManager()
+								Optional<RecipeHolder<CraftingRecipe>> iRecipe = player.level().getServer().getRecipeManager()
 										.getRecipeFor(RecipeType.CRAFTING, craftMatrix.asCraftInput(), level);
 								iRecipe.ifPresent((holder) -> {
 									CompoundTag recipeContents = new CompoundTag();

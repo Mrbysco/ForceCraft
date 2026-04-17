@@ -9,6 +9,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -17,8 +19,6 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-
-import java.util.List;
 
 public class ForceBiomeModifiers {
 
@@ -62,35 +62,35 @@ public class ForceBiomeModifiers {
 
 		context.register(ADD_CHU_CHU_MODIFIER, new BiomeModifiers.AddSpawnsBiomeModifier(
 				overworldHolder,
-				List.of(
-						new MobSpawnSettings.SpawnerData(ForceEntities.RED_CHU_CHU.get(), 100, 1, 1),
-						new MobSpawnSettings.SpawnerData(ForceEntities.GREEN_CHU_CHU.get(), 100, 1, 1),
-						new MobSpawnSettings.SpawnerData(ForceEntities.BLUE_CHU_CHU.get(), 100, 1, 1),
-						new MobSpawnSettings.SpawnerData(ForceEntities.GOLD_CHU_CHU.get(), 100, 1, 1)
+				WeightedList.of(
+						new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.RED_CHU_CHU.get(), 1, 1), 100),
+						new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.GREEN_CHU_CHU.get(), 1, 1), 100),
+						new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.BLUE_CHU_CHU.get(), 1, 1), 100),
+						new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.GOLD_CHU_CHU.get(), 1, 1), 100)
 				)
 		));
 
 		context.register(ADD_SWAMP_CHU_CHU_MODIFIER, new BiomeModifiers.AddSpawnsBiomeModifier(
 				swampHolder,
-				List.of(
-						new MobSpawnSettings.SpawnerData(ForceEntities.RED_CHU_CHU.get(), 1, 1, 1),
-						new MobSpawnSettings.SpawnerData(ForceEntities.GREEN_CHU_CHU.get(), 1, 1, 1),
-						new MobSpawnSettings.SpawnerData(ForceEntities.BLUE_CHU_CHU.get(), 1, 1, 1),
-						new MobSpawnSettings.SpawnerData(ForceEntities.GOLD_CHU_CHU.get(), 1, 1, 1)
+				WeightedList.of(
+						new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.RED_CHU_CHU.get(), 1, 1), 1),
+						new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.GREEN_CHU_CHU.get(), 1, 1), 1),
+						new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.BLUE_CHU_CHU.get(), 1, 1), 1),
+						new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.GOLD_CHU_CHU.get(), 1, 1), 1)
 				)
 		));
 
 		context.register(ADD_CREEPER_TOT_MODIFIER, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				overworldHolder,
-				new MobSpawnSettings.SpawnerData(ForceEntities.CREEPER_TOT.get(), 25, 1, 1))
+				new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.CREEPER_TOT.get(), 1, 1), 25))
 		);
 		context.register(ADD_ENDER_TOT_MODIFIER, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				overworldHolder,
-				new MobSpawnSettings.SpawnerData(ForceEntities.ENDER_TOT.get(), 5, 1, 1))
+				new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.ENDER_TOT.get(), 1, 1), 5))
 		);
 		context.register(ADD_FAIRY_MODIFIER, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				overworldHolder,
-				new MobSpawnSettings.SpawnerData(ForceEntities.FAIRY.get(), 4, 1, 2))
+				new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.FAIRY.get(), 1, 2), 4))
 		);
 	}
 }

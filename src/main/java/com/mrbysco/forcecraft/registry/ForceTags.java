@@ -2,7 +2,7 @@ package com.mrbysco.forcecraft.registry;
 
 import com.mrbysco.forcecraft.Reference;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
@@ -49,6 +49,7 @@ public class ForceTags {
 	public static final TagKey<Item> FORCE_LOGS_ITEM = ItemTags.create(Reference.modLoc("force_logs"));
 	public static final TagKey<Item> ENTITY_FLASKS = ItemTags.create(Reference.modLoc("entity_flasks"));
 	public static final TagKey<Item> CHU_JELLY = ItemTags.create(Reference.modLoc("chu_jelly"));
+	public static final TagKey<Item> FORCE_REPAIR_INGREDIENTS = ItemTags.create(Reference.modLoc("force_repair_ingredients"));
 
 	public static final TagKey<Item> FORCE_INGOT = commonItemTag("ingots/force");
 	public static final TagKey<Item> FORCE_NUGGET = commonItemTag("nuggets/force");
@@ -71,7 +72,7 @@ public class ForceTags {
 
 
 	private static TagKey<Item> commonItemTag(String name) {
-		return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+		return ItemTags.create(Identifier.fromNamespaceAndPath("c", name));
 	}
 
 	private static TagKey<Block> forceBlockTag(String name) {
@@ -79,11 +80,11 @@ public class ForceTags {
 	}
 
 	private static TagKey<Fluid> commonFluidTag(String name) {
-		return FluidTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+		return FluidTags.create(Identifier.fromNamespaceAndPath("c", name));
 	}
 
 	private static TagKey<Fluid> optionalCommonFluidTag(String name) {
-		return FluidTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+		return FluidTags.create(Identifier.fromNamespaceAndPath("c", name));
 	}
 
 }

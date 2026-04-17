@@ -8,10 +8,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -29,14 +27,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.ToIntFunction;
@@ -113,22 +114,22 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-	                                          Player player, InteractionHand hand, BlockHitResult hitResult) {
-		IFluidHandler handler = level.getCapability(Capabilities.FluidHandler.BLOCK, pos, hitResult.getDirection());
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+	                                      Player player, InteractionHand hand, BlockHitResult hitResult) {
+		ResourceHandler<FluidResource> handler = level.getCapability(Capabilities.Fluid.BLOCK, pos, hitResult.getDirection());
 		if (handler != null) {
-			if (player.getItemInHand(hand).getCapability(Capabilities.FluidHandler.ITEM) != null) {
+			if (ItemAccess.forPlayerInteraction(player, hand).getCapability(Capabilities.Fluid.ITEM) != null) {
 				if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection()))
-					return ItemInteractionResult.SUCCESS;
+					return InteractionResult.SUCCESS;
 			}
 		}
 
-		return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		return InteractionResult.PASS;
 	}
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			return InteractionResult.SUCCESS;
 		} else {
 			BlockEntity blockentity = level.getBlockEntity(pos);
@@ -178,8 +179,8 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-		if (!level.isClientSide) {
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @org.jspecify.annotations.Nullable Orientation orientation, boolean movedByPiston) {
+		if (level.isClientSide()) {
 			boolean flag = state.getValue(ACTIVE);
 			if (flag != level.hasNeighborSignal(pos)) {
 				if (flag) {
@@ -212,7 +213,7 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 
 	@Nullable
 	protected static <T extends BlockEntity> BlockEntityTicker<T> createEngineTicker(Level level, BlockEntityType<T> p_151989_, BlockEntityType<? extends ForceEngineBlockEntity> forceEngineBlockEntity) {
-		return level.isClientSide ? null : createTickerHelper(p_151989_, forceEngineBlockEntity, ForceEngineBlockEntity::serverTick);
+		return level.isClientSide() ? null : createTickerHelper(p_151989_, forceEngineBlockEntity, ForceEngineBlockEntity::serverTick);
 	}
 
 	@Nullable
@@ -241,20 +242,5 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 	@Override
 	public PushReaction getPistonPushReaction(BlockState state) {
 		return PushReaction.BLOCK;
-	}
-
-	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (!state.is(newState.getBlock())) {
-			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if (blockEntity instanceof ForceEngineBlockEntity engineTile) {
-				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), engineTile.inputHandler.getStackInSlot(0));
-				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), engineTile.inputHandler.getStackInSlot(1));
-				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), engineTile.outputHandler.getStackInSlot(0));
-				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), engineTile.outputHandler.getStackInSlot(1));
-			}
-
-			super.onRemove(state, level, pos, newState, isMoving);
-		}
 	}
 }

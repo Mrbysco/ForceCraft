@@ -7,10 +7,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -24,15 +22,17 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
@@ -77,7 +77,7 @@ public class InfuserBlock extends BaseEntityBlock {
 
 	@Nullable
 	protected static <T extends BlockEntity> BlockEntityTicker<T> createInfuserTicker(Level level, BlockEntityType<T> p_151989_, BlockEntityType<? extends InfuserBlockEntity> infuserBlockEntityType) {
-		return level.isClientSide ? null : createTickerHelper(p_151989_, infuserBlockEntityType, InfuserBlockEntity::serverTick);
+		return level.isClientSide() ? null : createTickerHelper(p_151989_, infuserBlockEntityType, InfuserBlockEntity::serverTick);
 	}
 
 	@Override
@@ -86,21 +86,22 @@ public class InfuserBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-	                                          Player player, InteractionHand hand, BlockHitResult hitResult) {
-		IFluidHandler handler = level.getCapability(Capabilities.FluidHandler.BLOCK, pos, hitResult.getDirection());
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+	                                      Player player, InteractionHand hand, BlockHitResult hitResult) {
+		ResourceHandler<FluidResource> handler = level.getCapability(Capabilities.Fluid.BLOCK, pos, hitResult.getDirection());
 		if (handler != null) {
-			if (player.getItemInHand(hand).getCapability(Capabilities.FluidHandler.ITEM) != null) {
+			if (ItemAccess.forPlayerInteraction(player, hand).getCapability(Capabilities.Fluid.ITEM) != null) {
 				if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection()))
-					return ItemInteractionResult.SUCCESS;
+					return InteractionResult.SUCCESS;
 			}
 		}
-		return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+		return InteractionResult.PASS;
 	}
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			return InteractionResult.SUCCESS;
 		} else {
 			BlockEntity blockentity = level.getBlockEntity(pos);
@@ -112,28 +113,10 @@ public class InfuserBlock extends BaseEntityBlock {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (!state.is(newState.getBlock())) {
-			BlockEntity blockentity = level.getBlockEntity(pos);
-			if (blockentity instanceof InfuserBlockEntity infuserBlockEntity) {
-				IItemHandler handler = infuserBlockEntity.getItemHandler(null);
-				if (handler != null) {
-					for (int i = 0; i < handler.getSlots(); ++i) {
-						Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), handler.getStackInSlot(i));
-					}
-				}
-			}
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @org.jspecify.annotations.Nullable Orientation orientation, boolean movedByPiston) {
 
-			super.onRemove(state, level, pos, newState, isMoving);
-		}
-	}
-
-	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbourBlock, BlockPos neighborPos,
-	                            boolean movedByPiston) {
-		if (!level.isClientSide) {
+		if (level.isClientSide()) {
 			boolean flag = level.hasNeighborSignal(pos);
 			BlockEntity blockentity = level.getBlockEntity(pos);
 			if (flag && blockentity instanceof InfuserBlockEntity infuserBE) {

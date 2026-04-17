@@ -15,7 +15,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -50,12 +50,12 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 
 	@Override
 	public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup focuses) {
-		builder.addSlot(RecipeIngredientRole.INPUT, 10, 10).addIngredients(recipe.getIngredients().getFirst());
+		builder.addSlot(RecipeIngredientRole.INPUT, 10, 10).add(recipe.getIngredients().getFirst());
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 83, 10)
-				.addItemStack(recipe.getRecipeOutputs().get(0));
+				.add(recipe.getRecipeOutputs().get(0));
 		if (recipe.getRecipeOutputs().size() > 1) {
 			IRecipeSlotBuilder secondOutputBuilder = builder.addSlot(RecipeIngredientRole.OUTPUT, 113, 10)
-					.addItemStack(recipe.getRecipeOutputs().get(1));
+					.add(recipe.getRecipeOutputs().get(1));
 
 			if (showChance) {
 				secondOutputBuilder.addRichTooltipCallback(new ChanceTooltip(recipe));
@@ -64,7 +64,7 @@ public abstract class AbstractMultiOutputCategory<T extends MultipleOutputFurnac
 	}
 
 	@Override
-	public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+	public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
 		this.background.draw(guiGraphics);
 		IRecipeCategory.super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
 	}

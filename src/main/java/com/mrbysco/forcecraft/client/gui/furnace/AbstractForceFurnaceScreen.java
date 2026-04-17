@@ -6,7 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 import java.util.ArrayList;
@@ -14,9 +14,9 @@ import java.util.List;
 
 
 public abstract class AbstractForceFurnaceScreen<T extends AbstractForceFurnaceMenu> extends AbstractContainerScreen<T> {
-	private final ResourceLocation GUI_TEXTURE;
+	private final Identifier GUI_TEXTURE;
 
-	public AbstractForceFurnaceScreen(T screenContainer, Inventory inv, Component titleIn, ResourceLocation guiTextureIn) {
+	public AbstractForceFurnaceScreen(T screenContainer, Inventory inv, Component titleIn, Identifier guiTextureIn) {
 		super(screenContainer, inv, titleIn);
 		this.GUI_TEXTURE = guiTextureIn;
 	}

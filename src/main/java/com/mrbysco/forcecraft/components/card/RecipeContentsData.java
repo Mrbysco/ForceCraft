@@ -24,7 +24,7 @@ public record RecipeContentsData(NonNullList<ItemStack> recipeItems, ItemStack r
 									DataResult::success
 							)
 							.forGetter(recipe -> recipe.recipeItems),
-					ItemStack.STRICT_CODEC.fieldOf("resultItem").forGetter(RecipeContentsData::resultItem))
+					ItemStack.CODEC.fieldOf("resultItem").forGetter(RecipeContentsData::resultItem))
 			.apply(inst, RecipeContentsData::new));
 	public static final StreamCodec<RegistryFriendlyByteBuf, RecipeContentsData> STREAM_CODEC = StreamCodec.of(
 			RecipeContentsData::toNetwork, RecipeContentsData::fromNetwork

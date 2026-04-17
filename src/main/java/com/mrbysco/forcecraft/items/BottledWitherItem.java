@@ -18,10 +18,10 @@ public class BottledWitherItem extends BaseItem {
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
 		Level level = context.getLevel();
-		if (!level.isClientSide) {
+		if (level.isClientSide()) {
 			BlockPos pos = context.getClickedPos();
 			WitherBoss wither = new WitherBoss(EntityType.WITHER, level);
-			wither.moveTo(pos.getX(), pos.getY() + 2.0, pos.getZ(), 0.0F, 0.0F);
+			wither.snapTo(pos.getX(), pos.getY() + 2.0, pos.getZ(), 0.0F, 0.0F);
 			level.addFreshEntity(wither);
 		}
 

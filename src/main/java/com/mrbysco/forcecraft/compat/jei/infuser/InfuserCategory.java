@@ -16,6 +16,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -40,7 +41,7 @@ public class InfuserCategory<T extends InfuseRecipe> implements IRecipeCategory<
 	}
 
 	@Override
-	public RecipeType<InfuseRecipe> getRecipeType() {
+	public IRecipeType<InfuseRecipe> getRecipeType() {
 		return JeiCompat.INFUSER_TYPE;
 	}
 

@@ -6,23 +6,24 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.level.Level;
 
 public class BaseItem extends Item {
 
 	public BaseItem(Item.Properties properties) {
-		super(properties);
+		super(properties.enchantable(0));
 	}
 
-	@Override
-	public int getEnchantmentValue() {
-		return 0;
-	}
-
-	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
-	}
+//	@Override
+//	public int getEnchantmentValue() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+//		return false;
+//	}
 
 	@Override
 	public void onCraftedPostProcess(ItemStack stack, Level level) {

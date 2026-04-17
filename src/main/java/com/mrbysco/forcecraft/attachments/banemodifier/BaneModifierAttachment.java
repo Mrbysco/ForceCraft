@@ -1,10 +1,10 @@
 package com.mrbysco.forcecraft.attachments.banemodifier;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.common.util.ValueIOSerializable;
 
-public class BaneModifierAttachment implements IBaneModifier, INBTSerializable<CompoundTag> {
+public class BaneModifierAttachment implements IBaneModifier, ValueIOSerializable {
 	boolean canTeleport = true;
 
 	@Override
@@ -30,16 +30,14 @@ public class BaneModifierAttachment implements IBaneModifier, INBTSerializable<C
 	}
 
 	@Override
-	public CompoundTag serializeNBT(HolderLookup.Provider provider) {
-		CompoundTag tag = new CompoundTag();
-		tag.putBoolean("canTeleport", this.canTeleport());
-		tag.putBoolean("canExplode", this.canExplode());
-		return tag;
+	public void deserialize(ValueInput input) {
+		this.setTeleportAbility(input.getBooleanOr("canTeleport", false));
+		this.setExplodeAbility(input.getBooleanOr("canExplode", false));
 	}
 
 	@Override
-	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
-		this.setTeleportAbility(tag.getBoolean("canTeleport"));
-		this.setExplodeAbility(tag.getBoolean("canExplode"));
+	public void serialize(ValueOutput output) {
+		output.putBoolean("canTeleport", this.canTeleport());
+		output.putBoolean("canExplode", this.canExplode());
 	}
 }

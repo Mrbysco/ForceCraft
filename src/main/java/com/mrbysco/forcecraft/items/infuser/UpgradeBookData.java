@@ -8,19 +8,19 @@ import com.mrbysco.forcecraft.components.ForceComponents;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record UpgradeBookData(UpgradeBookTier tier, List<ResourceLocation> recipesUsed,
+public record UpgradeBookData(UpgradeBookTier tier, List<Identifier> recipesUsed,
                               int points, String progressCache) {
 	public static final UpgradeBookData DEFAULT = new UpgradeBookData(UpgradeBookTier.ZERO, new ArrayList<>(), 0, "");
 	public static final Codec<UpgradeBookData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
 					UpgradeBookTier.CODEC.fieldOf("tier").forGetter(UpgradeBookData::tier),
-					Codec.list(ResourceLocation.CODEC).fieldOf("recipesUsed").forGetter(UpgradeBookData::recipesUsed),
+					Codec.list(Identifier.CODEC).fieldOf("recipesUsed").forGetter(UpgradeBookData::recipesUsed),
 					Codec.INT.fieldOf("points").forGetter(UpgradeBookData::points),
 					Codec.STRING.fieldOf("progressCache").forGetter(UpgradeBookData::progressCache))
 			.apply(inst, UpgradeBookData::new));
@@ -30,7 +30,7 @@ public record UpgradeBookData(UpgradeBookTier tier, List<ResourceLocation> recip
 
 	private static UpgradeBookData fromNetwork(RegistryFriendlyByteBuf byteBuf) {
 		UpgradeBookTier tier = UpgradeBookTier.values()[byteBuf.readVarInt()];
-		List<ResourceLocation> recipesUsed = byteBuf.readList(ResourceLocation.STREAM_CODEC);
+		List<Identifier> recipesUsed = byteBuf.readList(Identifier.STREAM_CODEC);
 		int points = byteBuf.readVarInt();
 		String progressCache = byteBuf.readUtf(32767);
 		return new UpgradeBookData(tier, recipesUsed, points, progressCache);
@@ -38,7 +38,7 @@ public record UpgradeBookData(UpgradeBookTier tier, List<ResourceLocation> recip
 
 	private static void toNetwork(RegistryFriendlyByteBuf byteBuf, UpgradeBookData playerCompassData) {
 		byteBuf.writeVarInt(playerCompassData.tier().ordinal());
-		byteBuf.writeCollection(playerCompassData.recipesUsed(), ResourceLocation.STREAM_CODEC);
+		byteBuf.writeCollection(playerCompassData.recipesUsed(), Identifier.STREAM_CODEC);
 		byteBuf.writeVarInt(playerCompassData.points());
 		byteBuf.writeUtf(playerCompassData.progressCache());
 	}
@@ -55,9 +55,9 @@ public record UpgradeBookData(UpgradeBookTier tier, List<ResourceLocation> recip
 	public void onRecipeApply(RecipeHolder<InfuseRecipe> recipeHolder, ItemStack bookStack) {
 		UpgradeBookData data = bookStack.getOrDefault(ForceComponents.UPGRADE_BOOK, UpgradeBookData.DEFAULT);
 		if (InfuserBlockEntity.LEVEL_RECIPE_LIST.get(data.tier.asInt()).contains(recipeHolder.id())) {
-			List<ResourceLocation> recipesUsed = new ArrayList<>(data.recipesUsed());
+			List<Identifier> recipesUsed = new ArrayList<>(data.recipesUsed());
 			if (!recipesUsed.contains(recipeHolder.id())) {
-				recipesUsed.add(recipeHolder.id());
+				recipesUsed.add(recipeHolder.id().identifier());
 				bookStack.set(ForceComponents.UPGRADE_BOOK,
 						new UpgradeBookData(
 								data.tier,
@@ -99,8 +99,8 @@ public record UpgradeBookData(UpgradeBookTier tier, List<ResourceLocation> recip
 	private static void updateCache(ItemStack stack) {
 		UpgradeBookData data = stack.getOrDefault(ForceComponents.UPGRADE_BOOK, UpgradeBookData.DEFAULT);
 		//Update tooltip
-		List<ResourceLocation> thisTier = InfuserBlockEntity.LEVEL_RECIPE_LIST.get(data.tier().ordinal());
-		List<ResourceLocation> usedRecipes = data.recipesUsed();
+		List<Identifier> thisTier = InfuserBlockEntity.LEVEL_RECIPE_LIST.get(data.tier().ordinal());
+		List<Identifier> usedRecipes = data.recipesUsed();
 		ForceCraft.LOGGER.info("thisTier {}", thisTier);
 		ForceCraft.LOGGER.info("RecipesUsed {}", usedRecipes);
 		int recipesThisTier = (usedRecipes == null) ? 0 : usedRecipes.size();
@@ -120,7 +120,7 @@ public record UpgradeBookData(UpgradeBookTier tier, List<ResourceLocation> recip
 	private static boolean canLevelUp(ItemStack stack) {
 		UpgradeBookData data = stack.getOrDefault(ForceComponents.UPGRADE_BOOK, UpgradeBookData.DEFAULT);
 		// check more
-		List<ResourceLocation> thisTier = data.recipesUsed();
+		List<Identifier> thisTier = data.recipesUsed();
 		int recipesThisTier = (thisTier == null) ? 0 : thisTier.size();
 		int totalThisTier = InfuserBlockEntity.LEVEL_RECIPE_LIST.get(data.tier().ordinal()).size();
 

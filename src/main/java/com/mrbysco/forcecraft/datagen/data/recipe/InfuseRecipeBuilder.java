@@ -6,7 +6,7 @@ import com.mrbysco.forcecraft.recipe.InfuseRecipe;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -71,7 +71,7 @@ public class InfuseRecipeBuilder implements RecipeBuilder {
 	}
 
 	@Override
-	public void save(RecipeOutput output, ResourceLocation id) {
+	public void save(RecipeOutput output, Identifier id) {
 		InfuseRecipe recipe = new InfuseRecipe(this.center, this.ingredient, this.resultModifier, this.tier, this.output, this.time);
 		output.accept(id, recipe, null);
 	}

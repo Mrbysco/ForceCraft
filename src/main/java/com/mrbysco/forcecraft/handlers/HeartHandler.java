@@ -18,7 +18,7 @@ public class HeartHandler {
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
 		Level level = event.getEntity().level();
-		if (level.isClientSide || event.getSource() == null || ConfigHandler.COMMON.disableRecoveryHearts.get() || level.random.nextDouble() >= CHANCE) {
+		if (level.isClientSide() || event.getSource() == null || ConfigHandler.COMMON.disableRecoveryHearts.get() || level.getRandom().nextDouble() >= CHANCE) {
 			return;
 		}
 		if (event.getSource().getEntity() instanceof Player && !(event.getSource().getEntity() instanceof FakePlayer)) {

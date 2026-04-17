@@ -20,7 +20,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.function.Predicate;
@@ -44,6 +44,12 @@ public class AngryEndermanEntity extends EnderMan {
 		this.targetSelector.addGoal(4, new ResetUniversalAngerTargetGoal<>(this, false));
 	}
 
+	private boolean isBeingStaredBy(Player player) {
+		return !LivingEntity.PLAYER_NOT_WEARING_DISGUISE_ITEM_FOR_TARGET.test(player, this) ? false :
+				this.isLookingAtMe(player, 0.025, true, false, this.getEyeY()) &&
+				!net.neoforged.neoforge.common.CommonHooks.shouldSuppressEnderManAnger(this, player);
+	}
+
 	public static AttributeSupplier.Builder generateAttributes() {
 		return Monster.createMonsterAttributes()
 				.add(Attributes.MAX_HEALTH, 40.0D)
@@ -54,7 +60,7 @@ public class AngryEndermanEntity extends EnderMan {
 
 	@Override
 	public boolean teleport() {
-		if (!this.level().isClientSide() && this.isAlive() && !this.isInWaterOrBubble()) {
+		if (!this.level().isClientSide() && this.isAlive() && !this.isInWater()) {
 			double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
 			double d1 = this.getY() + (double) (this.random.nextInt(64) - 32);
 			double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
@@ -65,11 +71,11 @@ public class AngryEndermanEntity extends EnderMan {
 	}
 
 	static class StareGoal extends Goal {
-		private final EnderMan enderman;
-		private LivingEntity targetPlayer;
+		private final AngryEndermanEntity enderman;
+		private LivingEntity target;
 
-		public StareGoal(EnderMan endermanIn) {
-			this.enderman = endermanIn;
+		public StareGoal(AngryEndermanEntity enderman) {
+			this.enderman = enderman;
 			this.setFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
 		}
 
@@ -78,12 +84,12 @@ public class AngryEndermanEntity extends EnderMan {
 		 * method as well.
 		 */
 		public boolean canUse() {
-			this.targetPlayer = this.enderman.getTarget();
-			if (!(this.targetPlayer instanceof Player)) {
-				return false;
+			this.target = this.enderman.getTarget();
+			if (this.target instanceof Player playerTarget) {
+				double dist = this.target.distanceToSqr(this.enderman);
+				return dist > 256.0 ? false : this.enderman.isBeingStaredBy(playerTarget);
 			} else {
-				double d0 = this.targetPlayer.distanceToSqr(this.enderman);
-				return d0 > 256.0D ? false : this.enderman.isLookingAtMe((Player) this.targetPlayer);
+				return false;
 			}
 		}
 
@@ -98,7 +104,7 @@ public class AngryEndermanEntity extends EnderMan {
 		 * Keep ticking a continuous task that has already been started
 		 */
 		public void tick() {
-			this.enderman.getLookControl().setLookAt(this.targetPlayer.getX(), this.targetPlayer.getEyeY(), this.targetPlayer.getZ());
+			this.enderman.getLookControl().setLookAt(this.target.getX(), this.target.getEyeY(), this.target.getZ());
 		}
 	}
 
@@ -113,12 +119,11 @@ public class AngryEndermanEntity extends EnderMan {
 		private final TargetingConditions startAggroTargetConditions;
 		private final TargetingConditions continueAggroTargetConditions = TargetingConditions.forCombat().ignoreLineOfSight();
 
-		public FindPlayerGoal(AngryEndermanEntity endermantIn, @Nullable Predicate<LivingEntity> p_i241912_2_) {
-			super(endermantIn, Player.class, 10, false, false, p_i241912_2_);
-			this.enderman = endermantIn;
-			this.startAggroTargetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector((livingEntity) -> {
-				return endermantIn.isLookingAtMe((Player) livingEntity);
-			});
+		public FindPlayerGoal(AngryEndermanEntity enderman, TargetingConditions.@Nullable Selector selector) {
+			super(enderman, Player.class, 10, false, false, selector);
+			this.enderman = enderman;
+			this.startAggroTargetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector((livingEntity, level) ->
+					this.enderman.isBeingStaredBy((Player) livingEntity));
 		}
 
 		/**
@@ -126,7 +131,7 @@ public class AngryEndermanEntity extends EnderMan {
 		 * method as well.
 		 */
 		public boolean canUse() {
-			this.player = this.enderman.level().getNearestPlayer(this.startAggroTargetConditions, this.enderman);
+			this.player = getServerLevel(this.enderman).getNearestPlayer(this.startAggroTargetConditions, this.enderman);
 			return this.player != null;
 		}
 
@@ -152,14 +157,15 @@ public class AngryEndermanEntity extends EnderMan {
 		 */
 		public boolean canContinueToUse() {
 			if (this.player != null) {
-				if (!this.enderman.isLookingAtMe(this.player)) {
+				if (!this.enderman.isBeingStaredBy(this.player)) {
 					return false;
 				} else {
 					this.enderman.lookAt(this.player, 10.0F, 10.0F);
 					return true;
 				}
 			} else {
-				return this.target != null && this.continueAggroTargetConditions.test(this.enderman, this.target) ? true : super.canContinueToUse();
+				return this.target != null && this.continueAggroTargetConditions.test(getServerLevel(this.enderman), this.enderman, this.target) ||
+						super.canContinueToUse();
 			}
 		}
 
@@ -179,7 +185,7 @@ public class AngryEndermanEntity extends EnderMan {
 				}
 			} else {
 				if (this.target != null && !this.enderman.isPassenger()) {
-					if (this.enderman.isLookingAtMe((Player) this.target)) {
+					if (this.enderman.isBeingStaredBy((Player) this.target)) {
 						if (this.target.distanceToSqr(this.enderman) < 16.0D) {
 							this.enderman.teleport();
 						}

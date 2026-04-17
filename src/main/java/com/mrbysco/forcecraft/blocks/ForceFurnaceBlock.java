@@ -55,7 +55,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 	protected void openContainer(Level level, BlockPos pos, Player player) {
 		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof ForceFurnaceBlockEntity) {
-			if (!level.isClientSide) {
+			if (level.isClientSide()) {
 				player.openMenu((ForceFurnaceBlockEntity) blockentity, pos);
 			}
 			player.awardStat(Stats.INTERACT_WITH_FURNACE);
@@ -98,7 +98,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 
 	@Nullable
 	protected static <T extends BlockEntity> BlockEntityTicker<T> createForceFurnaceTicker(Level level, BlockEntityType<T> p_151989_, BlockEntityType<? extends AbstractForceFurnaceBlockEntity> abstractForceFurnaceType) {
-		return level.isClientSide ? null : createTickerHelper(p_151989_, abstractForceFurnaceType, AbstractForceFurnaceBlockEntity::serverTick);
+		return level.isClientSide() ? null : createTickerHelper(p_151989_, abstractForceFurnaceType, AbstractForceFurnaceBlockEntity::serverTick);
 	}
 
 	@Override
@@ -125,14 +125,14 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock implements EntityBlo
 		double d0 = (double) EntityType.ITEM.getWidth();
 		double d1 = 1.0D - d0;
 		double d2 = d0 / 2.0D;
-		double d3 = Math.floor(x) + level.random.nextDouble() * d1 + d2;
-		double d4 = Math.floor(y) + level.random.nextDouble() * d1;
-		double d5 = Math.floor(z) + level.random.nextDouble() * d1 + d2;
+		double d3 = Math.floor(x) + level.getRandom().nextDouble() * d1 + d2;
+		double d4 = Math.floor(y) + level.getRandom().nextDouble() * d1;
+		double d5 = Math.floor(z) + level.getRandom().nextDouble() * d1 + d2;
 
 		while (!stack.isEmpty()) {
-			ItemEntity itementity = new ItemEntity(level, d3, d4, d5, stack.split(level.random.nextInt(21) + 10));
+			ItemEntity itementity = new ItemEntity(level, d3, d4, d5, stack.split(level.getRandom().nextInt(21) + 10));
 			float f = 0.05F;
-			itementity.setDeltaMovement(level.random.nextGaussian() * (double) 0.05F, level.random.nextGaussian() * (double) f + (double) 0.2F, level.random.nextGaussian() * (double) f);
+			itementity.setDeltaMovement(level.getRandom().nextGaussian() * (double) 0.05F, level.getRandom().nextGaussian() * (double) f + (double) 0.2F, level.getRandom().nextGaussian() * (double) f);
 			level.addFreshEntity(itementity);
 		}
 	}

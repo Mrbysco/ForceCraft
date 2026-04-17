@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class AdvancementUtil {
 	public static void unlockTierAdvancements(Player player, int tier) {
-		if (!player.level().isClientSide) {
+		if (!player.level().isClientSide()) {
 			ServerPlayer serverPlayer = (ServerPlayer) player;
 			if (tier >= 1) {
 				unlockAdvancement(serverPlayer, "tier1/tier");
@@ -55,8 +55,8 @@ public class AdvancementUtil {
 	}
 
 	public static void unlockAdvancement(ServerPlayer serverPlayer, String name) {
-		if (serverPlayer.getServer() == null) return;
-		AdvancementHolder holder = serverPlayer.getServer().getAdvancements().get(Reference.modLoc(name));
+		if (serverPlayer.level().getServer() == null) return;
+		AdvancementHolder holder = serverPlayer.level().getServer().getAdvancements().get(Reference.modLoc(name));
 		if (holder != null) {
 			AdvancementProgress advancementprogress = serverPlayer.getAdvancements().getOrStartProgress(holder);
 			if (!advancementprogress.isDone()) {

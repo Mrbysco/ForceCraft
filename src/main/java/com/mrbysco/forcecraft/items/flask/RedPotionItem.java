@@ -27,7 +27,7 @@ public class RedPotionItem extends BaseItem {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
-		if (!level.isClientSide) entityLiving.heal(Float.MAX_VALUE);
+		if (level.isClientSide()) entityLiving.heal(Float.MAX_VALUE);
 
 		if (entityLiving instanceof ServerPlayer serverPlayer) {
 			CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
@@ -64,6 +64,6 @@ public class RedPotionItem extends BaseItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
 		super.appendHoverText(stack, context, tooltip, tooltipFlag);
-		tooltip.add(Component.translatable("item.red_potion.tooltip").withStyle(ChatFormatting.GRAY));
+		builder.accept(Component.translatable("item.red_potion.tooltip").withStyle(ChatFormatting.GRAY));
 	}
 }

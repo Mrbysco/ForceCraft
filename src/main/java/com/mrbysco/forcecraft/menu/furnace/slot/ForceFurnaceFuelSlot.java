@@ -3,14 +3,16 @@ package com.mrbysco.forcecraft.menu.furnace.slot;
 import com.mrbysco.forcecraft.menu.furnace.AbstractForceFurnaceMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.IndexModifier;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
-public class ForceFurnaceFuelSlot extends SlotItemHandler {
+public class ForceFurnaceFuelSlot extends ResourceHandlerSlot {
 	private final AbstractForceFurnaceMenu furnaceContainer;
 
-	public ForceFurnaceFuelSlot(AbstractForceFurnaceMenu furnaceContainer, IItemHandler furnaceInventory, int slotIndex, int xPosition, int yPosition) {
-		super(furnaceInventory, slotIndex, xPosition, yPosition);
+	public ForceFurnaceFuelSlot(AbstractForceFurnaceMenu furnaceContainer, ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> slotModifier, int slotIndex, int xPosition, int yPosition) {
+		super(handler, slotModifier, slotIndex, xPosition, yPosition);
 		this.furnaceContainer = furnaceContainer;
 	}
 

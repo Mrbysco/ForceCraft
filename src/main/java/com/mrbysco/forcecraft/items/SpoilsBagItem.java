@@ -93,7 +93,7 @@ public class SpoilsBagItem extends BaseItem {
 	}
 
 	public void populateBag(Level level, ItemStack stack) {
-		if (!level.isClientSide && !stack.has(ForceComponents.SPOILS_FILLED)) {
+		if (!level.isClientSide() && !stack.has(ForceComponents.SPOILS_FILLED)) {
 			IItemHandler handler = stack.getCapability(Capabilities.ItemHandler.ITEM);
 			if (handler instanceof ComponentItemHandler componentItemHandler) {
 				if (ItemHandlerUtils.isEmpty(handler)) {
@@ -112,7 +112,7 @@ public class SpoilsBagItem extends BaseItem {
 					} while (stacks.isEmpty());
 
 					if (stacks.size() > 7) {
-						int newSize = Math.min(8, Math.max(5, level.random.nextInt(stacks.size())));
+						int newSize = Math.min(8, Math.max(5, level.getRandom().nextInt(stacks.size())));
 						if (stacks.size() < newSize) {
 							newSize = stacks.size();
 						}
@@ -143,7 +143,7 @@ public class SpoilsBagItem extends BaseItem {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (!level.isClientSide && stack.has(ForceComponents.SPOILS_FILLED)) {
+		if (!level.isClientSide() && stack.has(ForceComponents.SPOILS_FILLED)) {
 			IItemHandler handler = stack.getCapability(Capabilities.ItemHandler.ITEM);
 			if (ItemHandlerUtils.isEmpty(handler)) {
 				stack.shrink(1);
@@ -154,6 +154,6 @@ public class SpoilsBagItem extends BaseItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
 		super.appendHoverText(stack, context, tooltip, tooltipFlag);
-		tooltip.add(Component.literal("Tier: " + tier).withStyle(ChatFormatting.GRAY));
+		builder.accept(Component.literal("Tier: " + tier).withStyle(ChatFormatting.GRAY));
 	}
 }

@@ -6,17 +6,17 @@ import com.mrbysco.forcecraft.client.model.FairyModel;
 import com.mrbysco.forcecraft.entities.FairyEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class FairyRenderer extends MobRenderer<FairyEntity, FairyModel<FairyEntity>> {
-	private static final ResourceLocation FAIRY_TEXTURES = Reference.modLoc("textures/entity/fairy.png");
+	private static final Identifier FAIRY_TEXTURES = Reference.modLoc("textures/entity/fairy.png");
 
 	public FairyRenderer(EntityRendererProvider.Context context) {
 		super(context, new FairyModel<>(context.bakeLayer(ClientHandler.FAIRY)), 0.2F);
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(FairyEntity entity) {
+	public Identifier getTextureLocation(FairyEntity entity) {
 		return FAIRY_TEXTURES;
 	}
 }

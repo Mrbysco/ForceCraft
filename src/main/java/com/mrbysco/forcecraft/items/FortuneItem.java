@@ -3,8 +3,9 @@ package com.mrbysco.forcecraft.items;
 import com.mrbysco.forcecraft.components.ForceComponents;
 import com.mrbysco.forcecraft.config.ConfigHandler;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +24,7 @@ public class FortuneItem extends BaseItem {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+	public InteractionResult use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		String message = stack.getOrDefault(ForceComponents.MESSAGE, "");
 
@@ -32,13 +33,13 @@ public class FortuneItem extends BaseItem {
 			message = stack.getOrDefault(ForceComponents.MESSAGE, "");
 		}
 
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			if (playerIn != null && playerIn.isShiftKeyDown()) {
 				stack.consume(1, playerIn);
 
 				ItemStack paperStack = new ItemStack(Items.PAPER);
 				if (!playerIn.addItem(paperStack)) {
-					playerIn.spawnAtLocation(paperStack);
+					playerIn.spawnAtLocation((ServerLevel) level, paperStack);
 				}
 			} else {
 				playerIn.sendSystemMessage(Component.literal(message));

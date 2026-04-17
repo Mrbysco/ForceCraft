@@ -3,7 +3,7 @@ package com.mrbysco.forcecraft.datagen.assets;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -19,7 +19,7 @@ public class ForceBlockModelProvider extends BlockModelProvider {
 	}
 
 
-	protected void generateOre(ResourceLocation blockID, ResourceLocation oreTexture, ResourceLocation stoneVariant) {
+	protected void generateOre(Identifier blockID, Identifier oreTexture, Identifier stoneVariant) {
 		String path = blockID.getPath();
 		withExistingParent(path, modLoc("block/ore"))
 				.texture("ore", oreTexture)

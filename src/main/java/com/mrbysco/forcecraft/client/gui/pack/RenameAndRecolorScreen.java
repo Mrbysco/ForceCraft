@@ -12,13 +12,13 @@ import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class RenameAndRecolorScreen extends Screen {
-	private static final ResourceLocation TEXTURE = Reference.modLoc("textures/gui/container/rename_screen.png");
+	private static final Identifier TEXTURE = Reference.modLoc("textures/gui/container/rename_screen.png");
 	private ItemStack itemstack;
 	private final InteractionHand usedHand;
 	private EditBox textfield;

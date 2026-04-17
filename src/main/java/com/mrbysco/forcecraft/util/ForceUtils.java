@@ -121,7 +121,7 @@ public class ForceUtils {
 		stack.mineBlock(level, state, pos, player);
 
 		// server sided handling
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			// send the blockbreak event
 			BlockState blockstate1 = level.getBlockState(pos);
 			var event = net.neoforged.neoforge.common.CommonHooks.fireBlockBreak(level, ((ServerPlayer) player).gameMode.getGameModeForPlayer(), ((ServerPlayer) player), pos, blockstate1);
@@ -133,7 +133,7 @@ public class ForceUtils {
 
 			BlockEntity tileEntity = level.getBlockEntity(pos);
 			// ItemInWorldManager.removeBlock
-			if (block.onDestroyedByPlayer(state, level, pos, player, true, fluidState)) { // boolean is if block can be harvested, checked above
+			if (block.onDestroyedByPlayer(state, level, pos, player, stack, true, fluidState)) { // boolean is if block can be harvested, checked above
 				block.playerWillDestroy(level, pos, state, player);
 				block.playerDestroy(level, player, pos, state, tileEntity, stack);
 				int xp = block.getExpDrop(state, level, pos, null, player, stack);
@@ -151,7 +151,7 @@ public class ForceUtils {
 
 			// following code can be found in PlayerControllerMP.onPlayerDestroyBlock
 			level.globalLevelEvent(2001, pos, Block.getId(state));
-			if (block.onDestroyedByPlayer(state, level, pos, player, true, fluidState)) {
+			if (block.onDestroyedByPlayer(state, level, pos, player, stack, true, fluidState)) {
 				block.playerWillDestroy(level, pos, state, player);
 			}
 			// callback to the tool
@@ -198,12 +198,12 @@ public class ForceUtils {
 
 		if (player.getAbilities().instabuild) {
 			block.playerWillDestroy(level, pos, state, player);
-			if (block.onDestroyedByPlayer(state, level, pos, player, false, fluidState)) {
+			if (block.onDestroyedByPlayer(state, level, pos, player, stack, false, fluidState)) {
 				block.playerWillDestroy(level, pos, state, player);
 			}
 
 			// send update to client
-			if (!level.isClientSide) {
+			if (!level.isClientSide()) {
 				((ServerPlayer) player).connection.send(new ClientboundBlockUpdatePacket(level, pos));
 			}
 			return false;
@@ -216,7 +216,7 @@ public class ForceUtils {
 	}
 
 	public static void teleportRandomly(LivingEntity livingEntity) {
-		if (!livingEntity.level().isClientSide() && livingEntity.isAlive() && !livingEntity.isInWaterOrBubble()) {
+		if (!livingEntity.level().isClientSide() && livingEntity.isAlive() && !livingEntity.isInWater()) {
 			double d0 = livingEntity.getX() + (livingEntity.getRandom().nextDouble() - 0.5D) * 32.0D;
 			double d1 = livingEntity.getY() + (double) (livingEntity.getRandom().nextInt(32) - 16);
 			double d2 = livingEntity.getZ() + (livingEntity.getRandom().nextDouble() - 0.5D) * 32.0D;
@@ -246,7 +246,7 @@ public class ForceUtils {
 	}
 
 	public static void teleportPlayerToLocation(Player player, GlobalPos globalPos) {
-		if (player.level().dimension().location().equals(globalPos.dimension().location())) {
+		if (player.level().dimension().identifier().equals(globalPos.dimension().identifier())) {
 			BlockPos pos = globalPos.pos();
 			int x = pos.getX();
 			int y = pos.getY() + 1;
@@ -254,7 +254,7 @@ public class ForceUtils {
 
 			ForceUtils.teleportToLocation(player, x, y, z, true);
 		} else {
-			if (!player.level().isClientSide) {
+			if (!player.level().isClientSide()) {
 				player.sendSystemMessage(Component.translatable("forcecraft.ender_rod.dimension.text").withStyle(ChatFormatting.YELLOW));
 			}
 		}

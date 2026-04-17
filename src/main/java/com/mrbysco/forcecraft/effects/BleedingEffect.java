@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.effects;
 
 import com.mrbysco.forcecraft.Reference;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,7 +27,7 @@ public class BleedingEffect extends MobEffect {
 	}
 
 	@Override
-	public boolean applyEffectTick(LivingEntity target, int amplifier) {
+	public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity target, int amplifier) {
 		//once per tick
 		if (target.level().getGameTime() % 20 == 0) {
 			target.hurt(Reference.causeBleedingDamage(target), 2.0F);

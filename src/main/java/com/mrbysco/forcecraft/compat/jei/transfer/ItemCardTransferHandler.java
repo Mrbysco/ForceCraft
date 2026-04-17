@@ -6,16 +6,17 @@ import com.mrbysco.forcecraft.registry.ForceMenus;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,32 +33,34 @@ public class ItemCardTransferHandler implements IRecipeTransferHandler<ItemCardM
 	}
 
 	@Override
-	public RecipeType<RecipeHolder<CraftingRecipe>> getRecipeType() {
+	public IRecipeType<RecipeHolder<CraftingRecipe>> getRecipeType() {
 		return null;
 	}
 
-	@Nullable
 	@Override
-	public Class<ItemCardMenu> getContainerClass() {
+	public @NonNull Class<ItemCardMenu> getContainerClass() {
 		return ItemCardMenu.class;
 	}
 
 	@Override
-	public @Nullable IRecipeTransferError transferRecipe(ItemCardMenu container, RecipeHolder<CraftingRecipe> recipeHolder, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer) {
+	public @Nullable IRecipeTransferError transferRecipe(ItemCardMenu container,
+	                                                     RecipeHolder<CraftingRecipe> recipeHolder,
+	                                                     IRecipeSlotsView recipeSlots, Player player,
+	                                                     boolean maxTransfer, boolean doTransfer) {
 		List<ItemStack> items = new ArrayList<>(10);
 		for (int i = 0; i < 10; i++) {
 			items.add(ItemStack.EMPTY);
 		}
 
 		List<IRecipeSlotView> outputs = recipeSlots.getSlotViews(RecipeIngredientRole.OUTPUT);
-		items.set(0, outputs.get(0).getDisplayedItemStack().orElse(ItemStack.EMPTY));
+		items.set(0, outputs.getFirst().getDisplayedItemStack().orElse(ItemStack.EMPTY));
 
 		List<IRecipeSlotView> ingredients = recipeSlots.getSlotViews(RecipeIngredientRole.INPUT);
 		for (int i = 0; i < ingredients.size(); i++) {
 			items.set((i + 1), ingredients.get(i).getDisplayedItemStack().orElse(ItemStack.EMPTY));
 		}
 
-		PacketDistributor.sendToServer(new RecipeToCardPayload(items));
+		ClientPacketDistributor.sendToServer(new RecipeToCardPayload(items));
 
 		return null;
 	}

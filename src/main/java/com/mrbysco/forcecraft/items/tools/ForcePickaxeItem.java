@@ -8,25 +8,25 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 
-public class ForcePickaxeItem extends PickaxeItem implements IForceChargingTool {
+public class ForcePickaxeItem extends Item implements IForceChargingTool {
 
 	public ForcePickaxeItem(Item.Properties properties) {
-		super(ModToolTiers.FORCE, properties.attributes(createAttributes(ModToolTiers.FORCE, -6, -2.8F)));
+		super(properties.pickaxe(ModToolTiers.FORCE, -6, -2.8F)
+				.enchantable(0)
+		);
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-		TooltipUtil.addForceTooltips(stack, tooltip);
-		ForceToolData fd = new ForceToolData(stack);
-		fd.attachInformation(tooltip);
-		super.appendHoverText(stack, context, tooltip, tooltipFlag);
+	public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+		TooltipUtil.addForceTooltips(itemStack, builder);
+		ForceToolData fd = new ForceToolData(itemStack);
+		fd.attachInformation(builder);
 	}
 
 	@Override
@@ -34,14 +34,14 @@ public class ForcePickaxeItem extends PickaxeItem implements IForceChargingTool 
 		return this.damageItem(stack, amount);
 	}
 
-	@Override
-	public int getEnchantmentValue() {
-		return 0;
-	}
-
-	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
-	}
+//	@Override
+//	public int getEnchantmentValue() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+//		return false;
+//	}
 
 }

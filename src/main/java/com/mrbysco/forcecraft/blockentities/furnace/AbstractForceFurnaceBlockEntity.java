@@ -16,7 +16,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -105,14 +105,14 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		}
 	};
 
-	protected static final List<ResourceLocation> hopperBlacklist = List.of(
-			ResourceLocation.withDefaultNamespace("hopper"),
-			ResourceLocation.fromNamespaceAndPath("cyclic", "hopper"),
-			ResourceLocation.fromNamespaceAndPath("cyclic", "hopper_gold"),
-			ResourceLocation.fromNamespaceAndPath("cyclic", "hopper_fluid"),
-			ResourceLocation.fromNamespaceAndPath("uppers", "upper"),
-			ResourceLocation.fromNamespaceAndPath("goldenhopper", "golden_hopper"),
-			ResourceLocation.fromNamespaceAndPath("woodenhopper", "wooden_hopper")
+	protected static final List<Identifier> hopperBlacklist = List.of(
+			Identifier.withDefaultNamespace("hopper"),
+			Identifier.fromNamespaceAndPath("cyclic", "hopper"),
+			Identifier.fromNamespaceAndPath("cyclic", "hopper_gold"),
+			Identifier.fromNamespaceAndPath("cyclic", "hopper_fluid"),
+			Identifier.fromNamespaceAndPath("uppers", "upper"),
+			Identifier.fromNamespaceAndPath("goldenhopper", "golden_hopper"),
+			Identifier.fromNamespaceAndPath("woodenhopper", "wooden_hopper")
 	);
 
 	protected int litTime;
@@ -148,7 +148,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	protected RecipeHolder<? extends AbstractCookingRecipe> currentRecipe;
 	protected ItemStack failedMatch = ItemStack.EMPTY;
 
-	protected final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
+	protected final Object2IntOpenHashMap<Identifier> recipes = new Object2IntOpenHashMap<>();
 
 	protected AbstractForceFurnaceBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
 		super(blockEntityType, pos, state);
@@ -230,7 +230,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 		CompoundTag recipesUsed = tag.getCompound("RecipesUsed");
 
 		for (String s : recipesUsed.getAllKeys()) {
-			this.recipes.put(ResourceLocation.parse(s), recipesUsed.getInt(s));
+			this.recipes.put(Identifier.parse(s), recipesUsed.getInt(s));
 		}
 	}
 
@@ -358,7 +358,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 					ItemStack outputStack = outputStacks.get(i).copy();
 
 					if (i > 0) {
-						if (multipleRecipe.getSecondaryChance() != 1.0F || level.random.nextFloat() > multipleRecipe.getSecondaryChance()) {
+						if (multipleRecipe.getSecondaryChance() != 1.0F || level.getRandom().nextFloat() > multipleRecipe.getSecondaryChance()) {
 							//Early break if change didn't work out on second output
 							break;
 						}
@@ -371,7 +371,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 							BlockEntity foundTile = this.level.getBlockEntity(offPos);
 							IItemHandler itemHandler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, offPos, dir.getOpposite());
 							if (foundTile != null && itemHandler != null) {
-								ResourceLocation typeLocation = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(foundTile.getType());
+								Identifier typeLocation = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(foundTile.getType());
 								boolean flag = foundTile instanceof Hopper || foundTile instanceof AbstractFurnaceBlockEntity || foundTile instanceof AbstractForceFurnaceBlockEntity;
 								boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
 								if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && itemHandler != null) {
@@ -413,7 +413,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 						BlockEntity foundTile = this.level.getBlockEntity(offPos);
 						IItemHandler itemHandler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, offPos, dir.getOpposite());
 						if (foundTile != null && itemHandler != null) {
-							ResourceLocation typeLocation = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(foundTile.getType());
+							Identifier typeLocation = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(foundTile.getType());
 							boolean flag = foundTile instanceof Hopper || foundTile instanceof AbstractFurnaceBlockEntity || foundTile instanceof AbstractForceFurnaceBlockEntity;
 							boolean flag2 = typeLocation != null && (!hopperBlacklist.contains(typeLocation) && (additionalBlacklist.isEmpty() || !additionalBlacklist.contains(typeLocation.toString())));
 							if (!flag && flag2 && !foundTile.isRemoved() && foundTile.hasLevel() && foundTile != null) {
@@ -600,7 +600,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 
 	public void setRecipeUsed(@Nullable RecipeHolder<?> recipe) {
 		if (recipe != null) {
-			ResourceLocation resourcelocation = recipe.id();
+			Identifier resourcelocation = recipe.id();
 			this.recipes.addTo(resourcelocation, 1);
 		}
 	}
@@ -624,7 +624,7 @@ public abstract class AbstractForceFurnaceBlockEntity extends BaseContainerBlock
 	public List<RecipeHolder<?>> getRecipesToAwardAndPopExperience(ServerLevel serverLevel, Vec3 pos) {
 		List<RecipeHolder<?>> list = Lists.newArrayList();
 
-		for (Object2IntMap.Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
+		for (Object2IntMap.Entry<Identifier> entry : this.recipes.object2IntEntrySet()) {
 			serverLevel.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
 				list.add(recipe);
 				createExperience(serverLevel, pos, entry.getIntValue(), (((AbstractCookingRecipe) recipe.value()).getExperience() * getXPMultiplier()));

@@ -40,7 +40,7 @@ public class TimeTorchBlock extends TorchBlock implements EntityBlock {
 	protected static <T extends BlockEntity> BlockEntityTicker<T> createTimeTorchTicker(Level level,
 	                                                                                    BlockEntityType<T> entityType,
 	                                                                                    BlockEntityType<? extends TimeTorchBlockEntity> timeTorchBlockEntityType) {
-		return level.isClientSide ? null : createTickerHelper(entityType, timeTorchBlockEntityType, TimeTorchBlockEntity::serverTick);
+		return level.isClientSide() ? null : createTickerHelper(entityType, timeTorchBlockEntityType, TimeTorchBlockEntity::serverTick);
 	}
 
 	@Nullable

@@ -9,7 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -38,7 +38,7 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 		super(type, level);
 		this.moveControl = new FlyingMoveControl(this, 20, true);
 		this.lookControl = new LookHelperController(this);
-		this.setPathfindingMalus(PathType.DANGER_FIRE, -1.0F);
+		this.setPathfindingMalus(PathType.FIRE, -1.0F);
 		this.setPathfindingMalus(PathType.WATER, -1.0F);
 		this.setPathfindingMalus(PathType.WATER_BORDER, 16.0F);
 		this.setPathfindingMalus(PathType.COCOA, -1.0F);
@@ -77,13 +77,13 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 		this.discard();
 	}
 
-	public static boolean canSpawnOn(EntityType<? extends Mob> typeIn, LevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource random) {
+	public static boolean canSpawnOn(EntityType<? extends Mob> typeIn, LevelAccessor level, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
 		BlockPos blockpos = pos.below();
-		return reason == MobSpawnType.SPAWNER || (level.getBlockState(blockpos).isValidSpawn(level, blockpos, typeIn) && level.getRawBrightness(pos, 0) > 8);
+		return reason == EntitySpawnReason.SPAWNER || (level.getBlockState(blockpos).isValidSpawn(level, blockpos, typeIn) && level.getRawBrightness(pos, 0) > 8);
 	}
 
 	public SoundEvent collideSound(Player playerEntity) {
-		int randomInt = this.level().random.nextInt(100);
+		int randomInt = this.level().getRandom().nextInt(100);
 		if (UUID.fromString("7135da42-d327-47bb-bb04-5ba4e212fb32").equals(playerEntity.getUUID())) {
 			return ForceSounds.FAIRY_PICKUP.get();
 		}
@@ -108,7 +108,7 @@ public class FairyEntity extends PathfinderMob implements FlyingAnimal {
 	}
 
 	private void addParticle(Level level, double posX, double posX2, double posZ, double posZ2, double posY, ParticleOptions particleData) {
-		level.addParticle(particleData, Mth.lerp(level.random.nextDouble(), posX, posX2), posY - 0.2F, Mth.lerp(level.random.nextDouble(), posZ, posZ2), 0.0D, 0.0D, 0.0D);
+		level.addParticle(particleData, Mth.lerp(level.getRandom().nextDouble(), posX, posX2), posY - 0.2F, Mth.lerp(level.getRandom().nextDouble(), posZ, posZ2), 0.0D, 0.0D, 0.0D);
 	}
 
 	@Override

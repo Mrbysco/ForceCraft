@@ -4,7 +4,7 @@ import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -103,11 +103,11 @@ public class ForceBlockTagProvider extends BlockTagsProvider {
 	public static final TagKey<Block> ORES_POWER = commonTag("ores/power");
 
 	private static TagKey<Block> commonTag(String name) {
-		return BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+		return BlockTags.create(Identifier.fromNamespaceAndPath("c", name));
 	}
 
 	private static TagKey<Block> optionalTag(String modid, String name) {
-		return BlockTags.create(ResourceLocation.fromNamespaceAndPath(modid, name));
+		return BlockTags.create(Identifier.fromNamespaceAndPath(modid, name));
 	}
 
 	@Override

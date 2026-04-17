@@ -5,12 +5,15 @@ import com.mrbysco.forcecraft.items.infuser.ForceToolData;
 import com.mrbysco.forcecraft.items.infuser.IForceChargingTool;
 import com.mrbysco.forcecraft.registry.material.ModToolTiers;
 import com.mrbysco.forcecraft.util.TooltipUtil;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.enchantment.Enchantable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class ForceShovelItem extends ShovelItem implements IForceChargingTool {
 	public List<Reference.MODIFIERS> applicableModifers = new ArrayList<>();
 
 	public ForceShovelItem(Item.Properties properties) {
-		super(ModToolTiers.FORCE, properties.attributes(createAttributes(ModToolTiers.FORCE, -7F, -3.0F)));
+		super(ModToolTiers.FORCE, -7F, -3.0F, properties.enchantable(0));
 		setApplicableModifiers();
 	}
 
@@ -49,11 +52,10 @@ public class ForceShovelItem extends ShovelItem implements IForceChargingTool {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-		TooltipUtil.addForceTooltips(stack, tooltip);
-		ForceToolData fd = new ForceToolData(stack);
-		fd.attachInformation(tooltip);
-		super.appendHoverText(stack, context, tooltip, tooltipFlag);
+	public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+		TooltipUtil.addForceTooltips(itemStack, builder);
+		ForceToolData fd = new ForceToolData(itemStack);
+		fd.attachInformation(builder);
 	}
 
 	@Override
@@ -61,13 +63,13 @@ public class ForceShovelItem extends ShovelItem implements IForceChargingTool {
 		return this.damageItem(stack, amount);
 	}
 
-	@Override
-	public int getEnchantmentValue() {
-		return 0;
-	}
-
-	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
-	}
+//	@Override
+//	public int getEnchantmentValue() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+//		return false;
+//	}
 }

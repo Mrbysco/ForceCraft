@@ -1,10 +1,10 @@
 package com.mrbysco.forcecraft.attachments.playermodifier;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.common.util.ValueIOSerializable;
 
-public class PlayerModifierAttachment implements IPlayerModifier, INBTSerializable<CompoundTag> {
+public class PlayerModifierAttachment implements IPlayerModifier, ValueIOSerializable {
 	private float attackDamage = 2.0F; //Default of Attributes.ATTACK_DAMAGE
 	private float wingPower = 0.0f;
 	private float flightCounter = wingPower;
@@ -157,32 +157,30 @@ public class PlayerModifierAttachment implements IPlayerModifier, INBTSerializab
 	}
 
 	@Override
-	public CompoundTag serializeNBT(HolderLookup.Provider provider) {
-		CompoundTag tag = new CompoundTag();
-		tag.putFloat("attackDamage", this.getAttackDamage());
-		tag.putFloat("wingPower", this.getWingPower());
-		tag.putFloat("flightCounter", this.getFlightTimer());
-		tag.putFloat("damage", this.getDamage());
-		tag.putFloat("heatDamage", this.getHeatDamage());
-		tag.putInt("heatPieces", this.getHeatPieces());
-		tag.putInt("luckLevel", this.getLuckLevel());
-		tag.putInt("armorPieces", this.getArmorPieces());
-		tag.putBoolean("bane", this.hasBane());
-		tag.putInt("bleeding", this.getBleedingLevel());
-		return tag;
+	public void serialize(ValueOutput output) {
+		output.putFloat("attackDamage", this.getAttackDamage());
+		output.putFloat("wingPower", this.getWingPower());
+		output.putFloat("flightCounter", this.getFlightTimer());
+		output.putFloat("damage", this.getDamage());
+		output.putFloat("heatDamage", this.getHeatDamage());
+		output.putInt("heatPieces", this.getHeatPieces());
+		output.putInt("luckLevel", this.getLuckLevel());
+		output.putInt("armorPieces", this.getArmorPieces());
+		output.putBoolean("bane", this.hasBane());
+		output.putInt("bleeding", this.getBleedingLevel());
 	}
 
 	@Override
-	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
-		this.setAttackDamage(tag.getFloat("attackDamage"));
-		this.setWingPower(tag.getFloat("wingPower"));
-		this.setFlightTimer(tag.getFloat("flightCounter"));
-		this.setDamage(tag.getFloat("damage"));
-		this.setHeatDamage(tag.getFloat("heatDamage"));
-		this.setHeatPieces(tag.getInt("heatPieces"));
-		this.setLuckLevel(tag.getInt("luckLevel"));
-		this.setArmorPieces(tag.getInt("armorPieces"));
-		this.setBane(tag.getBoolean("bane"));
-		this.setBleeding(tag.getInt("bleeding"));
+	public void deserialize(ValueInput input) {
+		this.setAttackDamage(input.getFloatOr("attackDamage", 0));
+		this.setWingPower(input.getFloatOr("wingPower", 0));
+		this.setFlightTimer(input.getFloatOr("flightCounter", 0));
+		this.setDamage(input.getFloatOr("damage", 0));
+		this.setHeatDamage(input.getFloatOr("heatDamage", 0));
+		this.setHeatPieces(input.getIntOr("heatPieces", 0));
+		this.setLuckLevel(input.getIntOr("luckLevel", 0));
+		this.setArmorPieces(input.getIntOr("armorPieces", 0));
+		this.setBane(input.getBooleanOr("bane", false));
+		this.setBleeding(input.getIntOr("bleeding", 0));
 	}
 }

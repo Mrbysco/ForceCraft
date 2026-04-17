@@ -3,7 +3,6 @@ package com.mrbysco.forcecraft;
 import com.mojang.logging.LogUtils;
 import com.mrbysco.forcecraft.attachments.ForceAttachments;
 import com.mrbysco.forcecraft.capability.CapabilityHandler;
-import com.mrbysco.forcecraft.client.ClientHandler;
 import com.mrbysco.forcecraft.client.KeybindHandler;
 import com.mrbysco.forcecraft.command.ForceCommands;
 import com.mrbysco.forcecraft.components.ForceComponents;
@@ -56,9 +55,7 @@ public class ForceCraft {
 		eventBus.addListener(CapabilityHandler::registerCapabilities);
 		eventBus.addListener(PacketHandler::setupPackets);
 		eventBus.addListener(this::setup);
-
-		ForceFluids.registerFluids();
-
+		
 		ForceRegistry.BLOCKS.register(eventBus);
 		ForceRegistry.BLOCK_ENTITY_TYPES.register(eventBus);
 		ForceRegistry.ITEMS.register(eventBus);
@@ -97,12 +94,6 @@ public class ForceCraft {
 
 		if (dist.isClient()) {
 			container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-			eventBus.addListener(ClientHandler::onClientSetup);
-			eventBus.addListener(ClientHandler::onRegisterMenu);
-			eventBus.addListener(ClientHandler::registerKeymapping);
-			eventBus.addListener(ClientHandler::registerEntityRenders);
-			eventBus.addListener(ClientHandler::registerLayerDefinitions);
-			eventBus.addListener(ClientHandler::registerItemColors);
 			NeoForge.EVENT_BUS.addListener(KeybindHandler::onClientTick);
 		}
 	}

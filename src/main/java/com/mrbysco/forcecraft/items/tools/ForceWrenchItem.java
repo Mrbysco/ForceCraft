@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.items.tools;
 
 import com.mrbysco.forcecraft.ForceCraft;
+import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.components.ForceComponents;
 import com.mrbysco.forcecraft.components.forcewrench.ForceWrenchData;
 import com.mrbysco.forcecraft.items.BaseItem;
@@ -12,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -27,10 +30,11 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import static com.mrbysco.forcecraft.components.ForceComponents.WRENCH;
@@ -63,14 +67,14 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 					level.setBlockAndUpdate(pos, state.rotate(level, pos, Rotation.CLOCKWISE_90));
 					fd.setForce(fd.getForce() - 10);
 					if (player != null)
-						player.displayClientMessage(Component.translatable("forcecraft.wrench_rotate.success").withStyle(ChatFormatting.YELLOW), true);
+						player.sendOverlayMessage(Component.translatable("forcecraft.wrench_rotate.success").withStyle(ChatFormatting.YELLOW));
 				} else {
 					if (player != null)
-						player.displayClientMessage(Component.translatable("forcecraft.wrench_rotate.unrotatable").withStyle(ChatFormatting.RED), true);
+						player.sendOverlayMessage(Component.translatable("forcecraft.wrench_rotate.unrotatable").withStyle(ChatFormatting.RED));
 				}
 			} else {
 				if (player != null)
-					player.displayClientMessage(Component.translatable("forcecraft.wrench_rotate.insufficient", 10).withStyle(ChatFormatting.RED), true);
+					player.sendOverlayMessage(Component.translatable("forcecraft.wrench_rotate.insufficient", 10).withStyle(ChatFormatting.RED));
 			}
 		}
 		return super.onItemUseFirst(stack, context);
@@ -82,7 +86,7 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 		if (fd.getForce() >= 250) {
 			BlockState state = level.getBlockState(pos);
 			if (state.is(Tags.Blocks.RELOCATION_NOT_SUPPORTED)) {
-				player.displayClientMessage(Component.translatable("forcecraft.wrench_transport.unmovable").withStyle(ChatFormatting.RED), true);
+				player.sendOverlayMessage(Component.translatable("forcecraft.wrench_transport.unmovable").withStyle(ChatFormatting.RED));
 				return InteractionResult.FAIL;
 			}
 
@@ -99,10 +103,10 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 			fd.setForce(fd.getForce() - 250);
 			BlockState airState = Blocks.AIR.defaultBlockState();
 			level.setBlockAndUpdate(pos, airState);
-			player.displayClientMessage(Component.translatable("forcecraft.wrench_transport.pickup").withStyle(ChatFormatting.YELLOW), true);
+			player.sendOverlayMessage(Component.translatable("forcecraft.wrench_transport.pickup").withStyle(ChatFormatting.YELLOW));
 			return InteractionResult.SUCCESS;
 		} else {
-			player.displayClientMessage(Component.translatable("forcecraft.wrench_transport.insufficient", 250).withStyle(ChatFormatting.RED), true);
+			player.sendOverlayMessage(Component.translatable("forcecraft.wrench_transport.insufficient", 250).withStyle(ChatFormatting.RED));
 		}
 		return InteractionResult.FAIL;
 	}
@@ -119,10 +123,12 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 				CompoundTag blockTag = attachment.storedBlockNBT();
 				BlockEntity be = entityBlock.newBlockEntity(offPos, state);
 				if (be != null) {
-					be.loadWithComponents(blockTag, level.registryAccess());
-					be.setChanged();
-					level.setBlockEntity(be);
-					level.blockEntityChanged(offPos);
+					try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(ForceCraft.LOGGER)) {
+						be.loadWithComponents(TagValueInput.create(reporter, level.registryAccess(), blockTag));
+						be.setChanged();
+						level.setBlockEntity(be);
+						level.blockEntityChanged(offPos);
+					}
 				} else {
 					if (blockTag != null) {
 						ForceCraft.LOGGER.error("Was unable to load block entity");
@@ -133,18 +139,17 @@ public class ForceWrenchItem extends BaseItem implements IForceChargingTool {
 			heldWrench.remove(WRENCH);
 		}
 
-		player.displayClientMessage(Component.translatable("forcecraft.wrench_transport.success").withStyle(ChatFormatting.YELLOW), true);
+		player.sendOverlayMessage(Component.translatable("forcecraft.wrench_transport.success").withStyle(ChatFormatting.YELLOW));
 		return InteractionResult.SUCCESS;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-		super.appendHoverText(stack, context, tooltip, tooltipFlag);
-		TooltipUtil.addForceTooltips(stack, tooltip);
-		if (stack.has(ForceComponents.WRENCH)) {
-			ForceWrenchData attachment = stack.getOrDefault(ForceComponents.WRENCH, ForceWrenchData.EMPTY);
+	public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+		TooltipUtil.addForceTooltips(itemStack, builder);
+		if (itemStack.has(ForceComponents.WRENCH)) {
+			ForceWrenchData attachment = itemStack.getOrDefault(ForceComponents.WRENCH, ForceWrenchData.EMPTY);
 			if (attachment.name() != null && !attachment.name().isEmpty()) { // idk what this is
-				tooltip.add(Component.literal("Stored: ").withStyle(ChatFormatting.GOLD)
+				builder.accept(Component.literal("Stored: ").withStyle(ChatFormatting.GOLD)
 						.append(Component.translatable(attachment.name()).withStyle(ChatFormatting.GRAY)));
 			}
 		}

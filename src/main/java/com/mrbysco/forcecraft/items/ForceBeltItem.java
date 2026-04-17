@@ -11,20 +11,22 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class ForceBeltItem extends BaseItem {
 
@@ -33,14 +35,14 @@ public class ForceBeltItem extends BaseItem {
 	}
 
 	@Override
-	public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player playerIn, @NotNull InteractionHand handIn) {
+	public @NotNull InteractionResult use(@NotNull Level level, Player playerIn, @NotNull InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		if (playerIn.isShiftKeyDown()) {
-			if (level.isClientSide) {
+			if (level.isClientSide()) {
 				com.mrbysco.forcecraft.client.gui.pack.RenameAndRecolorScreen.openScreen(stack, handIn);
 			}
 		} else {
-			if (!level.isClientSide) {
+			if (level.isClientSide()) {
 				BeltStorage data = StorageManager.getOrCreateBelt(stack);
 
 				playerIn.openMenu(getContainer(stack, data.getInventory()));
@@ -51,7 +53,7 @@ public class ForceBeltItem extends BaseItem {
 	}
 
 	@Nullable
-	public MenuProvider getContainer(ItemStack stack, IItemHandler handler) {
+	public MenuProvider getContainer(ItemStack stack, ResourceHandler<ItemResource> handler) {
 		return new SimpleMenuProvider((id, inventory, player) -> new ForceBeltMenu(id, inventory, handler)
 				, stack.has(DataComponents.CUSTOM_NAME) ? ((MutableComponent) stack.getHoverName()).withStyle(ChatFormatting.BLACK) : Component.translatable(Reference.MOD_ID + ".container.belt"));
 	}
@@ -62,19 +64,18 @@ public class ForceBeltItem extends BaseItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
-		super.appendHoverText(stack, context, tooltip, flagIn);
-		if (stack.has(ForceComponents.SLOTS_USED) && stack.has(ForceComponents.SLOTS_TOTAL)) {
-			tooltip.add(Component.literal(String.format("%s/%s Slots",
-					stack.getOrDefault(ForceComponents.SLOTS_USED, 0),
-					stack.getOrDefault(ForceComponents.SLOTS_TOTAL, 1))));
+	public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+		if (itemStack.has(ForceComponents.SLOTS_USED) && itemStack.has(ForceComponents.SLOTS_TOTAL)) {
+			builder.accept(Component.literal(String.format("%s/%s Slots",
+					itemStack.getOrDefault(ForceComponents.SLOTS_USED, 0),
+					itemStack.getOrDefault(ForceComponents.SLOTS_TOTAL, 1))));
 		} else {
-			tooltip.add(Component.literal("0/8 Slots"));
+			builder.accept(Component.literal("0/8 Slots"));
 		}
 
-		if (flagIn.isAdvanced() && stack.has(ForceComponents.UUID)) {
-			UUID uuid = stack.get(ForceComponents.UUID);
-			tooltip.add(Component.literal("ID: " + uuid.toString().substring(0, 8))
+		if (tooltipFlag.isAdvanced() && itemStack.has(ForceComponents.UUID)) {
+			UUID uuid = itemStack.get(ForceComponents.UUID);
+			builder.accept(Component.literal("ID: " + uuid.toString().substring(0, 8))
 					.withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
 		}
 	}
@@ -84,7 +85,7 @@ public class ForceBeltItem extends BaseItem {
 		return ((MutableComponent) super.getName(stack)).withStyle(ChatFormatting.YELLOW);
 	}
 
-	public static boolean filter(ItemStack stack) {
-		return !(stack.getItem() instanceof ForceBeltItem) && stack.is(ForceTags.VALID_FORCE_BELT);
+	public static boolean filter(ItemResource resource) {
+		return !(resource.getItem() instanceof ForceBeltItem) && resource.is(ForceTags.VALID_FORCE_BELT);
 	}
 }

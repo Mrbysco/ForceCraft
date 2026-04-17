@@ -5,16 +5,16 @@ import com.mrbysco.forcecraft.menu.ForcePackMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 public class ForcePackScreen extends AbstractContainerScreen<ForcePackMenu> {
 
-	private final ResourceLocation TEXTURE = Reference.modLoc("textures/gui/container/forcepack.png");
-	private final ResourceLocation TEXTURE_UPGRADE_1 = Reference.modLoc("textures/gui/container/forcepack_upgrade_1.png");
-	private final ResourceLocation TEXTURE_UPGRADE_2 = Reference.modLoc("textures/gui/container/forcepack_upgrade_2.png");
-	private final ResourceLocation TEXTURE_UPGRADE_3 = Reference.modLoc("textures/gui/container/forcepack_upgrade_3.png");
-	private final ResourceLocation TEXTURE_UPGRADE_4 = Reference.modLoc("textures/gui/container/forcepack_upgrade_4.png");
+	private final Identifier TEXTURE = Reference.modLoc("textures/gui/container/forcepack.png");
+	private final Identifier TEXTURE_UPGRADE_1 = Reference.modLoc("textures/gui/container/forcepack_upgrade_1.png");
+	private final Identifier TEXTURE_UPGRADE_2 = Reference.modLoc("textures/gui/container/forcepack_upgrade_2.png");
+	private final Identifier TEXTURE_UPGRADE_3 = Reference.modLoc("textures/gui/container/forcepack_upgrade_3.png");
+	private final Identifier TEXTURE_UPGRADE_4 = Reference.modLoc("textures/gui/container/forcepack_upgrade_4.png");
 
 	public ForcePackScreen(ForcePackMenu screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);
@@ -31,7 +31,7 @@ public class ForcePackScreen extends AbstractContainerScreen<ForcePackMenu> {
 
 	@Override
 	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int x, int y) {
-		ResourceLocation texture = switch (this.menu.getUpgrades()) {
+		Identifier texture = switch (this.menu.getUpgrades()) {
 			default -> this.TEXTURE;
 			case 1 -> this.TEXTURE_UPGRADE_1;
 			case 2 -> this.TEXTURE_UPGRADE_2;

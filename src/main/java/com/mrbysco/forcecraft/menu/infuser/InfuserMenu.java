@@ -15,6 +15,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.IndexModifier;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -237,16 +241,16 @@ public class InfuserMenu extends AbstractContainerMenu {
 		AdvancementUtil.unlockTierAdvancements(player, tile.getBookTier());
 	}
 
-	public class MatrixUpdatingSlot extends SlotItemHandler {
-		public MatrixUpdatingSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-			super(itemHandler, index, xPosition, yPosition);
+	public class MatrixUpdatingSlot extends ResourceHandlerSlot {
+		public MatrixUpdatingSlot(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> slotModifier, int index, int xPosition, int yPosition) {
+			super(handler, slotModifier, index, xPosition, yPosition);
 		}
 
-		@Override
-		public void setChanged() {
-			super.setChanged();
-			slotsChanged(null);
-		}
+//		@Override
+//		public void setChanged() {
+//			super.setChanged();
+//			slotsChanged(null);
+//		}
 
 		@Override
 		public int getMaxStackSize() {
@@ -255,18 +259,18 @@ public class InfuserMenu extends AbstractContainerMenu {
 	}
 
 	public class UnlockableSlot extends MatrixUpdatingSlot {
-		public UnlockableSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-			super(itemHandler, index, xPosition, yPosition);
+		public UnlockableSlot(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> slotModifier, int index, int xPosition, int yPosition) {
+			super(handler, slotModifier, index, xPosition, yPosition);
 		}
 
 		@Override
 		public boolean isActive() {
-			return slot <= tile.getBookTier();
+			return getSlotIndex() <= tile.getBookTier();
 		}
 
 		@Override
 		public boolean mayPlace(@NotNull ItemStack stack) {
-			return slot <= tile.getBookTier() && super.mayPlace(stack);
+			return getSlotIndex() <= tile.getBookTier() && super.mayPlace(stack);
 		}
 
 		@Override

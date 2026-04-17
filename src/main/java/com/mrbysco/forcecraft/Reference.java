@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft;
 
 import com.mrbysco.forcecraft.registry.ForceDamageTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 
@@ -50,7 +50,7 @@ public class Reference {
 		return entity.damageSources().source(ForceDamageTypes.LIQUID_FORCE, entity);
 	}
 
-	public static ResourceLocation modLoc(String path) {
-		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+	public static Identifier modLoc(String path) {
+		return Identifier.fromNamespaceAndPath(MOD_ID, path);
 	}
 }

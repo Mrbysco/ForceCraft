@@ -8,7 +8,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ForceEngineScreen extends AbstractContainerScreen<ForceEngineMenu> {
-	private final ResourceLocation TEXTURE = Reference.modLoc("textures/gui/container/force_engine.png");
+	private final Identifier TEXTURE = Reference.modLoc("textures/gui/container/force_engine.png");
 
 	public ForceEngineScreen(ForceEngineMenu screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);

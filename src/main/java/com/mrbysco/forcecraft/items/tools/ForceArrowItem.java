@@ -6,7 +6,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -24,7 +24,7 @@ public class ForceArrowItem extends ArrowItem {
 		ForceArrowEntity forceArrow = new ForceArrowEntity(level, shooter, stack.copyWithCount(1), weapon);
 		if (shooter instanceof Player player && weapon != null) {
 			if (weapon.has(ForceComponents.TOOL_FREEZING)) {
-				forceArrow.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2, false, false));
+				forceArrow.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 2, false, false));
 			}
 			if (weapon.has(ForceComponents.TOOL_ENDER)) {
 				forceArrow.setEnder();

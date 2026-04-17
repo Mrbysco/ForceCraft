@@ -4,7 +4,7 @@ import com.mrbysco.forcecraft.compat.jei.JeiCompat;
 import com.mrbysco.forcecraft.recipe.FreezingRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 
 public class FreezingCategory extends AbstractMultiOutputCategory<FreezingRecipe> {
 
@@ -13,7 +13,7 @@ public class FreezingCategory extends AbstractMultiOutputCategory<FreezingRecipe
 	}
 
 	@Override
-	public RecipeType<FreezingRecipe> getRecipeType() {
+	public IRecipeType<FreezingRecipe> getRecipeType() {
 		return JeiCompat.FREEZING_TYPE;
 	}
 }

@@ -1,8 +1,6 @@
 package com.mrbysco.forcecraft.items.nonburnable;
 
 import com.mrbysco.forcecraft.registry.ForceEntities;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -22,16 +20,6 @@ public class NonBurnableItemEntity extends ItemEntity {
 	@Override
 	public EntityType<?> getType() {
 		return ForceEntities.NON_BURNABLE_ITEM.get();
-	}
-
-	@Override
-	public boolean fireImmune() {
-		return true;
-	}
-
-	@Override
-	public boolean isInvulnerableTo(DamageSource source) {
-		return !source.is(DamageTypes.FELL_OUT_OF_WORLD);
 	}
 
 	public static class EventHandler {

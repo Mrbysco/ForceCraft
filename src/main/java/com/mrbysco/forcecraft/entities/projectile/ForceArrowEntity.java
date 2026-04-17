@@ -7,7 +7,6 @@ import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.util.ForceUtils;
 import com.mrbysco.forcecraft.util.MobUtil;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -18,9 +17,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 public class ForceArrowEntity extends Arrow {
@@ -110,43 +111,43 @@ public class ForceArrowEntity extends Arrow {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
+	protected void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
 
-		if (compound.getBoolean("Bane")) {
+		if (input.getBooleanOr("Bane", false)) {
 			setBane();
 		}
-		if (compound.getBoolean("Ender")) {
+		if (input.getBooleanOr("Ender", false)) {
 			setEnder();
 		}
-		if (compound.getBoolean("AppliesGlowing")) {
+		if (input.getBooleanOr("AppliesGlowing", false)) {
 			setAppliesGlowing();
 		}
-		if (compound.getBoolean("Speedy")) {
+		if (input.getBooleanOr("Speedy", false)) {
 			setSpeedy();
 		}
-		this.setLuck(compound.getInt("Luck"));
-		this.setBleeding(compound.getInt("Bleeding"));
+		this.setLuck(input.getIntOr("Luck", 0));
+		this.setBleeding(input.getIntOr("Bleeding", 0));
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
+	protected void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
 
 		if (isBane()) {
-			compound.putBoolean("Bane", true);
+			output.putBoolean("Bane", true);
 		}
 		if (isEnder()) {
-			compound.putBoolean("Ender", true);
+			output.putBoolean("Ender", true);
 		}
 		if (appliesGlowing()) {
-			compound.putBoolean("AppliesGlowing", true);
+			output.putBoolean("AppliesGlowing", true);
 		}
 		if (isSpeedy()) {
-			compound.putBoolean("Speedy", true);
+			output.putBoolean("Speedy", true);
 		}
-		compound.putInt("Luck", getLuck());
-		compound.putInt("Bleeding", getBleeding());
+		output.putInt("Luck", getLuck());
+		output.putInt("Bleeding", getBleeding());
 	}
 
 //	@Override

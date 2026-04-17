@@ -11,7 +11,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,10 +18,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class ItemCardItem extends BaseItem {
 	public ItemCardItem(Properties properties) {
@@ -35,9 +35,9 @@ public class ItemCardItem extends BaseItem {
 	private static final Component TOO_FAST = Component.literal("TOO FAST. TRY AGAIN.").withStyle(ChatFormatting.RED);
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+	public InteractionResult use(Level level, Player playerIn, InteractionHand handIn) {
 		if (playerIn.isShiftKeyDown()) {
-			if (!level.isClientSide) {
+			if (!level.isClientSide()) {
 				playerIn.openMenu(getContainer(level, playerIn.blockPosition()), playerIn.blockPosition());
 			}
 		}
@@ -56,35 +56,34 @@ public class ItemCardItem extends BaseItem {
 		Level level = playerIn.level();
 		level.playSound((Player) null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 
-		if (level.isClientSide) {
+		if (level.isClientSide()) {
 			int rand = playerIn.getRandom().nextInt(3);
 			Component message = switch (rand) {
 				case 1 -> TOO_SLOW;
 				case 2 -> TOO_FAST;
 				default -> BAD_READ;
 			};
-			playerIn.displayClientMessage(message, true);
+			playerIn.sendOverlayMessage(message);
 		}
 
 		return super.interactLivingEntity(stack, playerIn, target, hand);
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-		super.appendHoverText(stack, context, tooltip, tooltipFlag);
-
-		if (stack.has(ForceComponents.RECIPE_CONTENTS)) {
-			RecipeContentsData contentsData = stack.get(ForceComponents.RECIPE_CONTENTS);
+	public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+		super.appendHoverText(itemStack, context, display, builder, tooltipFlag);
+		if (itemStack.has(ForceComponents.RECIPE_CONTENTS)) {
+			RecipeContentsData contentsData = itemStack.get(ForceComponents.RECIPE_CONTENTS);
 			if (contentsData != null) {
 				ItemStack resultStack = contentsData.resultItem();
-				tooltip.add(Component.translatable("forcecraft.item_card.recipe_output",
+				builder.accept(Component.translatable("forcecraft.item_card.recipe_output",
 						Component.literal(resultStack.getCount() + " " + resultStack.getHoverName().getString()).withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.YELLOW));
 			}
 		} else {
-			tooltip.add(Component.translatable("forcecraft.item_card.unset").withStyle(ChatFormatting.RED));
+			builder.accept(Component.translatable("forcecraft.item_card.unset").withStyle(ChatFormatting.RED));
 		}
-		tooltip.add(Component.literal(" "));
-		tooltip.add(Component.translatable("forcecraft.item_card.recipe_set").withStyle(ChatFormatting.BOLD));
+		builder.accept(Component.literal(" "));
+		builder.accept(Component.translatable("forcecraft.item_card.recipe_set").withStyle(ChatFormatting.BOLD));
 
 	}
 }

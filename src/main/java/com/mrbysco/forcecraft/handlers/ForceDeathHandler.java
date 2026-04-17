@@ -19,7 +19,7 @@ public class ForceDeathHandler {
 	public void onDeath(LivingDeathEvent event) {
 		final LivingEntity livingEntity = event.getEntity();
 		final Level level = event.getEntity().level();
-		if (level.isClientSide) return;
+		if (level.isClientSide()) return;
 
 		if (event.getSource() != null && event.getSource().is(ForceDamageTypes.LIQUID_FORCE)) {
 			// Killed by Liquid Force
@@ -29,7 +29,7 @@ public class ForceDeathHandler {
 					if (BuiltInRegistries.ENTITY_TYPE.getKey(livingEntity.getType()).equals(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.CREEPER))) {
 						CreeperTotEntity totEntity = ForceEntities.CREEPER_TOT.get().create(level);
 						if (totEntity != null) {
-							totEntity.absMoveTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), mob.getXRot());
+							totEntity.snapTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), mob.getXRot());
 							CompoundTag persistentData = totEntity.getPersistentData();
 							persistentData.putBoolean(SPAWNED_TAG, true);
 							level.addFreshEntity(totEntity);
@@ -51,7 +51,7 @@ public class ForceDeathHandler {
 							Mob childMob = (Mob) mob.getType().create(level);
 							if (childMob != null) {
 								childMob.setBaby(true);
-								childMob.absMoveTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), mob.getXRot());
+								childMob.snapTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), mob.getXRot());
 
 								CompoundTag persistentData = childMob.getPersistentData();
 								persistentData.putBoolean(SPAWNED_TAG, true);

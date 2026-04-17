@@ -1,11 +1,11 @@
 package com.mrbysco.forcecraft.client.gui.widgets;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class ProgressBar {
 
-	private ResourceLocation texture;
+	private Identifier texture;
 	private ProgressBarDirection direction;
 	private int positionX, positionY;
 	private int width, height;
@@ -24,7 +24,7 @@ public class ProgressBar {
 	 * @param textureX  X Position of Texture
 	 * @param textureY  Y Position of Texture
 	 */
-	public ProgressBar(ResourceLocation texture, ProgressBarDirection direction, int width, int height, int posX, int posY, int textureX, int textureY) {
+	public ProgressBar(Identifier texture, ProgressBarDirection direction, int width, int height, int posX, int posY, int textureX, int textureY) {
 		this.texture = texture;
 		this.direction = direction;
 		this.width = width;

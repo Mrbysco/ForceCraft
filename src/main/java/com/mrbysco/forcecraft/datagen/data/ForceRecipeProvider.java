@@ -22,7 +22,7 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -941,7 +941,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 	}
 
 	public static ItemStack getGuideBook() {
-		Item guideBook = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("patchouli", "guide_book"));
+		Item guideBook = BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath("patchouli", "guide_book"));
 		if (guideBook != null) {
 			ItemStack patchouliBook = new ItemStack(guideBook);
 			patchouliBook.set(PatchouliDataComponents.BOOK, Reference.modLoc("force_and_you"));

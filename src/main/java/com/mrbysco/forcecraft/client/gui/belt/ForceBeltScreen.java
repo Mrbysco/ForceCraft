@@ -5,11 +5,11 @@ import com.mrbysco.forcecraft.menu.ForceBeltMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 public class ForceBeltScreen extends AbstractContainerScreen<ForceBeltMenu> {
-	private final ResourceLocation TEXTURE = Reference.modLoc("textures/gui/container/forcebelt.png");
+	private final Identifier TEXTURE = Reference.modLoc("textures/gui/container/forcebelt.png");
 
 	public ForceBeltScreen(ForceBeltMenu screenContainer, Inventory inv, Component titleIn) {
 		super(screenContainer, inv, titleIn);

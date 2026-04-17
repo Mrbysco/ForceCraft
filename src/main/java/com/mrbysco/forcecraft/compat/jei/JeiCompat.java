@@ -18,8 +18,8 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -27,7 +27,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
@@ -36,17 +36,17 @@ import java.util.Objects;
 
 @JeiPlugin
 public class JeiCompat implements IModPlugin {
-	public static final ResourceLocation RECIPE_MULTIPLES_JEI = Reference.modLoc("textures/gui/jei/multiples.png");
-	public static final ResourceLocation RECIPE_INFUSER_JEI = Reference.modLoc("textures/gui/jei/infuser.png");
+	public static final Identifier RECIPE_MULTIPLES_JEI = Reference.modLoc("textures/gui/jei/multiples.png");
+	public static final Identifier RECIPE_INFUSER_JEI = Reference.modLoc("textures/gui/jei/infuser.png");
 
-	public static final ResourceLocation PLUGIN_UID = Reference.modLoc("main");
+	public static final Identifier PLUGIN_UID = Reference.modLoc("main");
 
-	public static final ResourceLocation FREEZING = Reference.modLoc("freezing");
-	public static final ResourceLocation GRINDING = Reference.modLoc("grinding");
-	public static final ResourceLocation INFUSER = Reference.modLoc("infuser");
-	public static final RecipeType<FreezingRecipe> FREEZING_TYPE = RecipeType.create(Reference.MOD_ID, "freezing", FreezingRecipe.class);
-	public static final RecipeType<GrindingRecipe> GRINDING_TYPE = RecipeType.create(Reference.MOD_ID, "grinding", GrindingRecipe.class);
-	public static final RecipeType<InfuseRecipe> INFUSER_TYPE = RecipeType.create(Reference.MOD_ID, "infuser", InfuseRecipe.class);
+	public static final Identifier FREEZING = Reference.modLoc("freezing");
+	public static final Identifier GRINDING = Reference.modLoc("grinding");
+	public static final Identifier INFUSER = Reference.modLoc("infuser");
+	public static final IRecipeType<FreezingRecipe> FREEZING_TYPE = IRecipeType.create(Reference.MOD_ID, "freezing", FreezingRecipe.class);
+	public static final IRecipeType<GrindingRecipe> GRINDING_TYPE = IRecipeType.create(Reference.MOD_ID, "grinding", GrindingRecipe.class);
+	public static final IRecipeType<InfuseRecipe> INFUSER_TYPE = IRecipeType.create(Reference.MOD_ID, "infuser", InfuseRecipe.class);
 
 	@Nullable
 	private IRecipeCategory<FreezingRecipe> freezingCategory;
@@ -56,32 +56,48 @@ public class JeiCompat implements IModPlugin {
 	private IRecipeCategory<InfuseRecipe> infuserCategory;
 
 	@Override
-	public ResourceLocation getPluginUid() {
+	public Identifier getPluginUid() {
 		return PLUGIN_UID;
 	}
 
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.BLACK_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.BLUE_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.BROWN_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.CYAN_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.GRAY_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.GREEN_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.LIGHT_BLUE_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.LIGHT_GRAY_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.LIME_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.MAGENTA_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.ORANGE_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.PINK_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.PURPLE_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.RED_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.WHITE_FORCE_FURNACE.get()), RecipeTypes.SMELTING, RecipeTypes.FUELING);
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.BLACK_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.BLACK_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.BLUE_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.BLUE_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.BROWN_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.BROWN_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.CYAN_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.CYAN_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.GRAY_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.GRAY_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.GREEN_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.GREEN_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.LIGHT_BLUE_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.LIGHT_BLUE_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.LIGHT_GRAY_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.LIGHT_GRAY_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.LIME_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.LIME_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.MAGENTA_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.MAGENTA_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.ORANGE_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.ORANGE_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.PINK_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.PINK_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.PURPLE_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.PURPLE_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.RED_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.RED_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING, new ItemStack(ForceRegistry.WHITE_FORCE_FURNACE.get()));
+		registration.addCraftingStation(RecipeTypes.SMELTING_FUEL, new ItemStack(ForceRegistry.WHITE_FORCE_FURNACE.get()));
 
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.FREEZING_CORE.get()), FREEZING_TYPE);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.GRINDING_CORE.get()), GRINDING_TYPE);
-		registration.addRecipeCatalyst(new ItemStack(ForceRegistry.INFUSER.get()), INFUSER_TYPE);
+		registration.addCraftingStation(FREEZING_TYPE, new ItemStack(ForceRegistry.FREEZING_CORE.get()));
+		registration.addCraftingStation(GRINDING_TYPE, new ItemStack(ForceRegistry.GRINDING_CORE.get()));
+		registration.addCraftingStation(INFUSER_TYPE, new ItemStack(ForceRegistry.INFUSER.get()));
 	}
 
 	@Override
@@ -97,7 +113,7 @@ public class JeiCompat implements IModPlugin {
 
 	@Override
 	public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-		registration.addRecipeClickArea(ForceFurnaceScreen.class, 78, 32, 28, 23, RecipeTypes.SMELTING, RecipeTypes.FUELING);
+		registration.addRecipeClickArea(ForceFurnaceScreen.class, 78, 32, 28, 23, RecipeTypes.SMELTING, RecipeTypes.SMELTING_FUEL);
 	}
 
 	@Override
@@ -115,8 +131,9 @@ public class JeiCompat implements IModPlugin {
 		assert INFUSER_TYPE != null;
 
 		ClientLevel world = Objects.requireNonNull(Minecraft.getInstance().level);
-		registration.addRecipes(FREEZING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.FREEZING.get()).stream().map(RecipeHolder::value).toList());
-		registration.addRecipes(GRINDING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.GRINDING.get()).stream().map(RecipeHolder::value).toList());
-		registration.addRecipes(INFUSER_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get()).stream().map(RecipeHolder::value).toList());
+		// TODO: Use the event to request the recipes from the server
+//		registration.addRecipes(FREEZING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.FREEZING.get()).stream().map(RecipeHolder::value).toList());
+//		registration.addRecipes(GRINDING_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.GRINDING.get()).stream().map(RecipeHolder::value).toList());
+//		registration.addRecipes(INFUSER_TYPE, world.getRecipeManager().getAllRecipesFor(ForceRecipes.INFUSER_TYPE.get()).stream().map(RecipeHolder::value).toList());
 	}
 }

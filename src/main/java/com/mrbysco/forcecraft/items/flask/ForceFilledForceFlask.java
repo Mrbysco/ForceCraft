@@ -29,7 +29,7 @@ public class ForceFilledForceFlask extends BaseItem {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
-		if (!level.isClientSide)
+		if (level.isClientSide())
 			entityLiving.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 600, 2, false, false));
 
 		if (entityLiving instanceof ServerPlayer serverplayerentity) {
@@ -67,6 +67,6 @@ public class ForceFilledForceFlask extends BaseItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
 		super.appendHoverText(stack, context, tooltip, tooltipFlag);
-		tooltip.add(Component.translatable("item.force_filled_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
+		builder.accept(Component.translatable("item.force_filled_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
 	}
 }

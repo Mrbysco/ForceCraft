@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class ForceToolData {
 	private ItemStack stack;
@@ -31,12 +31,12 @@ public class ForceToolData {
 		this.stack.set(ForceComponents.FORCE, this.force);
 	}
 
-	public void attachInformation(List<Component> tooltip) {
+	public void attachInformation(Consumer<Component> builder) {
 		if (this.force > 0) {
 			MutableComponent t = Component.translatable("item.infuser.tooltip.forcelevel");
 			t.append("" + this.force);
 			t.withStyle(ChatFormatting.GOLD);
-			tooltip.add(t);
+			builder.accept(t);
 		}
 	}
 }

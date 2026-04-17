@@ -3,6 +3,8 @@ package com.mrbysco.forcecraft.components.storage;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import java.util.UUID;
 
@@ -25,7 +27,7 @@ public class BeltStorage {
 		return uuid;
 	}
 
-	public IItemHandler getInventory() {
+	public ResourceHandler<ItemResource> getInventory() {
 		return inventory;
 	}
 

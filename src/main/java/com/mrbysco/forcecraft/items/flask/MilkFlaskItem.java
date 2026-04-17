@@ -28,7 +28,7 @@ public class MilkFlaskItem extends BaseItem {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
-		if (!level.isClientSide) entityLiving.removeEffectsCuredBy(EffectCures.MILK);
+		if (level.isClientSide()) entityLiving.removeEffectsCuredBy(EffectCures.MILK);
 
 		if (entityLiving instanceof ServerPlayer serverPlayer) {
 			CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
@@ -65,6 +65,6 @@ public class MilkFlaskItem extends BaseItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
 		super.appendHoverText(stack, context, tooltip, tooltipFlag);
-		tooltip.add(Component.translatable("item.milk_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
+		builder.accept(Component.translatable("item.milk_force_flask.tooltip").withStyle(ChatFormatting.GRAY));
 	}
 }

@@ -11,6 +11,7 @@ import com.mrbysco.forcecraft.datagen.data.ForceLootProvider;
 import com.mrbysco.forcecraft.datagen.data.ForceRecipeProvider;
 import com.mrbysco.forcecraft.datagen.data.tags.ForceBlockTagProvider;
 import com.mrbysco.forcecraft.datagen.data.tags.ForceDamageTypeTagProvider;
+import com.mrbysco.forcecraft.datagen.data.tags.ForceEntityTagProvider;
 import com.mrbysco.forcecraft.datagen.data.tags.ForceItemTagProvider;
 import com.mrbysco.forcecraft.datagen.patchouli.PatchouliProvider;
 import com.mrbysco.forcecraft.world.feature.ForceBiomeModifiers;
@@ -35,34 +36,32 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class ForceDataGen {
 	@SubscribeEvent
-	public static void gatherData(GatherDataEvent event) {
+	public static void gatherData(GatherDataEvent.Client event) {
 		DataGenerator generator = event.getGenerator();
 		PackOutput packOutput = generator.getPackOutput();
 		CompletableFuture<HolderLookup.Provider> lookupProvider = CompletableFuture.supplyAsync(() -> getProvider().full());
-		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		if (event.includeServer()) {
-			generator.addProvider(event.includeServer(), new ForceLootProvider(packOutput, lookupProvider));
-			generator.addProvider(event.includeServer(), new ForceRecipeProvider(packOutput, lookupProvider));
-			generator.addProvider(event.includeServer(), new PatchouliProvider(packOutput, lookupProvider));
-			BlockTagsProvider provider;
-			generator.addProvider(event.includeServer(), provider = new ForceBlockTagProvider(packOutput, lookupProvider, existingFileHelper));
-			generator.addProvider(event.includeServer(), new ForceItemTagProvider(packOutput, lookupProvider, provider, existingFileHelper));
-			generator.addProvider(event.includeServer(), new ForceDamageTypeTagProvider(packOutput, lookupProvider, existingFileHelper));
-			generator.addProvider(event.includeServer(), new ForceLootModifierProvider(packOutput, lookupProvider));
+		generator.addProvider(true, new ForceLootProvider(packOutput, lookupProvider));
+		generator.addProvider(true, new ForceRecipeProvider.Runner(packOutput, lookupProvider));
+		generator.addProvider(true, new PatchouliProvider(packOutput, lookupProvider));
+		BlockTagsProvider provider;
+		generator.addProvider(true, provider = new ForceBlockTagProvider(packOutput, lookupProvider));
+		generator.addProvider(true, new ForceItemTagProvider(packOutput, lookupProvider, provider));
+		generator.addProvider(true, new ForceDamageTypeTagProvider(packOutput, lookupProvider));
+		generator.addProvider(true, new ForceEntityTagProvider(packOutput, lookupProvider));
+		generator.addProvider(true, new ForceLootModifierProvider(packOutput, lookupProvider));
 
-			generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(
-					packOutput, CompletableFuture.supplyAsync(ForceDataGen::getProvider), Set.of(Reference.MOD_ID)));
-		}
-		if (event.includeClient()) {
-			generator.addProvider(event.includeClient(), new ForceLanguageProvider(packOutput));
-			generator.addProvider(event.includeClient(), new ForceBlockModelProvider(packOutput, existingFileHelper));
-			generator.addProvider(event.includeClient(), new ForceBlockStateProvider(packOutput, existingFileHelper));
-			generator.addProvider(event.includeClient(), new ForceItemModelProvider(packOutput, existingFileHelper));
-		}
+		generator.addProvider(true, new DatapackBuiltinEntriesProvider(
+				packOutput, CompletableFuture.supplyAsync(ForceDataGen::getProvider), Set.of(Reference.MOD_ID)));
+
+		generator.addProvider(true, new ForceLanguageProvider(packOutput));
+		generator.addProvider(true, new ForceBlockModelProvider(packOutput));
+		generator.addProvider(true, new ForceBlockStateProvider(packOutput));
+		generator.addProvider(true, new ForceItemModelProvider(packOutput));
+		
 	}
 
 	private static RegistrySetBuilder.PatchedRegistries getProvider() {

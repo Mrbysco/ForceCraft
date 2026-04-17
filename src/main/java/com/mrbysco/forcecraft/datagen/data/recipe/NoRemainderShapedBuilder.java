@@ -11,7 +11,7 @@ import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -127,7 +127,7 @@ public class NoRemainderShapedBuilder implements RecipeBuilder {
 	}
 
 	@Override
-	public void save(RecipeOutput output, ResourceLocation id) {
+	public void save(RecipeOutput output, Identifier id) {
 		ShapedRecipePattern shapedrecipepattern = this.ensureValid(id);
 		Advancement.Builder advancement$builder = output.advancement()
 				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
@@ -144,7 +144,7 @@ public class NoRemainderShapedBuilder implements RecipeBuilder {
 		output.accept(id, shapedNoRemainderRecipe, advancement$builder.build(id.withPrefix("recipes/" + this.category.getFolderName() + "/")));
 	}
 
-	private ShapedRecipePattern ensureValid(ResourceLocation id) {
+	private ShapedRecipePattern ensureValid(Identifier id) {
 		if (this.criteria.isEmpty()) {
 			throw new IllegalStateException("No way of obtaining recipe " + id);
 		} else {

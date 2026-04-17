@@ -5,15 +5,17 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.IndexModifier;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
-public class ForceFurnaceResultSlot extends SlotItemHandler {
+public class ForceFurnaceResultSlot extends ResourceHandlerSlot {
 	private final Player player;
 	protected int removeCount;
 
-	public ForceFurnaceResultSlot(Player player, IItemHandler inventoryIn, int slotIndex, int xPosition, int yPosition) {
-		super(inventoryIn, slotIndex, xPosition, yPosition);
+	public ForceFurnaceResultSlot(Player player, ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> slotModifier, int slotIndex, int xPosition, int yPosition) {
+		super(handler, slotModifier, slotIndex, xPosition, yPosition);
 		this.player = player;
 	}
 
@@ -27,13 +29,13 @@ public class ForceFurnaceResultSlot extends SlotItemHandler {
 	/**
 	 * Decrease the size of the stack in slot (first int arg) by the amount of the second int arg. Returns the new stack.
 	 */
-	public ItemStack remove(int amount) {
-		if (this.hasItem()) {
-			this.removeCount += Math.min(amount, this.getItem().getCount());
-		}
-
-		return super.remove(amount);
-	}
+//	public ItemStack remove(int amount) {
+//		if (this.hasItem()) {
+//			this.removeCount += Math.min(amount, this.getItem().getCount());
+//		}
+//
+//		return super.remove(amount);
+//	}
 
 	public void onTake(Player thePlayer, ItemStack stack) {
 		this.checkTakeAchievements(stack);
@@ -53,12 +55,12 @@ public class ForceFurnaceResultSlot extends SlotItemHandler {
 	 * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood.
 	 */
 	protected void checkTakeAchievements(ItemStack stack) {
-		stack.onCraftedBy(this.player.level(), this.player, this.removeCount);
+		stack.onCraftedBy(this.player, this.removeCount);
 		if (this.player instanceof ServerPlayer && this.container instanceof AbstractForceFurnaceBlockEntity forceFurnaceBlockEntity) {
 			forceFurnaceBlockEntity.awardUsedRecipesAndPopExperience((ServerPlayer) this.player);
 		}
 
 		this.removeCount = 0;
-		EventHooks.firePlayerSmeltedEvent(this.player, stack);
+		EventHooks.firePlayerSmeltedEvent(this.player, stack, 1);
 	}
 }

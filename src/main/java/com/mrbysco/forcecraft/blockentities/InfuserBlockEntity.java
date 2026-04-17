@@ -40,12 +40,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -67,6 +68,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,7 +81,7 @@ import java.util.Set;
 
 public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Container {
 	private static final Set<String> HASHES = new HashSet<>();
-	public static final Map<Integer, List<ResourceLocation>> LEVEL_RECIPE_LIST = new HashMap<>();
+	public static final Map<Integer, List<Identifier>> LEVEL_RECIPE_LIST = new HashMap<>();
 
 	private static final int FLUID_CHARGE = 1000;
 
@@ -280,7 +282,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		if (canWork) {
 			stopWorkSound();
 			makesSpecialSound = false;
-			if (level != null && level.random.nextInt(10) == 0) {
+			if (level != null && level.getRandom().nextInt(10) == 0) {
 				makesSpecialSound = true;
 				playSound(ForceSounds.INFUSER_SPECIAL_BEEP.get(), 1.0F, 1.0F);
 			}
@@ -1201,7 +1203,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	public static boolean addRecipe(RecipeHolder<InfuseRecipe> holder) {
-		ResourceLocation id = holder.id();
+		Identifier id = holder.id();
 		if (HASHES.contains(id.toString())) {
 			return false;
 		}
@@ -1215,5 +1217,17 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 		HASHES.add(id.toString());
 		ForceCraft.LOGGER.info("Recipe loaded {} -> {} , {}", id.toString(), recipe.getModifier(), recipe.getIngredient());
 		return true;
+	}
+
+	@Override
+	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+		super.preRemoveSideEffects(pos, state);
+		try (Transaction tx = Transaction.openRoot()) {
+			for (int i = 0; i < handler.size(); ++i) {
+				if (!handler.getResource(i).isEmpty())
+					Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), handler.getResource(i).toStack());
+			}
+			tx.commit();
+		}
 	}
 }

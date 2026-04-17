@@ -8,6 +8,7 @@ import com.mrbysco.forcecraft.util.ForceUtils;
 import com.mrbysco.forcecraft.util.TooltipUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +16,8 @@ import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -22,7 +25,6 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -32,11 +34,11 @@ import static com.mrbysco.forcecraft.util.ForceUtils.isLog;
 public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 
 	public ForceAxeItem(Item.Properties properties) {
-		super(ModToolTiers.FORCE, properties.attributes(createAttributes(ModToolTiers.FORCE, 0F, -3.1F)));
+		super(ModToolTiers.FORCE, 0F, -3.1F, properties.enchantable(0));
 	}
 
 	public static boolean fellTree(ItemStack stack, BlockPos pos, Player player) {
-		if (player.level().isClientSide) {
+		if (player.level().isClientSide()) {
 			return true;
 		}
 		NeoForge.EVENT_BUS.register(new TreeChopTask(stack, pos, player, 10));
@@ -68,7 +70,7 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 				return;
 			}
 			// only if same dimension
-			if (!this.level.dimension().location().equals(level.dimension().location())) {
+			if (!this.level.dimension().identifier().equals(level.dimension().identifier())) {
 				return;
 			}
 
@@ -124,22 +126,21 @@ public class ForceAxeItem extends AxeItem implements IForceChargingTool {
 		}
 	}
 
-	@Override
-	public int getEnchantmentValue() {
-		return 0;
-	}
+//	@Override
+//	public int getEnchantmentValue() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+//		return false;
+//	}
 
 	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-		return false;
-	}
-
-	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-		TooltipUtil.addForceTooltips(stack, tooltip);
-		ForceToolData fd = new ForceToolData(stack);
-		fd.attachInformation(tooltip);
-		super.appendHoverText(stack, context, tooltip, tooltipFlag);
+	public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+		TooltipUtil.addForceTooltips(itemStack, builder);
+		ForceToolData fd = new ForceToolData(itemStack);
+		fd.attachInformation(builder);
 	}
 
 	@Override

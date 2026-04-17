@@ -13,7 +13,7 @@ public class ForceAttachments {
 	public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Reference.MOD_ID);
 
 	public static final Supplier<AttachmentType<BaneModifierAttachment>> BANE_MODIFIER = ATTACHMENT_TYPES.register("bane_modifier", () ->
-			AttachmentType.builder(BaneModifierAttachment::new).build());
+			AttachmentType.serializable(BaneModifierAttachment::new).build());
 	public static final Supplier<AttachmentType<PlayerModifierAttachment>> PLAYER_MOD = ATTACHMENT_TYPES.register("player_mod", () ->
 			AttachmentType.serializable(PlayerModifierAttachment::new).build());
 }

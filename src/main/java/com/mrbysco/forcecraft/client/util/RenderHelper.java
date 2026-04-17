@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -22,7 +22,7 @@ public class RenderHelper {
 		if (fluid == null || fluid.isEmpty())
 			return;
 
-		ResourceLocation flowing = IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture(fluid);
+		Identifier flowing = IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture(fluid);
 
 		AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS);
 		if (texture instanceof TextureAtlas) {

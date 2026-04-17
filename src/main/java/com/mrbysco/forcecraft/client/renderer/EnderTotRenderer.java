@@ -10,14 +10,14 @@ import com.mrbysco.forcecraft.entities.EnderTotEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
 public class EnderTotRenderer extends MobRenderer<EnderTotEntity, EnderTotModel<EnderTotEntity>> {
-	private static final ResourceLocation ENDERTOT_TEXTURES = Reference.modLoc("textures/entity/ender_tot.png");
+	private static final Identifier ENDERTOT_TEXTURES = Reference.modLoc("textures/entity/ender_tot.png");
 	private final Random rnd = new Random();
 
 	public EnderTotRenderer(EntityRendererProvider.Context context) {
@@ -48,7 +48,7 @@ public class EnderTotRenderer extends MobRenderer<EnderTotEntity, EnderTotModel<
 	/**
 	 * Returns the location of an entity's texture.
 	 */
-	public ResourceLocation getTextureLocation(EnderTotEntity entity) {
+	public Identifier getTextureLocation(EnderTotEntity entity) {
 		return ENDERTOT_TEXTURES;
 	}
 }

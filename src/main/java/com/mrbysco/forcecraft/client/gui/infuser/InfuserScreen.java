@@ -13,7 +13,7 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModList;
@@ -27,9 +27,9 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	private Inventory inventory;
 	private ProgressBar infuserProgress;
 	// 12 by 107
-	private final ResourceLocation INFO = Reference.modLoc("textures/gui/container/info.png");
-	private final ResourceLocation ENERGY = Reference.modLoc("textures/gui/container/energy.png");
-	private final ResourceLocation TEXTURE = Reference.modLoc("textures/gui/container/forceinfuser.png");
+	private final Identifier INFO = Reference.modLoc("textures/gui/container/info.png");
+	private final Identifier ENERGY = Reference.modLoc("textures/gui/container/energy.png");
+	private final Identifier TEXTURE = Reference.modLoc("textures/gui/container/forceinfuser.png");
 
 	private static final WidgetSprites GUIDE_SPRITE = new WidgetSprites(
 			Reference.modLoc("infuser/guide"),

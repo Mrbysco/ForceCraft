@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.client.gui.widgets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
@@ -26,11 +26,9 @@ public class ItemButton extends Button {
 	}
 
 	@Override
-	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		//RENDER THE STACK
+	protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
 		Minecraft minecraft = Minecraft.getInstance();
-		guiGraphics.renderItemDecorations(minecraft.font, this.buttonStack, this.getX(), this.getY());
-//		super.renderWidget(guiGraphics, mouseX, mouseY, partialTicks);
+		graphics.itemDecorations(minecraft.font, this.buttonStack, this.getX(), this.getY());
 	}
 
 	public static ItemButton.Builder builder(Component component, ItemStack stack, Button.OnPress onPress) {

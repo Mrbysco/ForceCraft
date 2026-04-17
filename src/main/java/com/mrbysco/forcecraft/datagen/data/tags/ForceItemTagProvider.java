@@ -5,16 +5,13 @@ import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ItemTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -53,6 +50,7 @@ import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_WHITE_SL
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_WHITE_STAIRS;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_YELLOW_SLAB;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_YELLOW_STAIRS;
+import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_GEM;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_LEAVES;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_PLANKS;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_PLANK_STAIRS;
@@ -60,9 +58,8 @@ import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_SAPLING_ITEM;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.POWER_ORE_ITEM;
 
 public class ForceItemTagProvider extends ItemTagsProvider {
-	public ForceItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
-	                            TagsProvider<Block> blockTagProvider, ExistingFileHelper existingFileHelper) {
-		super(output, lookupProvider, blockTagProvider.contentsGetter(), Reference.MOD_ID, existingFileHelper);
+	public ForceItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+		super(output, lookupProvider, Reference.MOD_ID);
 	}
 
 	public static final TagKey<Item> ORES_IN_GROUND_DEEPSLATE = commonTag("ores_in_ground/deepslate");
@@ -72,11 +69,11 @@ public class ForceItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> MEAT = mcTag("meat");
 
 	private static TagKey<Item> commonTag(String name) {
-		return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+		return ItemTags.create(Identifier.fromNamespaceAndPath("c", name));
 	}
 
 	private static TagKey<Item> mcTag(String name) {
-		return ItemTags.create(ResourceLocation.withDefaultNamespace(name));
+		return ItemTags.create(Identifier.withDefaultNamespace(name));
 	}
 
 	@Override
@@ -172,6 +169,8 @@ public class ForceItemTagProvider extends ItemTagsProvider {
 		this.tag(ItemTags.LOGS_THAT_BURN).addTag(ForceTags.FORCE_LOGS_ITEM);
 
 		this.tag(ItemTags.SAPLINGS).add(FORCE_SAPLING_ITEM.get());
+
+		this.tag(ForceTags.FORCE_REPAIR_INGREDIENTS).add(FORCE_GEM.get());
 
 	}
 }

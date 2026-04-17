@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -39,10 +40,9 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.EventHooks;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.EnumSet;
-import java.util.function.Predicate;
 
 public class EnderTotEntity extends EnderMan {
 	public EnderTotEntity(EntityType<? extends EnderMan> type, Level level) {
@@ -76,7 +76,7 @@ public class EnderTotEntity extends EnderMan {
 
 	@Override
 	public boolean teleport() {
-		if (!this.level().isClientSide() && this.isAlive() && !this.isInWaterOrBubble()) {
+		if (!this.level().isClientSide() && this.isAlive() && !this.isInWater()) {
 			double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 32.0D;
 			double d1 = this.getY() + (double) (this.random.nextInt(32) - 16);
 			double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 32;
@@ -89,18 +89,24 @@ public class EnderTotEntity extends EnderMan {
 	@Override
 	public void die(DamageSource cause) {
 		Entity entitySource = cause.getDirectEntity();
-		if (entitySource instanceof LivingEntity livingEntity && !this.level().isClientSide) {
+		if (entitySource instanceof LivingEntity livingEntity && !this.level().isClientSide()) {
 			int total = getRandom().nextInt(2) + 1;
 			for (int i = 0; i < total; i++) {
-				AngryEndermanEntity endermanEntity = ForceEntities.ANGRY_ENDERMAN.get().create(this.level());
-				if (endermanEntity != null) {
-					endermanEntity.moveTo(getX(), getY() + 0.5D, getZ(), 0.0F, 0.0F);
-					endermanEntity.setTarget(livingEntity);
-					this.level().addFreshEntity(endermanEntity);
+				AngryEndermanEntity angryEndermanEntity = ForceEntities.ANGRY_ENDERMAN.get().create(this.level(), EntitySpawnReason.MOB_SUMMONED);
+				if (angryEndermanEntity != null) {
+					angryEndermanEntity.snapTo(getX(), getY() + 0.5D, getZ(), 0.0F, 0.0F);
+					angryEndermanEntity.setTarget(livingEntity);
+					this.level().addFreshEntity(angryEndermanEntity);
 				}
 			}
 		}
 		super.die(cause);
+	}
+
+	private boolean isBeingStaredBy(Player player) {
+		return !LivingEntity.PLAYER_NOT_WEARING_DISGUISE_ITEM_FOR_TARGET.test(player, this) ? false :
+				this.isLookingAtMe(player, 0.025, true, false, this.getEyeY()) &&
+				!net.neoforged.neoforge.common.CommonHooks.shouldSuppressEnderManAnger(this, player);
 	}
 
 	public static AttributeSupplier.Builder generateAttributes() {
@@ -113,7 +119,7 @@ public class EnderTotEntity extends EnderMan {
 
 	static class StareGoal extends Goal {
 		private final EnderTotEntity endertot;
-		private LivingEntity targetPlayer;
+		private LivingEntity target;
 
 		public StareGoal(EnderTotEntity endertotIn) {
 			this.endertot = endertotIn;
@@ -125,12 +131,12 @@ public class EnderTotEntity extends EnderMan {
 		 * method as well.
 		 */
 		public boolean canUse() {
-			this.targetPlayer = this.endertot.getTarget();
-			if (!(this.targetPlayer instanceof Player)) {
-				return false;
+			this.target = this.endertot.getTarget();
+			if (this.target instanceof Player playerTarget) {
+				double dist = this.target.distanceToSqr(this.endertot);
+				return dist > 256.0 ? false : this.endertot.isBeingStaredBy(playerTarget);
 			} else {
-				double d0 = this.targetPlayer.distanceToSqr(this.endertot);
-				return !(d0 > 256.0D) && this.endertot.isLookingAtMe((Player) this.targetPlayer);
+				return false;
 			}
 		}
 
@@ -145,7 +151,7 @@ public class EnderTotEntity extends EnderMan {
 		 * Keep ticking a continuous task that has already been started
 		 */
 		public void tick() {
-			this.endertot.getLookControl().setLookAt(this.targetPlayer.getX(), this.targetPlayer.getEyeY(), this.targetPlayer.getZ());
+			this.endertot.getLookControl().setLookAt(this.target.getX(), this.target.getEyeY(), this.target.getZ());
 		}
 	}
 
@@ -160,10 +166,11 @@ public class EnderTotEntity extends EnderMan {
 		private final TargetingConditions startAggroTargetConditions;
 		private final TargetingConditions continueAggroTargetConditions = TargetingConditions.forCombat().ignoreLineOfSight();
 
-		public FindPlayerGoal(EnderTotEntity enderTotIn, @Nullable Predicate<LivingEntity> p_i241912_2_) {
-			super(enderTotIn, Player.class, 10, false, false, p_i241912_2_);
+		public FindPlayerGoal(EnderTotEntity enderTotIn, TargetingConditions.@Nullable Selector selector) {
+			super(enderTotIn, Player.class, 10, false, false, selector);
 			this.endertot = enderTotIn;
-			this.startAggroTargetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector((livingEntity) -> enderTotIn.isLookingAtMe((Player) livingEntity));
+			this.startAggroTargetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector((livingEntity, level) ->
+					enderTotIn.isBeingStaredBy((Player) livingEntity));
 		}
 
 		/**
@@ -171,7 +178,7 @@ public class EnderTotEntity extends EnderMan {
 		 * method as well.
 		 */
 		public boolean canUse() {
-			this.player = this.endertot.level().getNearestPlayer(this.startAggroTargetConditions, this.endertot);
+			this.player = getServerLevel(this.endertot).getNearestPlayer(this.startAggroTargetConditions, this.endertot);
 			return this.player != null;
 		}
 
@@ -197,14 +204,16 @@ public class EnderTotEntity extends EnderMan {
 		 */
 		public boolean canContinueToUse() {
 			if (this.player != null) {
-				if (!this.endertot.isLookingAtMe(this.player)) {
+				if (!this.endertot.isBeingStaredBy(this.player)) {
 					return false;
 				} else {
 					this.endertot.lookAt(this.player, 10.0F, 10.0F);
 					return true;
 				}
 			} else {
-				return this.target != null && this.continueAggroTargetConditions.test(this.endertot, this.target) || super.canContinueToUse();
+				return this.target != null &&
+						this.continueAggroTargetConditions.test(getServerLevel(this.endertot), this.endertot, this.target) ||
+						super.canContinueToUse();
 			}
 		}
 
@@ -224,13 +233,14 @@ public class EnderTotEntity extends EnderMan {
 				}
 			} else {
 				if (this.target != null && !this.endertot.isPassenger()) {
-					if (this.endertot.isLookingAtMe((Player) this.target)) {
+					if (this.endertot.isBeingStaredBy((Player) this.target)) {
 						if (this.target.distanceToSqr(this.endertot) < 16.0D) {
 							this.endertot.teleport();
 						}
 
 						this.teleportTime = 0;
-					} else if (this.target.distanceToSqr(this.endertot) > 128.0D && this.teleportTime++ >= 30 && this.endertot.teleportTowards(this.target)) {
+					} else if (this.target.distanceToSqr(this.endertot) > 128.0D && this.teleportTime++ >= 30 &&
+							this.endertot.teleportTowards(this.target)) {
 						this.teleportTime = 0;
 					}
 				}
@@ -254,7 +264,7 @@ public class EnderTotEntity extends EnderMan {
 		public boolean canUse() {
 			if (this.endertot.getCarriedBlock() != null) {
 				return false;
-			} else if (!EventHooks.canEntityGrief(this.endertot.level(), this.endertot)) {
+			} else if (!EventHooks.canEntityGrief(getServerLevel(this.endertot), this.endertot)) {
 				return false;
 			} else {
 				return this.endertot.getRandom().nextInt(20) == 0;
@@ -298,7 +308,7 @@ public class EnderTotEntity extends EnderMan {
 		public boolean canUse() {
 			if (this.endertot.getCarriedBlock() == null) {
 				return false;
-			} else if (!EventHooks.canEntityGrief(this.endertot.level(), this.endertot)) {
+			} else if (!EventHooks.canEntityGrief(getServerLevel(this.endertot), this.endertot)) {
 				return false;
 			} else {
 				return this.endertot.getRandom().nextInt(2000) == 0;

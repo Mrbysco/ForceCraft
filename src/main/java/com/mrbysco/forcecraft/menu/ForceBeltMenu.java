@@ -10,16 +10,17 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 
 public class ForceBeltMenu extends AbstractContainerMenu {
 
 	private ItemStack heldStack;
-	private IItemHandler itemHandler;
+	private ItemStacksResourceHandler itemHandler;
 
 	@Override
 	public boolean stillValid(Player playerIn) {
@@ -27,15 +28,15 @@ public class ForceBeltMenu extends AbstractContainerMenu {
 	}
 
 	public static ForceBeltMenu fromNetwork(int windowId, Inventory playerInventory, FriendlyByteBuf data) {
-		return new ForceBeltMenu(windowId, playerInventory, new ItemStackHandler(8) {
+		return new ForceBeltMenu(windowId, playerInventory, new ItemStacksResourceHandler(8) {
 			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
+			public boolean isValid(int slot, ItemResource stack) {
 				return ForceBeltItem.filter(stack);
 			}
 		});
 	}
 
-	public ForceBeltMenu(int id, Inventory playerInventory, IItemHandler handler) {
+	public ForceBeltMenu(int id, Inventory playerInventory, ResourceHandler<ItemResource> handler) {
 		super(ForceMenus.FORCE_BELT.get(), id);
 		this.heldStack = FindingUtil.findInstanceStack(playerInventory.player, (stack) -> stack.getItem() instanceof ForceBeltItem);
 		if (heldStack == null || heldStack.isEmpty()) {
@@ -47,10 +48,12 @@ public class ForceBeltMenu extends AbstractContainerMenu {
 		int yPosC = 20;
 		//Maxes at 40
 
-		itemHandler = handler;
+		if (handler instanceof ItemStacksResourceHandler itemStacksHandler) {
+			itemHandler = itemStacksHandler;
+		}
 		if (itemHandler != null) {
 			for (int k = 0; k < 8; ++k) {
-				this.addSlot(new BeltSlot(itemHandler, k, xPosC + k * 18, yPosC));
+				this.addSlot(new BeltSlot(itemHandler, itemHandler::set, k, xPosC + k * 18, yPosC));
 			}
 
 			//Player Inventory
@@ -75,21 +78,21 @@ public class ForceBeltMenu extends AbstractContainerMenu {
 	public void removed(Player playerIn) {
 		if (itemHandler != null) {
 			heldStack.set(ForceComponents.SLOTS_USED, ItemHandlerUtils.getUsedSlots(itemHandler));
-			heldStack.set(ForceComponents.SLOTS_TOTAL, itemHandler.getSlots());
+			heldStack.set(ForceComponents.SLOTS_TOTAL, itemHandler.size());
 		}
 
 		super.removed(playerIn);
 	}
 
 	@Override
-	public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-		if (slotId >= 0) {
-			if (getSlot(slotId).getItem().getItem() instanceof ForceBeltItem)
+	public void clicked(int slotIndex, int buttonNum, ContainerInput containerInput, Player player) {
+		if (slotIndex >= 0) {
+			if (getSlot(slotIndex).getItem().getItem() instanceof ForceBeltItem)
 				return;
 		}
-		if (clickTypeIn == ClickType.SWAP)
+		if (containerInput == containerInput.SWAP)
 			return;
-		super.clicked(slotId, dragType, clickTypeIn, player);
+		super.clicked(slotIndex, buttonNum, containerInput, player);
 	}
 
 	//Credit to Shadowfacts for this method
@@ -105,7 +108,7 @@ public class ForceBeltMenu extends AbstractContainerMenu {
 			if (itemstack.getItem() instanceof ForceBeltItem)
 				return ItemStack.EMPTY;
 
-			int containerSlots = slots.size() - player.getInventory().items.size();
+			int containerSlots = slots.size() - Inventory.INVENTORY_SIZE;
 
 			if (index < containerSlots) {
 				if (!this.moveItemStackTo(itemstack1, containerSlots, slots.size(), true)) {

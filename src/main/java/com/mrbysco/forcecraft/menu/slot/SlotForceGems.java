@@ -2,14 +2,16 @@ package com.mrbysco.forcecraft.menu.slot;
 
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.IndexModifier;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 import org.jetbrains.annotations.NotNull;
 
-public class SlotForceGems extends SlotItemHandler {
+public class SlotForceGems extends ResourceHandlerSlot {
 
-	public SlotForceGems(IItemHandler handler, int index, int posX, int posY) {
-		super(handler, index, posX, posY);
+	public SlotForceGems(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> slotModifier, int index, int posX, int posY) {
+		super(handler, slotModifier, index, posX, posY);
 	}
 
 	@Override

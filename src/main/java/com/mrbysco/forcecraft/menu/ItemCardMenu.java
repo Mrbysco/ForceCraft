@@ -119,7 +119,7 @@ public class ItemCardMenu extends AbstractContainerMenu {
 	}
 
 	protected void updateCraftingResult(Level level, Player player, CraftingContainer inventory, ResultContainer inventoryResult) {
-		if (!level.isClientSide) {
+		if (level.isClientSide()) {
 			ServerPlayer serverPlayer = (ServerPlayer) player;
 			final Optional<RecipeHolder<CraftingRecipe>> iRecipe = serverPlayer.server.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventory.asCraftInput(), level);
 			final ItemStack stack;
