@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.datagen.server;
 
+import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.datagen.server.builder.InfuseRecipeBuilder;
 import com.mrbysco.forcecraft.datagen.server.builder.MultiOutputRecipeBuilder;
@@ -1137,6 +1138,10 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.result(Items.BONE_MEAL, 5)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, key("grinding/bone_meal_from_bone"));
+		MultiOutputRecipeBuilder.grinding(tag(Tags.Items.FEATHERS), 1.0F, 0.1F, 400)
+				.result(ForceRegistry.FEATHER_DUST, 1)
+				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
+				.save(output, key("grinding/feather_dust_from_feathers"));
 	}
 
 	private ResourceKey<Recipe<?>> key(String path) {

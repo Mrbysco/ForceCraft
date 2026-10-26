@@ -1,0 +1,11 @@
+{
+  "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
+  "experience": 0.1,
+  "ingredient": "#c:feathers",
+  "result": {
+    "id": "forcecraft:feather_dust"
+  },
+  "secondaryChance": 1.0
+}
