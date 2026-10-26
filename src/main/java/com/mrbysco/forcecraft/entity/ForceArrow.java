@@ -14,6 +14,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -245,16 +246,19 @@ public class ForceArrow extends Arrow {
 		if (!isHeat()) return;
 		if (!(this.level() instanceof ServerLevel serverLevel)) return;
 
-		hitPos = hitPos.above();
-		for (BlockPos target : BlockPos.betweenClosed(
-				hitPos.offset(-1, 0, -1),
-				hitPos.offset(1, 0, 1))) {
-			if (BaseFireBlock.canBePlacedAt(serverLevel, target, direction)) {
-				serverLevel.playSound(null, target, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F,
-						serverLevel.getRandom().nextFloat() * 0.4F + 0.8F);
-				BlockState fireState = BaseFireBlock.getState(serverLevel, target);
-				serverLevel.setBlock(target, fireState, 11);
-				serverLevel.gameEvent(this, GameEvent.BLOCK_PLACE, target);
+		BlockState state = serverLevel.getBlockState(hitPos);
+		if (!state.getBlockSupportShape(serverLevel, hitPos).isEmpty()) {
+			hitPos = hitPos.above();
+			for (BlockPos target : BlockPos.betweenClosed(
+					hitPos.offset(-1, 0, -1),
+					hitPos.offset(1, 0, 1))) {
+				if (BaseFireBlock.canBePlacedAt(serverLevel, target, direction)) {
+					serverLevel.playSound(null, target, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F,
+							serverLevel.getRandom().nextFloat() * 0.4F + 0.8F);
+					BlockState fireState = BaseFireBlock.getState(serverLevel, target);
+					serverLevel.setBlock(target, fireState, 11);
+					serverLevel.gameEvent(this, GameEvent.BLOCK_PLACE, target);
+				}
 			}
 		}
 	}
