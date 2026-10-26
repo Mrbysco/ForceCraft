@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forcecraft:block/force_slab"
+    },
+    "type=double": {
+      "model": "forcecraft:block/force_planks"
+    },
+    "type=top": {
+      "model": "forcecraft:block/force_slab_top"
+    }
+  }
+}

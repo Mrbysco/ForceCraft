@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_force_brick_white": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:force_brick_white"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:force_brick_white_slab_from_force_brick_white_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_force_brick_white"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:force_brick_white_slab_from_force_brick_white_stonecutting"
+    ]
+  }
+}

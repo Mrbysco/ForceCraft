@@ -12,6 +12,7 @@ import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -32,6 +33,7 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 
@@ -41,6 +43,7 @@ public class ForceFeatureKeys {
 
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_FORCE = createConfiguredKey("ore_force");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_FORCE_BURIED = createConfiguredKey("ore_force_buried");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_NETHER_FORCE = createConfiguredKey("ore_nether_force");
 
 	public static final ResourceKey<ConfiguredFeature<?, ?>> FORCE_TREE = createConfiguredKey("force_tree");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> FORCE_TREE_WITH_MORE_BEEHIVES_CONFIG = createConfiguredKey("force_tree_with_bees");
@@ -53,6 +56,7 @@ public class ForceFeatureKeys {
 
 	public static final ResourceKey<PlacedFeature> PLACED_ORE_FORCE = createPlacedKey("ore_force");
 	public static final ResourceKey<PlacedFeature> PLACED_ORE_FORCE_BURIED = createPlacedKey("ore_force_buried");
+	public static final ResourceKey<PlacedFeature> PLACED_ORE_NETHER_FORCE = createPlacedKey("ore_nether_force");
 	public static final ResourceKey<PlacedFeature> PLACED_FORCE_TREE = createPlacedKey("force_tree");
 	public static final ResourceKey<PlacedFeature> PLACED_FORCE_TREE_BEES_002 = createPlacedKey("force_tree_bees_002");
 
@@ -72,6 +76,7 @@ public class ForceFeatureKeys {
 	public static void configuredBootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
 		RuleTest stoneRuleTest = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
 		RuleTest deepslateRuleTest = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
+
 		List<OreConfiguration.TargetBlockState> list = List.of(
 				OreConfiguration.target(stoneRuleTest, ForceRegistry.POWER_ORE.get().defaultBlockState()),
 				OreConfiguration.target(deepslateRuleTest, ForceRegistry.DEEPSLATE_POWER_ORE.get().defaultBlockState())
@@ -81,6 +86,9 @@ public class ForceFeatureKeys {
 		Holder<PlacedFeature> PLACED_FORCE_TREE = placedFeatureHolderGetter.getOrThrow(ForceFeatureKeys.PLACED_FORCE_TREE);
 		FeatureUtils.register(context, ORE_FORCE, Feature.ORE, new OreConfiguration(list, 6));
 		FeatureUtils.register(context, ORE_FORCE_BURIED, Feature.ORE, new OreConfiguration(list, 6, 1.0F));
+
+		RuleTest netherrack = new BlockMatchTest(Blocks.NETHERRACK);
+		FeatureUtils.register(context, ORE_NETHER_FORCE, Feature.ORE, new OreConfiguration(netherrack, ForceRegistry.NETHER_POWER_ORE.get().defaultBlockState(), 6));
 
 		BeehiveDecorator decorator_005 = new BeehiveDecorator(0.05F);
 		FeatureUtils.register(context, FORCE_TREE, ForceFeatures.FORCE_TREE.get(), createForceTree().build());
@@ -107,6 +115,8 @@ public class ForceFeatureKeys {
 				commonOrePlacement(5, HeightRangePlacement.triangle(VerticalAnchor.absolute(-24), VerticalAnchor.absolute(48))));
 		PlacementUtils.register(context, PLACED_ORE_FORCE_BURIED, holdergetter.getOrThrow(ORE_FORCE_BURIED),
 				commonOrePlacement(3, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64))));
+		PlacementUtils.register(context, PLACED_ORE_NETHER_FORCE, holdergetter.getOrThrow(ORE_NETHER_FORCE),
+				commonOrePlacement(10, PlacementUtils.RANGE_10_10));
 
 		PlacementUtils.register(context, PLACED_FORCE_TREE, holdergetter.getOrThrow(FORCE_TREE),
 				VegetationPlacements.treePlacement(RarityFilter.onAverageOnceEvery(3), ForceRegistry.FORCE_SAPLING.get()));

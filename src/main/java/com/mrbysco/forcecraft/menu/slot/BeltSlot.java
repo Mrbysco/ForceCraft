@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.menu.slot;
 
-import com.mrbysco.forcecraft.items.ForceBeltItem;
-import com.mrbysco.forcecraft.items.ForcePackItem;
+import com.mrbysco.forcecraft.item.ForceBeltItem;
+import com.mrbysco.forcecraft.item.ForcePackItem;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.transfer.IndexModifier;
@@ -18,7 +18,7 @@ public class BeltSlot extends ResourceHandlerSlot {
 
 	@Override
 	public boolean mayPlace(@NotNull ItemStack stack) {
-		return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem) && stack.is(ForceTags.VALID_FORCE_BELT);
+		return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem) && stack.is(ForceTags.Items.VALID_FORCE_BELT);
 	}
 
 	@Override

@@ -1,69 +1,42 @@
 package com.mrbysco.forcecraft.client.util;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.renderer.block.FluidStateModelSet;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.client.fluid.FluidTintSource;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-import java.awt.*;
-
 public class RenderHelper {
-	public static void drawFluidTankInGUI(FluidStack fluid, float x, float y, float percent, int height) {
-		if (fluid == null || fluid.isEmpty())
+	public static void extractFluidTankInGUI(GuiGraphicsExtractor graphics, FluidStack fluidStack, float x, float y, float percent, int height) {
+		if (fluidStack == null || fluidStack.isEmpty())
 			return;
 
-		Identifier flowing = IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture(fluid);
+		Fluid fluid = fluidStack.getFluid();
+		Minecraft minecraft = Minecraft.getInstance();
+		ModelManager modelManager = minecraft.getModelManager();
+		FluidStateModelSet fluidStateModelSet = modelManager.getFluidStateModelSet();
+		FluidModel fluidModel = fluidStateModelSet.get(fluid.defaultFluidState());
+		FluidTintSource tintSource = fluidModel.fluidTintSource();
+		int tint = tintSource == null ? 0xFFFFFFFF : tintSource.colorAsStack(fluidStack);
 
-		AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS);
-		if (texture instanceof TextureAtlas) {
-			TextureAtlasSprite sprite = ((TextureAtlas) texture).getSprite(flowing);
-			if (sprite != null) {
-				float minU = sprite.getU0();
-				float maxU = sprite.getU1();
-				float minV = sprite.getV0();
-				float maxV = sprite.getV1();
-				float deltaV = maxV - minV;
-				double tankLevel = percent * height;
+		Material.Baked stillMaterial = fluidModel.stillMaterial();
+		TextureAtlasSprite sprite = stillMaterial.sprite();
 
-				RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
+		double tankLevel = percent * height;
+		int left = (int) x;
+		int bottom = (int) y + height;
 
-				Color color = new Color(IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor(fluid));
-
-				RenderSystem.setShaderColor((float) color.getRed() / 255.0F,
-						(float) color.getGreen() / 255.0F,
-						(float) color.getBlue() / 255.0F,
-						(float) color.getAlpha() / 255.0F);
-				RenderSystem.enableBlend();
-				int count = 1 + ((int) Math.ceil(tankLevel)) / 16;
-				for (int i = 0; i < count; i++) {
-					double subHeight = Math.min(16.0, tankLevel - (16.0 * i));
-					double offsetY = height - 16.0 * i - subHeight;
-					drawQuad(x, (float) (y + offsetY), 16F, (float) subHeight, minU, (float) (maxV - deltaV * (subHeight / 16.0)), maxU, maxV);
-				}
-				RenderSystem.disableBlend();
-				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			}
+		graphics.enableScissor(left, (int) (bottom - tankLevel), left + 16, bottom);
+		int count = (int) Math.ceil(tankLevel / 16.0);
+		for (int i = 0; i < count; i++) {
+			graphics.blitSprite(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, sprite, left, bottom - 16 * (i + 1), 16, 16, tint);
 		}
-	}
-
-	private static void drawQuad(float x, float y, float width, float height, float minU, float minV, float maxU, float maxV) {
-		Tesselator tesselator = Tesselator.getInstance();
-		BufferBuilder buffer = tesselator.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		buffer.addVertex(x, y + height, 0).setUv(minU, maxV);
-		buffer.addVertex(x + width, y + height, 0).setUv(maxU, maxV);
-		buffer.addVertex(x + width, y, 0).setUv(maxU, minV);
-		buffer.addVertex(x, y, 0).setUv(minU, minV);
-		BufferUploader.drawWithShader(buffer.buildOrThrow());
+		graphics.disableScissor();
 	}
 
 	public static float getTankPercentage(int fluidAmount, int fluidMax) {

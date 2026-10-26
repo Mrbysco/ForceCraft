@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "forcecraft:block/force_furnace_blue_front",
+    "side": "forcecraft:block/force_furnace_blue_side",
+    "top": "forcecraft:block/force_furnace_blue_top"
+  }
+}

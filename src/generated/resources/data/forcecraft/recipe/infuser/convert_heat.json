@@ -1,16 +1,15 @@
 {
-  "type": "forcecraft:infuser",
-  "center": {
-    "item": "forcecraft:upgrade_core"
-  },
-  "ingredient": {
-    "item": "forcecraft:golden_power_source"
-  },
+  "type": "forcecraft:infuse",
+  "center": "forcecraft:golden_power_source",
+  "group": "heat",
+  "ingredient": "forcecraft:upgrade_core",
   "output": {
-    "count": 1,
     "id": "forcecraft:heat_core"
   },
-  "resultType": "item",
-  "tier": "4",
-  "time": 60
+  "points": 30,
+  "tier": "3",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:convert"
+  }
 }

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "W": {
-      "item": "forcecraft:force_planks"
-    }
+    "W": "forcecraft:force_planks"
   },
   "pattern": [
     " W",

@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/wing",
+  "ingredient": "forcecraft:rocs_feather",
+  "points": 35,
+  "tier": "4",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:wing"
+  }
+}

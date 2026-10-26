@@ -1,6 +1,6 @@
 package com.mrbysco.forcecraft.modifier;
 
-import com.mrbysco.forcecraft.config.ConfigHandler;
+import com.mrbysco.forcecraft.config.ForceConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,8 +8,9 @@ import java.util.function.Supplier;
 
 public enum ConfigEnum {
 	FALSE("invalid", () -> false),
-	FORCE_ORE("force_ore", ConfigHandler.COMMON.generateForceOre),
-	FORCE_TREE("force_tree", ConfigHandler.COMMON.generateForceTree);
+	FORCE_ORE("force_ore", ForceConfig.COMMON.generateForceOre),
+	NETHER_FORCE_ORE("force_ore_nether", ForceConfig.COMMON.generateNetherForceOre),
+	FORCE_TREE("force_tree", ForceConfig.COMMON.generateForceTree);
 
 
 	public final String name;

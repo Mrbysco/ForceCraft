@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/forge",
+  "ingredient": "minecraft:furnace",
+  "points": 30,
+  "tier": "3",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:forge"
+  }
+}

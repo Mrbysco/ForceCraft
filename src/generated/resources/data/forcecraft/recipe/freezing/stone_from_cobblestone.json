@@ -1,14 +1,11 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
-  "ingredient": {
-    "tag": "c:cobblestones/normal"
+  "ingredient": "#c:cobblestones/normal",
+  "result": {
+    "id": "minecraft:stone"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:stone"
-    }
-  ]
+  "secondaryChance": 0.0
 }

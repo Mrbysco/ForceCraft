@@ -1,14 +1,11 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
-  "ingredient": {
-    "item": "minecraft:blaze_powder"
+  "ingredient": "minecraft:blaze_powder",
+  "result": {
+    "id": "minecraft:bone_meal"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:bone_meal"
-    }
-  ]
+  "secondaryChance": 0.0
 }

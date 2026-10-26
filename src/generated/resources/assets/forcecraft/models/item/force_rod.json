@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "forcecraft:item/force_rod",
+    "layer1": "forcecraft:item/force_rod_layer"
+  }
+}

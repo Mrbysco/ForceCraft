@@ -3,45 +3,85 @@ package com.mrbysco.forcecraft.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mrbysco.forcecraft.blockentities.InfuserBlockEntity;
-import com.mrbysco.forcecraft.blockentities.InfuserModifierType;
-import com.mrbysco.forcecraft.components.ForceComponents;
-import com.mrbysco.forcecraft.components.storage.PackStackHandler;
-import com.mrbysco.forcecraft.items.infuser.UpgradeBookData;
-import com.mrbysco.forcecraft.items.infuser.UpgradeBookTier;
-import com.mrbysco.forcecraft.registry.ForceRecipeSerializers;
+import com.mrbysco.forcecraft.blockentity.infuser.InfuserBlockEntity;
+import com.mrbysco.forcecraft.blockentity.infuser.InfuserUpgrade;
+import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceRecipes;
-import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.core.HolderLookup;
+import com.mrbysco.forcecraft.upgrade.UpgradeBookData;
+import com.mrbysco.forcecraft.upgrade.UpgradeBookTier;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
+
+import java.util.Optional;
 
 public class InfuseRecipe implements Recipe<RecipeInput> {
-	private static final int MAX_SLOTS = 8;
-	protected Ingredient ingredient;
-	protected InfuserModifierType resultModifier;
-	protected ItemStack output;
-	protected UpgradeBookTier tier;
-	protected Ingredient center;
-	protected int time;
+	public static final MapCodec<InfuseRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(
+			i -> i.group(
+					Ingredient.CODEC.fieldOf("center").forGetter(o -> o.center),
+					Ingredient.CODEC.fieldOf("ingredient").forGetter(o -> o.ingredient),
+					InfuserUpgrade.CODEC.fieldOf("upgrade").forGetter(o -> o.upgrade),
+					UpgradeBookTier.CODEC.fieldOf("tier").forGetter(o -> o.tier),
+					ItemStackTemplate.CODEC.optionalFieldOf("output").forGetter(o -> o.output),
+					Codec.INT.fieldOf("points").forGetter(o -> o.points),
+					Codec.INT.fieldOf("time").forGetter(o -> o.time),
+					Codec.STRING.optionalFieldOf("group", "").forGetter(o -> o.group)
+			).apply(i, InfuseRecipe::new)
+	);
 
-	public InfuseRecipe(Ingredient center, Ingredient input, InfuserModifierType resultType, UpgradeBookTier tier, ItemStack outputStack, int time) {
-		this.ingredient = input;
+	public static final StreamCodec<RegistryFriendlyByteBuf, InfuseRecipe> STREAM_CODEC = StreamCodec.composite(
+			Ingredient.CONTENTS_STREAM_CODEC,
+			o -> o.center,
+			Ingredient.CONTENTS_STREAM_CODEC,
+			o -> o.ingredient,
+			ByteBufCodecs.fromCodecWithRegistries(InfuserUpgrade.CODEC),
+			o -> o.upgrade,
+			ByteBufCodecs.idMapper(id -> UpgradeBookTier.values()[id], UpgradeBookTier::ordinal),
+			o -> o.tier,
+			ByteBufCodecs.optional(ItemStackTemplate.STREAM_CODEC),
+			o -> o.output,
+			ByteBufCodecs.VAR_INT,
+			o -> o.time,
+			ByteBufCodecs.VAR_INT,
+			o -> o.time,
+			ByteBufCodecs.STRING_UTF8,
+			o -> o.group,
+			InfuseRecipe::new
+	);
+
+	public static final RecipeSerializer<InfuseRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+
+	private final Ingredient center;
+	private final Ingredient ingredient;
+	private final InfuserUpgrade upgrade;
+	private final UpgradeBookTier tier;
+	private final Optional<ItemStackTemplate> output;
+	private final int points;
+	private final int time;
+	private final String group;
+
+	public InfuseRecipe(Ingredient center, Ingredient ingredient, InfuserUpgrade upgrade, UpgradeBookTier tier,
+	                    Optional<ItemStackTemplate> output, int points, int time, String group) {
 		this.center = center;
-		this.output = outputStack;
-		this.resultModifier = resultType;
+		this.ingredient = ingredient;
+		this.upgrade = upgrade;
 		this.tier = tier;
+		this.output = output;
+		this.points = points;
 		this.time = time;
+		this.group = group;
 	}
 
 	@Override
@@ -49,179 +89,100 @@ public class InfuseRecipe implements Recipe<RecipeInput> {
 		return true;
 	}
 
-	public int getTime() {
-		return time;
+	@Override
+	public boolean showNotification() {
+		return false;
 	}
 
-	public void setTime(int time) {
-		this.time = time;
+	@Override
+	public String group() {
+		return group;
 	}
 
 	@Override
 	public boolean matches(RecipeInput inv, Level level) {
-		for (int i = 0; i < inv.size(); i++) {
-			ItemStack stack = inv.getItem(i);
-			if (i < InfuserBlockEntity.SLOT_TOOL) {
-				return matchesModifier(inv, stack, false);
-			}
+		ItemStack tool = inv.getItem(InfuserBlockEntity.SLOT_TOOL);
+		UpgradeBookData book = inv.getItem(InfuserBlockEntity.SLOT_BOOK)
+				.getOrDefault(ForceComponents.UPGRADE_BOOK, UpgradeBookData.DEFAULT);
+		for (int i = 0; i < InfuserBlockEntity.SLOT_TOOL; i++) {
+			if (matchesModifier(tool, inv.getItem(i), book, false)) return true;
 		}
 		return false;
 	}
 
-	public boolean matchesModifier(RecipeInput inv, ItemStack modifier, boolean ignoreInfused) {
-		//Has the correct tier
-		ItemStack bookStack = inv.getItem(InfuserBlockEntity.SLOT_BOOK);
-		UpgradeBookData bd = bookStack.getOrDefault(ForceComponents.UPGRADE_BOOK, UpgradeBookData.DEFAULT);
-		int bookTier = bd.tier().ordinal();
-		if (getTier().ordinal() > bookTier) {
-			return false;
-		}
-
-		//Does the center match
-		ItemStack centerStack = inv.getItem(InfuserBlockEntity.SLOT_TOOL);
-		boolean toolMatches = matchesTool(centerStack, ignoreInfused);
-		boolean modifierMatches = matchesModifier(centerStack, modifier);
-
-//		ForceCraft.LOGGER.info(cent + " does  match center for "+this.id);
-
-
-		return toolMatches && modifierMatches;
+	public boolean matchesModifier(ItemStack tool, ItemStack modifier, UpgradeBookData book, boolean ignoreInfused) {
+		return tier.ordinal() <= book.tier().ordinal()
+				&& matchesTool(tool, ignoreInfused)
+				&& ingredient.test(modifier)
+				&& upgrade.canApply(tool, tier);
 	}
 
-	public boolean matchesModifier(InfuserBlockEntity inv, ItemStack modifierStack) {
-		ItemStack centerStack = inv.handler.getStackInSlot(InfuserBlockEntity.SLOT_TOOL);
-		return matchesModifier(centerStack, modifierStack);
-	}
-
-	public boolean matchesModifier(ItemStack centerStack, ItemStack modifierStack) {
-		if (modifierStack.getItem() == ForceRegistry.FORCE_PACK_UPGRADE.get()) {
-			IItemHandler handler = centerStack.getCapability(Capabilities.ItemHandler.ITEM);
-			if (handler instanceof PackStackHandler) {
-				if (((PackStackHandler) handler).getUpgrades() != getTier().ordinal() - 2) {
-					return false;
-				}
-			}
-		}
-
-		return this.ingredient.test(modifierStack);
-	}
-
-	public boolean matchesTool(ItemStack toolStack, boolean ignoreInfused) {
-		if (!this.center.test(toolStack)) {
-			// center doesn't match this recipe. move over
-			return false;
-		}
-		if (!ignoreInfused) {
-			//Ignore if the tool is infused in case of infusing for the first time
-			return !toolStack.has(ForceComponents.FORCE_INFUSED);
-		}
-		return true;
+	public boolean matchesTool(ItemStack tool, boolean ignoreInfused) {
+		if (!center.test(tool)) return false;
+		return ignoreInfused || !tool.has(ForceComponents.FORCE_INFUSED);
 	}
 
 	@Override
-	public boolean canCraftInDimensions(int width, int height) {
-		return height == 1 && width < MAX_SLOTS;
-	}
-
-	@Override
-	public ItemStack getResultItem(HolderLookup.Provider registries) {
-		return output;
+	public ItemStack assemble(RecipeInput inv) {
+		return getOutput();
 	}
 
 	public boolean hasOutput() {
-		return !output.isEmpty(); //should also be for modifier == ITEM
+		return output.isPresent();
 	}
 
 	@Override
-	public ItemStack assemble(RecipeInput inv, HolderLookup.Provider registries) {
-		return getResultItem(registries);
+	public RecipeType<? extends Recipe<RecipeInput>> getType() {
+		return ForceRecipes.INFUSE.get();
 	}
 
 	@Override
-	public RecipeType<?> getType() {
-		return ForceRecipes.INFUSER_TYPE.get();
+	public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
+		return ForceRecipes.INFUSE_SERIALIZER.get();
 	}
 
-	public Ingredient getIngredient() {
-		return ingredient;
+	@Override
+	public PlacementInfo placementInfo() {
+		return PlacementInfo.NOT_PLACEABLE;
+	}
+
+	@Override
+	public RecipeBookCategory recipeBookCategory() {
+		return RecipeBookCategories.CRAFTING_MISC;
 	}
 
 	public Ingredient getCenter() {
 		return center;
 	}
 
-	public InfuserModifierType getModifier() {
-		return resultModifier;
+	public Ingredient getIngredient() {
+		return ingredient;
 	}
 
-	public void setModifier(InfuserModifierType modifier) {
-		this.resultModifier = modifier;
+	public InfuserUpgrade getUpgrade() {
+		return upgrade;
 	}
 
 	public UpgradeBookTier getTier() {
 		return tier;
 	}
 
-	public void setTier(UpgradeBookTier tier) {
-		this.tier = tier;
+	public ItemStack getOutput() {
+		return output.map(ItemStackTemplate::create).orElse(ItemStack.EMPTY);
 	}
 
-	@Override
+	public int getPoints() {
+		return points;
+	}
+
+	public int getTime() {
+		return time;
+	}
+
 	public NonNullList<Ingredient> getIngredients() {
 		NonNullList<Ingredient> ingredients = NonNullList.create();
 		ingredients.add(center);
 		ingredients.add(ingredient);
 		return ingredients;
-	}
-
-	@Override
-	public RecipeSerializer<?> getSerializer() {
-		return ForceRecipeSerializers.INFUSER_SERIALIZER.get();
-	}
-
-	public static class Serializer implements RecipeSerializer<InfuseRecipe> {
-		private static final MapCodec<InfuseRecipe> CODEC = RecordCodecBuilder.mapCodec(
-				instance -> instance.group(
-								Ingredient.CODEC_NONEMPTY.fieldOf("center").forGetter(recipe -> recipe.center),
-								Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
-								InfuserModifierType.CODEC.fieldOf("resultType").forGetter(recipe -> recipe.resultModifier),
-								UpgradeBookTier.CODEC.fieldOf("tier").forGetter(recipe -> recipe.tier),
-								ItemStack.OPTIONAL_CODEC.optionalFieldOf("output", ItemStack.EMPTY).forGetter(recipe -> recipe.output),
-								Codec.INT.fieldOf("time").forGetter(recipe -> recipe.time)
-						)
-						.apply(instance, InfuseRecipe::new)
-		);
-		public static final StreamCodec<RegistryFriendlyByteBuf, InfuseRecipe> STREAM_CODEC = StreamCodec.of(
-				Serializer::toNetwork, Serializer::fromNetwork
-		);
-
-		@Override
-		public MapCodec<InfuseRecipe> codec() {
-			return CODEC;
-		}
-
-		@Override
-		public StreamCodec<RegistryFriendlyByteBuf, InfuseRecipe> streamCodec() {
-			return STREAM_CODEC;
-		}
-
-		public static void toNetwork(RegistryFriendlyByteBuf buffer, InfuseRecipe recipe) {
-			Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.center);
-			Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
-			buffer.writeEnum(recipe.resultModifier);
-			buffer.writeEnum(recipe.tier);
-			ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.output);
-			buffer.writeInt(recipe.getTime());
-		}
-
-		public static InfuseRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
-			Ingredient center = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
-			Ingredient ing = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
-			InfuserModifierType infuserType = buffer.readEnum(InfuserModifierType.class);
-			UpgradeBookTier tier = buffer.readEnum(UpgradeBookTier.class);
-			ItemStack output = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
-			int time = buffer.readInt();
-			return new InfuseRecipe(center, ing, infuserType, tier, output, time);
-		}
 	}
 }

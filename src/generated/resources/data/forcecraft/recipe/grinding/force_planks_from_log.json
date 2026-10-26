@@ -1,15 +1,12 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "item": "forcecraft:force_log"
+  "ingredient": "forcecraft:force_log",
+  "result": {
+    "count": 6,
+    "id": "forcecraft:force_planks"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 6,
-      "id": "forcecraft:force_planks"
-    }
-  ],
   "secondaryChance": 1.0
 }

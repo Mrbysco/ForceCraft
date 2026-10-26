@@ -1,15 +1,12 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "item": "minecraft:birch_door"
+  "ingredient": "minecraft:birch_door",
+  "result": {
+    "count": 2,
+    "id": "minecraft:birch_planks"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 2,
-      "id": "minecraft:birch_planks"
-    }
-  ],
   "secondaryChance": 1.0
 }

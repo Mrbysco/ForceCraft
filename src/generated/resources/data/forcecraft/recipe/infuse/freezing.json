@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/freezing",
+  "group": "freezing",
+  "ingredient": "forcecraft:snow_cookie",
+  "points": 15,
+  "tier": "1",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:freezing"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "forcecraft:block/wall_force_torch_brown"
+    },
+    "facing=north": {
+      "model": "forcecraft:block/wall_force_torch_brown",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "forcecraft:block/wall_force_torch_brown",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "forcecraft:block/wall_force_torch_brown",
+      "y": 180
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": "forcecraft:feather_dust",
+    "F": "#c:feathers",
+    "G": "#c:dusts/glowstone"
+  },
+  "pattern": [
+    " D ",
+    "GFG",
+    " D "
+  ],
+  "result": {
+    "id": "forcecraft:rocs_feather"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "values": {
+    "minecraft:cobblestone": "minecraft:stone",
+    "minecraft:lava": "minecraft:cobblestone",
+    "minecraft:stone": "minecraft:stone_bricks",
+    "minecraft:water": "minecraft:ice"
+  }
+}

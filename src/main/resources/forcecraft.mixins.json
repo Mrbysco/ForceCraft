@@ -4,8 +4,8 @@
   "package": "com.mrbysco.forcecraft.mixin",
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_25",
-  "client": [
-    "GameRendererMixin"
+  "mixins": [
+    "ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1

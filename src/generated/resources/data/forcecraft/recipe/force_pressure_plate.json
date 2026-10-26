@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "forcecraft:force_planks"
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "id": "forcecraft:force_pressure_plate"
+  }
+}

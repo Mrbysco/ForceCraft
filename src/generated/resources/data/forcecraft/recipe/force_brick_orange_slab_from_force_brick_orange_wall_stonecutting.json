@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "forcecraft:force_brick_orange_wall",
+  "result": {
+    "id": "forcecraft:force_brick_orange_slab"
+  }
+}

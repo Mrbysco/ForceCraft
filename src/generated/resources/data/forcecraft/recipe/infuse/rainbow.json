@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/rainbow",
+  "ingredient": "minecraft:lapis_lazuli",
+  "points": 10,
+  "tier": "1",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:rainbow"
+  }
+}

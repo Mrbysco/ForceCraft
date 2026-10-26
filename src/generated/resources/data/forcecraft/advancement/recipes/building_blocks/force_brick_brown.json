@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_brown_dye": {
+    "has_dye": {
       "conditions": {
         "items": [
           {
@@ -15,7 +15,7 @@
       "conditions": {
         "items": [
           {
-            "items": "forcecraft:force_brick"
+            "items": "#forcecraft:force_bricks"
           }
         ]
       },
@@ -32,7 +32,7 @@
     [
       "has_the_recipe",
       "has_force_brick",
-      "has_brown_dye"
+      "has_dye"
     ]
   ],
   "rewards": {

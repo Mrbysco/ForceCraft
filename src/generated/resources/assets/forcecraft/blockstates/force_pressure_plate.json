@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "forcecraft:block/force_pressure_plate"
+    },
+    "powered=true": {
+      "model": "forcecraft:block/force_pressure_plate_down"
+    }
+  }
+}

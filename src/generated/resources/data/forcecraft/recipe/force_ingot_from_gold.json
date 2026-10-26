@@ -1,16 +1,13 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    {
-      "tag": "c:ingots/gold"
-    },
-    {
-      "tag": "c:ingots/gold"
-    },
-    {
-      "tag": "c:gems/force"
-    }
+  "key": {
+    "G": "forcecraft:force_gem",
+    "I": "#c:ingots/gold"
+  },
+  "pattern": [
+    "GI",
+    "I "
   ],
   "result": {
     "count": 3,

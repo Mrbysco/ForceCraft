@@ -1,0 +1,20 @@
+{
+  "values": [
+    "forcecraft:force_torch",
+    "forcecraft:force_torch_red",
+    "forcecraft:force_torch_orange",
+    "forcecraft:force_torch_green",
+    "forcecraft:force_torch_blue",
+    "forcecraft:force_torch_white",
+    "forcecraft:force_torch_black",
+    "forcecraft:force_torch_brown",
+    "forcecraft:force_torch_light_blue",
+    "forcecraft:force_torch_magenta",
+    "forcecraft:force_torch_pink",
+    "forcecraft:force_torch_light_gray",
+    "forcecraft:force_torch_lime",
+    "forcecraft:force_torch_cyan",
+    "forcecraft:force_torch_purple",
+    "forcecraft:force_torch_gray"
+  ]
+}

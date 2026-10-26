@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/damage",
+  "ingredient": "forcecraft:claw",
+  "points": 30,
+  "tier": "0",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:leveled",
+    "cap": 5,
+    "component": "forcecraft:damage"
+  }
+}

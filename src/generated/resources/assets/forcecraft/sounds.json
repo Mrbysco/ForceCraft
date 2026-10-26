@@ -1,0 +1,75 @@
+{
+  "fairy.listen": {
+    "sounds": [
+      "forcecraft:listen",
+      "forcecraft:listen2"
+    ],
+    "subtitle": "forcecraft.subtitle.fairy.listen"
+  },
+  "fairy.listen.special": {
+    "sounds": [
+      "forcecraft:listen3"
+    ],
+    "subtitle": "forcecraft.subtitle.fairy.listen.special"
+  },
+  "fairy.pickup": {
+    "sounds": [
+      "forcecraft:pickup"
+    ],
+    "subtitle": "forcecraft.subtitle.fairy.pickup"
+  },
+  "force.magic": {
+    "sounds": [
+      "forcecraft:magic"
+    ],
+    "subtitle": "forcecraft.subtitle.force.magic"
+  },
+  "force.punch": {
+    "sounds": [
+      "forcecraft:force_punch"
+    ],
+    "subtitle": "forcecraft.subtitle.force.punch"
+  },
+  "heart.pickup": {
+    "sounds": [
+      "forcecraft:pickup"
+    ],
+    "subtitle": "forcecraft.subtitle.heart.pickup"
+  },
+  "infuser.done": {
+    "sounds": [
+      "forcecraft:infuser_done"
+    ],
+    "subtitle": "forcecraft.subtitle.infuser.done"
+  },
+  "infuser.special": {
+    "sounds": [
+      "forcecraft:hum"
+    ],
+    "subtitle": "forcecraft.subtitle.infuser.special"
+  },
+  "infuser.special.beep": {
+    "sounds": [
+      "forcecraft:start_beep"
+    ],
+    "subtitle": "forcecraft.subtitle.infuser.special.beep"
+  },
+  "infuser.special.done": {
+    "sounds": [
+      "forcecraft:finish"
+    ],
+    "subtitle": "forcecraft.subtitle.infuser.special.done"
+  },
+  "infuser.working": {
+    "sounds": [
+      "forcecraft:chimes"
+    ],
+    "subtitle": "forcecraft.subtitle.infuser.working"
+  },
+  "whoosh": {
+    "sounds": [
+      "forcecraft:whoosh"
+    ],
+    "subtitle": "forcecraft.subtitle.whoosh"
+  }
+}

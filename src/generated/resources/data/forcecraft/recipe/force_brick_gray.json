@@ -1,16 +1,17 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "building",
-  "ingredients": [
-    {
-      "item": "forcecraft:force_brick"
-    },
-    {
-      "tag": "c:dyes/gray"
-    }
+  "key": {
+    "B": "#forcecraft:force_bricks",
+    "D": "#c:dyes/gray"
+  },
+  "pattern": [
+    "BBB",
+    "BDB",
+    "BBB"
   ],
   "result": {
-    "count": 1,
+    "count": 8,
     "id": "forcecraft:force_brick_gray"
   }
 }

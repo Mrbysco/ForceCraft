@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_shelf_right",
+  "textures": {
+    "all": "forcecraft:block/force_shelf",
+    "particle": "forcecraft:block/force_planks"
+  }
+}

@@ -1,14 +1,11 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
-  "ingredient": {
-    "tag": "c:bricks/normal"
+  "ingredient": "#c:bricks/normal",
+  "result": {
+    "id": "minecraft:brick"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:brick"
-    }
-  ]
+  "secondaryChance": 0.0
 }

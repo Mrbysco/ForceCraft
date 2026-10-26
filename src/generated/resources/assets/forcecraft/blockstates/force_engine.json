@@ -1,0 +1,108 @@
+{
+  "variants": {
+    "facing=down,generating=false,powered=false": {
+      "model": "forcecraft:block/force_engine",
+      "x": 180
+    },
+    "facing=down,generating=false,powered=true": {
+      "model": "forcecraft:block/force_engine",
+      "x": 180
+    },
+    "facing=down,generating=true,powered=false": {
+      "model": "forcecraft:block/force_engine_active",
+      "x": 180
+    },
+    "facing=down,generating=true,powered=true": {
+      "model": "forcecraft:block/force_engine_active",
+      "x": 180
+    },
+    "facing=east,generating=false,powered=false": {
+      "model": "forcecraft:block/force_engine",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,generating=false,powered=true": {
+      "model": "forcecraft:block/force_engine",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,generating=true,powered=false": {
+      "model": "forcecraft:block/force_engine_active",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,generating=true,powered=true": {
+      "model": "forcecraft:block/force_engine_active",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north,generating=false,powered=false": {
+      "model": "forcecraft:block/force_engine",
+      "x": 90
+    },
+    "facing=north,generating=false,powered=true": {
+      "model": "forcecraft:block/force_engine",
+      "x": 90
+    },
+    "facing=north,generating=true,powered=false": {
+      "model": "forcecraft:block/force_engine_active",
+      "x": 90
+    },
+    "facing=north,generating=true,powered=true": {
+      "model": "forcecraft:block/force_engine_active",
+      "x": 90
+    },
+    "facing=south,generating=false,powered=false": {
+      "model": "forcecraft:block/force_engine",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,generating=false,powered=true": {
+      "model": "forcecraft:block/force_engine",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,generating=true,powered=false": {
+      "model": "forcecraft:block/force_engine_active",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,generating=true,powered=true": {
+      "model": "forcecraft:block/force_engine_active",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up,generating=false,powered=false": {
+      "model": "forcecraft:block/force_engine"
+    },
+    "facing=up,generating=false,powered=true": {
+      "model": "forcecraft:block/force_engine"
+    },
+    "facing=up,generating=true,powered=false": {
+      "model": "forcecraft:block/force_engine_active"
+    },
+    "facing=up,generating=true,powered=true": {
+      "model": "forcecraft:block/force_engine_active"
+    },
+    "facing=west,generating=false,powered=false": {
+      "model": "forcecraft:block/force_engine",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,generating=false,powered=true": {
+      "model": "forcecraft:block/force_engine",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,generating=true,powered=false": {
+      "model": "forcecraft:block/force_engine_active",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,generating=true,powered=true": {
+      "model": "forcecraft:block/force_engine_active",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

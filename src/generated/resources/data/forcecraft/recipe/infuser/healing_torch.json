@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "minecraft:ghast_tear",
+  "group": "healing",
+  "ingredient": "#forcecraft:valid_items/infuse_torch",
+  "output": {
+    "id": "forcecraft:healing_torch"
+  },
+  "points": 35,
+  "tier": "4",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:convert"
+  }
+}

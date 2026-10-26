@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "forcecraft:block/force_brick_magenta"
+  }
+}

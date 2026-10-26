@@ -2,23 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "F": {
-      "tag": "c:ingots/force"
-    },
-    "N": {
-      "tag": "c:nuggets/force"
-    },
-    "S": {
-      "tag": "c:rods/force"
-    }
+    "I": "forcecraft:force_ingot",
+    "N": "forcecraft:force_nugget",
+    "S": "forcecraft:force_stick"
   },
   "pattern": [
-    "  F",
+    "  I",
     " S ",
     "N  "
   ],
   "result": {
-    "count": 1,
     "id": "forcecraft:force_rod"
   }
 }

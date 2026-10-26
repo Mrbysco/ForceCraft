@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/bane",
+  "group": "bane",
+  "ingredient": "minecraft:spider_eye",
+  "points": 30,
+  "tier": "3",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:bane"
+  }
+}

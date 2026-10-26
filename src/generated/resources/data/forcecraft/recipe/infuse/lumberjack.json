@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/lumberjack",
+  "ingredient": "#forcecraft:force_logs",
+  "points": 35,
+  "tier": "0",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:lumberjack"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/bleed",
+  "ingredient": "minecraft:arrow",
+  "points": 20,
+  "tier": "2",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:leveled",
+    "cap": 3,
+    "component": "forcecraft:bleed"
+  }
+}

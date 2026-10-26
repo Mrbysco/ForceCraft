@@ -1,15 +1,12 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "item": "minecraft:acacia_door"
+  "ingredient": "minecraft:acacia_door",
+  "result": {
+    "count": 2,
+    "id": "minecraft:acacia_planks"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 2,
-      "id": "minecraft:acacia_planks"
-    }
-  ],
   "secondaryChance": 1.0
 }

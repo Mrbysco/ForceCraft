@@ -1,15 +1,12 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "tag": "minecraft:wool"
+  "ingredient": "#minecraft:wool",
+  "result": {
+    "count": 4,
+    "id": "minecraft:string"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 4,
-      "id": "forcecraft:force_planks"
-    }
-  ],
   "secondaryChance": 1.0
 }

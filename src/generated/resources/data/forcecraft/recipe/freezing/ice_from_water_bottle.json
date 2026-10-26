@@ -1,9 +1,10 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
   "ingredient": {
-    "type": "neoforge:components",
+    "neoforge:ingredient_type": "neoforge:components",
     "components": {
       "minecraft:potion_contents": {
         "potion": "minecraft:water"
@@ -11,14 +12,11 @@
     },
     "items": "minecraft:potion"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:ice"
-    },
-    {
-      "count": 1,
-      "id": "minecraft:glass_bottle"
-    }
-  ]
+  "result": {
+    "id": "minecraft:ice"
+  },
+  "result2": {
+    "id": "minecraft:glass_bottle"
+  },
+  "secondaryChance": 0.0
 }

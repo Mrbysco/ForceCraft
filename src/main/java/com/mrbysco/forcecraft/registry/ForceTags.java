@@ -14,77 +14,96 @@ import net.minecraft.world.level.material.Fluid;
 
 public class ForceTags {
 
-	public static final TagKey<Block> INCORRECT_FOR_FORCE = forceBlockTag("needs_force_tool");
-	public static final TagKey<Block> MINEABLE_WITH_MITTS = forceBlockTag("mineable_with_mitts");
-	public static final TagKey<Block> FORCE_BRICKS = forceBlockTag("force_bricks");
-	public static final TagKey<Block> FORCE_LOGS = forceBlockTag("force_logs");
-	public static final TagKey<Block> TICKING_NOT_SUPPORTED = forceBlockTag("ticking_not_supported");
+	public static class Blocks {
+		public static final TagKey<Block> FORCE_LOGS = BlockTags.create(Reference.modLoc("force_logs"));
+		public static final TagKey<Block> FORCE_BRICKS = BlockTags.create(Reference.modLoc("force_bricks"));
+		public static final TagKey<Block> FORCE_TORCHES = BlockTags.create(Reference.modLoc("force_torches"));
+		public static final TagKey<Block> INCORRECT_FOR_FORCE = BlockTags.create(Reference.modLoc("needs_force_tool"));
+		public static final TagKey<Block> MINEABLE_WITH_MITTS = BlockTags.create(Reference.modLoc("mineable_with_mitts"));
+		public static final TagKey<Block> TICKING_NOT_SUPPORTED = BlockTags.create(Reference.modLoc("ticking_not_supported"));
 
-	public static final TagKey<Item> VALID_INFUSER_MODIFIERS = ItemTags.create(Reference.modLoc("valid_infuser_modifiers"));
-	public static final TagKey<Item> VALID_INFUSER_TOOLS = ItemTags.create(Reference.modLoc("valid_infuser_tools"));
-	public static final TagKey<Item> VALID_INFUSER_CHARGE = ItemTags.create(Reference.modLoc("valid_infuser_charge"));
-	public static final TagKey<Item> TOOLS = ItemTags.create(Reference.modLoc("tools"));
-	public static final TagKey<Item> FORCE_FUELS = ItemTags.create(Reference.modLoc("force_fuel"));
-	public static final TagKey<Item> BACONATOR_FOOD = ItemTags.create(Reference.modLoc("baconator_food"));
-	public static final TagKey<Item> FORTUNE = ItemTags.create(Reference.modLoc("fortune"));
-	public static final TagKey<Item> VALID_FORCE_BELT = ItemTags.create(Reference.modLoc("valid_force_belt"));
-	public static final TagKey<Item> VALID_BANE_TOOLS = ItemTags.create(Reference.modLoc("valid_bane_tools"));
-	public static final TagKey<Item> VALID_HEALING_TOOLS = ItemTags.create(Reference.modLoc("valid_healing_tools"));
-	public static final TagKey<Item> VALID_WING_TOOLS = ItemTags.create(Reference.modLoc("valid_wing_tools"));
-	public static final TagKey<Item> VALID_STURDY_TOOLS = ItemTags.create(Reference.modLoc("valid_sturdy_tools"));
-	public static final TagKey<Item> VALID_ENDER_TOOLS = ItemTags.create(Reference.modLoc("valid_ender_tools"));
-	public static final TagKey<Item> VALID_LIGHT_TOOLS = ItemTags.create(Reference.modLoc("valid_light_tools"));
-	public static final TagKey<Item> VALID_TREASURE_TOOLS = ItemTags.create(Reference.modLoc("valid_treasure_tools"));
-	public static final TagKey<Item> VALID_BLEEDING_TOOLS = ItemTags.create(Reference.modLoc("valid_bleeding_tools"));
-	public static final TagKey<Item> VALID_SILKY_TOOLS = ItemTags.create(Reference.modLoc("valid_silky_tools"));
-	public static final TagKey<Item> VALID_CAMO_TOOLS = ItemTags.create(Reference.modLoc("valid_camo_tools"));
-	public static final TagKey<Item> VALID_DAMAGE_TOOLS = ItemTags.create(Reference.modLoc("valid_damage_tools"));
-	public static final TagKey<Item> VALID_LUCKY_TOOLS = ItemTags.create(Reference.modLoc("valid_lucky_tools"));
-	public static final TagKey<Item> VALID_FREEZING_TOOLS = ItemTags.create(Reference.modLoc("valid_freezing_tools"));
-	public static final TagKey<Item> VALID_HEAT_TOOLS = ItemTags.create(Reference.modLoc("valid_heat_tools"));
-	public static final TagKey<Item> VALID_LUMBER_TOOLS = ItemTags.create(Reference.modLoc("valid_lumber_tools"));
-	public static final TagKey<Item> VALID_SPEED_TOOLS = ItemTags.create(Reference.modLoc("valid_speed_tools"));
-	public static final TagKey<Item> VALID_KNOCKBACK_TOOLS = ItemTags.create(Reference.modLoc("valid_knockback_tools"));
-	public static final TagKey<Item> ENDER = ItemTags.create(Reference.modLoc("ender"));
-	public static final TagKey<Item> FORCE_LOGS_ITEM = ItemTags.create(Reference.modLoc("force_logs"));
-	public static final TagKey<Item> ENTITY_FLASKS = ItemTags.create(Reference.modLoc("entity_flasks"));
-	public static final TagKey<Item> CHU_JELLY = ItemTags.create(Reference.modLoc("chu_jelly"));
-	public static final TagKey<Item> FORCE_REPAIR_INGREDIENTS = ItemTags.create(Reference.modLoc("force_repair_ingredients"));
-
-	public static final TagKey<Item> FORCE_INGOT = commonItemTag("ingots/force");
-	public static final TagKey<Item> FORCE_NUGGET = commonItemTag("nuggets/force");
-	public static final TagKey<Item> FORCE_FURNACES = ItemTags.create(Reference.modLoc("force_furnace"));
-	public static final TagKey<Item> FORCE_GEM = commonItemTag("gems/force");
-	public static final TagKey<Item> FORCE_ROD = commonItemTag("rods/force");
-	public static final TagKey<Item> FORCE_GEAR = commonItemTag("gears/force");
-	public static final TagKey<Item> HOLDS_ITEMS = commonItemTag("holds_items");
-
-	//Fuels
-	public static final TagKey<Fluid> FORCE = commonFluidTag("force");
-	public static final TagKey<Fluid> MILK = commonFluidTag("milk");
-	public static final TagKey<Fluid> FUEL = optionalCommonFluidTag("fuel");
-	public static final TagKey<Fluid> BIOFUEL = optionalCommonFluidTag("biofuel");
+		public static final TagKey<Block> ORES = commonTag("ores");
+		public static final TagKey<Block> ORES_POWER = commonTag("ores/power");
 
 
-	public static final TagKey<Block> ENDERTOT_HOLDABLE = forceBlockTag("endertot_holdable");
-
-	public static final TagKey<EntityType<?>> FLASK_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, Reference.modLoc("flask_blacklist"));
-
-
-	private static TagKey<Item> commonItemTag(String name) {
-		return ItemTags.create(Identifier.fromNamespaceAndPath("c", name));
+		private static TagKey<Block> commonTag(String name) {
+			return BlockTags.create(Identifier.fromNamespaceAndPath("c", name));
+		}
 	}
 
-	private static TagKey<Block> forceBlockTag(String name) {
-		return BlockTags.create(Reference.modLoc(name));
+	public static class Items {
+		public static final TagKey<Item> FORCE_LOGS = ItemTags.create(Reference.modLoc("force_logs"));
+		public static final TagKey<Item> FORCE_BRICKS = ItemTags.create(Reference.modLoc("force_bricks"));
+		public static final TagKey<Item> FORCE_TORCHES = ItemTags.create(Reference.modLoc("force_torches"));
+		public static final TagKey<Item> CAN_STORE_FORCE = ItemTags.create(Reference.modLoc("can_store_force"));
+		public static final TagKey<Item> FORCE_REPAIR_INGREDIENTS = ItemTags.create(Reference.modLoc("force_repair_ingredients"));
+		public static final TagKey<Item> FORCE_ARMOR = ItemTags.create(Reference.modLoc("force_armor"));
+		public static final TagKey<Item> UPGRADE_CORES = ItemTags.create(Reference.modLoc("upgrade_cores"));
+		public static final TagKey<Item> FORCE_FURNACES = ItemTags.create(Reference.modLoc("force_furnaces"));
+		public static final TagKey<Item> HOLDS_ITEMS = ItemTags.create(Identifier.fromNamespaceAndPath("c", "holds_items"));
+
+		public static final TagKey<Item> VALID_INFUSER_MODIFIERS = ItemTags.create(Reference.modLoc("valid_infuser_modifiers"));
+		public static final TagKey<Item> VALID_INFUSER_TOOLS = ItemTags.create(Reference.modLoc("valid_infuser_tools"));
+		public static final TagKey<Item> VALID_INFUSER_CHARGE = ItemTags.create(Reference.modLoc("valid_infuser_charge"));
+		public static final TagKey<Item> VALID_FORCE_BELT = ItemTags.create(Reference.modLoc("valid_force_belt"));
+
+		public static final TagKey<Item> VALID_FORCE_ITEMS = ItemTags.create(Reference.modLoc("valid_items/force"));
+		public static final TagKey<Item> VALID_DAMAGE_ITEMS = ItemTags.create(Reference.modLoc("valid_items/damage"));
+		public static final TagKey<Item> VALID_SPEED_ITEMS = ItemTags.create(Reference.modLoc("valid_items/speed"));
+		public static final TagKey<Item> VALID_LUMBERJACK_ITEMS = ItemTags.create(Reference.modLoc("valid_items/lumberjack"));
+		public static final TagKey<Item> VALID_RAINBOW_ITEMS = ItemTags.create(Reference.modLoc("valid_items/rainbow"));
+		public static final TagKey<Item> VALID_LUCK_ITEMS = ItemTags.create(Reference.modLoc("valid_items/luck"));
+		public static final TagKey<Item> VALID_GRINDING_ITEMS = ItemTags.create(Reference.modLoc("valid_items/grinding"));
+		public static final TagKey<Item> VALID_FREEZING_ITEMS = ItemTags.create(Reference.modLoc("valid_items/freezing"));
+		public static final TagKey<Item> VALID_EXPERIENCE_ITEMS = ItemTags.create(Reference.modLoc("valid_items/experience"));
+		public static final TagKey<Item> VALID_FALSE_ITEMS = ItemTags.create(Reference.modLoc("valid_items/false"));
+		public static final TagKey<Item> VALID_TOUCH_ITEMS = ItemTags.create(Reference.modLoc("valid_items/touch"));
+		public static final TagKey<Item> VALID_BLEED_ITEMS = ItemTags.create(Reference.modLoc("valid_items/bleed"));
+		public static final TagKey<Item> VALID_CRAFT_ITEMS = ItemTags.create(Reference.modLoc("valid_items/craft"));
+		public static final TagKey<Item> VALID_TIME_ITEMS = ItemTags.create(Reference.modLoc("valid_items/time"));
+		public static final TagKey<Item> VALID_INFUSE_TORCHES = ItemTags.create(Reference.modLoc("valid_items/infuse_torch"));
+		public static final TagKey<Item> VALID_HEAT_ITEMS = ItemTags.create(Reference.modLoc("valid_items/heat"));
+		public static final TagKey<Item> VALID_BANE_ITEMS = ItemTags.create(Reference.modLoc("valid_items/bane"));
+		public static final TagKey<Item> VALID_FORGE_ITEMS = ItemTags.create(Reference.modLoc("valid_items/forge"));
+		public static final TagKey<Item> VALID_WING_ITEMS = ItemTags.create(Reference.modLoc("valid_items/wing"));
+		public static final TagKey<Item> VALID_HEALING_ITEMS = ItemTags.create(Reference.modLoc("valid_items/healing"));
+		public static final TagKey<Item> VALID_CAMO_ITEMS = ItemTags.create(Reference.modLoc("valid_items/camo"));
+		public static final TagKey<Item> VALID_SIGHT_ITEMS = ItemTags.create(Reference.modLoc("valid_items/sight"));
+		public static final TagKey<Item> VALID_STURDY_ITEMS = ItemTags.create(Reference.modLoc("valid_items/sturdy"));
+		public static final TagKey<Item> LIMITED_STURDY_ITEMS = ItemTags.create(Reference.modLoc("valid_items/limited_sturdy"));
+		public static final TagKey<Item> VALID_ENDER_ITEMS = ItemTags.create(Reference.modLoc("valid_items/ender"));
+		public static final TagKey<Item> VALID_SOUL_ITEMS = ItemTags.create(Reference.modLoc("valid_items/soul"));
+		public static final TagKey<Item> VALID_LIGHT_ITEMS = ItemTags.create(Reference.modLoc("valid_items/light"));
+		public static final TagKey<Item> VALID_TREASURE_ITEMS = ItemTags.create(Reference.modLoc("valid_items/treasure"));
+
+		public static final TagKey<Item> ORES_POWER = commonTag("ores/power");
+		public static final TagKey<Item> GEMS_FORCE = commonTag("gems/force");
+		public static final TagKey<Item> INGOTS_FORCE = commonTag("ingots/force");
+		public static final TagKey<Item> NUGGETS_FORCE = commonTag("nuggets/force");
+		public static final TagKey<Item> RODS_FORCE = commonTag("rods/force");
+
+		private static TagKey<Item> commonTag(String name) {
+			return ItemTags.create(Identifier.fromNamespaceAndPath("c", name));
+		}
 	}
 
-	private static TagKey<Fluid> commonFluidTag(String name) {
-		return FluidTags.create(Identifier.fromNamespaceAndPath("c", name));
+	public static class Fluids {
+		public static final TagKey<Fluid> FORCE = commonTag("force");
+		public static final TagKey<Fluid> FUEL = commonTag("fuel");
+		public static final TagKey<Fluid> BIOFUEL = commonTag("biofuel");
+
+		private static TagKey<Fluid> commonTag(String name) {
+			return FluidTags.create(Identifier.fromNamespaceAndPath("c", name));
+		}
 	}
 
-	private static TagKey<Fluid> optionalCommonFluidTag(String name) {
-		return FluidTags.create(Identifier.fromNamespaceAndPath("c", name));
-	}
 
+	public static class EntityTypes {
+		public static final TagKey<EntityType<?>> VALID_BANE = tag("valid_entities/bane");
+		public static final TagKey<EntityType<?>> TICKING_NOT_SUPPORTED = tag("ticking_not_supported");
+
+		private static TagKey<EntityType<?>> tag(String name) {
+			return TagKey.create(Registries.ENTITY_TYPE, Reference.modLoc(name));
+		}
+	}
 }

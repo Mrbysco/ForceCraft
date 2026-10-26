@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "#c:gears/force"
+            "items": "forcecraft:force_gear"
           }
         ]
       },

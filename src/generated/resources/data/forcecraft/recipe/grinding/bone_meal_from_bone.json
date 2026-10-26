@@ -1,15 +1,12 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "tag": "c:bones"
+  "ingredient": "#c:bones",
+  "result": {
+    "count": 5,
+    "id": "minecraft:bone_meal"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 5,
-      "id": "minecraft:bone_meal"
-    }
-  ],
   "secondaryChance": 1.0
 }

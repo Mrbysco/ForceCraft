@@ -1,19 +1,16 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "tag": "forcecraft:force_furnace"
+  "ingredient": "#forcecraft:force_furnaces",
+  "result": {
+    "count": 3,
+    "id": "forcecraft:force_ingot"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 3,
-      "id": "forcecraft:force_ingot"
-    },
-    {
-      "count": 2,
-      "id": "minecraft:iron_ingot"
-    }
-  ],
+  "result2": {
+    "count": 2,
+    "id": "minecraft:iron_ingot"
+  },
   "secondaryChance": 1.0
 }

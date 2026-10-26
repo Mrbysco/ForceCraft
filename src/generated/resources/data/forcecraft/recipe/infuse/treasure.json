@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/treasure",
+  "ingredient": "forcecraft:treasure_core",
+  "points": 55,
+  "tier": "6",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:treasure"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/force",
+  "ingredient": "forcecraft:force_nugget",
+  "points": 25,
+  "tier": "0",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:leveled",
+    "cap": 2,
+    "component": "forcecraft:force"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dye": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:dyes/white"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_force_furnace": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#forcecraft:force_furnaces"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:force_furnace_white"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_force_furnace",
+      "has_dye"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:force_furnace_white"
+    ]
+  }
+}

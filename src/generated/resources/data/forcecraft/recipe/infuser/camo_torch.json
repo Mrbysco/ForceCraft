@@ -1,0 +1,23 @@
+{
+  "type": "forcecraft:infuse",
+  "center": {
+    "neoforge:ingredient_type": "neoforge:components",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:invisibility"
+      }
+    },
+    "items": "minecraft:potion"
+  },
+  "group": "camo",
+  "ingredient": "#forcecraft:valid_items/infuse_torch",
+  "output": {
+    "id": "forcecraft:camo_torch"
+  },
+  "points": 35,
+  "tier": "4",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:convert"
+  }
+}

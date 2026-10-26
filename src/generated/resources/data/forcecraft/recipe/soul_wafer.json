@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "tag": "c:bones"
-    },
-    "F": {
-      "item": "minecraft:rotten_flesh"
-    },
-    "G": {
-      "tag": "c:gunpowders"
-    },
-    "L": {
-      "tag": "c:dyes/light_blue"
-    },
-    "S": {
-      "item": "forcecraft:snow_cookie"
-    }
+    "B": "#c:bones",
+    "F": "minecraft:rotten_flesh",
+    "G": "#c:gunpowders",
+    "L": "#c:dyes/light_blue",
+    "S": "forcecraft:snow_cookie"
   },
   "pattern": [
     " G ",
@@ -24,7 +14,6 @@
     " L "
   ],
   "result": {
-    "count": 1,
     "id": "forcecraft:soul_wafer"
   }
 }

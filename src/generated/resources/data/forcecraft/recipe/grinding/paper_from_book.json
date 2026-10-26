@@ -1,15 +1,12 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "item": "minecraft:book"
+  "ingredient": "minecraft:book",
+  "result": {
+    "count": 3,
+    "id": "minecraft:paper"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 3,
-      "id": "minecraft:paper"
-    }
-  ],
   "secondaryChance": 1.0
 }

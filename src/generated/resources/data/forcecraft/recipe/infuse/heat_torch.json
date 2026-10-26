@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "forcecraft:golden_power_source",
+  "group": "heat",
+  "ingredient": "#forcecraft:valid_items/infuse_torch",
+  "output": {
+    "id": "forcecraft:heat_torch"
+  },
+  "points": 30,
+  "tier": "3",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:convert"
+  }
+}

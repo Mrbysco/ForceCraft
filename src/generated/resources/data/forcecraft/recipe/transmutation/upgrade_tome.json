@@ -1,15 +1,11 @@
 {
-  "type": "forcecraft:transmutation",
+  "type": "forcecraft:transmute",
+  "category": "misc",
   "ingredients": [
-    {
-      "item": "forcecraft:force_rod"
-    },
-    {
-      "item": "minecraft:book"
-    }
+    "forcecraft:force_rod",
+    "minecraft:book"
   ],
   "result": {
-    "count": 1,
     "id": "forcecraft:upgrade_tome"
   }
 }

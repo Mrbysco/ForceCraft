@@ -1,0 +1,7 @@
+{
+  "type": "forcecraft:add_config_features",
+  "biomes": "#minecraft:is_nether",
+  "enabledConfig": "force_ore_nether",
+  "features": "forcecraft:ore_nether_force",
+  "step": "underground_ores"
+}

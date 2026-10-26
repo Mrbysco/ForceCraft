@@ -12,11 +12,6 @@ public class BleedingEffect extends MobEffect {
 	}
 
 	@Override
-	public boolean isInstantenous() {
-		return false;
-	}
-
-	@Override
 	public boolean isBeneficial() {
 		return false;
 	}

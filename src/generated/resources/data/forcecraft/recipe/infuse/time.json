@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/time",
+  "group": "time",
+  "ingredient": "minecraft:clock",
+  "points": 20,
+  "tier": "2",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:time"
+  }
+}

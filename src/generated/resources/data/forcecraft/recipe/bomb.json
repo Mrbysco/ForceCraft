@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": "minecraft:fire_charge",
+    "G": "forcecraft:golden_power_source"
+  },
+  "pattern": [
+    "FFF",
+    "FGF",
+    "FFF"
+  ],
+  "result": {
+    "count": 8,
+    "id": "forcecraft:bomb"
+  }
+}

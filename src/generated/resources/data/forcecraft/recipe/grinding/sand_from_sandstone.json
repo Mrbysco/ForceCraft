@@ -1,15 +1,11 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "item": "minecraft:sandstone"
+  "ingredient": "minecraft:sandstone",
+  "result": {
+    "id": "minecraft:sand"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:sand"
-    }
-  ],
   "secondaryChance": 1.0
 }

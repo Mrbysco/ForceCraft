@@ -1,0 +1,15 @@
+{
+  "values": {
+    "minecraft:acacia_sapling": "forcecraft:force_sapling",
+    "minecraft:azalea": "forcecraft:force_sapling",
+    "minecraft:birch_sapling": "forcecraft:force_sapling",
+    "minecraft:cherry_sapling": "forcecraft:force_sapling",
+    "minecraft:dark_oak_sapling": "forcecraft:force_sapling",
+    "minecraft:flowering_azalea": "forcecraft:force_sapling",
+    "minecraft:jungle_sapling": "forcecraft:force_sapling",
+    "minecraft:mangrove_propagule": "forcecraft:force_sapling",
+    "minecraft:oak_sapling": "forcecraft:force_sapling",
+    "minecraft:pale_oak_sapling": "forcecraft:force_sapling",
+    "minecraft:spruce_sapling": "forcecraft:force_sapling"
+  }
+}

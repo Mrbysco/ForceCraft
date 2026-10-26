@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "minecraft:experience_bottle",
+  "group": "experience",
+  "ingredient": "#forcecraft:valid_items/experience",
+  "output": {
+    "id": "forcecraft:experience_tome"
+  },
+  "points": 15,
+  "tier": "1",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:convert"
+  }
+}

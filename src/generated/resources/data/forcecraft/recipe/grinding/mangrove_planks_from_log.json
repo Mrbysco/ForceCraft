@@ -1,15 +1,12 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "tag": "minecraft:mangrove_logs"
+  "ingredient": "#minecraft:mangrove_logs",
+  "result": {
+    "count": 6,
+    "id": "minecraft:mangrove_planks"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 6,
-      "id": "minecraft:mangrove_planks"
-    }
-  ],
   "secondaryChance": 1.0
 }

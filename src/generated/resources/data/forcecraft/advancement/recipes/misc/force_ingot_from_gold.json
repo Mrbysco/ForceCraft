@@ -5,13 +5,13 @@
       "conditions": {
         "items": [
           {
-            "items": "#c:gems/force"
+            "items": "forcecraft:force_gem"
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_gold_ingot": {
+    "has_ingot": {
       "conditions": {
         "items": [
           {
@@ -31,8 +31,8 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_gold_ingot",
-      "has_force_gem"
+      "has_force_gem",
+      "has_ingot"
     ]
   ],
   "rewards": {

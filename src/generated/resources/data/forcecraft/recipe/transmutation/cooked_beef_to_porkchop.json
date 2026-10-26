@@ -1,15 +1,11 @@
 {
-  "type": "forcecraft:transmutation",
+  "type": "forcecraft:transmute",
+  "category": "misc",
   "ingredients": [
-    {
-      "item": "forcecraft:force_rod"
-    },
-    {
-      "item": "minecraft:cooked_beef"
-    }
+    "forcecraft:force_rod",
+    "minecraft:cooked_beef"
   ],
   "result": {
-    "count": 1,
     "id": "minecraft:cooked_porkchop"
   }
 }

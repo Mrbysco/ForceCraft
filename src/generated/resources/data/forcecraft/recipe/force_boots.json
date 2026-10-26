@@ -2,16 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "F": {
-      "tag": "c:ingots/force"
-    }
+    "F": "#c:ingots/force"
   },
   "pattern": [
     "F F",
     "F F"
   ],
   "result": {
-    "count": 1,
     "id": "forcecraft:force_boots"
   }
 }

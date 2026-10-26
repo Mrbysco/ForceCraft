@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/false",
+  "ingredient": "minecraft:glass_bottle",
+  "points": 20,
+  "tier": "2",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:false"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/light",
+  "ingredient": "minecraft:glowstone_dust",
+  "points": 55,
+  "tier": "6",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:leveled",
+    "cap": 5,
+    "component": "forcecraft:light"
+  }
+}

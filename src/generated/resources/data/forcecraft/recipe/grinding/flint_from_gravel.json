@@ -1,15 +1,11 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "tag": "c:gravels"
+  "ingredient": "#c:gravels",
+  "result": {
+    "id": "minecraft:flint"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:flint"
-    }
-  ],
   "secondaryChance": 1.0
 }

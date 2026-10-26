@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "forcecraft:force_brick_green"
-    }
+    "#": "forcecraft:force_brick_green"
   },
   "pattern": [
     "#  ",

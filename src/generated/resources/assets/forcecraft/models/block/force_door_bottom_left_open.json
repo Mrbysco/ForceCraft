@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left_open",
+  "textures": {
+    "bottom": "forcecraft:block/force_door_bottom",
+    "top": "forcecraft:block/force_door_top"
+  }
+}

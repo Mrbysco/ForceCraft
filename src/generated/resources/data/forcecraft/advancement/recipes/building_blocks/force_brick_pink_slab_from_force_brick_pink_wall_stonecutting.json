@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_force_brick_pink_wall": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:force_brick_pink_wall"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:force_brick_pink_slab_from_force_brick_pink_wall_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_force_brick_pink_wall"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:force_brick_pink_slab_from_force_brick_pink_wall_stonecutting"
+    ]
+  }
+}

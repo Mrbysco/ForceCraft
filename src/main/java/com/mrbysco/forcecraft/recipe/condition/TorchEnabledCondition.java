@@ -1,7 +1,7 @@
 package com.mrbysco.forcecraft.recipe.condition;
 
 import com.mojang.serialization.MapCodec;
-import com.mrbysco.forcecraft.config.ConfigHandler;
+import com.mrbysco.forcecraft.config.ForceConfig;
 import net.neoforged.neoforge.common.conditions.ICondition;
 
 public class TorchEnabledCondition implements ICondition {
@@ -15,6 +15,6 @@ public class TorchEnabledCondition implements ICondition {
 
 	@Override
 	public boolean test(IContext context) {
-		return ConfigHandler.COMMON.timeTorchEnabled.get();
+		return ForceConfig.COMMON.timeTorchEnabled.get();
 	}
 }

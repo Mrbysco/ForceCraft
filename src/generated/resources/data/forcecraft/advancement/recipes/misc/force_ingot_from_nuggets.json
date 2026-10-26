@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "#c:nuggets/force"
+            "items": "forcecraft:force_nugget"
           }
         ]
       },

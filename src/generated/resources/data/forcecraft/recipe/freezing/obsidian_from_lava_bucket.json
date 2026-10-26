@@ -1,18 +1,14 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
-  "ingredient": {
-    "item": "minecraft:lava_bucket"
+  "ingredient": "minecraft:lava_bucket",
+  "result": {
+    "id": "minecraft:obsidian"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:obsidian"
-    },
-    {
-      "count": 1,
-      "id": "minecraft:bucket"
-    }
-  ]
+  "result2": {
+    "id": "minecraft:bucket"
+  },
+  "secondaryChance": 0.0
 }

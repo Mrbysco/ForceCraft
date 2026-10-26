@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "forcecraft:block/force_log_top",
+    "side": "forcecraft:block/force_log"
+  }
+}

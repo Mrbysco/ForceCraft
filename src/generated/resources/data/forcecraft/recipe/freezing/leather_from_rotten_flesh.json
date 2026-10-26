@@ -1,14 +1,11 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
-  "ingredient": {
-    "item": "minecraft:rotten_flesh"
+  "ingredient": "minecraft:rotten_flesh",
+  "result": {
+    "id": "minecraft:leather"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:leather"
-    }
-  ]
+  "secondaryChance": 0.0
 }

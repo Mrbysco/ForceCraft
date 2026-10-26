@@ -1,14 +1,11 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
-  "ingredient": {
-    "tag": "c:slime_balls"
+  "ingredient": "#c:slime_balls",
+  "result": {
+    "id": "minecraft:snowball"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:snowball"
-    }
-  ]
+  "secondaryChance": 0.0
 }

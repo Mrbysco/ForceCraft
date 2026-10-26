@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/sturdy",
+  "ingredient": "minecraft:obsidian",
+  "points": 45,
+  "tier": "5",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:leveled",
+    "cap": 2,
+    "component": "forcecraft:sturdy",
+    "limitedTag": "forcecraft:valid_items/limited_sturdy"
+  }
+}

@@ -1,20 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "building",
+  "category": "misc",
   "key": {
-    "G": {
-      "item": "forcecraft:golden_power_source"
-    },
-    "S": {
-      "tag": "c:rods/wooden"
-    }
+    "G": "forcecraft:golden_power_source",
+    "S": "forcecraft:force_stick"
   },
   "pattern": [
     "G",
     "S"
   ],
   "result": {
-    "count": 4,
+    "count": 6,
     "id": "forcecraft:force_torch"
   }
 }

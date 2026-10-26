@@ -1,11 +1,11 @@
 package com.mrbysco.forcecraft.menu;
 
-import com.mrbysco.forcecraft.components.ForceComponents;
-import com.mrbysco.forcecraft.items.ForceBeltItem;
+import com.mrbysco.forcecraft.item.ForceBeltItem;
 import com.mrbysco.forcecraft.menu.slot.BeltSlot;
+import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.util.FindingUtil;
-import com.mrbysco.forcecraft.util.ItemHandlerUtils;
+import com.mrbysco.forcecraft.util.ResourceHandlerUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +19,7 @@ import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 
 public class ForceBeltMenu extends AbstractContainerMenu {
 
-	private ItemStack heldStack;
+	private final ItemStack heldStack;
 	private ItemStacksResourceHandler itemHandler;
 
 	@Override
@@ -77,7 +77,7 @@ public class ForceBeltMenu extends AbstractContainerMenu {
 	@Override
 	public void removed(Player playerIn) {
 		if (itemHandler != null) {
-			heldStack.set(ForceComponents.SLOTS_USED, ItemHandlerUtils.getUsedSlots(itemHandler));
+			heldStack.set(ForceComponents.SLOTS_USED, ResourceHandlerUtils.getUsedSlots(itemHandler));
 			heldStack.set(ForceComponents.SLOTS_TOTAL, itemHandler.size());
 		}
 

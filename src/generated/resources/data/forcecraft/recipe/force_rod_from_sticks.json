@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "forcecraft:force_ingot",
+    "N": "forcecraft:force_nugget",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "  I",
+    " S ",
+    "N  "
+  ],
+  "result": {
+    "components": {
+      "minecraft:damage": 73
+    },
+    "id": "forcecraft:force_rod"
+  }
+}

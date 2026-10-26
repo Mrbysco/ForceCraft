@@ -1,12 +1,9 @@
 {
-  "type": "forcecraft:transmutation",
+  "type": "forcecraft:transmute",
+  "category": "misc",
   "ingredients": [
-    {
-      "item": "forcecraft:force_rod"
-    },
-    {
-      "item": "minecraft:diamond_pickaxe"
-    }
+    "forcecraft:force_rod",
+    "minecraft:diamond_pickaxe"
   ],
   "result": {
     "count": 2,

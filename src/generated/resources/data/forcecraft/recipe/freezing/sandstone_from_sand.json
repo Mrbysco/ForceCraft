@@ -1,14 +1,11 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
-  "ingredient": {
-    "tag": "c:sands/colorless"
+  "ingredient": "#c:sands/colorless",
+  "result": {
+    "id": "minecraft:sandstone"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:sandstone"
-    }
-  ]
+  "secondaryChance": 0.0
 }

@@ -22,7 +22,7 @@ public class ForceFluids {
 	public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(BuiltInRegistries.FLUID, Reference.MOD_ID);
 	public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, Reference.MOD_ID);
 
-	private static DeferredHolder<FluidType, FluidType> FORCE_TYPE = FLUID_TYPES.register("force", () -> new FluidType(createTypeProperties()) {
+	public static DeferredHolder<FluidType, FluidType> FORCE_TYPE = FLUID_TYPES.register("force", () -> new FluidType(createTypeProperties()) {
 		@Override
 		public double motionScale(Entity entity) {
 			return entity.level().environmentAttributes().getValue(EnvironmentAttributes.WATER_EVAPORATES, entity.blockPosition()) ? 0.007D : 0.0023333333333333335D;
@@ -40,13 +40,14 @@ public class ForceFluids {
 
 	private static BaseFlowingFluid.Properties FLUID_FORCE_PROPERTIES = new BaseFlowingFluid.Properties(
 			() -> ForceFluids.FORCE_TYPE.get(), () -> ForceFluids.FORCE_FLUID_SOURCE.get(), () -> ForceFluids.FORCE_FLUID_FLOWING.get())
-			.bucket(ForceRegistry.BUCKET_FLUID_FORCE).block(() -> (LiquidBlock) ForceRegistry.FORCE_FLUID_BLOCK.get());
+			.bucket(ForceRegistry.FORCE_BUCKET).block(() -> (LiquidBlock) ForceRegistry.FORCE_FLUID_BLOCK.get());
 
 
 	private static FluidType.Properties createTypeProperties() {
 		return FluidType.Properties.create()
-				.canSwim(false)
-				.canDrown(false)
+				.canSwim(true)
+				.canDrown(true)
+				.isWaterLike(true)
 				.pathType(PathType.LAVA)
 				.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
 				.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)

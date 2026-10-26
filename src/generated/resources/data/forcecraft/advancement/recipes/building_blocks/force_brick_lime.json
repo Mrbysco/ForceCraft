@@ -1,21 +1,21 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_force_brick": {
+    "has_dye": {
       "conditions": {
         "items": [
           {
-            "items": "forcecraft:force_brick"
+            "items": "#c:dyes/lime"
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_lime_dye": {
+    "has_force_brick": {
       "conditions": {
         "items": [
           {
-            "items": "#c:dyes/lime"
+            "items": "#forcecraft:force_bricks"
           }
         ]
       },
@@ -32,7 +32,7 @@
     [
       "has_the_recipe",
       "has_force_brick",
-      "has_lime_dye"
+      "has_dye"
     ]
   ],
   "rewards": {

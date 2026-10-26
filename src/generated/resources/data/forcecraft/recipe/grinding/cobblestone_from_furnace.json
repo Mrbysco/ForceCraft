@@ -1,15 +1,12 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "item": "minecraft:furnace"
+  "ingredient": "minecraft:furnace",
+  "result": {
+    "count": 8,
+    "id": "minecraft:cobblestone"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 8,
-      "id": "minecraft:cobblestone"
-    }
-  ],
   "secondaryChance": 1.0
 }

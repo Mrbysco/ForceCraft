@@ -1,0 +1,94 @@
+package com.mrbysco.forcecraft.compat.jei.category;
+
+import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.recipe.MultiOutputFurnaceRecipe;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
+import mezz.jei.api.gui.ingredient.IRecipeSlotView;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+
+public abstract class AbstractMultiOutputCategory<T extends MultiOutputFurnaceRecipe> implements IRecipeCategory<T> {
+	public static final Identifier RECIPE_MULTIPLES_JEI = Reference.modLoc("textures/gui/jei/multiples.png");
+
+	private final IDrawable background;
+	private final IDrawable icon;
+	private final Component localizedName;
+	private final boolean showChance;
+
+	public AbstractMultiOutputCategory(IGuiHelper guiHelper, Block icon, String translationKey, int yOffset, boolean showChance) {
+		this.background = guiHelper.createDrawable(RECIPE_MULTIPLES_JEI, 0, yOffset, 140, 37);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(icon));
+		this.localizedName = Component.translatable(translationKey);
+		this.showChance = showChance;
+	}
+
+	@Override
+	public int getHeight() {
+		return 37;
+	}
+
+	@Override
+	public int getWidth() {
+		return 140;
+	}
+
+	@Override
+	public IDrawable getIcon() {
+		return icon;
+	}
+
+	@Override
+	public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup focuses) {
+		builder.addSlot(RecipeIngredientRole.INPUT, 10, 10).add(recipe.input());
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 83, 10)
+				.add(recipe.result().create());
+
+		recipe.result2().ifPresent(secondResult -> {
+			IRecipeSlotBuilder secondOutputBuilder = builder.addSlot(RecipeIngredientRole.OUTPUT, 113, 10)
+					.add(secondResult.create());
+
+			if (showChance) {
+				secondOutputBuilder.addRichTooltipCallback(new ChanceTooltip(recipe));
+			}
+		});
+	}
+
+	@Override
+	public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+		this.background.draw(guiGraphics);
+		IRecipeCategory.super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
+	}
+
+	@Override
+	public Component getTitle() {
+		return localizedName;
+	}
+
+	public static class ChanceTooltip implements IRecipeSlotRichTooltipCallback {
+		private final MultiOutputFurnaceRecipe recipe;
+
+		public ChanceTooltip(MultiOutputFurnaceRecipe recipe) {
+			this.recipe = recipe;
+		}
+
+		@Override
+		public void onRichTooltip(IRecipeSlotView recipeSlotView, ITooltipBuilder tooltip) {
+			tooltip.add(Component.literal(recipe.secondaryChance() * 100 + " ")
+					.append(Component.translatable("forcecraft.gui.jei.category.grinding.tooltip")).withStyle(ChatFormatting.YELLOW));
+		}
+	}
+}

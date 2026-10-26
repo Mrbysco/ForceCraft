@@ -1,0 +1,15 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "forcecraft:snow_cookie",
+  "group": "freezing",
+  "ingredient": "forcecraft:upgrade_core",
+  "output": {
+    "id": "forcecraft:frozen_core"
+  },
+  "points": 15,
+  "tier": "1",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:convert"
+  }
+}

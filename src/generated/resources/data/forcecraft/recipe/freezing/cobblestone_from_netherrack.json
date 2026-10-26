@@ -1,14 +1,11 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
-  "ingredient": {
-    "tag": "c:netherracks"
+  "ingredient": "#c:netherracks",
+  "result": {
+    "id": "minecraft:cobblestone"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:cobblestone"
-    }
-  ]
+  "secondaryChance": 0.0
 }

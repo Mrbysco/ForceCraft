@@ -1,17 +1,11 @@
 {
-  "type": "forcecraft:transmutation",
+  "type": "forcecraft:transmute",
+  "category": "misc",
   "ingredients": [
-    {
-      "item": "forcecraft:force_rod"
-    },
-    {
-      "type": "neoforge:components",
-      "components": {},
-      "items": "forcecraft:experience_tome"
-    }
+    "forcecraft:force_rod",
+    "forcecraft:experience_tome"
   ],
   "result": {
-    "count": 1,
     "id": "forcecraft:upgrade_core"
   }
 }

@@ -1,14 +1,11 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
-  "ingredient": {
-    "tag": "c:stones"
+  "ingredient": "#c:stones",
+  "result": {
+    "id": "minecraft:stone_bricks"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:stone_bricks"
-    }
-  ]
+  "secondaryChance": 0.0
 }

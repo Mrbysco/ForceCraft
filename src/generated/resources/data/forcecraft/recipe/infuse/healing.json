@@ -1,0 +1,14 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/healing",
+  "group": "healing",
+  "ingredient": "minecraft:ghast_tear",
+  "points": 35,
+  "tier": "4",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:leveled",
+    "cap": 2,
+    "component": "forcecraft:healing"
+  }
+}

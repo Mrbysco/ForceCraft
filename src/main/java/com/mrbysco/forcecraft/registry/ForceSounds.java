@@ -42,5 +42,8 @@ public class ForceSounds {
 	public static final DeferredHolder<SoundEvent, SoundEvent> FORCE_PUNCH = SOUND_EVENTS.register("force.punch", () ->
 			SoundEvent.createVariableRangeEvent(Reference.modLoc("force.punch")));
 
+	public static final DeferredHolder<SoundEvent, SoundEvent> FORCE_MAGIC = SOUND_EVENTS.register("force.magic", () ->
+			SoundEvent.createVariableRangeEvent(Reference.modLoc("force.magic")));
+
 
 }

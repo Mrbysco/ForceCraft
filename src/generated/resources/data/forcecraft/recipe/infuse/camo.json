@@ -1,0 +1,21 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/camo",
+  "group": "camo",
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:components",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:invisibility"
+      }
+    },
+    "items": "minecraft:potion"
+  },
+  "points": 35,
+  "tier": "4",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:camo"
+  }
+}

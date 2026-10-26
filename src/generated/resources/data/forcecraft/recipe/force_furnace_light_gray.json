@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "#forcecraft:force_furnaces",
+    "#c:dyes/light_gray"
+  ],
+  "result": {
+    "id": "forcecraft:force_furnace_light_gray"
+  }
+}

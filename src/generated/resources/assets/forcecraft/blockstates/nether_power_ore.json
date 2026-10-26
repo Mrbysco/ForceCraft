@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "forcecraft:block/nether_power_ore"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "forcecraft:force_pack",
+  "ingredient": "forcecraft:force_pack_upgrade",
+  "points": 30,
+  "tier": "4",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:pack"
+  }
+}

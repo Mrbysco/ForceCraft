@@ -5,27 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "#c:ingots/force"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "has_force_nugget": {
-      "conditions": {
-        "items": [
-          {
-            "items": "#c:nuggets/force"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "has_force_rod": {
-      "conditions": {
-        "items": [
-          {
-            "items": "#c:rods/force"
+            "items": "forcecraft:force_ingot"
           }
         ]
       },
@@ -41,9 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_force_ingot",
-      "has_force_nugget",
-      "has_force_rod"
+      "has_force_ingot"
     ]
   ],
   "rewards": {

@@ -1,15 +1,12 @@
 {
   "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
   "experience": 0.1,
-  "ingredient": {
-    "tag": "minecraft:cherry_logs"
+  "ingredient": "#minecraft:cherry_logs",
+  "result": {
+    "count": 6,
+    "id": "minecraft:cherry_planks"
   },
-  "processTime": 400,
-  "results": [
-    {
-      "count": 6,
-      "id": "minecraft:cherry_planks"
-    }
-  ],
   "secondaryChance": 1.0
 }

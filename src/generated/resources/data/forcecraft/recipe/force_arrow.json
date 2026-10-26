@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": {
-      "tag": "c:rods/force"
-    },
-    "X": {
-      "tag": "c:nuggets/force"
-    },
-    "Y": {
-      "tag": "c:feathers"
-    }
+    "#": "#c:rods/force",
+    "X": "#c:nuggets/force",
+    "Y": "#c:feathers"
   },
   "pattern": [
     "X",

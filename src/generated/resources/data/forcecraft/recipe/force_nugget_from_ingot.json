@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "forcecraft:force_ingot"
+  ],
+  "result": {
+    "count": 9,
+    "id": "forcecraft:force_nugget"
+  }
+}

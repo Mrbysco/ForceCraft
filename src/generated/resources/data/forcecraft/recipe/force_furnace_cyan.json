@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "#forcecraft:force_furnaces",
+    "#c:dyes/cyan"
+  ],
+  "result": {
+    "id": "forcecraft:force_furnace_cyan"
+  }
+}

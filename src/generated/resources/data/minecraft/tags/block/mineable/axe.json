@@ -1,0 +1,20 @@
+{
+  "values": [
+    "forcecraft:force_log",
+    "forcecraft:force_wood",
+    "forcecraft:force_planks",
+    "forcecraft:force_button",
+    "forcecraft:force_door",
+    "forcecraft:force_fence",
+    "forcecraft:force_fence_gate",
+    "forcecraft:force_pressure_plate",
+    "forcecraft:force_slab",
+    "forcecraft:force_stairs",
+    "forcecraft:force_trapdoor",
+    "forcecraft:force_sign",
+    "forcecraft:force_wall_sign",
+    "forcecraft:force_hanging_sign",
+    "forcecraft:force_wall_hanging_sign",
+    "forcecraft:force_shelf"
+  ]
+}

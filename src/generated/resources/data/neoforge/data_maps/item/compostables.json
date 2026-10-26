@@ -1,0 +1,10 @@
+{
+  "values": {
+    "forcecraft:force_leaves": {
+      "chance": 0.3
+    },
+    "forcecraft:force_sapling": {
+      "chance": 0.3
+    }
+  }
+}

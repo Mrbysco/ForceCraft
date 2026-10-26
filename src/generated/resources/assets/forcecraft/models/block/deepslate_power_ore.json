@@ -1,8 +1,8 @@
 {
-  "parent": "forcecraft:block/ore",
-  "render_type": "minecraft:cutout",
+  "parent": "forcecraft:block/template_ore",
   "textures": {
     "ore": "forcecraft:block/power_ore",
+    "particle": "minecraft:block/deepslate",
     "stone": "minecraft:block/deepslate"
   }
 }

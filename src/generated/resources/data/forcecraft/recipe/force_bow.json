@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": {
-      "tag": "c:strings"
-    },
-    "N": {
-      "tag": "c:nuggets/force"
-    },
-    "S": {
-      "tag": "c:rods/force"
-    }
+    "#": "#c:strings",
+    "N": "#c:nuggets/force",
+    "S": "#c:rods/force"
   },
   "pattern": [
     " #S",
@@ -18,7 +12,6 @@
     " #S"
   ],
   "result": {
-    "count": 1,
     "id": "forcecraft:force_bow"
   }
 }

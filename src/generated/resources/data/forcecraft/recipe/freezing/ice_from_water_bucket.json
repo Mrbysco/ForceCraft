@@ -1,18 +1,14 @@
 {
   "type": "forcecraft:freezing",
+  "category": "misc",
+  "cookingtime": 200,
   "experience": 0.1,
-  "freezingTime": 200,
-  "ingredient": {
-    "item": "minecraft:water_bucket"
+  "ingredient": "minecraft:water_bucket",
+  "result": {
+    "id": "minecraft:packed_ice"
   },
-  "results": [
-    {
-      "count": 1,
-      "id": "minecraft:packed_ice"
-    },
-    {
-      "count": 1,
-      "id": "minecraft:bucket"
-    }
-  ]
+  "result2": {
+    "id": "minecraft:bucket"
+  },
+  "secondaryChance": 0.0
 }

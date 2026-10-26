@@ -1,0 +1,21 @@
+{
+  "values": [
+    "forcecraft:force_brick_red_wall",
+    "forcecraft:force_brick_yellow_wall",
+    "forcecraft:force_brick_green_wall",
+    "forcecraft:force_brick_blue_wall",
+    "forcecraft:force_brick_white_wall",
+    "forcecraft:force_brick_black_wall",
+    "forcecraft:force_brick_brown_wall",
+    "forcecraft:force_brick_orange_wall",
+    "forcecraft:force_brick_light_blue_wall",
+    "forcecraft:force_brick_magenta_wall",
+    "forcecraft:force_brick_pink_wall",
+    "forcecraft:force_brick_light_gray_wall",
+    "forcecraft:force_brick_lime_wall",
+    "forcecraft:force_brick_cyan_wall",
+    "forcecraft:force_brick_purple_wall",
+    "forcecraft:force_brick_gray_wall",
+    "forcecraft:force_brick_wall"
+  ]
+}

@@ -2,12 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:snowball"
-    }
+    "minecraft:snowball"
   ],
   "result": {
-    "count": 1,
     "id": "forcecraft:snow_cookie"
   }
 }

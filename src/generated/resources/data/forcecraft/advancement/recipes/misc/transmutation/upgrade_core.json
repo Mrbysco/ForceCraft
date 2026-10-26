@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_experience_tome": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:experience_tome"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_force_rod": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:force_rod"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:transmutation/upgrade_core"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_force_rod",
+      "has_experience_tome"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:transmutation/upgrade_core"
+    ]
+  }
+}

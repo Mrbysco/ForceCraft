@@ -1,12 +1,9 @@
 {
-  "type": "forcecraft:transmutation",
+  "type": "forcecraft:transmute",
+  "category": "misc",
   "ingredients": [
-    {
-      "item": "forcecraft:force_rod"
-    },
-    {
-      "item": "minecraft:anvil"
-    }
+    "forcecraft:force_rod",
+    "minecraft:anvil"
   ],
   "result": {
     "count": 31,

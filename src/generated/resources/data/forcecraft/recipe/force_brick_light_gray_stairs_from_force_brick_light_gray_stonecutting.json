@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "forcecraft:force_brick_light_gray",
+  "result": {
+    "count": 4,
+    "id": "forcecraft:force_brick_light_gray_stairs"
+  }
+}

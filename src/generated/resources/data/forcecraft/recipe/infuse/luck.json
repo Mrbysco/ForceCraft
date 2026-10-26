@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/luck",
+  "ingredient": "forcecraft:fortune",
+  "points": 15,
+  "tier": "1",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:leveled",
+    "cap": 4,
+    "component": "forcecraft:luck"
+  }
+}

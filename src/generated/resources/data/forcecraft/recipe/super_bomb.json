@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "forcecraft:bomb",
+    "O": "#c:ores/power"
+  },
+  "pattern": [
+    "BBB",
+    "BOB",
+    "BBB"
+  ],
+  "result": {
+    "id": "forcecraft:super_bomb"
+  }
+}

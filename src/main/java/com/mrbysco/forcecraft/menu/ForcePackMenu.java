@@ -1,28 +1,21 @@
 package com.mrbysco.forcecraft.menu;
 
-import com.mrbysco.forcecraft.components.ForceComponents;
-import com.mrbysco.forcecraft.components.card.RecipeContentsData;
-import com.mrbysco.forcecraft.components.storage.PackStackHandler;
-import com.mrbysco.forcecraft.items.ForceBeltItem;
-import com.mrbysco.forcecraft.items.ForcePackItem;
-import com.mrbysco.forcecraft.items.ItemCardItem;
+import com.mrbysco.forcecraft.item.ForceBeltItem;
+import com.mrbysco.forcecraft.item.ForcePackItem;
+import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceMenus;
+import com.mrbysco.forcecraft.storage.PackStackHandler;
 import com.mrbysco.forcecraft.util.FindingUtil;
-import com.mrbysco.forcecraft.util.ItemHandlerUtils;
-import net.minecraft.core.NonNullList;
+import com.mrbysco.forcecraft.util.ResourceHandlerUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ForcePackMenu extends AbstractContainerMenu {
 
@@ -60,7 +53,7 @@ public class ForcePackMenu extends AbstractContainerMenu {
 		//Maxes at 40
 		for (int j = 0; j < numRows; ++j) {
 			for (int k = 0; k < 8; ++k) {
-				this.addSlot(new SlotItemHandler(inventory, k + j * 8, xPosC + k * 18, yPosC + j * 18) {
+				this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, k + j * 8, xPosC + k * 18, yPosC + j * 18) {
 					@Override
 					public boolean mayPlace(@NotNull ItemStack stack) {
 						return !(stack.getItem() instanceof ForcePackItem || stack.getItem() instanceof ForceBeltItem);
@@ -94,138 +87,23 @@ public class ForcePackMenu extends AbstractContainerMenu {
 	@Override
 	public void removed(Player player) {
 		if (inventory != null) {
-			if (player.level().isClientSide) return;
-			for (int i = 0; i < inventory.getSlots(); i++) {
-				ItemStack stack = inventory.getStackInSlot(i);
-				if (stack.getItem() instanceof ItemCardItem && stack.has(ForceComponents.RECIPE_CONTENTS)) {
-					RecipeContentsData recipeData = stack.get(ForceComponents.RECIPE_CONTENTS);
-					NonNullList<ItemStack> ingredientList = NonNullList.create();
-					List<ItemStack> mergeList = new ArrayList<>();
-					for (int j = 0; j < 9; j++) {
-						ItemStack recipeStack = recipeData.recipeItems().get(j);
-						if (!recipeStack.isEmpty()) {
-							if (ingredientList.stream().noneMatch(s -> ItemStack.isSameItemSameComponents(s, recipeStack))) {
-								ingredientList.add(recipeStack.copy());
-							} else {
-								mergeList.add(recipeStack.copy());
-							}
-						}
-					}
-
-					for (ItemStack recipeStack : mergeList) {
-						if (!ingredientList.isEmpty()) {
-							List<ItemStack> buffer = new ArrayList<>();
-							if (recipeStack.getMaxStackSize() == 1) {
-								//We can't merge these, so just add them to the buffer
-								ingredientList.add(recipeStack.copy());
-								recipeStack.shrink(1);
-								continue;
-							} else {
-								for (ItemStack ingredient : ingredientList) {
-									if (ingredient != null && !ingredient.isEmpty() && ingredient.getMaxStackSize() > 1) {
-										if (ItemStack.isSameItemSameComponents(ingredient, recipeStack)) {
-											int addedCount = ingredient.getCount() + recipeStack.getCount();
-											int maxCount = ingredient.getMaxStackSize();
-											if (addedCount <= maxCount) {
-												recipeStack.shrink(1);
-												ingredient.setCount(addedCount);
-											} else if (recipeStack.getCount() < maxCount) {
-												recipeStack.shrink(maxCount - ingredient.getCount());
-												ingredient.setCount(maxCount);
-											}
-										}
-									}
-
-									if (!recipeStack.isEmpty()) {
-										buffer.add(recipeStack);
-									}
-								}
-							}
-							buffer.removeIf(ItemStack::isEmpty);
-							if (!buffer.isEmpty()) {
-								ingredientList.addAll(buffer);
-							}
-						}
-					}
-					mergeList.clear();
-
-					List<ItemStack> restList = new ArrayList<>();
-					for (int k = 0; k < inventory.getSlots(); k++) {
-						if (k != i) {
-							ItemStack restStack = inventory.getStackInSlot(k);
-							if (!restStack.isEmpty()) {
-								restList.add(restStack);
-							}
-						}
-					}
-					boolean canCraft = true;
-					int craftCount = 64;
-					for (ItemStack ingredient : ingredientList) {
-						int countPossible = 0;
-						for (ItemStack rest : restList) {
-							if (ItemStack.isSameItemSameComponents(ingredient, rest)) {
-								countPossible += (int) Math.floor((double) rest.getCount() / ingredient.getCount());
-							}
-						}
-						if (countPossible == 0) {
-							canCraft = false;
-							craftCount = 0;
-							break;
-						}
-						if (countPossible < craftCount) {
-							craftCount = countPossible;
-						}
-					}
-
-					ItemStack craftStack = recipeData.resultItem();
-					if (canCraft && craftCount > 0) {
-						for (int l = 0; l < craftCount; l++) {
-							for (ItemStack ingredient : ingredientList) {
-								for (ItemStack rest : restList) {
-									if (ItemStack.isSameItemSameComponents(ingredient, rest)) {
-										if (rest.getCount() >= ingredient.getCount()) {
-											if (rest.hasCraftingRemainingItem()) {
-												ItemStack remainderStack = rest.getCraftingRemainingItem().copy();
-												rest.shrink(1);
-												ItemStack insertResult = ItemHandlerHelper.insertItem(inventory,
-														remainderStack, false);
-												if (!insertResult.isEmpty()) {
-													player.drop(insertResult, true);
-												}
-											} else {
-												rest.shrink(ingredient.getCount());
-											}
-										}
-									}
-								}
-							}
-
-							ItemStack stackCopy = craftStack.copy();
-							ItemStack craftedStack = ItemHandlerHelper.insertItem(inventory, stackCopy, false);
-							if (!craftedStack.isEmpty()) {
-								player.drop(craftedStack, true);
-							}
-						}
-					}
-				}
-			}
-
-			heldStack.set(ForceComponents.SLOTS_USED, ItemHandlerUtils.getUsedSlots(inventory));
+			if (player.level().isClientSide()) return;
+			heldStack.set(ForceComponents.SLOTS_USED, ResourceHandlerUtils.getUsedSlots(inventory));
 		}
 
 		super.removed(player);
 	}
 
 	@Override
-	public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+	public void clicked(int slotId, int dragType, ContainerInput containerInput, Player player) {
 		if (slotId >= 0) {
 			if (getSlot(slotId).getItem().getItem() instanceof ForcePackItem)
 				return;
 		}
-		if (clickTypeIn == ClickType.SWAP)
+		if (containerInput == ContainerInput.SWAP)
 			return;
 
-		super.clicked(slotId, dragType, clickTypeIn, player);
+		super.clicked(slotId, dragType, containerInput, player);
 	}
 
 	public int getUpgrades() {
@@ -245,7 +123,7 @@ public class ForcePackMenu extends AbstractContainerMenu {
 			if (itemstack.getItem() instanceof ForcePackItem)
 				return ItemStack.EMPTY;
 
-			int containerSlots = slots.size() - player.getInventory().items.size();
+			int containerSlots = slots.size() - player.getInventory().getNonEquipmentItems().size();
 
 			if (index < containerSlots) {
 				if (!this.moveItemStackTo(itemstack1, containerSlots, slots.size(), true)) {

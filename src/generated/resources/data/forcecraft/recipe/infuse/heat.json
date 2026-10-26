@@ -1,0 +1,13 @@
+{
+  "type": "forcecraft:infuse",
+  "center": "#forcecraft:valid_items/heat",
+  "group": "heat",
+  "ingredient": "forcecraft:golden_power_source",
+  "points": 30,
+  "tier": "3",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:heat"
+  }
+}
