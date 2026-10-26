@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-26T22:32:19.9418216	Tags for minecraft:item mod id forcecraft
+// 26.1.2	2026-10-26T23:20:54.3277742	Tags for minecraft:item mod id forcecraft
 e4114fb3db46efa51fbbe42ba62fe557c245011e data/c/tags/item/gems.json
 6acf1247ecbbd8d85c4f176ff43157c4353856e7 data/c/tags/item/gems/force.json
 417731315b0e838f1c2b1e7bd36d21ec3d3c0df2 data/c/tags/item/holds_items.json
@@ -48,7 +48,7 @@ d0839816bc5ce3b45313754d9906dbff2041e63c data/forcecraft/tags/item/valid_items/l
 258ff8ea600041ff7fc7ee9dbd34b236a663d42d data/forcecraft/tags/item/valid_items/sight.json
 919e6d75ea4faf772493aad779bb387136859c88 data/forcecraft/tags/item/valid_items/soul.json
 c460e8b9590468594376e360b361d681b467dcd1 data/forcecraft/tags/item/valid_items/speed.json
-7ac2e9331a73a653089de7d7ec31be65ca593ea4 data/forcecraft/tags/item/valid_items/sturdy.json
+aaa2dc5cf784fe3d1e2f99042e8dd270a67338e9 data/forcecraft/tags/item/valid_items/sturdy.json
 4f3cae5ffe56fcc40e2ef188194cefae1a36339a data/forcecraft/tags/item/valid_items/time.json
 4e038e6fdbda73bec817ac96c77a99cb51fc3334 data/forcecraft/tags/item/valid_items/touch.json
 443c433a2fd3ac4ea464f4a41249de7854800c7d data/forcecraft/tags/item/valid_items/treasure.json

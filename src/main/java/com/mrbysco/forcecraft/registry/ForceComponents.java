@@ -322,7 +322,7 @@ public class ForceComponents {
 	 * Modifier: Camo
 	 * Item: Potion of Invisibility
 	 * Levels: 1
-	 * Effect: Makes Force armor invisible. On a FOrce Rod it gives short spurts of invisibility to its user.
+	 * Effect: Makes Force armor invisible. On a Force Rod it gives short spurts of invisibility to its user.
 	 */
 	public static final Supplier<DataComponentType<Boolean>> CAMO = COMPONENT_TYPE.register("camo", () ->
 			DataComponentType.<Boolean>builder()

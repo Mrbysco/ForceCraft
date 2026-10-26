@@ -96,6 +96,7 @@ public class TooltipHandler {
 			builder.accept(Component.translatable("forcecraft.component.forge").withStyle(ChatFormatting.GOLD));
 		}
 		if (stack.has(ForceComponents.WING)) {
+			builder.accept(Component.literal("NOT IMPLEMENTED YET"));
 			builder.accept(Component.translatable("forcecraft.component.wing"));
 		}
 		if (stack.has(ForceComponents.HEALING)) {

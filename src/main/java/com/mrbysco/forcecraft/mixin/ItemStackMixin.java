@@ -1,7 +1,6 @@
 package com.mrbysco.forcecraft.mixin;
 
-import com.mrbysco.forcecraft.registry.ForceComponents;
-import com.mrbysco.forcecraft.util.ForceUtil;
+import com.mrbysco.forcecraft.util.DurabilityUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -21,8 +20,6 @@ public abstract class ItemStackMixin {
 	private void forcecraft$applyForce(int amount, ServerLevel level, @Nullable LivingEntity player,
 	                                   CallbackInfoReturnable<Integer> cir) {
 		ItemStack self = (ItemStack) (Object) this;
-		if (self.has(ForceComponents.FORCE_STORED)) {
-			cir.setReturnValue(ForceUtil.damageForceItem(self, cir.getReturnValueI()));
-		}
+		cir.setReturnValue(DurabilityUtil.processForceDurabilityChanges(level, self, cir.getReturnValueI()));
 	}
 }

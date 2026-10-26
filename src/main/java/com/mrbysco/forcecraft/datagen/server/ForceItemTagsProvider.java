@@ -180,8 +180,8 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 
 		this.tag(ForceTags.Items.VALID_STURDY_ITEMS)
 				.add(
-						ForceRegistry.FORCE_PICKAXE.get(), ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_AXE.get(),
-						ForceRegistry.FORCE_BOW.get())
+						ForceRegistry.FORCE_PICKAXE.get(), ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_AXE.get()
+				)
 				.addTag(ForceTags.Items.FORCE_ARMOR);
 
 		this.tag(ForceTags.Items.VALID_ENDER_ITEMS).add(
