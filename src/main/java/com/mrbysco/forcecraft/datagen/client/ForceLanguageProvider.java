@@ -166,6 +166,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		//Networking
 		add("forcecraft.networking.ender_pos_change.failed", "Failed to change Rod Position: %s");
 		add("forcecraft.networking.pack_change.failed", "Failed to change Force Pack: %s");
+		add("forcecraft.networking.stop_infuser_sound.failed", "Failed to stop Infuser sound: %s");
 
 		//Subtitles
 		addSubtitle(ForceSounds.WHOOSH, "Whooshing");

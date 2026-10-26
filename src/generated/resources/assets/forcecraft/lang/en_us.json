@@ -266,6 +266,7 @@
   "forcecraft.infuser.working.subtitle": "Infuser Processing",
   "forcecraft.networking.ender_pos_change.failed": "Failed to change Rod Position: %s",
   "forcecraft.networking.pack_change.failed": "Failed to change Force Pack: %s",
+  "forcecraft.networking.stop_infuser_sound.failed": "Failed to stop Infuser sound: %s",
   "forcecraft.serious_bomb.tooltip": "Serious Business.",
   "forcecraft.time_mode.fast": "Fast",
   "forcecraft.time_mode.hyper": "Hyper",

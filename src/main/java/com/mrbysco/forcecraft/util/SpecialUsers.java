@@ -19,6 +19,8 @@ public class SpecialUsers {
 	private static final String EXPLODY_URL = "https://raw.githubusercontent.com/Mrbysco/ForceCraft/refs/heads/26.1/explody.md";
 	private static final Set<UUID> EXPLODY_USERS = ConcurrentHashMap.newKeySet();
 
+	public static final float EXPLODE_CHANCE = 0.05F;
+
 	public static void loadExplodyUsers() {
 		new Thread(() -> {
 			ForceCraft.LOGGER.info("Loading ForceCraft explody users...");

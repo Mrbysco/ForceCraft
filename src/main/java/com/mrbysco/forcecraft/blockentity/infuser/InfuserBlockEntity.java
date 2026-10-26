@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.config.ForceConfig;
 import com.mrbysco.forcecraft.menu.InfuserMenu;
+import com.mrbysco.forcecraft.networking.message.StopInfuserSoundPayload;
 import com.mrbysco.forcecraft.recipe.InfuseRecipe;
 import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceFluids;
@@ -25,6 +26,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ProblemReporter;
@@ -43,6 +45,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
@@ -64,8 +67,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	private static final int FLUID_TO_FORCE_RATE = 1; // 1 unit of Liquid Force = 1 Force
 	private static final int ENERGY_COST_PER = 20;
 	private static final int FLUID_COST_PER = 1000;
-	private static final int FLUID_PER_GEM = 250;
-	private static final float EXPLODE_CHANCE = 0.05F; // If on list!
+	private static final int FLUID_PER_GEM = 250;// If on list!
 
 	private FluidStacksResourceHandler tank = new FluidStacksResourceHandler(1, 50_000) {
 		@Override
@@ -191,7 +193,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 
 	private void finishWork(ServerLevel level) {
 		if (isWorkAllowed() && lastUser != null && SpecialUsers.isExplodyUser(lastUser)
-				&& level.getRandom().nextFloat() < EXPLODE_CHANCE) {
+				&& level.getRandom().nextFloat() < SpecialUsers.EXPLODE_CHANCE) {
 			BlockPos pos = getBlockPos();
 			level.removeBlock(pos, false);
 			level.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 3.0F, Level.ExplosionInteraction.BLOCK);
@@ -388,7 +390,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 			BlockPos pos = getBlockPos();
 			for (Player player : level.players()) {
 				if (player.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < 200) {
-//					PacketDistributor.sendToPlayer(((ServerPlayer) player), new StopInfuserSoundPayload());
+					PacketDistributor.sendToPlayer(((ServerPlayer) player), new StopInfuserSoundPayload());
 				}
 			}
 		}
