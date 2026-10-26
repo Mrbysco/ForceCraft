@@ -675,7 +675,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output, Reference.modLoc("infuse/force"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.CLAW), tag(ForceTags.Items.VALID_DAMAGE_ITEMS),
-						LeveledUpgrade.of(ForceComponents.DAMAGE.get(), 5), UpgradeBookTier.ONE, 30, 200)
+						LeveledUpgrade.of(ForceComponents.STURDY.get(), 5, ForceTags.Items.LIMITED_DAMAGE_ITEMS), UpgradeBookTier.ONE, 30, 200)
 				.save(output, Reference.modLoc("infuse/damage"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.SUGAR), tag(ForceTags.Items.VALID_SPEED_ITEMS),

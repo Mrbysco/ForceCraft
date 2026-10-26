@@ -193,6 +193,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("forcecraft.component.force1", "Force I");
 		add("forcecraft.component.force2", "Force II");
 
+		add("forcecraft.component.damage", "Damage");
 		add("forcecraft.component.damage1", "Damage I");
 		add("forcecraft.component.damage2", "Damage II");
 		add("forcecraft.component.damage3", "Damage III");

@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-26T01:36:06.0446675	ForceCraft Recipes
+// 26.1.2	2026-10-26T22:02:26.104203	ForceCraft Recipes
 aa43c1fe5e90eb41a5bc902b064e800a187ab9e3 data/forcecraft/advancement/recipes/building_blocks/force_brick_black.json
 7598ae751331f861a5b1257137a9d2db69579483 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab.json
 179c9202b5d92a6648c92b9ea3bc18e8a9623ad5 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab_from_force_brick_black_stonecutting.json
@@ -592,7 +592,7 @@ a757d83197c47298fb477ffb020ff6e35d2334e2 data/forcecraft/recipe/infuse/bane.json
 6ecb558eb58ed13727a38f1b41175595e222b5af data/forcecraft/recipe/infuse/bane_torch.json
 5cc8792cf2bff5e972f898ba254b4e7363ff34be data/forcecraft/recipe/infuse/bleed.json
 0a1b563367e808462b52cda6058ee9d013db1d7f data/forcecraft/recipe/infuse/camo.json
-6e355710c96341d7544b260773608488506aa1fa data/forcecraft/recipe/infuse/damage.json
+244bad4837973d9488d3c902f23f2f1181703059 data/forcecraft/recipe/infuse/damage.json
 b3ebc9e2b56f9a2e4d9ba134db0501bff119adc8 data/forcecraft/recipe/infuse/ender.json
 dfe8ecde4c0b8a95bd13ff4cd392e41168bcdc4f data/forcecraft/recipe/infuse/experience.json
 324a5166de8be6d0bec6709108aa897d6f833c3e data/forcecraft/recipe/infuse/false.json

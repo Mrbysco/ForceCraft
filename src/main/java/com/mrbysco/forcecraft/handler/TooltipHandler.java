@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.data.TimeMode;
 import com.mrbysco.forcecraft.item.tool.EnderData;
 import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
+import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.upgrade.UpgradeBookData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -37,7 +38,11 @@ public class TooltipHandler {
 			builder.accept(Component.translatable("forcecraft.component.force" + stack.get(ForceComponents.FORCE)).withStyle(ChatFormatting.GOLD));
 		}
 		if (stack.has(ForceComponents.DAMAGE)) {
-			builder.accept(Component.translatable("forcecraft.component.damage" + stack.get(ForceComponents.DAMAGE)).withStyle(ChatFormatting.RED));
+			if (stack.is(ForceTags.Items.FORCE_ARMOR)) {
+				builder.accept(Component.translatable("forcecraft.component.damage").withStyle(ChatFormatting.RED));
+			} else {
+				builder.accept(Component.translatable("forcecraft.component.damage" + stack.get(ForceComponents.DAMAGE)).withStyle(ChatFormatting.RED));
+			}
 		}
 		if (stack.has(ForceComponents.SPEED)) {
 			if (!stack.is(ForceRegistry.FORCE_ROD)) {

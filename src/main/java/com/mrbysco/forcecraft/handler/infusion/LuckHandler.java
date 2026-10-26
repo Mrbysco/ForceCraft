@@ -26,6 +26,8 @@ public class LuckHandler {
 
 	@SubscribeEvent
 	public static void onEntityLoot(EnchantedEntityLootEvent event) {
+		if (!event.getEnchantment().is(Enchantments.FORTUNE)) return; // Only run once
+
 		DamageSource source = event.getDamageSource();
 		if (source == null) return;
 

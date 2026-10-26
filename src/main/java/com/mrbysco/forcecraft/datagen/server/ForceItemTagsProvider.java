@@ -184,9 +184,6 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 						ForceRegistry.FORCE_BOW.get())
 				.addTag(ForceTags.Items.FORCE_ARMOR);
 
-		this.tag(ForceTags.Items.LIMITED_STURDY_ITEMS)
-				.addTag(ForceTags.Items.FORCE_ARMOR);
-
 		this.tag(ForceTags.Items.VALID_ENDER_ITEMS).add(
 				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_ROD.get());
 
@@ -196,5 +193,11 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 
 		this.tag(ForceTags.Items.VALID_TREASURE_ITEMS).add(
 				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_BOW.get());
+
+		this.tag(ForceTags.Items.LIMITED_STURDY_ITEMS)
+				.addTag(ForceTags.Items.FORCE_ARMOR);
+
+		this.tag(ForceTags.Items.LIMITED_DAMAGE_ITEMS)
+				.addTag(ForceTags.Items.FORCE_ARMOR);
 	}
 }

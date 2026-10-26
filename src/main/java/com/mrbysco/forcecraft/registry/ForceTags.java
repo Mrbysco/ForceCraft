@@ -70,11 +70,12 @@ public class ForceTags {
 		public static final TagKey<Item> VALID_CAMO_ITEMS = ItemTags.create(Reference.modLoc("valid_items/camo"));
 		public static final TagKey<Item> VALID_SIGHT_ITEMS = ItemTags.create(Reference.modLoc("valid_items/sight"));
 		public static final TagKey<Item> VALID_STURDY_ITEMS = ItemTags.create(Reference.modLoc("valid_items/sturdy"));
-		public static final TagKey<Item> LIMITED_STURDY_ITEMS = ItemTags.create(Reference.modLoc("valid_items/limited_sturdy"));
 		public static final TagKey<Item> VALID_ENDER_ITEMS = ItemTags.create(Reference.modLoc("valid_items/ender"));
 		public static final TagKey<Item> VALID_SOUL_ITEMS = ItemTags.create(Reference.modLoc("valid_items/soul"));
 		public static final TagKey<Item> VALID_LIGHT_ITEMS = ItemTags.create(Reference.modLoc("valid_items/light"));
 		public static final TagKey<Item> VALID_TREASURE_ITEMS = ItemTags.create(Reference.modLoc("valid_items/treasure"));
+		public static final TagKey<Item> LIMITED_STURDY_ITEMS = ItemTags.create(Reference.modLoc("valid_items/limited_sturdy"));
+		public static final TagKey<Item> LIMITED_DAMAGE_ITEMS = ItemTags.create(Reference.modLoc("valid_items/limited_damage"));
 
 		public static final TagKey<Item> ORES_POWER = commonTag("ores/power");
 		public static final TagKey<Item> GEMS_FORCE = commonTag("gems/force");

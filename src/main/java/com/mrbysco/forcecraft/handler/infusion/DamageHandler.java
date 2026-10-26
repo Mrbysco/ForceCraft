@@ -2,6 +2,8 @@ package com.mrbysco.forcecraft.handler.infusion;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceComponents;
+import com.mrbysco.forcecraft.registry.ForceRegistry;
+import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -37,16 +39,19 @@ public class DamageHandler {
 		if (event.getSource().getDirectEntity() != player) return;
 		if (!player.getMainHandItem().isEmpty()) return;
 
+		float extraAmount = 0.0F;
 		boolean hasDamage = false;
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
 			if (slot.getType() != EquipmentSlot.Type.HUMANOID_ARMOR) continue;
 			if (player.getItemBySlot(slot).has(ForceComponents.DAMAGE)) {
+				extraAmount += 1.0F;
 				hasDamage = true;
 				break;
 			}
 		}
 		if (!hasDamage) return;
 
-		event.setAmount(event.getAmount() + 1.0F);
+		player.playSound(ForceSounds.FORCE_PUNCH.get());
+		event.setAmount(event.getAmount() + extraAmount);
 	}
 }

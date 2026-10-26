@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-26T01:20:26.280154	Tags for minecraft:item mod id forcecraft
+// 26.1.2	2026-10-26T22:02:26.1102231	Tags for minecraft:item mod id forcecraft
 e4114fb3db46efa51fbbe42ba62fe557c245011e data/c/tags/item/gems.json
 6acf1247ecbbd8d85c4f176ff43157c4353856e7 data/c/tags/item/gems/force.json
 417731315b0e838f1c2b1e7bd36d21ec3d3c0df2 data/c/tags/item/holds_items.json
@@ -38,6 +38,7 @@ f032ac419d25b874a3d20e6d1fabde6eb34f2946 data/forcecraft/tags/item/valid_items/h
 09d4ded866f06350b1749029d08ebe05924f71df data/forcecraft/tags/item/valid_items/heat.json
 9db210a0b152bdf434426fa42c26ba97cdda4e87 data/forcecraft/tags/item/valid_items/infuse_torch.json
 919e6d75ea4faf772493aad779bb387136859c88 data/forcecraft/tags/item/valid_items/light.json
+8090d0d0101c7027e822c896fc68706d766688f9 data/forcecraft/tags/item/valid_items/limited_damage.json
 8090d0d0101c7027e822c896fc68706d766688f9 data/forcecraft/tags/item/valid_items/limited_sturdy.json
 b32dfddf1d652894535ca967aab789155c766175 data/forcecraft/tags/item/valid_items/luck.json
 d0839816bc5ce3b45313754d9906dbff2041e63c data/forcecraft/tags/item/valid_items/lumberjack.json
