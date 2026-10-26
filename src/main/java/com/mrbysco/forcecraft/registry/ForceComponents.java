@@ -284,7 +284,7 @@ public class ForceComponents {
 	 * Modifier: Forge
 	 * Item: Furnace
 	 * Levels: 1
-	 * Effect: Valid for Item Cars. It allows them to transmute items in the same tag.
+	 * Effect: Valid for Item Cards. It allows them to transmute items in the same tag.
 	 */
 	public static final Supplier<DataComponentType<Boolean>> FORGE = COMPONENT_TYPE.register("forge", () ->
 			DataComponentType.<Boolean>builder()
