@@ -199,5 +199,17 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 
 		this.tag(ForceTags.Items.LIMITED_DAMAGE_ITEMS)
 				.addTag(ForceTags.Items.FORCE_ARMOR);
+
+		this.tag(ForceTags.Items.FORCE_TOOLS).add(
+				ForceRegistry.FORCE_PICKAXE.get(),
+				ForceRegistry.FORCE_AXE.get(),
+				ForceRegistry.FORCE_SHOVEL.get(),
+				ForceRegistry.FORCE_SHEARS.get()
+		);
+		this.tag(ForceTags.Items.FORCE_WEAPONS).add(
+				ForceRegistry.FORCE_SWORD.get(),
+				ForceRegistry.FORCE_MITT.get(),
+				ForceRegistry.FORCE_BOW.get()
+		);
 	}
 }

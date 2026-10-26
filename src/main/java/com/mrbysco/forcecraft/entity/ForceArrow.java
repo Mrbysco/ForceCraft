@@ -5,12 +5,15 @@ import com.mrbysco.forcecraft.registry.ForceDatamaps;
 import com.mrbysco.forcecraft.registry.ForceEffects;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,9 +25,12 @@ import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -34,6 +40,7 @@ public class ForceArrow extends Arrow {
 	private static final EntityDataAccessor<ItemStack> TORCH = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.ITEM_STACK);
 	private static final EntityDataAccessor<Boolean> ICE = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> BANE = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> HEAT = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> BLEED = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.INT);
 
 	private static final int EXPIRE_TICKS = 3 * 20;
@@ -61,6 +68,7 @@ public class ForceArrow extends Arrow {
 		entityData.define(TORCH, ItemStack.EMPTY);
 		entityData.define(ICE, false);
 		entityData.define(BANE, false);
+		entityData.define(HEAT, false);
 		entityData.define(BLEED, 0);
 	}
 
@@ -111,6 +119,14 @@ public class ForceArrow extends Arrow {
 
 	public int getBleed() {
 		return this.entityData.get(BLEED);
+	}
+
+	public void setHeat(boolean b) {
+		this.entityData.set(HEAT, b);
+	}
+
+	public boolean isHeat() {
+		return this.entityData.get(HEAT);
 	}
 
 	@Override
@@ -170,6 +186,10 @@ public class ForceArrow extends Arrow {
 		if (getBleed() > 0) {
 			mob.addEffect(new MobEffectInstance(ForceEffects.BLEEDING, 100, getBleed()), this.getOwner());
 		}
+
+		if (isHeat()) {
+			mob.igniteForSeconds(LevelBasedValue.perLevel(4.0F).calculate(1));
+		}
 	}
 
 	@Override
@@ -198,6 +218,7 @@ public class ForceArrow extends Arrow {
 	protected void hitBlockEnchantmentEffects(ServerLevel serverLevel, BlockHitResult hitResult, ItemStack weapon) {
 		super.hitBlockEnchantmentEffects(serverLevel, hitResult, weapon);
 		handleIceConversion(hitResult.getBlockPos());
+		handleHeat(hitResult.getBlockPos(), hitResult.getDirection());
 	}
 
 	private void handleIceConversion(BlockPos hitPos) {
@@ -217,6 +238,24 @@ public class ForceArrow extends Arrow {
 			serverLevel.sendParticles(ParticleTypes.SNOWFLAKE,
 					target.getX() + 0.5, target.getY() + 0.5, target.getZ() + 0.5,
 					8, 0.25, 0.25, 0.25, 0.0);
+		}
+	}
+
+	private void handleHeat(BlockPos hitPos, Direction direction) {
+		if (!isHeat()) return;
+		if (!(this.level() instanceof ServerLevel serverLevel)) return;
+
+		hitPos = hitPos.above();
+		for (BlockPos target : BlockPos.betweenClosed(
+				hitPos.offset(-1, 0, -1),
+				hitPos.offset(1, 0, 1))) {
+			if (BaseFireBlock.canBePlacedAt(serverLevel, target, direction)) {
+				serverLevel.playSound(null, target, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F,
+						serverLevel.getRandom().nextFloat() * 0.4F + 0.8F);
+				BlockState fireState = BaseFireBlock.getState(serverLevel, target);
+				serverLevel.setBlock(target, fireState, 11);
+				serverLevel.gameEvent(this, GameEvent.BLOCK_PLACE, target);
+			}
 		}
 	}
 }

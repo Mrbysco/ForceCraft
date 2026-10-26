@@ -298,6 +298,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("forcecraft.bow.mode.normal", "Normal");
 		add("forcecraft.bow.mode.torch", "Torch");
 		add("forcecraft.bow.mode.ice", "Ice");
+		add("forcecraft.bow.mode.fire", "Fire");
 
 		//JEI Compat
 		add("forcecraft.gui.jei.category.freezing", "Freezing");

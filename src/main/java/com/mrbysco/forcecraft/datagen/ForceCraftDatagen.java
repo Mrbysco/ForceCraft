@@ -9,6 +9,7 @@ import com.mrbysco.forcecraft.datagen.server.ForceDataMapProvider;
 import com.mrbysco.forcecraft.datagen.server.ForceEntityTypeTagsProvider;
 import com.mrbysco.forcecraft.datagen.server.ForceFluidTagsProvider;
 import com.mrbysco.forcecraft.datagen.server.ForceItemTagsProvider;
+import com.mrbysco.forcecraft.datagen.server.ForceLootModifierProvider;
 import com.mrbysco.forcecraft.datagen.server.ForceLootProvider;
 import com.mrbysco.forcecraft.datagen.server.ForceRecipeProvider;
 import com.mrbysco.forcecraft.registry.ForceDamageTypes;
@@ -45,5 +46,6 @@ public class ForceCraftDatagen {
 		event.createProvider(ForceDataMapProvider::new);
 		event.createProvider(ForceLootProvider::new);
 		event.createProvider(ForceRecipeProvider.Runner::new);
+		event.createProvider(ForceLootModifierProvider::new);
 	}
 }

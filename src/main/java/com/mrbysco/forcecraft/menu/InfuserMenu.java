@@ -288,6 +288,10 @@ public class InfuserMenu extends AbstractContainerMenu {
 			return getSlotIndex() <= blockEntity.getBookTier() && super.mayPlace(stack);
 		}
 
+		@Override
+		public int getMaxStackSize(@NotNull ItemStack stack) {
+			return 1;
+		}
 	}
 
 	public static class SlotForceGems extends ResourceHandlerSlot {

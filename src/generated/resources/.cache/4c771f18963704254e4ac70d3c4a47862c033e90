@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-26T22:02:26.1102231	Tags for minecraft:item mod id forcecraft
+// 26.1.2	2026-10-26T22:32:19.9418216	Tags for minecraft:item mod id forcecraft
 e4114fb3db46efa51fbbe42ba62fe557c245011e data/c/tags/item/gems.json
 6acf1247ecbbd8d85c4f176ff43157c4353856e7 data/c/tags/item/gems/force.json
 417731315b0e838f1c2b1e7bd36d21ec3d3c0df2 data/c/tags/item/holds_items.json
@@ -20,7 +20,9 @@ a2ec999b18f53012ccc1a893b944cbe0e84b1199 data/forcecraft/tags/item/force_bricks.
 e3a47625682d41e470f1936847dab10947a9577e data/forcecraft/tags/item/force_furnaces.json
 eff2e9b711edce9a5ae1875f820c2b5272b0779f data/forcecraft/tags/item/force_logs.json
 6acf1247ecbbd8d85c4f176ff43157c4353856e7 data/forcecraft/tags/item/force_repair_ingredients.json
+9a2f1ed97d66bc281c249c8fdfc5e0e9db5f881c data/forcecraft/tags/item/force_tools.json
 4a70364139feeb506f34ec66b6b056216b6dfe71 data/forcecraft/tags/item/force_torches.json
+a9a150a0cf791ee872a41489d83a8aa2b9fe828f data/forcecraft/tags/item/force_weapons.json
 c28b25f1ba103b14e5d5e66444f35b01ffe6361f data/forcecraft/tags/item/upgrade_cores.json
 109979ba6691c3f6bed47ce2ba7d0a52c3514a3b data/forcecraft/tags/item/valid_force_belt.json
 a2588468460760c403b085d6bc2ac32fa319d3ae data/forcecraft/tags/item/valid_infuser_charge.json

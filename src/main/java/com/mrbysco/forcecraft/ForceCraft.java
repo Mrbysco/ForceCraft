@@ -8,6 +8,7 @@ import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceEffects;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import com.mrbysco.forcecraft.registry.ForceFluids;
+import com.mrbysco.forcecraft.registry.ForceLootModifiers;
 import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceModifiers;
 import com.mrbysco.forcecraft.registry.ForceRecipes;
@@ -53,6 +54,7 @@ public class ForceCraft {
 		ForceFeatures.FEATURES.register(eventBus);
 		ForceRecipes.RECIPE_TYPES.register(eventBus);
 		ForceRecipes.RECIPE_SERIALIZERS.register(eventBus);
+		ForceLootModifiers.GLM.register(eventBus);
 		ForceConditions.CONDITION_CODECS.register(eventBus);
 
 		eventBus.addListener(this::init);

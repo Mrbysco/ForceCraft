@@ -40,6 +40,8 @@ public class ForceBowItem extends BowItem {
 				arrow.setBane(true);
 			if (weapon.has(ForceComponents.BLEED))
 				arrow.setBleed(weapon.getOrDefault(ForceComponents.BLEED, 0));
+			if (weapon.has(ForceComponents.HEAT))
+				arrow.setHeat(true);
 		}
 		return projectileEntity;
 	}

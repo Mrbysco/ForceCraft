@@ -40,6 +40,8 @@ public class ForceTags {
 		public static final TagKey<Item> FORCE_ARMOR = ItemTags.create(Reference.modLoc("force_armor"));
 		public static final TagKey<Item> UPGRADE_CORES = ItemTags.create(Reference.modLoc("upgrade_cores"));
 		public static final TagKey<Item> FORCE_FURNACES = ItemTags.create(Reference.modLoc("force_furnaces"));
+		public static final TagKey<Item> FORCE_TOOLS = ItemTags.create(Reference.modLoc("force_tools"));
+		public static final TagKey<Item> FORCE_WEAPONS = ItemTags.create(Reference.modLoc("force_weapons"));
 		public static final TagKey<Item> HOLDS_ITEMS = ItemTags.create(Identifier.fromNamespaceAndPath("c", "holds_items"));
 
 		public static final TagKey<Item> VALID_INFUSER_MODIFIERS = ItemTags.create(Reference.modLoc("valid_infuser_modifiers"));

@@ -1,7 +1,10 @@
 package com.mrbysco.forcecraft.handler.infusion;
 
 import com.mrbysco.forcecraft.registry.ForceComponents;
+import com.mrbysco.forcecraft.registry.ForceSounds;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
@@ -37,10 +40,30 @@ public class HeatHandler {
 
 	@SubscribeEvent
 	public static void onIncomingDamage(LivingIncomingDamageEvent event) {
-		ItemStack weapon = event.getSource().getWeaponItem();
-		if (weapon == null || weapon.isEmpty()) return;
-		if (!weapon.getOrDefault(ForceComponents.HEAT, false)) return;
+		if (event.getSource().getEntity() instanceof Player player) {
+			if (player.getMainHandItem().isEmpty()) {
+				// Bare hand
+				int totalLevel = 0;
+				boolean hasDamage = false;
+				for (EquipmentSlot slot : EquipmentSlot.values()) {
+					if (slot.getType() != EquipmentSlot.Type.HUMANOID_ARMOR) continue;
+					if (player.getItemBySlot(slot).has(ForceComponents.HEAT)) {
+						totalLevel += 1;
 
-		event.getEntity().igniteForSeconds(LevelBasedValue.perLevel(4.0F).calculate(1));
+						hasDamage = true;
+						break;
+					}
+				}
+				if (!hasDamage) return;
+
+				event.getEntity().igniteForSeconds(LevelBasedValue.perLevel(4.0F).calculate(totalLevel));
+				return;
+			}
+
+			ItemStack weapon = event.getSource().getWeaponItem();
+			if (weapon == null || weapon.isEmpty()) return;
+			if (!weapon.getOrDefault(ForceComponents.HEAT, false)) return;
+			event.getEntity().igniteForSeconds(LevelBasedValue.perLevel(4.0F).calculate(1));
+		}
 	}
 }

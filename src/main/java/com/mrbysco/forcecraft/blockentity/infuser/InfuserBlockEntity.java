@@ -85,12 +85,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	private final ItemStacksResourceHandler handler = new ItemStacksResourceHandler(11) {
 		@Override
 		protected int getCapacity(int index, ItemResource resource) {
-			if (ItemAccess.forStack(resource.toStack(1)).getCapability(Capabilities.Fluid.ITEM) != null) {
-				if (resource.getMaxStackSize() > 1) {
-					return 1;
-				}
-			}
-			return super.getCapacity(index, resource);
+			return 1;
 		}
 
 		@Override
