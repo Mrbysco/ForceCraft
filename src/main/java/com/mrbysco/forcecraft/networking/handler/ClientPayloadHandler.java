@@ -2,6 +2,7 @@ package com.mrbysco.forcecraft.networking.handler;
 
 import com.mrbysco.forcecraft.networking.message.StopInfuserSoundPayload;
 import com.mrbysco.forcecraft.registry.ForceSounds;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -15,7 +16,7 @@ public class ClientPayloadHandler {
 
     public void handleStopData(StopInfuserSoundPayload data, IPayloadContext context) {
 	    context.enqueueWork(() -> {
-				    net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+				    Minecraft mc = Minecraft.getInstance();
 				    mc.getSoundManager().stop(ForceSounds.INFUSER_WORKING.getId(), SoundSource.BLOCKS);
 				    mc.getSoundManager().stop(ForceSounds.INFUSER_SPECIAL.getId(), SoundSource.BLOCKS);
 			    })
