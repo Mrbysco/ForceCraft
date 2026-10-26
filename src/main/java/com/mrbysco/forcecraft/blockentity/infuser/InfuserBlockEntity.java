@@ -14,6 +14,7 @@ import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.upgrade.ConvertUpgrade;
 import com.mrbysco.forcecraft.upgrade.UpgradeBookData;
 import com.mrbysco.forcecraft.util.ForceUtil;
+import com.mrbysco.forcecraft.util.SpecialUsers;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -53,6 +54,7 @@ import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	public static final int SLOT_TOOL = 8;
@@ -63,6 +65,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	private static final int ENERGY_COST_PER = 20;
 	private static final int FLUID_COST_PER = 1000;
 	private static final int FLUID_PER_GEM = 250;
+	private static final float EXPLODE_CHANCE = 0.05F; // If on list!
 
 	private FluidStacksResourceHandler tank = new FluidStacksResourceHandler(1, 50_000) {
 		@Override
@@ -110,6 +113,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	public int maxProcessTime = 20;
 	public boolean canWork;
 	private final Int2ObjectOpenHashMap<RecipeHolder<InfuseRecipe>> currentRecipes = new Int2ObjectOpenHashMap<>();
+	private @Nullable UUID lastUser;
 
 	public InfuserBlockEntity(BlockPos pos, BlockState blockState) {
 		super(ForceRegistry.INFUSER_BLOCK_ENTITY.get(), pos, blockState);
@@ -138,6 +142,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 
 	@Override
 	public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
+		this.lastUser = player.getUUID();
 		return new InfuserMenu(containerId, inventory, this);
 	}
 
@@ -185,6 +190,14 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	}
 
 	private void finishWork(ServerLevel level) {
+		if (isWorkAllowed() && lastUser != null && SpecialUsers.isExplodyUser(lastUser)
+				&& level.getRandom().nextFloat() < EXPLODE_CHANCE) {
+			BlockPos pos = getBlockPos();
+			level.removeBlock(pos, false);
+			level.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 3.0F, Level.ExplosionInteraction.BLOCK);
+			return;
+		}
+
 		if (isWorkAllowed()) {
 			if (areAllModifiersEmpty() && canCharge()) {
 				processForceCharging();

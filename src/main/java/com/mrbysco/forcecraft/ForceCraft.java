@@ -14,6 +14,7 @@ import com.mrbysco.forcecraft.registry.ForceRecipes;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.registry.ForceUpgradeTypes;
+import com.mrbysco.forcecraft.util.SpecialUsers;
 import com.mrbysco.forcecraft.world.feature.ForceFeatures;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
@@ -66,5 +67,6 @@ public class ForceCraft {
 	public void init(FMLCommonSetupEvent event) {
 		FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
 		pot.addPlant(ForceRegistry.FORCE_SAPLING.getId(), ForceRegistry.POTTED_FORCE_SAPLING);
+		SpecialUsers.loadExplodyUsers();
 	}
 }
