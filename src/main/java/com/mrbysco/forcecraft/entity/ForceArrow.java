@@ -14,7 +14,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,6 +43,7 @@ public class ForceArrow extends Arrow {
 	private static final EntityDataAccessor<Boolean> BANE = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> HEAT = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> BLEED = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> HEALING = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.INT);
 
 	private static final int EXPIRE_TICKS = 3 * 20;
 	private int expireTicks = -1;
@@ -71,6 +72,7 @@ public class ForceArrow extends Arrow {
 		entityData.define(BANE, false);
 		entityData.define(HEAT, false);
 		entityData.define(BLEED, 0);
+		entityData.define(HEALING, 0);
 	}
 
 	@Override
@@ -120,6 +122,14 @@ public class ForceArrow extends Arrow {
 
 	public int getBleed() {
 		return this.entityData.get(BLEED);
+	}
+
+	public void setHealing(int level) {
+		this.entityData.set(HEALING, level);
+	}
+
+	public int getHealing() {
+		return this.entityData.get(HEALING);
 	}
 
 	public void setHeat(boolean b) {
@@ -186,6 +196,14 @@ public class ForceArrow extends Arrow {
 
 		if (getBleed() > 0) {
 			mob.addEffect(new MobEffectInstance(ForceEffects.BLEEDING, 100, getBleed()), this.getOwner());
+		}
+
+		if (getHealing() > 0 && !level().isClientSide()) {
+			if (mob.is(EntityTypeTags.UNDEAD)) {
+				mob.hurtServer((ServerLevel) level(), level().damageSources().magic(), getHealing());
+			} else {
+				mob.heal(getHealing());
+			}
 		}
 
 		if (isHeat()) {
