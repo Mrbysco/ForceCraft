@@ -780,9 +780,9 @@ public class ForceRecipeProvider extends RecipeProvider {
 
 		// Storage Unit upgrade maybe in future?????
 
-		InfuseRecipeBuilder.infuse(Ingredient.of(Items.FURNACE), tag(ForceTags.Items.VALID_FORGE_ITEMS),
-						FlagUpgrade.of(ForceComponents.FORGE.get()), UpgradeBookTier.FOUR, 30, 200)
-				.save(output, Reference.modLoc("infuse/forge"));
+//		InfuseRecipeBuilder.infuse(Ingredient.of(Items.FURNACE), tag(ForceTags.Items.VALID_FORGE_ITEMS),
+//						FlagUpgrade.of(ForceComponents.FORGE.get()), UpgradeBookTier.FOUR, 30, 200)
+//				.save(output, Reference.modLoc("infuse/forge"));
 
 		// Tier 5:
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.ROCS_FEATHER), tag(ForceTags.Items.VALID_WING_ITEMS),

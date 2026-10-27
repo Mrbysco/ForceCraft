@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-26T22:02:26.104203	ForceCraft Recipes
+// 26.1.2	2026-10-27T22:55:28.2831853	ForceCraft Recipes
 aa43c1fe5e90eb41a5bc902b064e800a187ab9e3 data/forcecraft/advancement/recipes/building_blocks/force_brick_black.json
 7598ae751331f861a5b1257137a9d2db69579483 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab.json
 179c9202b5d92a6648c92b9ea3bc18e8a9623ad5 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab_from_force_brick_black_stonecutting.json
@@ -597,7 +597,6 @@ b3ebc9e2b56f9a2e4d9ba134db0501bff119adc8 data/forcecraft/recipe/infuse/ender.jso
 dfe8ecde4c0b8a95bd13ff4cd392e41168bcdc4f data/forcecraft/recipe/infuse/experience.json
 324a5166de8be6d0bec6709108aa897d6f833c3e data/forcecraft/recipe/infuse/false.json
 fa6e4604b88eacc9cb952d806b87d0e805ca47f8 data/forcecraft/recipe/infuse/force.json
-89fbd111b22fb3df97116d4a241e2bbd1edf0350 data/forcecraft/recipe/infuse/forge.json
 d96f65e5ecacaa05602d91a2747f35bf6d0f2293 data/forcecraft/recipe/infuse/freezing.json
 77d991aa3c1b3dea94d1fd2fbb23d7d946b196a4 data/forcecraft/recipe/infuse/freezing_core.json
 7545095c720044ca8d1fa288fab36b2e8d967d57 data/forcecraft/recipe/infuse/grinding_core.json
