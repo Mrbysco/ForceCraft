@@ -210,6 +210,11 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.unlockedBy("has_paper", has(Items.PAPER))
 				.save(output);
 
+		shapeless(RecipeCategory.FOOD, Items.PAPER)
+				.requires(ForceRegistry.FORTUNE)
+				.unlockedBy("has_fortune", has(ForceRegistry.FORTUNE.get()))
+				.save(output, key("paper_from_fortune"));
+
 		shapeless(RecipeCategory.FOOD, ForceRegistry.SNOW_COOKIE.get())
 				.requires(Items.SNOWBALL)
 				.unlockedBy("has_snowball", has(Items.SNOWBALL))

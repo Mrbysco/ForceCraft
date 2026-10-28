@@ -19,6 +19,7 @@ import com.mrbysco.forcecraft.item.ExperienceTomeItem;
 import com.mrbysco.forcecraft.item.ForceArrowItem;
 import com.mrbysco.forcecraft.item.ForceBeltItem;
 import com.mrbysco.forcecraft.item.ForcePackItem;
+import com.mrbysco.forcecraft.item.FortuneItem;
 import com.mrbysco.forcecraft.item.MobChunkItem;
 import com.mrbysco.forcecraft.item.tool.ForceBowItem;
 import com.mrbysco.forcecraft.item.tool.ForceMittItem;
@@ -303,8 +304,8 @@ public class ForceRegistry {
 //	public static final DeferredItem<MagnetGloveItem> MAGNET_GLOVE = ITEMS.registerItem("magnet_glove", MagnetGloveItem::new);
 
 	public static final DeferredItem<Item> FORCE_ARROW = ITEMS.registerItem("force_arrow", ForceArrowItem::new);
-	public static final DeferredItem<Item> FORTUNE_COOKIE = ITEMS.registerSimpleItem("fortune_cookie");
-	public static final DeferredItem<Item> FORTUNE = ITEMS.registerSimpleItem("fortune");
+	public static final DeferredItem<Item> FORTUNE = ITEMS.registerItem("fortune", FortuneItem::new, (properties) -> properties.stacksTo(1));
+	public static final DeferredItem<Item> FORTUNE_COOKIE = ITEMS.registerSimpleItem("fortune_cookie", (properties) -> properties.stacksTo(16).food(ForceFoods.FORTUNE_COOKIE).usingConvertsTo(FORTUNE.get()));
 	public static final DeferredItem<Item> FORCE_STICK = ITEMS.registerSimpleItem("force_stick");
 	public static final DeferredItem<Item> FORCE_GEAR = ITEMS.registerSimpleItem("force_gear");
 	public static final DeferredItem<BucketItem> FORCE_BUCKET = ITEMS.registerItem("force_bucket", (properties) ->
@@ -315,7 +316,7 @@ public class ForceRegistry {
 	public static final DeferredItem<Item> FEATHER_DUST = ITEMS.registerSimpleItem("feather_dust");
 	public static final DeferredItem<Item> TREASURE_CORE = ITEMS.registerSimpleItem("treasure_core");
 	public static final DeferredItem<Item> SOUL_WAFER = ITEMS.registerSimpleItem("soul_wafer", (properties) -> properties.rarity(Rarity.RARE));
-	public static final DeferredItem<Item> SNOW_COOKIE = ITEMS.registerSimpleItem("snow_cookie");
+	public static final DeferredItem<Item> SNOW_COOKIE = ITEMS.registerSimpleItem("snow_cookie", (properties) -> properties.food(ForceFoods.SNOW_COOKIE));
 	public static final DeferredItem<Item> BOMB = ITEMS.registerItem("bomb", (properties) -> new BombItem(properties, false));
 	public static final DeferredItem<Item> SUPER_BOMB = ITEMS.registerItem("super_bomb", (properties) -> new BombItem(properties, true));
 

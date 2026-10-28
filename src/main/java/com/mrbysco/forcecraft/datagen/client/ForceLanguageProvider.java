@@ -21,6 +21,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -159,6 +160,12 @@ public class ForceLanguageProvider extends LanguageProvider {
 		// Config
 		addConfig("general", "General", "General Settings");
 		addConfig("forceInfusingTime", "Force Infusing Time", "The max amount of ticks it takes to charge a tool with Force [Default: 120 (6 seconds)]");
+		addConfig("repeatInfusePenalty", "Repeat Infuse Penalty", "When enabled repeating an infusement will not give full points [Default: true]");
+		addConfig("furnaceOutputBlacklist", "Furnace Output Blacklist", "An additional list of blockentities the Force Furnace can NOT insert into [Syntax: modid:blockentity_id]\n" +
+				"Examples: \"minecraft:shulker_box\" would stop it inserting into shulkers");
+
+		addConfig("fortunes", "Fortunes", "Fortune Messages");
+		addConfig("fortuneMessages", "Fortune Messages", "Adding lines / removing lines specifies what the fortunes can say");
 
 		addConfig("rod", "Rod", "Rod Settings");
 		addConfig("buffRadius", "Buff Radius", "The radius of the buff effect around the activated position [Default: 5]");
@@ -169,6 +176,12 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addConfig("slowSpeed", "Slow Speed", "The speed multiplier for slow time mode [Default: 0.25]");
 		addConfig("fastSpeed", "Fast Speed", "The speed multiplier for fast time mode [Default: 2.0]");
 		addConfig("hyperSpeed", "Hyper Speed", "The speed multiplier for hyper time mode [Default: 4.0]");
+
+		addConfig("torch", "Torch", "Torch Settings");
+		addConfig("torchRadius", "Torch Radius", "The radius of the torch effect around the activated position [Default: 3]");
+		addConfig("timeTorchRadius", "Time Torch Radius", "The radius of the time torch effect around the activated position [Default: 3]");
+		addConfig("timeTorchEnabled", "Time Torch Enabled", "Enable Time Torch [Default: true]");
+		addConfig("timeTorchLogging", "Time Torch Logging", "Log when a player places a Time Torch [Default: true]");
 
 		addConfig("worldgen", "World Generation", "World Generation Settings");
 		addConfig("generateForceOre", "Generate Force Ore", "Enable Force Ore generation [Default: true]");

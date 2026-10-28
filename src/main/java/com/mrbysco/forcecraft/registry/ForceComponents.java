@@ -92,7 +92,13 @@ public class ForceComponents {
 	public static final Supplier<DataComponentType<Identifier>> BOUND_ID = COMPONENT_TYPE.register("bound_id", () ->
 			DataComponentType.<Identifier>builder()
 					.persistent(Identifier.CODEC)
-					.networkSynchronized(ByteBufCodecs.fromCodec(Identifier.CODEC))
+					.networkSynchronized(Identifier.STREAM_CODEC)
+					.build());
+
+	public static final Supplier<DataComponentType<String>> FORTUNE = COMPONENT_TYPE.register("fortune", () ->
+			DataComponentType.<String>builder()
+					.persistent(Codec.STRING)
+					.networkSynchronized(ByteBufCodecs.STRING_UTF8)
 					.build());
 
 	/**
