@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.datagen.server;
 
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
@@ -31,7 +30,6 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 
 		for (ForceTorchReg reg : ForceRegistry.getTorches()) {
 			if (!reg.isSpecialTorch()) {
-				ForceCraft.LOGGER.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA {}", reg.getTorch().getId());
 				this.tag(ForceTags.Items.FORCE_TORCHES).add(reg.getTorch().asItem());
 			}
 		}
