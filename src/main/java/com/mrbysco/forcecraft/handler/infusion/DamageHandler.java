@@ -2,7 +2,6 @@ package com.mrbysco.forcecraft.handler.infusion;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceComponents;
-import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.entity.EquipmentSlot;

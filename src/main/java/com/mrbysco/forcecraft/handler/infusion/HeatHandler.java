@@ -1,7 +1,6 @@
 package com.mrbysco.forcecraft.handler.infusion;
 
 import com.mrbysco.forcecraft.registry.ForceComponents;
-import com.mrbysco.forcecraft.registry.ForceSounds;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
