@@ -36,6 +36,10 @@ public class TooltipHandler {
 		if (stack.is(ForceTags.Items.MOB_CHUNKS) && !stack.has(ForceComponents.BOUND_ID)) {
 			addChunkTooltip(stack, tooltips::add);
 		}
+
+		if (stack.is(ForceRegistry.FORTUNE_COOKIE)) {
+			tooltips.add(Component.translatable("item.forcecraft.fortune_cookie.tooltip").withStyle(ChatFormatting.GRAY));
+		}
 	}
 
 	public static void addForceTooltips(ItemStack stack, Consumer<Component> builder) {

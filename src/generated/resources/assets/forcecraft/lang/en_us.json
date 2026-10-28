@@ -347,6 +347,7 @@
   "item.forcecraft.force_sword": "Force Sword",
   "item.forcecraft.fortune": "Fortune",
   "item.forcecraft.fortune_cookie": "Fortune Cookie",
+  "item.forcecraft.fortune_cookie.tooltip": "Eat me!",
   "item.forcecraft.frozen_core": "Frozen Core",
   "item.forcecraft.golden_power_source": "Golden Power Source",
   "item.forcecraft.grinding_core": "Grinding Core",

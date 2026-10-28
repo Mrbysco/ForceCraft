@@ -90,6 +90,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addItem(ForceRegistry.UPGRADE_TOME, "Upgrade Tome");
 		addItem(ForceRegistry.EXPERIENCE_TOME, "Experience Tome");
 		addItem(ForceRegistry.FORTUNE_COOKIE, "Fortune Cookie");
+		add("item.forcecraft.fortune_cookie.tooltip", "Eat me!");
 		addItem(ForceRegistry.FORTUNE, "Fortune");
 		addItem(ForceRegistry.FORCE_ROD, "Force Rod");
 		add("item.forcecraft.force_rod.time", "Rod of Time");
