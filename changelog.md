@@ -1,4 +1,5 @@
-* Fix infusing a Claw applying Sturdy instead of Damage
-* Remove Forge (for smelting with the Item Card) infusement (Since the Item Card isn't implemented yet)
-* Add Mob Chunks and Mob Ingots
-* Allow Bats to drop the Claw
+* Fix Golden Power Source recipe conflicting with Charcoal
+* Implement Fortune Cookie behavior
+* Make Snow Cookies edible (Not recommended)
+* Add Treasure mechanic of dropping Cards (Spoils bags not implemented **YET**)
+* Implement Light behavior (Smite)
