@@ -37,7 +37,6 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 		}
 
 		this.tag(ForceTags.Items.FORCE_LOGS).add(ForceRegistry.FORCE_LOG.asItem(), ForceRegistry.FORCE_WOOD.asItem());
-		this.tag(ItemTags.LOGS_THAT_BURN).addTag(ForceTags.Items.FORCE_LOGS);
 		this.tag(ItemTags.LEAVES).add(ForceRegistry.FORCE_LEAVES.asItem());
 		this.tag(ItemTags.SAPLINGS).add(ForceRegistry.FORCE_SAPLING.asItem());
 		this.tag(ItemTags.PLANKS).add(ForceRegistry.FORCE_PLANKS.getPlanks().asItem());

@@ -1,20 +1,20 @@
 {
   "values": [
-    "forcecraft:mob_chunk_light_gray",
-    "forcecraft:mob_chunk_lime",
-    "forcecraft:mob_chunk_white",
-    "forcecraft:mob_chunk_light_blue",
+    "forcecraft:mob_chunk_yellow",
+    "forcecraft:mob_chunk_pink",
+    "forcecraft:mob_chunk_red",
     "forcecraft:mob_chunk_brown",
+    "forcecraft:mob_chunk_black",
+    "forcecraft:mob_chunk_light_blue",
+    "forcecraft:mob_chunk_green",
+    "forcecraft:mob_chunk_cyan",
+    "forcecraft:mob_chunk_lime",
+    "forcecraft:mob_chunk_orange",
+    "forcecraft:mob_chunk_white",
     "forcecraft:mob_chunk_gray",
     "forcecraft:mob_chunk_purple",
     "forcecraft:mob_chunk_blue",
     "forcecraft:mob_chunk_magenta",
-    "forcecraft:mob_chunk_red",
-    "forcecraft:mob_chunk_green",
-    "forcecraft:mob_chunk_cyan",
-    "forcecraft:mob_chunk_black",
-    "forcecraft:mob_chunk_yellow",
-    "forcecraft:mob_chunk_orange",
-    "forcecraft:mob_chunk_pink"
+    "forcecraft:mob_chunk_light_gray"
   ]
 }
