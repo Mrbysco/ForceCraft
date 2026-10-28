@@ -10,6 +10,7 @@ import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.registry.helper.ForceBrickReg;
 import com.mrbysco.forcecraft.registry.helper.ForceFurnaceReg;
 import com.mrbysco.forcecraft.registry.helper.ForceTorchReg;
+import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.data.PackOutput;
 import net.minecraft.locale.Language;
 import net.minecraft.sounds.SoundEvent;
@@ -82,6 +83,9 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addItem(ForceRegistry.ROCS_FEATHER, "Roc's Feather");
 		addItem(ForceRegistry.FEATHER_DUST, "Feather Dust");
 		addItem(ForceRegistry.TREASURE_CORE, "Treasure Core");
+		addItem(ForceRegistry.LIFE_CARD, "Life Card");
+		addItem(ForceRegistry.DARKNESS_CARD, "Darkness Card");
+		addItem(ForceRegistry.UNDEATH_CARD, "Undeath Card");
 		addItem(ForceRegistry.SOUL_WAFER, "Soul Wafer");
 		addItem(ForceRegistry.UPGRADE_TOME, "Upgrade Tome");
 		addItem(ForceRegistry.EXPERIENCE_TOME, "Experience Tome");

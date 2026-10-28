@@ -95,6 +95,9 @@ public class ForceModelProvider extends ModelProvider {
 		itemModels.generateFlatItem(ForceRegistry.ROCS_FEATHER.get(), ModelTemplates.FLAT_ITEM);
 		itemModels.generateFlatItem(ForceRegistry.FEATHER_DUST.get(), ModelTemplates.FLAT_ITEM);
 		itemModels.generateFlatItem(ForceRegistry.TREASURE_CORE.get(), ModelTemplates.FLAT_ITEM);
+		itemModels.generateFlatItem(ForceRegistry.LIFE_CARD.get(), ModelTemplates.FLAT_ITEM);
+		itemModels.generateFlatItem(ForceRegistry.DARKNESS_CARD.get(), ModelTemplates.FLAT_ITEM);
+		itemModels.generateFlatItem(ForceRegistry.UNDEATH_CARD.get(), ModelTemplates.FLAT_ITEM);
 		itemModels.generateItemWithTintedOverlay(ForceRegistry.FORCE_ROD.get(), "_layer", new RodColor());
 		itemModels.generateFlatItem(ForceRegistry.EXPERIENCE_TOME.get(), ModelTemplates.FLAT_ITEM);
 		itemModels.generateFlatItem(ForceRegistry.UPGRADE_TOME.get(), ModelTemplates.FLAT_ITEM);

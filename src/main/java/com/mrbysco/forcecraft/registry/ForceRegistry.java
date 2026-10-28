@@ -315,6 +315,9 @@ public class ForceRegistry {
 	public static final DeferredItem<Item> ROCS_FEATHER = ITEMS.registerSimpleItem("rocs_feather");
 	public static final DeferredItem<Item> FEATHER_DUST = ITEMS.registerSimpleItem("feather_dust");
 	public static final DeferredItem<Item> TREASURE_CORE = ITEMS.registerSimpleItem("treasure_core");
+	public static final DeferredItem<Item> LIFE_CARD = ITEMS.registerSimpleItem("life_card", (properties) -> properties.rarity(Rarity.UNCOMMON));
+	public static final DeferredItem<Item> DARKNESS_CARD = ITEMS.registerSimpleItem("darkness_card", (properties) -> properties.rarity(Rarity.RARE));
+	public static final DeferredItem<Item> UNDEATH_CARD = ITEMS.registerSimpleItem("undeath_card", (properties) -> properties.rarity(Rarity.EPIC));
 	public static final DeferredItem<Item> SOUL_WAFER = ITEMS.registerSimpleItem("soul_wafer", (properties) -> properties.rarity(Rarity.RARE));
 	public static final DeferredItem<Item> SNOW_COOKIE = ITEMS.registerSimpleItem("snow_cookie", (properties) -> properties.food(ForceFoods.SNOW_COOKIE));
 	public static final DeferredItem<Item> BOMB = ITEMS.registerItem("bomb", (properties) -> new BombItem(properties, false));

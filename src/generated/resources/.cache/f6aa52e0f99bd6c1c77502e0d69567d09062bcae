@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-27T23:28:20.7704416	Model Definitions - forcecraft
+// 26.1.2	2026-10-28T23:30:58.0420436	Model Definitions - forcecraft
 f3d4efc950e3905de57ae7440fb1d5fbd49edbb0 assets/forcecraft/blockstates/bane_torch.json
 1bb22a6415eb79f339382c2f95ec0c23f70afe23 assets/forcecraft/blockstates/camo_torch.json
 76bd2dbcbce69e7d8f85ba70103b57ca2cfa6363 assets/forcecraft/blockstates/deepslate_power_ore.json
@@ -154,6 +154,7 @@ cccbb0b4c1f61928ca5d2d06b9dc913b4d6ab82e assets/forcecraft/blockstates/wall_heal
 965200ed95d3303a2abe5c61fa11146c5556ef59 assets/forcecraft/items/bomb.json
 9fb38dfab5a7af81073a28db885c951fb5bc4c4a assets/forcecraft/items/camo_torch.json
 c4b34c36d6b0b3b1d898cb89ba95a3ffb029a668 assets/forcecraft/items/claw.json
+60dbb775c265dadd92853da7a9f74321568f9c56 assets/forcecraft/items/darkness_card.json
 4a155413a2b1b95cbb3093c94b84a91c1d468a5e assets/forcecraft/items/deepslate_power_ore.json
 f2ed4835f99c9929b04be3ee7beaec06754174e4 assets/forcecraft/items/experience_core.json
 fcff5ee70b0b2a144529beee454244d317c87691 assets/forcecraft/items/experience_tome.json
@@ -307,6 +308,7 @@ d3de54b4c76c860ae91956378aac3936693858c5 assets/forcecraft/items/grinding_core.j
 49b49519c75a65e96870e231bd5a165f21b32316 assets/forcecraft/items/heat_core.json
 655895ec740c62f97d729d31e5a61d68fa49cd2e assets/forcecraft/items/heat_torch.json
 481c34f703872040f08e94ddf095768e98eb7709 assets/forcecraft/items/inert_core.json
+19e5055b460627dff65cf23da8d351cab11ee496 assets/forcecraft/items/life_card.json
 cdb6f9dfbd79d6e38f114410f53abf5677082737 assets/forcecraft/items/mob_chunk_black.json
 478bac3811a31fee826b44b7bfd1ee8ecbf67290 assets/forcecraft/items/mob_chunk_blue.json
 1cb8ad11ba9b3272036949759d39300ad2d19ed7 assets/forcecraft/items/mob_chunk_brown.json
@@ -348,6 +350,7 @@ e10bd5a4e282b2ae4e4829bbea2d66a1ad9f2c72 assets/forcecraft/items/speed_core.json
 fabf8c7a97c113043302e23610c8626d24b02e38 assets/forcecraft/items/super_bomb.json
 a46a5c6b5e5df99aa9aceeaad94c40a7d8ca9661 assets/forcecraft/items/time_torch.json
 8fd5865d3cbc22ed87d1f1044deea117c2cd587b assets/forcecraft/items/treasure_core.json
+fe8de6042429ff43051003afa84adc4a16500083 assets/forcecraft/items/undeath_card.json
 644f14eb75331bd027b9f37d1e045dee25d90a19 assets/forcecraft/items/upgrade_core.json
 4a4997b470384cfe563b7b2c1f119d5612c434c1 assets/forcecraft/items/upgrade_tome.json
 30763402b8ef595c5711c96e77f113b5bd559797 assets/forcecraft/models/block/bane_torch.json
@@ -644,6 +647,7 @@ b650d15a55ab5323b5a02b5cf8429eff73ed1020 assets/forcecraft/models/block/wall_tim
 27daa381e1bcfac9442866a49e54bae7d1194269 assets/forcecraft/models/item/bane_torch.json
 51e14465425a2e84a7391b7fa2a15eb0fa36ee98 assets/forcecraft/models/item/camo_torch.json
 eb3d9618db1341f63383e6623f494c683643aeb6 assets/forcecraft/models/item/claw.json
+227017a60fd746d2bd08f9d85367cde8c14db90d assets/forcecraft/models/item/darkness_card.json
 0794ec826fb08cc6837c8ca99d2b31e6ccecb480 assets/forcecraft/models/item/experience_core.json
 2205a72b4b780f41577ae2ecf202ff3c267a1b17 assets/forcecraft/models/item/experience_tome.json
 19866d1fb802b60b93d6cb1bafe1463e7997006b assets/forcecraft/models/item/feather_dust.json
@@ -712,6 +716,7 @@ c3010e2948d0b458feeecee56301b2e95e91487e assets/forcecraft/models/item/healing_t
 ca62ed6e27bb126d3ca0b20180ae41f42d150d95 assets/forcecraft/models/item/heat_core.json
 27317c60983cc2b7dd7a25176081dae062658886 assets/forcecraft/models/item/heat_torch.json
 ff5f16df38c54bb560c7bd61cddc1972d2c61127 assets/forcecraft/models/item/inert_core.json
+7702ec3ab689dc6d06d95a3118c60dc0998a174e assets/forcecraft/models/item/life_card.json
 ed5517eb71690da8a8eddcad9bd9e4f3b7251c06 assets/forcecraft/models/item/mob_chunk_black.json
 207b03b344906ad27ca8b74e34cd79dd21306757 assets/forcecraft/models/item/mob_chunk_blue.json
 9b7fc6f66c53da0b2e6945612cdccb2543145e76 assets/forcecraft/models/item/mob_chunk_brown.json
@@ -750,5 +755,6 @@ d5c7c6d8827109bbd7afb99257c3b05808eab281 assets/forcecraft/models/item/mob_ingot
 b9033a41f476703aad151826fde4686c9bcec4cf assets/forcecraft/models/item/speed_core.json
 f25af4924ad262134673b4789cac31e5ee9744e5 assets/forcecraft/models/item/time_torch.json
 714d9f55c4fb3abf16b6fa44b1fa2c713c87e812 assets/forcecraft/models/item/treasure_core.json
+451defeb9c914a22fc0a5f1fc2d882a4a3d78a03 assets/forcecraft/models/item/undeath_card.json
 3ab34a31cff57209726d7d589aeefdad97fe5c51 assets/forcecraft/models/item/upgrade_core.json
 6318fb7c239cfa9f861ecc7b04089ba80ac9879e assets/forcecraft/models/item/upgrade_tome.json

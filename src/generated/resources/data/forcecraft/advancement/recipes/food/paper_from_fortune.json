@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_fortune": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:fortune"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:paper_from_fortune"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_fortune"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:paper_from_fortune"
+    ]
+  }
+}

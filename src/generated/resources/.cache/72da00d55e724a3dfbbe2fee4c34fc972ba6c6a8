@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-28T04:04:20.1034949	ForceCraft Recipes
+// 26.1.2	2026-10-28T21:46:43.355276	ForceCraft Recipes
 aa43c1fe5e90eb41a5bc902b064e800a187ab9e3 data/forcecraft/advancement/recipes/building_blocks/force_brick_black.json
 7598ae751331f861a5b1257137a9d2db69579483 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab.json
 179c9202b5d92a6648c92b9ea3bc18e8a9623ad5 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab_from_force_brick_black_stonecutting.json
@@ -144,6 +144,7 @@ db00d850a020a3c681f013ff6549c3b21b9fafb7 data/forcecraft/advancement/recipes/dec
 efc7aca4a50fe49600349ad9cd2dbb945c5376a8 data/forcecraft/advancement/recipes/decorations/force_hanging_sign.json
 08681f4b94db380c1b172cb0de81c096a7a01b2d data/forcecraft/advancement/recipes/decorations/force_sign.json
 21053eed58a22b643317513a9fc4418bc32dea98 data/forcecraft/advancement/recipes/food/fortune_cookie.json
+06f611bf8aec09a433a8a302e9b399dd6b17a974 data/forcecraft/advancement/recipes/food/paper_from_fortune.json
 bc1ce053d292cb60f7499c021319cb9003487efb data/forcecraft/advancement/recipes/food/snow_cookie.json
 feca2a485c7d8bc50858bf06ca927bc129078312 data/forcecraft/advancement/recipes/food/soul_wafer.json
 3eb7cddd7255797d4a487dffe3c231ac5b5f5e4b data/forcecraft/advancement/recipes/food/transmutation/beef_to_porkchop.json
@@ -686,6 +687,7 @@ c259b633655925dff9e827fdc5b2456bb24fde2b data/forcecraft/recipe/mob_ingot_purple
 f26b34269c90e88ce0cefbaffb3f3462a330e73e data/forcecraft/recipe/mob_ingot_white_from_smelting_mob_chunk_white.json
 040c23111b99c9a6597b1e6c7293e6e1824205af data/forcecraft/recipe/mob_ingot_yellow_from_mob_ingot_yellow.json
 447c00c0ad377f7492ff6b4b7397523088768303 data/forcecraft/recipe/mob_ingot_yellow_from_smelting_mob_chunk_yellow.json
+262c2d1f3f211bfaedfb180cc8ed4d31a445e62b data/forcecraft/recipe/paper_from_fortune.json
 f2bac11865e8aff048c1de73f1f5946acb054173 data/forcecraft/recipe/rocs_feather.json
 7efd686a6ae51fd8f440c6a45d6a72de5a20e360 data/forcecraft/recipe/snow_cookie.json
 f57575c2eb656dc78ac893d6762eac38b28364dc data/forcecraft/recipe/soul_wafer.json
