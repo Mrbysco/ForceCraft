@@ -14,11 +14,15 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.locale.Language;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ForceLanguageProvider extends LanguageProvider {
@@ -106,6 +110,15 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addItem(ForceRegistry.FORCE_BUCKET, "Force Bucket");
 		addItem(ForceRegistry.FORCE_ARROW, "Force Arrow");
 		addItem(ForceRegistry.SNOW_COOKIE, "Snow Cookie");
+		for (Map.Entry<DyeColor, DeferredItem<Item>> entry : ForceRegistry.getMobChunks().entrySet()) {
+			String colorPrefix = getColorPrefix(entry.getKey());
+			addItem(entry.getValue(), colorPrefix + "Mob Chunk");
+		}
+		add("item.forcecraft.mob_chunk.bound", "%s Mob Chunk");
+		for (Map.Entry<DyeColor, DeferredItem<Item>> entry : ForceRegistry.getMobIngots().entrySet()) {
+			String colorPrefix = getColorPrefix(entry.getKey());
+			addItem(entry.getValue(), colorPrefix + "Mob Ingot");
+		}
 		addItem(ForceRegistry.BOMB, "Bomb");
 		addItem(ForceRegistry.SUPER_BOMB, "Super Bomb");
 

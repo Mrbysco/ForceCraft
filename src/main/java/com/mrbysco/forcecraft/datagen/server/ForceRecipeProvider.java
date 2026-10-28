@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.datagen.server;
 
-import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.datagen.server.builder.InfuseRecipeBuilder;
 import com.mrbysco.forcecraft.datagen.server.builder.MultiOutputRecipeBuilder;
@@ -30,6 +29,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
@@ -41,7 +41,9 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
+import net.neoforged.neoforge.registries.DeferredItem;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ForceRecipeProvider extends RecipeProvider {
@@ -401,6 +403,8 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.define('W', ForceRegistry.FORCE_PLANKS.getPlanks())
 				.unlockedBy("has_force_planks", has(ForceRegistry.FORCE_PLANKS.getPlanks()))
 				.save(output);
+
+		addMobRecipes();
 	}
 
 	private void generateBrickRecipes() {
@@ -675,7 +679,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output, Reference.modLoc("infuse/force"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.CLAW), tag(ForceTags.Items.VALID_DAMAGE_ITEMS),
-						LeveledUpgrade.of(ForceComponents.STURDY.get(), 5, ForceTags.Items.LIMITED_DAMAGE_ITEMS), UpgradeBookTier.ONE, 30, 200)
+						LeveledUpgrade.of(ForceComponents.DAMAGE.get(), 5, ForceTags.Items.LIMITED_DAMAGE_ITEMS), UpgradeBookTier.ONE, 30, 200)
 				.save(output, Reference.modLoc("infuse/damage"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.SUGAR), tag(ForceTags.Items.VALID_SPEED_ITEMS),
@@ -767,7 +771,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output, Reference.modLoc("infuse/heat"));
 
 		InfuseRecipeBuilder.convert(Ingredient.of(ForceRegistry.GOLDEN_POWER_SOURCE), tag(ForceTags.Items.VALID_INFUSE_TORCHES),
-				new ItemStackTemplate(ForceRegistry.HEAT_TORCH.getTorchItem()), UpgradeBookTier.FOUR, 30, 200).group("heat")
+						new ItemStackTemplate(ForceRegistry.HEAT_TORCH.getTorchItem()), UpgradeBookTier.FOUR, 30, 200).group("heat")
 				.save(output, Reference.modLoc("infuse/heat_torch"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.SPIDER_EYE), tag(ForceTags.Items.VALID_BANE_ITEMS),
@@ -1142,6 +1146,41 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.result(ForceRegistry.FEATHER_DUST, 1)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, key("grinding/feather_dust_from_feathers"));
+	}
+
+	private void addMobRecipes() {
+		Map<DyeColor, DeferredItem<Item>> chunks = ForceRegistry.getMobChunks();
+		Map<DyeColor, DeferredItem<Item>> ingots = ForceRegistry.getMobIngots();
+		for (DyeColor color : chunks.keySet()) {
+			DeferredItem<Item> chunk = chunks.get(color);
+			DeferredItem<Item> ingot = ingots.get(color);
+
+			SimpleCookingRecipeBuilder.smelting(Ingredient.of(chunk.get()), RecipeCategory.MISC, CookingBookCategory.MISC,
+							ingot.get(), 0.15F, 200)
+					.unlockedBy("has_chunk", has(chunk.get()))
+					.save(output, key(ingot.getId().getPath() + "_from_smelting_" + chunk.getId().getPath()));
+
+			shaped(RecipeCategory.MISC, ForceRegistry.FORCE_INGOT.get(), 3)
+					.pattern("II")
+					.pattern("G ")
+					.define('I', ingot.get())
+					.define('G', ForceRegistry.FORCE_GEM.get())
+					.unlockedBy("has_ingot", has(ingot.get()))
+					.unlockedBy("has_gem", has(ForceRegistry.FORCE_GEM.get()))
+					.save(output, key(ingot.getId().getPath() + "_from_" + ingot.getId().getPath()));
+		}
+
+		shaped(RecipeCategory.MISC, ForceRegistry.INERT_CORE)
+				.pattern("BGB")
+				.pattern("GCG")
+				.pattern("BGB")
+				.define('B', ForceRegistry.MOB_INGOT_BLACK)
+				.define('G', ForceRegistry.MOB_INGOT_LIGHT_GRAY)
+				.define('C', ForceRegistry.UPGRADE_CORE)
+				.unlockedBy("has_black_ingot", has(ForceRegistry.MOB_INGOT_BLACK))
+				.unlockedBy("has_light_gray_ingot", has(ForceRegistry.MOB_INGOT_LIGHT_GRAY))
+				.unlockedBy("has_upgrade_core", has(ForceRegistry.UPGRADE_CORE))
+				.save(output);
 	}
 
 	private ResourceKey<Recipe<?>> key(String path) {

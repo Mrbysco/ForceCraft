@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": "forcecraft:force_gem",
+    "I": "forcecraft:mob_ingot_green"
+  },
+  "pattern": [
+    "II",
+    "G "
+  ],
+  "result": {
+    "count": 3,
+    "id": "forcecraft:force_ingot"
+  }
+}

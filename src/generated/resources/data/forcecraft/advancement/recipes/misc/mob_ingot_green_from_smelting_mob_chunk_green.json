@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chunk": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:mob_chunk_green"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:mob_ingot_green_from_smelting_mob_chunk_green"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_chunk"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:mob_ingot_green_from_smelting_mob_chunk_green"
+    ]
+  }
+}

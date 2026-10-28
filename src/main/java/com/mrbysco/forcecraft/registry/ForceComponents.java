@@ -10,6 +10,7 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -86,6 +87,12 @@ public class ForceComponents {
 			DataComponentType.<EnderData>builder()
 					.persistent(EnderData.MAP_CODEC)
 					.networkSynchronized(EnderData.STREAM_CODEC)
+					.build());
+
+	public static final Supplier<DataComponentType<Identifier>> BOUND_ID = COMPONENT_TYPE.register("bound_id", () ->
+			DataComponentType.<Identifier>builder()
+					.persistent(Identifier.CODEC)
+					.networkSynchronized(ByteBufCodecs.fromCodec(Identifier.CODEC))
 					.build());
 
 	/**

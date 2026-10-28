@@ -9,9 +9,11 @@ import com.mrbysco.forcecraft.registry.helper.ForceTorchReg;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -211,5 +213,6 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 				ForceRegistry.FORCE_MITT.get(),
 				ForceRegistry.FORCE_BOW.get()
 		);
+		ForceRegistry.getMobChunks().forEach((entry, item) -> this.tag(ForceTags.Items.MOB_CHUNKS).add(item.get()));
 	}
 }

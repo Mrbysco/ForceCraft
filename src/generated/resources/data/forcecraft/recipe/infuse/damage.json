@@ -8,7 +8,7 @@
   "upgrade": {
     "type": "forcecraft:leveled",
     "cap": 5,
-    "component": "forcecraft:sturdy",
+    "component": "forcecraft:damage",
     "limitedTag": "forcecraft:valid_items/limited_damage"
   }
 }

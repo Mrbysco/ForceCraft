@@ -3,19 +3,27 @@ package com.mrbysco.forcecraft.handler;
 import com.mrbysco.forcecraft.data.TimeMode;
 import com.mrbysco.forcecraft.item.tool.EnderData;
 import com.mrbysco.forcecraft.registry.ForceComponents;
+import com.mrbysco.forcecraft.registry.ForceDatamaps;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.upgrade.UpgradeBookData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @EventBusSubscriber
 public class TooltipHandler {
@@ -25,6 +33,9 @@ public class TooltipHandler {
 		List<Component> tooltips = event.getToolTip();
 		ItemStack stack = event.getItemStack();
 		addForceTooltips(stack, tooltips::add);
+		if (stack.is(ForceTags.Items.MOB_CHUNKS) && !stack.has(ForceComponents.BOUND_ID)) {
+			addChunkTooltip(stack, tooltips::add);
+		}
 	}
 
 	public static void addForceTooltips(ItemStack stack, Consumer<Component> builder) {
@@ -154,5 +165,41 @@ public class TooltipHandler {
 						.withStyle(ChatFormatting.AQUA));
 			}
 		}
+	}
+
+	private static final Map<EntityType<?>, DyeColor> ENTITY_COLOR_CACHE = new HashMap<>();
+
+	public static void addChunkTooltip(ItemStack stack, Consumer<Component> builder) {
+		Identifier itemId = stack.getItem().builtInRegistryHolder().unwrapKey().orElseThrow().identifier();
+		String colorName = itemId.getPath().substring(10);
+		DyeColor color = DyeColor.byName(colorName, null);
+		if (color != null) {
+			List<EntityType<?>> entities = getEntities(color);
+			entities.forEach(type -> {
+				builder.accept(Component.translatable(type.getDescriptionId()).withStyle(ChatFormatting.GRAY));
+			});
+		}
+	}
+
+	private static void populateCache() {
+		for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
+			DyeColor color = type.builtInRegistryHolder().getData(ForceDatamaps.MOB_COLORS);
+			if (color != null) {
+				ENTITY_COLOR_CACHE.put(type, color);
+			}
+		}
+	}
+
+	private static List<EntityType<?>> getEntities(DyeColor color) {
+		if (ENTITY_COLOR_CACHE.isEmpty())
+			populateCache();
+		// If still empty (somehow)
+		if (ENTITY_COLOR_CACHE.isEmpty())
+			return List.of();
+		// Else get all entities matching the color
+		return ENTITY_COLOR_CACHE.entrySet().stream()
+				.filter(entry -> entry.getValue() == color)
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toUnmodifiableList());
 	}
 }

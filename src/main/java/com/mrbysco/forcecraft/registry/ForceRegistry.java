@@ -19,6 +19,7 @@ import com.mrbysco.forcecraft.item.ExperienceTomeItem;
 import com.mrbysco.forcecraft.item.ForceArrowItem;
 import com.mrbysco.forcecraft.item.ForceBeltItem;
 import com.mrbysco.forcecraft.item.ForcePackItem;
+import com.mrbysco.forcecraft.item.MobChunkItem;
 import com.mrbysco.forcecraft.item.tool.ForceBowItem;
 import com.mrbysco.forcecraft.item.tool.ForceMittItem;
 import com.mrbysco.forcecraft.item.tool.ForceRodItem;
@@ -29,8 +30,11 @@ import com.mrbysco.forcecraft.registry.helper.ForcePlankReg;
 import com.mrbysco.forcecraft.registry.helper.ForceTorchReg;
 import com.mrbysco.forcecraft.upgrade.UpgradeBookData;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
@@ -52,7 +56,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.TintedParticleLeavesBlock;
+import net.minecraft.world.level.block.UntintedParticleLeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -64,11 +68,14 @@ import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -92,10 +99,12 @@ public class ForceRegistry {
 	public static final DeferredItem<BlockItem> FORCE_WOOD_ITEM = ITEMS.registerSimpleBlockItem(FORCE_WOOD);
 	public static final ForcePlankReg FORCE_PLANKS = new ForcePlankReg();
 	public static final DeferredBlock<LeavesBlock> FORCE_LEAVES = BLOCKS.registerBlock("force_leaves", (properties) ->
-			new TintedParticleLeavesBlock(0.01F, properties), () ->
+			new UntintedParticleLeavesBlock(0.01F, ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, ARGB.opaque(0xafbc63)), properties), () ->
 			BlockBehaviour.Properties.of()
 					.mapColor(MapColor.PLANT).strength(0.3f).pushReaction(PushReaction.DESTROY).randomTicks().sound(SoundType.GRASS).noOcclusion()
-					.isValidSpawn(Blocks::ocelotOrParrot).isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos) -> false));
+					.isValidSpawn(Blocks::ocelotOrParrot)
+					.isSuffocating((state, level, pos) -> false)
+					.isViewBlocking((state, level, pos) -> false));
 	public static final DeferredItem<BlockItem> FORCE_LEAVES_ITEM = ITEMS.registerSimpleBlockItem(FORCE_LEAVES);
 	public static final DeferredBlock<SaplingBlock> FORCE_SAPLING = BLOCKS.registerBlock("force_sapling", (properties) ->
 			new SaplingBlock(ForceTreeGrower.FORCE, properties), () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollision().randomTicks().instabreak().sound(SoundType.GRASS));
@@ -309,6 +318,69 @@ public class ForceRegistry {
 	public static final DeferredItem<Item> SNOW_COOKIE = ITEMS.registerSimpleItem("snow_cookie");
 	public static final DeferredItem<Item> BOMB = ITEMS.registerItem("bomb", (properties) -> new BombItem(properties, false));
 	public static final DeferredItem<Item> SUPER_BOMB = ITEMS.registerItem("super_bomb", (properties) -> new BombItem(properties, true));
+
+
+	// Mob Chunks
+	private static final Map<DyeColor, DeferredItem<Item>> MOB_CHUNKS = new HashMap<>();
+
+	public static final DeferredItem<Item> MOB_CHUNK_RED = createChunk(DyeColor.RED);
+	public static final DeferredItem<Item> MOB_CHUNK_YELLOW = createChunk(DyeColor.YELLOW);
+	public static final DeferredItem<Item> MOB_CHUNK_GREEN = createChunk(DyeColor.GREEN);
+	public static final DeferredItem<Item> MOB_CHUNK_BLUE = createChunk(DyeColor.BLUE);
+	public static final DeferredItem<Item> MOB_CHUNK_WHITE = createChunk(DyeColor.WHITE);
+	public static final DeferredItem<Item> MOB_CHUNK_BLACK = createChunk(DyeColor.BLACK);
+	public static final DeferredItem<Item> MOB_CHUNK_BROWN = createChunk(DyeColor.BROWN);
+	public static final DeferredItem<Item> MOB_CHUNK_ORANGE = createChunk(DyeColor.ORANGE);
+	public static final DeferredItem<Item> MOB_CHUNK_LIGHT_BLUE = createChunk(DyeColor.LIGHT_BLUE);
+	public static final DeferredItem<Item> MOB_CHUNK_MAGENTA = createChunk(DyeColor.MAGENTA);
+	public static final DeferredItem<Item> MOB_CHUNK_PINK = createChunk(DyeColor.PINK);
+	public static final DeferredItem<Item> MOB_CHUNK_LIGHT_GRAY = createChunk(DyeColor.LIGHT_GRAY);
+	public static final DeferredItem<Item> MOB_CHUNK_LIME = createChunk(DyeColor.LIME);
+	public static final DeferredItem<Item> MOB_CHUNK_CYAN = createChunk(DyeColor.CYAN);
+	public static final DeferredItem<Item> MOB_CHUNK_PURPLE = createChunk(DyeColor.PURPLE);
+	public static final DeferredItem<Item> MOB_CHUNK_GRAY = createChunk(DyeColor.GRAY);
+
+	public static Map<DyeColor, DeferredItem<Item>> getMobChunks() {
+		return Collections.unmodifiableMap(MOB_CHUNKS);
+	}
+
+	private static DeferredItem<Item> createChunk(@NotNull DyeColor color) {
+		String colorName = color.getName();
+		DeferredItem<Item> chunk = ITEMS.registerItem("mob_chunk_" + colorName, MobChunkItem::new);
+		MOB_CHUNKS.put(color, chunk);
+		return chunk;
+	}
+
+	// Mob Ingots
+	private static final Map<DyeColor, DeferredItem<Item>> MOB_INGOTS = new HashMap<>();
+
+	public static final DeferredItem<Item> MOB_INGOT_RED = createMobIngot(DyeColor.RED);
+	public static final DeferredItem<Item> MOB_INGOT_YELLOW = createMobIngot(DyeColor.YELLOW);
+	public static final DeferredItem<Item> MOB_INGOT_GREEN = createMobIngot(DyeColor.GREEN);
+	public static final DeferredItem<Item> MOB_INGOT_BLUE = createMobIngot(DyeColor.BLUE);
+	public static final DeferredItem<Item> MOB_INGOT_WHITE = createMobIngot(DyeColor.WHITE);
+	public static final DeferredItem<Item> MOB_INGOT_BLACK = createMobIngot(DyeColor.BLACK);
+	public static final DeferredItem<Item> MOB_INGOT_BROWN = createMobIngot(DyeColor.BROWN);
+	public static final DeferredItem<Item> MOB_INGOT_ORANGE = createMobIngot(DyeColor.ORANGE);
+	public static final DeferredItem<Item> MOB_INGOT_LIGHT_BLUE = createMobIngot(DyeColor.LIGHT_BLUE);
+	public static final DeferredItem<Item> MOB_INGOT_MAGENTA = createMobIngot(DyeColor.MAGENTA);
+	public static final DeferredItem<Item> MOB_INGOT_PINK = createMobIngot(DyeColor.PINK);
+	public static final DeferredItem<Item> MOB_INGOT_LIGHT_GRAY = createMobIngot(DyeColor.LIGHT_GRAY);
+	public static final DeferredItem<Item> MOB_INGOT_LIME = createMobIngot(DyeColor.LIME);
+	public static final DeferredItem<Item> MOB_INGOT_CYAN = createMobIngot(DyeColor.CYAN);
+	public static final DeferredItem<Item> MOB_INGOT_PURPLE = createMobIngot(DyeColor.PURPLE);
+	public static final DeferredItem<Item> MOB_INGOT_GRAY = createMobIngot(DyeColor.GRAY);
+
+	public static Map<DyeColor, DeferredItem<Item>> getMobIngots() {
+		return Collections.unmodifiableMap(MOB_INGOTS);
+	}
+
+	private static DeferredItem<Item> createMobIngot(@NotNull DyeColor color) {
+		String colorName = color.getName();
+		DeferredItem<Item> chunk = ITEMS.registerSimpleItem("mob_ingot_" + colorName);
+		MOB_INGOTS.put(color, chunk);
+		return chunk;
+	}
 
 	public static final Supplier<CreativeModeTab> FORCE_TAB = CREATIVE_MODE_TABS.register("tab", (properties) -> CreativeModeTab.builder()
 			.icon(() -> new ItemStack(ForceRegistry.FORCE_GEM.get()))

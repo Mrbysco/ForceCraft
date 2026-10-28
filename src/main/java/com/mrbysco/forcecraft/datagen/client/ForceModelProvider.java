@@ -32,6 +32,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.client.model.item.DynamicFluidContainerModel;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +120,13 @@ public class ForceModelProvider extends ModelProvider {
 		itemModels.generateFlatItem(ForceRegistry.GRINDING_CORE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 		itemModels.generateFlatItem(ForceRegistry.HEAT_CORE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
 		itemModels.generateFlatItem(ForceRegistry.SPEED_CORE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+
+		for (DeferredItem<Item> chunk : ForceRegistry.getMobChunks().values()) {
+			itemModels.generateFlatItem(chunk.get(), ModelTemplates.FLAT_ITEM);
+		}
+		for (DeferredItem<Item> ingot : ForceRegistry.getMobIngots().values()) {
+			itemModels.generateFlatItem(ingot.get(), ModelTemplates.FLAT_ITEM);
+		}
 
 		// Bombs
 		itemModels.declareCustomModelItem(ForceRegistry.BOMB.get());
