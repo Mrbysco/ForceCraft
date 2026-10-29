@@ -206,16 +206,19 @@ public class ForceConfig {
 		public final ModConfigSpec.IntValue buffRadius;
 		public final ModConfigSpec.IntValue timeRadius;
 		public final ModConfigSpec.IntValue timeCooldown;
+		public final ModConfigSpec.IntValue torchRadius;
+		public final ModConfigSpec.IntValue timeTorchRadius;
+		public final ModConfigSpec.BooleanValue timeTorchLogging;
+
+		public final ModConfigSpec.BooleanValue timeTorchEnabled;
+		public final ModConfigSpec.BooleanValue timeRodEnabled;
+		public final ModConfigSpec.BooleanValue timeWeaponEnabled;
 		public final ModConfigSpec.IntValue entitySpeedDuration;
 		public final ModConfigSpec.IntValue blockSpeedDuration;
 		public final ModConfigSpec.DoubleValue slowSpeed;
 		public final ModConfigSpec.DoubleValue fastSpeed;
 		public final ModConfigSpec.DoubleValue hyperSpeed;
 
-		public final ModConfigSpec.IntValue torchRadius;
-		public final ModConfigSpec.IntValue timeTorchRadius;
-		public final ModConfigSpec.BooleanValue timeTorchEnabled;
-		public final ModConfigSpec.BooleanValue timeTorchLogging;
 
 		public final ModConfigSpec.ConfigValue<List<? extends String>> fortuneMessages;
 
@@ -266,6 +269,40 @@ public class ForceConfig {
 					.comment("The cooldown of the Rod of Time in ticks [Default: 100]")
 					.defineInRange("timeCooldown", 100, 1, 1000);
 
+			builder.pop();
+
+			builder.comment("Torch settings")
+					.push("torch");
+
+			torchRadius = builder
+					.comment("The radius of the torch effect around the activated position [Default: 3]")
+					.defineInRange("torchRadius", 3, 1, 64);
+
+			timeTorchRadius = builder
+					.comment("The radius of the time torch effect around the activated position [Default: 3]")
+					.defineInRange("timeTorchRadius", 3, 1, 64);
+
+			timeTorchLogging = builder
+					.comment("Log when a player places a Time Torch [Default: true]")
+					.define("timeTorchLogging", true);
+
+			builder.pop();
+
+			builder.comment("Time settings")
+					.push("time");
+
+			timeTorchEnabled = builder
+					.comment("Enable Time Torch infusing [Default: true]")
+					.define("timeTorchEnabled", true);
+
+			timeRodEnabled = builder
+					.comment("Enable Time Rod infusing [Default: true]")
+					.define("timeRodEnabled", true);
+
+			timeWeaponEnabled = builder
+					.comment("Enable Time Weapon infusing [Default: true]")
+					.define("timeWeaponEnabled", true);
+
 			entitySpeedDuration = builder
 					.comment("The duration of the speed effect for entities in ticks (20 ticks = 1 second) [Default: 200]")
 					.defineInRange("entitySpeedDuration", 200, 1, 1000);
@@ -285,27 +322,6 @@ public class ForceConfig {
 			hyperSpeed = builder
 					.comment("The speed multiplier for hyper time mode [Default: 4.0]")
 					.defineInRange("hyperSpeed", 4.0, 0.0, 16.0);
-
-			builder.pop();
-
-			builder.comment("Torch settings")
-					.push("torch");
-
-			torchRadius = builder
-					.comment("The radius of the torch effect around the activated position [Default: 3]")
-					.defineInRange("torchRadius", 3, 1, 64);
-
-			timeTorchRadius = builder
-					.comment("The radius of the time torch effect around the activated position [Default: 3]")
-					.defineInRange("timeTorchRadius", 3, 1, 64);
-
-			timeTorchEnabled = builder
-					.comment("Enable Time Torch [Default: true]")
-					.define("timeTorchEnabled", true);
-
-			timeTorchLogging = builder
-					.comment("Log when a player places a Time Torch [Default: true]")
-					.define("timeTorchLogging", true);
 
 			builder.pop();
 

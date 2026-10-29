@@ -1,7 +1,8 @@
 {
   "neoforge:conditions": [
     {
-      "type": "forcecraft:time_torch_enabled"
+      "type": "forcecraft:time_torch_enabled",
+      "option": "timeTorchEnabled"
     }
   ],
   "type": "forcecraft:infuse",

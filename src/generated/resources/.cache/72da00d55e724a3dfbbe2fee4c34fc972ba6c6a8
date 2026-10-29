@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-28T21:46:43.355276	ForceCraft Recipes
+// 26.1.2	2026-10-29T22:51:37.4066012	ForceCraft Recipes
 aa43c1fe5e90eb41a5bc902b064e800a187ab9e3 data/forcecraft/advancement/recipes/building_blocks/force_brick_black.json
 7598ae751331f861a5b1257137a9d2db69579483 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab.json
 179c9202b5d92a6648c92b9ea3bc18e8a9623ad5 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab_from_force_brick_black_stonecutting.json
@@ -650,8 +650,9 @@ e32aca42e0ddde2ecb6a0f9c1739652057194b24 data/forcecraft/recipe/infuse/sight.jso
 919aa69fa7338c6ce22b9ec6c57ec4919249d111 data/forcecraft/recipe/infuse/soul.json
 1f0eea1c8622326da029f03aa4128b0e6b79e784 data/forcecraft/recipe/infuse/speed.json
 c170bb32efff84e0317a4f3475410d6832ea3bd0 data/forcecraft/recipe/infuse/sturdy.json
-c3bbdc10566baf74d78328730b2e5d36a081302c data/forcecraft/recipe/infuse/time.json
-0c0b966998e0a5416d6d5d6aed11acf96cb03603 data/forcecraft/recipe/infuse/time_torch.json
+dc242a439b27ee7a7132d4741402802fa33c6420 data/forcecraft/recipe/infuse/time.json
+0184ec8887565c5a33fac8598007f85d968c8d93 data/forcecraft/recipe/infuse/time_rod.json
+6ffb1c8e9e2e50e68f24e6727517c58425b77cb4 data/forcecraft/recipe/infuse/time_torch.json
 a928a06431cd6ec163fd3acf511030b22c76b073 data/forcecraft/recipe/infuse/touch.json
 e183a8b873925f2170a32b62e5a1914e664677df data/forcecraft/recipe/infuse/treasure.json
 041382917f437067674e9d99c36a2ba26f040be7 data/forcecraft/recipe/infuse/wing.json

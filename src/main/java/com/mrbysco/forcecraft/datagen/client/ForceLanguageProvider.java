@@ -10,7 +10,6 @@ import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.registry.helper.ForceBrickReg;
 import com.mrbysco.forcecraft.registry.helper.ForceFurnaceReg;
 import com.mrbysco.forcecraft.registry.helper.ForceTorchReg;
-import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.data.PackOutput;
 import net.minecraft.locale.Language;
 import net.minecraft.sounds.SoundEvent;
@@ -22,7 +21,6 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -176,17 +174,21 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addConfig("buffRadius", "Buff Radius", "The radius of the buff effect around the activated position [Default: 5]");
 		addConfig("timeRadius", "Time Radius", "The radius of the time effect around the activated position [Default: 5]");
 		addConfig("timeCooldown", "Time Cooldown", "The cooldown of the Rod of Time in ticks [Default: 100]");
+
+		addConfig("torch", "Torch", "Torch Settings");
+		addConfig("torchRadius", "Torch Radius", "The radius of the torch effect around the activated position [Default: 3]");
+		addConfig("timeTorchRadius", "Time Torch Radius", "The radius of the time torch effect around the activated position [Default: 3]");
+		addConfig("timeTorchEnabled", "Time Torch Enabled", "Enable Time Torch infusing [Default: true]");
+		addConfig("timeRodEnabled", "Time Rod Enabled", "Enable Time Rod infusing [Default: true]");
+		addConfig("timeWeaponEnabled", "Time Weapon Enabled", "Enable Time Weapon infusing [Default: true]");
+		addConfig("timeTorchLogging", "Time Torch Logging", "Log when a player places a Time Torch [Default: true]");
+
+		addConfig("time", "Time", "Time Settings");
 		addConfig("entitySpeedDuration", "Entity Speed Duration", "The duration of the speed effect for entities in ticks (20 ticks = 1 second) [Default: 200]");
 		addConfig("blockSpeedDuration", "Block Speed Duration", "The duration of the speed effect for blocks in ticks (20 ticks = 1 second) [Default: 200]");
 		addConfig("slowSpeed", "Slow Speed", "The speed multiplier for slow time mode [Default: 0.25]");
 		addConfig("fastSpeed", "Fast Speed", "The speed multiplier for fast time mode [Default: 2.0]");
 		addConfig("hyperSpeed", "Hyper Speed", "The speed multiplier for hyper time mode [Default: 4.0]");
-
-		addConfig("torch", "Torch", "Torch Settings");
-		addConfig("torchRadius", "Torch Radius", "The radius of the torch effect around the activated position [Default: 3]");
-		addConfig("timeTorchRadius", "Time Torch Radius", "The radius of the time torch effect around the activated position [Default: 3]");
-		addConfig("timeTorchEnabled", "Time Torch Enabled", "Enable Time Torch [Default: true]");
-		addConfig("timeTorchLogging", "Time Torch Logging", "Log when a player places a Time Torch [Default: true]");
 
 		addConfig("worldgen", "World Generation", "World Generation Settings");
 		addConfig("generateForceOre", "Generate Force Ore", "Enable Force Ore generation [Default: true]");

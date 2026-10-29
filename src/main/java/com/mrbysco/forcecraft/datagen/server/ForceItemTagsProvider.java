@@ -145,7 +145,7 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 //		this.tag(ForceTags.Items.VALID_CRAFT_ITEMS).add(ForceRegistry.ITEM_CARD.get());
 
 		this.tag(ForceTags.Items.VALID_TIME_ITEMS)
-				.add(ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_ROD.get());
+				.add(ForceRegistry.FORCE_SWORD.get());
 
 		this.tag(ForceTags.Items.VALID_INFUSE_TORCHES)
 				.addTag(ForceTags.Items.FORCE_TORCHES);

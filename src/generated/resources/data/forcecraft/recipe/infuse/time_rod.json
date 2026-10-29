@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "forcecraft:time_torch_enabled",
+      "option": "timeRodEnabled"
+    }
+  ],
+  "type": "forcecraft:infuse",
+  "center": "forcecraft:force_rod",
+  "group": "time",
+  "ingredient": "minecraft:clock",
+  "points": 20,
+  "tier": "2",
+  "time": 200,
+  "upgrade": {
+    "type": "forcecraft:flag",
+    "component": "forcecraft:time"
+  }
+}

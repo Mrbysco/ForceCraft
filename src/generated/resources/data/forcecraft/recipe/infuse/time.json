@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "forcecraft:time_torch_enabled",
+      "option": "timeWeaponEnabled"
+    }
+  ],
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/time",
   "group": "time",

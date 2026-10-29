@@ -4,7 +4,7 @@ import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.datagen.server.builder.InfuseRecipeBuilder;
 import com.mrbysco.forcecraft.datagen.server.builder.MultiOutputRecipeBuilder;
 import com.mrbysco.forcecraft.datagen.server.builder.TransmutationRecipeBuilder;
-import com.mrbysco.forcecraft.recipe.condition.TorchEnabledCondition;
+import com.mrbysco.forcecraft.recipe.condition.ConfigEnabledCondition;
 import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
@@ -756,11 +756,15 @@ public class ForceRecipeProvider extends RecipeProvider {
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.CLOCK), tag(ForceTags.Items.VALID_TIME_ITEMS),
 						FlagUpgrade.of(ForceComponents.TIME.get()), UpgradeBookTier.THREE, 20, 200).group("time")
-				.save(output, Reference.modLoc("infuse/time"));
+				.save(output.withConditions(new ConfigEnabledCondition("timeWeaponEnabled")), Reference.modLoc("infuse/time"));
+
+		InfuseRecipeBuilder.infuse(Ingredient.of(Items.CLOCK), Ingredient.of(ForceRegistry.FORCE_ROD),
+						FlagUpgrade.of(ForceComponents.TIME.get()), UpgradeBookTier.THREE, 20, 200).group("time")
+				.save(output.withConditions(new ConfigEnabledCondition("timeRodEnabled")), Reference.modLoc("infuse/time_rod"));
 
 		InfuseRecipeBuilder.convert(Ingredient.of(Items.CLOCK), tag(ForceTags.Items.VALID_INFUSE_TORCHES),
 						new ItemStackTemplate(ForceRegistry.TIME_TORCH.getTorchItem()), UpgradeBookTier.THREE, 20, 200).group("time")
-				.save(output.withConditions(new TorchEnabledCondition()), Reference.modLoc("infuse/time_torch"));
+				.save(output.withConditions(new ConfigEnabledCondition("timeTorchEnabled")), Reference.modLoc("infuse/time_torch"));
 
 		// Tier 4:
 		InfuseRecipeBuilder.convert(Ingredient.of(ForceRegistry.GOLDEN_POWER_SOURCE.get()), Ingredient.of(ForceRegistry.UPGRADE_CORE.get()),

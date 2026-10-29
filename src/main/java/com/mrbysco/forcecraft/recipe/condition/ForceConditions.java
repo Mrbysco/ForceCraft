@@ -10,5 +10,5 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 public class ForceConditions {
 	public static final DeferredRegister<MapCodec<? extends ICondition>> CONDITION_CODECS = DeferredRegister.create(NeoForgeRegistries.Keys.CONDITION_CODECS, Reference.MOD_ID);
 
-	public static final DeferredHolder<MapCodec<? extends ICondition>, MapCodec<TorchEnabledCondition>> TIME_TORCH_ENABLED = CONDITION_CODECS.register("time_torch_enabled", () -> TorchEnabledCondition.CODEC);
+	public static final DeferredHolder<MapCodec<? extends ICondition>, MapCodec<ConfigEnabledCondition>> TIME_TORCH_ENABLED = CONDITION_CODECS.register("time_torch_enabled", () -> ConfigEnabledCondition.CODEC);
 }
