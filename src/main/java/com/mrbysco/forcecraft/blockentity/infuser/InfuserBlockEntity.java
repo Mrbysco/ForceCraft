@@ -398,7 +398,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 		return handler.getResource(SLOT_TOOL).toStack(1);
 	}
 
-	private UpgradeBookData getBook() {
+	public UpgradeBookData getBook() {
 		return handler.getResource(SLOT_BOOK).toStack(1).getOrDefault(ForceComponents.UPGRADE_BOOK, UpgradeBookData.DEFAULT);
 	}
 
