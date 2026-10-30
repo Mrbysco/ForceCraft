@@ -3,10 +3,12 @@ package com.mrbysco.forcecraft.blockentity.torch;
 import com.mrbysco.forcecraft.config.ForceConfig;
 import com.mrbysco.forcecraft.data.TimeData;
 import com.mrbysco.forcecraft.data.TimeMode;
+import com.mrbysco.forcecraft.handler.infusion.TimeHandler;
 import com.mrbysco.forcecraft.registry.ForceAttachments;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -41,6 +43,7 @@ public class TimeTorchBlockEntity extends AbstractTorchBlockEntity {
 				BlockEntity blockEntity = level.getBlockEntity(target);
 				if (blockEntity == null || !(blockEntity.getBlockState().getBlock() instanceof EntityBlock)) continue;
 				blockEntity.setData(ForceAttachments.TIME_ADJUSTMENT, new TimeData(level.getGameTime() + (6 * 20), rate));
+				TimeHandler.trackBlock((ServerLevel) level, target.immutable());
 			}
 		}
 	}
