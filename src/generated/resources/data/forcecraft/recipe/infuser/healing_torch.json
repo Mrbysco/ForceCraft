@@ -1,8 +1,8 @@
 {
   "type": "forcecraft:infuse",
-  "center": "minecraft:ghast_tear",
+  "center": "#forcecraft:valid_items/infuse_torch",
   "group": "healing",
-  "ingredient": "#forcecraft:valid_items/infuse_torch",
+  "ingredient": "minecraft:ghast_tear",
   "output": {
     "id": "forcecraft:healing_torch"
   },

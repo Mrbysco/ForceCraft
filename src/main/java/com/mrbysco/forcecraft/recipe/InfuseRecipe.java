@@ -53,7 +53,7 @@ public class InfuseRecipe implements Recipe<RecipeInput> {
 			ByteBufCodecs.optional(ItemStackTemplate.STREAM_CODEC),
 			o -> o.output,
 			ByteBufCodecs.VAR_INT,
-			o -> o.time,
+			o -> o.points,
 			ByteBufCodecs.VAR_INT,
 			o -> o.time,
 			ByteBufCodecs.STRING_UTF8,

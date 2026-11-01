@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/soul",
+  "group": "soul",
   "ingredient": "forcecraft:soul_wafer",
   "points": 45,
   "tier": "5",

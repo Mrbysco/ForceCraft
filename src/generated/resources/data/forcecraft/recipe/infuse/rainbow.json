@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/rainbow",
+  "group": "rainbow",
   "ingredient": "minecraft:lapis_lazuli",
   "points": 10,
   "tier": "1",

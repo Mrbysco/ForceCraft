@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/light",
+  "group": "light",
   "ingredient": "minecraft:glowstone_dust",
   "points": 55,
   "tier": "6",

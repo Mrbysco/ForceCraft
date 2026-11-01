@@ -1,8 +1,8 @@
 {
   "type": "forcecraft:infuse",
-  "center": "forcecraft:golden_power_source",
+  "center": "#forcecraft:valid_items/infuse_torch",
   "group": "heat",
-  "ingredient": "#forcecraft:valid_items/infuse_torch",
+  "ingredient": "forcecraft:golden_power_source",
   "output": {
     "id": "forcecraft:heat_torch"
   },

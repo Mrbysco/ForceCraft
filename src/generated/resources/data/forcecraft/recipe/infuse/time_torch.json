@@ -6,9 +6,9 @@
     }
   ],
   "type": "forcecraft:infuse",
-  "center": "minecraft:clock",
+  "center": "#forcecraft:valid_items/infuse_torch",
   "group": "time",
-  "ingredient": "#forcecraft:valid_items/infuse_torch",
+  "ingredient": "minecraft:clock",
   "output": {
     "id": "forcecraft:time_torch"
   },

@@ -38,7 +38,7 @@ public class InfuseRecipeBuilder {
 		return new InfuseRecipeBuilder(ingredient, center, upgrade, tier, points, time);
 	}
 
-	public static InfuseRecipeBuilder convert(Ingredient center, Ingredient ingredient, ItemStackTemplate result, UpgradeBookTier tier, int points, int time) {
+	public static InfuseRecipeBuilder convert(Ingredient ingredient, Ingredient center, ItemStackTemplate result, UpgradeBookTier tier, int points, int time) {
 		InfuseRecipeBuilder builder = new InfuseRecipeBuilder(ingredient, center, new ConvertUpgrade(), tier, points, time);
 		builder.output = result;
 		return builder;

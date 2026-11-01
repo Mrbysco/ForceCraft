@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.blockentity.infuser.InfuserBlockEntity;
 import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
+import com.mrbysco.forcecraft.upgrade.UpgradeBookTier;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -229,6 +230,10 @@ public class InfuserMenu extends AbstractContainerMenu {
 
 	public InfuserBlockEntity getBlockEntity() {
 		return blockEntity;
+	}
+
+	public UpgradeBookTier getTier() {
+		return blockEntity.getBook().tier();
 	}
 
 	@Override

@@ -68,7 +68,7 @@ public class TooltipHandler {
 			builder.accept(Component.translatable("forcecraft.component.lumberjack").withStyle(ChatFormatting.YELLOW));
 		}
 		if (stack.has(ForceComponents.RAINBOW)) {
-			builder.accept(Component.translatable("forcecraft.component.rainbow").withStyle(ChatFormatting.GOLD));
+			builder.accept(Component.translatable("forcecraft.component.rainbow"));
 		}
 		if (stack.has(ForceComponents.LUCK)) {
 			builder.accept(Component.translatable("forcecraft.component.luck" + stack.get(ForceComponents.LUCK)).withStyle(ChatFormatting.GREEN));

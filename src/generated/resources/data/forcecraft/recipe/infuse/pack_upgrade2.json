@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "forcecraft:force_pack",
+  "group": "pack_upgrade",
   "ingredient": "forcecraft:force_pack_upgrade",
   "points": 20,
   "tier": "2",

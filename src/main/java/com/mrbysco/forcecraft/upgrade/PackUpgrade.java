@@ -39,6 +39,6 @@ public record PackUpgrade() implements InfuserUpgrade {
 
 	@Override
 	public int levelCap(ItemStack tool) {
-		return tool.getItem() instanceof ForcePackItem ? 4 : 0;
+		return 4;
 	}
 }

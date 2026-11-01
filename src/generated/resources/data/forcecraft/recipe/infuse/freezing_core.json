@@ -1,8 +1,8 @@
 {
   "type": "forcecraft:infuse",
-  "center": "forcecraft:snow_cookie",
+  "center": "forcecraft:upgrade_core",
   "group": "freezing",
-  "ingredient": "forcecraft:upgrade_core",
+  "ingredient": "forcecraft:snow_cookie",
   "output": {
     "id": "forcecraft:frozen_core"
   },

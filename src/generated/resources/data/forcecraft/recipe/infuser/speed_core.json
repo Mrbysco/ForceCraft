@@ -1,7 +1,8 @@
 {
   "type": "forcecraft:infuse",
-  "center": "minecraft:sugar",
-  "ingredient": "forcecraft:upgrade_core",
+  "center": "forcecraft:upgrade_core",
+  "group": "speed",
+  "ingredient": "minecraft:sugar",
   "output": {
     "id": "forcecraft:speed_core"
   },

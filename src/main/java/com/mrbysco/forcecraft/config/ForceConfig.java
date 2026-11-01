@@ -235,7 +235,7 @@ public class ForceConfig {
 					.defineInRange("forceInfusingTime", 120, 20, Integer.MAX_VALUE);
 
 			repeatInfusePenalty = builder
-					.comment("When enabled repeating an infusement will not give full points [Default: true]")
+					.comment("When enabled repeating an infusion will not give full points [Default: true]")
 					.define("repeatInfusePenalty", true);
 
 			furnaceOutputBlacklist = builder

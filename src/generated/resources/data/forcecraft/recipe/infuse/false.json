@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/false",
+  "group": "false",
   "ingredient": "minecraft:glass_bottle",
   "points": 20,
   "tier": "2",
