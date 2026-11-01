@@ -236,8 +236,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 			}
 		}
 
-		if (!hasDrawn) {
-			// Special-rendered items have no quads, so fall back to the particle sprite
+		if (!hasDrawn) { //Fallback
 			Material.Baked material = state.pickParticleMaterial(this.minecraft.level.getRandom());
 			if (material != null) {
 				graphics.blitSprite(RenderPipelines.GUI_TEXTURED, material.sprite(), x, y, 16, 16, 0xFF000000);
