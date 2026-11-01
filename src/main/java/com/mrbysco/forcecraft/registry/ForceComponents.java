@@ -101,6 +101,11 @@ public class ForceComponents {
 					.networkSynchronized(ByteBufCodecs.STRING_UTF8)
 					.build());
 
+	public static final Supplier<DataComponentType<Boolean>> SILHOUETTE = COMPONENT_TYPE.register("silhouette", () ->
+			DataComponentType.<Boolean>builder()
+					.persistent(Codec.BOOL)
+					.networkSynchronized(ByteBufCodecs.BOOL)
+					.build());
 	/**
 	 * Modifier: Force
 	 * Item: Force Nugget

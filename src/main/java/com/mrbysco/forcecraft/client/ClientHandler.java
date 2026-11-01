@@ -18,9 +18,11 @@ import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -30,11 +32,15 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.pipeline.PipelineModifier;
+import net.neoforged.neoforge.client.pipeline.RegisterPipelineModifiersEvent;
 
 @EventBusSubscriber(Dist.CLIENT)
 public class ClientHandler {
 	public static final ModelLayerLocation ENGINE = new ModelLayerLocation(Reference.modLoc("engine"), "main");
 	public static final ModelLayerLocation BOMB = new ModelLayerLocation(Reference.modLoc("bomb"), "main");
+
+	public static final ResourceKey<PipelineModifier> SILHOUTTE = ResourceKey.create(PipelineModifier.MODIFIERS_KEY, Reference.modLoc("silhouette"));
 
 	@SubscribeEvent
 	public static void onRegisterMenu(final RegisterMenuScreensEvent event) {
@@ -86,5 +92,19 @@ public class ClientHandler {
 				ForceRegistry.FORCE_CHEST, ForceRegistry.FORCE_HELMET
 		);
 //		event.registerMobEffect(new MagnetEffectExtension(), ForceEffects.MAGNET);
+	}
+
+	@SubscribeEvent
+	public static void modifiers(RegisterPipelineModifiersEvent event) {
+		event.register(SILHOUTTE, (pipeline, name) -> {
+			Identifier loc = pipeline.getLocation();
+			if (loc.equals(RenderPipelines.ITEM_CUTOUT.getLocation()) || loc.equals(RenderPipelines.ITEM_TRANSLUCENT.getLocation())) {
+				return pipeline.toBuilder()
+						.withLocation(name)
+						.withFragmentShader(Reference.modLoc("core/silhouette"))
+						.build();
+			}
+			return pipeline;
+		});
 	}
 }

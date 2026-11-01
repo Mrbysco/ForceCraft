@@ -6,6 +6,7 @@ import com.mrbysco.forcecraft.client.screen.guide.GuideEntry;
 import com.mrbysco.forcecraft.client.screen.widgets.ProgressBar;
 import com.mrbysco.forcecraft.client.util.RenderHelper;
 import com.mrbysco.forcecraft.menu.InfuserMenu;
+import com.mrbysco.forcecraft.registry.ForceComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -14,22 +15,16 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	private static final int ENTRIES_PER_PAGE = 8;
@@ -212,36 +207,9 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	}
 
 	private void extractSilhouette(GuiGraphicsExtractor graphics, ItemStack stack, int x, int y) {
-		ItemStackRenderState state = new ItemStackRenderState();
-		this.minecraft.getItemModelResolver().updateForTopItem(
-				state, stack, ItemDisplayContext.GUI, this.minecraft.level, this.minecraft.player, 0);
-
-		if (state.isEmpty()) return;
-
-		//TODO: Figure out how I can draw a blockitem silhouette inside inventory!
-		if (state.usesBlockLight()) {
-			graphics.blitSprite(RenderPipelines.GUI_TEXTURED, UNKNOWN_BLOCK, x, y, 16, 16);
-			return;
-		}
-
-		boolean hasDrawn = false;
-		Set<TextureAtlasSprite> sprites = new HashSet<>();
-		for (int i = 0; i < state.activeLayerCount; i++) {
-			for (var quad : state.layers[i].prepareQuadList()) {
-				var sprite = quad.materialInfo().sprite();
-				if (sprites.add(sprite)) {
-					graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, x, y, 16, 16, 0xFF000000);
-					hasDrawn = true;
-				}
-			}
-		}
-
-		if (!hasDrawn) { //Fallback
-			Material.Baked material = state.pickParticleMaterial(this.minecraft.level.getRandom());
-			if (material != null) {
-				graphics.blitSprite(RenderPipelines.GUI_TEXTURED, material.sprite(), x, y, 16, 16, 0xFF000000);
-			}
-		}
+		ItemStack copy = stack.copy();
+		copy.set(ForceComponents.SILHOUETTE, true);
+		graphics.fakeItem(copy, x, y);
 	}
 
 	@Override

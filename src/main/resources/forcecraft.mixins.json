@@ -7,6 +7,11 @@
   "mixins": [
     "ItemStackMixin"
   ],
+  "client": [
+    "client.GuiGraphicsExtractorMixin",
+    "client.GuiItemAtlasMixin",
+    "client.ItemStackRenderStateMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
