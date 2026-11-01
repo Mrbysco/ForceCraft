@@ -1,8 +1,8 @@
 {
   "type": "forcecraft:infuse",
-  "center": "minecraft:experience_bottle",
+  "center": "#forcecraft:valid_items/experience",
   "group": "experience",
-  "ingredient": "#forcecraft:valid_items/experience",
+  "ingredient": "minecraft:experience_bottle",
   "output": {
     "id": "forcecraft:experience_tome"
   },

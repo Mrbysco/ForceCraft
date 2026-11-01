@@ -1,8 +1,8 @@
 {
   "type": "forcecraft:infuse",
-  "center": "minecraft:spider_eye",
+  "center": "#forcecraft:valid_items/infuse_torch",
   "group": "bane",
-  "ingredient": "#forcecraft:valid_items/infuse_torch",
+  "ingredient": "minecraft:spider_eye",
   "output": {
     "id": "forcecraft:bane_torch"
   },

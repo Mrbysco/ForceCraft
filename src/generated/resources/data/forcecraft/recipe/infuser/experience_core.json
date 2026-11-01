@@ -1,8 +1,8 @@
 {
   "type": "forcecraft:infuse",
-  "center": "minecraft:experience_bottle",
+  "center": "forcecraft:upgrade_core",
   "group": "experience",
-  "ingredient": "forcecraft:upgrade_core",
+  "ingredient": "minecraft:experience_bottle",
   "output": {
     "id": "forcecraft:experience_core"
   },

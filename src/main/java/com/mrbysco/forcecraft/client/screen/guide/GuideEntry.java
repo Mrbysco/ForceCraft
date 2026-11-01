@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,20 +19,26 @@ public record GuideEntry(ItemStack stack, Component vagueHint, Component realTex
                          boolean discovered) {
 	public static List<GuideEntry> buildEntries(UpgradeBookData book, ContextMap context) {
 		Map<String, GuideEntry> entries = new LinkedHashMap<>();
-		for (RecipeHolder<InfuseRecipe> holder : ForceRecipeCache.getInfuseRecipes()) {
+		int bookTier = book.tier().asInt();
+
+		List<RecipeHolder<InfuseRecipe>> recipes = new ArrayList<>(ForceRecipeCache.getInfuseRecipes());
+		recipes.sort(Comparator.comparingInt(recipe -> recipe.value().getTier().ordinal()));
+
+		for (RecipeHolder<InfuseRecipe> holder : recipes) {
 			InfuseRecipe recipe = holder.value();
-			if (recipe.getTier().asInt() > book.tier().asInt()) continue;
+			int recipeTier = recipe.getTier().asInt();
+			if (recipeTier > bookTier) continue;
 
 			ItemStack stack = recipe.getIngredient().display().resolveForFirstStack(context);
 			if (stack.isEmpty()) continue;
 
-			String key = guideKey(holder, recipe);
-			Identifier usedId = recipe.group().isEmpty()
-					? holder.id().identifier()
-					: holder.id().identifier().withPath(recipe.group());
-			boolean discovered = recipe.getTier().asInt() < book.tier().asInt()
+			Identifier recipeId = holder.id().identifier();
+			String recipeGroup = recipe.group();
+			Identifier usedId = recipeGroup.isEmpty() ? recipeId : recipeId.withPath(recipeGroup);
+			boolean discovered = recipeTier < bookTier
 					|| book.recipesUsed().contains(usedId);
 
+			String key = guideKey(holder, recipe);
 			GuideEntry existing = entries.get(key);
 			if (existing != null) {
 				if (discovered && !existing.discovered()) {
@@ -40,9 +47,9 @@ public record GuideEntry(ItemStack stack, Component vagueHint, Component realTex
 				continue;
 			}
 			entries.put(key, new GuideEntry(stack,
-					Component.translatable("guide.forcecraft.infuser." + key + ".hint"),
-					Component.translatable("guide.forcecraft.infuser." + key + ".text"),
-					Component.translatable("guide.forcecraft.infuser." + key + ".header"),
+					Component.translatableWithFallback("guide.forcecraft.infuser." + key + ".hint", "Please ask the developer to add language keys for the " + key + " infusion."),
+					Component.translatableWithFallback("guide.forcecraft.infuser." + key + ".text", "Please ask the developer to add language keys for the " + key + " infusion."),
+					Component.translatableWithFallback("guide.forcecraft.infuser." + key + ".header", "Unknown Upgrade"),
 					discovered)
 			);
 		}

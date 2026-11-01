@@ -1,4 +1,4 @@
-// 26.1.2	2026-11-01T02:56:46.8225827	ForceCraft Recipes
+// 26.1.2	2026-11-01T15:04:47.0787448	ForceCraft Recipes
 aa43c1fe5e90eb41a5bc902b064e800a187ab9e3 data/forcecraft/advancement/recipes/building_blocks/force_brick_black.json
 7598ae751331f861a5b1257137a9d2db69579483 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab.json
 179c9202b5d92a6648c92b9ea3bc18e8a9623ad5 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab_from_force_brick_black_stonecutting.json
@@ -618,26 +618,26 @@ abcfa9602aad6a9cff5d0b36b4f9f1a0120afdb6 data/forcecraft/recipe/grinding/warped_
 82e486e64cce9c3cc37d482250332a5e4447e555 data/forcecraft/recipe/healing_torch.json
 352a529a34c798cf16a96ff36dd086df996d9471 data/forcecraft/recipe/heat_torch.json
 0fe929ce9dde836b3e62b7637afa37ab31503cd8 data/forcecraft/recipe/inert_core.json
-cd2d42af143336e1b48677c610bb27fb17ead3cc data/forcecraft/recipe/infuser/camo_torch.json
-aaea152a15c4ca81a060a7aad67a43c46cfe5b13 data/forcecraft/recipe/infuser/convert_heat.json
-79e8d016f5449dbb3975a3f1fcd608d1847abe7f data/forcecraft/recipe/infuser/experience_core.json
-991ecbd57e6004bde1ee144b764208e6f91088cc data/forcecraft/recipe/infuser/healing_torch.json
-103ea8a83e8558992da08c606c38671cc1a903c0 data/forcecraft/recipe/infuser/speed_core.json
+8a8bd3d005831c0ede9b294c62ccabf4a69d688f data/forcecraft/recipe/infuser/camo_torch.json
+9a8c2f290ca59011e0d1182256dc6f473a2dc5d7 data/forcecraft/recipe/infuser/convert_heat.json
+cf59a9cfe33a85065ed91cb812957c73c57ca6ac data/forcecraft/recipe/infuser/experience_core.json
+3d80b5c73da0c490eb153fff957bb952b07d4a27 data/forcecraft/recipe/infuser/healing_torch.json
+2aa23fd57cc0d3ada68e6acaf7f29f068223f6b3 data/forcecraft/recipe/infuser/speed_core.json
 a757d83197c47298fb477ffb020ff6e35d2334e2 data/forcecraft/recipe/infuse/bane.json
-6ecb558eb58ed13727a38f1b41175595e222b5af data/forcecraft/recipe/infuse/bane_torch.json
+8d6ac965801694d6a697a921d39f5e25869fd9d9 data/forcecraft/recipe/infuse/bane_torch.json
 cf19c10dfe63b8de8d8e0bacac08aad4fc758827 data/forcecraft/recipe/infuse/bleed.json
 0a1b563367e808462b52cda6058ee9d013db1d7f data/forcecraft/recipe/infuse/camo.json
 a76dda3255b2bf69f7fc4c7c346f10084bc7fa2c data/forcecraft/recipe/infuse/damage.json
 f153087c5092e99ce557be815905340b55b056d7 data/forcecraft/recipe/infuse/ender.json
-dfe8ecde4c0b8a95bd13ff4cd392e41168bcdc4f data/forcecraft/recipe/infuse/experience.json
+b98e05c4b1c11092195467e5e2c1382d43f045ea data/forcecraft/recipe/infuse/experience.json
 389a008dbdd898b70262ef767f216a374c61d56f data/forcecraft/recipe/infuse/false.json
 bcd76165fb50531a5e39c67404fd86e38a0e6bb5 data/forcecraft/recipe/infuse/force.json
 d96f65e5ecacaa05602d91a2747f35bf6d0f2293 data/forcecraft/recipe/infuse/freezing.json
-77d991aa3c1b3dea94d1fd2fbb23d7d946b196a4 data/forcecraft/recipe/infuse/freezing_core.json
-0239c85302552657884a9b85718602cb01c02769 data/forcecraft/recipe/infuse/grinding_core.json
+26f51f43b56c63eee07f3d669cce9c76ce3cab87 data/forcecraft/recipe/infuse/freezing_core.json
+6df1f5441b1ee99f6e324d79fc79e51c2cf0e0a8 data/forcecraft/recipe/infuse/grinding_core.json
 ef8dd1ad58995fefe666e20cc889c8e024f3f7ca data/forcecraft/recipe/infuse/healing.json
 8d3c89710ce6861f6f5cf1404f9e80c1eed77fb3 data/forcecraft/recipe/infuse/heat.json
-28a21d0893d274fe676d8e79429c78039c9b8047 data/forcecraft/recipe/infuse/heat_torch.json
+5fd09021b8faf29fa1c3343ebf8b93daae080910 data/forcecraft/recipe/infuse/heat_torch.json
 16648ac632ded80fd46cbcaba5065645cdf2c859 data/forcecraft/recipe/infuse/light.json
 5430f26dfea75a5c5ac50ce1e91daf422ed0db61 data/forcecraft/recipe/infuse/luck.json
 d2bc3316e8dc9951b83f69c4aec7782c4221a9a0 data/forcecraft/recipe/infuse/lumberjack.json
@@ -652,7 +652,7 @@ f77ecc8c93c18f44a89154823aa8a8b9d6ccf3a8 data/forcecraft/recipe/infuse/soul.json
 89bec15ca2815c8fe88dd8914694e61df87d88dd data/forcecraft/recipe/infuse/sturdy.json
 dc242a439b27ee7a7132d4741402802fa33c6420 data/forcecraft/recipe/infuse/time.json
 0184ec8887565c5a33fac8598007f85d968c8d93 data/forcecraft/recipe/infuse/time_rod.json
-6ffb1c8e9e2e50e68f24e6727517c58425b77cb4 data/forcecraft/recipe/infuse/time_torch.json
+16fd5a94bb5afdc44383bd30307ba010c71b8795 data/forcecraft/recipe/infuse/time_torch.json
 64d764822cdc7c8de95e7c49a3bd4b86d4894b63 data/forcecraft/recipe/infuse/touch.json
 43c906136b5f2e9fc758490dafa7c96551830652 data/forcecraft/recipe/infuse/treasure.json
 aca53ddbe5c55131f30b49caec0096802e931404 data/forcecraft/recipe/infuse/wing.json

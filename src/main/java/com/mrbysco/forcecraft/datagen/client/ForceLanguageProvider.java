@@ -163,7 +163,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		// Config
 		addConfig("general", "General", "General Settings");
 		addConfig("forceInfusingTime", "Force Infusing Time", "The max amount of ticks it takes to charge a tool with Force [Default: 120 (6 seconds)]");
-		addConfig("repeatInfusePenalty", "Repeat Infuse Penalty", "When enabled repeating an infusement will not give full points [Default: true]");
+		addConfig("repeatInfusePenalty", "Repeat Infuse Penalty", "When enabled repeating an infusion will not give full points [Default: true]");
 		addConfig("furnaceOutputBlacklist", "Furnace Output Blacklist", "An additional list of blockentities the Force Furnace can NOT insert into [Syntax: modid:blockentity_id]\n" +
 				"Examples: \"minecraft:shulker_box\" would stop it inserting into shulkers");
 
@@ -239,7 +239,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("forcecraft.component.speed5", "Speed V");
 
 		add("forcecraft.component.lumberjack", "Lumberjack");
-		add("forcecraft.component.rainbow", "Rainbow");
+		add("forcecraft.component.rainbow", "§bRain§ebow");
 
 		add("forcecraft.component.luck1", "Luck I");
 		add("forcecraft.component.luck2", "Luck II");
@@ -350,6 +350,90 @@ public class ForceLanguageProvider extends LanguageProvider {
 				"Apparently these Forceful Logs hold the power to quickly destroying their brethren.",
 				"This upgrade transforms a Force Axe into a treebliterating tool of mass destruction, although the durability cost for such monstrous tool is also, well, monstrous.",
 				"[Lumberjack] Tier: 1 Mlvl: 1");
+		addGuideEntry("experience",
+				"I might be able to get one from an Enchanted Book. Now where did that Force Rod go? If I can manage to get one I should put it on a book.",
+				"This upgrade has only one function: to upgrade a normal book into an Experience Tome, which is able to store an infinite amount of experience for the player. Shift right-click it to store experience, and right-click to recall it. There is a small percent loss, but it's free.",
+				"[Experience] Tier: 2 Mlvl: 1");
+		addGuideEntry("freezing",
+				"Is this made out of snow?",
+				"Don't eat that cookie! It doesn't do anything anyway. Upgrading your Force Bow with Freezing will allow it to shoot Ice Arrows which will freeze your enemies in place for a short time, and even change some blocks in the world.",
+				"[Freezing] Tier: 2 Mlvl: 1");
+		addGuideEntry("grinding",
+				"This is either a rock, or a really misshapen pancreas.",
+				"This upgrade allows for certain items and drops to be ground into powdery substances or other useful materials.", //Try mining some ore with it and you'll get more return than usual.
+				"[Grinding] Tier: 2 Mlvl: 1");
+		addGuideEntry("luck",
+				"A nugget of otherworldly wisdom stuffed inside a delicious confection.",
+				"The Luck upgrade enhances the amount of loot one receives for performing almost any task. on the Force Sword it gives Looting, causing enemies slain to drop more loot. On any standard block breaking tool it will give Fortune, which increases the drop rate of certain items.",
+				"[Luck] Tier! 2 Mlvl: 4");
+		addGuideEntry("pack_upgrade",
+				"I might try and upgrade a Force Pack with this strange item.",
+				"This unique upgrade serves to increase the storage capacity of Force Packs by 8 slots per upgrade, up to a total size of 40 slots. Force Packs oan only be upgraded once per tier, so you'll have to get to tier 5 before you can max out any Force Pack.",
+				"[Holding] Tier: 2 Mlvl: 1");
+		addGuideEntry("rainbow",
+				"Colorful cloth abounds with this gorgeous gem.",
+				"This upgrade is only valid on the Force Shears and randomly changes the color of wool dropped from sheep, Try it out!",
+				"[Rainbow] Tier: 2 Mlvl: 1");
+		addGuideEntry("bleed",
+				"You'll shoot your eye out!",
+				"Bleeding will cause entities that are struck to quickly take small amounts of bleed damage over time. This works on both the Force Sword and Bow and does stack with burning damage.",
+				"[Bleed] Tier: 3 Mlvl: 3");
+		addGuideEntry("false",
+				"It appears to be some discarded glass left behind by a Flask-wielding lunatic.",
+				"The False upgrade, when present on a Force Sword will never deal a finishing blow to an enemy when struck.", //This could be useful for weakening monsters so they can be easily captured in Force Flasks.
+				"[False] Tier: 3 Mlvl: 1");
+		addGuideEntry("time",
+				"A perfect timepiece.",
+				"Time is relative, At least it will be when you place this upgrade on a Force Sword or Force Rod. Shift right clicking the rod will change modes while right clicking will use it. Try it out!",
+				"[Time] Tier: 3 Mlvl: 1");
+		addGuideEntry("touch",
+				"Spiders aren't the only ones who can weave this Silky material.",
+				"This upgrade imbues basic Force Tools with Silk Touch, which generally applies before upgrades like Grinding or Heat.",
+				"[Touch] Tier: 3 Mlvl: 1");
+		addGuideEntry("bane",
+				"You probably shouldn't eat this... Just jam it on a sword.",
+				"When an entity is struck with a Bane imbued weapon they are likely to lose some of their inherent abilities. Creepers and Enderman are perfect examples of this principle.",
+				"[Bane] Tier: 4 Mlvl: 1");
+		addGuideEntry("heat",
+				"This Golden Power is not so hard to obtain.",
+				"Heat is valid on every iteration of Force Tool and has a tendency to ignite things it comes into contact with. If you put Heat on shears. You're a terrible person.",
+				"[Heat] Tier: 4 Mlvl: 1");
+		addGuideEntry("camo",
+				"Nothing to see here, except a floating set of armor.",
+				"Camo will make Force Armor invisible, if you'd rather not appear to be wearing armor, or it can be placed on a Force Rod to give short spurts of invisibility to its user.",
+				"[Camo] Tier: 5 Mlvl: 1");
+		addGuideEntry("healing",
+				"Your tears give me strength... and regeneration.",
+				"Healing will heal any entity it hits for 1 heart per level, unless of course that entity happens to be undead. Healing can be placed on a sword, bow and rod, and will heal the user when the rod is used.",
+				"[Healing] Tier: 5 Mlvl: 2");
+		addGuideEntry("sight",
+				"I'm pretty sure it's a potion of some kind, but then again I'm just a sentence. Perhaps if I could just See a little better...",
+				"Upgrading a Force Rod with Sight will give Night Vision to the user for about a minute per use. It's worth noting that only an unmodified Potion of Night Vision may be used.",
+				"[Sight] Tier: 5 Mlvl: 1");
+		addGuideEntry("wing",
+				"May contain feathers.",
+				"Wing Swords will fling their user when they right-click while holding the jump key, or allow small amounts of flight with a sneak jump right-click combination. On armor it will also allow flight and increase the maximum duration of flight.",
+				"[Wing] Tier: 5 MLvl: 1");
+		addGuideEntry("sturdy",
+				"The hardest substance known to post-apocalyptic blocky man.",
+				"This upgrade can be used to imbue Unbreaking on all Force Tools but the Shears and Sword, or it can be attached to Force Armor once to reduce incoming damage by a fairly signifoant amount. Sturdy can also be used to upgrade packs and belts to make them immune to damage and despauning.",
+				"[Sturdy] Tier: 6 Mlvl: 2");
+		addGuideEntry("ender",
+				"This dark orb must house some potent spatial magic.",
+				"Teleportation - not just for Endermen anymore! Harness this space-bending upgrade on a Force Sword or Rod for easy transportation, or have loads of fun griefing your buddies with the Ender Bow. Teleport responsibly.",
+				"[Ender] Tier: 6 Mlvl: 1");
+		addGuideEntry("soul",
+				"A thin, brittle wafer holds a restless spirit.",
+				"The Soul upgrade on Force Swords will occasionally cause Mob Chunks to drop, which can be used to craft vanilla spawners for that mob or even be smelted into colored Mob Ingots.",
+				"[Soul] Tier: 6 Mlvl: 1");
+		addGuideEntry("light",
+				"It's glowing, yet stone-like.",
+				"At the moment this can only be used to add Smite to Force Swords. (This will change eventually.)",
+				"[Light] Tier: 7 Mlvl: 5");
+		addGuideEntry("treasure",
+				"Everyone loves treasure.",
+				"When entities are killed with a Treasure imbued weapon they will occasionally drop Treasure Cards, which can then be crafted into a Spoils Bag for some phat loot. Fortune increases the drop rate as well.",
+				"[Treasure] Tier: 7 Mlvl: 1");
 
 		//JEI Compat
 		add("forcecraft.gui.jei.category.freezing", "Freezing");

@@ -1,6 +1,8 @@
 {
   "type": "forcecraft:infuse",
-  "center": {
+  "center": "#forcecraft:valid_items/infuse_torch",
+  "group": "camo",
+  "ingredient": {
     "neoforge:ingredient_type": "neoforge:components",
     "components": {
       "minecraft:potion_contents": {
@@ -9,8 +11,6 @@
     },
     "items": "minecraft:potion"
   },
-  "group": "camo",
-  "ingredient": "#forcecraft:valid_items/infuse_torch",
   "output": {
     "id": "forcecraft:camo_torch"
   },
