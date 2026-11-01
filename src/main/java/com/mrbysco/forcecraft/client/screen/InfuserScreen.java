@@ -373,13 +373,6 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	}
 
 	private void refreshGuideEntries() {
-		var book = menu.getBlockEntity().getBook();
-		System.out.println("GUIDE book: " + book);
-		for (var holder : com.mrbysco.forcecraft.client.ForceRecipeCache.getInfuseRecipes()) {
-			System.out.println("GUIDE holder: " + holder.id().identifier()
-					+ " contained=" + book.recipesUsed().contains(holder.id().identifier()));
-		}
-
 		guideEntries.clear();
 		guideEntries.addAll(GuideEntry.buildEntries(menu.getBlockEntity().getBook(),
 				SlotDisplayContext.fromLevel(minecraft.level)));
