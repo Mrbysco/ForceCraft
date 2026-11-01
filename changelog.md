@@ -1,1 +1,2 @@
-* Fixed Power Ore and Force Furnaces not being in the `minecraft:mineable/pickaxe` tag
+* Fix `/forcecraft ishard` command not giving a proper completed book
+* Change silhouette rendering inside the infuser guide
