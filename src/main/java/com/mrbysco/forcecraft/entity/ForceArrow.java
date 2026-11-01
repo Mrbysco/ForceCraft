@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.registry.ForceAttachments;
 import com.mrbysco.forcecraft.registry.ForceDatamaps;
 import com.mrbysco.forcecraft.registry.ForceEffects;
 import com.mrbysco.forcecraft.registry.ForceEntities;
+import com.mrbysco.forcecraft.util.TeleportHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -42,6 +43,7 @@ public class ForceArrow extends Arrow {
 	private static final EntityDataAccessor<Boolean> ICE = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> BANE = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> HEAT = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> ENDER = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> BLEED = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> HEALING = SynchedEntityData.defineId(ForceArrow.class, EntityDataSerializers.INT);
 
@@ -71,6 +73,7 @@ public class ForceArrow extends Arrow {
 		entityData.define(ICE, false);
 		entityData.define(BANE, false);
 		entityData.define(HEAT, false);
+		entityData.define(ENDER, false);
 		entityData.define(BLEED, 0);
 		entityData.define(HEALING, 0);
 	}
@@ -138,6 +141,14 @@ public class ForceArrow extends Arrow {
 
 	public boolean isHeat() {
 		return this.entityData.get(HEAT);
+	}
+
+	public void setEnder(boolean b) {
+		this.entityData.set(ENDER, b);
+	}
+
+	public boolean isEnder() {
+		return this.entityData.get(ENDER);
 	}
 
 	@Override
@@ -208,6 +219,10 @@ public class ForceArrow extends Arrow {
 
 		if (isHeat()) {
 			mob.igniteForSeconds(LevelBasedValue.perLevel(4.0F).calculate(1));
+		}
+
+		if (isEnder()) {
+			TeleportHelper.teleportRandomly(mob);
 		}
 	}
 

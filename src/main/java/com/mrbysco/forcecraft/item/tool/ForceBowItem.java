@@ -34,6 +34,8 @@ public class ForceBowItem extends BowItem {
 				arrow.setIce(true);
 			} else if (mode == BowMode.TORCH) {
 				arrow.setTorch(takeTorch(shooter));
+			} else if (mode == BowMode.ENDER) {
+				arrow.setEnder(true);
 			}
 
 			if (weapon.has(ForceComponents.BANE))

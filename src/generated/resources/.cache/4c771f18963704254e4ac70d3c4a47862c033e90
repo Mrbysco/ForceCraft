@@ -1,4 +1,4 @@
-// 26.1.2	2026-11-01T20:12:31.1936353	Tags for minecraft:item mod id forcecraft
+// 26.1.2	2026-11-01T22:04:27.1872081	Tags for minecraft:item mod id forcecraft
 e4114fb3db46efa51fbbe42ba62fe557c245011e data/c/tags/item/gems.json
 6acf1247ecbbd8d85c4f176ff43157c4353856e7 data/c/tags/item/gems/force.json
 417731315b0e838f1c2b1e7bd36d21ec3d3c0df2 data/c/tags/item/holds_items.json
@@ -23,7 +23,7 @@ eff2e9b711edce9a5ae1875f820c2b5272b0779f data/forcecraft/tags/item/force_logs.js
 9a2f1ed97d66bc281c249c8fdfc5e0e9db5f881c data/forcecraft/tags/item/force_tools.json
 4a70364139feeb506f34ec66b6b056216b6dfe71 data/forcecraft/tags/item/force_torches.json
 a9a150a0cf791ee872a41489d83a8aa2b9fe828f data/forcecraft/tags/item/force_weapons.json
-62394dff2f9fda26a947eb1f1613256d1cb2bd3f data/forcecraft/tags/item/mob_chunks.json
+a273ea5e2291737b709c6b128c5d2d5754480a1d data/forcecraft/tags/item/mob_chunks.json
 c28b25f1ba103b14e5d5e66444f35b01ffe6361f data/forcecraft/tags/item/upgrade_cores.json
 109979ba6691c3f6bed47ce2ba7d0a52c3514a3b data/forcecraft/tags/item/valid_force_belt.json
 a2588468460760c403b085d6bc2ac32fa319d3ae data/forcecraft/tags/item/valid_infuser_charge.json
@@ -31,7 +31,7 @@ a2588468460760c403b085d6bc2ac32fa319d3ae data/forcecraft/tags/item/valid_infuser
 443c433a2fd3ac4ea464f4a41249de7854800c7d data/forcecraft/tags/item/valid_items/bleed.json
 87bdf071b9dc500ecd18d91c2a8bc865d6f45810 data/forcecraft/tags/item/valid_items/camo.json
 6f2462ba650584af0342aa42596d26b46b5b436c data/forcecraft/tags/item/valid_items/damage.json
-4f3cae5ffe56fcc40e2ef188194cefae1a36339a data/forcecraft/tags/item/valid_items/ender.json
+f032ac419d25b874a3d20e6d1fabde6eb34f2946 data/forcecraft/tags/item/valid_items/ender.json
 2e0ada6a835e8b0f902f82a72452d5602a6064e5 data/forcecraft/tags/item/valid_items/experience.json
 919e6d75ea4faf772493aad779bb387136859c88 data/forcecraft/tags/item/valid_items/false.json
 b32dfddf1d652894535ca967aab789155c766175 data/forcecraft/tags/item/valid_items/force.json

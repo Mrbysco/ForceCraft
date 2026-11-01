@@ -13,7 +13,8 @@ public enum BowMode implements StringRepresentable {
 	NORMAL("forcecraft.bow.mode.normal", () -> null),
 	TORCH("forcecraft.bow.mode.torch", () -> null),
 	ICE("forcecraft.bow.mode.ice", ForceComponents.FREEZING::get),
-	FIRE("forcecraft.bow.mode.fire", ForceComponents.HEAT::get);
+	FIRE("forcecraft.bow.mode.fire", ForceComponents.HEAT::get),
+	ENDER("forcecraft.bow.mode.ender", ForceComponents.ENDER::get);
 
 	public static final Codec<BowMode> CODEC = StringRepresentable.fromEnum(BowMode::values);
 

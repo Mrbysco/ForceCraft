@@ -182,7 +182,7 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 				.addTag(ForceTags.Items.FORCE_ARMOR);
 
 		this.tag(ForceTags.Items.VALID_ENDER_ITEMS).add(
-				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_ROD.get());
+				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_BOW.get(), ForceRegistry.FORCE_ROD.get());
 
 		this.tag(ForceTags.Items.VALID_SOUL_ITEMS).add(ForceRegistry.FORCE_SWORD.get());
 

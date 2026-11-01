@@ -200,6 +200,7 @@ public class ForceConfig {
 	public static class Common {
 
 		public final ModConfigSpec.IntValue forceInfusingTime;
+		public final ModConfigSpec.IntValue enderSwordCooldown;
 		public final ModConfigSpec.BooleanValue repeatInfusePenalty;
 		public final ModConfigSpec.ConfigValue<List<? extends String>> furnaceOutputBlacklist;
 
@@ -233,6 +234,10 @@ public class ForceConfig {
 			forceInfusingTime = builder
 					.comment("The max amount of ticks it takes to charge a tool with Force [Default: 120 (6 seconds)]")
 					.defineInRange("forceInfusingTime", 120, 20, Integer.MAX_VALUE);
+
+			enderSwordCooldown = builder
+					.comment("The cooldown of the Ender Sword in ticks [Default: 30]")
+					.defineInRange("enderSwordCooldown", 30, 0, Integer.MAX_VALUE);
 
 			repeatInfusePenalty = builder
 					.comment("When enabled repeating an infusion will not give full points [Default: true]")
