@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/ender",
+  "group": "ender",
   "ingredient": "minecraft:ender_pearl",
   "points": 45,
   "tier": "5",

@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/bleed",
+  "group": "bleed",
   "ingredient": "minecraft:arrow",
   "points": 20,
   "tier": "2",

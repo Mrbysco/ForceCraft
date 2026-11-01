@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/lumberjack",
+  "group": "lumberjack",
   "ingredient": "#forcecraft:force_logs",
   "points": 35,
   "tier": "0",

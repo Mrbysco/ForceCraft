@@ -14,11 +14,14 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -33,6 +36,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	private final Identifier INFO = Reference.modLoc("textures/gui/container/info.png");
 	private final Identifier ENERGY = Reference.modLoc("textures/gui/container/energy.png");
 	private final Identifier TEXTURE = Reference.modLoc("textures/gui/container/forceinfuser.png");
+	private static final Identifier UNKNOWN_BLOCK = Reference.modLoc("infuser/unknown_block");
 
 	private static final WidgetSprites GUIDE = new WidgetSprites(
 			Reference.modLoc("infuser/guide"),
@@ -86,7 +90,9 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		buttonGuide = this.addRenderableWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
 				GUIDE, (button) -> {
 			refreshGuideEntries();
-			guideShown = true;
+			guidePage = 0;
+			selectedEntry = -1;
+			setGuideShown(true);
 		}, Component.translatable("gui.forcecraft.infuser.button.guide")));
 
 		x = 39;
@@ -108,26 +114,42 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 
 		buttonGuideLeft = this.addWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
 				ARROW_LEFT, (button) -> {
-			//TODO: Check if you can go to page 2
-			if (guidePage > 0) guidePage--;
+			if (guidePage > 0) {
+				guidePage--;
+				selectedEntry = -1;
+			}
 		}, Component.translatable("gui.forcecraft.infuser.button.left")));
+		buttonGuideLeft.active = false;
 
 		x = 155;
 		y = 25;
 
 		buttonGuideRight = this.addWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
 				ARROW_RIGHT, (button) -> {
-			//TODO: Check if you can go to page 2
-			if (guidePage < guideMaxPage) guidePage++;
+			if (guidePage < guideMaxPage) {
+				guidePage++;
+				selectedEntry = -1;
+			}
 		}, Component.translatable("gui.forcecraft.infuser.button.close_guide")));
+		buttonGuideRight.active = false;
 
 		x = 170;
 		y = 25;
 
 		buttonGuideClose = this.addWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
 				CLOSE_GUIDE, (button) -> {
-			guideShown = false;
+			setGuideShown(false);
 		}, Component.translatable("gui.forcecraft.infuser.button.close_guide")));
+		buttonGuideClose.active = false;
+
+		setGuideShown(guideShown);
+	}
+
+	private void setGuideShown(boolean shown) {
+		this.guideShown = shown;
+		this.buttonGuideLeft.active = shown;
+		this.buttonGuideRight.active = shown;
+		this.buttonGuideClose.active = shown;
 	}
 
 	@Override
@@ -159,29 +181,60 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 				int offset = i * 23;
 				graphics.blit(RenderPipelines.GUI_TEXTURED, INFO, this.leftPos - 7 + offset, this.topPos + 154, i == selectedEntry ? 45 : 13, 173, 22, 22, 256, 256);
 
-				if (guideEntries.isEmpty()) continue;
-				ItemStack renderStack = guideEntries.get(guidePage * ENTRIES_PER_PAGE + i).stack();
-				graphics.fakeItem(renderStack, this.leftPos - 4 + offset, this.topPos + 157);
+				int index = guidePage * ENTRIES_PER_PAGE + i;
+				if (index >= guideEntries.size()) continue;
+
+				GuideEntry entry = guideEntries.get(index);
+				if (entry.discovered()) {
+					graphics.fakeItem(entry.stack(), this.leftPos - 4 + offset, this.topPos + 157);
+				} else {
+					extractSilhouette(graphics, entry.stack(), this.leftPos - 4 + offset, this.topPos + 157);
+				}
 
 				if (i == selectedEntry) {
-					GuideEntry entry = guideEntries.get(guidePage * ENTRIES_PER_PAGE + i);
-					graphics.textWithWordWrap(font, entry.realText(), this.leftPos + 2, this.topPos + 48, 166, -1, false);
+					Component text = entry.discovered() ? entry.realText() : entry.vagueHint();
+					graphics.textWithWordWrap(font, text, this.leftPos + 2, this.topPos + 48, 166, -1, false);
 				}
 			}
 
-			graphics.text(minecraft.font, "Unknown Upgrade", this.leftPos, this.topPos + 28, -1);
+			Component header = Component.translatable("forcecraft.gui.infuser.guide.unknown");
+			int selectedIndex = guidePage * ENTRIES_PER_PAGE + selectedEntry;
+			if (selectedEntry >= 0 && selectedIndex < guideEntries.size() && guideEntries.get(selectedIndex).discovered()) {
+				header = guideEntries.get(selectedIndex).header();
+			}
+			graphics.text(minecraft.font, header, this.leftPos, this.topPos + 28, -1);
 		}
 		extractTooltip(graphics, mouseX, mouseY);
+	}
+
+	private void extractSilhouette(GuiGraphicsExtractor graphics, ItemStack stack, int x, int y) {
+		ItemStackRenderState state = new ItemStackRenderState();
+		this.minecraft.getItemModelResolver().updateForTopItem(
+				state, stack, ItemDisplayContext.GUI, this.minecraft.level, this.minecraft.player, 0);
+
+		if (state.isEmpty()) return;
+
+		//TODO: Figure out how I can draw a blockitem silhouette inside inventory!
+		if (state.usesBlockLight()) {
+			graphics.blitSprite(RenderPipelines.GUI_TEXTURED, UNKNOWN_BLOCK, x, y, 16, 16);
+			return;
+		}
+
+		var material = state.pickParticleMaterial(this.minecraft.level.getRandom());
+		if (material == null) return;
+
+		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, material.sprite(), x, y, 16, 16, 0xFF000000);
 	}
 
 	@Override
 	public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
 		if (guideShown) {
-			// Check if any of the fake item slots are pressed, if so setting it to that index:
 			for (int i = 0; i < ENTRIES_PER_PAGE; i++) {
 				int offset = i * 23;
-				if (event.x() >= this.leftPos - 5 + offset && event.x() <= this.leftPos - 5 + offset + 16 &&
-						event.y() >= this.topPos + 157 && event.y() <= this.topPos + 157 + 16) {
+				int index = guidePage * ENTRIES_PER_PAGE + i;
+				if (index < guideEntries.size()
+						&& event.x() >= this.leftPos - 5 + offset && event.x() <= this.leftPos - 5 + offset + 16
+						&& event.y() >= this.topPos + 157 && event.y() <= this.topPos + 157 + 16) {
 					selectedEntry = i;
 				}
 			}
@@ -206,13 +259,19 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		if (guideShown) {
 			for (int i = 0; i < ENTRIES_PER_PAGE; i++) {
 				int offset = i * 23;
-				if (guideEntries.isEmpty()) continue;
-				ItemStack renderStack = guideEntries.get(guidePage * ENTRIES_PER_PAGE + i).stack();
+				int index = guidePage * ENTRIES_PER_PAGE + i;
+				if (index >= guideEntries.size()) continue;
+				GuideEntry entry = guideEntries.get(index);
 				if (mouseX >= this.leftPos - 5 + offset &&
 						mouseX <= this.leftPos - 5 + offset + 16 &&
 						mouseY >= this.topPos + 157 &&
 						mouseY <= this.topPos + 157 + 16) {
-					graphics.setTooltipForNextFrame(font, renderStack, mouseX, mouseY);
+					if (entry.discovered()) {
+						graphics.setTooltipForNextFrame(font, entry.stack(), mouseX, mouseY);
+					} else {
+						graphics.setTooltipForNextFrame(font,
+								Component.literal("????").withStyle(ChatFormatting.YELLOW), mouseX, mouseY);
+					}
 				}
 			}
 		} else {
@@ -314,8 +373,18 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	}
 
 	private void refreshGuideEntries() {
+		var book = menu.getBlockEntity().getBook();
+		System.out.println("GUIDE book: " + book);
+		for (var holder : com.mrbysco.forcecraft.client.ForceRecipeCache.getInfuseRecipes()) {
+			System.out.println("GUIDE holder: " + holder.id().identifier()
+					+ " contained=" + book.recipesUsed().contains(holder.id().identifier()));
+		}
+
 		guideEntries.clear();
-		guideEntries.addAll(GuideEntry.buildEntries(this.getMenu().getTier()));
-		guideMaxPage = (int) Math.ceil((double) guideEntries.size() / ENTRIES_PER_PAGE);
+		guideEntries.addAll(GuideEntry.buildEntries(menu.getBlockEntity().getBook(),
+				SlotDisplayContext.fromLevel(minecraft.level)));
+		guideMaxPage = Math.max(0, (int) Math.ceil((double) guideEntries.size() / ENTRIES_PER_PAGE) - 1);
+		guidePage = Math.min(guidePage, guideMaxPage);
+		selectedEntry = -1;
 	}
 }

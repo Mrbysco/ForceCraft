@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/treasure",
+  "group": "treasure",
   "ingredient": "forcecraft:treasure_core",
   "points": 55,
   "tier": "6",

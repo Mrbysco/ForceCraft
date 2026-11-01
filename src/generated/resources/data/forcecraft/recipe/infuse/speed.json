@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/speed",
+  "group": "speed",
   "ingredient": "minecraft:sugar",
   "points": 30,
   "tier": "0",

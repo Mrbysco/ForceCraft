@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/force",
+  "group": "force",
   "ingredient": "forcecraft:force_nugget",
   "points": 25,
   "tier": "0",

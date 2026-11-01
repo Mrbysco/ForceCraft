@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/wing",
+  "group": "wing",
   "ingredient": "forcecraft:rocs_feather",
   "points": 35,
   "tier": "4",

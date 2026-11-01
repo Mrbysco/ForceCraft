@@ -680,36 +680,36 @@ public class ForceRecipeProvider extends RecipeProvider {
 	private void addInfuserRecipes() {
 		// Tier 1:
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.FORCE_NUGGET), tag(ForceTags.Items.VALID_FORCE_ITEMS),
-						LeveledUpgrade.of(ForceComponents.FORCE.get(), 2), UpgradeBookTier.ONE, 25, 200)
+						LeveledUpgrade.of(ForceComponents.FORCE.get(), 2), UpgradeBookTier.ONE, 25, 200).group("force")
 				.save(output, Reference.modLoc("infuse/force"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.CLAW), tag(ForceTags.Items.VALID_DAMAGE_ITEMS),
-						LeveledUpgrade.of(ForceComponents.DAMAGE.get(), 5, ForceTags.Items.LIMITED_DAMAGE_ITEMS), UpgradeBookTier.ONE, 30, 200)
+						LeveledUpgrade.of(ForceComponents.DAMAGE.get(), 5, ForceTags.Items.LIMITED_DAMAGE_ITEMS), UpgradeBookTier.ONE, 30, 200).group("damage")
 				.save(output, Reference.modLoc("infuse/damage"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.SUGAR), tag(ForceTags.Items.VALID_SPEED_ITEMS),
-						LeveledUpgrade.of(ForceComponents.SPEED.get(), 5), UpgradeBookTier.ONE, 30, 200)
+						LeveledUpgrade.of(ForceComponents.SPEED.get(), 5), UpgradeBookTier.ONE, 30, 200).group("speed")
 				.save(output, Reference.modLoc("infuse/speed"));
 
 		InfuseRecipeBuilder.infuse(tag(ForceTags.Items.FORCE_LOGS), tag(ForceTags.Items.VALID_LUMBERJACK_ITEMS),
-						FlagUpgrade.of(ForceComponents.LUMBERJACK.get()), UpgradeBookTier.ONE, 35, 200)
+						FlagUpgrade.of(ForceComponents.LUMBERJACK.get()), UpgradeBookTier.ONE, 35, 200).group("lumberjack")
 				.save(output, Reference.modLoc("infuse/lumberjack"));
 
 		// Tier 2:
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.LAPIS_LAZULI), tag(ForceTags.Items.VALID_RAINBOW_ITEMS),
-						FlagUpgrade.of(ForceComponents.RAINBOW.get()), UpgradeBookTier.TWO, 10, 200)
+						FlagUpgrade.of(ForceComponents.RAINBOW.get()), UpgradeBookTier.TWO, 10, 200).group("rainbow")
 				.save(output, Reference.modLoc("infuse/rainbow"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.FORTUNE), tag(ForceTags.Items.VALID_LUCK_ITEMS),
-						LeveledUpgrade.of(ForceComponents.LUCK.get(), 4), UpgradeBookTier.TWO, 15, 200)
+						LeveledUpgrade.of(ForceComponents.LUCK.get(), 4), UpgradeBookTier.TWO, 15, 200).group("luck")
 				.save(output, Reference.modLoc("infuse/luck"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.FORCE_PACK_UPGRADE), Ingredient.of(ForceRegistry.FORCE_PACK),
-						new PackUpgrade(), UpgradeBookTier.TWO, 15, 200)
+						new PackUpgrade(), UpgradeBookTier.TWO, 15, 200).group("pack_upgrade")
 				.save(output, Reference.modLoc("infuse/pack_upgrade"));
 
 		InfuseRecipeBuilder.convert(Ingredient.of(Items.FLINT), Ingredient.of(ForceRegistry.UPGRADE_CORE),
-						new ItemStackTemplate(ForceRegistry.GRINDING_CORE), UpgradeBookTier.TWO, 15, 200)
+						new ItemStackTemplate(ForceRegistry.GRINDING_CORE), UpgradeBookTier.TWO, 15, 200).group("grinding")
 				.save(output, Reference.modLoc("infuse/grinding_core"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.SNOW_COOKIE), tag(ForceTags.Items.VALID_FREEZING_ITEMS),
@@ -721,7 +721,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output, Reference.modLoc("infuse/freezing_core"));
 
 		InfuseRecipeBuilder.convert(Ingredient.of(Items.SUGAR), Ingredient.of(ForceRegistry.UPGRADE_CORE.get()),
-						new ItemStackTemplate(ForceRegistry.SPEED_CORE), UpgradeBookTier.TWO, 15, 20)
+						new ItemStackTemplate(ForceRegistry.SPEED_CORE), UpgradeBookTier.TWO, 15, 20).group("speed")
 				.save(output, Reference.modLoc("infuser/speed_core"));
 
 		InfuseRecipeBuilder.convert(Ingredient.of(Items.EXPERIENCE_BOTTLE), Ingredient.of(ForceRegistry.UPGRADE_CORE.get()),
@@ -735,19 +735,19 @@ public class ForceRecipeProvider extends RecipeProvider {
 
 		// Tier 3:
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.GLASS_BOTTLE), tag(ForceTags.Items.VALID_FALSE_ITEMS),
-						FlagUpgrade.of(ForceComponents.FALSE.get()), UpgradeBookTier.THREE, 20, 200)
+						FlagUpgrade.of(ForceComponents.FALSE.get()), UpgradeBookTier.THREE, 20, 200).group("false")
 				.save(output, Reference.modLoc("infuse/false"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.COBWEB), tag(ForceTags.Items.VALID_TOUCH_ITEMS),
-						FlagUpgrade.of(ForceComponents.TOUCH.get()), UpgradeBookTier.THREE, 20, 200)
+						FlagUpgrade.of(ForceComponents.TOUCH.get()), UpgradeBookTier.THREE, 20, 200).group("touch")
 				.save(output, Reference.modLoc("infuse/touch"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.ARROW), tag(ForceTags.Items.VALID_BLEED_ITEMS),
-						LeveledUpgrade.of(ForceComponents.BLEED.get(), 3), UpgradeBookTier.THREE, 20, 200)
+						LeveledUpgrade.of(ForceComponents.BLEED.get(), 3), UpgradeBookTier.THREE, 20, 200).group("bleed")
 				.save(output, Reference.modLoc("infuse/bleed"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.FORCE_PACK_UPGRADE), Ingredient.of(ForceRegistry.FORCE_PACK),
-						new PackUpgrade(), UpgradeBookTier.THREE, 20, 200)
+						new PackUpgrade(), UpgradeBookTier.THREE, 20, 200).group("pack_upgrade")
 				.save(output, Reference.modLoc("infuse/pack_upgrade2"));
 
 //		InfuseRecipeBuilder.infuse(Ingredient.of(Items.CRAFTING_TABLE), tag(ForceTags.Items.VALID_CRAFT_ITEMS),
@@ -772,7 +772,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output, Reference.modLoc("infuser/convert_heat"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.FORCE_PACK_UPGRADE), Ingredient.of(ForceRegistry.FORCE_PACK),
-						new PackUpgrade(), UpgradeBookTier.FOUR, 30, 200)
+						new PackUpgrade(), UpgradeBookTier.FOUR, 30, 200).group("pack_upgrade")
 				.save(output, Reference.modLoc("infuse/pack_upgrade3"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.GOLDEN_POWER_SOURCE), tag(ForceTags.Items.VALID_HEAT_ITEMS),
@@ -799,7 +799,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 
 		// Tier 5:
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.ROCS_FEATHER), tag(ForceTags.Items.VALID_WING_ITEMS),
-						FlagUpgrade.of(ForceComponents.WING.get()), UpgradeBookTier.FIVE, 35, 200)
+						FlagUpgrade.of(ForceComponents.WING.get()), UpgradeBookTier.FIVE, 35, 200).group("wing")
 				.save(output, Reference.modLoc("infuse/wing"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.GHAST_TEAR), tag(ForceTags.Items.VALID_HEALING_ITEMS),
@@ -811,7 +811,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output, Reference.modLoc("infuser/healing_torch"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.FORCE_PACK_UPGRADE), Ingredient.of(ForceRegistry.FORCE_PACK),
-						new PackUpgrade(), UpgradeBookTier.FIVE, 30, 200)
+						new PackUpgrade(), UpgradeBookTier.FIVE, 30, 200).group("pack_upgrade")
 				.save(output, Reference.modLoc("infuse/pack_upgrade4"));
 
 		ItemStackTemplate invisibilityPotion = new ItemStackTemplate(Items.POTION, DataComponentPatch.builder()
@@ -829,29 +829,29 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.NIGHT_VISION))
 				.build());
 		InfuseRecipeBuilder.infuse(DataComponentIngredient.of(false, nightVisionPotion), tag(ForceTags.Items.VALID_SIGHT_ITEMS),
-						FlagUpgrade.of(ForceComponents.SIGHT.get()), UpgradeBookTier.FIVE, 35, 200)
+						FlagUpgrade.of(ForceComponents.SIGHT.get()), UpgradeBookTier.FIVE, 35, 200).group("sight")
 				.save(output, Reference.modLoc("infuse/sight"));
 
 		// Tier 6:
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.OBSIDIAN), tag(ForceTags.Items.VALID_STURDY_ITEMS),
-						LeveledUpgrade.of(ForceComponents.STURDY.get(), 2, ForceTags.Items.LIMITED_STURDY_ITEMS), UpgradeBookTier.SIX, 45, 200)
+						LeveledUpgrade.of(ForceComponents.STURDY.get(), 2, ForceTags.Items.LIMITED_STURDY_ITEMS), UpgradeBookTier.SIX, 45, 200).group("sturdy")
 				.save(output, Reference.modLoc("infuse/sturdy"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.ENDER_PEARL), tag(ForceTags.Items.VALID_ENDER_ITEMS),
-						FlagUpgrade.of(ForceComponents.ENDER.get()), UpgradeBookTier.SIX, 45, 200)
+						FlagUpgrade.of(ForceComponents.ENDER.get()), UpgradeBookTier.SIX, 45, 200).group("ender")
 				.save(output, Reference.modLoc("infuse/ender"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.SOUL_WAFER), tag(ForceTags.Items.VALID_SOUL_ITEMS),
-						FlagUpgrade.of(ForceComponents.SOUL.get()), UpgradeBookTier.SIX, 45, 200)
+						FlagUpgrade.of(ForceComponents.SOUL.get()), UpgradeBookTier.SIX, 45, 200).group("soul")
 				.save(output, Reference.modLoc("infuse/soul"));
 
 		// Tier 7:
 		InfuseRecipeBuilder.infuse(Ingredient.of(Items.GLOWSTONE_DUST), tag(ForceTags.Items.VALID_LIGHT_ITEMS),
-						LeveledUpgrade.of(ForceComponents.LIGHT.get(), 5), UpgradeBookTier.SEVEN, 55, 200)
+						LeveledUpgrade.of(ForceComponents.LIGHT.get(), 5), UpgradeBookTier.SEVEN, 55, 200).group("light")
 				.save(output, Reference.modLoc("infuse/light"));
 
 		InfuseRecipeBuilder.infuse(Ingredient.of(ForceRegistry.TREASURE_CORE), tag(ForceTags.Items.VALID_TREASURE_ITEMS),
-						FlagUpgrade.of(ForceComponents.TREASURE.get()), UpgradeBookTier.SEVEN, 55, 200)
+						FlagUpgrade.of(ForceComponents.TREASURE.get()), UpgradeBookTier.SEVEN, 55, 200).group("treasure")
 				.save(output, Reference.modLoc("infuse/treasure"));
 
 	}

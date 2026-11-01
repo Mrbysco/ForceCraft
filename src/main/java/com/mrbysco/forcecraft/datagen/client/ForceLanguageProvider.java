@@ -332,6 +332,25 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("forcecraft.bow.mode.ice", "Ice");
 		add("forcecraft.bow.mode.fire", "Fire");
 
+		// Infuser Guide
+		add("forcecraft.gui.infuser.guide.unknown", "Unknown Upgrade");
+		addGuideEntry("force",
+				"It appears to be a small fragment of Force. Perhaps I could use this to modify a sword.",
+				"This upgrade can be used to turn certain items into more Forceful versions of themselves. It also seems to imbue Force Swords with Knockback.",
+				"[Force] Tier: 1 Mlvl: 2");
+		addGuideEntry("damage",
+				"They say that bats hold the secret to increased damage.",
+				"This upgrade serves to boost the damage of the weapon to which it is attached. On Force Swords it gives Sharpness, while Punch is given to Force Bows.",
+				"[Damage] Tier: 1 Mlvl: 5");
+		addGuideEntry("speed",
+				"Tastes like win, and diabetes.",
+				"This upgrade imbues Force Tools with the ability to break blocks faster, and gives an overall speed boost to players when used on a Force Rod. If used to upgrade armor the player will move faster.",
+				"[Speed] Tier: 1 Mlvl: 5");
+		addGuideEntry("lumberjack",
+				"Apparently these Forceful Logs hold the power to quickly destroying their brethren.",
+				"This upgrade transforms a Force Axe into a treebliterating tool of mass destruction, although the durability cost for such monstrous tool is also, well, monstrous.",
+				"[Lumberjack] Tier: 1 Mlvl: 1");
+
 		//JEI Compat
 		add("forcecraft.gui.jei.category.freezing", "Freezing");
 		add("forcecraft.gui.jei.category.grinding", "Grinding");
@@ -417,6 +436,13 @@ public class ForceLanguageProvider extends LanguageProvider {
 	public void addSubtitle(DeferredHolder<SoundEvent, SoundEvent> sound, String name) {
 		String path = Reference.MOD_ID + "." + sound.getId().getPath() + ".subtitle";
 		this.add(path, name);
+	}
+
+	private void addGuideEntry(String key, String hint, String text, String header) {
+		String prefix = "guide." + Reference.MOD_ID + ".infuser." + key;
+		this.add(prefix + ".hint", hint);
+		this.add(prefix + ".text", text);
+		this.add(prefix + ".header", header);
 	}
 
 	/**

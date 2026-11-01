@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "minecraft:flint",
+  "group": "grinding",
   "ingredient": "forcecraft:upgrade_core",
   "output": {
     "id": "forcecraft:grinding_core"

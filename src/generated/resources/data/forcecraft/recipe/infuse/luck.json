@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/luck",
+  "group": "luck",
   "ingredient": "forcecraft:fortune",
   "points": 15,
   "tier": "1",

@@ -1,6 +1,7 @@
 {
   "type": "forcecraft:infuse",
   "center": "#forcecraft:valid_items/sturdy",
+  "group": "sturdy",
   "ingredient": "minecraft:obsidian",
   "points": 45,
   "tier": "5",
