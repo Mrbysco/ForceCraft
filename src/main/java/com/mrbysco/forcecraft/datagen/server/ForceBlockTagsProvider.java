@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.registry.helper.ForceBrickReg;
+import com.mrbysco.forcecraft.registry.helper.ForceFurnaceReg;
 import com.mrbysco.forcecraft.registry.helper.ForceTorchReg;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -23,8 +24,14 @@ public class ForceBlockTagsProvider extends BlockTagsProvider {
 		this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
 				ForceRegistry.FORCE_INFUSER.get(),
 				ForceRegistry.FORCE_ENGINE.get(),
-				ForceRegistry.FORCE_FURNACE.get()
+				ForceRegistry.FORCE_FURNACE.get(),
+				ForceRegistry.POWER_ORE.get(),
+				ForceRegistry.DEEPSLATE_POWER_ORE.get(),
+				ForceRegistry.NETHER_POWER_ORE.get()
 		);
+		for (ForceFurnaceReg reg : ForceRegistry.getFurnaces()) {
+			this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(reg.getFurnace().get());
+		}
 		for (ForceBrickReg brickReg : ForceRegistry.getBricks()) {
 			this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
 					brickReg.getBrick().get(),

@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-26T01:20:26.2771339	Tags for minecraft:block mod id forcecraft
+// 26.1.2	2026-11-01T20:12:31.1906172	Tags for minecraft:block mod id forcecraft
 4a98efb5348a415ae8088d3a9de590315e7c44f8 data/c/tags/block/fence_gates/wooden.json
 d964b17dbbb1870466808060f50c0991f7cfaf65 data/c/tags/block/ores.json
 0f05bf39bcabd383349deb2fe461a89a2676edc8 data/c/tags/block/ores/power.json
@@ -17,7 +17,7 @@ f57a1c0d935679dbbcab3f2e8a06cae2238a6735 data/forcecraft/tags/block/needs_force_
 5735e1c0769971033c17f1285a4c739a18804eaa data/minecraft/tags/block/logs_that_burn.json
 235426f8060ca7b38a9b41979adb430ebddfbb7f data/minecraft/tags/block/mineable/axe.json
 299ef3da8e95b3dd24c877780bb80bc97f1415e8 data/minecraft/tags/block/mineable/hoe.json
-80aeec297885efd952dbc865f91664493aaa277d data/minecraft/tags/block/mineable/pickaxe.json
+d8bae3b19d5c025ee988d3647e9681d8409daa18 data/minecraft/tags/block/mineable/pickaxe.json
 3078b965f9eeda0ac3df7a1772d1e2f0a6c9ad09 data/minecraft/tags/block/needs_diamond_tool.json
 0f05bf39bcabd383349deb2fe461a89a2676edc8 data/minecraft/tags/block/needs_iron_tool.json
 cde75bc2fd92249c9a82eb34bc90e0886cb053b2 data/minecraft/tags/block/planks.json
