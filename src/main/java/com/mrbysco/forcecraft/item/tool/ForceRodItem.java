@@ -63,6 +63,7 @@ public class ForceRodItem extends Item {
 						level.broadcastEntityEvent(player, EntityEvent.TELEPORT);
 						level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_TELEPORT, player.getSoundSource(), 1.0F, 1.0F);
 
+						heldStack.hurtAndBreak(1, player, hand);
 						player.getCooldowns().addCooldown(heldStack, 20);
 					}
 				}
