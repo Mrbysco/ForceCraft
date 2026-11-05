@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.menu.ForceBeltMenu;
 import com.mrbysco.forcecraft.menu.ForceEngineMenu;
 import com.mrbysco.forcecraft.menu.ForceFurnaceMenu;
+import com.mrbysco.forcecraft.menu.ForceMenu;
 import com.mrbysco.forcecraft.menu.ForcePackMenu;
 import com.mrbysco.forcecraft.menu.InfuserMenu;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -36,4 +37,7 @@ public class ForceMenus {
 
 	public static final Supplier<MenuType<ForceEngineMenu>> FORCE_ENGINE = MENU_TYPES.register("force_engine", () ->
 			IMenuTypeExtension.create(ForceEngineMenu::new));
+
+	public static final Supplier<MenuType<ForceMenu>> FORCE = MENU_TYPES.register("force", () ->
+			IMenuTypeExtension.create((windowId, inv, data) -> new ForceMenu(windowId, inv)));
 }

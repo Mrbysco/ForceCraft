@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.networking.handler.ClientPayloadHandler;
 import com.mrbysco.forcecraft.networking.handler.ServerPayloadHandler;
 import com.mrbysco.forcecraft.networking.message.ChangeEnderPosPayload;
+import com.mrbysco.forcecraft.networking.message.OpenForceMenuPayload;
 import com.mrbysco.forcecraft.networking.message.PackChangePayload;
 import com.mrbysco.forcecraft.networking.message.StopInfuserSoundPayload;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -22,5 +23,6 @@ public class PacketHandler {
 
 		registrar.playToServer(ChangeEnderPosPayload.ID, ChangeEnderPosPayload.CODEC, ServerPayloadHandler.getInstance()::handleEnderPos);
 		registrar.playToServer(PackChangePayload.ID, PackChangePayload.CODEC, ServerPayloadHandler.getInstance()::handlePackChange);
+		registrar.playToServer(OpenForceMenuPayload.ID, OpenForceMenuPayload.CODEC, ServerPayloadHandler.getInstance()::handleForceMenu);
 	}
 }

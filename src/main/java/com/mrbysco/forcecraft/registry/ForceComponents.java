@@ -13,6 +13,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.UUID;
@@ -31,6 +32,12 @@ public class ForceComponents {
 			DataComponentType.<Integer>builder()
 					.persistent(ExtraCodecs.intRange(0, 10_000))
 					.networkSynchronized(ByteBufCodecs.VAR_INT)
+					.build());
+
+	public static final Supplier<DataComponentType<ItemContainerContents>> FORCE_SLOT = COMPONENT_TYPE.register("force_slot", () ->
+			DataComponentType.<ItemContainerContents>builder()
+					.persistent(ItemContainerContents.CODEC)
+					.networkSynchronized(ItemContainerContents.STREAM_CODEC)
 					.build());
 
 	public static final Supplier<DataComponentType<Integer>> SLOTS_USED = COMPONENT_TYPE.register("slots_used", () ->

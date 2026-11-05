@@ -160,6 +160,21 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addTorch(ForceRegistry.CAMO_TORCH, "Camo Torch");
 		addTorch(ForceRegistry.TIME_TORCH, "Time Torch");
 
+		// Keybinds
+		add("key.category.forcecraft.category", "Forcecraft");
+		add("key.forcecraft.open_hotbar_pack", "Open hotbar Force Pack");
+		add("key.forcecraft.open_hotbar_belt", "Open hotbar Force Belt");
+		add("key.forcecraft.force", "Force Key");
+		add("key.category.forcecraft.quick_use", "Forcecraft Quick Use");
+		add("key.forcecraft.quick_use_1", "Force Belt Slot 1");
+		add("key.forcecraft.quick_use_2", "Force Belt Slot 2");
+		add("key.forcecraft.quick_use_3", "Force Belt Slot 3");
+		add("key.forcecraft.quick_use_4", "Force Belt Slot 4");
+		add("key.forcecraft.quick_use_5", "Force Belt Slot 5");
+		add("key.forcecraft.quick_use_6", "Force Belt Slot 6");
+		add("key.forcecraft.quick_use_7", "Force Belt Slot 7");
+		add("key.forcecraft.quick_use_8", "Force Belt Slot 8");
+
 		// Config
 		addConfig("general", "General", "General Settings");
 		addConfig("forceInfusingTime", "Force Infusing Time", "The max amount of ticks it takes to charge a tool with Force [Default: 120 (6 seconds)]");
@@ -200,6 +215,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("forcecraft.networking.ender_pos_change.failed", "Failed to change Rod Position: %s");
 		add("forcecraft.networking.pack_change.failed", "Failed to change Force Pack: %s");
 		add("forcecraft.networking.stop_infuser_sound.failed", "Failed to stop Infuser sound: %s");
+		add("forcecraft.networking.open_force_menu.failed", "Failed to open Force Menu: %s");
 
 		//Subtitles
 		addSubtitle(ForceSounds.WHOOSH, "Whooshing");
@@ -306,6 +322,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("forcecraft.container.spoils_bag", "Spoils Bag");
 		add("forcecraft.container.card", "Item Card");
 		add("forcecraft.container.force_engine", "Force Engine");
+		add("forcecraft.container.force", "Force");
 
 		//Infuser UI
 		add("gui.forcecraft.infuser.nobook", "Upgrade Tome required");

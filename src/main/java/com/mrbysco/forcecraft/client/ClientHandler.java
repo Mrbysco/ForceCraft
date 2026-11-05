@@ -9,6 +9,7 @@ import com.mrbysco.forcecraft.client.renderer.EngineBER;
 import com.mrbysco.forcecraft.client.renderer.IceArrowRenderer;
 import com.mrbysco.forcecraft.client.screen.ForceEngineScreen;
 import com.mrbysco.forcecraft.client.screen.ForceFurnaceScreen;
+import com.mrbysco.forcecraft.client.screen.ForceScreen;
 import com.mrbysco.forcecraft.client.screen.InfuserScreen;
 import com.mrbysco.forcecraft.client.screen.belt.ForceBeltScreen;
 import com.mrbysco.forcecraft.client.screen.pack.ForcePackScreen;
@@ -49,6 +50,7 @@ public class ClientHandler {
 		event.register(ForceMenus.FORCE_FURNACE.get(), ForceFurnaceScreen::new);
 		event.register(ForceMenus.FORCE_BELT.get(), ForceBeltScreen::new);
 		event.register(ForceMenus.FORCE_PACK.get(), ForcePackScreen::new);
+		event.register(ForceMenus.FORCE.get(), ForceScreen::new);
 	}
 
 	@SubscribeEvent
