@@ -13,7 +13,7 @@ public class UpgradeSlot extends ResourceHandlerSlot {
 	}
 
 	public boolean mayPlace(ItemStack stack) {
-		return isUpgrade(stack) && getItem().isEmpty();
+		return stack.is(ForceTags.Items.UPGRADE_CORES) && getItem().isEmpty();
 	}
 
 	@Override
@@ -24,9 +24,5 @@ public class UpgradeSlot extends ResourceHandlerSlot {
 	@Override
 	public boolean mayPickup(Player player) {
 		return player.isShiftKeyDown();
-	}
-
-	public static boolean isUpgrade(ItemStack stack) {
-		return stack.is(ForceTags.Items.UPGRADE_CORES);
 	}
 }
