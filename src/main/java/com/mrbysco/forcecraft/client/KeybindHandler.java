@@ -61,8 +61,8 @@ public class KeybindHandler {
 		Player player = Minecraft.getInstance().player;
 		if (player == null) return;
 		ItemStack stack = player.getItemInHand(player.getUsedItemHand());
-		if (stack.is(ForceTags.Items.CAN_STORE_FORCE)) {
-			if (KEY_FORCE.consumeClick()) {
+		if (KEY_FORCE.consumeClick()) {
+			if (stack.is(ForceTags.Items.CAN_STORE_FORCE)) {
 				if (!stack.has(ForceComponents.FORCE_SLOT)) {
 					stack.set(ForceComponents.FORCE_SLOT, ItemContainerContents.EMPTY);
 				}
