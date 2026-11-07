@@ -335,6 +335,9 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("gui.forcecraft.infuser.missing.recipe", "Cannot find matching infusion recipe");
 		add("gui.forcecraft.infuser.button.guide", "Open Guide GUI");
 		add("gui.forcecraft.infuser.button.button", "Start Button");
+		add("gui.forcecraft.infuser.button.left", "Previous Page");
+		add("gui.forcecraft.infuser.button.right", "Next Page");
+		add("gui.forcecraft.infuser.button.close_guide", "Return");
 
 		//Force Engine UI
 		add("gui.forcecraft.force_engine.empty", "Empty");
