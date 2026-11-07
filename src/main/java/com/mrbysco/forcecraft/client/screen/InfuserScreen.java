@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
@@ -31,7 +33,6 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 
 	private Inventory inventory;
 	private ProgressBar infuserProgress;
-	// 12 by 107
 	private final Identifier INFO = Reference.modLoc("textures/gui/container/info.png");
 	private final Identifier ENERGY = Reference.modLoc("textures/gui/container/energy.png");
 	private final Identifier TEXTURE = Reference.modLoc("textures/gui/container/forceinfuser.png");
@@ -103,6 +104,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 			if (bookStack.isEmpty()) {
 				this.inventory.player.sendSystemMessage(Component.translatable("gui.forcecraft.infuser.nobook"));
 			} else {
+				assert this.minecraft.gameMode != null;
 				this.minecraft.gameMode.handleInventoryButtonClick(menu.containerId, 0);
 			}
 		}, Component.empty()));
@@ -110,35 +112,33 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 		// Guide buttons
 		x = 140;
 		y = 25;
-
 		buttonGuideLeft = this.addWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
 				ARROW_LEFT, (button) -> {
 			if (guidePage > 0) {
 				guidePage--;
 				selectedEntry = -1;
 			}
-		}, Component.translatable("gui.forcecraft.infuser.button.left")));
+		}, Component.empty()));
+		buttonGuideLeft.setTooltip(Tooltip.create(Component.translatable("gui.forcecraft.infuser.button.left")));
 		buttonGuideLeft.active = false;
 
 		x = 155;
-		y = 25;
-
 		buttonGuideRight = this.addWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
 				ARROW_RIGHT, (button) -> {
 			if (guidePage < guideMaxPage) {
 				guidePage++;
 				selectedEntry = -1;
 			}
-		}, Component.translatable("gui.forcecraft.infuser.button.close_guide")));
+		}, Component.empty()));
+		buttonGuideRight.setTooltip(Tooltip.create(Component.translatable("gui.forcecraft.infuser.button.right")));
 		buttonGuideRight.active = false;
 
 		x = 170;
-		y = 25;
-
 		buttonGuideClose = this.addWidget(new ImageButton(leftPos + x, topPos + y, btnSize, btnSize,
 				CLOSE_GUIDE, (button) -> {
 			setGuideShown(false);
-		}, Component.translatable("gui.forcecraft.infuser.button.close_guide")));
+		}, Component.empty()));
+		buttonGuideClose.setTooltip(Tooltip.create(Component.translatable("gui.forcecraft.infuser.button.close_guide")));
 		buttonGuideClose.active = false;
 
 		setGuideShown(guideShown);
@@ -201,7 +201,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 			if (selectedEntry >= 0 && selectedIndex < guideEntries.size() && guideEntries.get(selectedIndex).discovered()) {
 				header = guideEntries.get(selectedIndex).header();
 			}
-			graphics.text(minecraft.font, header, this.leftPos, this.topPos + 28, -1);
+			graphics.text(minecraft.font, header, this.leftPos, this.topPos + 28, ARGB.opaque(5592405), false);
 		}
 		extractTooltip(graphics, mouseX, mouseY);
 	}
