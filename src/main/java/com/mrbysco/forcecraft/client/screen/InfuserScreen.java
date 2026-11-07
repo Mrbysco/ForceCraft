@@ -21,6 +21,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -204,6 +205,16 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 			graphics.text(minecraft.font, header, this.leftPos, this.topPos + 28, ARGB.opaque(5592405), false);
 		}
 		extractTooltip(graphics, mouseX, mouseY);
+	}
+
+	@Override
+	protected void extractSlots(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+		super.extractSlots(graphics, mouseX, mouseY);
+		for (Slot slot : this.menu.slots) {
+			if (slot instanceof InfuserMenu.UnlockableSlot unlockableSlot && unlockableSlot.isLocked()) {
+				graphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, ARGB.color(100, 0, 0, 0));
+			}
+		}
 	}
 
 	private void extractSilhouette(GuiGraphicsExtractor graphics, ItemStack stack, int x, int y) {
