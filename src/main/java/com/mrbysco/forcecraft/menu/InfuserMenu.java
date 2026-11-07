@@ -288,6 +288,10 @@ public class InfuserMenu extends AbstractContainerMenu {
 			return getSlotIndex() <= blockEntity.getBookTier();
 		}
 
+		public boolean isLocked() {
+			return !isActive();
+		}
+
 		@Override
 		public boolean mayPlace(@NotNull ItemStack stack) {
 			return getSlotIndex() <= blockEntity.getBookTier() && super.mayPlace(stack);
