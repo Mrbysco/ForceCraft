@@ -17,7 +17,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.chicken.Chicken;
 import net.minecraft.world.entity.animal.cow.Cow;
 import net.minecraft.world.entity.animal.pig.Pig;
@@ -72,52 +71,31 @@ public class ForceShearsItem extends ShearsItem {
 		if (!(entity instanceof IColdMob) && !entity.isBaby()) {
 			boolean hasHeat = stack.has(ForceComponents.HEAT);
 			Mob replacementMob = null;
+			List<ItemStack> drops = new ArrayList<>();
 			if (entity instanceof Cow originalCow) {
 				int i = 1 + rand.nextInt(3);
-
-				List<ItemStack> drops = new ArrayList<>();
 				for (int j = 0; j < i; ++j)
 					drops.add(new ItemStack(Items.LEATHER, 1));
 
-				drops.forEach(dropStack -> {
-					ItemEntity itemEntity = entity.spawnAtLocation(serverLevel, dropStack, 1.0F);
-					if (itemEntity != null) {
-						itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add(
-								(rand.nextFloat() - rand.nextFloat()) * 0.1F,
-								rand.nextFloat() * 0.05F,
-								(rand.nextFloat() - rand.nextFloat()) * 0.1F)
-						);
-					}
-				});
 				replacementMob = new ColdCow(level, originalCow.getType());
 			}
 			if (entity instanceof Chicken originalChicken) {
 				int i = 1 + rand.nextInt(3);
-
-				List<ItemStack> drops = new ArrayList<>();
 				for (int j = 0; j < i; ++j) {
 					drops.add(new ItemStack(Items.FEATHER, 1));
 				}
 
-				drops.forEach(dropStack -> {
-					ItemEntity itemEntity = entity.spawnAtLocation(serverLevel, dropStack, 1.0F);
-					if (itemEntity != null) {
-						itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add(
-								(rand.nextFloat() - rand.nextFloat()) * 0.1F,
-								rand.nextFloat() * 0.05F,
-								(rand.nextFloat() - rand.nextFloat()) * 0.1F)
-						);
-					}
-				});
 				replacementMob = new ColdChicken(level, originalChicken.getType());
 			}
 			if (entity instanceof Pig originalPig) {
 				int i = 1 + rand.nextInt(2);
-
-				List<ItemStack> drops = new ArrayList<>();
 				for (int j = 0; j < i; ++j)
 					drops.add(new ItemStack(hasHeat ? ForceRegistry.COOKED_BACON.get() : ForceRegistry.RAW_BACON.get(), 1));
 
+				replacementMob = new ColdPig(level, originalPig.getType());
+			}
+
+			if (replacementMob != null) {
 				drops.forEach(dropStack -> {
 					ItemEntity itemEntity = entity.spawnAtLocation(serverLevel, dropStack, 1.0F);
 					if (itemEntity != null) {
@@ -128,10 +106,7 @@ public class ForceShearsItem extends ShearsItem {
 						);
 					}
 				});
-				replacementMob = new ColdPig(level, originalPig.getType());
-			}
 
-			if (replacementMob != null) {
 				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
 
 				replacementMob.copyPosition(entity);
