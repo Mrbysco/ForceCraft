@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.chicken.Chicken;
 import net.minecraft.world.entity.animal.cow.Cow;
 import net.minecraft.world.entity.animal.pig.Pig;
@@ -68,7 +69,7 @@ public class ForceShearsItem extends ShearsItem {
 			}
 		}
 
-		if (!(entity instanceof IColdMob)) {
+		if (!(entity instanceof IColdMob) && !entity.isBaby()) {
 			boolean hasHeat = stack.has(ForceComponents.HEAT);
 			Mob replacementMob = null;
 			if (entity instanceof Cow originalCow) {
