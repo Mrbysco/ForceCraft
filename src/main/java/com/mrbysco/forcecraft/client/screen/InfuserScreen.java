@@ -208,6 +208,12 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	}
 
 	@Override
+	protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+		if (guideShown) return;
+		super.extractTooltip(graphics, mouseX, mouseY);
+	}
+
+	@Override
 	protected void extractSlots(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 		super.extractSlots(graphics, mouseX, mouseY);
 		for (Slot slot : this.menu.slots) {
