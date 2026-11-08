@@ -52,7 +52,7 @@ public class ForceComponents {
 					.build());
 	public static final Supplier<DataComponentType<Integer>> PACK_TIER = COMPONENT_TYPE.register("pack_tier", () ->
 			DataComponentType.<Integer>builder()
-					.persistent(ExtraCodecs.NON_NEGATIVE_INT)
+					.persistent(ExtraCodecs.intRange(0, 4))
 					.networkSynchronized(ByteBufCodecs.VAR_INT)
 					.build());
 	public static final Supplier<DataComponentType<DyeColor>> PACK_COLOR = COMPONENT_TYPE.register("pack_color", () ->

@@ -1,0 +1,32 @@
+{
+  "parent": "forcecraft:force_infuser",
+  "criteria": {
+    "upgrade_tome": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:upgrade_tome"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.forcecraft.upgrade_tome.desc"
+    },
+    "icon": {
+      "id": "forcecraft:upgrade_tome"
+    },
+    "title": {
+      "translate": "advancement.forcecraft.upgrade_tome.title"
+    }
+  },
+  "requirements": [
+    [
+      "upgrade_tome"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

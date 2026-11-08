@@ -1,0 +1,32 @@
+{
+  "parent": "forcecraft:force_rod",
+  "criteria": {
+    "force_infuser": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:force_infuser"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.forcecraft.force_infuser.desc"
+    },
+    "icon": {
+      "id": "forcecraft:force_infuser"
+    },
+    "title": {
+      "translate": "advancement.forcecraft.force_infuser.title"
+    }
+  },
+  "requirements": [
+    [
+      "force_infuser"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

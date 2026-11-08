@@ -1,0 +1,32 @@
+{
+  "parent": "forcecraft:force_ingot",
+  "criteria": {
+    "force_pack": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:force_pack"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.forcecraft.force_pack.desc"
+    },
+    "icon": {
+      "id": "forcecraft:force_pack"
+    },
+    "title": {
+      "translate": "advancement.forcecraft.force_pack.title"
+    }
+  },
+  "requirements": [
+    [
+      "force_pack"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,37 @@
+{
+  "parent": "forcecraft:bane",
+  "criteria": {
+    "tome_mastery": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:upgrade_tome",
+            "predicates": {
+              "forcecraft:tome_tier": {
+                "minTier": 7
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.forcecraft.tome_mastery.desc"
+    },
+    "icon": {
+      "id": "forcecraft:upgrade_tome"
+    },
+    "title": {
+      "translate": "advancement.forcecraft.tome_mastery.title"
+    }
+  },
+  "requirements": [
+    [
+      "tome_mastery"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

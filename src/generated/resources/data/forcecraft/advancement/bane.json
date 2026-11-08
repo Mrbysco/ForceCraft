@@ -1,0 +1,35 @@
+{
+  "parent": "forcecraft:upgrade_tome",
+  "criteria": {
+    "bane": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#forcecraft:valid_items/bane",
+            "predicates": {
+              "forcecraft:bane": {}
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.forcecraft.bane.desc"
+    },
+    "icon": {
+      "id": "forcecraft:force_sword"
+    },
+    "title": {
+      "translate": "advancement.forcecraft.bane.title"
+    }
+  },
+  "requirements": [
+    [
+      "bane"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

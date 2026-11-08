@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.item.tool;
 
+import com.mrbysco.forcecraft.advancement.ForceCriteriaTriggers;
 import com.mrbysco.forcecraft.entity.cold.ColdChicken;
 import com.mrbysco.forcecraft.entity.cold.ColdCow;
 import com.mrbysco.forcecraft.entity.cold.ColdPig;
@@ -9,6 +10,7 @@ import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -119,6 +121,8 @@ public class ForceShearsItem extends ShearsItem {
 				if (hasHeat) {
 					replacementMob.igniteForSeconds(SET_FIRE_TIME);
 				}
+
+				ForceCriteriaTriggers.FORCE_SHEAR_ENTITY.get().trigger((ServerPlayer) player, entity);
 
 				stack.hurtAndBreak(1, player, hand.asEquipmentSlot());
 				return InteractionResult.SUCCESS;

@@ -1,0 +1,32 @@
+{
+  "parent": "forcecraft:force_sapling",
+  "criteria": {
+    "force_stick": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:force_stick"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.forcecraft.force_stick.desc"
+    },
+    "icon": {
+      "id": "forcecraft:force_stick"
+    },
+    "title": {
+      "translate": "advancement.forcecraft.force_stick.title"
+    }
+  },
+  "requirements": [
+    [
+      "force_stick"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

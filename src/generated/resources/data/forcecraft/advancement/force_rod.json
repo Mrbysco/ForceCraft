@@ -1,0 +1,32 @@
+{
+  "parent": "forcecraft:force_ingot",
+  "criteria": {
+    "rod": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:force_rod"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.forcecraft.force_rod.desc"
+    },
+    "icon": {
+      "id": "forcecraft:force_rod"
+    },
+    "title": {
+      "translate": "advancement.forcecraft.force_rod.title"
+    }
+  },
+  "requirements": [
+    [
+      "rod"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

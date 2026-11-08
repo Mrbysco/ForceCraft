@@ -1,0 +1,37 @@
+{
+  "parent": "forcecraft:force_pack",
+  "criteria": {
+    "force_pack_upgrade": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:force_pack",
+            "predicates": {
+              "forcecraft:force_pack_tier": {
+                "minTier": 1
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.forcecraft.force_pack_upgrade.desc"
+    },
+    "icon": {
+      "id": "forcecraft:force_pack_upgrade"
+    },
+    "title": {
+      "translate": "advancement.forcecraft.force_pack_upgrade.title"
+    }
+  },
+  "requirements": [
+    [
+      "force_pack_upgrade"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

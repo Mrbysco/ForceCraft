@@ -1,6 +1,8 @@
 package com.mrbysco.forcecraft;
 
 import com.mojang.logging.LogUtils;
+import com.mrbysco.forcecraft.advancement.ForceCriteriaTriggers;
+import com.mrbysco.forcecraft.advancement.ForceDataComponentPredicates;
 import com.mrbysco.forcecraft.config.ForceConfig;
 import com.mrbysco.forcecraft.recipe.condition.ForceConditions;
 import com.mrbysco.forcecraft.registry.ForceAttachments;
@@ -56,6 +58,8 @@ public class ForceCraft {
 		ForceRecipes.RECIPE_SERIALIZERS.register(eventBus);
 		ForceLootModifiers.GLM.register(eventBus);
 		ForceConditions.CONDITION_CODECS.register(eventBus);
+		ForceCriteriaTriggers.CRITERION_TRIGGERS.register(eventBus);
+		ForceDataComponentPredicates.COMPONENT_TYPE_PREDICATE.register(eventBus);
 
 		eventBus.addListener(this::init);
 

@@ -474,7 +474,18 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("forcecraft.gui.jei.category.infuser.tier", "Tier: %s");
 
 		// Advancements
-		addAdvancement("root", "The Golden Power", "This is where it all begins!");
+		addAdvancement("root", "Forcecraft", "This is where it all begins!");
+		addAdvancement("force_ingot", "May the Force B with U", "Craft a Force Ingot");
+		addAdvancement("force_shears", "What a jerk", "Unnaturally shear an unsuspecting animal");
+		addAdvancement("force_rod", "A Rod For All Seasons", "Craft a Force Rod");
+		addAdvancement("force_pack", "Smart Storage", "Craft a Force Pack");
+		addAdvancement("force_pack_upgrade", "Upgrade Time", "Upgrade your Force Pack");
+		addAdvancement("force_sapling", "Shiny Trees", "Transmutate a Sapling into a Force Sapling using a Force Rod");
+		addAdvancement("force_stick", "Better than Sticks", "Craft Force Sticks from Force planks");
+		addAdvancement("force_infuser", "Precision Enchanting", "Craft a Force Infuser");
+		addAdvancement("upgrade_tome", "Room for Improvement", "Craft an Upgrade Tome");
+		addAdvancement("bane", "Bane of Undeadthropods", "Infuse a tool with Bane");
+		addAdvancement("tome_mastery", "Mastery", "Upgrade an Upgrade Tome to tier 7");
 	}
 
 	private String getColorPrefix(@Nullable DyeColor dyeColor) {

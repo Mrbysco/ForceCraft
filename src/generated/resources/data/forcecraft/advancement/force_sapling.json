@@ -1,0 +1,43 @@
+{
+  "parent": "forcecraft:force_rod",
+  "criteria": {
+    "transmute_sapling": {
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": "forcecraft:force_sapling"
+              }
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": "forcecraft:force_rod"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:item_used_on_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.forcecraft.force_sapling.desc"
+    },
+    "icon": {
+      "id": "forcecraft:force_sapling"
+    },
+    "title": {
+      "translate": "advancement.forcecraft.force_sapling.title"
+    }
+  },
+  "requirements": [
+    [
+      "transmute_sapling"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

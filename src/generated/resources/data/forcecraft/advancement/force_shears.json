@@ -1,0 +1,38 @@
+{
+  "parent": "forcecraft:force_ingot",
+  "criteria": {
+    "shear": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:force_shears"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "shear_entity": {
+      "trigger": "forcecraft:force_shear_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.forcecraft.force_shears.desc"
+    },
+    "icon": {
+      "id": "forcecraft:force_shears"
+    },
+    "title": {
+      "translate": "advancement.forcecraft.force_shears.title"
+    }
+  },
+  "requirements": [
+    [
+      "shear"
+    ],
+    [
+      "shear_entity"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
