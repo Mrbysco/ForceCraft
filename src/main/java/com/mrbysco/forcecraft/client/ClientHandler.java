@@ -3,8 +3,12 @@ package com.mrbysco.forcecraft.client;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.client.extension.ForceArmorItemExtension;
 import com.mrbysco.forcecraft.client.model.BombModel;
+import com.mrbysco.forcecraft.client.model.CreeperTotModel;
+import com.mrbysco.forcecraft.client.model.EnderTotModel;
 import com.mrbysco.forcecraft.client.model.EngineModel;
 import com.mrbysco.forcecraft.client.renderer.BombRenderer;
+import com.mrbysco.forcecraft.client.renderer.CreeperTotRenderer;
+import com.mrbysco.forcecraft.client.renderer.EnderTotRenderer;
 import com.mrbysco.forcecraft.client.renderer.EngineBER;
 import com.mrbysco.forcecraft.client.renderer.IceArrowRenderer;
 import com.mrbysco.forcecraft.client.renderer.cold.ColdChickenRenderer;
@@ -22,8 +26,11 @@ import com.mrbysco.forcecraft.registry.ForceFluids;
 import com.mrbysco.forcecraft.registry.ForceMenus;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.monster.creeper.CreeperModel;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.renderer.entity.EndermanRenderer;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -43,6 +50,10 @@ import net.neoforged.neoforge.client.pipeline.RegisterPipelineModifiersEvent;
 public class ClientHandler {
 	public static final ModelLayerLocation ENGINE = new ModelLayerLocation(Reference.modLoc("engine"), "main");
 	public static final ModelLayerLocation BOMB = new ModelLayerLocation(Reference.modLoc("bomb"), "main");
+	public static final ModelLayerLocation CREEPER_TOT = new ModelLayerLocation(Reference.modLoc("creeper_tot"), "main");
+	public static final ModelLayerLocation CREEPER_TOT_ARMOR = new ModelLayerLocation(Reference.modLoc("creeper_tot"), "armor");
+	public static final ModelLayerLocation ENDERTOT = new ModelLayerLocation(Reference.modLoc("endertot"), "main");
+	public static final ModelLayerLocation FAIRY = new ModelLayerLocation(Reference.modLoc("fairy"), "main");
 
 	public static final ResourceKey<PipelineModifier> SILHOUTTE = ResourceKey.create(PipelineModifier.MODIFIERS_KEY, Reference.modLoc("silhouette"));
 
@@ -60,6 +71,10 @@ public class ClientHandler {
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(ENGINE, EngineModel::createBodyLayer);
 		event.registerLayerDefinition(BOMB, BombModel::createBodyLayer);
+		event.registerLayerDefinition(CREEPER_TOT, () -> CreeperTotModel.createBodyLayer(CubeDeformation.NONE));
+		event.registerLayerDefinition(CREEPER_TOT_ARMOR, () -> CreeperTotModel.createBodyLayer(new CubeDeformation(2.0F)));
+		event.registerLayerDefinition(ENDERTOT, EnderTotModel::createBodyLayer);
+//		event.registerLayerDefinition(FAIRY, FairyModel::createBodyLayer);
 	}
 
 	@SubscribeEvent
@@ -70,6 +85,9 @@ public class ClientHandler {
 		event.registerEntityRenderer(ForceEntities.COLD_CHICKEN.get(), ColdChickenRenderer::new);
 		event.registerEntityRenderer(ForceEntities.COLD_COW.get(), ColdCowRenderer::new);
 		event.registerEntityRenderer(ForceEntities.COLD_PIG.get(), ColdPigRenderer::new);
+		event.registerEntityRenderer(ForceEntities.CREEPER_TOT.get(), CreeperTotRenderer::new);
+		event.registerEntityRenderer(ForceEntities.ENDER_TOT.get(), EnderTotRenderer::new);
+		event.registerEntityRenderer(ForceEntities.ANGRY_ENDERMAN.get(), EndermanRenderer::new);
 
 		event.registerBlockEntityRenderer(ForceRegistry.FORCE_ENGINE_BLOCK_ENTITY.get(), EngineBER::new);
 	}

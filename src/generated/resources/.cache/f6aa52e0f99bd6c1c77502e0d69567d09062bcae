@@ -1,4 +1,4 @@
-// 26.1.2	2026-11-08T01:19:16.1796618	Model Definitions - forcecraft
+// 26.1.2	2026-11-08T01:43:01.2422105	Model Definitions - forcecraft
 f3d4efc950e3905de57ae7440fb1d5fbd49edbb0 assets/forcecraft/blockstates/bane_torch.json
 1bb22a6415eb79f339382c2f95ec0c23f70afe23 assets/forcecraft/blockstates/camo_torch.json
 76bd2dbcbce69e7d8f85ba70103b57ca2cfa6363 assets/forcecraft/blockstates/deepslate_power_ore.json
@@ -343,6 +343,7 @@ aca253cb1bf97fd8e000833987696a70f1bec8c4 assets/forcecraft/items/mob_ingot_red.j
 4bea61f4371c76e74a1e18c53c3454ee214c296f assets/forcecraft/items/mob_ingot_white.json
 63b3787c63938f721adbd6fc3a66fc70dcf77489 assets/forcecraft/items/mob_ingot_yellow.json
 e848b172ccbd8f8ef0a34ffacda9859e68c64621 assets/forcecraft/items/nether_power_ore.json
+b499c8b6ce5ff7c996f87fea705cffbf484a878b assets/forcecraft/items/pile_of_gunpowder.json
 bac54fd414d8da93c60d58e413f3066e6a274cbe assets/forcecraft/items/power_ore.json
 c348025e616f6d06aab1df81e54115db983fa23d assets/forcecraft/items/raw_bacon.json
 bbdf9adcea07731b722ec477965938f5d22e77c0 assets/forcecraft/items/rocs_feather.json
@@ -752,6 +753,7 @@ d348bb0bfc0befcdac23777780fd5264796f5ca6 assets/forcecraft/models/item/mob_ingot
 3c2c72b13b100026f93362eeb9e02705253d77f9 assets/forcecraft/models/item/mob_ingot_red.json
 2214f8754dfffa738b619ca2ddd3ad56010320b7 assets/forcecraft/models/item/mob_ingot_white.json
 d5c7c6d8827109bbd7afb99257c3b05808eab281 assets/forcecraft/models/item/mob_ingot_yellow.json
+305ed216178f0ff6818dd3feddd825dde1121a59 assets/forcecraft/models/item/pile_of_gunpowder.json
 c3a3c3e47e859a96196d99cfe481695fbcfecbc5 assets/forcecraft/models/item/raw_bacon.json
 5eb639706829138f6fe65837889022415717b83d assets/forcecraft/models/item/rocs_feather.json
 6da5bd41b92de8c120690ed8fd5bd3e5e45b0a40 assets/forcecraft/models/item/snow_cookie.json

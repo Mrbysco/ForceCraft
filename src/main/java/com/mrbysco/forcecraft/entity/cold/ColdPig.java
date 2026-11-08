@@ -9,6 +9,8 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.cow.Cow;
 import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class ColdPig extends Pig implements IColdMob {
 	private int eatAnimationTick;
@@ -79,5 +81,18 @@ public class ColdPig extends Pig implements IColdMob {
 		} else {
 			super.handleEntityEvent(id);
 		}
+	}
+
+	@Override
+	protected void addAdditionalSaveData(ValueOutput output) {
+		super.addAdditionalSaveData(output);
+		output.store("OriginalType", EntityType.CODEC, this.originalType);
+	}
+
+	@Override
+	protected void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		input.read("OriginalType", EntityType.CODEC)
+				.map(type -> this.originalType = type);
 	}
 }

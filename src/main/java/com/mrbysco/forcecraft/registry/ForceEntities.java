@@ -2,12 +2,19 @@ package com.mrbysco.forcecraft.registry;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.entity.Bomb;
+import com.mrbysco.forcecraft.entity.CreeperTot;
 import com.mrbysco.forcecraft.entity.ForceArrow;
 import com.mrbysco.forcecraft.entity.cold.ColdChicken;
 import com.mrbysco.forcecraft.entity.cold.ColdCow;
 import com.mrbysco.forcecraft.entity.cold.ColdPig;
+import com.mrbysco.forcecraft.entity.ender.AbstractForceEnderman;
+import com.mrbysco.forcecraft.entity.ender.AngryEnderman;
+import com.mrbysco.forcecraft.entity.ender.EnderTot;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -68,9 +75,40 @@ public class ForceEntities {
 					.clientTrackingRange(10)
 	);
 
+	public static final Supplier<EntityType<CreeperTot>> CREEPER_TOT = ENTITY_TYPES.registerEntityType("creeper_tot",
+			CreeperTot::new, MobCategory.MONSTER,
+			builder -> builder
+					.sized(0.6F, 1.1F)
+					.passengerAttachments(0.86875F)
+					.clientTrackingRange(8)
+	);
+
+	public static final Supplier<EntityType<EnderTot>> ENDER_TOT = ENTITY_TYPES.registerEntityType("ender_tot",
+			EnderTot::new, MobCategory.MONSTER,
+			builder -> builder
+					.sized(0.6F, 1.6F)
+					.eyeHeight(1.35F)
+					.passengerAttachments(1.50625F)
+					.clientTrackingRange(8)
+					.notInPeaceful()
+
+	);
+
+	public static final Supplier<EntityType<AngryEnderman>> ANGRY_ENDERMAN = ENTITY_TYPES.registerEntityType("angry_enderman",
+			AngryEnderman::new, MobCategory.MONSTER,
+			builder -> builder
+					.sized(0.6F, 2.9F)
+					.eyeHeight(2.55F)
+					.passengerAttachments(2.80625F)
+					.clientTrackingRange(8)
+					.notInPeaceful()
+	);
+
 	@SubscribeEvent
 	public static void registerSpawnPlacement(RegisterSpawnPlacementsEvent event) {
-
+		event.register(CREEPER_TOT.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.AND);
+		event.register(ENDER_TOT.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.AND);
+		event.register(ANGRY_ENDERMAN.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.AND);
 	}
 
 	@SubscribeEvent
@@ -78,5 +116,8 @@ public class ForceEntities {
 		event.put(ForceEntities.COLD_CHICKEN.get(), ColdChicken.generateAttributes().build());
 		event.put(ForceEntities.COLD_COW.get(), ColdCow.generateAttributes().build());
 		event.put(ForceEntities.COLD_PIG.get(), ColdPig.generateAttributes().build());
+		event.put(ForceEntities.CREEPER_TOT.get(), CreeperTot.generateAttributes().build());
+		event.put(ForceEntities.ENDER_TOT.get(), EnderTot.generateAttributes().build());
+		event.put(ForceEntities.ANGRY_ENDERMAN.get(), AbstractForceEnderman.generateAttributes().build());
 	}
 }

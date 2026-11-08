@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-25T23:57:48.7181082	Loot Tables
+// 26.1.2	2026-11-08T02:39:59.6163328	Loot Tables
 3db5755f80bc6441b8c370f62a7991e1a508dc20 data/forcecraft/loot_table/blocks/bane_torch.json
 aabea8fd7de455ed7fe439883af7127d752d29d0 data/forcecraft/loot_table/blocks/camo_torch.json
 791becb9a2cb09e71cf1e383e12d1e73808e3d42 data/forcecraft/loot_table/blocks/deepslate_power_ore.json
@@ -147,3 +147,9 @@ bace77a34534210121561eb175bf610a85c69831 data/forcecraft/loot_table/blocks/wall_
 af1957d8ec1b30a813432d52a6dff3d6454dadeb data/forcecraft/loot_table/blocks/wall_healing_torch.json
 45d1e20bb873aa3f93e38adebbc5c6599a9f103b data/forcecraft/loot_table/blocks/wall_heat_torch.json
 978bdaf0685e3d54e79f98a7ad8fb35f2727a2fb data/forcecraft/loot_table/blocks/wall_time_torch.json
+70fbafae39c6af9bc581affce62051ebcf18db95 data/forcecraft/loot_table/entities/angry_enderman.json
+d203d4f26f150feba2e5bec9fa4211ae944967ce data/forcecraft/loot_table/entities/cold_chicken.json
+fbc5c2895588b669eb8b02783427dc41d2406263 data/forcecraft/loot_table/entities/cold_cow.json
+5d4acb4df17397a7afce6e4d7cf585f0730362eb data/forcecraft/loot_table/entities/cold_pig.json
+d0b63ee98409c9eb4495a00235ab679707ba6400 data/forcecraft/loot_table/entities/creeper_tot.json
+0ebb26e2cbc69c1f8a9709dfb992c4e4d1b11710 data/forcecraft/loot_table/entities/ender_tot.json

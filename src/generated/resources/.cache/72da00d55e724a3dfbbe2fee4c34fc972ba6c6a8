@@ -1,4 +1,4 @@
-// 26.1.2	2026-11-08T01:29:09.9822909	ForceCraft Recipes
+// 26.1.2	2026-11-08T01:43:01.2493332	ForceCraft Recipes
 aa43c1fe5e90eb41a5bc902b064e800a187ab9e3 data/forcecraft/advancement/recipes/building_blocks/force_brick_black.json
 7598ae751331f861a5b1257137a9d2db69579483 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab.json
 179c9202b5d92a6648c92b9ea3bc18e8a9623ad5 data/forcecraft/advancement/recipes/building_blocks/force_brick_black_slab_from_force_brick_black_stonecutting.json
@@ -255,6 +255,7 @@ be27ef38baeb64bcbcf5cb9b8a6e62c1962cb488 data/forcecraft/advancement/recipes/mis
 882c610ca2660f8c03cfe1d64d0f7802ed89bff1 data/forcecraft/advancement/recipes/misc/grinding/warped_planks_from_door.json
 a7ebbca329da1804e8e81ed4e8ebe1849ad50370 data/forcecraft/advancement/recipes/misc/grinding/warped_planks_from_log.json
 75e754039115a0d7b2a2e61014172af0186b60e0 data/forcecraft/advancement/recipes/misc/grinding/warped_planks_from_pressure_plate.json
+4975a06b2b2e1416ed511e2a85ff4624ecb851a7 data/forcecraft/advancement/recipes/misc/gunpowder_from_pile_of_gunpowder.json
 b1040a7efdbe907d1f91cd42671dd066066d9379 data/forcecraft/advancement/recipes/misc/healing_torch.json
 9fbdff2a6035feffaa98d8ea8c4a1a6e8e9e00d9 data/forcecraft/advancement/recipes/misc/heat_torch.json
 26838861fb0cb8a531d811e6343fa3228d2342ad data/forcecraft/advancement/recipes/misc/inert_core.json
@@ -637,6 +638,7 @@ cbd707923280d0ed95c129e56cf888440822ef40 data/forcecraft/recipe/grinding/stone_f
 abcfa9602aad6a9cff5d0b36b4f9f1a0120afdb6 data/forcecraft/recipe/grinding/warped_planks_from_door.json
 68b0d7aca44876029e8ed42b845d542a4f71b81a data/forcecraft/recipe/grinding/warped_planks_from_log.json
 596a1985df3f3ff9b720754499a6402d8dcd0962 data/forcecraft/recipe/grinding/warped_planks_from_pressure_plate.json
+6c5dc673313ba74b49f1f11c5f9ffe81ec97a02b data/forcecraft/recipe/gunpowder_from_pile_of_gunpowder.json
 82e486e64cce9c3cc37d482250332a5e4447e555 data/forcecraft/recipe/healing_torch.json
 352a529a34c798cf16a96ff36dd086df996d9471 data/forcecraft/recipe/heat_torch.json
 0fe929ce9dde836b3e62b7637afa37ab31503cd8 data/forcecraft/recipe/inert_core.json

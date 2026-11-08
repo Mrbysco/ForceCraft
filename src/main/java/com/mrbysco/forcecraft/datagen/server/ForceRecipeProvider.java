@@ -369,6 +369,13 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.save(output);
+
+		shaped(RecipeCategory.MISC, Items.GUNPOWDER)
+				.pattern("##")
+				.pattern("##")
+				.define('#', ForceRegistry.PILE_OF_GUNPOWDER.get())
+				.unlockedBy("has_pile_of_gunpowder", has(ForceRegistry.PILE_OF_GUNPOWDER.get()))
+				.save(output, key("gunpowder_from_pile_of_gunpowder"));
 	}
 
 	private void generateWoodRecipes() {

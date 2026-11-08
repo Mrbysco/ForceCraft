@@ -1,4 +1,4 @@
-// 26.1.2	2026-11-08T00:51:59.8272628	Tags for minecraft:block mod id forcecraft
+// 26.1.2	2026-11-08T02:39:59.6218673	Tags for minecraft:block mod id forcecraft
 4a98efb5348a415ae8088d3a9de590315e7c44f8 data/c/tags/block/fence_gates/wooden.json
 d964b17dbbb1870466808060f50c0991f7cfaf65 data/c/tags/block/ores.json
 0f05bf39bcabd383349deb2fe461a89a2676edc8 data/c/tags/block/ores/power.json
@@ -6,6 +6,7 @@ b73848b6920747aedc21ffb8aed7e3aa8d325f04 data/c/tags/block/ores_in_ground/deepsl
 5b2618b88b5b044099742e91e0a5e3ed254d91cf data/c/tags/block/ores_in_ground/stone.json
 deaf515fb7a18da3af5efaa5f57409dd6ad817ac data/c/tags/block/ore_bearing_ground/netherrack.json
 382a0c8f43b3cf9557290daf4f352695e7c44bb2 data/forcecraft/tags/block/cold_edible_grass_blocks.json
+eab1c84857167780a1314be727ed00b327a480d4 data/forcecraft/tags/block/endertot_holdable.json
 a2ec999b18f53012ccc1a893b944cbe0e84b1199 data/forcecraft/tags/block/force_bricks.json
 eff2e9b711edce9a5ae1875f820c2b5272b0779f data/forcecraft/tags/block/force_logs.json
 4a70364139feeb506f34ec66b6b056216b6dfe71 data/forcecraft/tags/block/force_torches.json

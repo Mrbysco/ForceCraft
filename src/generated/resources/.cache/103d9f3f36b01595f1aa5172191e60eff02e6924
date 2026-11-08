@@ -1,6 +1,8 @@
-// 26.1.2	2026-10-20T00:30:25.4881445	Registries
+// 26.1.2	2026-11-08T02:39:59.6218673	Registries
 87c440755a6397c864f77e634f2077e1ce35d2b6 data/forcecraft/damage_type/bleeding.json
 8dc8e4c9472ce6ce4701a16e6af4fe1814c0674c data/forcecraft/damage_type/liquid_force.json
+ad713b9d467bd8413274d7fe754b641a1868875c data/forcecraft/neoforge/biome_modifier/add_creeper_tot.json
+6de9540773e19bd732918825d2833a1ffbe11614 data/forcecraft/neoforge/biome_modifier/add_ender_tot.json
 d8114e6ac0be1b9b32692e7316a7b07055e26234 data/forcecraft/neoforge/biome_modifier/add_force_ore.json
 4e3ca4e05c849c078d7aa0c4aae2ce91aff0b047 data/forcecraft/neoforge/biome_modifier/add_force_ore_buried.json
 a348918d7a560bbd136e0ea984c06bb92d593c3a data/forcecraft/neoforge/biome_modifier/add_force_tree.json

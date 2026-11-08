@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pile_of_gunpowder": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:pile_of_gunpowder"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "forcecraft:gunpowder_from_pile_of_gunpowder"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pile_of_gunpowder"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "forcecraft:gunpowder_from_pile_of_gunpowder"
+    ]
+  }
+}

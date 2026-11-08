@@ -40,6 +40,9 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addEntityType(ForceEntities.COLD_CHICKEN, "Cold Chicken");
 		addEntityType(ForceEntities.COLD_COW, "Cold Cow");
 		addEntityType(ForceEntities.COLD_PIG, "Cold Pig");
+		addEntityType(ForceEntities.CREEPER_TOT, "Creeper Tot");
+		addEntityType(ForceEntities.ENDER_TOT, "Ender Tot");
+		addEntityType(ForceEntities.ANGRY_ENDERMAN, "Angry Enderman");
 
 		addBlock(ForceRegistry.POWER_ORE, "Power Ore");
 		addBlock(ForceRegistry.DEEPSLATE_POWER_ORE, "Deepslate Power Ore");
@@ -118,6 +121,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addItem(ForceRegistry.FORCE_BUCKET, "Force Bucket");
 		addItem(ForceRegistry.FORCE_ARROW, "Force Arrow");
 		addItem(ForceRegistry.SNOW_COOKIE, "Snow Cookie");
+		addItem(ForceRegistry.PILE_OF_GUNPOWDER, "Small Pile of Gunpowder");
 		for (Map.Entry<DyeColor, DeferredItem<Item>> entry : ForceRegistry.getMobChunks().entrySet()) {
 			String colorPrefix = getColorPrefix(entry.getKey());
 			addItem(entry.getValue(), colorPrefix + "Mob Chunk");
@@ -493,6 +497,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addTag(() -> ForceTags.Blocks.ORES, "Ores");
 		addTag(() -> ForceTags.Blocks.ORES_POWER, "Power Ores");
 		addTag(() -> ForceTags.Blocks.COLD_EDIBLE_GRASS_BLOCKS, "Cold Edible Grass Blocks");
+		addTag(() -> ForceTags.Blocks.ENDERTOT_HOLDABLE, "Ender Tot Holdable");
 
 		addTag(() -> ForceTags.Items.FORCE_LOGS, "Force Logs");
 		addTag(() -> ForceTags.Items.FORCE_BRICKS, "Force Bricks");

@@ -54,6 +54,7 @@ public class ForceBlockTagsProvider extends BlockTagsProvider {
 		this.tag(ForceTags.Blocks.INCORRECT_FOR_FORCE).addTag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL);
 		this.tag(ForceTags.Blocks.TICKING_NOT_SUPPORTED);
 		this.tag(ForceTags.Blocks.COLD_EDIBLE_GRASS_BLOCKS).add(Blocks.GRASS_BLOCK, Blocks.PODZOL);
+		this.tag(ForceTags.Blocks.ENDERTOT_HOLDABLE).addTags(BlockTags.STAIRS, BlockTags.SLABS);
 
 		this.tag(BlockTags.NEEDS_IRON_TOOL).add(
 				ForceRegistry.POWER_ORE.get(),
