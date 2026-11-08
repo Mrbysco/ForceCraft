@@ -109,9 +109,6 @@ public class ForceShearsItem extends ShearsItem {
 						);
 					}
 				});
-
-				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
-
 				replacementMob = new ColdChicken(level, originalChicken.getType());
 			}
 			if (entity instanceof Pig originalPig) {
@@ -131,9 +128,6 @@ public class ForceShearsItem extends ShearsItem {
 						);
 					}
 				});
-
-				entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
-
 				replacementMob = new ColdPig(level, originalPig.getType());
 			}
 
