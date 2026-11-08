@@ -1,4 +1,4 @@
-// 26.1.2	2026-10-28T23:30:58.0420436	Model Definitions - forcecraft
+// 26.1.2	2026-11-08T01:19:16.1796618	Model Definitions - forcecraft
 f3d4efc950e3905de57ae7440fb1d5fbd49edbb0 assets/forcecraft/blockstates/bane_torch.json
 1bb22a6415eb79f339382c2f95ec0c23f70afe23 assets/forcecraft/blockstates/camo_torch.json
 76bd2dbcbce69e7d8f85ba70103b57ca2cfa6363 assets/forcecraft/blockstates/deepslate_power_ore.json
@@ -154,6 +154,7 @@ cccbb0b4c1f61928ca5d2d06b9dc913b4d6ab82e assets/forcecraft/blockstates/wall_heal
 965200ed95d3303a2abe5c61fa11146c5556ef59 assets/forcecraft/items/bomb.json
 9fb38dfab5a7af81073a28db885c951fb5bc4c4a assets/forcecraft/items/camo_torch.json
 c4b34c36d6b0b3b1d898cb89ba95a3ffb029a668 assets/forcecraft/items/claw.json
+bc7385a24134a9e97c28103594064e37ae2eb2e7 assets/forcecraft/items/cooked_bacon.json
 60dbb775c265dadd92853da7a9f74321568f9c56 assets/forcecraft/items/darkness_card.json
 4a155413a2b1b95cbb3093c94b84a91c1d468a5e assets/forcecraft/items/deepslate_power_ore.json
 f2ed4835f99c9929b04be3ee7beaec06754174e4 assets/forcecraft/items/experience_core.json
@@ -343,6 +344,7 @@ aca253cb1bf97fd8e000833987696a70f1bec8c4 assets/forcecraft/items/mob_ingot_red.j
 63b3787c63938f721adbd6fc3a66fc70dcf77489 assets/forcecraft/items/mob_ingot_yellow.json
 e848b172ccbd8f8ef0a34ffacda9859e68c64621 assets/forcecraft/items/nether_power_ore.json
 bac54fd414d8da93c60d58e413f3066e6a274cbe assets/forcecraft/items/power_ore.json
+c348025e616f6d06aab1df81e54115db983fa23d assets/forcecraft/items/raw_bacon.json
 bbdf9adcea07731b722ec477965938f5d22e77c0 assets/forcecraft/items/rocs_feather.json
 baae31de2aa3ac7fbab810827dee6b0f8c172af0 assets/forcecraft/items/snow_cookie.json
 ba8f1bb2ecbe6e3ca1dbeed164245952080855ab assets/forcecraft/items/soul_wafer.json
@@ -647,6 +649,7 @@ b650d15a55ab5323b5a02b5cf8429eff73ed1020 assets/forcecraft/models/block/wall_tim
 27daa381e1bcfac9442866a49e54bae7d1194269 assets/forcecraft/models/item/bane_torch.json
 51e14465425a2e84a7391b7fa2a15eb0fa36ee98 assets/forcecraft/models/item/camo_torch.json
 eb3d9618db1341f63383e6623f494c683643aeb6 assets/forcecraft/models/item/claw.json
+faabad552396878d9267a1e15a6c5b9b911e250c assets/forcecraft/models/item/cooked_bacon.json
 227017a60fd746d2bd08f9d85367cde8c14db90d assets/forcecraft/models/item/darkness_card.json
 0794ec826fb08cc6837c8ca99d2b31e6ccecb480 assets/forcecraft/models/item/experience_core.json
 2205a72b4b780f41577ae2ecf202ff3c267a1b17 assets/forcecraft/models/item/experience_tome.json
@@ -749,6 +752,7 @@ d348bb0bfc0befcdac23777780fd5264796f5ca6 assets/forcecraft/models/item/mob_ingot
 3c2c72b13b100026f93362eeb9e02705253d77f9 assets/forcecraft/models/item/mob_ingot_red.json
 2214f8754dfffa738b619ca2ddd3ad56010320b7 assets/forcecraft/models/item/mob_ingot_white.json
 d5c7c6d8827109bbd7afb99257c3b05808eab281 assets/forcecraft/models/item/mob_ingot_yellow.json
+c3a3c3e47e859a96196d99cfe481695fbcfecbc5 assets/forcecraft/models/item/raw_bacon.json
 5eb639706829138f6fe65837889022415717b83d assets/forcecraft/models/item/rocs_feather.json
 6da5bd41b92de8c120690ed8fd5bd3e5e45b0a40 assets/forcecraft/models/item/snow_cookie.json
 9299cbb30fbb88969b91f94d59325ce97a5b940f assets/forcecraft/models/item/soul_wafer.json

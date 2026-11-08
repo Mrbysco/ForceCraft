@@ -62,6 +62,10 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 		this.tag(Tags.Items.NUGGETS).addTag(ForceTags.Items.NUGGETS_FORCE);
 		this.tag(ForceTags.Items.RODS_FORCE).add(ForceRegistry.FORCE_STICK.get());
 
+		this.tag(ItemTags.MEAT).add(ForceRegistry.RAW_BACON.get(), ForceRegistry.COOKED_BACON.get());
+		this.tag(Tags.Items.FOODS_RAW_MEAT).add(ForceRegistry.RAW_BACON.get());
+		this.tag(Tags.Items.FOODS_COOKED_MEAT).add(ForceRegistry.COOKED_BACON.get());
+
 		this.tag(ForceTags.Items.CAN_STORE_FORCE).add(
 				ForceRegistry.FORCE_ROD.get()
 		);

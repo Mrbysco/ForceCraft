@@ -104,6 +104,8 @@ public class ForceModelProvider extends ModelProvider {
 		itemModels.generateFlatItem(ForceRegistry.FORTUNE_COOKIE.get(), ModelTemplates.FLAT_ITEM);
 		itemModels.generateFlatItem(ForceRegistry.FORTUNE.get(), ModelTemplates.FLAT_ITEM);
 		itemModels.generateFlatItem(ForceRegistry.SNOW_COOKIE.get(), ModelTemplates.FLAT_ITEM);
+		itemModels.generateFlatItem(ForceRegistry.RAW_BACON.get(), ModelTemplates.FLAT_ITEM);
+		itemModels.generateFlatItem(ForceRegistry.COOKED_BACON.get(), ModelTemplates.FLAT_ITEM);
 
 		itemModels.generateFlatItem(ForceRegistry.FORCE_ARROW.get(), ModelTemplates.FLAT_ITEM);
 		itemModels.generateFlatItem(ForceRegistry.FORCE_PICKAXE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);

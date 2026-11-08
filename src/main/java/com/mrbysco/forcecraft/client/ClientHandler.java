@@ -7,6 +7,9 @@ import com.mrbysco.forcecraft.client.model.EngineModel;
 import com.mrbysco.forcecraft.client.renderer.BombRenderer;
 import com.mrbysco.forcecraft.client.renderer.EngineBER;
 import com.mrbysco.forcecraft.client.renderer.IceArrowRenderer;
+import com.mrbysco.forcecraft.client.renderer.cold.ColdChickenRenderer;
+import com.mrbysco.forcecraft.client.renderer.cold.ColdCowRenderer;
+import com.mrbysco.forcecraft.client.renderer.cold.ColdPigRenderer;
 import com.mrbysco.forcecraft.client.screen.ForceEngineScreen;
 import com.mrbysco.forcecraft.client.screen.ForceFurnaceScreen;
 import com.mrbysco.forcecraft.client.screen.ForceScreen;
@@ -63,6 +66,10 @@ public class ClientHandler {
 	public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(ForceEntities.BOMB.get(), BombRenderer::new);
 		event.registerEntityRenderer(ForceEntities.FORCE_ARROW.get(), IceArrowRenderer::new);
+
+		event.registerEntityRenderer(ForceEntities.COLD_CHICKEN.get(), ColdChickenRenderer::new);
+		event.registerEntityRenderer(ForceEntities.COLD_COW.get(), ColdCowRenderer::new);
+		event.registerEntityRenderer(ForceEntities.COLD_PIG.get(), ColdPigRenderer::new);
 
 		event.registerBlockEntityRenderer(ForceRegistry.FORCE_ENGINE_BLOCK_ENTITY.get(), EngineBER::new);
 	}

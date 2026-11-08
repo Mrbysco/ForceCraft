@@ -410,6 +410,19 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output);
 
 		addMobRecipes();
+
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ForceRegistry.RAW_BACON.get()), RecipeCategory.FOOD, CookingBookCategory.FOOD,
+						ForceRegistry.COOKED_BACON.get(), 0.1F, 200)
+				.unlockedBy("has_raw_bacon", has(ForceRegistry.RAW_BACON.get()))
+				.save(output, key("cooked_bacon_from_smelting"));
+		SimpleCookingRecipeBuilder.smoking(Ingredient.of(ForceRegistry.RAW_BACON.get()), RecipeCategory.FOOD,
+						ForceRegistry.COOKED_BACON.get(), 0.1F, 100)
+				.unlockedBy("has_raw_bacon", has(ForceRegistry.RAW_BACON.get()))
+				.save(output, key("cooked_bacon_from_smoking"));
+		SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(ForceRegistry.RAW_BACON.get()), RecipeCategory.FOOD,
+						ForceRegistry.COOKED_BACON.get(), 0.1F, 600)
+				.unlockedBy("has_raw_bacon", has(ForceRegistry.RAW_BACON.get()))
+				.save(output, key("cooked_bacon_from_campfire"));
 	}
 
 	private void generateBrickRecipes() {
@@ -1035,6 +1048,32 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.result(Items.DARK_OAK_PLANKS, 2)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, key("grinding/dark_oak_planks_from_pressure_plate"));
+		//Pale Oak
+		MultiOutputRecipeBuilder.grinding(Items.PALE_OAK_DOOR, 1.0F, 0.1F, 400)
+				.result(Items.PALE_OAK_PLANKS, 2)
+				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
+				.save(output, key("grinding/pale_oak_planks_from_door"));
+		MultiOutputRecipeBuilder.grinding(tag(ItemTags.PALE_OAK_LOGS), 1.0F, 0.1F, 400)
+				.result(Items.PALE_OAK_PLANKS, 6)
+				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
+				.save(output, key("grinding/pale_oak_planks_from_log"));
+		MultiOutputRecipeBuilder.grinding(Items.PALE_OAK_PRESSURE_PLATE, 1.0F, 0.1F, 400)
+				.result(Items.PALE_OAK_PLANKS, 2)
+				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
+				.save(output, key("grinding/pale_oak_planks_from_pressure_plate"));
+		//Bamboo
+		MultiOutputRecipeBuilder.grinding(Items.BAMBOO_DOOR, 1.0F, 0.1F, 400)
+				.result(Items.BAMBOO_PLANKS, 2)
+				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
+				.save(output, key("grinding/bamboo_planks_from_door"));
+		MultiOutputRecipeBuilder.grinding(tag(ItemTags.BAMBOO_BLOCKS), 1.0F, 0.1F, 400)
+				.result(Items.BAMBOO_PLANKS, 3)
+				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
+				.save(output, key("grinding/bamboo_planks_from_block"));
+		MultiOutputRecipeBuilder.grinding(Items.BAMBOO_PRESSURE_PLATE, 1.0F, 0.1F, 400)
+				.result(Items.BAMBOO_PLANKS, 2)
+				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
+				.save(output, key("grinding/bamboo_planks_from_pressure_plate"));
 		//Crimson
 		MultiOutputRecipeBuilder.grinding(Items.CRIMSON_DOOR, 1.0F, 0.1F, 400)
 				.result(Items.CRIMSON_PLANKS, 2)
@@ -1132,15 +1171,15 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, key("grinding/cobblestone_from_furnace"));
 
-//		//Bacon
-//		MultiOutputRecipeBuilder.grinding(Items.PORKCHOP, 1.0F, 0.1F, 400)
-//				.result(ForceRegistry.RAW_BACON.get(), 2)
-//				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
-//				.save(output, key("grinding/raw_bacon_from_porkchop"));
-//		MultiOutputRecipeBuilder.grinding(Items.COOKED_PORKCHOP, 1.0F, 0.1F, 400)
-//				.result(ForceRegistry.COOKED_BACON.get(), 2)
-//				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
-//				.save(output, key("grinding/cooked_bacon_from_cooked_porkchop"));
+		//Bacon
+		MultiOutputRecipeBuilder.grinding(Items.PORKCHOP, 1.0F, 0.1F, 400)
+				.result(ForceRegistry.RAW_BACON.get(), 2)
+				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
+				.save(output, key("grinding/raw_bacon_from_porkchop"));
+		MultiOutputRecipeBuilder.grinding(Items.COOKED_PORKCHOP, 1.0F, 0.1F, 400)
+				.result(ForceRegistry.COOKED_BACON.get(), 2)
+				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
+				.save(output, key("grinding/cooked_bacon_from_cooked_porkchop"));
 
 		//Powder
 		MultiOutputRecipeBuilder.grinding(tag(Tags.Items.RODS_BLAZE), 1.0F, 0.1F, 400)

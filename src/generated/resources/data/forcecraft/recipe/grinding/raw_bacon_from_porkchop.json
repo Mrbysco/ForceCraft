@@ -1,0 +1,12 @@
+{
+  "type": "forcecraft:grinding",
+  "category": "misc",
+  "cookingtime": 400,
+  "experience": 0.1,
+  "ingredient": "minecraft:porkchop",
+  "result": {
+    "count": 2,
+    "id": "forcecraft:raw_bacon"
+  },
+  "secondaryChance": 1.0
+}

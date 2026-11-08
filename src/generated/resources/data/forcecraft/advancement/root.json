@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "force_gem": {
+      "conditions": {
+        "items": [
+          {
+            "items": "forcecraft:force_gem"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "background": "minecraft:gui/advancements/backgrounds/stone",
+    "description": {
+      "translate": "advancement.forcecraft.root.desc"
+    },
+    "icon": {
+      "id": "forcecraft:force_gem"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.forcecraft.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "force_gem"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

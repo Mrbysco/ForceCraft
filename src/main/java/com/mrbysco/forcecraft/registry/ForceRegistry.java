@@ -322,7 +322,8 @@ public class ForceRegistry {
 	public static final DeferredItem<Item> SNOW_COOKIE = ITEMS.registerSimpleItem("snow_cookie", (properties) -> properties.food(ForceFoods.SNOW_COOKIE));
 	public static final DeferredItem<Item> BOMB = ITEMS.registerItem("bomb", (properties) -> new BombItem(properties, false));
 	public static final DeferredItem<Item> SUPER_BOMB = ITEMS.registerItem("super_bomb", (properties) -> new BombItem(properties, true));
-
+	public static final DeferredItem<Item> RAW_BACON = ITEMS.registerSimpleItem("raw_bacon", (properties) -> properties.food(ForceFoods.BACON));
+	public static final DeferredItem<Item> COOKED_BACON = ITEMS.registerSimpleItem("cooked_bacon", (properties) -> properties.food(ForceFoods.COOKED_BACON));
 
 	// Mob Chunks
 	private static final Map<DyeColor, DeferredItem<Item>> MOB_CHUNKS = new HashMap<>();

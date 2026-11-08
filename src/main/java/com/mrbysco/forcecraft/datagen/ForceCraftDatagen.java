@@ -3,6 +3,7 @@ package com.mrbysco.forcecraft.datagen;
 import com.mrbysco.forcecraft.datagen.client.ForceLanguageProvider;
 import com.mrbysco.forcecraft.datagen.client.ForceModelProvider;
 import com.mrbysco.forcecraft.datagen.client.ForceSoundProvider;
+import com.mrbysco.forcecraft.datagen.server.ForceAdvancementsProvider;
 import com.mrbysco.forcecraft.datagen.server.ForceBlockTagsProvider;
 import com.mrbysco.forcecraft.datagen.server.ForceDamageTypeTagProvider;
 import com.mrbysco.forcecraft.datagen.server.ForceDataMapProvider;
@@ -47,5 +48,6 @@ public class ForceCraftDatagen {
 		event.createProvider(ForceLootProvider::new);
 		event.createProvider(ForceRecipeProvider.Runner::new);
 		event.createProvider(ForceLootModifierProvider::new);
+		event.createProvider(ForceAdvancementsProvider::new);
 	}
 }

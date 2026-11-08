@@ -21,6 +21,7 @@ public class ForceTags {
 		public static final TagKey<Block> INCORRECT_FOR_FORCE = BlockTags.create(Reference.modLoc("needs_force_tool"));
 		public static final TagKey<Block> MINEABLE_WITH_MITTS = BlockTags.create(Reference.modLoc("mineable_with_mitts"));
 		public static final TagKey<Block> TICKING_NOT_SUPPORTED = BlockTags.create(Reference.modLoc("ticking_not_supported"));
+		public static final TagKey<Block> COLD_EDIBLE_GRASS_BLOCKS = BlockTags.create(Reference.modLoc("cold_edible_grass_blocks"));
 
 		public static final TagKey<Block> ORES = commonTag("ores");
 		public static final TagKey<Block> ORES_POWER = commonTag("ores/power");

@@ -36,7 +36,10 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addTags();
 
 		addEntityType(ForceEntities.BOMB, "Bomb");
-		addEntityType(ForceEntities.FORCE_ARROW, "Ice Arrow");
+		addEntityType(ForceEntities.FORCE_ARROW, "Force Arrow");
+		addEntityType(ForceEntities.COLD_CHICKEN, "Cold Chicken");
+		addEntityType(ForceEntities.COLD_COW, "Cold Cow");
+		addEntityType(ForceEntities.COLD_PIG, "Cold Pig");
 
 		addBlock(ForceRegistry.POWER_ORE, "Power Ore");
 		addBlock(ForceRegistry.DEEPSLATE_POWER_ORE, "Deepslate Power Ore");
@@ -85,6 +88,8 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addItem(ForceRegistry.DARKNESS_CARD, "Darkness Card");
 		addItem(ForceRegistry.UNDEATH_CARD, "Undeath Card");
 		addItem(ForceRegistry.SOUL_WAFER, "Soul Wafer");
+		addItem(ForceRegistry.RAW_BACON, "Raw Bacon");
+		addItem(ForceRegistry.COOKED_BACON, "Cooked Bacon");
 		addItem(ForceRegistry.UPGRADE_TOME, "Upgrade Tome");
 		addItem(ForceRegistry.EXPERIENCE_TOME, "Experience Tome");
 		addItem(ForceRegistry.FORTUNE_COOKIE, "Fortune Cookie");
@@ -463,6 +468,9 @@ public class ForceLanguageProvider extends LanguageProvider {
 		add("forcecraft.gui.jei.category.grinding.tooltip", "% Chance");
 		add("forcecraft.gui.jei.category.infuser", "Infuser");
 		add("forcecraft.gui.jei.category.infuser.tier", "Tier: %s");
+
+		// Advancements
+		addAdvancement("root", "The Golden Power", "This is where it all begins!");
 	}
 
 	private String getColorPrefix(@Nullable DyeColor dyeColor) {
@@ -484,12 +492,20 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addTag(() -> ForceTags.Blocks.TICKING_NOT_SUPPORTED, "Ticking Not Supported");
 		addTag(() -> ForceTags.Blocks.ORES, "Ores");
 		addTag(() -> ForceTags.Blocks.ORES_POWER, "Power Ores");
+		addTag(() -> ForceTags.Blocks.COLD_EDIBLE_GRASS_BLOCKS, "Cold Edible Grass Blocks");
 
 		addTag(() -> ForceTags.Items.FORCE_LOGS, "Force Logs");
 		addTag(() -> ForceTags.Items.FORCE_BRICKS, "Force Bricks");
 		addTag(() -> ForceTags.Items.FORCE_TORCHES, "Force Torches");
 		addTag(() -> ForceTags.Items.CAN_STORE_FORCE, "Can Store Force");
 		addTag(() -> ForceTags.Items.FORCE_REPAIR_INGREDIENTS, "Force Repair Ingredients");
+		addTag(() -> ForceTags.Items.FORCE_ARMOR, "Force Armor");
+		addTag(() -> ForceTags.Items.UPGRADE_CORES, "Upgrade Cores");
+		addTag(() -> ForceTags.Items.FORCE_FURNACES, "Force Furnaces");
+		addTag(() -> ForceTags.Items.FORCE_TOOLS, "Force Tools");
+		addTag(() -> ForceTags.Items.FORCE_WEAPONS, "Force Weapons");
+		addTag(() -> ForceTags.Items.MOB_CHUNKS, "Mob Chunks");
+		addTag(() -> ForceTags.Items.HOLDS_ITEMS, "Holds Items");
 		addTag(() -> ForceTags.Items.VALID_INFUSER_MODIFIERS, "Valid Infuser Modifiers");
 		addTag(() -> ForceTags.Items.VALID_INFUSER_TOOLS, "Valid Infuser Tools");
 		addTag(() -> ForceTags.Items.VALID_INFUSER_CHARGE, "Valid Infuser Charge");
@@ -520,6 +536,9 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addTag(() -> ForceTags.Items.VALID_SOUL_ITEMS, "Valid Soul Items");
 		addTag(() -> ForceTags.Items.VALID_LIGHT_ITEMS, "Valid Light Items");
 		addTag(() -> ForceTags.Items.VALID_TREASURE_ITEMS, "Valid Treasure Items");
+		addTag(() -> ForceTags.Items.VALID_INFUSE_TORCHES, "Valid Infuse Torches");
+		addTag(() -> ForceTags.Items.LIMITED_STURDY_ITEMS, "Limited Sturdy Items");
+		addTag(() -> ForceTags.Items.LIMITED_DAMAGE_ITEMS, "Limited Damage Items");
 		addTag(() -> ForceTags.Items.ORES_POWER, "Power Ores");
 		addTag(() -> ForceTags.Items.GEMS_FORCE, "Force Gems");
 		addTag(() -> ForceTags.Items.INGOTS_FORCE, "Force Ingots");
@@ -529,6 +548,9 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addTag(() -> ForceTags.Fluids.FORCE, "Force");
 		addTag(() -> ForceTags.Fluids.FUEL, "Fuel");
 		addTag(() -> ForceTags.Fluids.BIOFUEL, "Biofuel");
+
+		addTag(() -> ForceTags.EntityTypes.VALID_BANE, "Valid Bane Entities");
+		addTag(() -> ForceTags.EntityTypes.TICKING_NOT_SUPPORTED, "Ticking Not Supported");
 	}
 
 	/**
@@ -549,6 +571,20 @@ public class ForceLanguageProvider extends LanguageProvider {
 		this.add(prefix + ".hint", hint);
 		this.add(prefix + ".text", text);
 		this.add(prefix + ".header", header);
+	}
+
+
+	/**
+	 * Add the translation of an advancement
+	 *
+	 * @param id          The advancement id
+	 * @param name        The name of the advancement
+	 * @param description The description of the advancement
+	 */
+	private void addAdvancement(String id, String name, String description) {
+		String prefix = "advancement.forcecraft.";
+		add(prefix + id + ".title", name);
+		add(prefix + id + ".desc", description);
 	}
 
 	/**

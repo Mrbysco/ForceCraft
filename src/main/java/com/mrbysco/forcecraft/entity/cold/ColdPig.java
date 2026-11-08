@@ -1,0 +1,83 @@
+package com.mrbysco.forcecraft.entity.cold;
+
+import com.mrbysco.forcecraft.entity.goal.EatGrassToRestoreGoal;
+import com.mrbysco.forcecraft.registry.ForceEntities;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.cow.Cow;
+import net.minecraft.world.entity.animal.pig.Pig;
+import net.minecraft.world.level.Level;
+
+public class ColdPig extends Pig implements IColdMob {
+	private int eatAnimationTick;
+	private EatGrassToRestoreGoal eatGrassGoal;
+	private EntityType<?> originalType = EntityType.PIG;
+
+	public ColdPig(EntityType<? extends Pig> type, Level level) {
+		super(type, level);
+	}
+
+	public ColdPig(Level level, EntityType<?> typeLocation) {
+		super(ForceEntities.COLD_PIG.get(), level);
+		if (typeLocation != null) {
+			this.originalType = typeLocation;
+		}
+	}
+
+	@Override
+	public EntityType<?> getType() {
+		return ForceEntities.COLD_PIG.get();
+	}
+
+	public static AttributeSupplier.Builder generateAttributes() {
+		return Pig.createAttributes();
+	}
+
+	@Override
+	public EntityType<?> originalEntityType() {
+		return this.originalType;
+	}
+
+	@Override
+	public int getEatAnimationTick() {
+		return this.eatAnimationTick;
+	}
+
+	@Override
+	public boolean canMate(Animal partner) {
+		return false;
+	}
+
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.eatGrassGoal = new EatGrassToRestoreGoal(this);
+		this.goalSelector.addGoal(5, this.eatGrassGoal);
+	}
+
+	@Override
+	protected void customServerAiStep(ServerLevel level) {
+		this.eatAnimationTick = this.eatGrassGoal.getEatAnimationTick();
+		super.customServerAiStep(level);
+	}
+
+	@Override
+	public void aiStep() {
+		if (this.level().isClientSide()) {
+			this.eatAnimationTick = Math.max(0, this.eatAnimationTick - 1);
+		}
+
+		super.aiStep();
+	}
+
+	@Override
+	public void handleEntityEvent(byte id) {
+		if (id == 10) {
+			this.eatAnimationTick = 40;
+		} else {
+			super.handleEntityEvent(id);
+		}
+	}
+}
