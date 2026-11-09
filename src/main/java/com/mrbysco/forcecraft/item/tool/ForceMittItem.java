@@ -1,6 +1,7 @@
 package com.mrbysco.forcecraft.item.tool;
 
 import com.mojang.datafixers.util.Pair;
+import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import com.mrbysco.forcecraft.registry.ModToolTiers;
 import net.minecraft.core.BlockPos;
@@ -58,7 +59,7 @@ public class ForceMittItem extends Item {
 				}
 			}
 
-//			level.playSound((Player) null, pos, ForceSounds.WHOOSH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+			level.playSound((Player) null, pos, ForceSounds.WHOOSH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 		}
 		return super.mineBlock(itemStack, level, state, pos, owner);
 	}
