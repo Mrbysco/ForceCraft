@@ -202,6 +202,7 @@ public class ForceConfig {
 		public final ModConfigSpec.IntValue forceInfusingTime;
 		public final ModConfigSpec.IntValue enderSwordCooldown;
 		public final ModConfigSpec.BooleanValue repeatInfusePenalty;
+		public final ModConfigSpec.BooleanValue allowEnchantingTable;
 		public final ModConfigSpec.ConfigValue<List<? extends String>> furnaceOutputBlacklist;
 
 		public final ModConfigSpec.IntValue buffRadius;
@@ -242,6 +243,10 @@ public class ForceConfig {
 			repeatInfusePenalty = builder
 					.comment("When enabled repeating an infusion will not give full points [Default: true]")
 					.define("repeatInfusePenalty", true);
+
+			allowEnchantingTable = builder
+					.comment("When enabled the Force tools can be enchanted regularly in an Enchantment Table [Default: false]")
+					.define("allowEnchantingTable", false);
 
 			furnaceOutputBlacklist = builder
 					.comment("An additional list of blockentities the Force Furnace can NOT insert into [Syntax: modid:blockentity_id]\n" +

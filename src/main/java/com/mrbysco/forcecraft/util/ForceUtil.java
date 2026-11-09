@@ -1,7 +1,10 @@
 package com.mrbysco.forcecraft.util;
 
+import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.config.ForceConfig;
 import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceTags;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 public class ForceUtil {
@@ -26,5 +29,13 @@ public class ForceUtil {
 			int newForce = stack.getOrDefault(ForceComponents.FORCE_STORED, 0) + toCharge;
 			stack.set(ForceComponents.FORCE_STORED, newForce);
 		}
+	}
+
+	public static boolean isForceItem(ItemStack itemStack) {
+		Identifier itemId = itemStack.getItem().builtInRegistryHolder().unwrapKey().orElseThrow().identifier();
+		if (itemId.getNamespace().equals(Reference.MOD_ID)) {
+			return !ForceConfig.COMMON.allowEnchantingTable.getAsBoolean();
+		}
+		return false;
 	}
 }

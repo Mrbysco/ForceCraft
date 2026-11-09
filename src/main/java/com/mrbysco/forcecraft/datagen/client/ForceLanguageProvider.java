@@ -189,6 +189,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addConfig("forceInfusingTime", "Force Infusing Time", "The max amount of ticks it takes to charge a tool with Force [Default: 120 (6 seconds)]");
 		addConfig("enderSwordCooldown", "Ender Sword Cooldown", "The cooldown of the Ender Sword in ticks [Default: 30]");
 		addConfig("repeatInfusePenalty", "Repeat Infuse Penalty", "When enabled repeating an infusion will not give full points [Default: true]");
+		addConfig("allowEnchantingTable", "Allow Enchanting Table", "When enabled the Force tools can be enchanted regularly in an Enchantment Table [Default: false]");
 		addConfig("furnaceOutputBlacklist", "Furnace Output Blacklist", "An additional list of blockentities the Force Furnace can NOT insert into [Syntax: modid:blockentity_id]\n" +
 				"Examples: \"minecraft:shulker_box\" would stop it inserting into shulkers");
 

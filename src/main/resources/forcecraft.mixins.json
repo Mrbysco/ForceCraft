@@ -5,6 +5,7 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "EnchantmentMenuMixin",
     "ItemStackMixin"
   ],
   "client": [

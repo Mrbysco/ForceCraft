@@ -244,6 +244,8 @@
   "forcecraft.component.upgrade_book.points": "%s Force Points",
   "forcecraft.component.upgrade_book.tier": "Tier %s",
   "forcecraft.component.wing": "Wing",
+  "forcecraft.configuration.allowEnchantingTable": "Allow Enchanting Table",
+  "forcecraft.configuration.allowEnchantingTable.tooltip": "When enabled the Force tools can be enchanted regularly in an Enchantment Table [Default: false]",
   "forcecraft.configuration.blockSpeedDuration": "Block Speed Duration",
   "forcecraft.configuration.blockSpeedDuration.tooltip": "The duration of the speed effect for blocks in ticks (20 ticks = 1 second) [Default: 200]",
   "forcecraft.configuration.buffRadius": "Buff Radius",
