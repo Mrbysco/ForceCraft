@@ -299,7 +299,7 @@ public class ForceRegistry {
 	public static final DeferredItem<Item> FORCE_SWORD = ITEMS.registerSimpleItem("force_sword", (properties) -> properties.sword(ModToolTiers.FORCE, -2, -2.4F));
 	public static final DeferredItem<ShovelItem> FORCE_SHOVEL = ITEMS.registerItem("force_shovel", (properties) -> new ShovelItem(ModToolTiers.FORCE, -7F, -3.0F, properties));
 	public static final DeferredItem<ForceShearsItem> FORCE_SHEARS = ITEMS.registerItem("force_shears", ForceShearsItem::new, (properties) -> properties.stacksTo(1).durability(952));
-	public static final DeferredItem<ForceBowItem> FORCE_BOW = ITEMS.registerItem("force_bow", ForceBowItem::new, (properties) -> properties.stacksTo(1).durability(332));
+	public static final DeferredItem<ForceBowItem> FORCE_BOW = ITEMS.registerItem("force_bow", ForceBowItem::new, (properties) -> properties.stacksTo(1).durability(332).enchantable(1));
 	public static final DeferredItem<Item> FORCE_MITT = ITEMS.registerItem("force_mitt", ForceMittItem::new, (properties) -> properties.durability(1000));
 //	public static final DeferredItem<MagnetGloveItem> MAGNET_GLOVE = ITEMS.registerItem("magnet_glove", MagnetGloveItem::new);
 

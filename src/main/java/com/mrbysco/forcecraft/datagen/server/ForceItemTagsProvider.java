@@ -104,6 +104,7 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 		);
 		this.tag(ItemTags.MELEE_WEAPON_ENCHANTABLE).add(ForceRegistry.FORCE_MITT.get());
 		this.tag(ItemTags.MINING_ENCHANTABLE).add(ForceRegistry.FORCE_SHEARS.get(), ForceRegistry.FORCE_MITT.get());
+		this.tag(ItemTags.MINING_LOOT_ENCHANTABLE).add(ForceRegistry.FORCE_MITT.get());
 		this.tag(Tags.Items.TOOLS_BOW).add(ForceRegistry.FORCE_BOW.get());
 		this.tag(Tags.Items.TOOLS_SHEAR).add(ForceRegistry.FORCE_SHEARS.get());
 
