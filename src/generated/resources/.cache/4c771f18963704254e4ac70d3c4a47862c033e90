@@ -1,4 +1,4 @@
-// 26.1.2	2026-11-08T21:33:06.3200721	Tags for minecraft:item mod id forcecraft
+// 26.1.2	2026-11-09T22:46:04.2672674	Tags for minecraft:item mod id forcecraft
 53afa95f4f2972f61ad4870a14ffdad392433608 data/c/tags/item/foods/cooked_meat.json
 6cc43bad0136bf877c33d3a7fbfa7a72d605f505 data/c/tags/item/foods/raw_meat.json
 e4114fb3db46efa51fbbe42ba62fe557c245011e data/c/tags/item/gems.json
@@ -25,7 +25,7 @@ eff2e9b711edce9a5ae1875f820c2b5272b0779f data/forcecraft/tags/item/force_logs.js
 9a2f1ed97d66bc281c249c8fdfc5e0e9db5f881c data/forcecraft/tags/item/force_tools.json
 4a70364139feeb506f34ec66b6b056216b6dfe71 data/forcecraft/tags/item/force_torches.json
 a9a150a0cf791ee872a41489d83a8aa2b9fe828f data/forcecraft/tags/item/force_weapons.json
-9ae558329986e560c5e905b678562ec86a16f9a3 data/forcecraft/tags/item/mob_chunks.json
+1e4e7244020e23643dcb7b71d9f2fb99f64c62c3 data/forcecraft/tags/item/mob_chunks.json
 c28b25f1ba103b14e5d5e66444f35b01ffe6361f data/forcecraft/tags/item/upgrade_cores.json
 109979ba6691c3f6bed47ce2ba7d0a52c3514a3b data/forcecraft/tags/item/valid_force_belt.json
 a2588468460760c403b085d6bc2ac32fa319d3ae data/forcecraft/tags/item/valid_infuser_charge.json
@@ -58,6 +58,10 @@ aaa2dc5cf784fe3d1e2f99042e8dd270a67338e9 data/forcecraft/tags/item/valid_items/s
 b19a0cb8bd325ff202705dd6871a975d59d6f2cd data/forcecraft/tags/item/valid_items/wing.json
 d0839816bc5ce3b45313754d9906dbff2041e63c data/minecraft/tags/item/axes.json
 68339fe69114320ca45df4429d821064bd426711 data/minecraft/tags/item/chest_armor.json
+e05efd811922fbbe385b35f046fa78667f037490 data/minecraft/tags/item/enchantable/bow.json
+746e3d16a036424c96b029265ad80244d609fb9f data/minecraft/tags/item/enchantable/durability.json
+cbb3b3f93d5cd291063d5fa986fd0cdd31ee85ad data/minecraft/tags/item/enchantable/melee_weapon.json
+1e2e5909e634791e65a4212ac42294ba0ec06dd2 data/minecraft/tags/item/enchantable/mining.json
 fc65e3ffc7e6b13b468b8c65cde171609867ca78 data/minecraft/tags/item/foot_armor.json
 1ea44eed5d9e9b3aa140bb9ec0ad3add03c918d8 data/minecraft/tags/item/hanging_signs.json
 937548fd28bc68befd2d0b888fa0e207ff481aa5 data/minecraft/tags/item/head_armor.json

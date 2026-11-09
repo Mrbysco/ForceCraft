@@ -97,6 +97,13 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 		this.tag(ItemTags.SHOVELS).add(ForceRegistry.FORCE_SHOVEL.get());
 		this.tag(ItemTags.AXES).add(ForceRegistry.FORCE_AXE.get());
 		this.tag(ItemTags.SWORDS).add(ForceRegistry.FORCE_SWORD.get());
+		this.tag(ItemTags.BOW_ENCHANTABLE).add(ForceRegistry.FORCE_BOW.get());
+		this.tag(ItemTags.DURABILITY_ENCHANTABLE).add(
+				ForceRegistry.FORCE_ROD.get(), ForceRegistry.FORCE_BOW.get(),
+				ForceRegistry.FORCE_SHEARS.get(), ForceRegistry.FORCE_MITT.get()
+		);
+		this.tag(ItemTags.MELEE_WEAPON_ENCHANTABLE).add(ForceRegistry.FORCE_MITT.get());
+		this.tag(ItemTags.MINING_ENCHANTABLE).add(ForceRegistry.FORCE_SHEARS.get(), ForceRegistry.FORCE_MITT.get());
 		this.tag(Tags.Items.TOOLS_BOW).add(ForceRegistry.FORCE_BOW.get());
 		this.tag(Tags.Items.TOOLS_SHEAR).add(ForceRegistry.FORCE_SHEARS.get());
 
