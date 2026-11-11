@@ -94,7 +94,11 @@ public class TimeHandler {
 		if (set == null || set.isEmpty()) return;
 
 		long time = level.getGameTime();
-		set.removeIf(pos -> !processAdjustedTick(level, pos, time));
+		for (BlockPos pos : new HashSet<>(set)) {
+			if (!processAdjustedTick(level, pos, time)) {
+				set.remove(pos);
+			}
+		}
 	}
 
 	private static boolean processAdjustedTick(ServerLevel level, BlockPos pos, long time) {
