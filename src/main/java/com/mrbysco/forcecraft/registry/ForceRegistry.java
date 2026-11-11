@@ -273,7 +273,7 @@ public class ForceRegistry {
 	public static final DeferredItem<Item> GOLDEN_POWER_SOURCE = ITEMS.registerSimpleItem("golden_power_source", (properties) -> properties.rarity(Rarity.UNCOMMON));
 	public static final DeferredItem<Item> EXPERIENCE_TOME = ITEMS.registerItem("experience_tome", ExperienceTomeItem::new, (properties) -> properties.stacksTo(1).rarity(Rarity.UNCOMMON).component(ForceComponents.TOME_EXPERIENCE, 0));
 	public static final DeferredItem<Item> UPGRADE_TOME = ITEMS.registerSimpleItem("upgrade_tome", (properties) -> properties.stacksTo(1).rarity(Rarity.UNCOMMON).component(ForceComponents.UPGRADE_BOOK, UpgradeBookData.DEFAULT));
-	public static final DeferredItem<ForceRodItem> FORCE_ROD = ITEMS.registerItem("force_rod", ForceRodItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(75));
+	public static final DeferredItem<ForceRodItem> FORCE_ROD = ITEMS.registerItem("force_rod", ForceRodItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON).durability(75).enchantable(1));
 	public static final DeferredItem<ForcePackItem> FORCE_PACK = ITEMS.registerItem("force_pack", ForcePackItem::new, properties -> properties.rarity(Rarity.UNCOMMON).stacksTo(1));
 	public static final DeferredItem<ForceBeltItem> FORCE_BELT = ITEMS.registerItem("force_belt", ForceBeltItem::new, properties -> properties.rarity(Rarity.UNCOMMON).stacksTo(1));
 	public static final DeferredItem<Item> FORCE_PACK_UPGRADE = ITEMS.registerSimpleItem("force_pack_upgrade");
