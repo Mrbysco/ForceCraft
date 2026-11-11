@@ -19,11 +19,12 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public class TimeTorchBlockEntity extends AbstractTorchBlockEntity {
 	private final int radius;
-	private TimeMode mode = TimeMode.STOP;
+	private TimeMode mode;
 
 	public TimeTorchBlockEntity(BlockPos pos, BlockState state) {
 		super(ForceRegistry.TIME_TORCH_ENTITY.get(), pos, state);
 		this.radius = ForceConfig.COMMON.timeTorchRadius.getAsInt();
+		this.mode = ForceConfig.COMMON.defaultTimeMode.get();
 	}
 
 	@Override

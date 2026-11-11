@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.config;
 
+import com.mrbysco.forcecraft.data.TimeMode;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -211,6 +212,7 @@ public class ForceConfig {
 		public final ModConfigSpec.IntValue torchRadius;
 		public final ModConfigSpec.IntValue timeTorchRadius;
 		public final ModConfigSpec.BooleanValue timeTorchLogging;
+		public final ModConfigSpec.EnumValue<TimeMode> defaultTimeMode;
 
 		public final ModConfigSpec.BooleanValue timeTorchEnabled;
 		public final ModConfigSpec.BooleanValue timeRodEnabled;
@@ -295,6 +297,10 @@ public class ForceConfig {
 			timeTorchLogging = builder
 					.comment("Log when a player places a Time Torch [Default: true]")
 					.define("timeTorchLogging", true);
+
+			defaultTimeMode = builder
+					.comment("The default time mode for the Time Torch [Default: STOP]")
+					.defineEnum("defaultTimeMode", TimeMode.STOP);
 
 			builder.pop();
 

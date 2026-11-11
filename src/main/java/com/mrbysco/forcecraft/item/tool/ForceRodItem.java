@@ -45,7 +45,7 @@ public class ForceRodItem extends Item {
 		ItemStack heldStack = player.getItemInHand(hand);
 		if (!level.isClientSide()) {
 			if (heldStack.has(ForceComponents.TIME)) {
-				TimeMode mode = heldStack.getOrDefault(ForceComponents.TIME_MODE, TimeMode.STOP);
+				TimeMode mode = heldStack.getOrDefault(ForceComponents.TIME_MODE, ForceConfig.COMMON.defaultTimeMode.get());
 				if (player.isShiftKeyDown()) {
 					TimeMode nextMode = mode.getNext();
 					heldStack.set(ForceComponents.TIME_MODE, nextMode);
@@ -112,7 +112,7 @@ public class ForceRodItem extends Item {
 			}
 
 			if (stack.has(ForceComponents.TIME)) {
-				TimeMode mode = stack.getOrDefault(ForceComponents.TIME_MODE, TimeMode.STOP);
+				TimeMode mode = stack.getOrDefault(ForceComponents.TIME_MODE, ForceConfig.COMMON.defaultTimeMode.get());
 				RodHelper.applyTimeField((ServerLevel) level, clickedPos, mode, player);
 				spawnParticles((ServerLevel) level, clickedPos);
 				player.getCooldowns().addCooldown(stack, ForceConfig.COMMON.timeCooldown.getAsInt());

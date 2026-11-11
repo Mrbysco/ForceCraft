@@ -208,6 +208,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addConfig("timeRodEnabled", "Time Rod Enabled", "Enable Time Rod infusing [Default: true]");
 		addConfig("timeWeaponEnabled", "Time Weapon Enabled", "Enable Time Weapon infusing [Default: true]");
 		addConfig("timeTorchLogging", "Time Torch Logging", "Log when a player places a Time Torch [Default: true]");
+		addConfig("defaultTimeMode", "Default Time Mode", "The default time mode for the Time Torch [Default: STOP]");
 
 		addConfig("time", "Time", "Time Settings");
 		addConfig("entitySpeedDuration", "Entity Speed Duration", "The duration of the speed effect for entities in ticks (20 ticks = 1 second) [Default: 200]");
