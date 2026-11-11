@@ -1,3 +1,3 @@
-* Fix enchantability in anvils (Some tools was missing item tags)
-* Fix tooltips of items under the Infuser Guide showing
-* Re-enable the Woosh sound on the Force Mitts
+* Add config option to change default Rod of Time / Time Torch mode (Default is STOP)
+* Fix issue where ticking could cause a crash
+* Fix issue where ticking would ignore unloaded chunks
