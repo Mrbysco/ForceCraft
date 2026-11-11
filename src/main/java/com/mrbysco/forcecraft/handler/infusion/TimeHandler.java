@@ -102,6 +102,7 @@ public class TimeHandler {
 	}
 
 	private static boolean processAdjustedTick(ServerLevel level, BlockPos pos, long time) {
+		if (!level.isLoaded(pos)) return true;
 		BlockEntity blockEntity = level.getBlockEntity(pos);
 		if (blockEntity == null || !blockEntity.hasData(ForceAttachments.TIME_ADJUSTMENT)) return false;
 
