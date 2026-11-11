@@ -1,0 +1,5 @@
+plugins { id 'java-library'; id 'net.neoforged.moddev' version '2.0.148' }
+java { toolchain.languageVersion=JavaLanguageVersion.of(25) }
+neoForge { version=providers.gradleProperty('neoVersion').getOrElse('26.1.2.126') }
+dependencies { compileOnly files(providers.gradleProperty('forcecraftJar').get()) }
+base { archivesName='excluded-force-time-qa' };version='1.0.0'

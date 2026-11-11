@@ -94,7 +94,11 @@ public class TimeHandler {
 		if (set == null || set.isEmpty()) return;
 
 		long time = level.getGameTime();
-		set.removeIf(pos -> !processAdjustedTick(level, pos, time));
+		// Ticking a block can load chunks and track more positions reentrantly.
+		// Process only this tick's snapshot; new positions belong to the next tick.
+		for (BlockPos pos : set.toArray(new BlockPos[0])) {
+			if (!processAdjustedTick(level, pos, time)) set.remove(pos);
+		}
 	}
 
 	private static boolean processAdjustedTick(ServerLevel level, BlockPos pos, long time) {

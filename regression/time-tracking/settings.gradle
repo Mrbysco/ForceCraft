@@ -1,0 +1,2 @@
+pluginManagement { repositories { gradlePluginPortal() } }
+rootProject.name='forcecraft-time-regression'
