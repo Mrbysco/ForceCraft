@@ -250,6 +250,8 @@
   "forcecraft.configuration.blockSpeedDuration.tooltip": "The duration of the speed effect for blocks in ticks (20 ticks = 1 second) [Default: 200]",
   "forcecraft.configuration.buffRadius": "Buff Radius",
   "forcecraft.configuration.buffRadius.tooltip": "The radius of the buff effect around the activated position [Default: 5]",
+  "forcecraft.configuration.defaultTimeMode": "Default Time Mode",
+  "forcecraft.configuration.defaultTimeMode.tooltip": "The default time mode for the Time Torch [Default: STOP]",
   "forcecraft.configuration.enderSwordCooldown": "Ender Sword Cooldown",
   "forcecraft.configuration.enderSwordCooldown.tooltip": "The cooldown of the Ender Sword in ticks [Default: 30]",
   "forcecraft.configuration.entitySpeedDuration": "Entity Speed Duration",

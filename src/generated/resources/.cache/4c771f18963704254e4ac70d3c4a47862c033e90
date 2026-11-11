@@ -1,4 +1,4 @@
-// 26.1.2	2026-11-09T23:11:09.6400796	Tags for minecraft:item mod id forcecraft
+// 26.1.2	2026-11-11T13:23:37.199325	Tags for minecraft:item mod id forcecraft
 53afa95f4f2972f61ad4870a14ffdad392433608 data/c/tags/item/foods/cooked_meat.json
 6cc43bad0136bf877c33d3a7fbfa7a72d605f505 data/c/tags/item/foods/raw_meat.json
 e4114fb3db46efa51fbbe42ba62fe557c245011e data/c/tags/item/gems.json
@@ -25,7 +25,7 @@ eff2e9b711edce9a5ae1875f820c2b5272b0779f data/forcecraft/tags/item/force_logs.js
 9a2f1ed97d66bc281c249c8fdfc5e0e9db5f881c data/forcecraft/tags/item/force_tools.json
 4a70364139feeb506f34ec66b6b056216b6dfe71 data/forcecraft/tags/item/force_torches.json
 a9a150a0cf791ee872a41489d83a8aa2b9fe828f data/forcecraft/tags/item/force_weapons.json
-5b1aaa7024272b6ad3c2840ed9b52d2d74c1f280 data/forcecraft/tags/item/mob_chunks.json
+0581c5bd6d5258c1827e4a6f634a3ca17b2dc7e1 data/forcecraft/tags/item/mob_chunks.json
 c28b25f1ba103b14e5d5e66444f35b01ffe6361f data/forcecraft/tags/item/upgrade_cores.json
 109979ba6691c3f6bed47ce2ba7d0a52c3514a3b data/forcecraft/tags/item/valid_force_belt.json
 a2588468460760c403b085d6bc2ac32fa319d3ae data/forcecraft/tags/item/valid_infuser_charge.json
