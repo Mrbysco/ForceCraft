@@ -1,1 +1,1 @@
-* Time Torch (and Rod of Time) will now check `forcecraft:ticking_not_supported` block tag again before attempting to tick a block
+* Fix infuser charging potentially going out of bounds
