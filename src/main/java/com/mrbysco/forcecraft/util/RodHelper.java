@@ -135,6 +135,7 @@ public class RodHelper {
 		float rate = TimeData.rateFor(mode);
 		int blockDuration = ForceConfig.COMMON.blockSpeedDuration.getAsInt();
 		for (BlockPos target : BlockPos.betweenClosed(pos.offset(-radius, -radius, -radius), pos.offset(radius, radius, radius))) {
+			if (level.getBlockState(target).is(ForceTags.Blocks.TICKING_NOT_SUPPORTED)) continue;
 			BlockEntity blockEntity = level.getBlockEntity(target);
 			if (blockEntity == null || !(blockEntity.getBlockState().getBlock() instanceof EntityBlock)) continue;
 			blockEntity.setData(ForceAttachments.TIME_ADJUSTMENT, new TimeData(level.getGameTime() + blockDuration, rate));

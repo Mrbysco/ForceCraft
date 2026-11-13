@@ -1,4 +1,4 @@
-// 26.1.2	2026-11-08T02:39:59.6218673	Tags for minecraft:block mod id forcecraft
+// 26.1.2	2026-11-13T19:22:15.4304421	Tags for minecraft:block mod id forcecraft
 4a98efb5348a415ae8088d3a9de590315e7c44f8 data/c/tags/block/fence_gates/wooden.json
 d964b17dbbb1870466808060f50c0991f7cfaf65 data/c/tags/block/ores.json
 0f05bf39bcabd383349deb2fe461a89a2676edc8 data/c/tags/block/ores/power.json
@@ -11,7 +11,7 @@ a2ec999b18f53012ccc1a893b944cbe0e84b1199 data/forcecraft/tags/block/force_bricks
 eff2e9b711edce9a5ae1875f820c2b5272b0779f data/forcecraft/tags/block/force_logs.json
 4a70364139feeb506f34ec66b6b056216b6dfe71 data/forcecraft/tags/block/force_torches.json
 f57a1c0d935679dbbcab3f2e8a06cae2238a6735 data/forcecraft/tags/block/needs_force_tool.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/forcecraft/tags/block/ticking_not_supported.json
+fcb32b33ddfac977c84671beb027e732e55f2936 data/forcecraft/tags/block/ticking_not_supported.json
 1ea44eed5d9e9b3aa140bb9ec0ad3add03c918d8 data/minecraft/tags/block/ceiling_hanging_signs.json
 4a98efb5348a415ae8088d3a9de590315e7c44f8 data/minecraft/tags/block/fence_gates.json
 742515adf3bf69482d441325ac7ff84b8a62d61d data/minecraft/tags/block/flower_pots.json
