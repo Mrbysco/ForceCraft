@@ -257,7 +257,8 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 			tool.setDamageValue(tool.getDamageValue() - repaired);
 			charge -= repaired * ForceUtil.FORCE_DMG_RATIO;
 		}
-		if (charge > 0) ForceUtil.chargeForce(tool, charge);
+		if (charge > 0 && ForceUtil.canChargeForce(tool, charge))
+			ForceUtil.chargeForce(tool, charge);
 
 		try (Transaction tx = Transaction.openRoot()) {
 			if (tank.extract(0, tank.getResource(0), FLUID_COST_PER, tx) != FLUID_COST_PER) return;
@@ -300,7 +301,9 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 
 	public boolean hasValidRecipe() {
 		if (!(level instanceof ServerLevel serverLevel) || !isWorkAllowed()) return false;
-		return (areAllModifiersEmpty() && canCharge()) || allSlotsMatchRecipe(serverLevel);
+		boolean infuseFlag = areAllModifiersEmpty() && canCharge();
+		boolean slotsFlag = allSlotsMatchRecipe(serverLevel);
+		return infuseFlag || slotsFlag;
 	}
 
 	private void processForceGems() {
@@ -348,7 +351,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	public boolean canCharge() {
 		ItemResource tool = handler.getResource(SLOT_TOOL);
 		ItemStack stack = tool.toStack(1);
-		return stack.is(ForceTags.Items.VALID_INFUSER_CHARGE) && stack.has(ForceComponents.FORCE_INFUSED)
+		return stack.is(ForceTags.Items.VALID_INFUSER_CHARGE) && ForceUtil.canChargeForce(stack, FLUID_COST_PER)
 				&& handler.getAmountAsInt(SLOT_TOOL) == 1 && tank.getAmountAsInt(0) >= FLUID_COST_PER;
 	}
 

@@ -8,6 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 public class ForceUtil {
+	public static final int FORCE_MAX = 10_000;
 	public static final int FORCE_DMG_RATIO = 25;
 
 	public static int damageForceItem(ItemStack stack, int amount) {
@@ -26,9 +27,19 @@ public class ForceUtil {
 
 	public static void chargeForce(ItemStack stack, int toCharge) {
 		if (stack.is(ForceTags.Items.CAN_STORE_FORCE)) {
-			int newForce = stack.getOrDefault(ForceComponents.FORCE_STORED, 0) + toCharge;
+			int currentForce = stack.getOrDefault(ForceComponents.FORCE_STORED, 0);
+			int newForce = currentForce + toCharge;
 			stack.set(ForceComponents.FORCE_STORED, newForce);
 		}
+	}
+
+	public static boolean canChargeForce(ItemStack stack, int toCharge) {
+		if (stack.is(ForceTags.Items.CAN_STORE_FORCE)) {
+			int currentForce = stack.getOrDefault(ForceComponents.FORCE_STORED, 0);
+			int newForce = currentForce + toCharge;
+			return newForce <= FORCE_MAX;
+		}
+		return false;
 	}
 
 	public static boolean isForceItem(ItemStack itemStack) {

@@ -6,6 +6,7 @@ import com.mrbysco.forcecraft.data.BowMode;
 import com.mrbysco.forcecraft.data.TimeMode;
 import com.mrbysco.forcecraft.item.tool.EnderData;
 import com.mrbysco.forcecraft.upgrade.UpgradeBookData;
+import com.mrbysco.forcecraft.util.ForceUtil;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -30,7 +31,7 @@ public class ForceComponents {
 
 	public static final Supplier<DataComponentType<Integer>> FORCE_STORED = COMPONENT_TYPE.register("force_stored", () ->
 			DataComponentType.<Integer>builder()
-					.persistent(ExtraCodecs.intRange(0, 10_000))
+					.persistent(ExtraCodecs.intRange(0, ForceUtil.FORCE_MAX))
 					.networkSynchronized(ByteBufCodecs.VAR_INT)
 					.build());
 

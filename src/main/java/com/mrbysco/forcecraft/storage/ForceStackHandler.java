@@ -2,6 +2,7 @@ package com.mrbysco.forcecraft.storage;
 
 import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceTags;
+import com.mrbysco.forcecraft.util.ForceUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.transfer.IndexModifier;
@@ -10,7 +11,6 @@ import net.neoforged.neoforge.transfer.item.ItemAccessItemHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 
 public class ForceStackHandler extends ItemAccessItemHandler {
-	private static final int MAX_STORED = 10_000;
 	private static final int PER_GEM = 250;
 
 	public ForceStackHandler(ItemAccess itemAccess, ItemStack parentStack) {
@@ -46,7 +46,7 @@ public class ForceStackHandler extends ItemAccessItemHandler {
 		}
 
 		int currentStored = stack.getOrDefault(ForceComponents.FORCE_STORED, 0);
-		int possibleGems = Math.max(0, (MAX_STORED - currentStored) / PER_GEM);
+		int possibleGems = Math.max(0, (ForceUtil.FORCE_MAX - currentStored) / PER_GEM);
 		int converted = Math.min(added, possibleGems);
 
 		if (converted > 0) {
