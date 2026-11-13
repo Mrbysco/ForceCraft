@@ -6,6 +6,7 @@ import com.mrbysco.forcecraft.data.TimeMode;
 import com.mrbysco.forcecraft.handler.infusion.TimeHandler;
 import com.mrbysco.forcecraft.registry.ForceAttachments;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
+import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -41,6 +42,7 @@ public class TimeTorchBlockEntity extends AbstractTorchBlockEntity {
 					getBlockPos().offset(-radius, -radius, -radius),
 					getBlockPos().offset(radius, radius, radius)
 			)) {
+				if (level.getBlockState(target).is(ForceTags.Blocks.TICKING_NOT_SUPPORTED)) continue;
 				BlockEntity blockEntity = level.getBlockEntity(target);
 				if (blockEntity == null || !(blockEntity.getBlockState().getBlock() instanceof EntityBlock)) continue;
 				blockEntity.setData(ForceAttachments.TIME_ADJUSTMENT, new TimeData(level.getGameTime() + (6 * 20), rate));
