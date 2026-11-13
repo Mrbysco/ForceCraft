@@ -1,3 +1,1 @@
-* Add config option to change default Rod of Time / Time Torch mode (Default is STOP)
-* Fix issue where ticking could cause a crash
-* Fix issue where ticking would ignore unloaded chunks
+* Time Torch (and Rod of Time) will now check `forcecraft:ticking_not_supported` block tag again before attempting to tick a block
