@@ -1,1 +1,1 @@
-* Fix infuser charging potentially going out of bounds
+* Disabling the Time Torch will now also disable behavior of placed Time Torches
