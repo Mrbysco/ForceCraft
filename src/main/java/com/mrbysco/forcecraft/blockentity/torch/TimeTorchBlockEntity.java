@@ -37,6 +37,7 @@ public class TimeTorchBlockEntity extends AbstractTorchBlockEntity {
 	@Override
 	public void serverTick() {
 		if (level.getGameTime() % (level.tickRateManager().tickrate() * 5) == 0) {
+			if (!ForceConfig.COMMON.timeTorchEnabled.getAsBoolean()) return;
 			float rate = TimeData.rateFor(mode);
 			for (BlockPos target : BlockPos.betweenClosed(
 					getBlockPos().offset(-radius, -radius, -radius),
