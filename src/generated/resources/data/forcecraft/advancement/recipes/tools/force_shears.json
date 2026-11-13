@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_shears"
+        "recipes": "forcecraft:force_shears"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

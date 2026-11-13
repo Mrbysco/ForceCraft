@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/birch_planks_from_log"
+        "recipes": "forcecraft:grinding/birch_planks_from_log"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

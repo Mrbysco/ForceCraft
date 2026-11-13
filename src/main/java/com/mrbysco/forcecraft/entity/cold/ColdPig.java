@@ -4,9 +4,9 @@ import com.mrbysco.forcecraft.entity.goal.EatGrassToRestoreGoal;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.cow.Cow;
 import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 public class ColdPig extends Pig implements IColdMob {
 	private int eatAnimationTick;
 	private EatGrassToRestoreGoal eatGrassGoal;
-	private EntityType<?> originalType = EntityType.PIG;
+	private EntityType<?> originalType = EntityTypes.PIG;
 
 	public ColdPig(EntityType<? extends Pig> type, Level level) {
 		super(type, level);

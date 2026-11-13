@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:camo_torch"
+        "recipes": "forcecraft:camo_torch"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

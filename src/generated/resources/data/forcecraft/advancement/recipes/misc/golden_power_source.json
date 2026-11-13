@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:golden_power_source"
+        "recipes": "forcecraft:golden_power_source"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

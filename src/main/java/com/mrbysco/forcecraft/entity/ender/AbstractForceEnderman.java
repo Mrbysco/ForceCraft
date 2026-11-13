@@ -14,7 +14,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -24,8 +24,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-public abstract class AbstractForceEnderman extends EnderMan {
-	public AbstractForceEnderman(EntityType<? extends EnderMan> type, Level level) {
+public abstract class AbstractForceEnderman extends Enderman {
+	public AbstractForceEnderman(EntityType<? extends Enderman> type, Level level) {
 		super(type, level);
 		this.setPathfindingMalus(PathType.WATER, 8.0F);
 	}

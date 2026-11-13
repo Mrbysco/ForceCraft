@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:mob_ingot_purple_from_mob_ingot_purple"
+        "recipes": "forcecraft:mob_ingot_purple_from_mob_ingot_purple"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

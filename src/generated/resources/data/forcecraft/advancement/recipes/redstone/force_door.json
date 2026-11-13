@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_door"
+        "recipes": "forcecraft:force_door"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

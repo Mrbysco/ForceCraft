@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:fortune_cookie"
+        "recipes": "forcecraft:fortune_cookie"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

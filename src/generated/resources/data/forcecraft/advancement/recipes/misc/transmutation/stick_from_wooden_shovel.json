@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/stick_from_wooden_shovel"
+        "recipes": "forcecraft:transmutation/stick_from_wooden_shovel"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

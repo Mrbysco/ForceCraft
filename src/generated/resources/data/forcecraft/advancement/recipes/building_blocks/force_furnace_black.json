@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_furnace_black"
+        "recipes": "forcecraft:force_furnace_black"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

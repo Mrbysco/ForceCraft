@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/sand_from_red_sandstone"
+        "recipes": "forcecraft:grinding/sand_from_red_sandstone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

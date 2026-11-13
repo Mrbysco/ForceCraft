@@ -43,7 +43,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:treasure_core"
+        "recipes": "forcecraft:treasure_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

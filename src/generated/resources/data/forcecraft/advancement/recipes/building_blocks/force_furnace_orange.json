@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_furnace_orange"
+        "recipes": "forcecraft:force_furnace_orange"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

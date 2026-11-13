@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_torch_black"
+        "recipes": "forcecraft:force_torch_black"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/diamond_from_helmet"
+        "recipes": "forcecraft:transmutation/diamond_from_helmet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

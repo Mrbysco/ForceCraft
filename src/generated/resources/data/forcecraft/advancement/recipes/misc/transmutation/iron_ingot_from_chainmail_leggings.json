@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/iron_ingot_from_chainmail_leggings"
+        "recipes": "forcecraft:transmutation/iron_ingot_from_chainmail_leggings"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:freezing/bone_meal_from_blaze_powder"
+        "recipes": "forcecraft:freezing/bone_meal_from_blaze_powder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

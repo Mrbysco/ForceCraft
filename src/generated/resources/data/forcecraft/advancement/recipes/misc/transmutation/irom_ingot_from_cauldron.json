@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/irom_ingot_from_cauldron"
+        "recipes": "forcecraft:transmutation/irom_ingot_from_cauldron"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

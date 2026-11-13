@@ -15,26 +15,34 @@ import com.mrbysco.forcecraft.datagen.server.ForceLootProvider;
 import com.mrbysco.forcecraft.datagen.server.ForceRecipeProvider;
 import com.mrbysco.forcecraft.registry.ForceDamageTypes;
 import com.mrbysco.forcecraft.world.feature.ForceBiomeModifiers;
-import com.mrbysco.forcecraft.world.feature.ForceFeatureKeys;
-import net.minecraft.core.RegistrySetBuilder;
+import com.mrbysco.forcecraft.world.feature.ForceFeatures;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 @EventBusSubscriber
 public class ForceCraftDatagen {
-	private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-			.add(Registries.CONFIGURED_FEATURE, ForceFeatureKeys::configuredBootstrap)
-			.add(Registries.PLACED_FEATURE, ForceFeatureKeys::placedBootstrap)
-			.add(Registries.DAMAGE_TYPE, ForceDamageTypes::bootstrap)
-			.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ForceBiomeModifiers::modifierBootstrap);
+	@SubscribeEvent
+	static void onGatherRegistries(GatherDataRegistryEntriesEvent event) {
+		event.recipe(ForceRecipeProvider::new);
+		event.lootTable(
+				new LootTableProvider.SubProviderEntry(ForceLootProvider.ForceBlockLoot::new, LootContextParamSets.BLOCK),
+				new LootTableProvider.SubProviderEntry(ForceLootProvider.ForceEntityLoot::new, LootContextParamSets.ENTITY)
+		);
+		event.advancement(ForceAdvancementsProvider.ForceAdvancementsSubProvider::new);
+		event.add(Registries.DAMAGE_TYPE, ForceDamageTypes::bootstrap);
+		event.add(Registries.FEATURE, ForceFeatures::bootstrap);
+		event.add(Registries.PLACED_FEATURE, ForceFeatures::placedBootstrap);
+		event.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ForceBiomeModifiers::modifierBootstrap);
+	}
 
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent.Client event) {
-		event.createDatapackRegistryObjects(BUILDER);
-
 		event.createProvider(ForceLanguageProvider::new);
 		event.createProvider(ForceModelProvider::new);
 		event.createProvider(ForceSoundProvider::new);
@@ -45,9 +53,6 @@ public class ForceCraftDatagen {
 		event.createProvider(ForceEntityTypeTagsProvider::new);
 		event.createProvider(ForceDamageTypeTagProvider::new);
 		event.createProvider(ForceDataMapProvider::new);
-		event.createProvider(ForceLootProvider::new);
-		event.createProvider(ForceRecipeProvider.Runner::new);
 		event.createProvider(ForceLootModifierProvider::new);
-		event.createProvider(ForceAdvancementsProvider::new);
 	}
 }

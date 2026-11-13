@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_purple_wall"
+        "recipes": "forcecraft:force_brick_purple_wall"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

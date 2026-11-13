@@ -1,11 +1,9 @@
 {
   "type": "forcecraft:smelting",
-  "conditions": [
-    {
-      "condition": "minecraft:match_tool",
-      "predicate": {
-        "items": "#forcecraft:force_tools"
-      }
+  "condition": {
+    "type": "minecraft:match_tool",
+    "predicate": {
+      "items": "#forcecraft:force_tools"
     }
-  ]
+  }
 }

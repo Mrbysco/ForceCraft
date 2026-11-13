@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/gold_ingot_from_shovel"
+        "recipes": "forcecraft:transmutation/gold_ingot_from_shovel"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

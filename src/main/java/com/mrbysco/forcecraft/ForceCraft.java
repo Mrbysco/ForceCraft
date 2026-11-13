@@ -18,9 +18,6 @@ import com.mrbysco.forcecraft.registry.ForceRegistry;
 import com.mrbysco.forcecraft.registry.ForceSounds;
 import com.mrbysco.forcecraft.registry.ForceUpgradeTypes;
 import com.mrbysco.forcecraft.util.SpecialUsers;
-import com.mrbysco.forcecraft.world.feature.ForceFeatures;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FlowerPotBlock;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -37,7 +34,7 @@ public class ForceCraft {
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public ForceCraft(IEventBus eventBus, Dist dist, ModContainer container) {
-		container.registerConfig(ModConfig.Type.COMMON, ForceConfig.commonSpec);
+		container.registerConfig(ModConfig.Type.LOCAL, ForceConfig.commonSpec);
 
 		ForceUpgradeTypes.TYPES.register(eventBus);
 		ForceComponents.COMPONENT_TYPE.register(eventBus);
@@ -53,7 +50,6 @@ public class ForceCraft {
 		ForceEntities.ENTITY_TYPES.register(eventBus);
 		ForceMenus.MENU_TYPES.register(eventBus);
 		ForceModifiers.BIOME_MODIFIER_SERIALIZERS.register(eventBus);
-		ForceFeatures.FEATURES.register(eventBus);
 		ForceRecipes.RECIPE_TYPES.register(eventBus);
 		ForceRecipes.RECIPE_SERIALIZERS.register(eventBus);
 		ForceLootModifiers.GLM.register(eventBus);
@@ -71,8 +67,8 @@ public class ForceCraft {
 	}
 
 	public void init(FMLCommonSetupEvent event) {
-		FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
-		pot.addPlant(ForceRegistry.FORCE_SAPLING.getId(), ForceRegistry.POTTED_FORCE_SAPLING);
+//		FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
+//		pot.addPlant(ForceRegistry.FORCE_SAPLING.getId(), ForceRegistry.POTTED_FORCE_SAPLING);
 		SpecialUsers.loadExplodyUsers();
 	}
 }

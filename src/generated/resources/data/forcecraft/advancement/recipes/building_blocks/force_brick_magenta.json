@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_magenta"
+        "recipes": "forcecraft:force_brick_magenta"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

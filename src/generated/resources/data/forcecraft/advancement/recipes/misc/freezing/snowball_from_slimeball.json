@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:freezing/snowball_from_slimeball"
+        "recipes": "forcecraft:freezing/snowball_from_slimeball"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

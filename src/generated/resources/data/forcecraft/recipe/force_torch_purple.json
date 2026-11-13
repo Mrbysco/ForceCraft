@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "B": "#forcecraft:force_torches",
     "D": "#c:dyes/purple"

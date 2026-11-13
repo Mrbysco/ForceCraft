@@ -16,13 +16,13 @@ A mod inspired by DartCraft
 [[dependencies.forcecraft]]
 modId="minecraft"
 type="REQUIRED"
-versionRange="[26.1.1,)"
+versionRange="[26.3,)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.forcecraft]]
 modId="neoforge"
 type="REQUIRED"
-versionRange="[26.1.1.0-alpha,)"
+versionRange="[26.3.0.76,)"
 ordering="NONE"
 side="BOTH"
 [[mixins]]

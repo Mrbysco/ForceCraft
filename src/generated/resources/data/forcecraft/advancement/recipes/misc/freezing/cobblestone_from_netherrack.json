@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:freezing/cobblestone_from_netherrack"
+        "recipes": "forcecraft:freezing/cobblestone_from_netherrack"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

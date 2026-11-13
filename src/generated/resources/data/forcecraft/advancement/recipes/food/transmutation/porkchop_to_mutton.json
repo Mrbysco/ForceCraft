@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/porkchop_to_mutton"
+        "recipes": "forcecraft:transmutation/porkchop_to_mutton"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

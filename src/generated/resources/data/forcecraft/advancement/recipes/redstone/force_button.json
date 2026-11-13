@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_button"
+        "recipes": "forcecraft:force_button"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_torch_pink"
+        "recipes": "forcecraft:force_torch_pink"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

@@ -43,7 +43,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_engine"
+        "recipes": "forcecraft:force_engine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

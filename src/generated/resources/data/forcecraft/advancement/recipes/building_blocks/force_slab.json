@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_slab"
+        "recipes": "forcecraft:force_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

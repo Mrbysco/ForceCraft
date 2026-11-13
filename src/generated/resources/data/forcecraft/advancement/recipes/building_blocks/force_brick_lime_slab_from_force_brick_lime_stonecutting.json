@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_lime_slab_from_force_brick_lime_stonecutting"
+        "recipes": "forcecraft:force_brick_lime_slab_from_force_brick_lime_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

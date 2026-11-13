@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/force_sapling_from_sapling"
+        "recipes": "forcecraft:transmutation/force_sapling_from_sapling"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

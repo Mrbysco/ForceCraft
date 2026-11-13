@@ -35,7 +35,7 @@ public class ChangeEnderPosScreen extends Screen {
 	}
 
 	public static void openScreen(ItemStack packName, InteractionHand hand) {
-		Minecraft.getInstance().setScreen(new ChangeEnderPosScreen(packName, hand));
+		Minecraft.getInstance().gui.setScreen(new ChangeEnderPosScreen(packName, hand));
 	}
 
 	@Override

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:mob_ingot_white_from_smelting_mob_chunk_white"
+        "recipes": "forcecraft:mob_ingot_white_from_smelting_mob_chunk_white"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

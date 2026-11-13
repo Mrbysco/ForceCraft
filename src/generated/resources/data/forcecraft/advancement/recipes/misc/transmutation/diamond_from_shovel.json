@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/diamond_from_shovel"
+        "recipes": "forcecraft:transmutation/diamond_from_shovel"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

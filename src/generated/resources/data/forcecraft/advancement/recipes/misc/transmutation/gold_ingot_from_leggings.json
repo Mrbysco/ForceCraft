@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/gold_ingot_from_leggings"
+        "recipes": "forcecraft:transmutation/gold_ingot_from_leggings"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

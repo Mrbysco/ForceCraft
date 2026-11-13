@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.block;
 
-import com.mojang.serialization.MapCodec;
 import com.mrbysco.forcecraft.blockentity.ForceEngineBlockEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
@@ -43,8 +42,6 @@ import java.util.Map;
 import java.util.function.ToIntFunction;
 
 public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
-	public static final MapCodec<ForceEngineBlock> CODEC = simpleCodec(ForceEngineBlock::new);
-
 	private static final Map<Direction, VoxelShape> SHAPES = Shapes.rotateAll(makeShape());
 
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
@@ -55,11 +52,6 @@ public class ForceEngineBlock extends DirectionalBlock implements EntityBlock {
 		super(properties);
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP)
 				.setValue(POWERED, false).setValue(GENERATING, false));
-	}
-
-	@Override
-	protected @NonNull MapCodec<? extends DirectionalBlock> codec() {
-		return CODEC;
 	}
 
 	@Override

@@ -53,7 +53,7 @@ public class BombRenderer extends EntityRenderer<Bomb, BombRenderState> {
 
 		nodeCollector.submitModel(
 				this.model, state, poseStack, RenderTypes.entityCutout(state.isSuper ? SUPER_BOMB_TEXTURE : BOMB_TEXTURE),
-				state.lightCoords, overlay, -1, null, state.outlineColor, null
+				state.lightCoords, overlay, -1, null, state.outlineColor
 		);
 		poseStack.popPose();
 		super.submit(state, poseStack, nodeCollector, camera);

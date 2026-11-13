@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_lime_wall"
+        "recipes": "forcecraft:force_brick_lime_wall"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

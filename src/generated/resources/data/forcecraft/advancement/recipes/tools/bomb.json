@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:bomb"
+        "recipes": "forcecraft:bomb"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

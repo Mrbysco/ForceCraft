@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_white_slab_from_force_brick_white_stonecutting"
+        "recipes": "forcecraft:force_brick_white_slab_from_force_brick_white_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

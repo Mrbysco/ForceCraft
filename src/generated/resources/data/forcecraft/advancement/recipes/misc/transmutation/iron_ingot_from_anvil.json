@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/iron_ingot_from_anvil"
+        "recipes": "forcecraft:transmutation/iron_ingot_from_anvil"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

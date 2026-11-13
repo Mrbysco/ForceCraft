@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/paper_from_book"
+        "recipes": "forcecraft:grinding/paper_from_book"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

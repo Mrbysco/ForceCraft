@@ -21,7 +21,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.item.BlockItem;
@@ -190,7 +190,7 @@ public class ForceArrow extends Arrow {
 		super.doPostHurtEffects(mob);
 
 		if (isBane()) {
-			if (mob instanceof Creeper || mob instanceof EnderMan) {
+			if (mob instanceof Creeper || mob instanceof Enderman) {
 				mob.setData(ForceAttachments.BANE, true);
 
 				if (mob instanceof Creeper creeper) {

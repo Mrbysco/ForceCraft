@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/cobblestone_from_furnace"
+        "recipes": "forcecraft:grinding/cobblestone_from_furnace"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

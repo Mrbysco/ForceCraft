@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/brown_to_red_mushroom"
+        "recipes": "forcecraft:transmutation/brown_to_red_mushroom"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

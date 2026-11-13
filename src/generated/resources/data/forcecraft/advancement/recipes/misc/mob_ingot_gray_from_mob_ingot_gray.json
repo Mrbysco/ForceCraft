@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:mob_ingot_gray_from_mob_ingot_gray"
+        "recipes": "forcecraft:mob_ingot_gray_from_mob_ingot_gray"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

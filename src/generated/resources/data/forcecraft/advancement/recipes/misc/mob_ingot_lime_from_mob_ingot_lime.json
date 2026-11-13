@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:mob_ingot_lime_from_mob_ingot_lime"
+        "recipes": "forcecraft:mob_ingot_lime_from_mob_ingot_lime"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

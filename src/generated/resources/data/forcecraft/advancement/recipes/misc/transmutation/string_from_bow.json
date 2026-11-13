@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/string_from_bow"
+        "recipes": "forcecraft:transmutation/string_from_bow"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

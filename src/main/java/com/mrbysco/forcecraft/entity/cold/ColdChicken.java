@@ -4,6 +4,7 @@ import com.mrbysco.forcecraft.entity.goal.EatGrassToRestoreGoal;
 import com.mrbysco.forcecraft.registry.ForceEntities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.chicken.Chicken;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 public class ColdChicken extends Chicken implements IColdMob {
 	private int eatAnimationTick;
 	private EatGrassToRestoreGoal eatGrassGoal;
-	private EntityType<?> originalType = EntityType.CHICKEN;
+	private EntityType<?> originalType = EntityTypes.CHICKEN;
 
 	public ColdChicken(EntityType<? extends Chicken> type, Level level) {
 		super(type, level);

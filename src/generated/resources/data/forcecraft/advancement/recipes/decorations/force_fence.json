@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_fence"
+        "recipes": "forcecraft:force_fence"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

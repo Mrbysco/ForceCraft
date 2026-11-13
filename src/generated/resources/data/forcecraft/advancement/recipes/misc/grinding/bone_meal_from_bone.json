@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/bone_meal_from_bone"
+        "recipes": "forcecraft:grinding/bone_meal_from_bone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

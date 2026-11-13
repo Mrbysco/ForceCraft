@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/flint_from_gravel"
+        "recipes": "forcecraft:grinding/flint_from_gravel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

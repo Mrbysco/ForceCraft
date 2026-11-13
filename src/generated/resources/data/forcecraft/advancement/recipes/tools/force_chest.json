@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_chest"
+        "recipes": "forcecraft:force_chest"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

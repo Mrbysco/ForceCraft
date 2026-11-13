@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:rocs_feather"
+        "recipes": "forcecraft:rocs_feather"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

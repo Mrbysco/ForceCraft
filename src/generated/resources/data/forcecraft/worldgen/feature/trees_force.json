@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:random_selector",
+  "default": "forcecraft:force_tree",
+  "features": [
+    {
+      "chance": 0.2,
+      "feature": "forcecraft:force_tree_bees_002"
+    }
+  ]
+}

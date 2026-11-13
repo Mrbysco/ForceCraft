@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:freezing/leather_from_rotten_flesh"
+        "recipes": "forcecraft:freezing/leather_from_rotten_flesh"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

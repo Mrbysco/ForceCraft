@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.upgrade.UpgradeBookData;
-import net.minecraft.advancements.criterion.SingleComponentItemPredicate;
+import net.minecraft.advancements.predicates.SingleComponentItemPredicate;
 import net.minecraft.core.component.DataComponentType;
 
 public record UpgradeTomeTierPredicate(int minTier) implements SingleComponentItemPredicate<UpgradeBookData> {

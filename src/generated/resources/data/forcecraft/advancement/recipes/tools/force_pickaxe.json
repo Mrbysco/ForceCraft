@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_pickaxe"
+        "recipes": "forcecraft:force_pickaxe"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

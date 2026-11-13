@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "G": "forcecraft:golden_power_source",
     "S": "forcecraft:force_stick"

@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/iron_ingot_from_bucket"
+        "recipes": "forcecraft:transmutation/iron_ingot_from_bucket"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

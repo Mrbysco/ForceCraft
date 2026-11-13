@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_blue"
+        "recipes": "forcecraft:force_brick_blue"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

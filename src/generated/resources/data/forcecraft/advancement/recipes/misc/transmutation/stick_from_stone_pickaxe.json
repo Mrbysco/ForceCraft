@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/stick_from_stone_pickaxe"
+        "recipes": "forcecraft:transmutation/stick_from_stone_pickaxe"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

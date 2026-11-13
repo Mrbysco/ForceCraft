@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/cooked_bacon_from_cooked_porkchop"
+        "recipes": "forcecraft:grinding/cooked_bacon_from_cooked_porkchop"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

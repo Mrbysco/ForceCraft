@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_rod_from_sticks"
+        "recipes": "forcecraft:force_rod_from_sticks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

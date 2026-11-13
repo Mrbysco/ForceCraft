@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/cooked_beef_to_porkchop"
+        "recipes": "forcecraft:transmutation/cooked_beef_to_porkchop"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

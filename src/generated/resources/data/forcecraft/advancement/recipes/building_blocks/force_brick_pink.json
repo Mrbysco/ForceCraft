@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_pink"
+        "recipes": "forcecraft:force_brick_pink"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

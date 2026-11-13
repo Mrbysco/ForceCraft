@@ -58,7 +58,7 @@ public class TimeHandler {
 
 			boolean allowTick = instance.getAmplifier() > 0 && mob.level().getGameTime() % interval == 0;
 			if (!allowTick) {
-				if (mob.invulnerableTime > 0) mob.invulnerableTime--;
+				if (mob.getInvulnerableTime() > 0) mob.setInvulnerableTime(mob.getInvulnerableTime() - 1);
 				if (mob.hurtTime > 0) mob.hurtTime--;
 				mob.tickEffects();
 				event.setCanceled(true);

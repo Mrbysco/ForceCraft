@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:gunpowder_from_pile_of_gunpowder"
+        "recipes": "forcecraft:gunpowder_from_pile_of_gunpowder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

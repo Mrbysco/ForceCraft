@@ -1,6 +1,5 @@
 {
   "type": "forcecraft:transmute",
-  "category": "misc",
   "ingredients": [
     "forcecraft:force_rod",
     "minecraft:iron_chestplate"

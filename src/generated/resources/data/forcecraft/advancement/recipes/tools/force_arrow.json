@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_arrow"
+        "recipes": "forcecraft:force_arrow"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

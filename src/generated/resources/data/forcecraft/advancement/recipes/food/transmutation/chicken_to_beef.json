@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/chicken_to_beef"
+        "recipes": "forcecraft:transmutation/chicken_to_beef"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_light_blue_slab_from_force_brick_light_blue_stonecutting"
+        "recipes": "forcecraft:force_brick_light_blue_slab_from_force_brick_light_blue_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

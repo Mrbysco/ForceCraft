@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_ingot_from_nuggets"
+        "recipes": "forcecraft:force_ingot_from_nuggets"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

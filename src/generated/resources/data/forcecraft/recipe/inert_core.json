@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "B": "forcecraft:mob_ingot_black",
     "C": "forcecraft:upgrade_core",

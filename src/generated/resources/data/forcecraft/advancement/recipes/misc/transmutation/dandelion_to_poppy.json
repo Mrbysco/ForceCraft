@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/dandelion_to_poppy"
+        "recipes": "forcecraft:transmutation/dandelion_to_poppy"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

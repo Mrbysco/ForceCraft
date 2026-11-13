@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:freezing/stone_bricks_from_stone"
+        "recipes": "forcecraft:freezing/stone_bricks_from_stone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

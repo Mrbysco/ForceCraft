@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/stick_from_stone_hoe"
+        "recipes": "forcecraft:transmutation/stick_from_stone_hoe"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

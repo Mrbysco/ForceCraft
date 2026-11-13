@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:healing_torch"
+        "recipes": "forcecraft:healing_torch"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

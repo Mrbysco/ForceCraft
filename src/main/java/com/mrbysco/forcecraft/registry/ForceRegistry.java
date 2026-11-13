@@ -37,7 +37,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -47,7 +46,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -59,10 +57,13 @@ import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.UntintedParticleLeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
+import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
@@ -100,16 +101,16 @@ public class ForceRegistry {
 	public static final DeferredItem<BlockItem> FORCE_WOOD_ITEM = ITEMS.registerSimpleBlockItem(FORCE_WOOD);
 	public static final ForcePlankReg FORCE_PLANKS = new ForcePlankReg();
 	public static final DeferredBlock<LeavesBlock> FORCE_LEAVES = BLOCKS.registerBlock("force_leaves", (properties) ->
-			new UntintedParticleLeavesBlock(0.01F, ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, ARGB.opaque(0xafbc63)), properties), () ->
+			new UntintedParticleLeavesBlock(0.01F, ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, ARGB.opaque(0xafbc63)), AmbientLeavesBlockSoundPlayer.noAmbientSound(), properties), () ->
 			BlockBehaviour.Properties.of()
-					.mapColor(MapColor.PLANT).strength(0.3f).pushReaction(PushReaction.DESTROY).randomTicks().sound(SoundType.GRASS).noOcclusion()
+					.mapColor(MapColor.PLANT).strength(0.3f).pushReaction(PushReaction.POPPED).randomTicks().sound(SoundType.GRASS).noOcclusion()
 					.isValidSpawn(Blocks::ocelotOrParrot)
 					.isSuffocating((state, level, pos) -> false)
-					.isViewBlocking((state, level, pos) -> false));
-	public static final DeferredItem<BlockItem> FORCE_LEAVES_ITEM = ITEMS.registerSimpleBlockItem(FORCE_LEAVES);
+					.isViewBlocking((state, level, pos, aabb) -> false));
+	public static final DeferredItem<BlockItem> FORCE_LEAVES_ITEM = ITEMS.registerSimpleBlockItem(FORCE_LEAVES, properties -> properties.compostable(ContextIntProviders.COMPOSTABLE_LOW));
 	public static final DeferredBlock<SaplingBlock> FORCE_SAPLING = BLOCKS.registerBlock("force_sapling", (properties) ->
-			new SaplingBlock(ForceTreeGrower.FORCE, properties), () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollision().randomTicks().instabreak().sound(SoundType.GRASS));
-	public static final DeferredItem<BlockItem> FORCE_SAPLING_ITEM = ITEMS.registerSimpleBlockItem(FORCE_SAPLING);
+			new SaplingBlock(ForceTreeGrower.FORCE, properties), () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.POPPED).noCollision().randomTicks().instabreak().sound(SoundType.GRASS));
+	public static final DeferredItem<BlockItem> FORCE_SAPLING_ITEM = ITEMS.registerSimpleBlockItem(FORCE_SAPLING, properties -> properties.compostable(ContextIntProviders.COMPOSTABLE_LOW));
 	public static final DeferredBlock<FlowerPotBlock> POTTED_FORCE_SAPLING = BLOCKS.registerBlock("potted_force_sapling", (properties) ->
 			new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, FORCE_SAPLING, properties), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FLOWER_POT));
 
@@ -122,7 +123,7 @@ public class ForceRegistry {
 			ForceEngineBlockEntity::new, ForceRegistry.FORCE_ENGINE.get()));
 
 	public static final DeferredBlock<InfuserBlock> FORCE_INFUSER = BLOCKS.registerBlock("force_infuser", InfuserBlock::new, () ->
-			BlockBehaviour.Properties.of().mapColor(MapColor.STONE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(2.0F));
+			BlockBehaviour.Properties.of().mapColor(MapColor.STONE).pushReaction(PushReaction.IMMOVEABLE).requiresCorrectToolForDrops().strength(2.0F));
 	public static final DeferredItem<BlockItem> INFUSER_ITEM = ITEMS.registerSimpleBlockItem(FORCE_INFUSER);
 
 	public static final Supplier<BlockEntityType<InfuserBlockEntity>> INFUSER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("force_infuser", () -> new BlockEntityType<>(
@@ -263,7 +264,7 @@ public class ForceRegistry {
 	public static final DeferredBlock<ForceFluidBlock> FORCE_FLUID_BLOCK = BLOCKS.registerBlock("force_fluid", (properties) ->
 			new ForceFluidBlock(ForceFluids.FORCE_FLUID_SOURCE.get(), properties), () ->
 			BlockBehaviour.Properties.of().mapColor(MapColor.SAND).replaceable().noCollision()
-					.strength(100.0F).pushReaction(PushReaction.DESTROY).liquid()
+					.strength(100.0F).pushReaction(PushReaction.POPPED).liquid()
 					.lightLevel(state -> 15).noLootTable()
 	);
 
@@ -295,9 +296,9 @@ public class ForceRegistry {
 
 	//Tools
 	public static final DeferredItem<Item> FORCE_PICKAXE = ITEMS.registerSimpleItem("force_pickaxe", (properties) -> properties.pickaxe(ModToolTiers.FORCE, -6, -2.8F));
-	public static final DeferredItem<AxeItem> FORCE_AXE = ITEMS.registerItem("force_axe", (properties) -> new AxeItem(ModToolTiers.FORCE, 0F, -3.1F, properties));
+	public static final DeferredItem<Item> FORCE_AXE = ITEMS.registerSimpleItem("force_axe", (properties) -> properties.axe(ModToolTiers.FORCE, 0F, -3.1F));
 	public static final DeferredItem<Item> FORCE_SWORD = ITEMS.registerSimpleItem("force_sword", (properties) -> properties.sword(ModToolTiers.FORCE, -2, -2.4F));
-	public static final DeferredItem<ShovelItem> FORCE_SHOVEL = ITEMS.registerItem("force_shovel", (properties) -> new ShovelItem(ModToolTiers.FORCE, -7F, -3.0F, properties));
+	public static final DeferredItem<Item> FORCE_SHOVEL = ITEMS.registerSimpleItem("force_shovel", (properties) -> properties.shovel(ModToolTiers.FORCE, -7F, -3.0F));
 	public static final DeferredItem<ForceShearsItem> FORCE_SHEARS = ITEMS.registerItem("force_shears", ForceShearsItem::new, (properties) -> properties.stacksTo(1).durability(952));
 	public static final DeferredItem<ForceBowItem> FORCE_BOW = ITEMS.registerItem("force_bow", ForceBowItem::new, (properties) -> properties.stacksTo(1).durability(332).enchantable(1));
 	public static final DeferredItem<Item> FORCE_MITT = ITEMS.registerItem("force_mitt", ForceMittItem::new, (properties) -> properties.durability(1000));
@@ -423,15 +424,15 @@ public class ForceRegistry {
 
 	@SubscribeEvent
 	public static void addBlockEntityTypes(BlockEntityTypeAddBlocksEvent event) {
-		event.modify(BlockEntityType.HANGING_SIGN,
+		event.modify(BlockEntityTypes.HANGING_SIGN,
 				FORCE_PLANKS.getHangingSign().get(),
 				FORCE_PLANKS.getWallHangingSign().get());
 
-		event.modify(BlockEntityType.SIGN,
+		event.modify(BlockEntityTypes.SIGN,
 				FORCE_PLANKS.getSign().get(),
 				FORCE_PLANKS.getWallSign().get());
 
-		event.modify(BlockEntityType.SHELF,
+		event.modify(BlockEntityTypes.SHELF,
 				FORCE_PLANKS.getShelf().get());
 	}
 }

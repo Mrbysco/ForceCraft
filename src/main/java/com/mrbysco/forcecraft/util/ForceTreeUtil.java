@@ -104,7 +104,7 @@ public class ForceTreeUtil {
 			// ItemInWorldManager.removeBlock
 			if (block.onDestroyedByPlayer(state, level, pos, player, stack, true, fluidState)) { // boolean is if block can be harvested, checked above
 				block.playerWillDestroy(level, pos, state, player);
-				block.playerDestroy(level, player, pos, state, tileEntity, stack);
+				block.playerDestroy((ServerLevel) level, (ServerPlayer) player, pos, state, tileEntity, stack);
 				int xp = block.getExpDrop(state, level, pos, null, player, stack);
 				if (xp > 0)
 					block.popExperience((ServerLevel) level, pos, xp);

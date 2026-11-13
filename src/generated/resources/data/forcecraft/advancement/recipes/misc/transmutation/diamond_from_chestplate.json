@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/diamond_from_chestplate"
+        "recipes": "forcecraft:transmutation/diamond_from_chestplate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

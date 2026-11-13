@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_torch_lime"
+        "recipes": "forcecraft:force_torch_lime"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_purple"
+        "recipes": "forcecraft:force_brick_purple"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

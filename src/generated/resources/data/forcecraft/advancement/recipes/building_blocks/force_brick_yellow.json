@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_yellow"
+        "recipes": "forcecraft:force_brick_yellow"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

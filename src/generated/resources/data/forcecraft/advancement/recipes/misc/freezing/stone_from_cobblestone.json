@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:freezing/stone_from_cobblestone"
+        "recipes": "forcecraft:freezing/stone_from_cobblestone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

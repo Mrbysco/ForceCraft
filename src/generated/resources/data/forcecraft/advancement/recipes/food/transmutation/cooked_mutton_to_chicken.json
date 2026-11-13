@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/cooked_mutton_to_chicken"
+        "recipes": "forcecraft:transmutation/cooked_mutton_to_chicken"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

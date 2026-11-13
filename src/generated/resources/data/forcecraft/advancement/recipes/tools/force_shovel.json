@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_shovel"
+        "recipes": "forcecraft:force_shovel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

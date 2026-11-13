@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/force_brick_from_stone_bricks"
+        "recipes": "forcecraft:transmutation/force_brick_from_stone_bricks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -10,6 +10,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.random.Weighted;
+import net.minecraft.util.valueproviders.VeryBiasedToBottomInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -41,33 +42,33 @@ public class ForceBiomeModifiers {
 
 		context.register(ADD_FORCE_ORE_MODIFIER, new AddConfigFeatureBiomeModifier(
 				overworldHolder,
-				HolderSet.direct(placedGetter.getOrThrow(ForceFeatureKeys.PLACED_ORE_FORCE)),
+				HolderSet.direct(placedGetter.getOrThrow(ForceFeatures.PLACED_ORE_FORCE)),
 				GenerationStep.Decoration.UNDERGROUND_ORES, "force_ore"
 		));
 		context.register(ADD_FORCE_ORE_BURIED_MODIFIER, new AddConfigFeatureBiomeModifier(
 				overworldHolder,
-				HolderSet.direct(placedGetter.getOrThrow(ForceFeatureKeys.PLACED_ORE_FORCE_BURIED)),
+				HolderSet.direct(placedGetter.getOrThrow(ForceFeatures.PLACED_ORE_FORCE_BURIED)),
 				GenerationStep.Decoration.UNDERGROUND_ORES, "force_ore"
 		));
 		context.register(ADD_NETHER_FORCE_ORE, new AddConfigFeatureBiomeModifier(
 				netherHolder,
-				HolderSet.direct(placedGetter.getOrThrow(ForceFeatureKeys.PLACED_ORE_NETHER_FORCE)),
+				HolderSet.direct(placedGetter.getOrThrow(ForceFeatures.PLACED_ORE_NETHER_FORCE)),
 				GenerationStep.Decoration.UNDERGROUND_ORES, "force_ore_nether"
 		));
 		context.register(ADD_FORCE_TREE, new AddConfigFeatureBiomeModifier(
 				forestHolder,
-				HolderSet.direct(placedGetter.getOrThrow(ForceFeatureKeys.PLACED_FORCE_TREE)),
+				HolderSet.direct(placedGetter.getOrThrow(ForceFeatures.PLACED_FORCE_TREE)),
 				GenerationStep.Decoration.VEGETAL_DECORATION, "force_tree"
 		));
 
 		// Entities
 		context.register(ADD_CREEPER_TOT_MODIFIER, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				overworldHolder,
-				new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.CREEPER_TOT.get(), 1, 1), 25))
+				new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.CREEPER_TOT.get(), VeryBiasedToBottomInt.of(1, 1)), 25))
 		);
 		context.register(ADD_ENDER_TOT_MODIFIER, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
 				overworldHolder,
-				new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.ENDER_TOT.get(), 1, 1), 5))
+				new Weighted<>(new MobSpawnSettings.SpawnerData(ForceEntities.ENDER_TOT.get(), VeryBiasedToBottomInt.of(1, 1)), 5))
 		);
 	}
 }

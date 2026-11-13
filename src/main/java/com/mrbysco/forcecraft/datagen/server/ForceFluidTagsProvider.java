@@ -18,8 +18,8 @@ public class ForceFluidTagsProvider extends FluidTagsProvider {
 	protected void addTags(HolderLookup.Provider registries) {
 		this.tag(ForceTags.Fluids.BIOFUEL);
 		this.tag(ForceTags.Fluids.FORCE).add(
-				ForceFluids.FORCE_FLUID_SOURCE.get(),
-				ForceFluids.FORCE_FLUID_FLOWING.get()
+				ForceFluids.FORCE_FLUID_SOURCE.key(),
+				ForceFluids.FORCE_FLUID_FLOWING.key()
 		);
 		this.tag(ForceTags.Fluids.FUEL);
 	}

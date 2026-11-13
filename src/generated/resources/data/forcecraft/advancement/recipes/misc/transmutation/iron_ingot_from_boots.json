@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/iron_ingot_from_boots"
+        "recipes": "forcecraft:transmutation/iron_ingot_from_boots"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

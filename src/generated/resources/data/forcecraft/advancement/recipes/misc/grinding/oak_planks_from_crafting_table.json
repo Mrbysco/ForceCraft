@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/oak_planks_from_crafting_table"
+        "recipes": "forcecraft:grinding/oak_planks_from_crafting_table"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

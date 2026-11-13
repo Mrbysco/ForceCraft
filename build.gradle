@@ -115,14 +115,14 @@ dependencies {
     compileOnly "mezz.jei:jei-${jei_minecraft}-neoforge-api:${jei_version}"
     localRuntime "mezz.jei:jei-${jei_minecraft}-neoforge:${jei_version}"
 
-    compileOnly "vazkii.patchouli:patchouli-neoforge:${patchouli_version}"
-    localRuntime "vazkii.patchouli:patchouli-neoforge:${patchouli_version}"
-
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     localRuntime "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
-    compileOnly "xyz.brassgoggledcoders:PatchouliProvider:${patchouli_provider_version}"
-    localRuntime "xyz.brassgoggledcoders:PatchouliProvider:${patchouli_provider_version}"
+//    compileOnly "vazkii.patchouli:patchouli-neoforge:${patchouli_version}"
+//    localRuntime "vazkii.patchouli:patchouli-neoforge:${patchouli_version}"
+//
+//    compileOnly "xyz.brassgoggledcoders:PatchouliProvider:${patchouli_provider_version}"
+//    localRuntime "xyz.brassgoggledcoders:PatchouliProvider:${patchouli_provider_version}"
 }
 
 jar {

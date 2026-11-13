@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_sign_rot_2",
+  "textures": {
+    "all": "forcecraft:block/force_sign",
+    "particle": "forcecraft:block/force_planks"
+  }
+}

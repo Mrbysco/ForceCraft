@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.block;
 
-import com.mojang.serialization.MapCodec;
 import com.mrbysco.forcecraft.blockentity.infuser.InfuserBlockEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
@@ -39,15 +38,9 @@ public class InfuserBlock extends BaseEntityBlock {
 			Block.box(2, 0, 12, 4, 5, 14),
 			Block.box(2, 5, 2, 14, 10, 14)
 	).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-	public static final MapCodec<InfuserBlock> CODEC = simpleCodec(InfuserBlock::new);
 
 	public InfuserBlock(Properties properties) {
 		super(properties);
-	}
-
-	@Override
-	protected MapCodec<? extends BaseEntityBlock> codec() {
-		return CODEC;
 	}
 
 	@Override

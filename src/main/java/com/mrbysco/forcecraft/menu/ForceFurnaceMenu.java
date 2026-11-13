@@ -28,8 +28,8 @@ public class ForceFurnaceMenu extends AbstractFurnaceMenu {
 	}
 
 	public ForceFurnaceMenu(int containerId, Inventory inventory, ForceFurnaceBlockEntity furnace) {
-		super(ForceMenus.FORCE_FURNACE.get(), RecipeType.SMELTING, RecipePropertySet.FURNACE_INPUT,
-				RecipeBookType.FURNACE, containerId, inventory, furnace, furnace.getDataAccess());
+		super(ForceMenus.FORCE_FURNACE.get(), RecipePropertySet.FURNACE_INPUT, RecipeBookType.FURNACE,
+				containerId, inventory, furnace, furnace.getDataAccess());
 		this.furnace = furnace;
 		this.addSlot(new UpgradeSlot(furnace.getUpgradeHandler(), 0, 12, 12));
 	}

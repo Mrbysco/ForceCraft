@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:inert_core"
+        "recipes": "forcecraft:inert_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

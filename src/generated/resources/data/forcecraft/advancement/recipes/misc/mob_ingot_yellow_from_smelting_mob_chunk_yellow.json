@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:mob_ingot_yellow_from_smelting_mob_chunk_yellow"
+        "recipes": "forcecraft:mob_ingot_yellow_from_smelting_mob_chunk_yellow"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

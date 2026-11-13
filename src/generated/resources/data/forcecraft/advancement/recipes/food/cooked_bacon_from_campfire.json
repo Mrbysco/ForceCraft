@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:cooked_bacon_from_campfire"
+        "recipes": "forcecraft:cooked_bacon_from_campfire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

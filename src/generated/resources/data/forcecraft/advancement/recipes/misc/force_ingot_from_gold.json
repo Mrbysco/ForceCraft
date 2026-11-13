@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_ingot_from_gold"
+        "recipes": "forcecraft:force_ingot_from_gold"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

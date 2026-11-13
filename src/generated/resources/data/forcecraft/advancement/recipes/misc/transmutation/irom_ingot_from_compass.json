@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/irom_ingot_from_compass"
+        "recipes": "forcecraft:transmutation/irom_ingot_from_compass"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

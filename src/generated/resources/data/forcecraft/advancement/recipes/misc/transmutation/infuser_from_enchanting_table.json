@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/infuser_from_enchanting_table"
+        "recipes": "forcecraft:transmutation/infuser_from_enchanting_table"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

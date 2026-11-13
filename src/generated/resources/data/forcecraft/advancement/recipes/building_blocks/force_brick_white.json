@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_brick_white"
+        "recipes": "forcecraft:force_brick_white"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

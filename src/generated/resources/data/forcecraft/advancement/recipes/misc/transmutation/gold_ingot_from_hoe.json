@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/gold_ingot_from_hoe"
+        "recipes": "forcecraft:transmutation/gold_ingot_from_hoe"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

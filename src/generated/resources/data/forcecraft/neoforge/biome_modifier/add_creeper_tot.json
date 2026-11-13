@@ -3,8 +3,11 @@
   "biomes": "#minecraft:is_overworld",
   "spawners": {
     "type": "forcecraft:creeper_tot",
-    "maxCount": 1,
-    "minCount": 1,
+    "count": {
+      "type": "minecraft:very_biased_to_bottom",
+      "max_inclusive": 1,
+      "min_inclusive": 1
+    },
     "weight": 25
   }
 }

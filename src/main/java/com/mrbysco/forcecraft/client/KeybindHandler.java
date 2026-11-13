@@ -1,5 +1,6 @@
 package com.mrbysco.forcecraft.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.networking.message.OpenForceMenuPayload;
 import com.mrbysco.forcecraft.registry.ForceComponents;
@@ -15,24 +16,23 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import org.lwjgl.glfw.GLFW;
 
 @EventBusSubscriber(Dist.CLIENT)
 public class KeybindHandler {
 	public static KeyMapping.Category CATEGORY = new KeyMapping.Category(Reference.modLoc("category"));
-	public static KeyMapping KEY_OPEN_HOTBAR_PACK = new KeyMapping(getKey("open_hotbar_pack"), GLFW.GLFW_KEY_X, CATEGORY);
-	public static KeyMapping KEY_OPEN_HOTBAR_BELT = new KeyMapping(getKey("open_hotbar_belt"), GLFW.GLFW_KEY_Z, CATEGORY);
-	public static KeyMapping KEY_FORCE = new KeyMapping(getKey("force"), GLFW.GLFW_KEY_V, CATEGORY);
+	public static KeyMapping KEY_OPEN_HOTBAR_PACK = new KeyMapping(getKey("open_hotbar_pack"), InputConstants.KEY_X, CATEGORY);
+	public static KeyMapping KEY_OPEN_HOTBAR_BELT = new KeyMapping(getKey("open_hotbar_belt"), InputConstants.KEY_Z, CATEGORY);
+	public static KeyMapping KEY_FORCE = new KeyMapping(getKey("force"), InputConstants.KEY_V, CATEGORY);
 
 	public static KeyMapping.Category QUICK_USE = new KeyMapping.Category(Reference.modLoc("quick_use"));
-	public static KeyMapping KEY_QUICK_USE_1 = new KeyMapping(getKey("quick_use_1"), GLFW.GLFW_KEY_KP_1, QUICK_USE);
-	public static KeyMapping KEY_QUICK_USE_2 = new KeyMapping(getKey("quick_use_2"), GLFW.GLFW_KEY_KP_2, QUICK_USE);
-	public static KeyMapping KEY_QUICK_USE_3 = new KeyMapping(getKey("quick_use_3"), GLFW.GLFW_KEY_KP_3, QUICK_USE);
-	public static KeyMapping KEY_QUICK_USE_4 = new KeyMapping(getKey("quick_use_4"), GLFW.GLFW_KEY_KP_4, QUICK_USE);
-	public static KeyMapping KEY_QUICK_USE_5 = new KeyMapping(getKey("quick_use_5"), GLFW.GLFW_KEY_KP_5, QUICK_USE);
-	public static KeyMapping KEY_QUICK_USE_6 = new KeyMapping(getKey("quick_use_6"), GLFW.GLFW_KEY_KP_6, QUICK_USE);
-	public static KeyMapping KEY_QUICK_USE_7 = new KeyMapping(getKey("quick_use_7"), GLFW.GLFW_KEY_KP_7, QUICK_USE);
-	public static KeyMapping KEY_QUICK_USE_8 = new KeyMapping(getKey("quick_use_8"), GLFW.GLFW_KEY_KP_8, QUICK_USE);
+	public static KeyMapping KEY_QUICK_USE_1 = new KeyMapping(getKey("quick_use_1"), InputConstants.KEY_NUMPAD1, QUICK_USE);
+	public static KeyMapping KEY_QUICK_USE_2 = new KeyMapping(getKey("quick_use_2"), InputConstants.KEY_NUMPAD2, QUICK_USE);
+	public static KeyMapping KEY_QUICK_USE_3 = new KeyMapping(getKey("quick_use_3"), InputConstants.KEY_NUMPAD3, QUICK_USE);
+	public static KeyMapping KEY_QUICK_USE_4 = new KeyMapping(getKey("quick_use_4"), InputConstants.KEY_NUMPAD4, QUICK_USE);
+	public static KeyMapping KEY_QUICK_USE_5 = new KeyMapping(getKey("quick_use_5"), InputConstants.KEY_NUMPAD5, QUICK_USE);
+	public static KeyMapping KEY_QUICK_USE_6 = new KeyMapping(getKey("quick_use_6"), InputConstants.KEY_NUMPAD6, QUICK_USE);
+	public static KeyMapping KEY_QUICK_USE_7 = new KeyMapping(getKey("quick_use_7"), InputConstants.KEY_NUMPAD7, QUICK_USE);
+	public static KeyMapping KEY_QUICK_USE_8 = new KeyMapping(getKey("quick_use_8"), InputConstants.KEY_NUMPAD8, QUICK_USE);
 
 	private static String getKey(String name) {
 		return String.join(".", "key", Reference.MOD_ID, name);

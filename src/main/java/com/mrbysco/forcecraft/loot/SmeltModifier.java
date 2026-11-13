@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceLootModifiers;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -18,13 +19,15 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class SmeltModifier extends LootModifier {
 	public static final Supplier<MapCodec<SmeltModifier>> CODEC = Suppliers.memoize(() ->
 			RecordCodecBuilder.mapCodec(inst -> codecStart(inst).apply(inst, SmeltModifier::new)));
 
 
-	public SmeltModifier(LootItemCondition[] conditionsIn, int priority) {
-		super(conditionsIn, priority);
+	public SmeltModifier(Optional<Holder<LootItemCondition>> condition, int priority) {
+		super(condition, priority);
 	}
 
 	@NotNull
@@ -36,7 +39,7 @@ public class SmeltModifier extends LootModifier {
 	}
 
 	private static ItemStack smelt(ItemStack stack, LootContext context) {
-		ItemInstance toolStack = context.getOptionalParameter(LootContextParams.TOOL);
+		ItemInstance toolStack = context.getOptional(LootContextParams.TOOL);
 		if (toolStack == null)
 			return stack;
 		if (toolStack.has(ForceComponents.HEAT)) {

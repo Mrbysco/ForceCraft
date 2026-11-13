@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/ingots_from_force_furnace"
+        "recipes": "forcecraft:grinding/ingots_from_force_furnace"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

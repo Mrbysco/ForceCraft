@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_ingot_from_iron"
+        "recipes": "forcecraft:force_ingot_from_iron"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

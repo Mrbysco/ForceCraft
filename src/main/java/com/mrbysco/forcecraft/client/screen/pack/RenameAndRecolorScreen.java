@@ -33,7 +33,7 @@ public class RenameAndRecolorScreen extends Screen {
 	}
 
 	public static void openScreen(ItemStack packName, InteractionHand hand) {
-		Minecraft.getInstance().setScreen(new RenameAndRecolorScreen(packName, hand));
+		Minecraft.getInstance().gui.setScreen(new RenameAndRecolorScreen(packName, hand));
 	}
 
 	@Override
@@ -49,12 +49,12 @@ public class RenameAndRecolorScreen extends Screen {
 		}).bounds(this.width / 2 - 89, this.height / 2 + 5, 18, 18).build());
 
 		this.addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL, (button) -> {
-			this.minecraft.setScreen(null);
+			this.minecraft.gui.setScreen(null);
 		}).bounds(this.width / 2 - 34, this.height / 2 + 3, 60, 20).build());
 
 		this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (button) -> {
 			ClientPacketDistributor.sendToServer(new PackChangePayload(usedHand, textfield.getValue(), this.selectedColor));
-			this.minecraft.setScreen(null);
+			this.minecraft.gui.setScreen(null);
 		}).bounds(this.width / 2 + 31, this.height / 2 + 3, 60, 20).build());
 
 		this.textfield = new EditBox(this.minecraft.font, this.width / 2 - 90, this.height / 2 - 24, 180, 20, Component.literal("Name"));

@@ -43,7 +43,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:soul_wafer"
+        "recipes": "forcecraft:soul_wafer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

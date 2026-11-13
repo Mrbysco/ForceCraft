@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:freezing/brick_from_nether_brick"
+        "recipes": "forcecraft:freezing/brick_from_nether_brick"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

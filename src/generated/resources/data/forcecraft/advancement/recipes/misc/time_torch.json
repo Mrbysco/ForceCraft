@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:time_torch"
+        "recipes": "forcecraft:time_torch"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

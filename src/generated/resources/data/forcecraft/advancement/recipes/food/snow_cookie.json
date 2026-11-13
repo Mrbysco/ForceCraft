@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:snow_cookie"
+        "recipes": "forcecraft:snow_cookie"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

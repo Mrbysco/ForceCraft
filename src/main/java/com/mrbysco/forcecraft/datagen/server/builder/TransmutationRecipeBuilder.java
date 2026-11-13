@@ -2,8 +2,8 @@ package com.mrbysco.forcecraft.datagen.server.builder;
 
 import com.mrbysco.forcecraft.recipe.TransmutationRecipe;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
-import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.triggers.Criterion;
+import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;

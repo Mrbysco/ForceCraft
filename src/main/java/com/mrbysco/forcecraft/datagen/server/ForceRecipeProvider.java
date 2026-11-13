@@ -15,16 +15,15 @@ import com.mrbysco.forcecraft.upgrade.FlagUpgrade;
 import com.mrbysco.forcecraft.upgrade.LeveledUpgrade;
 import com.mrbysco.forcecraft.upgrade.PackUpgrade;
 import com.mrbysco.forcecraft.upgrade.UpgradeBookTier;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
@@ -44,12 +43,11 @@ import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class ForceRecipeProvider extends RecipeProvider {
 
-	public ForceRecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
-		super(provider, recipeOutput);
+	public ForceRecipeProvider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+		super(recipeOutput, advancementOutput);
 	}
 
 	@Override
@@ -162,11 +160,11 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern(" # ")
 				.pattern("GPG")
 				.define('F', ForceTags.Items.INGOTS_FORCE)
-				.define('#', Tags.Items.GLASS_BLOCKS)
+				.define('#', Tags.BlockItems.GLASS_BLOCKS.item())
 				.define('G', ForceRegistry.FORCE_GEAR)
 				.define('P', Items.PISTON)
 				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
-				.unlockedBy("has_glass", has(Tags.Items.GLASS_BLOCKS))
+				.unlockedBy("has_glass", has(Tags.BlockItems.GLASS_BLOCKS.item()))
 				.unlockedBy("has_force_gear", has(ForceRegistry.FORCE_GEAR))
 				.unlockedBy("has_piston", has(Items.PISTON))
 				.save(output);
@@ -240,11 +238,11 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("DND")
 				.pattern("FGF")
 				.define('F', ForceTags.Items.INGOTS_FORCE)
-				.define('G', Tags.Items.STORAGE_BLOCKS_GOLD)
+				.define('G', Tags.BlockItems.STORAGE_BLOCKS_GOLD.item())
 				.define('D', Tags.Items.GEMS_DIAMOND)
 				.define('N', Tags.Items.NETHER_STARS)
 				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
-				.unlockedBy("has_gold_block", has(Tags.Items.STORAGE_BLOCKS_GOLD))
+				.unlockedBy("has_gold_block", has(Tags.BlockItems.STORAGE_BLOCKS_GOLD.item()))
 				.unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND))
 				.unlockedBy("has_nether_star", has(Tags.Items.NETHER_STARS))
 				.save(output);
@@ -334,11 +332,11 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("CLL")
 				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.define('L', Tags.Items.LEATHERS)
-				.define('C', Tags.Items.COBBLESTONES_NORMAL)
+				.define('C', Tags.BlockItems.COBBLESTONES_NORMAL.item())
 				.define('I', Tags.Items.INGOTS_IRON)
 				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_leather", has(Tags.Items.LEATHERS))
-				.unlockedBy("has_cobblestone", has(Tags.Items.COBBLESTONES_NORMAL))
+				.unlockedBy("has_cobblestone", has(Tags.BlockItems.COBBLESTONES_NORMAL.item()))
 				.unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON))
 				.save(output);
 
@@ -403,7 +401,9 @@ public class ForceRecipeProvider extends RecipeProvider {
 		signBuilder(ForceRegistry.FORCE_PLANKS.getSign(), Ingredient.of(ForceRegistry.FORCE_PLANKS.getPlanks().get()))
 				.unlockedBy("has_force_planks", this.has(ForceRegistry.FORCE_PLANKS.getPlanks().get()))
 				.save(this.output);
-		hangingSign(ForceRegistry.FORCE_PLANKS.getHangingSign(), ForceRegistry.FORCE_PLANKS.getPlanks().get());
+		hangingSignBuilder(ForceRegistry.FORCE_PLANKS.getHangingSign(), Ingredient.of(ForceRegistry.FORCE_PLANKS.getPlanks().get()))
+				.unlockedBy("has_force_planks", this.has(ForceRegistry.FORCE_PLANKS.getPlanks().get()))
+				.save(this.output);
 		trapdoorBuilder(ForceRegistry.FORCE_PLANKS.getTrapdoor(), Ingredient.of(ForceRegistry.FORCE_PLANKS.getPlanks().get()))
 				.unlockedBy("has_force_planks", this.has(ForceRegistry.FORCE_PLANKS.getPlanks().get()))
 				.save(this.output);
@@ -908,7 +908,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.secondaryResult(Items.BUCKET, 1)
 				.unlockedBy("has_core", has(ForceRegistry.FROZEN_CORE))
 				.save(output, key("freezing/ice_from_water_bucket"));
-		MultiOutputRecipeBuilder.freezing(tag(Tags.Items.NETHERRACKS), 0.1F, 200)
+		MultiOutputRecipeBuilder.freezing(tag(Tags.BlockItems.NETHERRACKS.item()), 0.1F, 200)
 				.result(Items.COBBLESTONE, 1)
 				.unlockedBy("has_core", has(ForceRegistry.FROZEN_CORE))
 				.save(output, key("freezing/cobblestone_from_netherrack"));
@@ -917,11 +917,11 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.secondaryResult(Items.BUCKET, 1)
 				.unlockedBy("has_core", has(ForceRegistry.FROZEN_CORE))
 				.save(output, key("freezing/obsidian_from_lava_bucket"));
-		MultiOutputRecipeBuilder.freezing(tag(Tags.Items.SANDS_COLORLESS), 0.1F, 200)
+		MultiOutputRecipeBuilder.freezing(tag(Tags.BlockItems.SANDS_COLORLESS.item()), 0.1F, 200)
 				.result(Items.SANDSTONE, 1)
 				.unlockedBy("has_core", has(ForceRegistry.FROZEN_CORE))
 				.save(output, key("freezing/sandstone_from_sand"));
-		MultiOutputRecipeBuilder.freezing(tag(Tags.Items.SANDS_RED), 0.1F, 200)
+		MultiOutputRecipeBuilder.freezing(tag(Tags.BlockItems.SANDS_RED.item()), 0.1F, 200)
 				.result(Items.RED_SANDSTONE, 1)
 				.unlockedBy("has_core", has(ForceRegistry.FROZEN_CORE))
 				.save(output, key("freezing/sandstone_from_red_sand"));
@@ -929,22 +929,22 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.result(Items.SNOWBALL, 1)
 				.unlockedBy("has_core", has(ForceRegistry.FROZEN_CORE))
 				.save(output, key("freezing/snowball_from_slimeball"));
-		MultiOutputRecipeBuilder.freezing(tag(Tags.Items.COBBLESTONES_NORMAL), 0.1F, 200)
+		MultiOutputRecipeBuilder.freezing(tag(Tags.BlockItems.COBBLESTONES_NORMAL.item()), 0.1F, 200)
 				.result(Items.STONE, 1)
 				.unlockedBy("has_core", has(ForceRegistry.FROZEN_CORE))
 				.save(output, key("freezing/stone_from_cobblestone"));
-		MultiOutputRecipeBuilder.freezing(tag(Tags.Items.STONES), 0.1F, 200)
+		MultiOutputRecipeBuilder.freezing(tag(Tags.BlockItems.STONES.item()), 0.1F, 200)
 				.result(Items.STONE_BRICKS, 1)
 				.unlockedBy("has_core", has(ForceRegistry.FROZEN_CORE))
 				.save(output, key("freezing/stone_bricks_from_stone"));
 
 		//Oak
-		MultiOutputRecipeBuilder.grinding(tag(Tags.Items.BOOKSHELVES), 1.0F, 0.1F, 400)
+		MultiOutputRecipeBuilder.grinding(tag(Tags.BlockItems.BOOKSHELVES.item()), 1.0F, 0.1F, 400)
 				.result(Items.OAK_PLANKS, 6)
 				.secondaryResult(Items.PAPER, 9)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, key("grinding/oak_planks_from_bookshelf"));
-		MultiOutputRecipeBuilder.grinding(tag(Tags.Items.CHESTS_WOODEN), 1.0F, 0.1F, 400)
+		MultiOutputRecipeBuilder.grinding(tag(Tags.BlockItems.CHESTS_WOODEN.item()), 1.0F, 0.1F, 400)
 				.result(Items.OAK_PLANKS, 8)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, key("grinding/oak_planks_from_chest"));
@@ -1119,7 +1119,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output, key("grinding/ingots_from_force_furnace"));
 
 		//Flint
-		MultiOutputRecipeBuilder.grinding(tag(Tags.Items.GRAVELS), 1.0F, 0.1F, 400)
+		MultiOutputRecipeBuilder.grinding(tag(Tags.BlockItems.GRAVELS.item()), 1.0F, 0.1F, 400)
 				.result(Items.FLINT, 1)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, key("grinding/flint_from_gravel"));
@@ -1167,7 +1167,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.result(Items.RED_SAND, 1)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, key("grinding/sand_from_red_sandstone"));
-		MultiOutputRecipeBuilder.grinding(tag(Tags.Items.COBBLESTONES_NORMAL), 1.0F, 0.1F, 400)
+		MultiOutputRecipeBuilder.grinding(tag(Tags.BlockItems.COBBLESTONES_NORMAL.item()), 1.0F, 0.1F, 400)
 				.result(Items.COBBLESTONE, 1)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, key("grinding/sand_from_cobblestone"));
@@ -1250,21 +1250,5 @@ public class ForceRecipeProvider extends RecipeProvider {
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(base), category, result, count)
 				.unlockedBy(getHasName(base), this.has(base))
 				.save(this.output, "forcecraft:" + getConversionRecipeName(result, base) + "_stonecutting");
-	}
-
-	public static class Runner extends RecipeProvider.Runner {
-		public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
-			super(output, completableFuture);
-		}
-
-		@Override
-		protected RecipeProvider createRecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
-			return new ForceRecipeProvider(provider, recipeOutput);
-		}
-
-		@Override
-		public String getName() {
-			return "ForceCraft Recipes";
-		}
 	}
 }

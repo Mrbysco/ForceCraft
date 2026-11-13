@@ -2,7 +2,7 @@ package com.mrbysco.forcecraft.advancement;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.advancement.trigger.ForceShearEntityTrigger;
-import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.registries.DeferredRegister;
 

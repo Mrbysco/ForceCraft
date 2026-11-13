@@ -53,7 +53,7 @@ public class CreeperTot extends Creeper {
 
 	public void summonFireworkParticles(List<FireworkExplosion> explosions, double yOffset) {
 		Vec3 motion = this.getDeltaMovement();
-		this.level().createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), motion.x, motion.y, motion.z, explosions);
+		this.level().createFireworks(this.getX(), this.getY() + yOffset, this.getZ(), motion.x, motion.y, motion.z, explosions, true);
 	}
 
 	@Override

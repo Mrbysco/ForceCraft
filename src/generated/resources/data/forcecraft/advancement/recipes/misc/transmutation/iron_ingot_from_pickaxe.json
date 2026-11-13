@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/iron_ingot_from_pickaxe"
+        "recipes": "forcecraft:transmutation/iron_ingot_from_pickaxe"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

@@ -3,7 +3,7 @@ package com.mrbysco.forcecraft.datagen.server.builder;
 import com.mrbysco.forcecraft.recipe.FreezingRecipe;
 import com.mrbysco.forcecraft.recipe.GrindingRecipe;
 import com.mrbysco.forcecraft.recipe.MultiOutputFurnaceRecipe;
-import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;

@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/tripwire_hook_from_crossbow"
+        "recipes": "forcecraft:transmutation/tripwire_hook_from_crossbow"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

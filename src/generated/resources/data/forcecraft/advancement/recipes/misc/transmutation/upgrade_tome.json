@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/upgrade_tome"
+        "recipes": "forcecraft:transmutation/upgrade_tome"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

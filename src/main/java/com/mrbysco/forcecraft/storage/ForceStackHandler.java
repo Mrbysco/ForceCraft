@@ -3,6 +3,7 @@ package com.mrbysco.forcecraft.storage;
 import com.mrbysco.forcecraft.registry.ForceComponents;
 import com.mrbysco.forcecraft.registry.ForceTags;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.transfer.IndexModifier;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
@@ -37,8 +38,11 @@ public class ForceStackHandler extends ItemAccessItemHandler {
 		}
 
 		ItemContainerContents contents = stack.getOrDefault(this.component, ItemContainerContents.EMPTY);
-		ItemStack oldStack = index < contents.getSlots() ? contents.getStackInSlot(index) : ItemStack.EMPTY;
-		int oldAmount = (!oldStack.isEmpty() && oldStack.getItem() == newResource.getItem()) ? oldStack.getCount() : 0;
+		ItemStackTemplate oldStack = index < contents.getSlots() ? contents.getTemplateInSlot(index).orElse(null) : null;
+		int oldAmount = 0;
+		if (oldStack != null) {
+			oldAmount = oldStack.is(newResource.getItem()) ? oldStack.count() : 0;
+		}
 
 		int added = amount - oldAmount;
 		if (added <= 0) {

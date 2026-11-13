@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/diamond_from_axe"
+        "recipes": "forcecraft:transmutation/diamond_from_axe"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

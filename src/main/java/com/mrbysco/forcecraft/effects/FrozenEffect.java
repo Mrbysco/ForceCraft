@@ -29,7 +29,7 @@ public class FrozenEffect extends MobEffect {
 	@Override
 	public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity livingEntity, int amplification) {
 		livingEntity.setDeltaMovement(0, Math.min(0, livingEntity.getDeltaMovement().y), 0);
-		livingEntity.hurtMarked = true;
+		livingEntity.syncVelocity = true;
 
 		if (livingEntity instanceof Mob mob) {
 			mob.getNavigation().stop();

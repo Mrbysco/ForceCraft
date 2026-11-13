@@ -115,11 +115,11 @@ public class ForceFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 					ItemStack burnResult = recipe.value().assemble(input);
 					if (!burnResult.isEmpty() && canBurn(entity.items, entity.getMaxStackSize(), burnResult)) {
 						if (!isLit) {
-							int newLitTime = entity.getBurnDuration(level.fuelValues(), fuel);
+							int newLitTime = entity.getBurnDuration(level, fuel);
 							entity.litTimeRemaining = newLitTime;
 							entity.litTotalTime = newLitTime;
 							if (newLitTime > 0) {
-								consumeFuel(entity.items, fuel);
+								consumeFuel(level, pos, entity.items, fuel);
 								isLit = true;
 								changed = true;
 							}

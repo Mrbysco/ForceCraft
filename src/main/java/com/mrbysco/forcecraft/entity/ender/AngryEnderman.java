@@ -4,12 +4,12 @@ import com.mrbysco.forcecraft.registry.ForceEntities;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 
 public class AngryEnderman extends AbstractForceEnderman{
-	public AngryEnderman(EntityType<? extends EnderMan> type, Level level) {
+	public AngryEnderman(EntityType<? extends Enderman> type, Level level) {
 		super(type, level);
 	}
 

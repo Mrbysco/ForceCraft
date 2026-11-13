@@ -7,7 +7,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mrbysco.forcecraft.client.ClientHandler;
 import com.mrbysco.forcecraft.client.ForceRenderStateHolder;
 import net.minecraft.client.gui.render.GuiItemAtlas;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,18 +16,18 @@ public class GuiItemAtlasMixin {
 
 	@WrapOperation(
 			method = "drawToSlot",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch()V")
+			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;disableScissorForRenderTypeDraws()V")
 	)
-	private void forcecraft$wrapEndBatchWithModifier(MultiBufferSource.BufferSource src, Operation<Void> original, @Local(argsOnly = true) ItemStackRenderState item) {
+	private void forcecraft$wrapEndBatchWithModifier(Operation<Void> original, @Local(argsOnly = true) ItemStackRenderState item) {
 		boolean isSilhouette = ((ForceRenderStateHolder) item).forcecraft$isSilhouette();
 		if (!isSilhouette) {
-			original.call(src);
+			original.call();
 			return;
 		}
 
 		RenderSystem.pushPipelineModifier(ClientHandler.SILHOUTTE);
 		try {
-			original.call(src);
+			original.call();
 		} finally {
 			RenderSystem.popPipelineModifier();
 		}

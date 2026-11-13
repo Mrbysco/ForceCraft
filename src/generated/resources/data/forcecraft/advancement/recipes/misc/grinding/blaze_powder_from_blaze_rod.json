@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/blaze_powder_from_blaze_rod"
+        "recipes": "forcecraft:grinding/blaze_powder_from_blaze_rod"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

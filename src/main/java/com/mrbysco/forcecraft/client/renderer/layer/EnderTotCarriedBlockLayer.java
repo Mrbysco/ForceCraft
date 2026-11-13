@@ -21,12 +21,12 @@ public class EnderTotCarriedBlockLayer extends RenderLayer<EnderTotRenderState, 
 		if (!carriedBlock.isEmpty()) {
 			poseStack.pushPose();
 			poseStack.translate(0.0F, 0.6875F, -0.75F);
-			poseStack.mulPose(Axis.XP.rotationDegrees(20.0F));
-			poseStack.mulPose(Axis.YP.rotationDegrees(45.0F));
+			poseStack.rotate(Axis.XP, 20.0F);
+			poseStack.rotate(Axis.YP, 45.0F);
 			poseStack.translate(0.25F, 0.1875F, 0.25F);
 			float s = 0.5F;
 			poseStack.scale(-0.5F, -0.5F, 0.5F);
-			poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+			poseStack.rotate(Axis.YP, 90.0F);
 			carriedBlock.submit(poseStack, submitNodeCollector, lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
 			poseStack.popPose();
 		}

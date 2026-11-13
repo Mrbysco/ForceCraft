@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/feather_dust_from_feathers"
+        "recipes": "forcecraft:grinding/feather_dust_from_feathers"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

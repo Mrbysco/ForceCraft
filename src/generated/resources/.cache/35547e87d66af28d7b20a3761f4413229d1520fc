@@ -1,5 +1,4 @@
-// 26.1.2	2026-10-28T02:45:40.0388051	Data Maps
+// 26.3	2026-11-13T01:02:37.0018052	forcecraft-global/Data Maps
 914f19bb53d884c5ed6e810df7bbbad08064f85d data/forcecraft/data_maps/block/ice_conversions.json
 f27f5e9053296ceafa8df0e4bcce1bcac0a0d008 data/forcecraft/data_maps/block/rod_conversions.json
 0528aaa23c010b51090769c3ac11ed241eab720a data/forcecraft/data_maps/entity_type/mob_colors.json
-b159ceb1ea92474ed53229a8df656f331c59c8de data/neoforge/data_maps/item/compostables.json

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:freezing/obsidian_from_lava_bucket"
+        "recipes": "forcecraft:freezing/obsidian_from_lava_bucket"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

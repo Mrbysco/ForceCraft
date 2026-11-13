@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:freezing/ice_from_water_bucket"
+        "recipes": "forcecraft:freezing/ice_from_water_bucket"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

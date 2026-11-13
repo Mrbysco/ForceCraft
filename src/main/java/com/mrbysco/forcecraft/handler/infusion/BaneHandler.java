@@ -3,7 +3,7 @@ package com.mrbysco.forcecraft.handler.infusion;
 import com.mrbysco.forcecraft.registry.ForceAttachments;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
@@ -13,7 +13,7 @@ import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 public class BaneHandler {
 	@SubscribeEvent
 	public static void onEnderTeleportEvent(EntityTeleportEvent.EnderEntity event) {
-		if (event.getEntity() instanceof EnderMan enderman) {
+		if (event.getEntity() instanceof Enderman enderman) {
 			if (enderman.hasData(ForceAttachments.BANE)) {
 				event.setCanceled(true);
 			}

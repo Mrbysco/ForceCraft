@@ -64,11 +64,6 @@ public class ForceModelProvider extends ModelProvider {
 		blockModels.createPlantWithDefaultItem(ForceRegistry.FORCE_SAPLING.get(), ForceRegistry.POTTED_FORCE_SAPLING.get(), BlockModelGenerators.PlantType.NOT_TINTED);
 
 		blockModels.family(ForceRegistry.FORCE_PLANKS.getPlanks().get()).generateFor(ForceRegistry.FORCE_PLANKS.getBlockFamily());
-		blockModels.createHangingSign(
-				ForceRegistry.FORCE_PLANKS.getPlanks().get(),
-				ForceRegistry.FORCE_PLANKS.getHangingSign().get(),
-				ForceRegistry.FORCE_PLANKS.getWallHangingSign().get()
-		);
 		blockModels.createShelf(ForceRegistry.FORCE_PLANKS.getShelf().get(), ForceRegistry.FORCE_PLANKS.getPlanks().get());
 		itemModels.generateFlatItem(ForceRegistry.FORCE_STICK.get(), ModelTemplates.FLAT_ITEM);
 		itemModels.generateFlatItem(ForceRegistry.FORCE_GEAR.get(), ModelTemplates.FLAT_ITEM);

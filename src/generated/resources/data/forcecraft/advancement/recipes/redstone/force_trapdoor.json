@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_trapdoor"
+        "recipes": "forcecraft:force_trapdoor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

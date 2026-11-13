@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/sand_from_cobblestone"
+        "recipes": "forcecraft:grinding/sand_from_cobblestone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

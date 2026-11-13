@@ -2,12 +2,13 @@ package com.mrbysco.forcecraft.registry.helper;
 
 import com.mrbysco.forcecraft.Reference;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
+import net.minecraft.core.Direction;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SignItem;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ButtonBlock;
@@ -114,6 +115,7 @@ public class ForcePlankReg {
 				.fenceGate(fenceGate.get())
 				.pressurePlate(pressurePlate.get())
 				.sign(sign.get(), wallSign.get())
+				.hangingSign(hangingSign.get(), wallHangingSign.get())
 				.slab(slab.get())
 				.stairs(stairs.get())
 				.door(door.get())
@@ -141,7 +143,7 @@ public class ForcePlankReg {
 
 		planks = ForceRegistry.BLOCKS.registerSimpleBlock("force_planks", () -> BlockBehaviour.Properties.of().mapColor(MapColor.SAND).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).ignitedByLava());
 		ForceRegistry.ITEMS.registerSimpleBlockItem(planks);
-		button = ForceRegistry.BLOCKS.registerBlock("force_button", (properties) -> new ButtonBlock(setType, 30, properties), () -> BlockBehaviour.Properties.of().noCollision().strength(0.5F).pushReaction(PushReaction.DESTROY));
+		button = ForceRegistry.BLOCKS.registerBlock("force_button", (properties) -> new ButtonBlock(setType, 30, properties), () -> BlockBehaviour.Properties.of().noCollision().strength(0.5F).pushReaction(PushReaction.POPPED));
 		ForceRegistry.ITEMS.registerSimpleBlockItem(button);
 		fence = ForceRegistry.BLOCKS.registerBlock("force_fence", FenceBlock::new, () -> BlockBehaviour.Properties.ofLegacyCopy(planks.get()));
 		ForceRegistry.ITEMS.registerSimpleBlockItem(fence);
@@ -162,7 +164,7 @@ public class ForcePlankReg {
 						.noCollision()
 						.strength(0.5F)
 						.ignitedByLava()
-						.pushReaction(PushReaction.DESTROY)
+						.pushReaction(PushReaction.POPPED)
 		);
 		ForceRegistry.ITEMS.registerSimpleBlockItem(pressurePlate);
 		sign = ForceRegistry.BLOCKS.registerBlock("force_sign", (properties) -> new StandingSignBlock(woodType, properties), () -> BlockBehaviour.Properties.of().mapColor(MapColor.SAND).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollision().strength(1.0F).ignitedByLava());
@@ -172,7 +174,7 @@ public class ForcePlankReg {
 					.mapColor(MapColor.SAND).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollision().strength(1.0F).ignitedByLava();
 
 		});
-		ForceRegistry.ITEMS.registerItem("force_sign", (properties) -> new SignItem(sign.get(), wallSign.get(), properties.useBlockDescriptionPrefix().stacksTo(16)));
+		ForceRegistry.ITEMS.registerItem("force_sign", (properties) -> new StandingAndWallBlockItem(sign.get(), wallSign.get(), Direction.DOWN, properties.useBlockDescriptionPrefix().stacksTo(16)));
 		hangingSign = ForceRegistry.BLOCKS.registerBlock("force_hanging_sign", (properties) -> new CeilingHangingSignBlock(woodType, properties), () ->
 				BlockBehaviour.Properties.of()
 						.mapColor(MapColor.SAND)
@@ -199,7 +201,7 @@ public class ForcePlankReg {
 						.strength(3.0F)
 						.noOcclusion()
 						.ignitedByLava()
-						.pushReaction(PushReaction.DESTROY));
+						.pushReaction(PushReaction.POPPED));
 		ForceRegistry.ITEMS.registerItem("force_door", (properties) -> new DoubleHighBlockItem(door.get(), properties.useBlockDescriptionPrefix()));
 		trapdoor = ForceRegistry.BLOCKS.registerBlock("force_trapdoor", (properties) -> new TrapDoorBlock(setType, properties), () ->
 				BlockBehaviour.Properties.of()

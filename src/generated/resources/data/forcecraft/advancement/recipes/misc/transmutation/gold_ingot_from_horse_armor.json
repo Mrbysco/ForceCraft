@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:transmutation/gold_ingot_from_horse_armor"
+        "recipes": "forcecraft:transmutation/gold_ingot_from_horse_armor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

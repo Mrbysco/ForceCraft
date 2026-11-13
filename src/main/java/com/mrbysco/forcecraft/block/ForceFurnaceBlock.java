@@ -1,6 +1,5 @@
 package com.mrbysco.forcecraft.block;
 
-import com.mojang.serialization.MapCodec;
 import com.mrbysco.forcecraft.blockentity.furnace.ForceFurnaceBlockEntity;
 import com.mrbysco.forcecraft.registry.ForceRegistry;
 import net.minecraft.core.BlockPos;
@@ -24,15 +23,9 @@ import org.jspecify.annotations.Nullable;
 import java.util.function.ToIntFunction;
 
 public class ForceFurnaceBlock extends AbstractFurnaceBlock {
-	public static final MapCodec<ForceFurnaceBlock> CODEC = simpleCodec(ForceFurnaceBlock::new);
 
 	public ForceFurnaceBlock(Properties properties) {
 		super(properties);
-	}
-
-	@Override
-	protected MapCodec<? extends AbstractFurnaceBlock> codec() {
-		return CODEC;
 	}
 
 	public static ToIntFunction<BlockState> getLightValueLit(int lightValue) {
@@ -43,7 +36,7 @@ public class ForceFurnaceBlock extends AbstractFurnaceBlock {
 
 	@Override
 	protected void openContainer(Level level, BlockPos pos, Player player) {
-			BlockEntity blockentity = level.getBlockEntity(pos);
+		BlockEntity blockentity = level.getBlockEntity(pos);
 		if (blockentity instanceof ForceFurnaceBlockEntity furnaceBE) {
 			if (!level.isClientSide()) {
 				player.openMenu(furnaceBE, pos);

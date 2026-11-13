@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:grinding/string_from_wool"
+        "recipes": "forcecraft:grinding/string_from_wool"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

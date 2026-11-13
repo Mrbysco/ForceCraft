@@ -91,11 +91,11 @@ public class EngineBER implements BlockEntityRenderer<ForceEngineBlockEntity, Fo
 
 	private static void applyOrientation(PoseStack poseStack, Direction direction) {
 		switch (direction) {
-			case EAST -> poseStack.mulPose(Axis.ZP.rotation(-Mth.HALF_PI));
-			case WEST -> poseStack.mulPose(Axis.ZP.rotation(Mth.HALF_PI));
-			case DOWN -> poseStack.mulPose(Axis.ZP.rotation(Mth.PI));
-			case NORTH -> poseStack.mulPose(Axis.XP.rotation(-Mth.HALF_PI));
-			case SOUTH -> poseStack.mulPose(Axis.XP.rotation(Mth.HALF_PI));
+			case EAST -> poseStack.rotate(Axis.ZP, -Mth.HALF_PI);
+			case WEST -> poseStack.rotate(Axis.ZP, Mth.HALF_PI);
+			case DOWN -> poseStack.rotate(Axis.ZP, Mth.PI);
+			case NORTH -> poseStack.rotate(Axis.XP, -Mth.HALF_PI);
+			case SOUTH -> poseStack.rotate(Axis.XP, Mth.HALF_PI);
 			default -> {
 			} // UP: no rotation
 		}

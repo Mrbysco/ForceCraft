@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:force_boots"
+        "recipes": "forcecraft:force_boots"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
