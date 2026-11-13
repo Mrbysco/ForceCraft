@@ -25,7 +25,7 @@ public class InfuserMenu extends AbstractContainerMenu {
 	private InfuserBlockEntity blockEntity;
 	private Player player;
 
-	public final int[] validRecipe = new int[1];
+	private final DataSlot validRecipe = DataSlot.standalone();
 
 	public InfuserMenu(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
 		this(windowId, playerInventory, getBlockEntity(playerInventory, data));
@@ -84,8 +84,8 @@ public class InfuserMenu extends AbstractContainerMenu {
 		trackPower();
 		trackFluid();
 
-		this.validRecipe[0] = blockEntity.hasValidRecipe() ? 1 : 0;
-		this.addDataSlot(DataSlot.shared(this.validRecipe, 0));
+		this.addDataSlot(this.validRecipe);
+		this.validRecipe.set(blockEntity.hasValidRecipe() ? 1 : 0);
 
 		//set data that will sync server->client WITHOUT needing to call .markDirty()
 		addDataSlot(new DataSlot() {
@@ -239,7 +239,7 @@ public class InfuserMenu extends AbstractContainerMenu {
 	@Override
 	public void broadcastChanges() {
 		if (!player.level().isClientSide()) {
-			this.validRecipe[0] = blockEntity.hasValidRecipe() ? 1 : 0;
+			this.validRecipe.set(blockEntity.hasValidRecipe() ? 1 : 0);
 		}
 		super.broadcastChanges();
 	}
@@ -258,7 +258,11 @@ public class InfuserMenu extends AbstractContainerMenu {
 			super.slotsChanged(inventoryIn);
 		}
 		getBlockEntity().setChanged();
-		this.validRecipe[0] = blockEntity.hasValidRecipe() ? 1 : 0;
+		this.validRecipe.set(blockEntity.hasValidRecipe() ? 1 : 0);
+	}
+
+	public boolean isValidRecipe() {
+		return this.validRecipe.get() == 1;
 	}
 
 	public static class MatrixUpdatingSlot extends ResourceHandlerSlot {

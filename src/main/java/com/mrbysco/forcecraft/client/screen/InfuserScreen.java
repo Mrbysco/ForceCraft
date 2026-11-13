@@ -156,7 +156,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 	protected void containerTick() {
 		super.containerTick();
 
-		boolean flag = getMenu().validRecipe[0] == 1;
+		boolean flag = getMenu().isValidRecipe();
 		if (buttonInfuse.visible != flag) {
 			buttonInfuse.visible = flag;
 		}
@@ -289,7 +289,7 @@ public class InfuserScreen extends AbstractContainerScreen<InfuserMenu> {
 			if (isHovering(39, 101, 12, 12, mouseX, mouseY)) {
 				List<Component> text = new ArrayList<>();
 				if (getMenu().isWorkAllowed()) {
-					if (getMenu().validRecipe[0] == 0) {
+					if (!getMenu().isValidRecipe()) {
 						text.add(Component.translatable("gui.forcecraft.infuser.missing.recipe")
 								.withStyle(ChatFormatting.RED));
 					} else {
