@@ -3,6 +3,7 @@ package com.mrbysco.forcecraft.registry;
 import com.mrbysco.forcecraft.Reference;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockItemTagId;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
@@ -14,34 +15,42 @@ import net.minecraft.world.level.material.Fluid;
 
 public class ForceTags {
 
+	public static class BlockItems {
+		public static final BlockItemTagId FORCE_LOGS = createBlockTagsId("force_logs");
+		public static final BlockItemTagId FORCE_BRICKS = createBlockTagsId("force_bricks");
+		public static final BlockItemTagId FORCE_TORCHES = createBlockTagsId("force_torches");
+		public static final BlockItemTagId FORCE_FURNACES = createBlockTagsId("force_furnaces");
+
+		public static final BlockItemTagId ORES = createBlockTagsId("c", "ores");
+		public static final BlockItemTagId ORES_POWER = createBlockTagsId("c", "ores/power");
+
+		private static BlockItemTagId createBlockTagsId(String path) {
+			return BlockItemTagId.create(
+					Reference.modLoc(path), Reference.modLoc(path)
+			);
+		}
+
+		private static BlockItemTagId createBlockTagsId(String namespace, String path) {
+			return BlockItemTagId.create(
+					Identifier.fromNamespaceAndPath(namespace, path), Identifier.fromNamespaceAndPath(namespace, path)
+			);
+		}
+	}
+
+
 	public static class Blocks {
-		public static final TagKey<Block> FORCE_LOGS = BlockTags.create(Reference.modLoc("force_logs"));
-		public static final TagKey<Block> FORCE_BRICKS = BlockTags.create(Reference.modLoc("force_bricks"));
-		public static final TagKey<Block> FORCE_TORCHES = BlockTags.create(Reference.modLoc("force_torches"));
 		public static final TagKey<Block> INCORRECT_FOR_FORCE = BlockTags.create(Reference.modLoc("needs_force_tool"));
 		public static final TagKey<Block> MINEABLE_WITH_MITTS = BlockTags.create(Reference.modLoc("mineable_with_mitts"));
 		public static final TagKey<Block> TICKING_NOT_SUPPORTED = BlockTags.create(Reference.modLoc("ticking_not_supported"));
 		public static final TagKey<Block> COLD_EDIBLE_GRASS_BLOCKS = BlockTags.create(Reference.modLoc("cold_edible_grass_blocks"));
 		public static final TagKey<Block> ENDERTOT_HOLDABLE = BlockTags.create(Reference.modLoc("endertot_holdable"));
-
-		public static final TagKey<Block> ORES = commonTag("ores");
-		public static final TagKey<Block> ORES_POWER = commonTag("ores/power");
-
-
-		private static TagKey<Block> commonTag(String name) {
-			return BlockTags.create(Identifier.fromNamespaceAndPath("c", name));
-		}
 	}
 
 	public static class Items {
-		public static final TagKey<Item> FORCE_LOGS = ItemTags.create(Reference.modLoc("force_logs"));
-		public static final TagKey<Item> FORCE_BRICKS = ItemTags.create(Reference.modLoc("force_bricks"));
-		public static final TagKey<Item> FORCE_TORCHES = ItemTags.create(Reference.modLoc("force_torches"));
 		public static final TagKey<Item> CAN_STORE_FORCE = ItemTags.create(Reference.modLoc("can_store_force"));
 		public static final TagKey<Item> FORCE_REPAIR_INGREDIENTS = ItemTags.create(Reference.modLoc("force_repair_ingredients"));
 		public static final TagKey<Item> FORCE_ARMOR = ItemTags.create(Reference.modLoc("force_armor"));
 		public static final TagKey<Item> UPGRADE_CORES = ItemTags.create(Reference.modLoc("upgrade_cores"));
-		public static final TagKey<Item> FORCE_FURNACES = ItemTags.create(Reference.modLoc("force_furnaces"));
 		public static final TagKey<Item> FORCE_TOOLS = ItemTags.create(Reference.modLoc("force_tools"));
 		public static final TagKey<Item> FORCE_WEAPONS = ItemTags.create(Reference.modLoc("force_weapons"));
 		public static final TagKey<Item> MOB_CHUNKS = ItemTags.create(Reference.modLoc("mob_chunks"));
@@ -82,7 +91,6 @@ public class ForceTags {
 		public static final TagKey<Item> LIMITED_STURDY_ITEMS = ItemTags.create(Reference.modLoc("valid_items/limited_sturdy"));
 		public static final TagKey<Item> LIMITED_DAMAGE_ITEMS = ItemTags.create(Reference.modLoc("valid_items/limited_damage"));
 
-		public static final TagKey<Item> ORES_POWER = commonTag("ores/power");
 		public static final TagKey<Item> GEMS_FORCE = commonTag("gems/force");
 		public static final TagKey<Item> INGOTS_FORCE = commonTag("ingots/force");
 		public static final TagKey<Item> NUGGETS_FORCE = commonTag("nuggets/force");

@@ -82,9 +82,9 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.unlockedBy("has_force_nugget", this.has(ForceRegistry.FORCE_NUGGET))
 				.save(this.output, ResourceKey.create(Registries.RECIPE, Identifier.parse("forcecraft:force_ingot_from_nuggets")));
 
-		SimpleCookingRecipeBuilder.smelting(tag(ForceTags.Items.FORCE_LOGS), RecipeCategory.MISC, CookingBookCategory.MISC,
+		SimpleCookingRecipeBuilder.smelting(tag(ForceTags.BlockItems.FORCE_LOGS.item()), RecipeCategory.MISC, CookingBookCategory.MISC,
 						ForceRegistry.GOLDEN_POWER_SOURCE.get(), 0.15F, 200)
-				.unlockedBy("has_force_logs", has(ForceTags.Items.FORCE_LOGS))
+				.unlockedBy("has_force_logs", has(ForceTags.BlockItems.FORCE_LOGS.item()))
 				.save(output);
 		shaped(RecipeCategory.TOOLS, ForceRegistry.BOMB, 8)
 				.pattern("FFF")
@@ -100,7 +100,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("BOB")
 				.pattern("BBB")
 				.define('B', ForceRegistry.BOMB)
-				.define('O', ForceTags.Items.ORES_POWER)
+				.define('O', ForceTags.BlockItems.ORES_POWER.item())
 				.unlockedBy("has_bomb", this.has(ForceRegistry.BOMB))
 				.save(this.output);
 
@@ -112,9 +112,9 @@ public class ForceRecipeProvider extends RecipeProvider {
 						.pattern("BBB")
 						.pattern("BDB")
 						.pattern("BBB")
-						.define('B', ForceTags.Items.FORCE_TORCHES)
+						.define('B', ForceTags.BlockItems.FORCE_TORCHES.item())
 						.define('D', tag)
-						.unlockedBy("has_torch", has(ForceTags.Items.FORCE_TORCHES))
+						.unlockedBy("has_torch", has(ForceTags.BlockItems.FORCE_TORCHES.item()))
 						.unlockedBy("has_dye", has(tag))
 						.save(output);
 			} else {
@@ -193,9 +193,9 @@ public class ForceRecipeProvider extends RecipeProvider {
 			if (furnaceReg.getColor() != null) {
 				TagKey<Item> tag = furnaceReg.getColor().getTag();
 				shapeless(RecipeCategory.BUILDING_BLOCKS, furnaceReg.getFurnace())
-						.requires(ForceTags.Items.FORCE_FURNACES)
+						.requires(ForceTags.BlockItems.FORCE_FURNACES.item())
 						.requires(tag)
-						.unlockedBy("has_force_furnace", has(ForceTags.Items.FORCE_FURNACES))
+						.unlockedBy("has_force_furnace", has(ForceTags.BlockItems.FORCE_FURNACES.item()))
 						.unlockedBy("has_dye", has(tag))
 						.save(output);
 			}
@@ -377,7 +377,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 	}
 
 	private void generateWoodRecipes() {
-		planksFromLogs(ForceRegistry.FORCE_PLANKS.getPlanks().get(), ForceTags.Items.FORCE_LOGS, 4);
+		planksFromLogs(ForceRegistry.FORCE_PLANKS.getPlanks().get(), ForceTags.BlockItems.FORCE_LOGS.item(), 4);
 		woodFromLogs(ForceRegistry.FORCE_WOOD.get(), ForceRegistry.FORCE_LOG.get());
 		// TODO: Boat
 		// TODO: Shelf
@@ -440,9 +440,9 @@ public class ForceRecipeProvider extends RecipeProvider {
 						.pattern("BBB")
 						.pattern("BDB")
 						.pattern("BBB")
-						.define('B', ForceTags.Items.FORCE_BRICKS)
+						.define('B', ForceTags.BlockItems.FORCE_BRICKS.item())
 						.define('D', tag)
-						.unlockedBy("has_force_brick", has(ForceTags.Items.FORCE_BRICKS))
+						.unlockedBy("has_force_brick", has(ForceTags.BlockItems.FORCE_BRICKS.item()))
 						.unlockedBy("has_dye", has(tag))
 						.save(output);
 			}
@@ -711,7 +711,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 						LeveledUpgrade.of(ForceComponents.SPEED.get(), 5), UpgradeBookTier.ONE, 30, 200).group("speed")
 				.save(output, Reference.modLoc("infuse/speed"));
 
-		InfuseRecipeBuilder.infuse(tag(ForceTags.Items.FORCE_LOGS), tag(ForceTags.Items.VALID_LUMBERJACK_ITEMS),
+		InfuseRecipeBuilder.infuse(tag(ForceTags.BlockItems.FORCE_LOGS.item()), tag(ForceTags.Items.VALID_LUMBERJACK_ITEMS),
 						FlagUpgrade.of(ForceComponents.LUMBERJACK.get()), UpgradeBookTier.ONE, 35, 200).group("lumberjack")
 				.save(output, Reference.modLoc("infuse/lumberjack"));
 
@@ -1112,7 +1112,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.result(ForceRegistry.FORCE_PLANKS.getPlanks(), 6)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, key("grinding/force_planks_from_log"));
-		MultiOutputRecipeBuilder.grinding(tag(ForceTags.Items.FORCE_FURNACES), 1.0F, 0.1F, 400)
+		MultiOutputRecipeBuilder.grinding(tag(ForceTags.BlockItems.FORCE_FURNACES.item()), 1.0F, 0.1F, 400)
 				.result(ForceRegistry.FORCE_INGOT.get(), 3)
 				.secondaryResult(Items.IRON_INGOT, 2)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))

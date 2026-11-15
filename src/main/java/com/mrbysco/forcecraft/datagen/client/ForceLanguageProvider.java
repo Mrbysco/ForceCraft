@@ -501,25 +501,26 @@ public class ForceLanguageProvider extends LanguageProvider {
 	}
 
 	private void addTags() {
-		addTag(() -> ForceTags.Blocks.FORCE_LOGS, "Force Logs");
-		addTag(() -> ForceTags.Blocks.FORCE_BRICKS, "Force Bricks");
-		addTag(() -> ForceTags.Blocks.FORCE_TORCHES, "Force Torches");
+		addTag(() -> ForceTags.BlockItems.FORCE_LOGS.block(), "Force Logs");
+		addTag(() -> ForceTags.BlockItems.FORCE_BRICKS.block(), "Force Bricks");
+		addTag(() -> ForceTags.BlockItems.FORCE_TORCHES.block(), "Force Torches");
+		addTag(() -> ForceTags.BlockItems.FORCE_FURNACES.block(), "Force Furnaces");
 		addTag(() -> ForceTags.Blocks.INCORRECT_FOR_FORCE, "Incorrect for Force");
 		addTag(() -> ForceTags.Blocks.MINEABLE_WITH_MITTS, "Mineable with Mitts");
 		addTag(() -> ForceTags.Blocks.TICKING_NOT_SUPPORTED, "Ticking Not Supported");
-		addTag(() -> ForceTags.Blocks.ORES, "Ores");
-		addTag(() -> ForceTags.Blocks.ORES_POWER, "Power Ores");
+		addTag(() -> ForceTags.BlockItems.ORES.block(), "Ores");
+		addTag(() -> ForceTags.BlockItems.ORES_POWER.block(), "Power Ores");
 		addTag(() -> ForceTags.Blocks.COLD_EDIBLE_GRASS_BLOCKS, "Cold Edible Grass Blocks");
 		addTag(() -> ForceTags.Blocks.ENDERTOT_HOLDABLE, "Ender Tot Holdable");
 
-		addTag(() -> ForceTags.Items.FORCE_LOGS, "Force Logs");
-		addTag(() -> ForceTags.Items.FORCE_BRICKS, "Force Bricks");
-		addTag(() -> ForceTags.Items.FORCE_TORCHES, "Force Torches");
+		addTag(() -> ForceTags.BlockItems.FORCE_LOGS.item(), "Force Logs");
+		addTag(() -> ForceTags.BlockItems.FORCE_BRICKS.item(), "Force Bricks");
+		addTag(() -> ForceTags.BlockItems.FORCE_TORCHES.item(), "Force Torches");
 		addTag(() -> ForceTags.Items.CAN_STORE_FORCE, "Can Store Force");
 		addTag(() -> ForceTags.Items.FORCE_REPAIR_INGREDIENTS, "Force Repair Ingredients");
 		addTag(() -> ForceTags.Items.FORCE_ARMOR, "Force Armor");
 		addTag(() -> ForceTags.Items.UPGRADE_CORES, "Upgrade Cores");
-		addTag(() -> ForceTags.Items.FORCE_FURNACES, "Force Furnaces");
+		addTag(() -> ForceTags.BlockItems.FORCE_FURNACES.item(), "Force Furnaces");
 		addTag(() -> ForceTags.Items.FORCE_TOOLS, "Force Tools");
 		addTag(() -> ForceTags.Items.FORCE_WEAPONS, "Force Weapons");
 		addTag(() -> ForceTags.Items.MOB_CHUNKS, "Mob Chunks");
@@ -557,7 +558,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addTag(() -> ForceTags.Items.VALID_INFUSE_TORCHES, "Valid Infuse Torches");
 		addTag(() -> ForceTags.Items.LIMITED_STURDY_ITEMS, "Limited Sturdy Items");
 		addTag(() -> ForceTags.Items.LIMITED_DAMAGE_ITEMS, "Limited Damage Items");
-		addTag(() -> ForceTags.Items.ORES_POWER, "Power Ores");
+		addTag(() -> ForceTags.BlockItems.ORES_POWER.item(), "Power Ores");
 		addTag(() -> ForceTags.Items.GEMS_FORCE, "Force Gems");
 		addTag(() -> ForceTags.Items.INGOTS_FORCE, "Force Ingots");
 		addTag(() -> ForceTags.Items.NUGGETS_FORCE, "Force Nuggets");

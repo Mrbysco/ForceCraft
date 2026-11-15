@@ -26,17 +26,17 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 			this.tag(BlockItemTags.WALLS.item()).add(brickReg.getWall().asItem().builtInRegistryHolder().key());
 			this.tag(BlockItemTags.STAIRS.item()).add(brickReg.getStairs().asItem().builtInRegistryHolder().key());
 			this.tag(BlockItemTags.SLABS.item()).add(brickReg.getSlab().asItem().builtInRegistryHolder().key());
-			this.tag(ForceTags.Items.FORCE_BRICKS).add(brickReg.getBrick().asItem().builtInRegistryHolder().key());
+			this.tag(ForceTags.BlockItems.FORCE_BRICKS.item()).add(brickReg.getBrick().asItem().builtInRegistryHolder().key());
 		}
 
 		for (ForceTorchReg reg : ForceRegistry.getTorches()) {
 			if (!reg.isSpecialTorch()) {
-				this.tag(ForceTags.Items.FORCE_TORCHES).add(reg.getTorch().asItem().builtInRegistryHolder().key());
+				this.tag(ForceTags.BlockItems.FORCE_TORCHES.item()).add(reg.getTorch().asItem().builtInRegistryHolder().key());
 			}
 		}
 
-		this.tag(ForceTags.Items.FORCE_LOGS).add(ForceRegistry.FORCE_LOG_ITEM.key(), ForceRegistry.FORCE_WOOD_ITEM.key());
-		this.tag(BlockItemTags.LOGS_THAT_BURN.item()).addTag(ForceTags.Items.FORCE_LOGS);
+		this.tag(ForceTags.BlockItems.FORCE_LOGS.item()).add(ForceRegistry.FORCE_LOG_ITEM.key(), ForceRegistry.FORCE_WOOD_ITEM.key());
+		this.tag(BlockItemTags.LOGS_THAT_BURN.item()).addTag(ForceTags.BlockItems.FORCE_LOGS.item());
 		this.tag(ItemTags.LEAVES).add(ForceRegistry.FORCE_LEAVES_ITEM.key());
 		this.tag(ItemTags.SAPLINGS).add(ForceRegistry.FORCE_SAPLING_ITEM.key());
 		this.tag(ItemTags.PLANKS).add(ForceRegistry.FORCE_PLANKS.getPlanks().asItem().builtInRegistryHolder().key());
@@ -54,12 +54,12 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 		this.tag(Tags.BlockItems.ORES_IN_GROUND_STONE.item()).add(ForceRegistry.POWER_ORE_ITEM.key());
 		this.tag(Tags.BlockItems.ORES_IN_GROUND_DEEPSLATE.item()).add(ForceRegistry.DEEPSLATE_POWER_ORE_ITEM.key());
 		this.tag(Tags.BlockItems.ORE_BEARING_GROUND_NETHERRACK.item()).add(ForceRegistry.NETHER_POWER_ORE_ITEM.key());
-		this.tag(ForceTags.Items.ORES_POWER).add(
+		this.tag(ForceTags.BlockItems.ORES_POWER.item()).add(
 				ForceRegistry.POWER_ORE_ITEM.key(),
 				ForceRegistry.DEEPSLATE_POWER_ORE_ITEM.key(),
 				ForceRegistry.NETHER_POWER_ORE_ITEM.key()
 		);
-		this.tag(Tags.BlockItems.ORES.item()).addTag(ForceTags.Items.ORES_POWER);
+		this.tag(Tags.BlockItems.ORES.item()).addTag(ForceTags.BlockItems.ORES_POWER.item());
 		this.tag(ForceTags.Items.GEMS_FORCE).add(ForceRegistry.FORCE_GEM.key());
 		this.tag(Tags.Items.GEMS).addTag(ForceTags.Items.GEMS_FORCE);
 		this.tag(ForceTags.Items.INGOTS_FORCE).add(ForceRegistry.FORCE_INGOT.key());
@@ -84,8 +84,8 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 				ForceRegistry.HEAT_CORE.key(),
 				ForceRegistry.SPEED_CORE.key()
 		);
-		this.tag(ForceTags.Items.FORCE_FURNACES).add(ForceRegistry.FORCE_FURNACE.asItem().builtInRegistryHolder().key());
-		ForceRegistry.getFurnaces().forEach(reg -> this.tag(ForceTags.Items.FORCE_FURNACES).add(reg.getFurnace().asItem().builtInRegistryHolder().key()));
+		this.tag(ForceTags.BlockItems.FORCE_FURNACES.item()).add(ForceRegistry.FORCE_FURNACE.asItem().builtInRegistryHolder().key());
+		ForceRegistry.getFurnaces().forEach(reg -> this.tag(ForceTags.BlockItems.FORCE_FURNACES.item()).add(reg.getFurnace().asItem().builtInRegistryHolder().key()));
 
 		this.tag(ForceTags.Items.HOLDS_ITEMS).add(
 				ForceRegistry.FORCE_PACK.key()
@@ -166,7 +166,7 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 				.add(ForceRegistry.FORCE_SWORD.key());
 
 		this.tag(ForceTags.Items.VALID_INFUSE_TORCHES)
-				.addTag(ForceTags.Items.FORCE_TORCHES);
+				.addTag(ForceTags.BlockItems.FORCE_TORCHES.item());
 
 		this.tag(ForceTags.Items.VALID_HEAT_ITEMS)
 				.add(

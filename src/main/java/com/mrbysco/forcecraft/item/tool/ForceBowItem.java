@@ -75,7 +75,7 @@ public class ForceBowItem extends BowItem {
 	}
 
 	private static boolean isTorch(ItemStack stack) {
-		return stack.is(ForceTags.Items.FORCE_TORCHES) || stack.is(Items.TORCH);
+		return stack.is(ForceTags.BlockItems.FORCE_TORCHES.item()) || stack.is(Items.TORCH);
 	}
 
 	private static ItemStack findTorch(Player player) {

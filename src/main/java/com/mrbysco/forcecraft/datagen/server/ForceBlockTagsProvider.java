@@ -50,8 +50,12 @@ public class ForceBlockTagsProvider extends BlockTagsProvider {
 			this.tag(BlockTags.WALLS).add(brickReg.getWall().key());
 			this.tag(BlockTags.STAIRS).add(brickReg.getStairs().key());
 			this.tag(BlockTags.SLABS).add(brickReg.getSlab().key());
-			this.tag(ForceTags.Blocks.FORCE_BRICKS).add(brickReg.getBrick().key());
+			this.tag(ForceTags.BlockItems.FORCE_BRICKS.block()).add(brickReg.getBrick().key());
 		}
+		this.tag(ForceTags.BlockItems.FORCE_FURNACES.block()).add(ForceRegistry.FORCE_FURNACE.key());
+		ForceRegistry.getFurnaces().forEach(reg -> this.tag(ForceTags.BlockItems.FORCE_FURNACES.block()).add(reg.getFurnace().key()));
+
+
 		this.tag(ForceTags.Blocks.INCORRECT_FOR_FORCE).addTag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL);
 		this.tag(ForceTags.Blocks.TICKING_NOT_SUPPORTED).add(
 				ForceRegistry.TIME_TORCH.getTorch().key(),
@@ -71,7 +75,7 @@ public class ForceBlockTagsProvider extends BlockTagsProvider {
 
 		for (ForceTorchReg reg : ForceRegistry.getTorches()) {
 			if (!reg.isSpecialTorch()) {
-				this.tag(ForceTags.Blocks.FORCE_TORCHES).add(reg.getTorch().key());
+				this.tag(ForceTags.BlockItems.FORCE_TORCHES.block()).add(reg.getTorch().key());
 			}
 		}
 
@@ -95,8 +99,8 @@ public class ForceBlockTagsProvider extends BlockTagsProvider {
 		);
 		this.tag(BlockTags.MINEABLE_WITH_HOE).add(ForceRegistry.FORCE_LEAVES.key());
 
-		this.tag(ForceTags.Blocks.FORCE_LOGS).add(ForceRegistry.FORCE_LOG.key(), ForceRegistry.FORCE_WOOD.key());
-		this.tag(BlockItemTags.LOGS_THAT_BURN.block()).addTag(ForceTags.Blocks.FORCE_LOGS);
+		this.tag(ForceTags.BlockItems.FORCE_LOGS.block()).add(ForceRegistry.FORCE_LOG.key(), ForceRegistry.FORCE_WOOD.key());
+		this.tag(BlockItemTags.LOGS_THAT_BURN.block()).addTag(ForceTags.BlockItems.FORCE_LOGS.block());
 		this.tag(BlockTags.LEAVES).add(ForceRegistry.FORCE_LEAVES.key());
 		this.tag(BlockTags.SAPLINGS).add(ForceRegistry.FORCE_SAPLING.key());
 		this.tag(BlockTags.FLOWER_POTS).add(ForceRegistry.POTTED_FORCE_SAPLING.key());
@@ -119,8 +123,8 @@ public class ForceBlockTagsProvider extends BlockTagsProvider {
 		this.tag(Tags.BlockItems.ORES_IN_GROUND_STONE.block()).add(ForceRegistry.POWER_ORE.key());
 		this.tag(Tags.BlockItems.ORES_IN_GROUND_DEEPSLATE.block()).add(ForceRegistry.DEEPSLATE_POWER_ORE.key());
 		this.tag(Tags.BlockItems.ORE_BEARING_GROUND_NETHERRACK.block()).add(ForceRegistry.NETHER_POWER_ORE.key());
-		this.tag(ForceTags.Blocks.ORES_POWER).add(ForceRegistry.POWER_ORE.key(), ForceRegistry.DEEPSLATE_POWER_ORE.key(), ForceRegistry.NETHER_POWER_ORE.key());
-		this.tag(Tags.BlockItems.ORES.block()).addTag(ForceTags.Blocks.ORES_POWER);
+		this.tag(ForceTags.BlockItems.ORES_POWER.block()).add(ForceRegistry.POWER_ORE.key(), ForceRegistry.DEEPSLATE_POWER_ORE.key(), ForceRegistry.NETHER_POWER_ORE.key());
+		this.tag(Tags.BlockItems.ORES.block()).addTag(ForceTags.BlockItems.ORES_POWER.block());
 
 
 	}
