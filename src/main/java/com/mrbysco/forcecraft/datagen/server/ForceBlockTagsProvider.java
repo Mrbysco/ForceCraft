@@ -58,6 +58,11 @@ public class ForceBlockTagsProvider extends BlockTagsProvider {
 		);
 		this.tag(ForceTags.Blocks.COLD_EDIBLE_GRASS_BLOCKS).add(Blocks.GRASS_BLOCK, Blocks.PODZOL);
 		this.tag(ForceTags.Blocks.ENDERTOT_HOLDABLE).addTags(BlockTags.STAIRS, BlockTags.SLABS);
+		this.tag(ForceTags.Blocks.MINEABLE_WITH_MITTS).addTags(
+				BlockTags.MINEABLE_WITH_SHOVEL,
+				BlockTags.MINEABLE_WITH_AXE,
+				BlockTags.MINEABLE_WITH_PICKAXE
+		).add(Blocks.COBWEB);
 
 		this.tag(BlockTags.NEEDS_IRON_TOOL).add(
 				ForceRegistry.POWER_ORE.get(),
