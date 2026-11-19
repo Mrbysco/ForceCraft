@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_damage_tools"
+    "tag": "forcecraft:valid_items/damage"
   },
   "ingredient": {
     "item": "forcecraft:claw"

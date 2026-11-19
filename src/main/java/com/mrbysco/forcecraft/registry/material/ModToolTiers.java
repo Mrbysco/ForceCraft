@@ -7,6 +7,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.SimpleTier;
 
 public class ModToolTiers {
-	public static final Tier FORCE = new SimpleTier(ForceTags.INCORRECT_FOR_FORCE, 1561, 8.0F, 8.0F, 22,
+	public static final Tier FORCE = new SimpleTier(ForceTags.Blocks.INCORRECT_FOR_FORCE, 1561, 8.0F, 8.0F, 22,
 			() -> Ingredient.of(ForceRegistry.FORCE_GEM));
 }

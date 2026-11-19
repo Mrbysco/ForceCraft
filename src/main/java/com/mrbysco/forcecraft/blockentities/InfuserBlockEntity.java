@@ -126,7 +126,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 
 		@Override
 		public boolean isFluidValid(FluidStack stack) {
-			return stack.is(ForceTags.FORCE);
+			return stack.is(ForceTags.Fluids.FORCE);
 		}
 	};
 
@@ -372,7 +372,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 				}
 			}
 		}
-		return toolStack.is(ForceTags.VALID_INFUSER_CHARGE);
+		return toolStack.is(ForceTags.Items.VALID_INFUSER_CHARGE);
 	}
 
 	protected boolean recipesStillMatch() {
@@ -540,7 +540,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Con
 	}
 
 	public boolean isValidChargeableStack(ItemStack stack) {
-		return stack.is(ForceTags.VALID_INFUSER_CHARGE) && stack.has(ForceComponents.FORCE_INFUSED) && stack.getCount() == 1;
+		return stack.is(ForceTags.Items.VALID_INFUSER_CHARGE) && stack.has(ForceComponents.FORCE_INFUSED) && stack.getCount() == 1;
 	}
 
 	/**

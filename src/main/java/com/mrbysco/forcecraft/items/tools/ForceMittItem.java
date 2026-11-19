@@ -42,7 +42,7 @@ public class ForceMittItem extends DiggerItem {
 	private final Tier itemTier = ModToolTiers.FORCE;
 
 	public ForceMittItem(Item.Properties properties) {
-		super(ModToolTiers.FORCE, ForceTags.MINEABLE_WITH_MITTS, properties
+		super(ModToolTiers.FORCE, ForceTags.Blocks.MINEABLE_WITH_MITTS, properties
 				.attributes(createAttributes(ModToolTiers.FORCE, 3.0F, -2.4F))
 				.durability(1000));
 	}
@@ -179,7 +179,7 @@ public class ForceMittItem extends DiggerItem {
 
 	@Override
 	public float getDestroySpeed(ItemStack stack, BlockState state) {
-		return state.is(ForceTags.MINEABLE_WITH_MITTS) ? 14.0F : 1.0F;
+		return state.is(ForceTags.Blocks.MINEABLE_WITH_MITTS) ? 14.0F : 1.0F;
 	}
 
 	public float getAttackDamage() {

@@ -41,7 +41,7 @@ public class BaconatorItem extends BaseItem {
 			if (!isFull) {
 				//Fill with food
 				boolean extracted = ItemHandlerUtils.extractStackFromPlayer(playerIn.getInventory(), handler, (stack) -> {
-					return !stack.isEmpty() && stack.has(DataComponents.FOOD) && stack.is(ForceTags.BACONATOR_FOOD);
+					return !stack.isEmpty() && stack.has(DataComponents.FOOD) && stack.is(ForceTags.Items.BACONATOR_FOOD);
 				});
 				boolean hasItems = ItemHandlerUtils.hasItems(handler);
 				if (!extracted) {

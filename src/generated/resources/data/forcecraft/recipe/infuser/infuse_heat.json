@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_heat_tools"
+    "tag": "forcecraft:valid_items/heat"
   },
   "ingredient": {
     "item": "forcecraft:golden_power_source"

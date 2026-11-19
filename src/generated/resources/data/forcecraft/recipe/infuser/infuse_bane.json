@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_bane_tools"
+    "tag": "forcecraft:valid_items/bane"
   },
   "ingredient": {
     "item": "minecraft:spider_eye"

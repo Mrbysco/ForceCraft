@@ -7,6 +7,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStackSimple;
@@ -46,7 +47,7 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 
 	@Override
 	public boolean canFillFluidType(FluidStack stack) {
-		return stack.getFluid().is(ForceTags.FORCE) || (NeoForgeMod.MILK.isBound() && stack.getFluid().is(ForceTags.MILK));
+		return stack.getFluid().is(ForceTags.Fluids.FORCE) || (NeoForgeMod.MILK.isBound() && stack.getFluid().is(Tags.Fluids.MILK));
 	}
 
 	@Override
@@ -64,11 +65,11 @@ public class FlaskFluidHandler extends FluidHandlerItemStackSimple {
 		if (stack.isEmpty()) {
 			setContainerToEmpty();
 		} else {
-			if (!stack.isEmpty() && stack.getFluid().is(ForceTags.FORCE)) {
+			if (!stack.isEmpty() && stack.getFluid().is(ForceTags.Fluids.FORCE)) {
 				container = new ItemStack(ForceRegistry.FORCE_FILLED_FORCE_FLASK.get());
 				return;
 			}
-			if (NeoForgeMod.MILK.isBound() && stack.getFluid().is(ForceTags.MILK)) {
+			if (NeoForgeMod.MILK.isBound() && stack.getFluid().is(Tags.Fluids.MILK)) {
 				container = new ItemStack(ForceRegistry.MILK_FORCE_FLASK.get());
 				return;
 			}

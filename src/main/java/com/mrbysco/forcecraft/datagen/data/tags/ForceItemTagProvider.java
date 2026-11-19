@@ -7,10 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
@@ -18,7 +15,6 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.mrbysco.forcecraft.registry.ForceRegistry.DEEPSLATE_POWER_ORE_ITEM;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_BLACK_SLAB;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_BLACK_STAIRS;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_BRICK_BLUE_SLAB;
@@ -57,7 +53,6 @@ import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_LEAVES;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_PLANKS;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_PLANK_STAIRS;
 import static com.mrbysco.forcecraft.registry.ForceRegistry.FORCE_SAPLING_ITEM;
-import static com.mrbysco.forcecraft.registry.ForceRegistry.POWER_ORE_ITEM;
 
 public class ForceItemTagProvider extends ItemTagsProvider {
 	public ForceItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
@@ -65,36 +60,30 @@ public class ForceItemTagProvider extends ItemTagsProvider {
 		super(output, lookupProvider, blockTagProvider.contentsGetter(), Reference.MOD_ID, existingFileHelper);
 	}
 
-	public static final TagKey<Item> ORES_IN_GROUND_DEEPSLATE = commonTag("ores_in_ground/deepslate");
-	public static final TagKey<Item> ORES_IN_GROUND_STONE = commonTag("ores_in_ground/stone");
-	public static final TagKey<Item> ORES = commonTag("ores");
-	public static final TagKey<Item> ORES_POWER = commonTag("ores/power");
-	public static final TagKey<Item> MEAT = mcTag("meat");
-
-	private static TagKey<Item> commonTag(String name) {
-		return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
-	}
-
-	private static TagKey<Item> mcTag(String name) {
-		return ItemTags.create(ResourceLocation.withDefaultNamespace(name));
-	}
-
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
-		this.tag(ORES_IN_GROUND_DEEPSLATE).add(DEEPSLATE_POWER_ORE_ITEM.get());
-		this.tag(ORES_IN_GROUND_STONE).add(POWER_ORE_ITEM.get());
-		this.tag(ORES_POWER).add(POWER_ORE_ITEM.get(), DEEPSLATE_POWER_ORE_ITEM.get());
-		this.tag(ORES).addTag(ORES_POWER);
-		this.tag(ForceTags.FORTUNE).add(ForceRegistry.FORTUNE.get(), ForceRegistry.FORTUNE_COOKIE.get());
-		this.tag(ForceTags.BACONATOR_FOOD).add(ForceRegistry.COOKED_BACON.get());
-		this.tag(ForceTags.ENDER).add(Items.ENDER_EYE, Items.ENDER_PEARL);
-		this.tag(ForceTags.CHU_JELLY).add(
+		this.tag(Tags.Items.ORES_IN_GROUND_STONE).add(ForceRegistry.POWER_ORE.asItem());
+		this.tag(Tags.Items.ORES_IN_GROUND_DEEPSLATE).add(ForceRegistry.DEEPSLATE_POWER_ORE.asItem());
+		this.tag(ForceTags.Items.ORES_POWER).add(ForceRegistry.POWER_ORE.asItem(), ForceRegistry.DEEPSLATE_POWER_ORE.asItem());
+		this.tag(Tags.Items.ORES).addTag(ForceTags.Items.ORES_POWER);
+		this.tag(ForceTags.Items.GEMS_FORCE).add(ForceRegistry.FORCE_GEM.get());
+		this.tag(Tags.Items.GEMS).addTag(ForceTags.Items.GEMS_FORCE);
+		this.tag(ForceTags.Items.INGOTS_FORCE).add(ForceRegistry.FORCE_INGOT.get());
+		this.tag(Tags.Items.INGOTS).addTag(ForceTags.Items.INGOTS_FORCE);
+		this.tag(ForceTags.Items.NUGGETS_FORCE).add(ForceRegistry.FORCE_NUGGET.get());
+		this.tag(Tags.Items.NUGGETS).addTag(ForceTags.Items.NUGGETS_FORCE);
+		this.tag(ForceTags.Items.RODS_FORCE).add(ForceRegistry.FORCE_STICK.get());
+		this.tag(ForceTags.Items.GEARS_FORCE).add(ForceRegistry.FORCE_GEAR.get());
+
+		this.tag(ForceTags.Items.BACONATOR_FOOD).add(ForceRegistry.COOKED_BACON.get());
+		this.tag(ForceTags.Items.ENDER).add(Items.ENDER_EYE, Items.ENDER_PEARL);
+		this.tag(ForceTags.Items.CHU_JELLY).add(
 				ForceRegistry.RED_CHU_JELLY.get(),
 				ForceRegistry.GREEN_CHU_JELLY.get(),
 				ForceRegistry.BLUE_CHU_JELLY.get(),
 				ForceRegistry.GOLD_CHU_JELLY.get()
 		);
-		this.tag(ForceTags.ENTITY_FLASKS).add(
+		this.tag(ForceTags.Items.ENTITY_FLASKS).add(
 				ForceRegistry.ENTITY_FLASK.get(), ForceRegistry.BAT_FLASK.get(), ForceRegistry.BEE_FLASK.get(),
 				ForceRegistry.CAT_FLASK.get(), ForceRegistry.CAVE_SPIDER_FLASK.get(), ForceRegistry.CHICKEN_FLASK.get(),
 				ForceRegistry.COD_FLASK.get(), ForceRegistry.COW_FLASK.get(), ForceRegistry.DOLPHIN_FLASK.get(),
@@ -110,7 +99,7 @@ public class ForceItemTagProvider extends ItemTagsProvider {
 				ForceRegistry.ZOMBIFIED_PIGLIN_FLASK.get()
 		);
 
-		this.tag(ForceTags.FORCE_FURNACES)
+		this.tag(ForceTags.Items.FORCE_FURNACES)
 				.add(ForceRegistry.FORCE_FURNACE.asItem(), ForceRegistry.BLACK_FORCE_FURNACE.asItem(),
 						ForceRegistry.BLUE_FORCE_FURNACE.asItem(), ForceRegistry.BROWN_FORCE_FURNACE.asItem(),
 						ForceRegistry.CYAN_FORCE_FURNACE.asItem(), ForceRegistry.GRAY_FORCE_FURNACE.asItem(),
@@ -121,30 +110,168 @@ public class ForceItemTagProvider extends ItemTagsProvider {
 						ForceRegistry.RED_FORCE_FURNACE.asItem(), ForceRegistry.WHITE_FORCE_FURNACE.asItem());
 
 		this.tag(ItemTags.MEAT).add(ForceRegistry.RAW_BACON.get(), ForceRegistry.COOKED_BACON.get());
-		this.tag(MEAT).add(ForceRegistry.RAW_BACON.get(), ForceRegistry.COOKED_BACON.get());
+		this.tag(Tags.Items.FOODS_RAW_MEAT).add(ForceRegistry.RAW_BACON.get());
+		this.tag(Tags.Items.FOODS_COOKED_MEAT).add(ForceRegistry.COOKED_BACON.get());
 
+		this.tag(ForceTags.Items.CAN_STORE_FORCE).add(
+				ForceRegistry.FORCE_ROD.get()
+		);
+
+		this.tag(ForceTags.Items.FORCE_REPAIR_INGREDIENTS).add(ForceRegistry.FORCE_GEM.get());
+		this.tag(ForceTags.Items.UPGRADE_CORES).add(
+				ForceRegistry.GRINDING_CORE.get(),
+				ForceRegistry.FREEZING_CORE.get(),
+				ForceRegistry.EXPERIENCE_CORE.get(),
+				ForceRegistry.HEAT_CORE.get(),
+				ForceRegistry.SPEED_CORE.get()
+		);
+		this.tag(ForceTags.Items.FORCE_FURNACES).add(ForceRegistry.FORCE_FURNACE.asItem());
+
+		this.tag(ForceTags.Items.HOLDS_ITEMS).add(
+				ForceRegistry.FORCE_PACK.get()
+		);
+		this.tag(ForceTags.Items.FORCE_ARMOR).add(
+				ForceRegistry.FORCE_BOOTS.get(), ForceRegistry.FORCE_LEGS.get(),
+				ForceRegistry.FORCE_CHEST.get(), ForceRegistry.FORCE_HELMET.get()
+		);
 		this.tag(ItemTags.FOOT_ARMOR).add(ForceRegistry.FORCE_BOOTS.get());
 		this.tag(ItemTags.LEG_ARMOR).add(ForceRegistry.FORCE_LEGS.get());
 		this.tag(ItemTags.CHEST_ARMOR).add(ForceRegistry.FORCE_CHEST.get());
 		this.tag(ItemTags.HEAD_ARMOR).add(ForceRegistry.FORCE_HELMET.get());
 
-		this.tag(ItemTags.PICKAXES)
-				.add(ForceRegistry.FORCE_PICKAXE.get());
+		this.tag(ItemTags.PICKAXES).add(ForceRegistry.FORCE_PICKAXE.get());
+		this.tag(ItemTags.SHOVELS).add(ForceRegistry.FORCE_SHOVEL.get());
+		this.tag(ItemTags.AXES).add(ForceRegistry.FORCE_AXE.get());
+		this.tag(ItemTags.SWORDS).add(ForceRegistry.FORCE_SWORD.get());
 
-		this.tag(ItemTags.SHOVELS)
-				.add(ForceRegistry.FORCE_SHOVEL.get());
+		this.tag(Tags.Items.TOOLS_BOW).add(ForceRegistry.FORCE_BOW.get());
+		this.tag(Tags.Items.TOOLS_SHEAR).add(ForceRegistry.FORCE_SHEARS.get());
 
-		this.tag(ItemTags.AXES)
-				.add(ForceRegistry.FORCE_AXE.get());
+		// Infuser tags
+		this.tag(ForceTags.Items.CAN_STORE_FORCE).add(
+				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_BOW.get(), ForceRegistry.FORCE_SHEARS.get(),
+				ForceRegistry.FORCE_PICKAXE.get(), ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_AXE.get()
+		).addTag(ForceTags.Items.FORCE_ARMOR);
 
-		this.tag(Tags.Items.TOOLS_BOW)
-				.add(ForceRegistry.FORCE_BOW.get());
+		this.tag(ForceTags.Items.VALID_INFUSER_CHARGE).addTag(ForceTags.Items.CAN_STORE_FORCE);
+		this.tag(ForceTags.Items.VALID_FORCE_BELT).add(Items.POTION, Items.MILK_BUCKET, ForceRegistry.RED_POTION.get(),
+				ForceRegistry.MILK_FORCE_FLASK.get(), ForceRegistry.FORCE_FILLED_FORCE_FLASK.get());
 
-		this.tag(ItemTags.SWORDS)
+		this.tag(ForceTags.Items.VALID_FORCE_ITEMS).add(
+				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_PICKAXE.get(),
+				ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_AXE.get());
+
+		this.tag(ForceTags.Items.VALID_DAMAGE_ITEMS).add(
+				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_BOW.get()
+		).addTag(ForceTags.Items.FORCE_ARMOR);
+
+		this.tag(ForceTags.Items.VALID_SPEED_ITEMS)
+				.add(
+						ForceRegistry.FORCE_PICKAXE.get(), ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_AXE.get(),
+						ForceRegistry.FORCE_ROD.get())
+				.addTag(ForceTags.Items.FORCE_ARMOR);
+
+		this.tag(ForceTags.Items.VALID_LUMBERJACK_ITEMS).add(ForceRegistry.FORCE_AXE.get());
+
+		this.tag(ForceTags.Items.VALID_RAINBOW_ITEMS).add(ForceRegistry.FORCE_SHEARS.get());
+
+		this.tag(ForceTags.Items.VALID_LUCK_ITEMS).add(
+				ForceRegistry.FORCE_SWORD.get(),
+				ForceRegistry.FORCE_PICKAXE.get(), ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_AXE.get());
+
+		this.tag(ForceTags.Items.VALID_GRINDING_ITEMS).add(
+				ForceRegistry.FORCE_PICKAXE.get(), ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_AXE.get());
+
+		this.tag(ForceTags.Items.VALID_FREEZING_ITEMS).add(ForceRegistry.FORCE_BOW.get(), ForceRegistry.FORCE_SWORD.get());
+
+		this.tag(ForceTags.Items.VALID_EXPERIENCE_ITEMS).add(net.minecraft.world.item.Items.BOOK);
+
+		this.tag(ForceTags.Items.VALID_FALSE_ITEMS).add(ForceRegistry.FORCE_SWORD.get());
+
+		this.tag(ForceTags.Items.VALID_TOUCH_ITEMS).add(
+				ForceRegistry.FORCE_PICKAXE.get(), ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_AXE.get());
+
+		this.tag(ForceTags.Items.VALID_BLEED_ITEMS).add(
+				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_BOW.get());
+
+		this.tag(ForceTags.Items.VALID_TIME_ITEMS)
 				.add(ForceRegistry.FORCE_SWORD.get());
 
-		this.tag(Tags.Items.TOOLS_SHEAR)
-				.add(ForceRegistry.FORCE_SHEARS.get());
+		this.tag(ForceTags.Items.FORCE_TORCHES).add(ForceRegistry.FORCE_TORCH.asItem(), ForceRegistry.FORCE_RED_TORCH.asItem(),
+				ForceRegistry.FORCE_ORANGE_TORCH.asItem(), ForceRegistry.FORCE_GREEN_TORCH.asItem(),
+				ForceRegistry.FORCE_BLUE_TORCH.asItem(), ForceRegistry.FORCE_WHITE_TORCH.asItem(),
+				ForceRegistry.FORCE_BLACK_TORCH.asItem(), ForceRegistry.FORCE_BROWN_TORCH.asItem(),
+				ForceRegistry.FORCE_LIGHT_BLUE_TORCH.asItem(), ForceRegistry.FORCE_MAGENTA_TORCH.asItem(),
+				ForceRegistry.FORCE_PINK_TORCH.asItem(), ForceRegistry.FORCE_LIGHT_GRAY_TORCH.asItem(),
+				ForceRegistry.FORCE_LIME_TORCH.asItem(), ForceRegistry.FORCE_CYAN_TORCH.asItem(),
+				ForceRegistry.FORCE_PURPLE_TORCH.asItem(), ForceRegistry.FORCE_GRAY_TORCH.asItem()
+		);
+
+		this.tag(ForceTags.Items.VALID_INFUSE_TORCHES)
+				.addTag(ForceTags.Items.FORCE_TORCHES);
+
+		this.tag(ForceTags.Items.VALID_HEAT_ITEMS)
+				.add(
+						ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_BOW.get(),
+						ForceRegistry.FORCE_PICKAXE.get(), ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_AXE.get(),
+						ForceRegistry.FORCE_ROD.get() // Item_card?
+				)
+				.addTag(ForceTags.Items.FORCE_ARMOR);
+
+		this.tag(ForceTags.Items.VALID_BANE_ITEMS).add(ForceRegistry.FORCE_SWORD.get());
+
+		this.tag(ForceTags.Items.VALID_WING_ITEMS)
+				.add(ForceRegistry.FORCE_SWORD.get())
+				.addTag(ForceTags.Items.FORCE_ARMOR);
+
+		this.tag(ForceTags.Items.VALID_HEALING_ITEMS).add(
+				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_BOW.get(), ForceRegistry.FORCE_ROD.get());
+
+		this.tag(ForceTags.Items.VALID_CAMO_ITEMS)
+				.add(ForceRegistry.FORCE_ROD.get())
+				.addTag(ForceTags.Items.FORCE_ARMOR);
+
+		this.tag(ForceTags.Items.VALID_SIGHT_ITEMS).add(ForceRegistry.FORCE_ROD.get());
+
+		this.tag(ForceTags.Items.VALID_STURDY_ITEMS)
+				.add(
+						ForceRegistry.FORCE_PICKAXE.get(), ForceRegistry.FORCE_SHOVEL.get(), ForceRegistry.FORCE_AXE.get()
+				)
+				.addTag(ForceTags.Items.FORCE_ARMOR);
+
+		this.tag(ForceTags.Items.VALID_ENDER_ITEMS).add(
+				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_BOW.get(), ForceRegistry.FORCE_ROD.get());
+
+		this.tag(ForceTags.Items.VALID_SOUL_ITEMS).add(ForceRegistry.FORCE_SWORD.get());
+
+		this.tag(ForceTags.Items.VALID_LIGHT_ITEMS).add(ForceRegistry.FORCE_SWORD.get());
+
+		this.tag(ForceTags.Items.VALID_TREASURE_ITEMS).add(
+				ForceRegistry.FORCE_SWORD.get(), ForceRegistry.FORCE_BOW.get());
+
+		this.tag(ForceTags.Items.LIMITED_STURDY_ITEMS)
+				.addTag(ForceTags.Items.FORCE_ARMOR);
+
+		this.tag(ForceTags.Items.LIMITED_DAMAGE_ITEMS)
+				.addTag(ForceTags.Items.FORCE_ARMOR);
+
+		this.tag(ForceTags.Items.FORCE_TOOLS).add(
+				ForceRegistry.FORCE_PICKAXE.get(),
+				ForceRegistry.FORCE_AXE.get(),
+				ForceRegistry.FORCE_SHOVEL.get(),
+				ForceRegistry.FORCE_SHEARS.get()
+		);
+		this.tag(ForceTags.Items.FORCE_WEAPONS).add(
+				ForceRegistry.FORCE_SWORD.get(),
+				ForceRegistry.FORCE_MITT.get(),
+				ForceRegistry.FORCE_BOW.get()
+		);
+		this.tag(ForceTags.Items.FORTUNE).add(
+				ForceRegistry.FORTUNE.get(),
+				ForceRegistry.FORTUNE_COOKIE.get()
+		);
+
+		this.tag(ForceTags.Items.FORCE_FUELS).add(ForceRegistry.FORCE_GEM.get());
 
 		this.tag(Tags.Items.DRINKS_MILK)
 				.add(ForceRegistry.MILK_FORCE_FLASK.get());
@@ -165,13 +292,10 @@ public class ForceItemTagProvider extends ItemTagsProvider {
 				FORCE_BRICK_LIGHT_BLUE_SLAB.asItem(), FORCE_BRICK_MAGENTA_SLAB.asItem(), FORCE_BRICK_PINK_SLAB.asItem(),
 				FORCE_BRICK_LIGHT_GRAY_SLAB.asItem(), FORCE_BRICK_LIME_SLAB.asItem(), FORCE_BRICK_CYAN_SLAB.asItem(),
 				FORCE_BRICK_PURPLE_SLAB.asItem(), FORCE_BRICK_GRAY_SLAB.asItem(), FORCE_BRICK_SLAB.asItem());
-		this.tag(ItemTags.LEAVES).add(FORCE_LEAVES.asItem());
 		this.tag(ItemTags.PLANKS).add(FORCE_PLANKS.asItem());
 
-		this.tag(ForceTags.FORCE_LOGS_ITEM).add(ForceRegistry.FORCE_LOG_ITEM.get(), ForceRegistry.FORCE_WOOD_ITEM.get());
-		this.tag(ItemTags.LOGS_THAT_BURN).addTag(ForceTags.FORCE_LOGS_ITEM);
-
-		this.tag(ItemTags.SAPLINGS).add(FORCE_SAPLING_ITEM.get());
-
+		this.tag(ForceTags.Items.FORCE_LOGS).add(ForceRegistry.FORCE_LOG.asItem(), ForceRegistry.FORCE_WOOD.asItem());
+		this.tag(ItemTags.LEAVES).add(ForceRegistry.FORCE_LEAVES.asItem());
+		this.tag(ItemTags.SAPLINGS).add(ForceRegistry.FORCE_SAPLING.asItem());
 	}
 }

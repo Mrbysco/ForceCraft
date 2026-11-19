@@ -85,6 +85,6 @@ public class ForceBeltItem extends BaseItem {
 	}
 
 	public static boolean filter(ItemStack stack) {
-		return !(stack.getItem() instanceof ForceBeltItem) && stack.is(ForceTags.VALID_FORCE_BELT);
+		return !(stack.getItem() instanceof ForceBeltItem) && stack.is(ForceTags.Items.VALID_FORCE_BELT);
 	}
 }

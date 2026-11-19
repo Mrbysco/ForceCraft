@@ -13,7 +13,7 @@ public class SlotForceFuel extends Slot {
 	}
 
 	public boolean mayPlace(ItemStack stack) {
-		return stack.is(ForceTags.FORCE_FUELS);
+		return stack.is(ForceTags.Items.FORCE_FUELS);
 	}
 
 	public int getMaxStackSize(ItemStack stack) {

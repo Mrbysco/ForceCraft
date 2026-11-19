@@ -21,7 +21,7 @@ public class ForceLootModifierProvider extends GlobalLootModifierProvider {
 	protected void start() {
 		this.add("smelting", new SmeltingModifier(
 				new LootItemCondition[]{
-						MatchTool.toolMatches(ItemPredicate.Builder.item().of(ForceTags.TOOLS)).build()
+						MatchTool.toolMatches(ItemPredicate.Builder.item().of(ForceTags.Items.FORCE_TOOLS)).build()
 				})
 		);
 	}

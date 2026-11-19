@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_lumber_tools"
+    "tag": "forcecraft:valid_items/lumberjack"
   },
   "ingredient": {
     "item": "forcecraft:force_log"

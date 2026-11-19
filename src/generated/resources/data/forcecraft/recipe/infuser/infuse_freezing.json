@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_freezing_tools"
+    "tag": "forcecraft:valid_items/freezing"
   },
   "ingredient": {
     "item": "forcecraft:snow_cookie"

@@ -1,3 +1,6 @@
 {
-  "values": []
+  "values": [
+    "forcecraft:time_torch",
+    "forcecraft:wall_time_torch"
+  ]
 }

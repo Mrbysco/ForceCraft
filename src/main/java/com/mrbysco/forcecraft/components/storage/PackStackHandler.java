@@ -24,7 +24,7 @@ public class PackStackHandler extends ItemStackHandler {
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack) {
 		//Make sure there's no ForcePack-ception
-		return !(stack.getItem() instanceof ForcePackItem) && !stack.is(ForceTags.HOLDS_ITEMS) && super.isItemValid(slot, stack);
+		return !(stack.getItem() instanceof ForcePackItem) && !stack.is(ForceTags.Items.HOLDS_ITEMS) && super.isItemValid(slot, stack);
 	}
 
 	public int getSlotsInUse() {

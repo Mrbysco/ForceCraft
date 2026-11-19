@@ -276,7 +276,7 @@ public class EnderTotEntity extends EnderMan {
 			Vec3 vector3d1 = new Vec3((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D);
 			BlockHitResult blockHitResult = world.clip(new ClipContext(vector3d, vector3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.endertot));
 			boolean flag = blockHitResult.getBlockPos().equals(blockpos);
-			if (blockstate.is(ForceTags.ENDERTOT_HOLDABLE) && flag) {
+			if (blockstate.is(ForceTags.Blocks.ENDERTOT_HOLDABLE) && flag) {
 				world.removeBlock(blockpos, false);
 				this.endertot.setCarriedBlock(blockstate.getBlock().defaultBlockState());
 			}

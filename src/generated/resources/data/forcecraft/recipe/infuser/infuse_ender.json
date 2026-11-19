@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_ender_tools"
+    "tag": "forcecraft:valid_items/ender"
   },
   "ingredient": {
     "tag": "forcecraft:ender"

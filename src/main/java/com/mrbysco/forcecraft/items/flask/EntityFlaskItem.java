@@ -117,7 +117,7 @@ public class EntityFlaskItem extends BaseItem {
 	}
 
 	public boolean isBlacklisted(LivingEntity livingEntity) {
-		return livingEntity.getType().is(ForceTags.FLASK_BLACKLIST);
+		return livingEntity.getType().is(ForceTags.EntityTypes.FLASK_BLACKLIST);
 	}
 
 	@Override

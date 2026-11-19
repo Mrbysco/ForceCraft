@@ -1,19 +1,27 @@
-// 1.21.1	2025-09-28T13:03:49.3346709	Tags for minecraft:block mod id forcecraft
+// 1.21.1	2026-11-19T21:11:29.5992797	Tags for minecraft:block mod id forcecraft
 d964b17dbbb1870466808060f50c0991f7cfaf65 data/c/tags/block/ores.json
 f002772c304bb8350635523d7d3bb1c4fdb5796a data/c/tags/block/ores/power.json
 b73848b6920747aedc21ffb8aed7e3aa8d325f04 data/c/tags/block/ores_in_ground/deepslate.json
 5b2618b88b5b044099742e91e0a5e3ed254d91cf data/c/tags/block/ores_in_ground/stone.json
+382a0c8f43b3cf9557290daf4f352695e7c44bb2 data/forcecraft/tags/block/cold_edible_grass_blocks.json
+eab1c84857167780a1314be727ed00b327a480d4 data/forcecraft/tags/block/endertot_holdable.json
+8bcee0d21a8b0ca161ddc158ca90eecd336dd55f data/forcecraft/tags/block/force_bricks.json
+ba8baa1de0654d18f27068517c95b5fb869c254a data/forcecraft/tags/block/force_furnaces.json
 eff2e9b711edce9a5ae1875f820c2b5272b0779f data/forcecraft/tags/block/force_logs.json
+9bc73372db679da77d6d00b4472ed14ce9c3530a data/forcecraft/tags/block/force_torches.json
+a425b009e85c11fd51e92f4d91db93af84106839 data/forcecraft/tags/block/mineable_with_mitts.json
 f57a1c0d935679dbbcab3f2e8a06cae2238a6735 data/forcecraft/tags/block/needs_force_tool.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/forcecraft/tags/block/ticking_not_supported.json
+fcb32b33ddfac977c84671beb027e732e55f2936 data/forcecraft/tags/block/ticking_not_supported.json
 299ef3da8e95b3dd24c877780bb80bc97f1415e8 data/minecraft/tags/block/leaves.json
 5735e1c0769971033c17f1285a4c739a18804eaa data/minecraft/tags/block/logs_that_burn.json
+11184f61c18d715bdcaa0c9f186ed7f4992c4c24 data/minecraft/tags/block/mineable/axe.json
+299ef3da8e95b3dd24c877780bb80bc97f1415e8 data/minecraft/tags/block/mineable/hoe.json
 d24fa89133e2e0d0fed52aec4122ab12ef2313f8 data/minecraft/tags/block/mineable/pickaxe.json
 bbb8aafb9fe8b2ac991b03b55e4a2bee3318a1da data/minecraft/tags/block/needs_diamond_tool.json
 f002772c304bb8350635523d7d3bb1c4fdb5796a data/minecraft/tags/block/needs_iron_tool.json
-0565031ed33bb4914a1700661ced560c8852fd98 data/minecraft/tags/block/overworld_natural_logs.json
 cde75bc2fd92249c9a82eb34bc90e0886cb053b2 data/minecraft/tags/block/planks.json
 cb4fcce1d3c5198eee0cfaa60cfea934ecab68e2 data/minecraft/tags/block/saplings.json
 a6e42b91b664111ab69f79acb07412d5a5e9e9ec data/minecraft/tags/block/slabs.json
 254e8f68ed4ceb11eaa56d69e7098db25adef92a data/minecraft/tags/block/stairs.json
-839940226aa79cde250c70cfc041e8cffb0e742e data/minecraft/tags/block/wooden_stairs.json
+d34de5ea011ab7af85361a95720e98a6ddf6a0eb data/minecraft/tags/block/wooden_slabs.json
+6d9cd8a8fc9ec21df75efdb8b0c098bb9aeb1a9b data/minecraft/tags/block/wooden_stairs.json

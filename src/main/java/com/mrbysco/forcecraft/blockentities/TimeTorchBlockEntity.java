@@ -64,7 +64,7 @@ public class TimeTorchBlockEntity extends BlockEntity {
 		if (pos.equals(getBlockPos()) || !level.isAreaLoaded(pos, 1)) return;
 
 		BlockState blockState = this.level.getBlockState(pos);
-		if (blockState != null && !blockState.is(ForceTags.TICKING_NOT_SUPPORTED)) {
+		if (blockState != null && !blockState.is(ForceTags.Blocks.TICKING_NOT_SUPPORTED)) {
 			Block block = blockState.getBlock();
 
 			if (block == null || block instanceof LiquidBlock || block instanceof TimeTorchBlock || block instanceof WallTimeTorchBlock || block == Blocks.AIR)

@@ -128,9 +128,9 @@ public class ForceRecipeProvider extends RecipeProvider {
 						ForceRegistry.COOKED_BACON.get(), 0.1F, 200)
 				.unlockedBy("has_raw_bacon", has(ForceRegistry.RAW_BACON.get()))
 				.save(output, Reference.modLoc("cooked_bacon_from_smelting"));
-		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ForceTags.FORCE_LOGS_ITEM), RecipeCategory.MISC,
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ForceTags.Items.FORCE_LOGS), RecipeCategory.MISC,
 						ForceRegistry.GOLDEN_POWER_SOURCE.get(), 0.15F, 200)
-				.unlockedBy("has_force_logs", has(ForceTags.FORCE_LOGS_ITEM))
+				.unlockedBy("has_force_logs", has(ForceTags.Items.FORCE_LOGS))
 				.save(output);
 		//Smoking
 		simpleCookingRecipe(output, "smoking", RecipeSerializer.SMOKING_RECIPE, SmokingRecipe::new, 100,
@@ -191,9 +191,9 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.unlockedBy("has_light_blue_dye", has(Tags.Items.DYES_LIGHT_BLUE))
 				.save(output, Reference.modLoc("light_blue_force_furnace_from_dye"));
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ForceRegistry.FORCE_FURNACE.get())
-				.requires(ForceTags.FORCE_FURNACES)
+				.requires(ForceTags.Items.FORCE_FURNACES)
 				.requires(Tags.Items.DYES_YELLOW)
-				.unlockedBy("has_force_furnace", has(ForceTags.FORCE_FURNACES))
+				.unlockedBy("has_force_furnace", has(ForceTags.Items.FORCE_FURNACES))
 				.unlockedBy("has_yellow_dye", has(Tags.Items.DYES_YELLOW))
 				.save(output, Reference.modLoc("force_furnace_from_dye"));
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ForceRegistry.LIME_FORCE_FURNACE.get())
@@ -519,11 +519,11 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("X")
 				.pattern("#")
 				.pattern("Y")
-				.define('X', ForceTags.FORCE_NUGGET)
-				.define('#', ForceTags.FORCE_ROD)
+				.define('X', ForceTags.Items.NUGGETS_FORCE)
+				.define('#', ForceTags.Items.RODS_FORCE)
 				.define('Y', Tags.Items.FEATHERS)
-				.unlockedBy("has_force_nugget", has(ForceTags.FORCE_NUGGET))
-				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+				.unlockedBy("has_force_nugget", has(ForceTags.Items.NUGGETS_FORCE))
+				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 				.unlockedBy("has_feather", has(Tags.Items.FEATHERS))
 				.save(output);
 
@@ -532,73 +532,73 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("FF")
 				.pattern("FS")
 				.pattern(" S")
-				.define('F', ForceTags.FORCE_INGOT)
-				.define('S', ForceTags.FORCE_ROD)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
-				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.define('S', ForceTags.Items.RODS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 				.save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_PICKAXE.get())
 				.pattern("FFF")
 				.pattern(" S ")
 				.pattern(" S ")
-				.define('F', ForceTags.FORCE_INGOT)
-				.define('S', ForceTags.FORCE_ROD)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
-				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.define('S', ForceTags.Items.RODS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 				.save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_SHOVEL.get())
 				.pattern("F")
 				.pattern("S")
 				.pattern("S")
-				.define('F', ForceTags.FORCE_INGOT)
-				.define('S', ForceTags.FORCE_ROD)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
-				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.define('S', ForceTags.Items.RODS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 				.save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ForceRegistry.FORCE_SWORD.get())
 				.pattern("F")
 				.pattern("F")
 				.pattern("S")
-				.define('F', ForceTags.FORCE_INGOT)
-				.define('S', ForceTags.FORCE_ROD)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
-				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.define('S', ForceTags.Items.RODS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 				.save(output);
 //		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_HOE.get()) TODO: Add Hoe?
 //				.pattern("FF")
 //				.pattern(" S")
 //				.pattern(" S")
-//				.define('F', ForceTags.FORCE_INGOT)
-//				.define('S', ForceTags.FORCE_ROD)
-//				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
-//				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+//				.define('F', ForceTags.Items.INGOTS_FORCE)
+//				.define('S', ForceTags.Items.RODS_FORCE)
+//				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+//				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 //				.save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_SHEARS.get())
 				.pattern("F ")
 				.pattern(" F")
-				.define('F', ForceTags.FORCE_INGOT)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ForceRegistry.FORCE_BOW.get())
 				.pattern(" #S")
 				.pattern("#NS")
 				.pattern(" #S")
-				.define('N', ForceTags.FORCE_NUGGET)
-				.define('S', ForceTags.FORCE_ROD)
+				.define('N', ForceTags.Items.NUGGETS_FORCE)
+				.define('S', ForceTags.Items.RODS_FORCE)
 				.define('#', Tags.Items.STRINGS)
-				.unlockedBy("has_force_nugget", has(ForceTags.FORCE_NUGGET))
-				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+				.unlockedBy("has_force_nugget", has(ForceTags.Items.NUGGETS_FORCE))
+				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 				.save(output);
 //		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ForceRegistry.FORCE_CROSSBOW.get()) TODO: Add crossbow?
 //				.pattern("SIS")
 //				.pattern("#T#")
 //				.pattern(" S ")
-//				.define('I', ForceTags.FORCE_INGOT)
-//				.define('S', ForceTags.FORCE_ROD)
+//				.define('I', ForceTags.Items.INGOTS_FORCE)
+//				.define('S', ForceTags.Items.RODS_FORCE)
 //				.define('#', Tags.Items.STRING)
 //				.define('T', Tags.Items.STRING)
-//				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
-//				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+//				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+//				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 //				.unlockedBy("has_string", has(Tags.Items.STRING))
 //				.unlockedBy("has_tripwire_hook", has(Items.TRIPWIRE_HOOK))
 //				.save(output);
@@ -606,20 +606,20 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("F F")
 				.pattern(" G ")
 				.pattern(" F ")
-				.define('F', ForceTags.FORCE_INGOT)
+				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.define('G', ForceRegistry.FORCE_GEAR)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
-				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 				.save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_MITT.get())
 				.pattern("CI ")
 				.pattern("CFI")
 				.pattern("CLL")
-				.define('F', ForceTags.FORCE_INGOT)
+				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.define('L', Tags.Items.LEATHERS)
 				.define('C', Tags.Items.COBBLESTONES_NORMAL)
 				.define('I', Tags.Items.INGOTS_IRON)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_leather", has(Tags.Items.LEATHERS))
 				.unlockedBy("has_cobblestone", has(Tags.Items.COBBLESTONES_NORMAL))
 				.unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON))
@@ -630,12 +630,12 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("  F")
 				.pattern(" S ")
 				.pattern("N  ")
-				.define('F', ForceTags.FORCE_INGOT)
-				.define('S', ForceTags.FORCE_ROD)
-				.define('N', ForceTags.FORCE_NUGGET)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
-				.unlockedBy("has_force_nugget", has(ForceTags.FORCE_NUGGET))
-				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.define('S', ForceTags.Items.RODS_FORCE)
+				.define('N', ForceTags.Items.NUGGETS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+				.unlockedBy("has_force_nugget", has(ForceTags.Items.NUGGETS_FORCE))
+				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 				.save(output);
 		ItemStack damagedRod = rodStack.copy();
 		damagedRod.setDamageValue(73);
@@ -643,39 +643,39 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("  F")
 				.pattern(" S ")
 				.pattern("N  ")
-				.define('F', ForceTags.FORCE_INGOT)
+				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.define('S', Items.STICK)
-				.define('N', ForceTags.FORCE_NUGGET)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
-				.unlockedBy("has_force_nugget", has(ForceTags.FORCE_NUGGET))
-				.unlockedBy("has_force_rod", has(ForceTags.FORCE_ROD))
+				.define('N', ForceTags.Items.NUGGETS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+				.unlockedBy("has_force_nugget", has(ForceTags.Items.NUGGETS_FORCE))
+				.unlockedBy("has_force_rod", has(ForceTags.Items.RODS_FORCE))
 				.save(output, Reference.modLoc("force_rod_from_stick"));
 		//Armor
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_BOOTS.get())
 				.pattern("F F")
 				.pattern("F F")
-				.define('F', ForceTags.FORCE_INGOT)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_LEGS.get())
 				.pattern("FFF")
 				.pattern("F F")
 				.pattern("F F")
-				.define('F', ForceTags.FORCE_INGOT)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_CHEST.get())
 				.pattern("F F")
 				.pattern("FFF")
 				.pattern("FFF")
-				.define('F', ForceTags.FORCE_INGOT)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_HELMET.get())
 				.pattern("FFF")
 				.pattern("F F")
-				.define('F', ForceTags.FORCE_INGOT)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.save(output);
 		//Stick
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ForceRegistry.FORCE_STICK.get(), 4)
@@ -686,8 +686,8 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output);
 		//Planks
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, ForceRegistry.FORCE_PLANKS.get(), 4)
-				.requires(ForceTags.FORCE_LOGS_ITEM)
-				.unlockedBy("has_force_log", has(ForceTags.FORCE_LOGS_ITEM))
+				.requires(ForceTags.Items.FORCE_LOGS)
+				.unlockedBy("has_force_log", has(ForceTags.Items.FORCE_LOGS))
 				.save(output);
 		//Wood
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ForceRegistry.FORCE_WOOD.get(), 3)
@@ -701,11 +701,11 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("LWL")
 				.pattern("FIF")
 				.pattern("LWL")
-				.define('F', ForceTags.FORCE_INGOT)
+				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.define('I', Tags.Items.INGOTS_IRON)
 				.define('L', Tags.Items.LEATHERS)
 				.define('W', ItemTags.WOOL)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON))
 				.unlockedBy("has_leather", has(Tags.Items.LEATHERS))
 				.unlockedBy("has_wool", has(ItemTags.WOOL))
@@ -715,13 +715,13 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("FFF")
 				.pattern(" # ")
 				.pattern("GPG")
-				.define('F', ForceTags.FORCE_INGOT)
+				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.define('#', Tags.Items.GLASS_BLOCKS)
-				.define('G', ForceTags.FORCE_GEAR)
+				.define('G', ForceTags.Items.GEARS_FORCE)
 				.define('P', Items.PISTON)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_glass", has(Tags.Items.GLASS_BLOCKS))
-				.unlockedBy("has_force_gear", has(ForceTags.FORCE_GEAR))
+				.unlockedBy("has_force_gear", has(ForceTags.Items.GEARS_FORCE))
 				.unlockedBy("has_piston", has(Items.PISTON))
 				.save(output);
 		//Force Furnace
@@ -729,10 +729,10 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern(" F ")
 				.pattern("F F")
 				.pattern("IUI")
-				.define('F', ForceTags.FORCE_INGOT)
+				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.define('I', Tags.Items.INGOTS_IRON)
 				.define('U', Items.FURNACE)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON))
 				.unlockedBy("has_furnace", has(Items.FURNACE))
 				.save(output);
@@ -741,23 +741,23 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern(" F ")
 				.pattern("F F")
 				.pattern(" F ")
-				.define('F', ForceTags.FORCE_INGOT)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.save(output);
 		//Force Nugget
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ForceRegistry.FORCE_NUGGET.get(), 9)
-				.requires(ForceTags.FORCE_INGOT)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.requires(ForceTags.Items.INGOTS_FORCE)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.save(output);
 		//Force Pack
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_PACK.get())
 				.pattern("FLF")
 				.pattern("LCL")
 				.pattern("FLF")
-				.define('F', ForceTags.FORCE_INGOT)
+				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.define('L', Tags.Items.LEATHERS)
 				.define('C', ItemTags.PLANKS)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_leather", has(Tags.Items.LEATHERS))
 				.unlockedBy("has_planks", has(ItemTags.PLANKS))
 				.save(output);
@@ -766,10 +766,10 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("WLW")
 				.pattern("LIL")
 				.pattern("WLW")
-				.define('I', ForceTags.FORCE_INGOT)
+				.define('I', ForceTags.Items.INGOTS_FORCE)
 				.define('L', Tags.Items.LEATHERS)
 				.define('W', ItemTags.WOOL)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_leather", has(Tags.Items.LEATHERS))
 				.unlockedBy("has_wool", has(ItemTags.WOOL))
 				.save(output);
@@ -778,15 +778,15 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern(" N ")
 				.pattern("G G")
 				.pattern(" G ")
-				.define('N', ForceTags.FORCE_NUGGET)
+				.define('N', ForceTags.Items.NUGGETS_FORCE)
 				.define('G', Tags.Items.GLASS_BLOCKS)
-				.unlockedBy("has_force_nugget", has(ForceTags.FORCE_NUGGET))
+				.unlockedBy("has_force_nugget", has(ForceTags.Items.NUGGETS_FORCE))
 				.unlockedBy("has_glass", has(Tags.Items.GLASS_BLOCKS))
 				.save(output);
 		NoRemainderShapedBuilder.shaped(RecipeCategory.MISC, ForceRegistry.FORCE_FLASK.get())
 				.pattern("E")
-				.define('E', ForceTags.ENTITY_FLASKS)
-				.unlockedBy("has_entity_flask", has(ForceTags.ENTITY_FLASKS))
+				.define('E', ForceTags.Items.ENTITY_FLASKS)
+				.unlockedBy("has_entity_flask", has(ForceTags.Items.ENTITY_FLASKS))
 				.save(output, Reference.modLoc("force_flask_from_entity_flask"));
 		//Fortune Cookie
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ForceRegistry.FORTUNE_COOKIE.get())
@@ -799,23 +799,23 @@ public class ForceRecipeProvider extends RecipeProvider {
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ForceRegistry.FORCE_INGOT.get(), 3)
 				.requires(Tags.Items.INGOTS_GOLD)
 				.requires(Tags.Items.INGOTS_GOLD)
-				.requires(ForceTags.FORCE_GEM)
+				.requires(ForceTags.Items.GEMS_FORCE)
 				.unlockedBy("has_gold_ingot", has(Tags.Items.INGOTS_GOLD))
-				.unlockedBy("has_force_gem", has(ForceTags.FORCE_GEM))
+				.unlockedBy("has_force_gem", has(ForceTags.Items.GEMS_FORCE))
 				.save(output, Reference.modLoc("force_ingot_from_gold"));
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ForceRegistry.FORCE_INGOT.get(), 2)
 				.requires(Tags.Items.INGOTS_IRON)
 				.requires(Tags.Items.INGOTS_IRON)
-				.requires(ForceTags.FORCE_GEM)
+				.requires(ForceTags.Items.GEMS_FORCE)
 				.unlockedBy("has_iron_ingot", has(Tags.Items.INGOTS_IRON))
-				.unlockedBy("has_force_gem", has(ForceTags.FORCE_GEM))
+				.unlockedBy("has_force_gem", has(ForceTags.Items.GEMS_FORCE))
 				.save(output, Reference.modLoc("force_ingot_from_iron"));
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ForceRegistry.FORCE_INGOT.get())
 				.pattern("NNN")
 				.pattern("NNN")
 				.pattern("NNN")
-				.define('N', ForceTags.FORCE_NUGGET)
-				.unlockedBy("has_force_nugget", has(ForceTags.FORCE_NUGGET))
+				.define('N', ForceTags.Items.NUGGETS_FORCE)
+				.unlockedBy("has_force_nugget", has(ForceTags.Items.NUGGETS_FORCE))
 				.save(output, Reference.modLoc("force_ingot_from_nuggets"));
 		//Item Card
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ForceRegistry.ITEM_CARD.get())
@@ -824,10 +824,10 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("PBP")
 				.define('P', Items.PAPER)
 				.define('R', Tags.Items.DYES_RED)
-				.define('I', ForceTags.FORCE_INGOT)
+				.define('I', ForceTags.Items.INGOTS_FORCE)
 				.define('B', Tags.Items.DYES_BLUE)
 				.unlockedBy("has_paper", has(Items.PAPER))
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_red_dye", has(Tags.Items.DYES_RED))
 				.unlockedBy("has_blue_dye", has(Tags.Items.DYES_BLUE))
 				.save(output);
@@ -837,10 +837,10 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("PPP")
 				.define('P', Items.PAPER)
 				.define('R', Tags.Items.DYES_RED)
-				.define('I', ForceTags.FORCE_INGOT)
+				.define('I', ForceTags.Items.INGOTS_FORCE)
 				.define('B', Tags.Items.DYES_BLUE)
 				.unlockedBy("has_paper", has(Items.PAPER))
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_red_dye", has(Tags.Items.DYES_RED))
 				.unlockedBy("has_blue_dye", has(Tags.Items.DYES_BLUE))
 				.save(output, Reference.modLoc("item_card_flipped"));
@@ -854,10 +854,10 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern(" N ")
 				.pattern("FCF")
 				.pattern(" F ")
-				.define('F', ForceTags.FORCE_INGOT)
+				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.define('C', Items.COMPASS)
 				.define('N', Tags.Items.NETHER_STARS)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_compass", has(Items.COMPASS))
 				.unlockedBy("has_nether_star", has(Tags.Items.NETHER_STARS))
 				.save(output);
@@ -873,8 +873,8 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output);
 		//Slimeball
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.SLIME_BALL)
-				.requires(ForceTags.CHU_JELLY)
-				.unlockedBy("has_chu_jelly", has(ForceTags.CHU_JELLY))
+				.requires(ForceTags.Items.CHU_JELLY)
+				.unlockedBy("has_chu_jelly", has(ForceTags.Items.CHU_JELLY))
 				.save(output, Reference.modLoc("slime_ball_from_chu_jelly"));
 		//Snow Cookie
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ForceRegistry.SNOW_COOKIE.get())
@@ -901,11 +901,11 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.pattern("FGF")
 				.pattern("DND")
 				.pattern("FGF")
-				.define('F', ForceTags.FORCE_INGOT)
+				.define('F', ForceTags.Items.INGOTS_FORCE)
 				.define('G', Tags.Items.STORAGE_BLOCKS_GOLD)
 				.define('D', Tags.Items.GEMS_DIAMOND)
 				.define('N', Tags.Items.NETHER_STARS)
-				.unlockedBy("has_force_ingot", has(ForceTags.FORCE_INGOT))
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
 				.unlockedBy("has_gold_block", has(Tags.Items.STORAGE_BLOCKS_GOLD))
 				.unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND))
 				.unlockedBy("has_nether_star", has(Tags.Items.NETHER_STARS))
@@ -954,14 +954,14 @@ public class ForceRecipeProvider extends RecipeProvider {
 		//0
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(ForceRegistry.CLAW.get()),
-						Ingredient.of(ForceTags.VALID_DAMAGE_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_DAMAGE_ITEMS),
 						UpgradeBookTier.ZERO,
 						20
 				).modifierType(InfuserModifierType.DAMAGE)
 				.save(output, Reference.modLoc("infuser/infuse_damage"));
 		InfuseRecipeBuilder.infuse(
-						Ingredient.of(ForceTags.FORCE_NUGGET),
-						Ingredient.of(ForceTags.VALID_KNOCKBACK_TOOLS),
+						Ingredient.of(ForceTags.Items.NUGGETS_FORCE),
+						Ingredient.of(ForceTags.Items.VALID_FORCE_ITEMS),
 						UpgradeBookTier.ZERO,
 						20
 				).modifierType(InfuserModifierType.FORCE)
@@ -970,21 +970,21 @@ public class ForceRecipeProvider extends RecipeProvider {
 		//1
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(ForceRegistry.GOLDEN_POWER_SOURCE.get()),
-						Ingredient.of(ForceTags.VALID_HEAT_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_HEAT_ITEMS),
 						UpgradeBookTier.ONE,
 						60
 				).modifierType(InfuserModifierType.HEAT)
 				.save(output, Reference.modLoc("infuser/infuse_heat"));
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(ForceRegistry.FORCE_LOG.get()),
-						Ingredient.of(ForceTags.VALID_LUMBER_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_LUMBERJACK_ITEMS),
 						UpgradeBookTier.ONE,
 						60
 				).modifierType(InfuserModifierType.LUMBERJACK)
 				.save(output, Reference.modLoc("infuser/infuse_lumberjack"));
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(Items.SUGAR),
-						Ingredient.of(ForceTags.VALID_SPEED_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_SPEED_ITEMS),
 						UpgradeBookTier.ONE,
 						20
 				).modifierType(InfuserModifierType.SPEED)
@@ -1027,15 +1027,15 @@ public class ForceRecipeProvider extends RecipeProvider {
 				).output(ForceRegistry.EXPERIENCE_TOME.get())
 				.save(output, Reference.modLoc("infuser/convert_xp_book"));
 		InfuseRecipeBuilder.infuse(
-						Ingredient.of(ForceTags.FORTUNE),
-						Ingredient.of(ForceTags.VALID_LUCKY_TOOLS),
+						Ingredient.of(ForceTags.Items.FORTUNE),
+						Ingredient.of(ForceTags.Items.VALID_LUCK_ITEMS),
 						UpgradeBookTier.TWO,
 						20
 				).modifierType(InfuserModifierType.FORTUNE)
 				.save(output, Reference.modLoc("infuser/infuse_fortune"));
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(ForceRegistry.SNOW_COOKIE.get()),
-						Ingredient.of(ForceTags.VALID_FREEZING_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_FREEZING_ITEMS),
 						UpgradeBookTier.TWO,
 						20
 				).modifierType(InfuserModifierType.FREEZING)
@@ -1058,14 +1058,14 @@ public class ForceRecipeProvider extends RecipeProvider {
 		//3
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(Items.ARROW),
-						Ingredient.of(ForceTags.VALID_BLEEDING_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_BLEED_ITEMS),
 						UpgradeBookTier.THREE,
 						20
 				).modifierType(InfuserModifierType.BLEEDING)
 				.save(output, Reference.modLoc("infuser/infuse_bleeding"));
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(Items.COBWEB),
-						Ingredient.of(ForceTags.VALID_SILKY_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_TOUCH_ITEMS),
 						UpgradeBookTier.THREE,
 						20
 				).modifierType(InfuserModifierType.SILK)
@@ -1073,7 +1073,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 		InfuseRecipeBuilder.infuse(
 						DataComponentIngredient.of(false, DataComponentPredicate.builder()
 								.expect(DataComponents.POTION_CONTENTS, new PotionContents(Potions.INVISIBILITY)).build(), Items.POTION),
-						Ingredient.of(ForceTags.VALID_CAMO_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_CAMO_ITEMS),
 						UpgradeBookTier.THREE,
 						20
 				).modifierType(InfuserModifierType.CAMO)
@@ -1096,7 +1096,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output, Reference.modLoc("infuser/convert_heat"));
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(Items.SPIDER_EYE),
-						Ingredient.of(ForceTags.VALID_BANE_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_BANE_ITEMS),
 						UpgradeBookTier.FOUR,
 						20
 				).modifierType(InfuserModifierType.BANE)
@@ -1119,14 +1119,14 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output, Reference.modLoc("infuser/infuse_pack_upgrade4"));
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(Items.GHAST_TEAR),
-						Ingredient.of(ForceTags.VALID_HEALING_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_HEALING_ITEMS),
 						UpgradeBookTier.FIVE,
 						20
 				).modifierType(InfuserModifierType.HEALING)
 				.save(output, Reference.modLoc("infuser/infuse_healing"));
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(Items.FEATHER),
-						Ingredient.of(ForceTags.VALID_WING_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_WING_ITEMS),
 						UpgradeBookTier.FIVE,
 						20
 				).modifierType(InfuserModifierType.WING)
@@ -1142,14 +1142,14 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.save(output.withConditions(new TorchEnabledCondition()), Reference.modLoc("infuser/convert_time_torch"));
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(Items.OBSIDIAN),
-						Ingredient.of(ForceTags.VALID_STURDY_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_STURDY_ITEMS),
 						UpgradeBookTier.SIX,
 						20
 				).modifierType(InfuserModifierType.STURDY)
 				.save(output, Reference.modLoc("infuser/infuse_sturdy"));
 		InfuseRecipeBuilder.infuse(
-						Ingredient.of(ForceTags.ENDER),
-						Ingredient.of(ForceTags.VALID_ENDER_TOOLS),
+						Ingredient.of(ForceTags.Items.ENDER),
+						Ingredient.of(ForceTags.Items.VALID_ENDER_ITEMS),
 						UpgradeBookTier.SIX,
 						20
 				).modifierType(InfuserModifierType.ENDER)
@@ -1157,14 +1157,14 @@ public class ForceRecipeProvider extends RecipeProvider {
 		//7
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(Items.GLOWSTONE),
-						Ingredient.of(ForceTags.VALID_LIGHT_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_LIGHT_ITEMS),
 						UpgradeBookTier.SEVEN,
 						20
 				).modifierType(InfuserModifierType.LIGHT)
 				.save(output, Reference.modLoc("infuser/infuse_light"));
 		InfuseRecipeBuilder.infuse(
 						Ingredient.of(ForceRegistry.TREASURE_CORE.get()),
-						Ingredient.of(ForceTags.VALID_TREASURE_TOOLS),
+						Ingredient.of(ForceTags.Items.VALID_TREASURE_ITEMS),
 						UpgradeBookTier.SEVEN,
 						20
 				).modifierType(InfuserModifierType.TREASURE)
@@ -1377,7 +1377,7 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.setResult(ForceRegistry.FORCE_PLANKS.get(), 6)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))
 				.save(output, Reference.modLoc("grinding/force_planks_from_log"));
-		MultipleOutputRecipeBuilder.grinding(Ingredient.of(ForceTags.FORCE_FURNACES), 1.0F, 0.1F, 400)
+		MultipleOutputRecipeBuilder.grinding(Ingredient.of(ForceTags.Items.FORCE_FURNACES), 1.0F, 0.1F, 400)
 				.setResult(ForceRegistry.FORCE_INGOT.get(), 3)
 				.setResult(Items.IRON_INGOT, 2)
 				.unlockedBy("has_core", has(ForceRegistry.GRINDING_CORE))

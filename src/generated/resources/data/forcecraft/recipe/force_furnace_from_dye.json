@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     {
-      "tag": "forcecraft:force_furnace"
+      "tag": "forcecraft:force_furnaces"
     },
     {
       "tag": "c:dyes/yellow"

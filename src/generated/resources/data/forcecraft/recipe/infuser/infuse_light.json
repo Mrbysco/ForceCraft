@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_light_tools"
+    "tag": "forcecraft:valid_items/light"
   },
   "ingredient": {
     "item": "minecraft:glowstone"

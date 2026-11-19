@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_treasure_tools"
+    "tag": "forcecraft:valid_items/treasure"
   },
   "ingredient": {
     "item": "forcecraft:treasure_core"

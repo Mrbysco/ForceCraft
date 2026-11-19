@@ -2,7 +2,7 @@
   "type": "forcecraft:grinding",
   "experience": 0.1,
   "ingredient": {
-    "tag": "forcecraft:force_furnace"
+    "tag": "forcecraft:force_furnaces"
   },
   "processTime": 400,
   "results": [

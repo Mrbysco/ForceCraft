@@ -4,7 +4,7 @@
     {
       "condition": "minecraft:match_tool",
       "predicate": {
-        "items": "#forcecraft:tools"
+        "items": "#forcecraft:force_tools"
       }
     }
   ]

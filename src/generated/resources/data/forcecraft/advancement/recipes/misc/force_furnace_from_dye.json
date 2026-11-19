@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "#forcecraft:force_furnace"
+            "items": "#forcecraft:force_furnaces"
           }
         ]
       },

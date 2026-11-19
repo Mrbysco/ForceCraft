@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_knockback_tools"
+    "tag": "forcecraft:valid_items/force"
   },
   "ingredient": {
     "tag": "c:nuggets/force"

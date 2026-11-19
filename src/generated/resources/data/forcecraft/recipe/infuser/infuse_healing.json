@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_healing_tools"
+    "tag": "forcecraft:valid_items/healing"
   },
   "ingredient": {
     "item": "minecraft:ghast_tear"

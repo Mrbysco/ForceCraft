@@ -14,7 +14,7 @@ public class SlotForceGems extends SlotItemHandler {
 
 	@Override
 	public boolean mayPlace(ItemStack stack) {
-		return stack.is(ForceTags.FORCE_GEM);
+		return stack.is(ForceTags.Items.GEMS_FORCE);
 	}
 
 	@Override

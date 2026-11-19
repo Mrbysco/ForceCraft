@@ -1,7 +1,7 @@
 {
   "type": "forcecraft:infuser",
   "center": {
-    "tag": "forcecraft:valid_silky_tools"
+    "tag": "forcecraft:valid_items/touch"
   },
   "ingredient": {
     "item": "minecraft:cobweb"
