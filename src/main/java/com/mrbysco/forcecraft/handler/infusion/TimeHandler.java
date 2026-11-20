@@ -54,6 +54,7 @@ public class TimeHandler {
 	public static void onEntityTick(EntityTickEvent.Pre event) {
 		if (event.getEntity() instanceof Mob mob && isFrozen(mob)) {
 			MobEffectInstance instance = mob.getEffect(ForceEffects.TIME_SLOWDOWN);
+			assert instance != null;
 			int interval = instance.getAmplifier() + 1;
 
 			boolean allowTick = instance.getAmplifier() > 0 && mob.level().getGameTime() % interval == 0;
