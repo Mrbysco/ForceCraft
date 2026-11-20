@@ -219,6 +219,7 @@ public class ForceConfig {
 		public final ModConfigSpec.BooleanValue timeWeaponEnabled;
 		public final ModConfigSpec.IntValue entitySpeedDuration;
 		public final ModConfigSpec.IntValue blockSpeedDuration;
+		public final ModConfigSpec.IntValue timeMaxStacks;
 		public final ModConfigSpec.DoubleValue slowSpeed;
 		public final ModConfigSpec.DoubleValue fastSpeed;
 		public final ModConfigSpec.DoubleValue hyperSpeed;
@@ -326,6 +327,10 @@ public class ForceConfig {
 			blockSpeedDuration = builder
 					.comment("The duration of the speed effect for blocks in ticks (20 ticks = 1 second) [Default: 200]")
 					.defineInRange("blockSpeedDuration", 200, 1, 1000);
+
+			timeMaxStacks = builder
+					.comment("The maximum number of time stacks [Default: 3]")
+					.defineInRange("timeMaxStacks", 3, 1, 16);
 
 			slowSpeed = builder
 					.comment("The speed multiplier for slow time mode [Default: 0.25]")

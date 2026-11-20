@@ -39,6 +39,7 @@ public class TimeTorchBlockEntity extends AbstractTorchBlockEntity {
 		if (level.getGameTime() % (level.tickRateManager().tickrate() * 5) == 0) {
 			if (!ForceConfig.COMMON.timeTorchEnabled.getAsBoolean()) return;
 			float rate = TimeData.rateFor(mode);
+			int blockDuration = ForceConfig.COMMON.blockSpeedDuration.getAsInt();
 			for (BlockPos target : BlockPos.betweenClosed(
 					getBlockPos().offset(-radius, -radius, -radius),
 					getBlockPos().offset(radius, radius, radius)
@@ -46,7 +47,11 @@ public class TimeTorchBlockEntity extends AbstractTorchBlockEntity {
 				if (level.getBlockState(target).is(ForceTags.Blocks.TICKING_NOT_SUPPORTED)) continue;
 				BlockEntity blockEntity = level.getBlockEntity(target);
 				if (blockEntity == null || !(blockEntity.getBlockState().getBlock() instanceof EntityBlock)) continue;
-				blockEntity.setData(ForceAttachments.TIME_ADJUSTMENT, new TimeData(level.getGameTime() + (6 * 20), rate));
+				TimeData existing = blockEntity.hasData(ForceAttachments.TIME_ADJUSTMENT)
+						? blockEntity.getData(ForceAttachments.TIME_ADJUSTMENT)
+						: null;
+				TimeData stacked = TimeData.stack(existing, level.getGameTime(), level.getGameTime() + blockDuration, rate, getBlockPos().asLong());
+				blockEntity.setData(ForceAttachments.TIME_ADJUSTMENT, stacked);
 				TimeHandler.trackBlock((ServerLevel) level, target.immutable());
 			}
 		}

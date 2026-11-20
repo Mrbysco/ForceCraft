@@ -138,7 +138,11 @@ public class RodHelper {
 			if (level.getBlockState(target).is(ForceTags.Blocks.TICKING_NOT_SUPPORTED)) continue;
 			BlockEntity blockEntity = level.getBlockEntity(target);
 			if (blockEntity == null || !(blockEntity.getBlockState().getBlock() instanceof EntityBlock)) continue;
-			blockEntity.setData(ForceAttachments.TIME_ADJUSTMENT, new TimeData(level.getGameTime() + blockDuration, rate));
+			TimeData existing = blockEntity.hasData(ForceAttachments.TIME_ADJUSTMENT)
+					? blockEntity.getData(ForceAttachments.TIME_ADJUSTMENT)
+					: null;
+			TimeData stacked = TimeData.stack(existing, level.getGameTime(), level.getGameTime() + blockDuration, rate, pos.asLong());
+			blockEntity.setData(ForceAttachments.TIME_ADJUSTMENT, stacked);
 			TimeHandler.trackBlock(level, target.immutable());
 		}
 	}

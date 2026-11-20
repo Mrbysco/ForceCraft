@@ -213,6 +213,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addConfig("time", "Time", "Time Settings");
 		addConfig("entitySpeedDuration", "Entity Speed Duration", "The duration of the speed effect for entities in ticks (20 ticks = 1 second) [Default: 200]");
 		addConfig("blockSpeedDuration", "Block Speed Duration", "The duration of the speed effect for blocks in ticks (20 ticks = 1 second) [Default: 200]");
+		addConfig("timeMaxStacks", "Time Max Stacks", "The maximum number of time stacks [Default: 3]");
 		addConfig("slowSpeed", "Slow Speed", "The speed multiplier for slow time mode [Default: 0.25]");
 		addConfig("fastSpeed", "Fast Speed", "The speed multiplier for fast time mode [Default: 2.0]");
 		addConfig("hyperSpeed", "Hyper Speed", "The speed multiplier for hyper time mode [Default: 4.0]");
