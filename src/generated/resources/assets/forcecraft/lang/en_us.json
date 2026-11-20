@@ -286,6 +286,8 @@
   "forcecraft.configuration.time.tooltip": "Time Settings",
   "forcecraft.configuration.timeCooldown": "Time Cooldown",
   "forcecraft.configuration.timeCooldown.tooltip": "The cooldown of the Rod of Time in ticks [Default: 100]",
+  "forcecraft.configuration.timeMaxStacks": "Time Max Stacks",
+  "forcecraft.configuration.timeMaxStacks.tooltip": "The maximum number of time stacks [Default: 3]",
   "forcecraft.configuration.timeRadius": "Time Radius",
   "forcecraft.configuration.timeRadius.tooltip": "The radius of the time effect around the activated position [Default: 5]",
   "forcecraft.configuration.timeRodEnabled": "Time Rod Enabled",
