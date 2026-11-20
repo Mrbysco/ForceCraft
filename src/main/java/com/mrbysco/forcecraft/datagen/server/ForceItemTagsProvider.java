@@ -8,10 +8,15 @@ import com.mrbysco.forcecraft.registry.helper.ForceTorchReg;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ForceItemTagsProvider extends ItemTagsProvider {
@@ -220,6 +225,9 @@ public class ForceItemTagsProvider extends ItemTagsProvider {
 				ForceRegistry.FORCE_MITT.get(),
 				ForceRegistry.FORCE_BOW.get()
 		);
-		ForceRegistry.getMobChunks().forEach((entry, item) -> this.tag(ForceTags.Items.MOB_CHUNKS).add(item.get()));
+		List<DeferredItem<Item>> chunks = ForceRegistry.getMobChunks().values().stream().sorted(
+				Comparator.comparing(DeferredHolder::getId)
+		).toList();
+		chunks.forEach(item -> this.tag(ForceTags.Items.MOB_CHUNKS).add(item.get()));
 	}
 }
