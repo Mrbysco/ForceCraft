@@ -23,6 +23,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.resources.Identifier;
@@ -84,6 +85,30 @@ public class ForceRecipeProvider extends RecipeProvider {
 				.unlockedBy("has_force_nugget", this.has(ForceRegistry.FORCE_NUGGET))
 				.save(this.output, ResourceKey.create(Registries.RECIPE, Identifier.parse("forcecraft:force_ingot_from_nuggets")));
 
+		shaped(RecipeCategory.TOOLS, ForceRegistry.FORCE_PACK.get())
+				.pattern("FLF")
+				.pattern("LCL")
+				.pattern("FLF")
+				.define('F', ForceTags.Items.INGOTS_FORCE)
+				.define('L', Tags.Items.LEATHERS)
+				.define('C', ItemTags.PLANKS)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+				.unlockedBy("has_leather", has(Tags.Items.LEATHERS))
+				.unlockedBy("has_planks", has(ItemTags.PLANKS))
+				.save(output);
+
+		shaped(RecipeCategory.MISC, ForceRegistry.FORCE_PACK_UPGRADE.get())
+				.pattern("WLW")
+				.pattern("LIL")
+				.pattern("WLW")
+				.define('I', ForceTags.Items.INGOTS_FORCE)
+				.define('L', Tags.Items.LEATHERS)
+				.define('W', ItemTags.WOOL)
+				.unlockedBy("has_force_ingot", has(ForceTags.Items.INGOTS_FORCE))
+				.unlockedBy("has_leather", has(Tags.Items.LEATHERS))
+				.unlockedBy("has_wool", has(ItemTags.WOOL))
+				.save(output);
+
 		SimpleCookingRecipeBuilder.smelting(tag(ForceTags.Items.FORCE_LOGS), RecipeCategory.MISC, CookingBookCategory.MISC,
 						ForceRegistry.GOLDEN_POWER_SOURCE.get(), 0.15F, 200)
 				.unlockedBy("has_force_logs", has(ForceTags.Items.FORCE_LOGS))
@@ -120,14 +145,16 @@ public class ForceRecipeProvider extends RecipeProvider {
 						.unlockedBy("has_dye", has(tag))
 						.save(output);
 			} else {
-				shaped(RecipeCategory.MISC, reg.getTorchItem(), 6)
-						.pattern("G")
-						.pattern("S")
-						.define('G', ForceRegistry.GOLDEN_POWER_SOURCE)
-						.define('S', ForceRegistry.FORCE_STICK)
-						.unlockedBy("has_golden_power_source", this.has(ForceRegistry.GOLDEN_POWER_SOURCE))
-						.unlockedBy("has_stick", this.has(ForceRegistry.FORCE_STICK))
-						.save(this.output);
+				if (!reg.isSpecialTorch()) {
+					shaped(RecipeCategory.MISC, reg.getTorchItem(), 4)
+							.pattern("G")
+							.pattern("S")
+							.define('G', ForceRegistry.GOLDEN_POWER_SOURCE)
+							.define('S', ForceRegistry.FORCE_STICK)
+							.unlockedBy("has_golden_power_source", this.has(ForceRegistry.GOLDEN_POWER_SOURCE))
+							.unlockedBy("has_stick", this.has(ForceRegistry.FORCE_STICK))
+							.save(this.output);
+				}
 			}
 		}
 
