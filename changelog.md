@@ -1,2 +1,2 @@
-* Allow Time Torch to stack (See `timeMaxStacks` config option that determines how many time torches can affect a block entity)
-* Fix Infuser taking an absurd amount of times the more modifiers you inserted
+* Fix Force Torch recipe
+* Add missing Force Pack and Force Pack Upgrade recipes
