@@ -235,6 +235,7 @@ public class ForceLanguageProvider extends LanguageProvider {
 		addSubtitle(ForceSounds.FAIRY_LISTEN, "Fairy yelling");
 		addSubtitle(ForceSounds.FAIRY_LISTEN_SPECIAL, "Fairy wishing a happy birthday");
 		addSubtitle(ForceSounds.INFUSER_DONE, "Infuser Completes");
+		addSubtitle(ForceSounds.INFUSER_DONE2, "Infuser Completes");
 		addSubtitle(ForceSounds.INFUSER_WORKING, "Infuser Processing");
 		addSubtitle(ForceSounds.INFUSER_SPECIAL_BEEP, "Infuser Beeps");
 		addSubtitle(ForceSounds.INFUSER_SPECIAL_DONE, "Infuser Completes");

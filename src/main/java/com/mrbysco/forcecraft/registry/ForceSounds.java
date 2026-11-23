@@ -24,6 +24,9 @@ public class ForceSounds {
 	public static final DeferredHolder<SoundEvent, SoundEvent> INFUSER_DONE = SOUND_EVENTS.register("infuser.done", () ->
 			SoundEvent.createVariableRangeEvent(Reference.modLoc("infuser.done")));
 
+	public static final DeferredHolder<SoundEvent, SoundEvent> INFUSER_DONE2 = SOUND_EVENTS.register("infuser.done2", () ->
+			SoundEvent.createVariableRangeEvent(Reference.modLoc("infuser.done2")));
+
 	public static final DeferredHolder<SoundEvent, SoundEvent> INFUSER_WORKING = SOUND_EVENTS.register("infuser.working", () ->
 			SoundEvent.createVariableRangeEvent(Reference.modLoc("infuser.working")));
 

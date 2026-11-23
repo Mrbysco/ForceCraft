@@ -42,6 +42,12 @@
     ],
     "subtitle": "forcecraft.subtitle.infuser.done"
   },
+  "infuser.done2": {
+    "sounds": [
+      "forcecraft:infuser_done2"
+    ],
+    "subtitle": "forcecraft.subtitle.infuser.done2"
+  },
   "infuser.special": {
     "sounds": [
       "forcecraft:hum"

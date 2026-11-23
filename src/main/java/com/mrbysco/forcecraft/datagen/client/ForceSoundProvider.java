@@ -37,6 +37,10 @@ public class ForceSoundProvider extends SoundDefinitionsProvider {
 				.subtitle(modSubtitle(ForceSounds.INFUSER_DONE.getId()))
 				.with(sound(modLoc("infuser_done"))));
 
+		this.add(ForceSounds.INFUSER_DONE2, definition()
+				.subtitle(modSubtitle(ForceSounds.INFUSER_DONE2.getId()))
+				.with(sound(modLoc("infuser_done2"))));
+
 		this.add(ForceSounds.INFUSER_WORKING, definition()
 				.subtitle(modSubtitle(ForceSounds.INFUSER_WORKING.getId()))
 				.with(sound(modLoc("chimes"))));

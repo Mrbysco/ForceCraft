@@ -29,6 +29,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
@@ -200,12 +201,20 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 				processTool(level);
 			}
 			stopWorkSound();
-			playSound(makesSpecialSound ? ForceSounds.INFUSER_SPECIAL_DONE.get() : ForceSounds.INFUSER_DONE.get(), 1.0F, 1.0F);
+			playSound(getSoundEvent(), 1.0F, 1.0F);
 			makesSpecialSound = false;
 		}
 		canWork = false;
 		processTime = 0;
 		refreshClient();
+	}
+
+	private SoundEvent getSoundEvent() {
+		if (makesSpecialSound) return ForceSounds.INFUSER_SPECIAL_DONE.get();
+		if (level != null && level.getRandom().nextInt(10) == 0) {
+			return ForceSounds.INFUSER_DONE2.get();
+		}
+		return ForceSounds.INFUSER_DONE.get();
 	}
 
 	private void processTool(ServerLevel level) {
@@ -277,9 +286,11 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 			maxProcessTime = ForceConfig.COMMON.forceInfusingTime.get();
 		} else {
 			maxProcessTime = 0;
+			int processTimes = 0;
 			for (RecipeHolder<InfuseRecipe> holder : currentRecipes.values()) {
-				maxProcessTime += holder.value().getTime();
+				processTimes += holder.value().getTime();
 			}
+			maxProcessTime = Mth.ceil((processTimes / (float)currentRecipes.size()));
 		}
 
 		canWork = maxProcessTime > 0 && isWorkAllowed();
