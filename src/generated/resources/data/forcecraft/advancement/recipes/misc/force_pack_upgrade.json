@@ -1,21 +1,21 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_golden_power_source": {
+    "has_force_ingot": {
       "conditions": {
         "items": [
           {
-            "items": "forcecraft:golden_power_source"
+            "items": "#c:ingots/force"
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_stick": {
+    "has_leather": {
       "conditions": {
         "items": [
           {
-            "items": "forcecraft:force_stick"
+            "items": "#c:leathers"
           }
         ]
       },
@@ -23,21 +23,32 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "forcecraft:heat_torch"
+        "recipe": "forcecraft:force_pack_upgrade"
       },
       "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wool": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#minecraft:wool"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_golden_power_source",
-      "has_stick"
+      "has_force_ingot",
+      "has_leather",
+      "has_wool"
     ]
   ],
   "rewards": {
     "recipes": [
-      "forcecraft:heat_torch"
+      "forcecraft:force_pack_upgrade"
     ]
   }
 }

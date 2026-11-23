@@ -2,6 +2,7 @@ package com.mrbysco.forcecraft.blockentity.infuser;
 
 import com.mrbysco.forcecraft.ForceCraft;
 import com.mrbysco.forcecraft.Reference;
+import com.mrbysco.forcecraft.client.ForceRecipeCache;
 import com.mrbysco.forcecraft.config.ForceConfig;
 import com.mrbysco.forcecraft.menu.InfuserMenu;
 import com.mrbysco.forcecraft.networking.message.StopInfuserSoundPayload;
@@ -279,7 +280,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	public void startWork(boolean instant) {
 		if (!(level instanceof ServerLevel serverLevel)) return;
 
-		refreshMatches(serverLevel);
+		refreshMatches();
 		processTime = 0;
 
 		if (areAllModifiersEmpty() && canCharge()) {
@@ -313,7 +314,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	public boolean hasValidRecipe() {
 		if (!(level instanceof ServerLevel serverLevel) || !isWorkAllowed()) return false;
 		boolean infuseFlag = areAllModifiersEmpty() && canCharge();
-		boolean slotsFlag = allSlotsMatchRecipe(serverLevel);
+		boolean slotsFlag = allSlotsMatchRecipe();
 		return infuseFlag || slotsFlag;
 	}
 
@@ -404,8 +405,11 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	}
 
 	// Recipe Checking
-	private Collection<RecipeHolder<InfuseRecipe>> recipes(ServerLevel serverLevel) {
-		return serverLevel.recipeAccess().recipeMap().byType(ForceRecipes.INFUSE.get());
+	private Collection<RecipeHolder<InfuseRecipe>> recipes() {
+		if (level instanceof ServerLevel serverLevel) {
+			return serverLevel.recipeAccess().recipeMap().byType(ForceRecipes.INFUSE.get());
+		}
+		return ForceRecipeCache.getInfuseRecipes();
 	}
 
 	private ItemStack getTool() {
@@ -416,7 +420,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 		return handler.getResource(SLOT_BOOK).toStack(1).getOrDefault(ForceComponents.UPGRADE_BOOK, UpgradeBookData.DEFAULT);
 	}
 
-	private void refreshMatches(ServerLevel serverLevel) {
+	private void refreshMatches() {
 		currentRecipes.clear();
 		ItemStack tool = getTool();
 		if (tool.isEmpty() || !hasValidBook()) return;
@@ -426,7 +430,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 			if (handler.getResource(slot).isEmpty()) continue;
 			ItemStack modifier = handler.getResource(slot).toStack(1);
 
-			for (RecipeHolder<InfuseRecipe> holder : recipes(serverLevel)) {
+			for (RecipeHolder<InfuseRecipe> holder : recipes()) {
 				if (holder.value().matchesModifier(tool, modifier, book, false)) {
 					currentRecipes.put(slot, holder);
 					break;
@@ -448,8 +452,8 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 		return true;
 	}
 
-	public boolean allSlotsMatchRecipe(ServerLevel serverLevel) {
-		refreshMatches(serverLevel);
+	public boolean allSlotsMatchRecipe() {
+		refreshMatches();
 		if (currentRecipes.isEmpty()) return false;
 
 		ItemStack tool = getTool();
@@ -478,7 +482,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 					&& !stack.is(ForceTags.Items.VALID_INFUSER_CHARGE);
 		}
 		ItemStack tool = getTool();
-		for (RecipeHolder<InfuseRecipe> holder : recipes(serverLevel)) {
+		for (RecipeHolder<InfuseRecipe> holder : recipes()) {
 			InfuseRecipe recipe = holder.value();
 			if (recipe.getIngredient().test(stack) && (tool.isEmpty() || recipe.getCenter().test(tool))) return true;
 		}
@@ -487,7 +491,7 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 
 	private boolean matchesTool(ItemStack stack) {
 		if (!(level instanceof ServerLevel serverLevel)) return true;
-		for (RecipeHolder<InfuseRecipe> holder : recipes(serverLevel)) {
+		for (RecipeHolder<InfuseRecipe> holder : recipes()) {
 			if (holder.value().matchesTool(stack, true)) return true;
 		}
 		return stack.is(ForceTags.Items.VALID_INFUSER_CHARGE);

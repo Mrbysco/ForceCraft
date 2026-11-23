@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": "#c:ingots/force",
+    "L": "#c:leathers",
+    "W": "#minecraft:wool"
+  },
+  "pattern": [
+    "WLW",
+    "LIL",
+    "WLW"
+  ],
+  "result": {
+    "id": "forcecraft:force_pack_upgrade"
+  }
+}
