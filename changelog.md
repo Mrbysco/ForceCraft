@@ -1,1 +1,2 @@
-* Disabling the Time Torch will now also disable behavior of placed Time Torches
+* Allow Time Torch to stack (See `timeMaxStacks` config option that determines how many time torches can affect a block entity)
+* Fix Infuser taking an absurd amount of times the more modifiers you inserted
