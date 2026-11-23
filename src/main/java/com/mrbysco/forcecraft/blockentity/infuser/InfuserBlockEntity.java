@@ -312,7 +312,6 @@ public class InfuserBlockEntity extends BlockEntity implements MenuProvider {
 	}
 
 	public boolean hasValidRecipe() {
-		if (!(level instanceof ServerLevel serverLevel) || !isWorkAllowed()) return false;
 		boolean infuseFlag = areAllModifiersEmpty() && canCharge();
 		boolean slotsFlag = allSlotsMatchRecipe();
 		return infuseFlag || slotsFlag;
