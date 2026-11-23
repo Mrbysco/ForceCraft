@@ -1,2 +1,1 @@
-* Fix Force Torch recipe
-* Add missing Force Pack and Force Pack Upgrade recipes
+* Fix desync in Infuser screen showing recipe was invalid unless you re-opened the screen
